@@ -1,0 +1,1 @@
+# Claude Code Reference - Initial commit for repository setup
