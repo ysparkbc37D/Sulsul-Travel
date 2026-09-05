@@ -102,11 +102,18 @@
 Sulsul-Travel/
 ├── .gitignore                     # Git 제외 설정
 ├── .nojekyll                      # GitHub Pages 정적 에셋 무시 방지 플래그
-├── index.html                     # 술술트래블 단일 파일 SPA 완성형 코어
+├── index.html                     # 술술트래블 단일 파일 SPA 완성형 코어 (v1.0.0)
 ├── kb-travel.js                   # 여행 도메인 지식 베이스 (환율, 22일 남미 시드 데이터)
 ├── manifest.webmanifest           # PWA 웹 매니페스트
-├── sw.js                          # 오프라인 캐싱 Service Worker
+├── sw.js                          # 오프라인 캐싱 Service Worker (st-shell-v1.0.0)
 ├── south_america_illustrated_map.jpg # 남미 일러스트 루트 지도 에셋
+├── CHANGELOG.md                   # 술술체인지스 (버전 관리 및 릴리즈 이력)
+├── 술술트래블신록.md              # 공식 기술 실록 & 린터(Linter) 10대 불변 법칙
+├── DEVELOPMENT.md                 # 개발 셋업 및 기여 가이드
+├── tools-verify.ps1               # 사전 배포 자동 게이트키퍼 검증기
+├── tools-serve.ps1                # 무의존성 PowerShell 로컬 개발 서버
+├── docs/                          # 상세 아키텍처 및 기술 문서
+│   └── architecture.md            # 오케스트레이션 모델 및 아키텍처 설계서
 ├── icons/                         # PWA 고해상도 앱 아이콘
 │   ├── apple-touch-icon.png       # iOS 홈 화면 아이콘 (180x180)
 │   ├── icon-192.png               # Android 표준 아이콘 (192x192)

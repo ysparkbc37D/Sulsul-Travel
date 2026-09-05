@@ -91,7 +91,7 @@
         </span>
         <div>
           <h1 class="text-base font-black tracking-tight text-white flex items-center gap-1.5">
-            술술트래블 <span class="text-[10px] font-bold px-1.5 py-0.5 rounded bg-amber-500/10 text-amber-400 border border-amber-500/20">v1.0</span>
+            술술트래블 <span id="app-ver-badge" class="text-[10px] font-bold px-1.5 py-0.5 rounded bg-amber-500/10 text-amber-400 border border-amber-500/20">v1.0.0</span>
           </h1>
           <p id="header-trip-name" class="text-[11px] text-slate-400 truncate max-w-[200px] sm:max-w-xs font-medium">남미 4개국 3주 최적화 황금 여정</p>
         </div>
@@ -688,6 +688,9 @@
   <!-- 6. 메인 앱 로직 스크립트 -->
   <!-- ========================================== -->
   <script>
+    // 앱 버전 및 글로벌 네임스페이스 (Sulsul-Travel Invariant Rule R-10)
+    const APP_VER = '1.0.0';
+
     // 전역 상태 스토어
     const State = {
       activeTab: 'plan',
@@ -1559,6 +1562,13 @@
           .catch(err => console.warn('[PWA] Service Worker registration failed:', err));
       }
     }
+
+    // 글로벌 네임스페이스 노출
+    window.SulsulTravel = {
+      version: APP_VER,
+      State: State,
+      initApp: initApp
+    };
   </script>
 </body>
 </html>
