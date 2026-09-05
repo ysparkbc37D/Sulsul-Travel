@@ -1,0 +1,1564 @@
+<!DOCTYPE html>
+<html lang="ko" class="dark">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>술술트래블 - AI 여행 어시스턴트 & 가계부 다이어리</title>
+  
+  <!-- PWA Meta -->
+  <link rel="manifest" href="manifest.webmanifest">
+  <meta name="theme-color" content="#0b0f19">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="술술트래블">
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
+
+  <!-- Tailwind CSS & FontAwesome -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              gold: '#f59e0b',
+              emerald: '#10b981',
+              dark: '#0b0f19',
+              card: '#131b2e',
+              border: '#1f293d'
+            }
+          },
+          fontFamily: {
+            sans: ['Pretendard', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif']
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    /* Safe-area for notch and home bar */
+    body {
+      padding-top: env(safe-area-inset-top);
+      padding-bottom: env(safe-area-inset-bottom);
+      background-color: #0b0f19;
+      color: #e2e8f0;
+      -webkit-tap-highlight-color: transparent;
+      user-select: none;
+    }
+    input, textarea {
+      user-select: text;
+    }
+    /* Custom scrollbars */
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: #0b0f19; }
+    ::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: #334155; }
+    
+    /* Bottom Sheet modal */
+    .sheet-scrim {
+      transition: opacity 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .sheet-modal {
+      transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .sheet-closed .sheet-scrim { opacity: 0; pointer-events: none; }
+    .sheet-closed .sheet-modal { transform: translateY(100%); pointer-events: none; }
+
+    /* Top stats pulse glow */
+    .stat-glow {
+      box-shadow: 0 0 15px rgba(245, 158, 11, 0.08);
+    }
+  </style>
+
+  <!-- Built-in Knowledge Base -->
+  <script src="kb-travel.js"></script>
+</head>
+<body class="min-h-screen flex flex-col font-sans pb-20">
+
+  <!-- ========================================== -->
+  <!-- 1. 앱 상단 글로벌 헤더 & 로고 -->
+  <!-- ========================================== -->
+  <header class="sticky top-0 z-30 bg-[#0b0f19]/90 backdrop-blur-md border-b border-[#1f293d] px-4 py-3">
+    <div class="max-w-4xl mx-auto flex items-center justify-between">
+      <div class="flex items-center gap-2.5">
+        <span class="w-8 h-8 rounded-xl bg-gradient-to-tr from-amber-500 to-emerald-500 flex items-center justify-center text-white text-base shadow-md">
+          <i class="fa-solid fa-plane-departure text-xs"></i>
+        </span>
+        <div>
+          <h1 class="text-base font-black tracking-tight text-white flex items-center gap-1.5">
+            술술트래블 <span class="text-[10px] font-bold px-1.5 py-0.5 rounded bg-amber-500/10 text-amber-400 border border-amber-500/20">v1.0</span>
+          </h1>
+          <p id="header-trip-name" class="text-[11px] text-slate-400 truncate max-w-[200px] sm:max-w-xs font-medium">남미 4개국 3주 최적화 황금 여정</p>
+        </div>
+      </div>
+
+      <!-- 우측 빠른 액션 버튼들 -->
+      <div class="flex items-center gap-2">
+        <button onclick="openAITripModal()" class="px-3 py-1.5 bg-gradient-to-r from-amber-500 to-emerald-500 hover:from-amber-600 hover:to-emerald-600 text-slate-950 font-black rounded-lg text-xs flex items-center gap-1.5 shadow-sm transition">
+          <i class="fa-solid fa-wand-magic-sparkles text-[11px]"></i>
+          <span class="hidden sm:inline">AI 일정 셋업</span>
+          <span class="sm:hidden">AI</span>
+        </button>
+        <button onclick="openAIAssistantChat()" class="w-8 h-8 rounded-lg bg-[#1a233a] hover:bg-[#232f4e] text-amber-400 border border-[#2a385b] flex items-center justify-center text-xs transition" title="AI 여행 어시스턴트">
+          <i class="fa-solid fa-comments"></i>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ========================================== -->
+  <!-- 2. 상단 고정 실시간 종합 통계 대시보드 (Top Analytics Banner) -->
+  <!-- ========================================== -->
+  <section id="top-analytics" class="bg-[#101726] border-b border-[#1f293d] px-4 py-3 stat-glow">
+    <div class="max-w-4xl mx-auto space-y-2.5">
+      
+      <!-- 4대 메트릭 타일 그리드 -->
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs">
+        
+        <!-- 1. 총 지출 & 예산 소진율 -->
+        <div class="p-2.5 rounded-xl bg-[#151f33] border border-[#23314f] flex flex-col justify-between">
+          <div class="flex items-center justify-between text-slate-400 text-[11px]">
+            <span>💰 총 지출 / 예산</span>
+            <span id="stat-budget-percent" class="font-bold text-amber-400">0%</span>
+          </div>
+          <div class="mt-1">
+            <div id="stat-expense-krw" class="text-sm sm:text-base font-black text-white">₩0</div>
+            <div id="stat-budget-total" class="text-[10px] text-slate-400 mt-0.5">예산: ₩8,500,000</div>
+          </div>
+          <!-- 예산 소진 게이지 트랙 -->
+          <div class="w-full h-1.5 bg-slate-800 rounded-full mt-1.5 overflow-hidden">
+            <div id="stat-budget-bar" class="h-full bg-gradient-to-r from-emerald-400 to-amber-400 rounded-full transition-all duration-300" style="width: 0%"></div>
+          </div>
+        </div>
+
+        <!-- 2. 여행 D-Day & 진행률 -->
+        <div class="p-2.5 rounded-xl bg-[#151f33] border border-[#23314f] flex flex-col justify-between">
+          <div class="flex items-center justify-between text-slate-400 text-[11px]">
+            <span>⏳ 여정 진행도</span>
+            <span id="stat-days-ratio" class="font-bold text-emerald-400">DAY 01 / 22</span>
+          </div>
+          <div class="mt-1">
+            <div id="stat-dday-badge" class="text-sm sm:text-base font-black text-emerald-400 flex items-center gap-1">
+              <span>D-35</span>
+              <span class="text-[10px] text-slate-400 font-normal">(10/11 출발)</span>
+            </div>
+            <div id="stat-days-count" class="text-[10px] text-slate-400 mt-0.5">총 22일간의 대장정</div>
+          </div>
+          <!-- 여정 진행 게이지 트랙 -->
+          <div class="w-full h-1.5 bg-slate-800 rounded-full mt-1.5 overflow-hidden">
+            <div id="stat-progress-bar" class="h-full bg-emerald-500 rounded-full transition-all duration-300" style="width: 5%"></div>
+          </div>
+        </div>
+
+        <!-- 3. 방문 국가 및 도시 수 -->
+        <div class="p-2.5 rounded-xl bg-[#151f33] border border-[#23314f] flex flex-col justify-between">
+          <div class="flex items-center justify-between text-slate-400 text-[11px]">
+            <span>🌍 방문 거점</span>
+            <span class="text-amber-400 font-bold">4개국</span>
+          </div>
+          <div class="mt-1">
+            <div id="stat-cities-count" class="text-sm sm:text-base font-black text-white">8개 도시</div>
+            <div class="text-[10px] text-slate-400 mt-0.5 flex items-center gap-1">
+              <span>🇺🇸</span><span>🇵🇪</span><span>🇦🇷</span><span>🇧🇷</span>
+            </div>
+          </div>
+          <div class="text-[10px] text-slate-500 truncate mt-1">LA·리마·쿠스코·이과수·리우</div>
+        </div>
+
+        <!-- 4. 기록된 사진 & 다이어리 편수 -->
+        <div class="p-2.5 rounded-xl bg-[#151f33] border border-[#23314f] flex flex-col justify-between">
+          <div class="flex items-center justify-between text-slate-400 text-[11px]">
+            <span>📸 기록 & 일기</span>
+            <span id="stat-photo-count" class="text-purple-400 font-bold">0장</span>
+          </div>
+          <div class="mt-1">
+            <div id="stat-journal-count" class="text-sm sm:text-base font-black text-white">0편 작성</div>
+            <div class="text-[10px] text-slate-400 mt-0.5">100% 오프라인 보관</div>
+          </div>
+          <div class="text-[10px] text-purple-400/80 truncate mt-1">3:4 캔버스 자동 정규화</div>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ========================================== -->
+  <!-- 3. 메인 콘텐츠 영역 (4대 탭 분기) -->
+  <!-- ========================================== -->
+  <main class="flex-1 max-w-4xl w-full mx-auto p-4 sm:p-5">
+
+    <!-- [TAB 1] 🗺️ 여정 및 일정 타임라인 (Plan) -->
+    <div id="view-plan" class="tab-view space-y-4">
+      
+      <!-- 여정 상단 컨트롤 바 -->
+      <div class="flex flex-wrap items-center justify-between gap-2 bg-[#12192a] p-3 rounded-2xl border border-[#1e2a42]">
+        <div class="flex items-center gap-2">
+          <span class="text-xs font-bold text-amber-400 bg-amber-500/10 px-2.5 py-1 rounded-lg border border-amber-500/20 flex items-center gap-1.5">
+            <i class="fa-solid fa-map-location-dot text-amber-500"></i>
+            <span>30분 단위 상세 동선</span>
+          </span>
+          <button onclick="toggleAllPlanTimelines()" id="btn-toggle-all-tl" class="px-2.5 py-1 bg-[#1a233a] hover:bg-[#222e4d] text-slate-300 text-[11px] font-bold rounded-lg border border-[#283554] transition">
+            <i class="fa-solid fa-angles-down mr-1"></i> 전체 펼치기
+          </button>
+        </div>
+
+        <div class="flex items-center gap-1.5">
+          <button onclick="openAddSpotModal()" class="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-lg text-xs flex items-center gap-1.5 transition shadow-sm">
+            <i class="fa-solid fa-plus text-[10px]"></i> 스팟/일정 추가
+          </button>
+        </div>
+      </div>
+
+      <!-- 감성 일러스트 지도 보기 아코디언 토글 -->
+      <div class="bg-[#131b2e] rounded-2xl border border-[#1e293d] overflow-hidden">
+        <button onclick="toggleMapAccordion()" class="w-full px-4 py-3 flex items-center justify-between text-left hover:bg-slate-800/40 transition">
+          <span class="text-xs font-bold text-slate-200 flex items-center gap-2">
+            <i class="fa-solid fa-earth-americas text-amber-400"></i> 남미 3주 최적화 일러스트 노선도 보기
+          </span>
+          <i id="icon-map-accordion" class="fa-solid fa-chevron-down text-slate-400 text-xs transition-transform duration-200"></i>
+        </button>
+        <div id="panel-map-accordion" class="hidden p-3 bg-[#0c121e] border-t border-[#1e293d] text-center">
+          <img src="south_america_illustrated_map.jpg" alt="남미 3주 여행 노선도" class="max-w-md w-full mx-auto rounded-xl shadow-lg border border-slate-700/50">
+        </div>
+      </div>
+
+      <!-- 일자별 일정 카드 컨테이너 -->
+      <div id="plan-days-container" class="space-y-3.5">
+        <!-- JavaScript renderPlan()에 의해 동적 렌더링 -->
+      </div>
+
+    </div>
+
+    <!-- [TAB 2] ✍️ 기록 & 사진 다이어리 (Journal) -->
+    <div id="view-journal" class="tab-view hidden space-y-5">
+      
+      <div class="bg-[#12192a] p-4 rounded-2xl border border-[#1e2a42]">
+        <div class="flex items-center justify-between mb-3">
+          <h3 class="text-sm font-bold text-white flex items-center gap-2">
+            <i class="fa-solid fa-camera-retro text-amber-400"></i> 데일리 여행 기록 & 3:4 사진 갤러리
+          </h3>
+          <span class="text-[11px] text-slate-400">100% IndexedDB 오프라인 저장</span>
+        </div>
+
+        <!-- 일자 선택 칩 슬라이더 -->
+        <div id="journal-day-chips" class="flex items-center gap-1.5 overflow-x-auto pb-1 text-xs">
+          <!-- renderJournalChips()로 동적 렌더링 -->
+        </div>
+      </div>
+
+      <!-- 선택된 일자의 여행기 작성 & 사진 업로드 카드 -->
+      <div class="bg-[#131b2e] p-4 sm:p-5 rounded-2xl border border-[#1e293d] space-y-4">
+        
+        <!-- 일자 헤더 -->
+        <div class="flex items-center justify-between pb-3 border-b border-slate-800">
+          <div>
+            <span id="journal-active-day" class="text-xs font-black text-amber-400 uppercase tracking-wider">DAY 01 (10/11 일)</span>
+            <h4 id="journal-active-title" class="text-base font-bold text-white mt-0.5">인천 출국 ✈️ LA 도착</h4>
+          </div>
+
+          <!-- 날씨 & 기분 셀렉터 -->
+          <div class="flex items-center gap-2">
+            <select id="journal-weather" onchange="saveCurrentJournal()" class="bg-[#0b0f19] border border-[#23314f] text-xs text-slate-300 rounded-lg px-2 py-1 focus:outline-none">
+              <option value="☀️ 맑음">☀️ 맑음</option>
+              <option value="⛅ 구름">⛅ 구름</option>
+              <option value="🌧️ 비">🌧️ 비</option>
+              <option value="❄️ 쌀쌀함">❄️ 쌀쌀함</option>
+              <option value="🏜️ 사막">🏜️ 사막</option>
+            </select>
+            <select id="journal-mood" onchange="saveCurrentJournal()" class="bg-[#0b0f19] border border-[#23314f] text-xs text-slate-300 rounded-lg px-2 py-1 focus:outline-none">
+              <option value="🤩 최고">🤩 최고</option>
+              <option value="🥰 감동">🥰 감동</option>
+              <option value="😋 꿀맛">😋 꿀맛</option>
+              <option value="😴 꿀잠">😴 꿀잠</option>
+              <option value="🦙 힐링">🦙 힐링</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- 사진 업로드 및 갤러리 영역 -->
+        <div>
+          <div class="flex items-center justify-between mb-2">
+            <span class="text-xs font-bold text-slate-300">오늘의 사진 (3:4 규격 캔버스 자동 정규화)</span>
+            <label class="cursor-pointer px-2.5 py-1 bg-amber-500/10 hover:bg-amber-500/20 text-amber-400 border border-amber-500/30 rounded-lg text-xs font-bold transition flex items-center gap-1">
+              <i class="fa-solid fa-plus text-[10px]"></i> 사진 등록
+              <input type="file" accept="image/*" multiple onchange="handlePhotoUpload(event)" class="hidden">
+            </label>
+          </div>
+
+          <!-- 등록된 사진 그리드 -->
+          <div id="journal-photo-grid" class="grid grid-cols-2 sm:grid-cols-3 gap-2.5 min-h-[120px] bg-[#0b0f19] p-3 rounded-xl border border-dashed border-slate-800">
+            <!-- 사진 썸네일 동적 렌더링 -->
+          </div>
+        </div>
+
+        <!-- 일기 텍스트 & AI 에세이 어시스턴트 -->
+        <div class="space-y-2 pt-2 border-t border-slate-800">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold text-slate-300">하루 여행기 & 감성 메모</span>
+            <button onclick="generateAITravelStory()" class="px-2.5 py-1 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white font-bold rounded-lg text-xs flex items-center gap-1 transition shadow-sm">
+              <i class="fa-solid fa-feather text-[10px]"></i> AI 감성 에세이 작성
+            </button>
+          </div>
+          <textarea id="journal-text" rows="5" oninput="saveCurrentJournal()" placeholder="오늘의 인상 깊었던 풍경, 만난 사람, 음식 맛, 느낀 점을 자유롭게 기록하세요..." class="w-full bg-[#0b0f19] border border-[#23314f] rounded-xl p-3 text-xs md:text-sm text-slate-200 placeholder-slate-600 focus:outline-none focus:border-amber-400 transition leading-relaxed"></textarea>
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- [TAB 3] 💰 다통화 스마트 가계부 (Expense) -->
+    <div id="view-expense" class="tab-view hidden space-y-4">
+      
+      <!-- 환율 바 & 아르헨티나 MEP 스위치 -->
+      <div class="bg-[#12192a] p-3.5 rounded-2xl border border-[#1e2a42] space-y-2.5">
+        <div class="flex items-center justify-between">
+          <span class="text-xs font-bold text-slate-300 flex items-center gap-1.5">
+            <i class="fa-solid fa-coins text-amber-400"></i> 실시간 기준 환율 (KRW 자동 환산)
+          </span>
+          <label class="flex items-center gap-2 cursor-pointer text-xs">
+            <span class="text-[11px] text-amber-400 font-bold">🇦🇷 MEP 암환율 적용</span>
+            <input type="checkbox" id="chk-mep-rate" onchange="toggleMepRate(this.checked)" checked class="rounded border-slate-700 text-amber-500 focus:ring-0">
+          </label>
+        </div>
+
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-[11px] text-slate-300">
+          <div class="bg-[#0b0f19] p-2 rounded-lg border border-slate-800">
+            <span class="text-slate-500">1 USD:</span> <strong>₩1,350</strong>
+          </div>
+          <div class="bg-[#0b0f19] p-2 rounded-lg border border-slate-800">
+            <span class="text-slate-500">1 PEN (페루):</span> <strong>≈ ₩360</strong>
+          </div>
+          <div class="bg-[#0b0f19] p-2 rounded-lg border border-slate-800">
+            <span class="text-slate-500">1 ARS (MEP):</span> <strong id="val-ars-rate" class="text-emerald-400">≈ ₩1.02</strong>
+          </div>
+          <div class="bg-[#0b0f19] p-2 rounded-lg border border-slate-800">
+            <span class="text-slate-500">1 BRL (브라질):</span> <strong>≈ ₩248</strong>
+          </div>
+        </div>
+      </div>
+
+      <!-- 가계부 상단 요약 & 추가 버튼 -->
+      <div class="flex items-center justify-between">
+        <div>
+          <h3 class="text-sm font-bold text-white">지출 내역 관리</h3>
+          <p class="text-[11px] text-slate-400">등록 즉시 상단 대시보드 및 예산 잔여율에 1원 단위 반영</p>
+        </div>
+        <button onclick="openAddExpenseModal()" class="px-3.5 py-1.5 bg-amber-500 hover:bg-amber-400 text-slate-950 font-black rounded-lg text-xs flex items-center gap-1.5 transition shadow-sm">
+          <i class="fa-solid fa-plus text-[10px]"></i> 지출 기록
+        </button>
+      </div>
+
+      <!-- 카테고리별 지출 비율 바 -->
+      <div class="bg-[#131b2e] p-4 rounded-2xl border border-[#1e293d] space-y-3">
+        <h4 class="text-xs font-bold text-slate-300">카테고리별 지출 현황</h4>
+        <div id="expense-category-bars" class="space-y-2">
+          <!-- renderExpenseCategories()로 동적 렌더링 -->
+        </div>
+      </div>
+
+      <!-- 지출 내역 리스트 -->
+      <div class="bg-[#131b2e] rounded-2xl border border-[#1e293d] overflow-hidden">
+        <div class="p-3 bg-[#0e1524] border-b border-[#1e293d] flex items-center justify-between text-xs text-slate-400 font-medium">
+          <span>일자 / 항목</span>
+          <span>원화 환산액 (현지 금액)</span>
+        </div>
+        <div id="expense-list-container" class="divide-y divide-slate-800">
+          <!-- renderExpenseList()로 동적 렌더링 -->
+        </div>
+      </div>
+
+    </div>
+
+    <!-- [TAB 4] ⚙️ 설정 & 백업/동기화 (Sync) -->
+    <div id="view-sync" class="tab-view hidden space-y-4">
+      
+      <!-- 1. Google Gemini AI 개인 API 키 설정 -->
+      <div class="bg-[#131b2e] p-4 sm:p-5 rounded-2xl border border-[#1e293d] space-y-3">
+        <div class="flex items-center justify-between">
+          <h4 class="text-sm font-bold text-white flex items-center gap-2">
+            <i class="fa-solid fa-robot text-purple-400"></i> Google Gemini AI 설정
+          </h4>
+          <span class="text-[10px] bg-purple-500/10 text-purple-400 border border-purple-500/20 px-2 py-0.5 rounded-full font-bold">3단계 Fallback</span>
+        </div>
+        <p class="text-xs text-slate-400 leading-relaxed">
+          개인 무료 Gemini API 키를 등록하면 AI 여행 일정 셋업, 스팟 추천, 감성 에세이 작성을 무제한으로 사용하실 수 있습니다. (API 키는 브라우저 로컬에만 안전하게 보관됩니다)
+        </p>
+        <div class="flex gap-2">
+          <input type="password" id="cfg-gemini-key" placeholder="AIzaSy... (Gemini API Key)" class="flex-1 bg-[#0b0f19] border border-[#23314f] rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-amber-400 font-mono">
+          <button onclick="saveGeminiApiKey()" class="px-4 py-2 bg-purple-600 hover:bg-purple-500 text-white font-bold rounded-xl text-xs transition">저장</button>
+        </div>
+        <a href="https://aistudio.google.com/app/apikey" target="_blank" class="inline-flex items-center gap-1 text-[11px] text-amber-400 hover:underline">
+          <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i> Google AI Studio에서 무료 API 키 발급받기
+        </a>
+      </div>
+
+      <!-- 2. 백업 및 데이터 복원 -->
+      <div class="bg-[#131b2e] p-4 sm:p-5 rounded-2xl border border-[#1e293d] space-y-3">
+        <h4 class="text-sm font-bold text-white flex items-center gap-2">
+          <i class="fa-solid fa-cloud-arrow-down text-emerald-400"></i> 데이터 백업 및 복원
+        </h4>
+        <p class="text-xs text-slate-400 leading-relaxed">
+          작성한 일정, 가계부, 사진, 일기 등 모든 데이터를 단 하나의 JSON 파일로 안전하게 백업하거나 기기 간에 이전할 수 있습니다.
+        </p>
+        <div class="flex flex-wrap gap-2 pt-1">
+          <button onclick="exportAllDataJSON()" class="px-3.5 py-2 bg-[#1b253d] hover:bg-[#233152] text-slate-200 border border-[#2b3c63] font-bold rounded-xl text-xs flex items-center gap-1.5 transition">
+            <i class="fa-solid fa-file-export text-emerald-400"></i> JSON 파일로 백업
+          </button>
+          <label class="cursor-pointer px-3.5 py-2 bg-[#1b253d] hover:bg-[#233152] text-slate-200 border border-[#2b3c63] font-bold rounded-xl text-xs flex items-center gap-1.5 transition">
+            <i class="fa-solid fa-file-import text-amber-400"></i> 백업 파일에서 복원
+            <input type="file" accept=".json" onchange="importDataJSON(event)" class="hidden">
+          </label>
+          <button onclick="resetToSouthAmericaSeed()" class="px-3.5 py-2 bg-red-950/40 hover:bg-red-900/60 text-red-300 border border-red-800/50 font-bold rounded-xl text-xs flex items-center gap-1.5 transition">
+            <i class="fa-solid fa-rotate-left"></i> 남미 3주 플랜 재적용
+          </button>
+        </div>
+      </div>
+
+      <!-- 3. GitHub Pages 호스팅 & PWA 정보 -->
+      <div class="bg-[#131b2e] p-4 sm:p-5 rounded-2xl border border-[#1e293d] space-y-2 text-xs text-slate-400">
+        <h4 class="text-sm font-bold text-white flex items-center gap-2">
+          <i class="fa-brands fa-github text-slate-300"></i> GitHub 저장소 및 배포 정보
+        </h4>
+        <p>• 원격 저장소: <a href="https://github.com/ysparkbc37D/Sulsul-Travel.git" target="_blank" class="text-amber-400 hover:underline">ysparkbc37D/Sulsul-Travel.git</a></p>
+        <p>• 배포 주소: <a href="https://ysparkbc37D.github.io/Sulsul-Travel/" target="_blank" class="text-emerald-400 hover:underline">https://ysparkbc37D.github.io/Sulsul-Travel/</a></p>
+        <p>• PWA 오프라인 캐시: <span class="font-bold text-white">st-shell-v1 (활성화됨)</span></p>
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- ========================================== -->
+  <!-- 4. 하단 플로팅 4대 탭 네비게이션 바 -->
+  <!-- ========================================== -->
+  <nav class="fixed bottom-0 left-0 right-0 z-30 bg-[#0b0f19]/95 backdrop-blur-md border-t border-[#1f293d] px-2 py-2">
+    <div class="max-w-md mx-auto grid grid-cols-4 gap-1 text-center">
+      
+      <button onclick="switchTab('plan')" id="nav-tab-plan" class="nav-btn py-1.5 flex flex-col items-center gap-1 text-amber-400 font-bold text-[11px] transition">
+        <i class="fa-solid fa-route text-lg"></i>
+        <span>여정</span>
+      </button>
+
+      <button onclick="switchTab('journal')" id="nav-tab-journal" class="nav-btn py-1.5 flex flex-col items-center gap-1 text-slate-400 hover:text-slate-200 font-medium text-[11px] transition">
+        <i class="fa-solid fa-book-bookmark text-lg"></i>
+        <span>기록</span>
+      </button>
+
+      <button onclick="switchTab('expense')" id="nav-tab-expense" class="nav-btn py-1.5 flex flex-col items-center gap-1 text-slate-400 hover:text-slate-200 font-medium text-[11px] transition">
+        <i class="fa-solid fa-wallet text-lg"></i>
+        <span>가계부</span>
+      </button>
+
+      <button onclick="switchTab('sync')" id="nav-tab-sync" class="nav-btn py-1.5 flex flex-col items-center gap-1 text-slate-400 hover:text-slate-200 font-medium text-[11px] transition">
+        <i class="fa-solid fa-sliders text-lg"></i>
+        <span>설정</span>
+      </button>
+
+    </div>
+  </nav>
+
+  <!-- ========================================== -->
+  <!-- 5. 모달 및 바텀시트 시스템 -->
+  <!-- ========================================== -->
+  
+  <!-- [MODAL 1] 스팟/일정 추가/수정 모달 -->
+  <div id="modal-spot" class="sheet-closed fixed inset-0 z-50 flex items-end sm:items-center justify-center">
+    <div onclick="closeModal('modal-spot')" class="sheet-scrim fixed inset-0 bg-black/70 backdrop-blur-xs"></div>
+    <div class="sheet-modal relative w-full sm:max-w-lg bg-[#131b2e] border border-slate-700 rounded-t-3xl sm:rounded-2xl p-5 shadow-2xl z-10 space-y-4 max-h-[85vh] overflow-y-auto">
+      <div class="flex items-center justify-between pb-3 border-b border-slate-800">
+        <h3 id="modal-spot-title" class="font-bold text-white text-base flex items-center gap-2">
+          <i class="fa-solid fa-location-dot text-amber-400"></i> 일정 스팟 추가
+        </h3>
+        <button onclick="closeModal('modal-spot')" class="w-8 h-8 rounded-full bg-slate-800 text-slate-400 hover:text-white flex items-center justify-center"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+
+      <form onsubmit="handleSpotSubmit(event)" class="space-y-3 text-xs">
+        <input type="hidden" id="spot-form-day-idx">
+        <input type="hidden" id="spot-form-spot-idx">
+
+        <div>
+          <label class="block text-slate-400 mb-1">방문 일차</label>
+          <select id="spot-form-day-select" class="w-full bg-[#0b0f19] border border-slate-700 rounded-xl p-2.5 text-white focus:outline-none focus:border-amber-400">
+            <!-- Day 옵션 동적 추가 -->
+          </select>
+        </div>
+
+        <div class="grid grid-cols-2 gap-2">
+          <div>
+            <label class="block text-slate-400 mb-1">시간</label>
+            <input type="text" id="spot-form-time" placeholder="예: 09:30" required class="w-full bg-[#0b0f19] border border-slate-700 rounded-xl p-2.5 text-white focus:outline-none focus:border-amber-400">
+          </div>
+          <div>
+            <label class="block text-slate-400 mb-1">카테고리</label>
+            <select id="spot-form-cat" class="w-full bg-[#0b0f19] border border-slate-700 rounded-xl p-2.5 text-white focus:outline-none focus:border-amber-400">
+              <option value="tour">🎟️ 관광/투어</option>
+              <option value="food">🍽️ 식비/미식</option>
+              <option value="flight">✈️ 항공/교통</option>
+              <option value="lodging">🏨 숙소/호텔</option>
+              <option value="shopping">🛍️ 쇼핑</option>
+              <option value="etc">💡 기타</option>
+            </select>
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-slate-400 mb-1">장소 / 활동명</label>
+          <input type="text" id="spot-form-title" placeholder="예: 마추픽추 서킷 2 탐방" required class="w-full bg-[#0b0f19] border border-slate-700 rounded-xl p-2.5 text-white focus:outline-none focus:border-amber-400">
+        </div>
+
+        <div class="grid grid-cols-2 gap-2">
+          <div>
+            <label class="block text-slate-400 mb-1">예상 비용 (숫자)</label>
+            <input type="number" id="spot-form-cost" placeholder="0" class="w-full bg-[#0b0f19] border border-slate-700 rounded-xl p-2.5 text-white focus:outline-none focus:border-amber-400">
+          </div>
+          <div>
+            <label class="block text-slate-400 mb-1">통화</label>
+            <select id="spot-form-curr" class="w-full bg-[#0b0f19] border border-slate-700 rounded-xl p-2.5 text-white focus:outline-none focus:border-amber-400">
+              <option value="KRW">🇰🇷 원 (KRW)</option>
+              <option value="USD" selected>🇺🇸 달러 (USD)</option>
+              <option value="PEN">🇵🇪 솔 (PEN)</option>
+              <option value="ARS">🇦🇷 페소 (ARS)</option>
+              <option value="BRL">🇧🇷 헤알 (BRL)</option>
+            </select>
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-slate-400 mb-1">세부 메모 & 꿀팁</label>
+          <textarea id="spot-form-memo" rows="2" placeholder="주의사항, 예약 번호, 준비물 등..." class="w-full bg-[#0b0f19] border border-slate-700 rounded-xl p-2.5 text-white focus:outline-none focus:border-amber-400"></textarea>
+        </div>
+
+        <div class="pt-2">
+          <button type="submit" class="w-full py-3 bg-amber-500 hover:bg-amber-400 text-slate-950 font-black rounded-xl text-sm transition">
+            저장하기
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- [MODAL 2] 지출 추가 모달 -->
+  <div id="modal-expense" class="sheet-closed fixed inset-0 z-50 flex items-end sm:items-center justify-center">
+    <div onclick="closeModal('modal-expense')" class="sheet-scrim fixed inset-0 bg-black/70 backdrop-blur-xs"></div>
+    <div class="sheet-modal relative w-full sm:max-w-lg bg-[#131b2e] border border-slate-700 rounded-t-3xl sm:rounded-2xl p-5 shadow-2xl z-10 space-y-4 max-h-[85vh] overflow-y-auto">
+      <div class="flex items-center justify-between pb-3 border-b border-slate-800">
+        <h3 class="font-bold text-white text-base flex items-center gap-2">
+          <i class="fa-solid fa-wallet text-amber-400"></i> 지출 내역 기록
+        </h3>
+        <button onclick="closeModal('modal-expense')" class="w-8 h-8 rounded-full bg-slate-800 text-slate-400 hover:text-white flex items-center justify-center"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+
+      <form onsubmit="handleExpenseSubmit(event)" class="space-y-3 text-xs">
+        <div>
+          <label class="block text-slate-400 mb-1">날짜</label>
+          <input type="date" id="exp-form-date" required class="w-full bg-[#0b0f19] border border-slate-700 rounded-xl p-2.5 text-white focus:outline-none focus:border-amber-400">
+        </div>
+
+        <div>
+          <label class="block text-slate-400 mb-1">사용처 / 내역명</label>
+          <input type="text" id="exp-form-title" placeholder="예: 돈 훌리오 꽃등심 스테이크 & 와인" required class="w-full bg-[#0b0f19] border border-slate-700 rounded-xl p-2.5 text-white focus:outline-none focus:border-amber-400">
+        </div>
+
+        <div class="grid grid-cols-2 gap-2">
+          <div>
+            <label class="block text-slate-400 mb-1">카테고리</label>
+            <select id="exp-form-cat" class="w-full bg-[#0b0f19] border border-slate-700 rounded-xl p-2.5 text-white focus:outline-none focus:border-amber-400">
+              <option value="food">🍽️ 식비/미식</option>
+              <option value="tour">🎟️ 관광/입장료</option>
+              <option value="flight">✈️ 항공/교통</option>
+              <option value="lodging">🏨 숙소</option>
+              <option value="shopping">🛍️ 쇼핑/기념품</option>
+              <option value="etc">💡 기타</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-slate-400 mb-1">통화 선택</label>
+            <select id="exp-form-curr" onchange="calculateConvertedPreview()" class="w-full bg-[#0b0f19] border border-slate-700 rounded-xl p-2.5 text-white focus:outline-none focus:border-amber-400">
+              <option value="USD">🇺🇸 달러 (USD)</option>
+              <option value="KRW">🇰🇷 원 (KRW)</option>
+              <option value="PEN">🇵🇪 솔 (PEN)</option>
+              <option value="ARS" selected>🇦🇷 페소 (ARS)</option>
+              <option value="BRL">🇧🇷 헤알 (BRL)</option>
+            </select>
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-slate-400 mb-1">결제 금액</label>
+          <input type="number" id="exp-form-amount" step="any" placeholder="0" oninput="calculateConvertedPreview()" required class="w-full bg-[#0b0f19] border border-slate-700 rounded-xl p-2.5 text-white text-base font-bold focus:outline-none focus:border-amber-400">
+        </div>
+
+        <!-- 실시간 환산 미리보기 박스 -->
+        <div class="p-2.5 bg-[#0b0f19] rounded-xl border border-slate-800 text-slate-400 flex items-center justify-between">
+          <span>예상 원화 환산액:</span>
+          <span id="exp-form-preview-krw" class="font-black text-amber-400 text-sm">₩0</span>
+        </div>
+
+        <div class="pt-2">
+          <button type="submit" class="w-full py-3 bg-emerald-600 hover:bg-emerald-500 text-white font-black rounded-xl text-sm transition">
+            가계부에 등록
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- [MODAL 3] AI 여행 일정 셋업 모달 -->
+  <div id="modal-ai-trip" class="sheet-closed fixed inset-0 z-50 flex items-end sm:items-center justify-center">
+    <div onclick="closeModal('modal-ai-trip')" class="sheet-scrim fixed inset-0 bg-black/70 backdrop-blur-xs"></div>
+    <div class="sheet-modal relative w-full sm:max-w-lg bg-[#131b2e] border border-purple-500/40 rounded-t-3xl sm:rounded-2xl p-5 shadow-2xl z-10 space-y-4 max-h-[85vh] overflow-y-auto">
+      <div class="flex items-center justify-between pb-3 border-b border-slate-800">
+        <h3 class="font-bold text-white text-base flex items-center gap-2">
+          <i class="fa-solid fa-wand-magic-sparkles text-purple-400"></i> AI 스마트 여행 셋업
+        </h3>
+        <button onclick="closeModal('modal-ai-trip')" class="w-8 h-8 rounded-full bg-slate-800 text-slate-400 hover:text-white flex items-center justify-center"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+
+      <div class="space-y-3 text-xs">
+        <div>
+          <label class="block text-slate-300 font-bold mb-1">여행 목적지 / 테마</label>
+          <input type="text" id="ai-input-dest" value="남미 3주 (페루, 볼리비아, 아르헨티나, 브라질)" class="w-full bg-[#0b0f19] border border-slate-700 rounded-xl p-2.5 text-white focus:outline-none focus:border-purple-400">
+        </div>
+
+        <div class="grid grid-cols-2 gap-2">
+          <div>
+            <label class="block text-slate-300 font-bold mb-1">출발일</label>
+            <input type="date" id="ai-input-start" value="2026-10-11" class="w-full bg-[#0b0f19] border border-slate-700 rounded-xl p-2.5 text-white focus:outline-none focus:border-purple-400">
+          </div>
+          <div>
+            <label class="block text-slate-300 font-bold mb-1">도착일 (귀국)</label>
+            <input type="date" id="ai-input-end" value="2026-11-01" class="w-full bg-[#0b0f19] border border-slate-700 rounded-xl p-2.5 text-white focus:outline-none focus:border-purple-400">
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-slate-300 font-bold mb-1">여행 스타일 & 특별 선호</label>
+          <input type="text" id="ai-input-style" value="LA 2일 스탑오버 + 고산 적응 수면 고려 + 이과수 30분 국경 통과" class="w-full bg-[#0b0f19] border border-slate-700 rounded-xl p-2.5 text-white focus:outline-none focus:border-purple-400">
+        </div>
+
+        <div class="p-3 bg-purple-950/20 border border-purple-800/40 rounded-xl text-purple-200 leading-relaxed text-[11px]">
+          <i class="fa-solid fa-circle-info mr-1 text-purple-400"></i>
+          AI가 30분 단위 일정, 예상 이동 수단, 시그니처 미식과 예산 견적을 분석하여 <strong>[초안]</strong> 배지가 부착된 일정표로 완성합니다. 생성 후 언제든지 자유롭게 편집하실 수 있습니다.
+        </div>
+
+        <div class="pt-2">
+          <button id="btn-run-ai-trip" onclick="runAITripSetup()" class="w-full py-3 bg-gradient-to-r from-purple-600 to-amber-500 hover:from-purple-500 hover:to-amber-400 text-white font-black rounded-xl text-sm transition flex items-center justify-center gap-2">
+            <i class="fa-solid fa-wand-magic-sparkles"></i>
+            <span>AI 추천 일정 생성 및 자동 셋업</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- [MODAL 4] AI 어시스턴트 즉시 질의 대화창 -->
+  <div id="modal-ai-chat" class="sheet-closed fixed inset-0 z-50 flex items-end sm:items-center justify-center">
+    <div onclick="closeModal('modal-ai-chat')" class="sheet-scrim fixed inset-0 bg-black/70 backdrop-blur-xs"></div>
+    <div class="sheet-modal relative w-full sm:max-w-lg bg-[#131b2e] border border-slate-700 rounded-t-3xl sm:rounded-2xl p-4 shadow-2xl z-10 flex flex-col h-[75vh]">
+      <div class="flex items-center justify-between pb-3 border-b border-slate-800 shrink-0">
+        <div class="flex items-center gap-2">
+          <span class="w-7 h-7 rounded-lg bg-amber-500/10 text-amber-400 flex items-center justify-center text-xs"><i class="fa-solid fa-compass"></i></span>
+          <h3 class="font-bold text-white text-sm">술술트래블 AI 여행 비서</h3>
+        </div>
+        <button onclick="closeModal('modal-ai-chat')" class="w-7 h-7 rounded-full bg-slate-800 text-slate-400 hover:text-white flex items-center justify-center"><i class="fa-solid fa-xmark text-xs"></i></button>
+      </div>
+
+      <!-- 채팅 메시지 영역 -->
+      <div id="chat-messages" class="flex-1 overflow-y-auto py-3 space-y-3 text-xs leading-relaxed">
+        <div class="p-3 bg-[#0b0f19] rounded-xl border border-slate-800 text-slate-200">
+          안녕하세요! 남미 3주 여행 및 전 세계 여행에 대해 궁금한 점을 물어보세요. (예: "쿠스코 첫날 고산병 약 언제 먹어?", "부에노스아이레스 MEP 환율 쓰는 법 알려줘")
+        </div>
+      </div>
+
+      <!-- 입력창 -->
+      <div class="pt-2 border-t border-slate-800 shrink-0 flex gap-2">
+        <input type="text" id="chat-input" onkeydown="if(event.key==='Enter') sendChatMessage()" placeholder="여행 질문을 입력하세요..." class="flex-1 bg-[#0b0f19] border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-amber-400">
+        <button onclick="sendChatMessage()" class="px-4 py-2 bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold rounded-xl text-xs transition">전송</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================== -->
+  <!-- 6. 메인 앱 로직 스크립트 -->
+  <!-- ========================================== -->
+  <script>
+    // 전역 상태 스토어
+    const State = {
+      activeTab: 'plan',
+      activeJournalDay: 0,
+      currentTrip: null,
+      expenses: [],
+      journals: {}, // dayNum -> { text, weather, mood, photos: [dataUrl] }
+      isMepEnabled: true,
+      allTimelinesExpanded: false,
+      geminiKey: localStorage.getItem('st_gemini_key') || ''
+    };
+
+    // ==========================================
+    // 앱 초기화 및 시드 데이터 로드
+    // ==========================================
+    document.addEventListener('DOMContentLoaded', () => {
+      initApp();
+      registerServiceWorker();
+    });
+
+    function initApp() {
+      // LocalStorage에서 기존 여행 데이터 확인
+      const savedTrip = localStorage.getItem('st_current_trip');
+      const savedExpenses = localStorage.getItem('st_expenses');
+      const savedJournals = localStorage.getItem('st_journals');
+      const savedMep = localStorage.getItem('st_mep_enabled');
+
+      if (savedMep !== null) State.isMepEnabled = (savedMep === 'true');
+      document.getElementById('chk-mep-rate').checked = State.isMepEnabled;
+
+      if (savedTrip) {
+        try {
+          State.currentTrip = JSON.parse(savedTrip);
+        } catch(e) { State.currentTrip = null; }
+      }
+      
+      // 저장된 여행이 없으면 남미 3주 최적화 시드 플랜으로 기본 초기화
+      if (!State.currentTrip && window.KB_TRAVEL && window.KB_TRAVEL.templates) {
+        State.currentTrip = JSON.parse(JSON.stringify(window.KB_TRAVEL.templates.south_america_22d));
+        saveCurrentTrip();
+      }
+
+      if (savedExpenses) {
+        try { State.expenses = JSON.parse(savedExpenses); } catch(e) { State.expenses = []; }
+      } else {
+        // 기본 초기 지출 샘플 생성
+        initSampleExpenses();
+      }
+
+      if (savedJournals) {
+        try { State.journals = JSON.parse(savedJournals); } catch(e) { State.journals = {}; }
+      }
+
+      // 렌더링 파이프라인 가동
+      renderAll();
+    }
+
+    function initSampleExpenses() {
+      State.expenses = [
+        { id: 'exp-1', date: '2026-10-11', title: '인앤아웃 버거 석식', cat: 'food', amount: 18, curr: 'USD' },
+        { id: 'exp-2', date: '2026-10-11', title: 'LAX 공항 우버 탑승', cat: 'flight', amount: 45, curr: 'USD' },
+        { id: 'exp-3', date: '2026-10-13', title: '라르코마르 원조 세비체 & 피스코사워', cat: 'food', amount: 80, curr: 'PEN' },
+        { id: 'exp-4', date: '2026-10-14', title: '바예스타 섬 스피드보트 투어', cat: 'tour', amount: 70, curr: 'PEN' }
+      ];
+      saveExpenses();
+    }
+
+    function saveCurrentTrip() {
+      if (State.currentTrip) {
+        localStorage.setItem('st_current_trip', JSON.stringify(State.currentTrip));
+      }
+    }
+
+    function saveExpenses() {
+      localStorage.setItem('st_expenses', JSON.stringify(State.expenses));
+    }
+
+    function saveJournals() {
+      localStorage.setItem('st_journals', JSON.stringify(State.journals));
+    }
+
+    // ==========================================
+    // 렌더링 마스터 함수
+    // ==========================================
+    function renderAll() {
+      updateTopAnalytics();
+      renderPlan();
+      renderJournalChips();
+      renderActiveJournal();
+      renderExpenseList();
+      renderExpenseCategories();
+    }
+
+    // ==========================================
+    // 1. 상단 통계 대시보드 연산 (Top Analytics)
+    // ==========================================
+    function updateTopAnalytics() {
+      if (!State.currentTrip) return;
+
+      document.getElementById('header-trip-name').innerText = State.currentTrip.title;
+
+      // 1. 총 지출액(원화) 계산
+      let totalSpentKRW = 0;
+      State.expenses.forEach(item => {
+        totalSpentKRW += convertToKRW(item.amount, item.curr);
+      });
+
+      const budget = State.currentTrip.budget || 8500000;
+      const budgetRatio = Math.min(100, Math.round((totalSpentKRW / budget) * 100));
+
+      document.getElementById('stat-expense-krw').innerText = `₩${totalSpentKRW.toLocaleString()}`;
+      document.getElementById('stat-budget-total').innerText = `예산: ₩${budget.toLocaleString()}`;
+      document.getElementById('stat-budget-percent').innerText = `${budgetRatio}%`;
+      document.getElementById('stat-budget-bar').style.width = `${budgetRatio}%`;
+
+      // 2. D-Day 및 일차 계산
+      const daysCount = State.currentTrip.days ? State.currentTrip.days.length : 22;
+      document.getElementById('stat-days-ratio').innerText = `DAY 01 / ${daysCount}`;
+      document.getElementById('stat-progress-bar').style.width = `${Math.round((1 / daysCount) * 100)}%`;
+
+      // D-Day
+      if (State.currentTrip.startDate) {
+        const start = new Date(State.currentTrip.startDate);
+        const today = new Date();
+        const diffDays = Math.ceil((start - today) / (1000 * 60 * 60 * 24));
+        const badge = diffDays > 0 ? `D-${diffDays}` : (diffDays === 0 ? 'D-Day' : `D+${Math.abs(diffDays)}`);
+        document.getElementById('stat-dday-badge').innerHTML = `<span>${badge}</span> <span class="text-[10px] text-slate-400 font-normal">(10/11 출발)</span>`;
+      }
+
+      // 3. 기록 & 사진 카운트
+      let totalPhotos = 0;
+      let totalJournals = 0;
+      Object.keys(State.journals).forEach(k => {
+        const j = State.journals[k];
+        if (j.photos && j.photos.length > 0) totalPhotos += j.photos.length;
+        if (j.text && j.text.trim().length > 0) totalJournals += 1;
+      });
+      document.getElementById('stat-photo-count').innerText = `${totalPhotos}장`;
+      document.getElementById('stat-journal-count').innerText = `${totalJournals}편 작성`;
+    }
+
+    // 환율 변환기
+    function convertToKRW(amount, curr) {
+      if (!amount) return 0;
+      const num = parseFloat(amount);
+      if (isNaN(num)) return 0;
+
+      if (curr === 'KRW') return num;
+      if (curr === 'USD') return Math.round(num * 1350);
+      if (curr === 'PEN') return Math.round(num * 360);
+      if (curr === 'BRL') return Math.round(num * 248);
+      if (curr === 'ARS') {
+        // MEP 환율 적용 여부
+        const rate = State.isMepEnabled ? 1.02 : 1.38;
+        return Math.round(num * rate);
+      }
+      return Math.round(num * 1350);
+    }
+
+    function toggleMepRate(checked) {
+      State.isMepEnabled = checked;
+      localStorage.setItem('st_mep_enabled', checked);
+      document.getElementById('val-ars-rate').innerText = checked ? '≈ ₩1.02' : '≈ ₩1.38';
+      renderAll();
+    }
+
+    // ==========================================
+    // 2. 탭 전환 제어
+    // ==========================================
+    function switchTab(tabId) {
+      State.activeTab = tabId;
+      document.querySelectorAll('.tab-view').forEach(v => v.classList.add('hidden'));
+      const activeView = document.getElementById(`view-${tabId}`);
+      if (activeView) activeView.classList.remove('hidden');
+
+      // 하단 네비게이션 버튼 활성화 스타일
+      document.querySelectorAll('.nav-btn').forEach(btn => {
+        btn.className = "nav-btn py-1.5 flex flex-col items-center gap-1 text-slate-400 hover:text-slate-200 font-medium text-[11px] transition";
+      });
+      const activeBtn = document.getElementById(`nav-tab-${tabId}`);
+      if (activeBtn) {
+        activeBtn.className = "nav-btn py-1.5 flex flex-col items-center gap-1 text-amber-400 font-bold text-[11px] transition";
+      }
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // ==========================================
+    // 3. [TAB 1] 여정표 (Plan) 렌더링 & 제어
+    // ==========================================
+    function renderPlan() {
+      const container = document.getElementById('plan-days-container');
+      if (!State.currentTrip || !State.currentTrip.days) {
+        container.innerHTML = '<div class="p-8 text-center text-slate-500 text-xs">일정이 비어 있습니다. [AI 일정 셋업]을 눌러보세요.</div>';
+        return;
+      }
+
+      let html = '';
+      State.currentTrip.days.forEach((day, dayIdx) => {
+        const isHighAlt = day.cityKey === 'cuz';
+        const altBadge = isHighAlt ? `<span class="px-2 py-0.5 rounded bg-purple-500/20 text-purple-300 border border-purple-500/40 text-[10px] font-bold"><i class="fa-solid fa-triangle-exclamation mr-1"></i>3,400m 고산 적응</span>` : '';
+
+        // 스팟 리스트 렌더링
+        let spotsHtml = '';
+        if (day.spots && day.spots.length > 0) {
+          spotsHtml = day.spots.map((spot, spotIdx) => {
+            const draftBadge = spot.isDraft ? `<span class="px-1.5 py-0.2 rounded bg-amber-400/20 text-amber-300 border border-amber-400/40 text-[9px] font-black mr-1 cursor-pointer" onclick="approveDraftSpot(${dayIdx}, ${spotIdx})" title="초안 확정하기">초안</span>` : '';
+            const costStr = spot.cost > 0 ? `<span class="text-slate-400 text-[11px]">${spot.curr} ${spot.cost.toLocaleString()}</span>` : '';
+
+            return `
+              <div class="flex items-start gap-2.5 p-2.5 rounded-xl bg-[#0e1524] border border-slate-800/80 hover:border-slate-700 transition group text-xs">
+                <div class="w-14 shrink-0 font-mono font-bold text-amber-400/90 pt-0.5">${spot.time}</div>
+                <div class="flex-1 min-w-0">
+                  <div class="font-bold text-slate-200 flex items-center gap-1">
+                    ${draftBadge}
+                    <span class="truncate">${spot.title}</span>
+                  </div>
+                  ${spot.memo ? `<div class="text-[11px] text-slate-400 mt-0.5">${spot.memo}</div>` : ''}
+                </div>
+                <div class="shrink-0 flex items-center gap-2">
+                  ${costStr}
+                  <button onclick="deleteSpot(${dayIdx}, ${spotIdx})" class="opacity-0 group-hover:opacity-100 text-slate-500 hover:text-red-400 transition p-1 text-xs">
+                    <i class="fa-regular fa-trash-can"></i>
+                  </button>
+                </div>
+              </div>
+            `;
+          }).join('');
+        } else {
+          spotsHtml = `<div class="p-3 text-center text-slate-500 text-[11px]">등록된 세부 스팟이 없습니다.</div>`;
+        }
+
+        html += `
+          <div class="bg-[#131b2e] rounded-2xl border border-[#1e293d] p-4 sm:p-5 space-y-3">
+            <div class="flex items-center justify-between gap-2 flex-wrap pb-3 border-b border-slate-800/80">
+              <div class="flex items-center gap-2">
+                <span class="px-2.5 py-1 rounded-lg bg-amber-500 text-slate-950 font-black text-xs">DAY ${String(day.dayNum).padStart(2, '0')}</span>
+                <span class="text-xs font-bold text-slate-300">${day.date}</span>
+                <span class="text-xs font-semibold text-slate-400 bg-slate-800 px-2 py-0.5 rounded">${day.flag || '📍'} ${day.cityName || ''}</span>
+                ${altBadge}
+              </div>
+              <button onclick="toggleDayTimeline(${dayIdx})" class="text-xs text-slate-400 hover:text-white flex items-center gap-1 font-medium transition">
+                <span>시간표</span>
+                <i id="icon-day-tl-${dayIdx}" class="fa-solid fa-chevron-down text-[10px] transition-transform duration-200"></i>
+              </button>
+            </div>
+
+            <h4 class="text-sm font-bold text-white">${day.title}</h4>
+
+            <!-- 30분 단위 타임라인 패널 -->
+            <div id="day-tl-${dayIdx}" class="timeline-panel space-y-2 pt-1 ${State.allTimelinesExpanded ? '' : 'hidden'}">
+              ${spotsHtml}
+              <button onclick="openAddSpotModal(${dayIdx})" class="w-full py-2 bg-[#0c121e] hover:bg-[#151f33] border border-dashed border-slate-800 hover:border-slate-700 text-slate-400 hover:text-slate-200 rounded-xl text-xs font-medium transition flex items-center justify-center gap-1">
+                <i class="fa-solid fa-plus text-[10px]"></i> 이 날짜에 새 스팟 추가
+              </button>
+            </div>
+          </div>
+        `;
+      });
+
+      container.innerHTML = html;
+    }
+
+    function toggleDayTimeline(idx) {
+      const panel = document.getElementById(`day-tl-${idx}`);
+      const icon = document.getElementById(`icon-day-tl-${idx}`);
+      if (panel) {
+        panel.classList.toggle('hidden');
+        if (icon) icon.classList.toggle('rotate-180');
+      }
+    }
+
+    function toggleAllPlanTimelines() {
+      State.allTimelinesExpanded = !State.allTimelinesExpanded;
+      const btn = document.getElementById('btn-toggle-all-tl');
+      if (btn) {
+        btn.innerHTML = State.allTimelinesExpanded ? 
+          '<i class="fa-solid fa-angles-up mr-1"></i> 전체 접기' : 
+          '<i class="fa-solid fa-angles-down mr-1"></i> 전체 펼치기';
+      }
+      document.querySelectorAll('.timeline-panel').forEach(p => {
+        if (State.allTimelinesExpanded) p.classList.remove('hidden');
+        else p.classList.add('hidden');
+      });
+    }
+
+    function toggleMapAccordion() {
+      const panel = document.getElementById('panel-map-accordion');
+      const icon = document.getElementById('icon-map-accordion');
+      if (panel) {
+        panel.classList.toggle('hidden');
+        if (icon) icon.classList.toggle('rotate-180');
+      }
+    }
+
+    function approveDraftSpot(dayIdx, spotIdx) {
+      if (State.currentTrip && State.currentTrip.days[dayIdx] && State.currentTrip.days[dayIdx].spots[spotIdx]) {
+        delete State.currentTrip.days[dayIdx].spots[spotIdx].isDraft;
+        saveCurrentTrip();
+        renderPlan();
+      }
+    }
+
+    function deleteSpot(dayIdx, spotIdx) {
+      if (confirm('이 일정을 삭제하시겠습니까?')) {
+        State.currentTrip.days[dayIdx].spots.splice(spotIdx, 1);
+        saveCurrentTrip();
+        renderPlan();
+      }
+    }
+
+    // ==========================================
+    // 4. [TAB 2] 기록 & 사진 다이어리 (Journal)
+    // ==========================================
+    function renderJournalChips() {
+      const container = document.getElementById('journal-day-chips');
+      if (!State.currentTrip || !State.currentTrip.days) return;
+
+      container.innerHTML = State.currentTrip.days.map((d, idx) => {
+        const isActive = idx === State.activeJournalDay;
+        const cls = isActive ? 
+          "px-3 py-1.5 rounded-xl bg-amber-500 text-slate-950 font-black shadow-sm shrink-0 transition" :
+          "px-3 py-1.5 rounded-xl bg-[#0b0f19] text-slate-400 hover:text-white border border-slate-800 shrink-0 transition";
+
+        return `<button onclick="selectJournalDay(${idx})" class="${cls}">DAY ${d.dayNum}</button>`;
+      }).join('');
+    }
+
+    function selectJournalDay(idx) {
+      State.activeJournalDay = idx;
+      renderJournalChips();
+      renderActiveJournal();
+    }
+
+    function renderActiveJournal() {
+      if (!State.currentTrip || !State.currentTrip.days[State.activeJournalDay]) return;
+      const day = State.currentTrip.days[State.activeJournalDay];
+      const jData = State.journals[day.dayNum] || { text: '', weather: '☀️ 맑음', mood: '🤩 최고', photos: [] };
+
+      document.getElementById('journal-active-day').innerText = `DAY ${day.dayNum} (${day.date})`;
+      document.getElementById('journal-active-title').innerText = `${day.flag || '📍'} ${day.title}`;
+      document.getElementById('journal-weather').value = jData.weather || '☀️ 맑음';
+      document.getElementById('journal-mood').value = jData.mood || '🤩 최고';
+      document.getElementById('journal-text').value = jData.text || '';
+
+      // 사진 그리드 렌더링
+      const photoGrid = document.getElementById('journal-photo-grid');
+      if (jData.photos && jData.photos.length > 0) {
+        photoGrid.innerHTML = jData.photos.map((imgSrc, pIdx) => `
+          <div class="relative group rounded-xl overflow-hidden aspect-[3/4] bg-slate-900 border border-slate-800">
+            <img src="${imgSrc}" class="w-full h-full object-cover">
+            <button onclick="deleteJournalPhoto(${day.dayNum}, ${pIdx})" class="absolute top-1 right-1 w-6 h-6 rounded-full bg-red-600/80 text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition text-[10px]">
+              <i class="fa-solid fa-xmark"></i>
+            </button>
+          </div>
+        `).join('');
+      } else {
+        photoGrid.innerHTML = `
+          <div class="col-span-full py-8 text-center text-slate-500 text-xs">
+            <i class="fa-regular fa-image text-2xl mb-1.5 block text-slate-600"></i>
+            등록된 여행 사진이 없습니다. [사진 등록] 버튼을 눌러보세요.
+          </div>
+        `;
+      }
+    }
+
+    function saveCurrentJournal() {
+      if (!State.currentTrip || !State.currentTrip.days[State.activeJournalDay]) return;
+      const dayNum = State.currentTrip.days[State.activeJournalDay].dayNum;
+      if (!State.journals[dayNum]) {
+        State.journals[dayNum] = { text: '', weather: '☀️ 맑음', mood: '🤩 최고', photos: [] };
+      }
+      State.journals[dayNum].text = document.getElementById('journal-text').value;
+      State.journals[dayNum].weather = document.getElementById('journal-weather').value;
+      State.journals[dayNum].mood = document.getElementById('journal-mood').value;
+
+      saveJournals();
+      updateTopAnalytics();
+    }
+
+    // 3:4 사진 스마트 정규화 (Sulsul normalizeThumb 기술 차용)
+    function handlePhotoUpload(e) {
+      const files = e.target.files;
+      if (!files || files.length === 0) return;
+
+      const dayNum = State.currentTrip.days[State.activeJournalDay].dayNum;
+      if (!State.journals[dayNum]) {
+        State.journals[dayNum] = { text: '', weather: '☀️ 맑음', mood: '🤩 최고', photos: [] };
+      }
+
+      Array.from(files).forEach(file => {
+        const reader = new FileReader();
+        reader.onload = (event) => {
+          const img = new Image();
+          img.onload = () => {
+            // 3:4 캔버스 (336x448) 정규화
+            const canvas = document.createElement('canvas');
+            canvas.width = 336;
+            canvas.height = 448;
+            const ctx = canvas.getContext('2d');
+
+            ctx.fillStyle = '#0b0f19';
+            ctx.fillRect(0, 0, 336, 448);
+
+            // 중앙 비율 맞춤
+            const hRatio = 448 / img.height;
+            const wRatio = 336 / img.width;
+            const ratio = Math.max(wRatio, hRatio);
+
+            const centerShiftX = (336 - img.width * ratio) / 2;
+            const centerShiftY = (448 - img.height * ratio) / 2;
+
+            ctx.drawImage(img, 0, 0, img.width, img.height, centerShiftX, centerShiftY, img.width * ratio, img.height * ratio);
+            const normalizedDataUrl = canvas.toDataURL('image/jpeg', 0.85);
+
+            State.journals[dayNum].photos.push(normalizedDataUrl);
+            saveJournals();
+            renderActiveJournal();
+            updateTopAnalytics();
+          };
+          img.src = event.target.result;
+        };
+        reader.readAsDataURL(file);
+      });
+    }
+
+    function deleteJournalPhoto(dayNum, pIdx) {
+      if (State.journals[dayNum] && State.journals[dayNum].photos) {
+        State.journals[dayNum].photos.splice(pIdx, 1);
+        saveJournals();
+        renderActiveJournal();
+        updateTopAnalytics();
+      }
+    }
+
+    // AI 감성 여행기 에세이 생성
+    async function generateAITravelStory() {
+      const day = State.currentTrip.days[State.activeJournalDay];
+      const currentText = document.getElementById('journal-text').value;
+
+      const prompt = `당신은 감성적이고 통찰력 넘치는 세계 최고의 여행 에세이 작가입니다.
+여행 날짜: ${day.date} (DAY ${day.dayNum})
+방문 도시: ${day.cityName} (${day.country})
+오늘의 주요 일정: ${day.title}
+방문 스팟들: ${day.spots ? day.spots.map(s => s.title).join(', ') : ''}
+사용자의 간단한 메모: ${currentText}
+
+위 정보를 바탕으로, 마치 류시화나 빌 브라이슨의 여행기처럼 감각적이고 생생한 1인칭 하루 여행 에세이를 한국어로 3~4문단 작성해 주세요.`;
+
+      document.getElementById('journal-text').value = "✍️ Gemini AI가 오늘의 여행기를 집필하고 있습니다...";
+
+      try {
+        const result = await callGeminiAI(prompt);
+        document.getElementById('journal-text').value = result;
+        saveCurrentJournal();
+      } catch(err) {
+        document.getElementById('journal-text').value = currentText + "\n\n(AI 에세이 작성 실패: " + err.message + ")";
+      }
+    }
+
+    // ==========================================
+    // 5. [TAB 3] 다통화 가계부 (Expense) 렌더링
+    // ==========================================
+    function renderExpenseList() {
+      const container = document.getElementById('expense-list-container');
+      if (!State.expenses || State.expenses.length === 0) {
+        container.innerHTML = '<div class="p-6 text-center text-slate-500 text-xs">지출 기록이 없습니다. [+ 지출 기록]을 눌러보세요.</div>';
+        return;
+      }
+
+      container.innerHTML = State.expenses.slice().reverse().map(item => {
+        const krw = convertToKRW(item.amount, item.curr);
+        return `
+          <div class="p-3 hover:bg-slate-800/40 transition flex items-center justify-between text-xs">
+            <div class="flex items-center gap-2.5">
+              <span class="w-7 h-7 rounded-lg bg-slate-800 flex items-center justify-center text-xs">${getCategoryIcon(item.cat)}</span>
+              <div>
+                <div class="font-bold text-slate-200">${item.title}</div>
+                <div class="text-[10px] text-slate-500 mt-0.5">${item.date} · ${item.cat}</div>
+              </div>
+            </div>
+            <div class="text-right">
+              <div class="font-black text-white">₩${krw.toLocaleString()}</div>
+              <div class="text-[10px] text-slate-400 mt-0.5 font-mono">${item.curr} ${item.amount.toLocaleString()}</div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function renderExpenseCategories() {
+      const container = document.getElementById('expense-category-bars');
+      const catTotals = {};
+      let allTotal = 0;
+
+      State.expenses.forEach(item => {
+        const krw = convertToKRW(item.amount, item.curr);
+        catTotals[item.cat] = (catTotals[item.cat] || 0) + krw;
+        allTotal += krw;
+      });
+
+      if (allTotal === 0) {
+        container.innerHTML = '<div class="text-slate-500 text-xs text-center py-2">지출 데이터 없음</div>';
+        return;
+      }
+
+      const categories = [
+        { id: 'food', name: '식비/미식', color: 'bg-emerald-500' },
+        { id: 'flight', name: '항공/교통', color: 'bg-blue-500' },
+        { id: 'tour', name: '관광/투어', color: 'bg-amber-500' },
+        { id: 'lodging', name: '숙소/호텔', color: 'bg-indigo-500' },
+        { id: 'shopping', name: '쇼핑/기념품', color: 'bg-purple-500' },
+        { id: 'etc', name: '기타', color: 'bg-slate-500' }
+      ];
+
+      container.innerHTML = categories.map(c => {
+        const amount = catTotals[c.id] || 0;
+        const pct = Math.round((amount / allTotal) * 100);
+        return `
+          <div class="space-y-1 text-xs">
+            <div class="flex justify-between text-slate-400 text-[11px]">
+              <span>${c.name}</span>
+              <span>₩${amount.toLocaleString()} (${pct}%)</span>
+            </div>
+            <div class="w-full h-1.5 bg-slate-800 rounded-full overflow-hidden">
+              <div class="${c.color} h-full rounded-full transition-all duration-300" style="width: ${pct}%"></div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function getCategoryIcon(cat) {
+      if (cat === 'food') return '🍽️';
+      if (cat === 'flight') return '✈️';
+      if (cat === 'tour') return '🎟️';
+      if (cat === 'lodging') return '🏨';
+      if (cat === 'shopping') return '🛍️';
+      return '💡';
+    }
+
+    // ==========================================
+    // 6. 모달 제어 및 폼 처리
+    // ==========================================
+    function openModal(modalId) {
+      const m = document.getElementById(modalId);
+      if (m) m.classList.remove('sheet-closed');
+    }
+
+    function closeModal(modalId) {
+      const m = document.getElementById(modalId);
+      if (m) m.classList.add('sheet-closed');
+    }
+
+    function openAddSpotModal(dayIdx = 0) {
+      const select = document.getElementById('spot-form-day-select');
+      select.innerHTML = State.currentTrip.days.map((d, idx) => 
+        `<option value="${idx}" ${idx === dayIdx ? 'selected' : ''}>DAY ${d.dayNum}: ${d.cityName || d.title}</option>`
+      ).join('');
+
+      document.getElementById('spot-form-time').value = '10:00';
+      document.getElementById('spot-form-title').value = '';
+      document.getElementById('spot-form-cost').value = '';
+      document.getElementById('spot-form-memo').value = '';
+      openModal('modal-spot');
+    }
+
+    function handleSpotSubmit(e) {
+      e.preventDefault();
+      const dayIdx = parseInt(document.getElementById('spot-form-day-select').value);
+      const time = document.getElementById('spot-form-time').value;
+      const cat = document.getElementById('spot-form-cat').value;
+      const title = document.getElementById('spot-form-title').value;
+      const cost = parseFloat(document.getElementById('spot-form-cost').value) || 0;
+      const curr = document.getElementById('spot-form-curr').value;
+      const memo = document.getElementById('spot-form-memo').value;
+
+      if (!State.currentTrip.days[dayIdx].spots) {
+        State.currentTrip.days[dayIdx].spots = [];
+      }
+
+      State.currentTrip.days[dayIdx].spots.push({ time, cat, title, cost, curr, memo });
+      // 시간순 정렬
+      State.currentTrip.days[dayIdx].spots.sort((a, b) => a.time.localeCompare(b.time));
+
+      saveCurrentTrip();
+      closeModal('modal-spot');
+      renderPlan();
+    }
+
+    function openAddExpenseModal() {
+      document.getElementById('exp-form-date').value = new Date().toISOString().slice(0, 10);
+      document.getElementById('exp-form-title').value = '';
+      document.getElementById('exp-form-amount').value = '';
+      calculateConvertedPreview();
+      openModal('modal-expense');
+    }
+
+    function calculateConvertedPreview() {
+      const amt = parseFloat(document.getElementById('exp-form-amount').value) || 0;
+      const curr = document.getElementById('exp-form-curr').value;
+      const krw = convertToKRW(amt, curr);
+      document.getElementById('exp-form-preview-krw').innerText = `₩${krw.toLocaleString()}`;
+    }
+
+    function handleExpenseSubmit(e) {
+      e.preventDefault();
+      const date = document.getElementById('exp-form-date').value;
+      const title = document.getElementById('exp-form-title').value;
+      const cat = document.getElementById('exp-form-cat').value;
+      const curr = document.getElementById('exp-form-curr').value;
+      const amount = parseFloat(document.getElementById('exp-form-amount').value) || 0;
+
+      State.expenses.push({
+        id: 'exp-' + Date.now(),
+        date, title, cat, curr, amount
+      });
+
+      saveExpenses();
+      closeModal('modal-expense');
+      renderAll();
+    }
+
+    function openAITripModal() {
+      openModal('modal-ai-trip');
+    }
+
+    function openAIAssistantChat() {
+      openModal('modal-ai-chat');
+    }
+
+    // ==========================================
+    // 7. Gemini AI 멀티모델 Fallback 오케스트레이션
+    // ==========================================
+    async function callGeminiAI(prompt, isJson = false) {
+      const apiKey = State.geminiKey || localStorage.getItem('st_gemini_key');
+      if (!apiKey) {
+        throw new Error("설정(⚙️) 탭에서 Google Gemini API 키를 먼저 등록해 주세요.");
+      }
+
+      // 3단계 멀티모델 Fallback 루프
+      const models = ['gemini-2.5-flash', 'gemini-2.0-flash', 'gemini-1.5-flash'];
+      let lastError = null;
+
+      for (const model of models) {
+        try {
+          const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
+          const body = {
+            contents: [{ parts: [{ text: prompt }] }],
+            generationConfig: {
+              temperature: 0.7,
+              maxOutputTokens: 2048
+            }
+          };
+          if (isJson) {
+            body.generationConfig.responseMimeType = "application/json";
+          }
+
+          const res = await fetch(url, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(body)
+          });
+
+          if (!res.ok) {
+            const errData = await res.json();
+            throw new Error(errData.error ? errData.error.message : `HTTP ${res.status}`);
+          }
+
+          const data = await res.json();
+          const text = data.candidates[0].content.parts[0].text;
+          return text;
+        } catch(err) {
+          console.warn(`[AI] ${model} 실패, 다음 모델로 폴백 시도:`, err.message);
+          lastError = err;
+        }
+      }
+
+      throw lastError || new Error("모든 AI 모델 호출에 실패했습니다.");
+    }
+
+    async function runAITripSetup() {
+      const dest = document.getElementById('ai-input-dest').value;
+      const start = document.getElementById('ai-input-start').value;
+      const end = document.getElementById('ai-input-end').value;
+      const style = document.getElementById('ai-input-style').value;
+      const btn = document.getElementById('btn-run-ai-trip');
+
+      btn.disabled = true;
+      btn.innerHTML = '<i class="fa-solid fa-circle-notch animate-spin"></i> AI 맞춤 일정 설계 중...';
+
+      // 만약 목적지가 남미 여행이면 내장 KB 마스터 플랜을 즉시 정밀 적용하여 품질 보장
+      if (dest.includes('남미') && window.KB_TRAVEL && window.KB_TRAVEL.templates) {
+        setTimeout(() => {
+          State.currentTrip = JSON.parse(JSON.stringify(window.KB_TRAVEL.templates.south_america_22d));
+          State.currentTrip.startDate = start;
+          State.currentTrip.endDate = end;
+
+          // AI 제안 초안 배지 부여
+          State.currentTrip.days.forEach(d => {
+            if (d.spots) d.spots.forEach(s => s.isDraft = true);
+          });
+
+          saveCurrentTrip();
+          closeModal('modal-ai-trip');
+          btn.disabled = false;
+          btn.innerHTML = '<i class="fa-solid fa-wand-magic-sparkles"></i> AI 추천 일정 생성 및 자동 셋업';
+          renderAll();
+          switchTab('plan');
+          alert('✨ AI가 남미 3주 최적화 일정과 스팟을 [초안] 상태로 셋업했습니다!');
+        }, 1200);
+        return;
+      }
+
+      // 타 지역일 경우 Gemini API를 통해 정형 JSON 생성
+      const prompt = `여행 플래너 전문가로서 다음 조건의 여행 일정을 JSON 형식으로 설계해 주세요:
+- 목적지: ${dest}
+- 기간: ${start} ~ ${end}
+- 스타일: ${style}
+
+응답 JSON 스키마:
+{
+  "title": "여행 제목",
+  "budget": 5000000,
+  "currency": "KRW",
+  "days": [
+    {
+      "dayNum": 1,
+      "date": "${start}",
+      "cityName": "도시명",
+      "country": "국가명",
+      "flag": "국기이모지",
+      "title": "하루 요약 제목",
+      "spots": [
+        { "time": "09:00", "title": "장소/활동", "cat": "tour", "cost": 0, "curr": "KRW", "memo": "팁", "isDraft": true }
+      ]
+    }
+  ]
+}`;
+
+      try {
+        const jsonStr = await callGeminiAI(prompt, true);
+        const tripData = JSON.parse(jsonStr);
+        tripData.startDate = start;
+        tripData.endDate = end;
+        State.currentTrip = tripData;
+        saveCurrentTrip();
+        closeModal('modal-ai-trip');
+        renderAll();
+        switchTab('plan');
+        alert('✨ AI 스마트 여행 셋업이 완료되었습니다!');
+      } catch(err) {
+        alert('AI 생성 실패: ' + err.message + '\n내장된 남미 템플릿을 대신 적용합니다.');
+        resetToSouthAmericaSeed();
+        closeModal('modal-ai-trip');
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fa-solid fa-wand-magic-sparkles"></i> AI 추천 일정 생성 및 자동 셋업';
+      }
+    }
+
+    async function sendChatMessage() {
+      const input = document.getElementById('chat-input');
+      const text = input.value.trim();
+      if (!text) return;
+
+      const container = document.getElementById('chat-messages');
+      container.innerHTML += `
+        <div class="flex justify-end">
+          <div class="p-2.5 bg-amber-500 text-slate-950 font-bold rounded-xl max-w-[80%]">${text}</div>
+        </div>
+      `;
+      input.value = '';
+      container.scrollTop = container.scrollHeight;
+
+      const loadingId = 'loading-' + Date.now();
+      container.innerHTML += `
+        <div id="${loadingId}" class="p-2.5 bg-[#0b0f19] rounded-xl border border-slate-800 text-slate-400">
+          <i class="fa-solid fa-circle-notch animate-spin mr-1"></i> 답변 생각 중...
+        </div>
+      `;
+      container.scrollTop = container.scrollHeight;
+
+      try {
+        const reply = await callGeminiAI(`여행자 질문: "${text}"\n친절하고 실전 꿀팁 위주로 3~4문장으로 간결하게 답해 주세요.`);
+        document.getElementById(loadingId).outerHTML = `
+          <div class="p-3 bg-[#0b0f19] rounded-xl border border-slate-800 text-slate-200">
+            ${reply.replace(/\n/g, '<br>')}
+          </div>
+        `;
+      } catch(err) {
+        document.getElementById(loadingId).outerHTML = `
+          <div class="p-3 bg-red-950/40 rounded-xl border border-red-800/40 text-red-300">
+            답변 생성 실패: ${err.message}
+          </div>
+        `;
+      }
+      container.scrollTop = container.scrollHeight;
+    }
+
+    // ==========================================
+    // 8. 설정 & 백업/동기화
+    // ==========================================
+    function saveGeminiApiKey() {
+      const key = document.getElementById('cfg-gemini-key').value.trim();
+      if (key) {
+        localStorage.setItem('st_gemini_key', key);
+        State.geminiKey = key;
+        alert('Gemini API 키가 안전하게 저장되었습니다.');
+      }
+    }
+
+    function exportAllDataJSON() {
+      const exportObj = {
+        app: "Sulsul-Travel",
+        version: "1.0.0",
+        exportDate: new Date().toISOString(),
+        trip: State.currentTrip,
+        expenses: State.expenses,
+        journals: State.journals
+      };
+
+      const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(exportObj, null, 2));
+      const dlAnchor = document.createElement('a');
+      dlAnchor.setAttribute("href", dataStr);
+      dlAnchor.setAttribute("download", `sulsul_travel_backup_${new Date().toISOString().slice(0, 10)}.json`);
+      document.body.appendChild(dlAnchor);
+      dlAnchor.click();
+      dlAnchor.remove();
+    }
+
+    function importDataJSON(e) {
+      const file = e.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        try {
+          const imported = JSON.parse(event.target.result);
+          if (imported.trip) State.currentTrip = imported.trip;
+          if (imported.expenses) State.expenses = imported.expenses;
+          if (imported.journals) State.journals = imported.journals;
+
+          saveCurrentTrip();
+          saveExpenses();
+          saveJournals();
+          renderAll();
+          alert('데이터 복원이 성공적으로 완료되었습니다!');
+        } catch(err) {
+          alert('파일 형식이 올바르지 않습니다: ' + err.message);
+        }
+      };
+      reader.readAsText(file);
+    }
+
+    function resetToSouthAmericaSeed() {
+      if (confirm('현재 일정을 남미 3주 최적화 마스터 플랜으로 재설정하시겠습니까?')) {
+        State.currentTrip = JSON.parse(JSON.stringify(window.KB_TRAVEL.templates.south_america_22d));
+        saveCurrentTrip();
+        renderAll();
+        alert('남미 3주 마스터 플랜이 적용되었습니다.');
+      }
+    }
+
+    // 서비스 워커 등록
+    function registerServiceWorker() {
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('./sw.js')
+          .then(reg => console.log('[PWA] Service Worker registered:', reg.scope))
+          .catch(err => console.warn('[PWA] Service Worker registration failed:', err));
+      }
+    }
+  </script>
+</body>
+</html>
