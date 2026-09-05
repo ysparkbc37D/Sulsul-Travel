@@ -1,5 +1,5 @@
 /**
- * Sulsul-Travel Built-in Knowledge Base (kb-travel.js) v1.0.2
+ * Sulsul-Travel Built-in Knowledge Base (kb-travel.js) v1.0.3
  * 100% Offline-First domain data for global travel, South America 3-week master plan,
  * multi-currency rates (including Argentina MEP rate), and packing checklists.
  */
@@ -416,7 +416,7 @@ const saDays = scheduleOct11Data.map((d, idx) => {
 });
 
 window.KB_TRAVEL = {
-  version: "1.0.2",
+  version: "1.0.3",
   
   currencies: {
     KRW: { name: "대한민국 원", symbol: "₩", rateToUSD: 1350, step: 1000, flag: "🇰🇷" },
@@ -597,7 +597,7 @@ window.KB_TRAVEL = {
     }
   ],
 
-  // 8대 거점 도시 가이드
+  // 8대 거점 도시 가이드 (GPS 좌표 & 구글 지도 연동)
   destinations: {
     lax: {
       id: "lax",
@@ -606,6 +606,10 @@ window.KB_TRAVEL = {
       flag: "🇺🇸",
       currency: "USD",
       altitude: "87m (평지)",
+      lat: 34.0522,
+      lng: -118.2437,
+      zoom: 12,
+      googleMapsQuery: "Los Angeles, CA, USA",
       highlights: ["산타모니카 피어 & 루트 66 종점", "그리피스 천문대 <라라랜드> 야경", "할리우드 명예의 거리", "게티 센터 미술관"],
       foods: ["인앤아웃(In-N-Out) 더블더블 버거", "BCD 북창동 순두부 본점", "핑크스(Pink's) 칠리 핫도그"],
       tips: "시차 적응을 위해 첫날 낮잠 1시간 제한! LAX-it 구역에서 우버 탑승 필수."
@@ -617,6 +621,10 @@ window.KB_TRAVEL = {
       flag: "🇵🇪",
       currency: "PEN",
       altitude: "34m (해안가)",
+      lat: -12.0464,
+      lng: -77.0428,
+      zoom: 12,
+      googleMapsQuery: "Miraflores, Lima, Peru",
       highlights: ["미라플로레스 라르코마르 해안 절벽", "사랑의 공원", "아르마스 광장 센트로 역사지구", "바랑코 예술거리"],
       foods: ["원조 세비체 (La Mar)", "안티쿠초 소심장 꼬치구이", "피스코 사워 칵테일"],
       tips: "공항 호객 택시 절대 탑승 금지! Green Taxi 공식 부스나 Uber 이용 필수. 수돗물 절대 음용 금지."
@@ -628,6 +636,10 @@ window.KB_TRAVEL = {
       flag: "🇵🇪",
       currency: "PEN",
       altitude: "400m (사막)",
+      lat: -14.0875,
+      lng: -75.7626,
+      zoom: 13,
+      googleMapsQuery: "Huacachina, Ica, Peru",
       highlights: ["바예스타 섬 바다사자·펭귄 보트 투어", "칸델라브라 신비의 지상화", "와카치나 거대 사구 듄 버기카", "사막 샌드보딩 & 일몰"],
       foods: ["이카 타카마(Tacama) 와이너리 와인 & 피스코", "오아시스 화덕 피자"],
       tips: "버기카 탑승 시 마스크, 선글라스, 스마트폰 방수팩 필수! 모래바람이 강함."
@@ -639,6 +651,10 @@ window.KB_TRAVEL = {
       flag: "🇵🇪",
       currency: "PEN",
       altitude: "3,400m (⚠️ 고산 지대)",
+      lat: -13.5319,
+      lng: -71.9675,
+      zoom: 13,
+      googleMapsQuery: "Plaza de Armas Cusco, Peru",
       highlights: ["아르마스 광장 & 잉카 석벽 12각의 돌", "삭사이와만 거대 요새", "산페드로 전통 시장", "친체로·모라이·살리네라스 염전"],
       foods: ["알파카 안심 스테이크 (Cicciolina / Morena)", "킨와(Quinoa) 수프", "코카차 (고산병 완화)"],
       tips: "🚨 첫날 도착 직후 3시간 침대 수면 필수! 달리기, 음주, 과식 3대 절대 금지. 다이아막스 사전 복용."
@@ -650,6 +666,10 @@ window.KB_TRAVEL = {
       flag: "🇵🇪",
       currency: "USD / PEN",
       altitude: "2,430m (아열대 고산 정글)",
+      lat: -13.1631,
+      lng: -72.5450,
+      zoom: 14,
+      googleMapsQuery: "Historic Sanctuary of Machu Picchu, Peru",
       highlights: ["서킷 2 망지기의 집 엽서 뷰", "태양의 신전 & 인티와타나 해시계", "비스타돔 파노라마 열차 댄스 공연", "아구아스 칼리엔테스 온천 마을"],
       foods: ["안데스 청정 송어구이 (Trucha)", "로컬 크래프트 맥주"],
       tips: "정문 입장 시 실물 여권 소지 필수! 유적지 내 화장실이 없으므로 정문 앞 유료 화장실 사전 이용."
@@ -661,6 +681,10 @@ window.KB_TRAVEL = {
       flag: "🇦🇷",
       currency: "ARS",
       altitude: "25m (라플라타 강변)",
+      lat: -34.6037,
+      lng: -58.3816,
+      zoom: 12,
+      googleMapsQuery: "Plaza de Mayo, Buenos Aires, Argentina",
       highlights: ["5월 광장 분홍빛 대통령궁(카사 로사다)", "원색의 카미니토 예술 거리 (라 보카)", "오페라 극장 개조 '엘 아테네오' 서점", "피아졸라 정통 탱고 쇼"],
       foods: ["돈 훌리오(Don Julio) 꽃등심 아사도 스테이크", "말벡(Malbec) 레드 와인", "하바나(Havanna) 둘세데레체 알파호르"],
       tips: "💡 신용카드 결제 시 외국인 우대 환율(MEP) 자동 적용! 현금보다 카드 결제가 훨씬 유리함."
@@ -672,6 +696,10 @@ window.KB_TRAVEL = {
       flag: "🇦🇷 🇧🇷",
       currency: "ARS / BRL",
       altitude: "195m (열대 우림)",
+      lat: -25.6953,
+      lng: -54.4367,
+      zoom: 12,
+      googleMapsQuery: "Iguazu Falls, Argentina",
       highlights: ["악마의 목구멍 (Garganta del Diablo)", "그란 아벤투라 폭포 돌진 보트 투어", "브라질 측 파노라마 산책로", "버드파크 투칸·마코 앵무새"],
       foods: ["아르헨티나 엠파나다 & 브라질 슈하스코", "시원한 아사이베리 볼"],
       tips: "🚗 택시로 30분 만에 아르헨티나 출국 ➔ 브라질 입국 심사대 통과! 비행기 환승 대비 6시간 절약."
@@ -683,6 +711,10 @@ window.KB_TRAVEL = {
       flag: "🇧🇷",
       currency: "BRL",
       altitude: "0m (대서양 해변)",
+      lat: -22.9068,
+      lng: -43.1729,
+      zoom: 12,
+      googleMapsQuery: "Christ the Redeemer, Rio de Janeiro, Brazil",
       highlights: ["코르코바두 산 거대 예수상 (Cristo Redentor)", "슈가로프(빵산) 케이블카 선셋", "코파카바나 & 이파네마 해변", "셀라론(Selarón) 붉은 타일 계단"],
       foods: ["전통 바비큐 슈하스코 (Fogo de Chão)", "카이피리냐(Caipirinha) 칵테일", "바삭한 파스텔 튀김"],
       tips: "스마트폰 손에 들고 걷기 금지! 소매치기 방지 목걸이 스트랩 필수. 밤에는 해변가라도 무조건 Uber 이용."

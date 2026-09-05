@@ -103,9 +103,10 @@ $mandatoryIds = @(
     'lifetime-analytics', 'trip-cards-grid', 'modal-create-trip',
     'view-hub', 'view-workspace', 'top-analytics', 'app-ver-badge', 'header-trip-name',
     'tab-content-plan', 'tab-content-expenses', 'tab-content-journal', 'tab-content-checklist',
-    'nav-tab-plan', 'nav-tab-journal', 'nav-tab-expense', 'nav-tab-sync',
+    'nav-tab-plan', 'nav-tab-journal', 'nav-tab-expenses', 'nav-tab-sync',
     'chk-mep-rate', 'modal-spot', 'modal-expense', 'modal-ai-trip', 
-    'modal-ai-chat', 'cfg-gemini-key'
+    'modal-ai-chat', 'modal-confirm-delete', 'modal-install-guide', 
+    'modal-share-room', 'cfg-gemini-key'
 )
 $missingIds = @()
 foreach ($id in $mandatoryIds) {
