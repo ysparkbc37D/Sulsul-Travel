@@ -106,7 +106,7 @@ $mandatoryIds = @(
     'nav-tab-plan', 'nav-tab-journal', 'nav-tab-expenses', 'nav-tab-sync',
     'chk-mep-rate', 'modal-spot', 'modal-expense', 'modal-ai-trip', 
     'modal-ai-chat', 'modal-confirm-delete', 'modal-install-guide', 
-    'modal-share-room', 'cfg-gemini-key'
+    'modal-share-room', 'cfg-gemini-key', 'modal-pdf-report', 'gps-radar-card'
 )
 $missingIds = @()
 foreach ($id in $mandatoryIds) {
