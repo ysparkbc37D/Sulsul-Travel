@@ -1,5 +1,5 @@
-﻿/**
- * Sulsul-Travel Built-in Knowledge Base (kb-travel.js) v1.1.0
+/**
+ * Sulsul-Travel Built-in Knowledge Base (kb-travel.js) v1.0.2
  * 100% Offline-First domain data for global travel, South America 3-week master plan,
  * multi-currency rates (including Argentina MEP rate), and packing checklists.
  */
@@ -416,7 +416,7 @@ const saDays = scheduleOct11Data.map((d, idx) => {
 });
 
 window.KB_TRAVEL = {
-  version: "1.1.0",
+  version: "1.0.2",
   
   currencies: {
     KRW: { name: "대한민국 원", symbol: "₩", rateToUSD: 1350, step: 1000, flag: "🇰🇷" },
