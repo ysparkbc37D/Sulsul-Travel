@@ -124,6 +124,43 @@
       }
     }
 
+    /* Sulsul-Diary Dark Luxury UI Tokens & Buttons */
+    .btn-gold {
+      background: linear-gradient(180deg, #d7a643, #bd8a2a);
+      color: #1a1306;
+      font-weight: 800;
+      border: none;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.35), 0 4px 14px rgba(212, 175, 55, 0.25);
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .btn-gold:hover {
+      background: linear-gradient(180deg, #e5b654, #ca9632);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.45), 0 6px 20px rgba(212, 175, 55, 0.38);
+      transform: translateY(-1px);
+    }
+    .btn-gold:active {
+      transform: translateY(0);
+    }
+    .btn-surface {
+      background: #141c2e;
+      border: 1px solid #23304c;
+      color: #cbd5e1;
+      font-weight: 600;
+      transition: all 0.18s ease;
+    }
+    .btn-surface:hover {
+      background: #1a263e;
+      border-color: #3b4d75;
+      color: #ffffff;
+    }
+    @keyframes pulseGold {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(212, 175, 55, 0.5); }
+      50% { box-shadow: 0 0 0 6px rgba(212, 175, 55, 0); }
+    }
+    .pulse-gold {
+      animation: pulseGold 2s infinite;
+    }
+
     /* Leaflet Dark Theme Overrides */
     #leaflet-route-map {
       width: 100%;
@@ -221,7 +258,7 @@
         </span>
         <div>
           <h1 class="text-base font-black tracking-tight text-white flex items-center gap-1.5">
-            술술트래블 <span id="app-ver-badge" class="text-[10px] font-bold px-1.5 py-0.5 rounded bg-amber-500/10 text-amber-400 border border-amber-500/20">v1.0.4</span>
+            술술트래블 <span id="app-ver-badge" class="text-[10px] font-bold px-1.5 py-0.5 rounded bg-amber-500/10 text-amber-400 border border-amber-500/20">v1.0.5</span>
           </h1>
           <p id="header-trip-name" class="text-[11px] text-slate-400 truncate max-w-[180px] sm:max-w-xs font-medium">인생의 모든 여정을 기록하는 다이어리</p>
         </div>
@@ -229,15 +266,15 @@
 
       <!-- 우측 빠른 액션 버튼들 -->
       <div class="flex items-center gap-2">
-        <!-- PWA 네이티브 앱 설치 버튼 (지원 브라우저에서 자동 노출) -->
-        <button id="btn-native-install" onclick="triggerNativeInstall()" class="hidden px-2.5 py-1.5 bg-emerald-500/15 hover:bg-emerald-500/25 border border-emerald-500/30 text-emerald-400 rounded-lg text-xs font-bold transition items-center gap-1.5">
-          <i class="fa-solid fa-download text-[11px]"></i>
-          <span class="hidden sm:inline">앱 설치</span>
+        <!-- PWA 스마트 앱 설치 버튼 (미설치 시 골드 하이라이트) -->
+        <button id="btn-native-install" onclick="handleInstallButtonClick()" class="px-2.5 py-1.5 btn-gold rounded-lg text-xs font-black flex items-center gap-1.5 transition shadow-sm cursor-pointer" title="홈 화면에 단독 앱(PWA) 설치">
+          <i class="fa-solid fa-mobile-screen-button text-[11px]"></i>
+          <span id="btn-native-install-txt" class="hidden sm:inline">앱 설치</span>
         </button>
 
         <!-- 앱 설치 가이드 버튼 -->
-        <button onclick="openModal('modal-install-guide')" class="px-2.5 py-1.5 bg-[#141c2e] hover:bg-[#1a263e] border border-[#23304c] text-slate-300 hover:text-white rounded-lg text-xs font-semibold flex items-center gap-1.5 transition" title="홈 화면에 앱 추가하는 법">
-          <i class="fa-solid fa-mobile-screen-button text-[11px] text-amber-400"></i>
+        <button onclick="openInstallGuideModal()" class="px-2.5 py-1.5 bg-[#141c2e] hover:bg-[#1a263e] border border-[#23304c] text-slate-300 hover:text-white rounded-lg text-xs font-semibold flex items-center gap-1.5 transition" title="홈 화면에 앱 추가하는 법">
+          <i class="fa-solid fa-book-open text-[11px] text-amber-400"></i>
           <span class="hidden sm:inline">설치 가이드</span>
         </button>
 
@@ -272,6 +309,9 @@
   <!-- ========================================== -->
   <main id="view-hub" class="flex-1 max-w-5xl mx-auto w-full px-4 py-6 space-y-6">
     
+    <!-- 스마트 웰컴 배너 (미설치 시 최상단 안내 및 원클릭 설치) -->
+    <div id="smart-welcome-banner" class="hidden"></div>
+
     <!-- 평생 여행 누적 통계 대시보드 (Lifetime Analytics Banner) -->
     <section id="lifetime-analytics" class="relative overflow-hidden rounded-2xl bg-gradient-to-br from-[#0f1422] via-[#0f1422] to-[#162035] border border-[#1e263c] p-5 sm:p-6 shadow-xl shadow-black/40">
       <div class="absolute -right-16 -top-16 w-56 h-56 bg-amber-500/10 rounded-full blur-3xl pointer-events-none"></div>
@@ -847,65 +887,95 @@
     <div class="sheet-scrim" onclick="closeModal('modal-install-guide')"></div>
     <div class="sheet-box p-6 sm:p-7 space-y-4">
       <div class="flex items-center justify-between border-b border-[#1e263c] pb-3">
-        <div class="flex items-center gap-2">
-          <span class="w-8 h-8 rounded-lg bg-amber-500/20 text-amber-400 flex items-center justify-center text-sm">📲</span>
-          <h3 class="text-base font-black text-white">홈 화면에 앱(PWA) 설치 가이드</h3>
+        <div class="flex items-center gap-2.5">
+          <span class="w-8 h-8 rounded-lg bg-amber-500/20 text-amber-400 border border-amber-500/30 flex items-center justify-center text-sm font-black shadow-sm">📲</span>
+          <div>
+            <h3 class="text-base font-black text-white">홈 화면에 앱(PWA) 바로 설치</h3>
+            <p class="text-[11px] text-slate-400">단독 앱 실행 & 영구 보관 저장소 보호</p>
+          </div>
         </div>
-        <button onclick="closeModal('modal-install-guide')" class="text-slate-400 hover:text-white text-base">✕</button>
+        <button onclick="closeModal('modal-install-guide')" class="text-slate-400 hover:text-white text-base p-1" title="닫기">✕</button>
       </div>
 
-      <div class="p-3 bg-amber-500/10 border border-amber-500/20 rounded-xl text-xs text-amber-300">
-        💡 <b>앱으로 설치하면 좋은 이유</b>: 일반 웹사이트 캐시와 달리 운영체제가 '영구 보호 저장소'로 승격시켜 오프라인 환경 및 비행기 모드에서도 기록이 안전하게 보호됩니다.
+      <!-- 헤더 히어로 배너 (Sulsul-Diary 다크 럭셔리 스타일) -->
+      <div class="p-3.5 rounded-xl bg-gradient-to-br from-amber-500/15 via-[#161d2e] to-[#0f1422] border border-amber-500/30 text-center space-y-1">
+        <div class="text-[10px] font-black tracking-widest text-amber-400">🌟 WELCOME TO SULSUL TRAVEL</div>
+        <div class="text-sm font-black text-white">술술트래블 200% 활용을 위한 <span class="text-amber-400">필수 안심 세팅</span></div>
+        <div class="text-[11px] text-slate-300 leading-relaxed mt-1">
+          일반 웹사이트는 7일간 방치 시 캐시가 삭제될 수 있습니다. <b>홈 화면에 앱(PWA)으로 설치하면 운영체제가 데이터를 영구 보호</b>하여 비행기 모드에서도 안전하게 보관됩니다.
+        </div>
+      </div>
+
+      <!-- 동적 인터랙티브 설치 영역 (앱 상태 / 인앱 브라우저 / 1-탭 설치 버튼) -->
+      <div id="install-guide-dynamic-box">
+        <div class="space-y-2">
+          <button id="btn-modal-direct-install" onclick="triggerNativeInstall()" class="btn-gold w-full py-3.5 px-4 rounded-xl text-sm font-black flex items-center justify-center gap-2 cursor-pointer pulse-gold shadow-lg shadow-amber-500/20">
+            <i class="fa-solid fa-download text-sm"></i>
+            <span>📲 지금 바로 홈 화면에 앱 설치하기</span>
+          </button>
+          <div class="text-[11px] text-slate-400 text-center">
+            (터치 시 브라우저 설치 팝업이 바로 뜹니다. 메뉴의 [앱 설치]로도 가능)
+          </div>
+        </div>
       </div>
 
       <!-- 플랫폼 3대 탭 -->
       <div class="flex items-center gap-1.5 p-1 bg-[#080b12] rounded-xl border border-[#1e263c]">
-        <button onclick="switchInstallTab('ios')" id="tab-inst-ios" class="flex-1 py-1.5 text-xs font-bold rounded-lg bg-[#141c2e] text-amber-400 border border-[#23304c]">🍎 iPhone / iPad</button>
-        <button onclick="switchInstallTab('android')" id="tab-inst-android" class="flex-1 py-1.5 text-xs font-bold rounded-lg text-slate-400 hover:text-white">🤖 Android</button>
-        <button onclick="switchInstallTab('pc')" id="tab-inst-pc" class="flex-1 py-1.5 text-xs font-bold rounded-lg text-slate-400 hover:text-white">💻 PC (Edge/Chrome)</button>
+        <button onclick="switchInstallTab('ios')" id="tab-inst-ios" class="flex-1 py-1.5 text-xs font-bold rounded-lg text-slate-400 hover:text-white transition">🍎 iPhone / iPad</button>
+        <button onclick="switchInstallTab('android')" id="tab-inst-android" class="flex-1 py-1.5 text-xs font-bold rounded-lg bg-gradient-to-r from-amber-500/20 to-amber-600/20 text-amber-300 border border-amber-500/40">🤖 Android</button>
+        <button onclick="switchInstallTab('pc')" id="tab-inst-pc" class="flex-1 py-1.5 text-xs font-bold rounded-lg text-slate-400 hover:text-white transition">💻 PC (Edge/Chrome)</button>
       </div>
 
       <!-- iOS 안내 -->
-      <div id="inst-guide-ios" class="space-y-2.5 text-xs text-slate-300">
-        <div class="flex items-start gap-2.5 p-2.5 rounded-lg bg-[#080b12] border border-[#1a2236]">
-          <span class="w-5 h-5 rounded-full bg-amber-500 text-slate-950 font-black flex items-center justify-center text-[10px] shrink-0">1</span>
-          <div>반드시 <b>Safari(사파리)</b> 브라우저로 본 페이지에 접속합니다.</div>
-        </div>
-        <div class="flex items-start gap-2.5 p-2.5 rounded-lg bg-[#080b12] border border-[#1a2236]">
-          <span class="w-5 h-5 rounded-full bg-amber-500 text-slate-950 font-black flex items-center justify-center text-[10px] shrink-0">2</span>
-          <div>화면 하단 중앙의 <b>공유 버튼(<i class="fa-solid fa-arrow-up-from-bracket"></i>)</b>을 누릅니다.</div>
-        </div>
-        <div class="flex items-start gap-2.5 p-2.5 rounded-lg bg-[#080b12] border border-[#1a2236]">
-          <span class="w-5 h-5 rounded-full bg-amber-500 text-slate-950 font-black flex items-center justify-center text-[10px] shrink-0">3</span>
-          <div>메뉴를 내려 <b>[홈 화면에 추가]</b>를 선택한 후, 우측 상단 <b>[추가]</b>를 누르면 완료!</div>
+      <div id="inst-guide-ios" class="hidden space-y-2 text-xs text-slate-300">
+        <div class="p-3 bg-[#080b12] rounded-xl border border-[#1a2236] space-y-2 leading-relaxed">
+          <div class="font-bold text-amber-400 flex items-center gap-1.5">
+            <span>🍎 아이폰·아이패드 3단계 설치법:</span>
+          </div>
+          <div class="flex items-start gap-2.5">
+            <span class="w-5 h-5 rounded-full bg-amber-500 text-slate-950 font-black flex items-center justify-center text-[10px] shrink-0 mt-0.5">1</span>
+            <div>사파리(Safari) 화면 하단 중앙의 <b>공유 버튼 ( <svg class="inline-block w-3.5 h-3.5 align-middle text-amber-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 15V4"/><path d="m8 8 4-4 4 4"/><path d="M5 13v6a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-6"/></svg> )</b>을 터치합니다.</div>
+          </div>
+          <div class="flex items-start gap-2.5">
+            <span class="w-5 h-5 rounded-full bg-amber-500 text-slate-950 font-black flex items-center justify-center text-[10px] shrink-0 mt-0.5">2</span>
+            <div>공유 메뉴를 아래로 스크롤하여 <b>[홈 화면에 추가]</b>를 터치합니다.</div>
+          </div>
+          <div class="flex items-start gap-2.5">
+            <span class="w-5 h-5 rounded-full bg-amber-500 text-slate-950 font-black flex items-center justify-center text-[10px] shrink-0 mt-0.5">3</span>
+            <div>오른쪽 상단 <b>[추가]</b>를 누르면 바탕화면에 앱 아이콘이 즉시 생성됩니다.</div>
+          </div>
         </div>
       </div>
 
       <!-- Android 안내 -->
-      <div id="inst-guide-android" class="hidden space-y-2.5 text-xs text-slate-300">
-        <div class="flex items-start gap-2.5 p-2.5 rounded-lg bg-[#080b12] border border-[#1a2236]">
-          <span class="w-5 h-5 rounded-full bg-emerald-500 text-slate-950 font-black flex items-center justify-center text-[10px] shrink-0">1</span>
-          <div><b>Chrome</b> 또는 <b>삼성 인터넷</b> 브라우저 우측 상단 메뉴(<b>⋮</b>)를 누릅니다.</div>
-        </div>
-        <div class="flex items-start gap-2.5 p-2.5 rounded-lg bg-[#080b12] border border-[#1a2236]">
-          <span class="w-5 h-5 rounded-full bg-emerald-500 text-slate-950 font-black flex items-center justify-center text-[10px] shrink-0">2</span>
-          <div>메뉴 중 <b>[앱 설치]</b> 또는 <b>[홈 화면에 추가]</b>를 클릭합니다.</div>
+      <div id="inst-guide-android" class="space-y-2 text-xs text-slate-300">
+        <div class="p-3 bg-[#080b12] rounded-xl border border-[#1a2236] space-y-2 leading-relaxed">
+          <div class="flex items-start gap-2.5">
+            <span class="w-5 h-5 rounded-full bg-amber-500 text-slate-950 font-black flex items-center justify-center text-[10px] shrink-0 mt-0.5">1</span>
+            <div>상단 <b>[📲 지금 바로 홈 화면에 앱 설치하기]</b> 버튼을 누르면 1초 만에 설치 팝업이 뜹니다.</div>
+          </div>
+          <div class="flex items-start gap-2.5">
+            <span class="w-5 h-5 rounded-full bg-amber-500 text-slate-950 font-black flex items-center justify-center text-[10px] shrink-0 mt-0.5">2</span>
+            <div>또는 <b>Chrome / 삼성 인터넷</b> 우측 상단 메뉴(<b>⋮</b>) → <b>[앱 설치]</b> 또는 <b>[홈 화면에 추가]</b>를 누르세요.</div>
+          </div>
         </div>
       </div>
 
       <!-- PC 안내 -->
-      <div id="inst-guide-pc" class="hidden space-y-2.5 text-xs text-slate-300">
-        <div class="flex items-start gap-2.5 p-2.5 rounded-lg bg-[#080b12] border border-[#1a2236]">
-          <span class="w-5 h-5 rounded-full bg-sky-500 text-slate-950 font-black flex items-center justify-center text-[10px] shrink-0">1</span>
-          <div>브라우저(Edge / Chrome) 주소창 오른쪽 끝의 <b>[설치 아이콘(🖥️)]</b>을 클릭합니다.</div>
-        </div>
-        <div class="flex items-start gap-2.5 p-2.5 rounded-lg bg-[#080b12] border border-[#1a2236]">
-          <span class="w-5 h-5 rounded-full bg-sky-500 text-slate-950 font-black flex items-center justify-center text-[10px] shrink-0">2</span>
-          <div>단독 데스크톱 창으로 열리며, 작업표시줄에 고정해 두면 일반 프로그램처럼 사용하실 수 있습니다.</div>
+      <div id="inst-guide-pc" class="hidden space-y-2 text-xs text-slate-300">
+        <div class="p-3 bg-[#080b12] rounded-xl border border-[#1a2236] space-y-2 leading-relaxed">
+          <div class="flex items-start gap-2.5">
+            <span class="w-5 h-5 rounded-full bg-sky-500 text-slate-950 font-black flex items-center justify-center text-[10px] shrink-0 mt-0.5">1</span>
+            <div>브라우저(Edge / Chrome) 주소창 오른쪽 끝의 <b>[설치 아이콘(🖥️ / ➕)]</b>을 클릭합니다.</div>
+          </div>
+          <div class="flex items-start gap-2.5">
+            <span class="w-5 h-5 rounded-full bg-sky-500 text-slate-950 font-black flex items-center justify-center text-[10px] shrink-0 mt-0.5">2</span>
+            <div>단독 데스크톱 창으로 열리며 작업표시줄에 고정해 일반 PC 프로그램처럼 이용할 수 있습니다.</div>
+          </div>
         </div>
       </div>
 
-      <button onclick="closeModal('modal-install-guide')" class="w-full py-2.5 rounded-xl bg-[#141c2e] hover:bg-[#1a263e] border border-[#23304c] text-white font-bold text-xs">
+      <button onclick="closeModal('modal-install-guide')" class="w-full py-2.5 rounded-xl btn-surface text-slate-200 hover:text-white font-bold text-xs transition cursor-pointer">
         확인 완료
       </button>
     </div>
@@ -1277,8 +1347,32 @@
   <!-- 8. 메인 자바스크립트 로직 -->
   <!-- ========================================== -->
   <script>
-    // 앱 버전 및 글로벌 네임스페이스 (Sulsul-Travel Invariant Rule R-10, R-11, R-12, R-13)
-    const APP_VER = '1.0.4';
+    // ── PWA 및 플랫폼 판별 유틸리티 (Sulsul-Diary 패턴 동기화 & 전역 호이스팅 보장) ──
+    function isIOS() {
+      return /iP(hone|ad|od)/.test(navigator.userAgent)
+        || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+    }
+    function isInstalled() {
+      return (typeof matchMedia === 'function' && (matchMedia('(display-mode: standalone)').matches || matchMedia('(display-mode: fullscreen)').matches))
+        || navigator.standalone === true;
+    }
+    function inApp() {
+      const u = navigator.userAgent;
+      if (/KAKAOTALK/i.test(u))           return '카카오톡';
+      if (/NAVER\(inapp|NAVER /i.test(u)) return '네이버 앱';
+      if (/Instagram/i.test(u))           return '인스타그램';
+      if (/FBAN|FBAV/i.test(u))           return '페이스북';
+      if (/Line\//i.test(u))              return '라인';
+      if (/DaumApps/i.test(u))            return '다음 앱';
+      return '';
+    }
+    function escapeHtml(str) {
+      if (!str) return '';
+      return String(str).replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+    }
+
+    // 앱 버전 및 글로벌 네임스페이스 (Sulsul-Travel Invariant Rule R-10, R-11, R-12, R-13, R-14)
+    const APP_VER = '1.0.5';
 
     // 전역 상태 스토어 (Multi-Trip State)
     const State = {
@@ -1356,6 +1450,7 @@
       saveTrips();
       renderHub();
       renderActiveTripWorkspace();
+      checkStartupInstallOnboarding();
     }
 
     function ensureShowcaseTripExists() {
@@ -2293,42 +2388,245 @@
     }
 
     // ==========================================
-    // [9] PWA 네이티브 설치 및 플랫폼 가이드
+    // [9] PWA 네이티브 설치 및 플랫폼 가이드 (Sulsul-Diary 아키텍처 연동)
     // ==========================================
     function setupPwaInstallPrompt() {
       window.addEventListener('beforeinstallprompt', (e) => {
         e.preventDefault();
         State.deferredPrompt = e;
-        const btn = document.getElementById('btn-native-install');
-        if (btn) btn.classList.remove('hidden');
+        updatePwaUiState();
+      });
+
+      window.addEventListener('appinstalled', () => {
+        State.deferredPrompt = null;
+        showToast('🎉 술술트래블이 홈 화면에 성공적으로 설치되었습니다!');
+        updatePwaUiState();
+        closeModal('modal-install-guide');
       });
     }
 
+    function updatePwaUiState() {
+      const installed = isInstalled();
+      const btn = document.getElementById('btn-native-install');
+      const btnTxt = document.getElementById('btn-native-install-txt');
+      if (btn) {
+        if (installed) {
+          btn.className = "px-2.5 py-1.5 bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 rounded-lg text-xs font-bold flex items-center gap-1.5 transition";
+          if (btnTxt) btnTxt.innerText = "PWA 구동 중";
+        } else {
+          btn.className = "px-2.5 py-1.5 btn-gold rounded-lg text-xs font-black flex items-center gap-1.5 transition shadow-sm cursor-pointer pulse-gold";
+          if (btnTxt) btnTxt.innerText = "앱 설치";
+        }
+      }
+      renderSmartWelcomeBanner();
+    }
+
     function triggerNativeInstall() {
+      if (isInstalled()) {
+        showToast('✅ 이미 홈 화면에 앱(PWA)으로 설치되어 실행 중입니다 ✈️');
+        return;
+      }
       if (State.deferredPrompt) {
-        State.deferredPrompt.prompt();
-        State.deferredPrompt.userChoice.then((choiceResult) => {
-          if (choiceResult.outcome === 'accepted') {
-            const btn = document.getElementById('btn-native-install');
-            if (btn) btn.classList.add('hidden');
+        const promptEvent = State.deferredPrompt;
+        State.deferredPrompt = null;
+        promptEvent.prompt();
+        promptEvent.userChoice.then((choiceResult) => {
+          if (choiceResult && choiceResult.outcome === 'accepted') {
+            showToast('🎉 술술트래블이 홈 화면에 설치되었습니다! 홈 화면에서 열어보세요.');
+            updatePwaUiState();
+            closeModal('modal-install-guide');
+          } else {
+            showToast('설치를 취소했습니다. 상단 버튼에서 언제든 다시 설치할 수 있습니다.');
           }
-          State.deferredPrompt = null;
+        }).catch(() => {});
+        return;
+      }
+
+      // If deferredPrompt is not yet ready or unsupported
+      const app = inApp();
+      if (app) {
+        showToast(`⚠️ ${app} 내부에서는 직접 설치가 불가능합니다. Chrome이나 Safari로 열어주세요.`);
+        openInstallGuideModal();
+      } else if (isIOS()) {
+        showToast('🍎 아이폰은 하단 공유(⬆) 버튼을 눌러 [홈 화면에 추가]를 선택해주세요.');
+        openInstallGuideModal('ios');
+      } else {
+        showToast('💡 브라우저 우측 상단 메뉴(⋮)에서 [앱 설치] 또는 [홈 화면에 추가]를 눌러주세요.');
+        openInstallGuideModal('android');
+      }
+    }
+
+    function handleInstallButtonClick() {
+      if (isInstalled()) {
+        showToast('✅ 이미 홈 화면에 앱(PWA)으로 설치되어 실행 중입니다 ✈️');
+        return;
+      }
+      if (State.deferredPrompt) {
+        triggerNativeInstall();
+      } else {
+        openInstallGuideModal();
+      }
+    }
+
+    function handleInstallBannerClick() {
+      if (State.deferredPrompt) {
+        triggerNativeInstall();
+      } else {
+        openInstallGuideModal();
+      }
+    }
+
+    function dismissSmartWelcomeBanner() {
+      sessionStorage.setItem('st_hide_swb', '1');
+      const banner = document.getElementById('smart-welcome-banner');
+      if (banner) {
+        banner.classList.add('hidden');
+        banner.innerHTML = '';
+      }
+    }
+
+    function copyCurrentUrl() {
+      const url = window.location.href.split('#')[0];
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(url).then(() => {
+          showToast('📋 앱 접속 주소가 복사되었습니다!');
+        }).catch(() => {
+          showToast('주소 복사 완료');
         });
       } else {
-        openModal('modal-install-guide');
+        showToast('주소: ' + url);
       }
+    }
+
+    function renderSmartWelcomeBanner() {
+      const banner = document.getElementById('smart-welcome-banner');
+      if (!banner) return;
+      const installed = isInstalled();
+      if (installed || sessionStorage.getItem('st_hide_swb') === '1') {
+        banner.classList.add('hidden');
+        banner.innerHTML = '';
+        return;
+      }
+      banner.classList.remove('hidden');
+      banner.innerHTML = `
+        <div class="rounded-2xl bg-gradient-to-r from-amber-500/15 via-[#141c2e] to-[#0f1422] border border-amber-500/30 p-3.5 sm:p-4 shadow-lg shadow-black/30">
+          <div class="flex items-center justify-between gap-3">
+            <div class="flex items-center gap-3 min-w-0 cursor-pointer" onclick="handleInstallBannerClick()">
+              <span class="w-9 h-9 rounded-xl bg-amber-500/20 text-amber-400 border border-amber-500/30 flex items-center justify-center text-base shrink-0 pulse-gold">📲</span>
+              <div class="min-w-0">
+                <div class="flex items-center gap-1.5 text-[11px] font-bold text-amber-400">
+                  <span>💡 시작 가이드</span>
+                  <span class="text-slate-400 font-normal hidden sm:inline">| 영구 보호 저장소</span>
+                </div>
+                <div class="text-xs sm:text-sm font-extrabold text-white truncate">
+                  터치 한 번으로 홈 화면에 앱 설치하기
+                </div>
+              </div>
+            </div>
+            <div class="flex items-center gap-2 shrink-0">
+              <button onclick="handleInstallBannerClick()" class="btn-gold px-3.5 py-1.5 rounded-lg text-xs font-black shadow-md cursor-pointer">
+                앱 설치
+              </button>
+              <button onclick="dismissSmartWelcomeBanner()" class="text-slate-400 hover:text-white p-1 text-sm transition cursor-pointer" title="배너 닫기">✕</button>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function checkStartupInstallOnboarding() {
+      updatePwaUiState();
+      if (isInstalled()) return;
+      if (!sessionStorage.getItem('st_startup_onboard_shown')) {
+        sessionStorage.setItem('st_startup_onboard_shown', '1');
+        setTimeout(() => {
+          openInstallGuideModal();
+        }, 700);
+      }
+    }
+
+    function openInstallGuideModal(preferredPlatform) {
+      const dynamicBox = document.getElementById('install-guide-dynamic-box');
+      const installed = isInstalled();
+      const app = inApp();
+      const currentUrl = window.location.href.split('#')[0];
+      const chromeIntent = 'intent://' + currentUrl.replace(/^https?:\/\//, '') + '#Intent;scheme=https;package=com.android.chrome;end';
+
+      if (dynamicBox) {
+        if (installed) {
+          dynamicBox.innerHTML = `
+            <div class="p-3.5 bg-emerald-500/10 border border-emerald-500/30 rounded-xl text-xs text-emerald-300 font-semibold flex items-center gap-2.5">
+              <span class="text-lg">✅</span>
+              <div>
+                <b>이미 홈 화면 단독 앱(PWA)으로 완벽하게 구동 중입니다.</b><br>
+                <span class="text-emerald-400/80 text-[11px]">운영체제 영구 저장소 보호가 가동되어 비행기 모드에서도 데이터가 보존됩니다.</span>
+              </div>
+            </div>
+          `;
+        } else if (app) {
+          dynamicBox.innerHTML = `
+            <div class="p-3.5 bg-amber-500/10 border border-amber-500/25 rounded-xl space-y-2.5">
+              <div class="text-xs text-amber-300 font-bold flex items-center gap-1.5">
+                <span>⚠️</span>
+                <span><b>${escapeHtml(app)} 인앱 브라우저</b>에서는 직접 설치가 지원되지 않습니다.</span>
+              </div>
+              <div class="text-[11px] text-slate-300 leading-relaxed">
+                인앱 브라우저는 홈 화면 추가 권한을 제공하지 않습니다. 원활한 앱 설치와 데이터 보호를 위해 기본 브라우저에서 열어주세요.
+              </div>
+              ${isIOS() ? `
+                <div class="p-2.5 bg-[#080b12] rounded-lg border border-[#1e263c] text-xs text-slate-300 space-y-1">
+                  <div class="font-bold text-amber-400">🍎 Safari로 전환하기:</div>
+                  <div>우측 하단(또는 상단) <b>⋯ / 나침반</b> 아이콘 터치 → <b>Safari로 열기</b> 선택</div>
+                </div>
+              ` : `
+                <a href="${chromeIntent}" class="btn-gold w-full py-2.5 px-3 rounded-xl text-xs font-black flex items-center justify-center gap-1.5 shadow-md">
+                  <i class="fa-brands fa-chrome"></i>
+                  <span>Chrome(크롬) 브라우저로 열기</span>
+                </a>
+              `}
+              <button onclick="copyCurrentUrl()" class="btn-surface w-full py-2 rounded-xl text-xs font-semibold text-slate-300 hover:text-white cursor-pointer">
+                <i class="fa-solid fa-copy mr-1 text-[11px]"></i> 주소 복사하기
+              </button>
+            </div>
+          `;
+        } else {
+          dynamicBox.innerHTML = `
+            <div class="space-y-2">
+              <button id="btn-modal-direct-install" onclick="triggerNativeInstall()" class="btn-gold w-full py-3.5 px-4 rounded-xl text-sm font-black flex items-center justify-center gap-2 cursor-pointer pulse-gold shadow-lg shadow-amber-500/20">
+                <i class="fa-solid fa-download text-sm"></i>
+                <span>📲 지금 바로 홈 화면에 앱 설치하기</span>
+              </button>
+              <div class="text-[11px] text-slate-400 text-center">
+                (터치 시 브라우저 설치 팝업이 바로 뜹니다. 메뉴의 [앱 설치]로도 가능합니다)
+              </div>
+            </div>
+          `;
+        }
+      }
+
+      let targetPlatform = preferredPlatform;
+      if (!targetPlatform) {
+        if (isIOS()) targetPlatform = 'ios';
+        else if (!/Android|iPhone|iPad|iPod/i.test(navigator.userAgent)) targetPlatform = 'pc';
+        else targetPlatform = 'android';
+      }
+      switchInstallTab(targetPlatform);
+
+      openModal('modal-install-guide');
     }
 
     function switchInstallTab(platform) {
       ['ios', 'android', 'pc'].forEach(p => {
         const btn = document.getElementById(`tab-inst-${p}`);
         const view = document.getElementById(`inst-guide-${p}`);
-        if (p === platform) {
-          btn.className = "flex-1 py-1.5 text-xs font-bold rounded-lg bg-[#141c2e] text-amber-400 border border-[#23304c]";
-          view.classList.remove('hidden');
-        } else {
-          btn.className = "flex-1 py-1.5 text-xs font-bold rounded-lg text-slate-400 hover:text-white";
-          view.classList.add('hidden');
+        if (btn && view) {
+          if (p === platform) {
+            btn.className = "flex-1 py-1.5 text-xs font-bold rounded-lg bg-gradient-to-r from-amber-500/20 to-amber-600/20 text-amber-300 border border-amber-500/40 shadow-sm transition";
+            view.classList.remove('hidden');
+          } else {
+            btn.className = "flex-1 py-1.5 text-xs font-bold rounded-lg text-slate-400 hover:text-white transition";
+            view.classList.add('hidden');
+          }
         }
       });
     }
@@ -3447,7 +3745,10 @@
       openPdfReportModal: openPdfReportModal,
       openTripPdfReport: openTripPdfReport,
       triggerPrintReport: triggerPrintReport,
-      downloadReportAsHtml: downloadReportAsHtml
+      downloadReportAsHtml: downloadReportAsHtml,
+      isInstalled: isInstalled,
+      triggerNativeInstall: triggerNativeInstall,
+      openInstallGuideModal: openInstallGuideModal
     };
   </script>
 </body>
