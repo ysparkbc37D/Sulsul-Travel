@@ -100,8 +100,9 @@ Write-Host "[3/4] Invariant Laws (DOM IDs, Fallback AI & Canvas Normalization)..
 
 # R-10: Mandatory DOM IDs
 $mandatoryIds = @(
-    'top-analytics', 'app-ver-badge', 'header-trip-name',
-    'view-plan', 'view-journal', 'view-expense', 'view-sync',
+    'lifetime-analytics', 'trip-cards-grid', 'modal-create-trip',
+    'view-hub', 'view-workspace', 'top-analytics', 'app-ver-badge', 'header-trip-name',
+    'tab-content-plan', 'tab-content-expenses', 'tab-content-journal', 'tab-content-checklist',
     'nav-tab-plan', 'nav-tab-journal', 'nav-tab-expense', 'nav-tab-sync',
     'chk-mep-rate', 'modal-spot', 'modal-expense', 'modal-ai-trip', 
     'modal-ai-chat', 'cfg-gemini-key'
@@ -155,7 +156,7 @@ if (Test-Path $edgePath) {
         $fileUri = [System.Uri]::new($tempHarness).AbsoluteUri
         $psi = New-Object System.Diagnostics.ProcessStartInfo
         $psi.FileName = $edgePath
-        $psi.Arguments = "--headless=new --disable-gpu --dump-dom `"$fileUri`""
+        $psi.Arguments = "--headless=new --disable-gpu --allow-file-access-from-files --dump-dom `"$fileUri`""
         $psi.UseShellExecute = $false
         $psi.RedirectStandardOutput = $true
         $psi.RedirectStandardError = $true
@@ -163,7 +164,7 @@ if (Test-Path $edgePath) {
 
         $proc = [System.Diagnostics.Process]::Start($psi)
         $domOutput = $proc.StandardOutput.ReadToEnd()
-        $proc.WaitForExit(10000)
+        [void]$proc.WaitForExit(10000)
 
         $gateCheckMatch = [regex]::Match($domOutput, 'id="V8_GATE_CHECK"[^>]*data-sulsul="([^"]+)"[^>]*data-ver="([^"]+)"[^>]*data-errs="([^"]+)"')
         if ($gateCheckMatch.Success) {
