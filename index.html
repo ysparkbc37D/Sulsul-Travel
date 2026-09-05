@@ -258,7 +258,7 @@
         </span>
         <div>
           <h1 class="text-base font-black tracking-tight text-white flex items-center gap-1.5">
-            술술트래블 <span id="app-ver-badge" class="text-[10px] font-bold px-1.5 py-0.5 rounded bg-amber-500/10 text-amber-400 border border-amber-500/20">v1.0.5</span>
+            술술트래블 <span id="app-ver-badge" class="text-[10px] font-bold px-1.5 py-0.5 rounded bg-amber-500/10 text-amber-400 border border-amber-500/20">v1.0.6</span>
           </h1>
           <p id="header-trip-name" class="text-[11px] text-slate-400 truncate max-w-[180px] sm:max-w-xs font-medium">인생의 모든 여정을 기록하는 다이어리</p>
         </div>
@@ -1370,9 +1370,14 @@
       if (!str) return '';
       return String(str).replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
     }
+    // Sulsul-Diary 실록 4.3.9 교훈: 제로위드 공백(\u200B~\u200D, \uFEFF), 특수 공백, 따옴표 자동 정제
+    function cleanApiKey(k) {
+      if (!k) return '';
+      return String(k).replace(/[\u200B-\u200D\uFEFF\s"'`]/g, '').trim();
+    }
 
-    // 앱 버전 및 글로벌 네임스페이스 (Sulsul-Travel Invariant Rule R-10, R-11, R-12, R-13, R-14)
-    const APP_VER = '1.0.5';
+    // 앱 버전 및 글로벌 네임스페이스 (Sulsul-Travel Invariant Rule R-10, R-11, R-12, R-13, R-14, R-15)
+    const APP_VER = '1.0.6';
 
     // 전역 상태 스토어 (Multi-Trip State)
     const State = {
@@ -1386,7 +1391,7 @@
       activeJournalDay: 0,
       isMepEnabled: true,
       allTimelinesExpanded: false,
-      geminiKey: localStorage.getItem('st_gemini_key') || '',
+      geminiKey: cleanApiKey(localStorage.getItem('st_gemini_key') || ''),
       
       // GPS Radar State (R-13)
       gps: {
@@ -1473,6 +1478,7 @@
         localStorage.setItem('st_trips_v2', JSON.stringify(State.trips));
       } catch (err) {
         console.error('[Storage] QuotaExceededError or write failed:', err);
+        showToast('⚠️ 로컬 저장 공간이 부족합니다. 오래된 사진이나 데이터를 정리해주세요.');
       }
     }
 
@@ -1564,6 +1570,32 @@
 
     function renderTripCards() {
       const grid = document.getElementById('trip-cards-grid');
+      if (!grid) return;
+
+      // Sulsul-Diary 실록 4.4.1 & 4.4.2: 럭셔리 빈 상태(Empty State) 엠블럼 및 다이렉트 액션 UI
+      if (!State.trips || State.trips.length === 0) {
+        grid.innerHTML = `
+          <div class="col-span-full p-10 text-center rounded-2xl bg-[#0f1422] border border-[#1e263c] space-y-4 shadow-xl">
+            <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-amber-500/20 to-amber-600/10 border border-amber-500/30 text-amber-400 mx-auto flex items-center justify-center text-3xl shadow-inner pulse-gold">
+              ✈️
+            </div>
+            <div class="space-y-1">
+              <h3 class="text-base font-black text-white">등록된 여행 다이어리가 없습니다</h3>
+              <p class="text-xs text-slate-400">새로운 여정을 시작하거나 22일 남미 대종단 완성형 샘플을 복원해 보세요.</p>
+            </div>
+            <div class="flex items-center justify-center gap-2.5 pt-2 flex-wrap">
+              <button onclick="openCreateTripModal()" class="btn-gold px-4 py-2 rounded-xl text-xs font-black shadow-md cursor-pointer">
+                + 새 여행 만들기
+              </button>
+              <button onclick="ensureShowcaseTripExists(); renderHub(); showToast('✨ 남미 대종단 22일 완성 샘플이 복원되었습니다!');" class="btn-surface px-4 py-2 rounded-xl text-xs font-bold cursor-pointer hover:text-white">
+                ✨ 맛보기 샘플 복구
+              </button>
+            </div>
+          </div>
+        `;
+        return;
+      }
+
       let html = '';
 
       State.trips.forEach(trip => {
@@ -2114,7 +2146,25 @@
       const expenses = trip.expenses || [];
 
       if (expenses.length === 0) {
-        container.innerHTML = `<div class="p-8 text-center text-xs text-slate-500 bg-[#0f1422] rounded-xl border border-[#1e263c]">지출 내역이 없습니다. + 버튼을 눌러 추가하세요.</div>`;
+        container.innerHTML = `
+          <div class="p-8 text-center rounded-2xl bg-[#0f1422] border border-[#1e263c] space-y-3 shadow-lg">
+            <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-amber-500/20 to-amber-600/10 border border-amber-500/30 text-amber-400 mx-auto flex items-center justify-center text-2xl shadow-inner">
+              💳
+            </div>
+            <div class="space-y-1">
+              <h4 class="text-sm font-black text-white">등록된 지출 내역이 없습니다</h4>
+              <p class="text-xs text-slate-400">현지 영수증을 촬영(OCR)하거나 첫 지출을 등록해 스마트 가계부를 시작하세요.</p>
+            </div>
+            <div class="flex items-center justify-center gap-2 pt-1 flex-wrap">
+              <button onclick="openAddExpenseModal()" class="btn-gold px-4 py-2 rounded-xl text-xs font-black shadow-md cursor-pointer">
+                + 첫 지출 등록하기
+              </button>
+              <button onclick="triggerReceiptScan()" class="btn-surface px-4 py-2 rounded-xl text-xs font-bold cursor-pointer hover:text-white flex items-center gap-1.5">
+                <i class="fa-solid fa-camera text-amber-400"></i> 영수증 자동 스캔
+              </button>
+            </div>
+          </div>
+        `;
         return;
       }
 
@@ -2728,7 +2778,18 @@
     // ==========================================
     function openCreateTripModal() {
       const today = new Date().toISOString().split('T')[0];
-      document.getElementById('trip-form-start').value = today;
+      const titleInput = document.getElementById('trip-form-title');
+      if (titleInput) titleInput.value = '';
+      const countriesInput = document.getElementById('trip-form-countries');
+      if (countriesInput) countriesInput.value = '';
+      const styleInput = document.getElementById('trip-form-style');
+      if (styleInput) styleInput.value = '';
+      const budgetInput = document.getElementById('trip-form-budget');
+      if (budgetInput) budgetInput.value = '3000000';
+      const startInput = document.getElementById('trip-form-start');
+      if (startInput) startInput.value = today;
+      const endInput = document.getElementById('trip-form-end');
+      if (endInput) endInput.value = '';
       openModal('modal-create-trip');
     }
 
@@ -2791,7 +2852,7 @@
       State.trips.unshift(newTrip);
       State.activeTripId = newTrip.id;
       saveTrips();
-      closeModal('modal-create-trip');
+      closeModal('modal-create-trip', true);
 
       switchView('workspace');
       openModal('modal-ai-trip'); // 신규 등록 후 즉시 AI 일정 추천 모달 연결
@@ -2803,6 +2864,12 @@
       daySelect.innerHTML = (trip.days || []).map((d, idx) => `
         <option value="${idx}">Day ${d.dayNum || (idx+1)}: ${d.title}</option>
       `).join('');
+      const titleInput = document.getElementById('spot-form-title');
+      if (titleInput) titleInput.value = '';
+      const memoInput = document.getElementById('spot-form-memo');
+      if (memoInput) memoInput.value = '';
+      const costInput = document.getElementById('spot-form-cost');
+      if (costInput) costInput.value = '';
       openModal('modal-spot');
     }
 
@@ -2841,12 +2908,17 @@
       trip.days[dayIdx].spots.sort((a, b) => a.time.localeCompare(b.time));
 
       saveTrips();
-      closeModal('modal-spot');
+      closeModal('modal-spot', true);
       renderTimelineTab();
     }
 
     function openAddExpenseModal() {
-      document.getElementById('exp-form-date').value = new Date().toISOString().split('T')[0];
+      const titleInput = document.getElementById('exp-form-title');
+      if (titleInput) titleInput.value = '';
+      const amountInput = document.getElementById('exp-form-amount');
+      if (amountInput) amountInput.value = '';
+      const dateInput = document.getElementById('exp-form-date');
+      if (dateInput) dateInput.value = new Date().toISOString().split('T')[0];
       openModal('modal-expense');
     }
 
@@ -2882,7 +2954,7 @@
       });
 
       saveTrips();
-      closeModal('modal-expense');
+      closeModal('modal-expense', true);
       renderActiveTripWorkspace();
     }
 
@@ -2892,27 +2964,35 @@
     const AI_MODELS = ['gemini-2.5-flash', 'gemini-2.0-flash', 'gemini-1.5-flash'];
 
     async function callGeminiApiWithFallback(prompt) {
-      const key = State.geminiKey || localStorage.getItem('st_gemini_key');
+      const rawKey = State.geminiKey || localStorage.getItem('st_gemini_key');
+      const key = cleanApiKey(rawKey);
       if (!key) {
         throw new Error('GEMINI_KEY_MISSING');
       }
 
       for (const model of AI_MODELS) {
+        let timeoutId = null;
         try {
+          const controller = new AbortController();
+          // Sulsul-Diary 실록 4.3.9 교훈: 구글 AI 큐 지연 시 무한 대기 방지 10초 타임아웃
+          timeoutId = setTimeout(() => controller.abort(), 10000);
           const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${key}`;
           const res = await fetch(url, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] })
+            body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] }),
+            signal: controller.signal
           });
+          clearTimeout(timeoutId);
           if (res.ok) {
             const data = await res.json();
-            if (data.candidates && data.candidates[0].content.parts[0].text) {
+            if (data.candidates && data.candidates[0].content && data.candidates[0].content.parts[0].text) {
               return data.candidates[0].content.parts[0].text;
             }
           }
         } catch (e) {
-          console.warn(`[AI] Model ${model} failed, attempting next fallback`, e);
+          if (timeoutId) clearTimeout(timeoutId);
+          console.warn(`[AI] Model ${model} failed or timed out, attempting next fallback:`, e.name || e);
         }
       }
       throw new Error('ALL_AI_MODELS_FAILED');
@@ -2953,7 +3033,7 @@
           });
           trip.days = parsedDays;
           saveTrips();
-          closeModal('modal-ai-trip');
+          closeModal('modal-ai-trip', true);
           renderTimelineTab();
           alert('AI 추천 일정이 성공적으로 생성되었습니다!');
         }
@@ -2964,7 +3044,7 @@
         } else {
           // Fallback offline mock generator
           generateOfflineMockItinerary(trip);
-          closeModal('modal-ai-trip');
+          closeModal('modal-ai-trip', true);
           renderTimelineTab();
           alert('오프라인 스마트 지식 베이스를 바탕으로 30분 단위 추천 일정을 주입하였습니다.');
         }
@@ -3077,16 +3157,48 @@
     }
 
     function saveGeminiKey() {
-      const k = document.getElementById('cfg-gemini-key').value.trim();
+      const raw = document.getElementById('cfg-gemini-key').value;
+      const k = cleanApiKey(raw);
       State.geminiKey = k;
       localStorage.setItem('st_gemini_key', k);
-      alert('Gemini API 키가 안전하게 저장되었습니다.');
+      document.getElementById('cfg-gemini-key').value = k;
+      closeModal('modal-api-settings', true);
+      showToast('🔑 Gemini API 키가 정제되어 안전하게 저장되었습니다.');
     }
 
     // ==========================================
-    // [14] 모달 제어 (Sulsul Invariant R-9)
+    // [14] 모달 제어 (Sulsul Invariant R-9, R-15)
     // ==========================================
+    let lastModalActionTime = 0;
+
+    function isModalFormDirty(modalId) {
+      if (modalId === 'modal-create-trip') {
+        const title = document.getElementById('trip-form-title');
+        const countries = document.getElementById('trip-form-countries');
+        const style = document.getElementById('trip-form-style');
+        return (title && title.value.trim().length > 0) ||
+               (countries && countries.value.trim().length > 0) ||
+               (style && style.value.trim().length > 0);
+      }
+      if (modalId === 'modal-spot') {
+        const title = document.getElementById('spot-form-title');
+        const memo = document.getElementById('spot-form-memo');
+        const cost = document.getElementById('spot-form-cost');
+        return (title && title.value.trim().length > 0) ||
+               (memo && memo.value.trim().length > 0) ||
+               (cost && cost.value.trim().length > 0);
+      }
+      if (modalId === 'modal-expense') {
+        const title = document.getElementById('exp-form-title');
+        const amount = document.getElementById('exp-form-amount');
+        return (title && title.value.trim().length > 0) ||
+               (amount && amount.value.trim().length > 0);
+      }
+      return false;
+    }
+
     function openModal(modalId) {
+      lastModalActionTime = Date.now();
       const m = document.getElementById(modalId);
       if (m) {
         m.classList.remove('sheet-closed');
@@ -3094,13 +3206,30 @@
       }
     }
 
-    function closeModal(modalId) {
+    function closeModal(modalId, force = false) {
+      const now = Date.now();
+      // Scrim 터치 연타 및 미세 클릭 오차 방지 (350ms 쓰로틀 가드, force인 경우 즉시 통과)
+      if (!force && (now - lastModalActionTime < 350)) {
+        return;
+      }
+
+      // Sulsul-Diary 실록 4.4.1 교훈: 작성 중 폼 Dirty State 이탈 방어
+      if (!force && isModalFormDirty(modalId)) {
+        const leave = confirm('작성 중인 내용이 있습니다. 저장하지 않고 창을 닫으시겠습니까?');
+        if (!leave) return;
+      }
+
+      lastModalActionTime = now;
       const m = document.getElementById(modalId);
       if (m) {
         m.classList.add('sheet-closed');
         const anyOpen = document.querySelector('.sheet-container:not(.sheet-closed)');
         if (!anyOpen) document.body.style.overflow = '';
       }
+    }
+
+    function safeCloseModal(modalId, force = false) {
+      closeModal(modalId, force);
     }
 
     // ==========================================
@@ -3325,7 +3454,8 @@
     }
 
     async function callGeminiVisionApiWithFallback(prompt, base64Data, mimeType) {
-      const key = State.geminiKey || localStorage.getItem('st_gemini_key');
+      const rawKey = State.geminiKey || localStorage.getItem('st_gemini_key');
+      const key = cleanApiKey(rawKey);
       if (!key) {
         throw new Error('GEMINI_KEY_MISSING');
       }
@@ -3333,7 +3463,11 @@
       const cleanBase64 = base64Data.replace(/^data:[^;]+;base64,/, '');
 
       for (const model of AI_MODELS) {
+        let timeoutId = null;
         try {
+          const controller = new AbortController();
+          // Sulsul-Diary 실록 4.3.9 교훈: 멀티모달 비전 OCR 12초 타임아웃
+          timeoutId = setTimeout(() => controller.abort(), 12000);
           const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${key}`;
           const payload = {
             contents: [
@@ -3354,8 +3488,10 @@
           const res = await fetch(url, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(payload)
+            body: JSON.stringify(payload),
+            signal: controller.signal
           });
+          clearTimeout(timeoutId);
 
           if (res.ok) {
             const data = await res.json();
@@ -3364,7 +3500,8 @@
             }
           }
         } catch (e) {
-          console.warn(`[Vision AI] Model ${model} failed, attempting next fallback`, e);
+          if (timeoutId) clearTimeout(timeoutId);
+          console.warn(`[Vision AI] Model ${model} failed or timed out, attempting next fallback:`, e.name || e);
         }
       }
       throw new Error('ALL_VISION_MODELS_FAILED');
@@ -3709,8 +3846,44 @@
     }
 
     window.addEventListener('keydown', (e) => {
+      // 1) 모달 닫기 (Escape): 최상단 모달부터 데이터 보호 검사 후 안전하게 닫기
       if (e.key === 'Escape') {
-        ['modal-confirm-delete', 'modal-install-guide', 'modal-share-room', 'modal-pdf-report', 'modal-create-trip', 'modal-spot', 'modal-expense', 'modal-ai-trip', 'modal-ai-chat'].forEach(closeModal);
+        const openContainers = Array.from(document.querySelectorAll('.sheet-container:not(.sheet-closed)'));
+        if (openContainers.length > 0) {
+          const topModal = openContainers[openContainers.length - 1];
+          if (topModal && topModal.id) {
+            safeCloseModal(topModal.id);
+          }
+        }
+        return;
+      }
+
+      // 2) 텍스트 입력창 포커스 중일 때는 탐색 키 무시
+      const activeEl = document.activeElement;
+      if (activeEl && (activeEl.tagName === 'INPUT' || activeEl.tagName === 'TEXTAREA' || activeEl.tagName === 'SELECT' || activeEl.isContentEditable)) {
+        return;
+      }
+
+      // 3) 모달 열려 있을 때는 방향키 무시
+      const anyModalOpen = document.querySelector('.sheet-container:not(.sheet-closed)');
+      if (anyModalOpen) return;
+
+      // 4) 워크스페이스 상태에서 ArrowLeft / ArrowRight 키로 일차(Day) 탐색 지원 (Sulsul-Diary 실록 4.4.4)
+      if (State.currentView === 'workspace') {
+        const trip = getActiveTrip();
+        if (!trip || !trip.days || trip.days.length <= 1) return;
+
+        if (e.key === 'ArrowLeft') {
+          if (State.activeJournalDay > 0) {
+            selectJournalDay(State.activeJournalDay - 1);
+            showToast(`◀ Day ${State.activeJournalDay + 1} (${trip.days[State.activeJournalDay].title || ''})`);
+          }
+        } else if (e.key === 'ArrowRight') {
+          if (State.activeJournalDay < trip.days.length - 1) {
+            selectJournalDay(State.activeJournalDay + 1);
+            showToast(`Day ${State.activeJournalDay + 1} (${trip.days[State.activeJournalDay].title || ''}) ▶`);
+          }
+        }
       }
     });
 
@@ -3748,7 +3921,11 @@
       downloadReportAsHtml: downloadReportAsHtml,
       isInstalled: isInstalled,
       triggerNativeInstall: triggerNativeInstall,
-      openInstallGuideModal: openInstallGuideModal
+      openInstallGuideModal: openInstallGuideModal,
+      cleanApiKey: cleanApiKey,
+      closeModal: closeModal,
+      safeCloseModal: safeCloseModal,
+      isModalFormDirty: isModalFormDirty
     };
   </script>
 </body>
