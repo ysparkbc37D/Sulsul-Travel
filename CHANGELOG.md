@@ -26,6 +26,21 @@
 
 ---
 
+## [v1.0.1] - 2026-09-06
+### 🐛 긴급 버그 수정 (Critical Fixes)
+- **모달(Bottom Sheet) 오버레이 레이어 뷰포트 점유 및 전체 클릭 먹통 버그 원천 해결**:
+  - `modal-spot`, `modal-expense`, `modal-ai-trip`, `modal-ai-chat` 등 4개 모달 컨테이너가 닫힘 상태(`.sheet-closed`)일 때 `fixed inset-0 z-50` 영역 전체를 차지하여 하위의 모든 버튼("시간표", "전체 펼치기", "+ 스팟 추가", 탭 네비게이션) 클릭을 가로채던 결함 수정.
+  - `.sheet-closed`에 `display: none !important; visibility: hidden !important; pointer-events: none !important;` 및 `transform: translateY(100vh)`를 부여하여 닫힘 상태에서 클릭 관통 및 오프스크린 완전 은폐 보장.
+  - 데스크톱 중앙 정렬(`sm:items-center`) 시 모달 상단이 화면 하단에 삐져나오던 시각 결함 해결.
+- **ESC 키 전역 모달 닫기 지원**:
+  - 키보드 `Escape` 키 입력 시 열려 있는 모든 모달 시트를 즉시 안전하게 닫도록 이벤트 리스너 추가.
+  - 모달 오픈 시 배경 스크롤 락(`overflow: hidden`), 닫힘 시 자동 해제 처리.
+- **Day 일정 타임라인 "시간표" 버튼 인터랙션 강화**:
+  - 일자별 "시간표" 버튼을 독립된 터치 타깃 버튼(`bg-[#1a233a] border border-[#283554] cursor-pointer`)으로 시각화 개선.
+  - 일차 제목 클릭 시에도 타임라인 아코디언이 즉시 토글되도록 UX 향상.
+
+---
+
 ## [v1.0.0] - 2026-09-06
 ### 🎉 공식 첫 런칭 (Initial Official Release)
 **술술다이어리(Sulsul-Diary)**의 엔터프라이즈 프론트엔드 오케스트레이션 아키텍처를 차용한 100% 무서버(Zero-Backend), 오프라인 퍼스트(Offline-First) 여행 어시스턴트 & 데일리 다이어리 웹앱 공식 런칭.
