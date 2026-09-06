@@ -14,7 +14,7 @@
   </script>
 
   <!-- PWA Meta & Icons -->
-  <link rel="manifest" href="manifest.webmanifest?v=1.1.9">
+  <link rel="manifest" href="manifest.webmanifest?v=1.2.0">
   <meta name="theme-color" content="#f5f5f7">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
@@ -557,7 +557,7 @@
             <h1 class="font-serif-brand text-base sm:text-xl font-bold tracking-tight text-[#1c1917] dark:text-[#ededed] whitespace-nowrap">
               Sulsul Travel
             </h1>
-            <span id="app-ver-badge" onclick="event.stopPropagation(); openVersionHistoryModal()" class="px-1.5 py-0.5 rounded-md theme-card-subtle hover:border-amber-500/60 hover:text-amber-600 dark:hover:text-amber-300 text-[#a2601b] dark:text-[#d4af37] text-[10px] font-bold font-mono shadow-inner cursor-pointer shrink-0 transition" title="버전 업데이트 기록 보기 (클릭)">v1.1.9</span>
+            <span id="app-ver-badge" onclick="event.stopPropagation(); openVersionHistoryModal()" class="px-1.5 py-0.5 rounded-md theme-card-subtle hover:border-amber-500/60 hover:text-amber-600 dark:hover:text-amber-300 text-[#a2601b] dark:text-[#d4af37] text-[10px] font-bold font-mono shadow-inner cursor-pointer shrink-0 transition" title="버전 업데이트 기록 보기 (클릭)">v1.2.0</span>
           </div>
           <p id="header-trip-name" class="text-[10px] sm:text-[11px] text-[#78716c] dark:text-stone-400 truncate max-w-[120px] sm:max-w-xs font-normal">인생의 모든 여정을 기록하는 다이어리</p>
         </div>
@@ -2027,7 +2027,7 @@
             <i class="fa-solid fa-clock-rotate-left text-[#a2601b] dark:text-[#d4af37]"></i>
             <span>술술트래블 엔진 버전 & 릴리즈 히스토리</span>
           </span>
-          <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-500/10 text-[#a2601b] dark:text-[#d4af37] border border-amber-500/30">v1.1.9</span>
+          <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-500/10 text-[#a2601b] dark:text-[#d4af37] border border-amber-500/30">v1.2.0</span>
         </div>
         <p class="text-[11px] text-[#78716c] dark:text-stone-400 leading-relaxed">
           술술 오도미터 순차 올림 원칙에 따른 전체 버전별 기능 추가, UI/UX 개선, 버그 해결 이력을 확인합니다.
@@ -2257,29 +2257,43 @@
 
       <!-- 버전 목록 스크롤 영역 -->
       <div class="flex-1 overflow-y-auto space-y-3 pr-1 text-xs">
-        <!-- v1.1.9 (Current) -->
+        <!-- v1.2.0 (Current) -->
         <div class="p-4 rounded-2xl bg-amber-500/5 dark:bg-amber-500/10 border-2 border-amber-500/40 space-y-2.5 shadow-sm relative overflow-hidden">
           <div class="flex items-center justify-between">
             <div class="flex items-center gap-2">
-              <span class="px-2 py-0.5 rounded-lg bg-amber-500 text-black font-black text-xs shadow-sm">v1.1.9</span>
-              <span class="text-xs font-black text-[#1c1917] dark:text-white">팁 박스 초고대비 색감 쇄신 & 버전 히스토리 모달</span>
+              <span class="px-2 py-0.5 rounded-lg bg-amber-500 text-black font-black text-xs shadow-sm">v1.2.0</span>
+              <span class="text-xs font-black text-[#1c1917] dark:text-white">남미 3주 풀 코스(22일/21일) 120+ 스팟 탑재 & 스마트 자동 채우기</span>
             </div>
             <span class="px-2 py-0.5 rounded-full text-[10px] font-black bg-emerald-100 text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300 border border-emerald-300">최신 버전 (Current)</span>
           </div>
           <div class="text-[11px] text-[#44403c] dark:text-stone-300 space-y-1.5 leading-relaxed">
             <div class="flex items-start gap-1.5">
-              <span class="text-amber-600 dark:text-amber-400 font-bold shrink-0">🎨</span>
-              <div><b>라이트 테마 팁 박스 초고대비(WCAG AAA 7:1+) 색감 쇄신</b>: 타임라인 스팟 팁, 필수 예약 꿀팁, 거점 도시 주의사항, 다이내믹 서머리 안내문의 흐릿한 연노랑 글자 증발 문제를 원천 해결하고, 앰버 계열 전용 고대비 규칙(7:1~9:1 대비)을 적용하여 실외에서도 100% 선명하게 읽을 수 있도록 개선.</div>
+              <span class="text-amber-600 dark:text-amber-400 font-bold shrink-0">🌎</span>
+              <div><b>남미 4개국 3주 실전 검증 황금 여정 풀 코스 전면 탑재</b>: 미국 LA, 페루(리마/이카/쿠스코/마추픽추), 아르헨티나(부에노스아이레스), 이과수 폭포, 브라질(리우) 등 22일(10/11 출발) 및 21일(10/12 출발) 전 일정 30분 단위 정밀 타임라인 120여 개 스팟과 세부 팁, 경비, 이동수단 전면 탑재.</div>
             </div>
             <div class="flex items-start gap-1.5">
-              <span class="text-amber-600 dark:text-amber-400 font-bold shrink-0">📜</span>
-              <div><b>버전 뱃지 원클릭 릴리즈 히스토리 뷰어 탑재</b>: 상단 헤더의 버전 뱃지(v1.1.9) 또는 설정 모달을 클릭하여 전체 버전별 변경사항을 즉시 열람할 수 있는 전용 모달 창(<code>modal-version-history</code>) 구축.</div>
+              <span class="text-amber-600 dark:text-amber-400 font-bold shrink-0">⚡</span>
+              <div><b>스마트 자동 채우기 & 자가 치유(Self-Healing)</b>: 샘플 일정 빈 껍데기 버그를 원천 차단하고, 타임라인 및 설정창에서 클릭 1번으로 22일 풀 코스 또는 21일 최적화 코스를 즉시 덮어씌워 자동 완성하는 스마트 액션 배너 지원.</div>
             </div>
           </div>
           <div class="text-[10px] text-stone-400 dark:text-stone-500 pt-1 border-t border-amber-500/20 flex items-center justify-between">
             <span>📅 2026-09-06 릴리즈</span>
-            <span class="font-mono">st-shell-v1.1.9</span>
+            <span class="font-mono">st-shell-v1.2.0</span>
           </div>
+        </div>
+
+        <!-- v1.1.9 -->
+        <div class="p-3.5 rounded-xl bg-stone-50 dark:bg-stone-900/50 border border-stone-200 dark:border-stone-800 space-y-2">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-2">
+              <span class="px-1.5 py-0.5 rounded-md bg-stone-200 dark:bg-stone-800 text-stone-800 dark:text-stone-200 font-bold text-[11px] font-mono">v1.1.9</span>
+              <span class="font-bold text-[#1c1917] dark:text-stone-200">팁 박스 초고대비 색감 쇄신 & 버전 히스토리 모달</span>
+            </div>
+            <span class="text-[10px] text-stone-400">2026-09-06</span>
+          </div>
+          <p class="text-[11px] text-[#78716c] dark:text-stone-400 leading-relaxed">
+            라이트 테마 팁 박스 초고대비(WCAG AAA 7:1+) 색감 쇄신으로 가독성을 대폭 끌어올리고, 상단 헤더 버전 뱃지 원클릭 릴리즈 히스토리 뷰어 모달(<code>modal-version-history</code>) 구축.
+          </p>
         </div>
 
         <!-- v1.1.8 -->
@@ -2425,7 +2439,7 @@
 
       <!-- 모달 푸터 -->
       <div class="pt-3 border-t border-[#e8e2d5] dark:border-stone-800 flex items-center justify-between shrink-0">
-        <span class="text-[11px] text-stone-400 dark:text-stone-500 font-mono">Sulsul Travel Engine v1.1.9</span>
+        <span class="text-[11px] text-stone-400 dark:text-stone-500 font-mono">Sulsul Travel Engine v1.2.0</span>
         <button onclick="closeModal('modal-version-history')" class="px-4 py-2 rounded-xl bg-[#faf8f5] dark:bg-stone-800 hover:bg-[#f0ece1] dark:hover:bg-stone-700 border border-[#e8e2d5] dark:border-stone-700 text-[#1c1917] dark:text-[#ededed] text-xs font-bold transition cursor-pointer shadow-sm">
           닫기
         </button>
@@ -2488,7 +2502,7 @@
     window.showToast = showToast;
 
     // 앱 버전 및 글로벌 네임스페이스 (Sulsul-Travel Invariant Rule R-10, R-11, R-12, R-13, R-14, R-15)
-    const APP_VER = '1.1.9';
+    const APP_VER = '1.2.0';
 
     // ══════════════════════════════════════════
     // [Two-Tone Theme System] 라이트 그레이 & 딥 블랙 테마 엔진
@@ -2675,23 +2689,51 @@
       checkStartupInstallOnboarding();
     }
 
+    function getSouthAmericaSourceDays(variant = 22) {
+      if (variant === 21) {
+        if (window.KB_TRAVEL && window.KB_TRAVEL.saDays21 && window.KB_TRAVEL.saDays21.length > 0) {
+          return JSON.parse(JSON.stringify(window.KB_TRAVEL.saDays21));
+        }
+        if (window.KB_TRAVEL && window.KB_TRAVEL.templates && window.KB_TRAVEL.templates.south_america_21d && window.KB_TRAVEL.templates.south_america_21d.days) {
+          return JSON.parse(JSON.stringify(window.KB_TRAVEL.templates.south_america_21d.days));
+        }
+      }
+      if (window.KB_TRAVEL && window.KB_TRAVEL.saDays && window.KB_TRAVEL.saDays.length > 0) {
+        return JSON.parse(JSON.stringify(window.KB_TRAVEL.saDays));
+      }
+      if (window.KB_TRAVEL && window.KB_TRAVEL.templates && window.KB_TRAVEL.templates.south_america_22d && window.KB_TRAVEL.templates.south_america_22d.days) {
+        return JSON.parse(JSON.stringify(window.KB_TRAVEL.templates.south_america_22d.days));
+      }
+      return [];
+    }
+
     function ensureShowcaseTripExists() {
       if (localStorage.getItem('st_sa_sample_deleted') === 'true') {
         return;
       }
       const showcaseId = 'trip_sa_showcase_22d';
       const exists = State.trips.find(t => t.id === showcaseId);
+      const fullDays = getSouthAmericaSourceDays(22);
       
       if (!exists && window.KB_TRAVEL && window.KB_TRAVEL.templates && window.KB_TRAVEL.templates.south_america_22d) {
         const seedTpl = JSON.parse(JSON.stringify(window.KB_TRAVEL.templates.south_america_22d));
-        seedTpl.days = window.KB_TRAVEL.saDays ? JSON.parse(JSON.stringify(window.KB_TRAVEL.saDays)) : [];
-        seedTpl.expenses = window.KB_TRAVEL.seedExpenses ? JSON.parse(JSON.stringify(window.KB_TRAVEL.seedExpenses)) : [];
-        seedTpl.journals = window.KB_TRAVEL.seedJournals ? JSON.parse(JSON.stringify(window.KB_TRAVEL.seedJournals)) : {};
-        seedTpl.checklist = window.KB_TRAVEL.defaultChecklist ? JSON.parse(JSON.stringify(window.KB_TRAVEL.defaultChecklist)) : [];
+        seedTpl.days = fullDays;
+        seedTpl.durationDays = seedTpl.days.length || 22;
+        seedTpl.expenses = window.KB_TRAVEL.seedExpenses ? JSON.parse(JSON.stringify(window.KB_TRAVEL.seedExpenses)) : (seedTpl.expenses || []);
+        seedTpl.journals = window.KB_TRAVEL.seedJournals ? JSON.parse(JSON.stringify(window.KB_TRAVEL.seedJournals)) : (seedTpl.journals || {});
+        seedTpl.checklist = window.KB_TRAVEL.defaultChecklist ? JSON.parse(JSON.stringify(window.KB_TRAVEL.defaultChecklist)) : (seedTpl.checklist || []);
         seedTpl.roomCode = 'SA-2026';
         seedTpl.concepts = ['배낭', '자연', '문화', '맛집'];
         seedTpl.isSample = true;
         State.trips.unshift(seedTpl);
+      } else if (exists) {
+        // Self-heal: If existing showcase trip has empty days or missing spots due to past initialization bug
+        const hasSpots = exists.days && exists.days.length > 0 && exists.days.some(d => d.spots && d.spots.length > 0);
+        if (!hasSpots && fullDays.length > 0) {
+          exists.days = fullDays;
+          exists.durationDays = fullDays.length;
+          saveTrips();
+        }
       }
     }
 
@@ -2719,12 +2761,20 @@
       }
     }
 
-    function restoreSouthAmericaSample() {
+    function restoreSouthAmericaSample(forceVariant = 22) {
       localStorage.removeItem('st_sa_sample_deleted');
+      const targetId = 'trip_sa_showcase_22d';
+      const idx = State.trips.findIndex(t => t.id === targetId || (t.title && t.title.includes('남미 4개국')));
+      if (idx !== -1) {
+        State.trips.splice(idx, 1);
+      }
       ensureShowcaseTripExists();
       saveTrips();
       updateHubFilterDropdowns();
       renderHub();
+      if (State.activeTripId === targetId) {
+        renderActiveTripWorkspace();
+      }
       closeModal('modal-settings');
       showToast('✨ 남미 4개국 22일 가이드 예제가 성공적으로 복원되었습니다!');
     }
@@ -2780,6 +2830,40 @@
       saveTrips();
       renderActiveTripWorkspace();
       showToast('✨ 중국 운남 13일 황금 코스가 성공적으로 적용되었습니다!');
+    }
+
+    function applySouthAmericaGoldenCourse(variant = 22) {
+      const trip = getActiveTrip();
+      if (!trip) return;
+
+      const is21 = (variant === 21);
+      const titleVariant = is21 ? '21일 (10/12 출발 최적화 코스)' : '22일 (10/11 출발 풀 코스)';
+      if (!confirm(`남미 4개국 3주 실제 황금 여정 [${titleVariant}]을 현재 여행에 즉시 적용하시겠습니까?\n\n(30분 단위 정밀 타임라인 120여 개 스팟, 이동 경로, 필수 팁, 통화별 경비가 자동으로 채워집니다)`)) {
+        return;
+      }
+
+      const sourceDays = getSouthAmericaSourceDays(variant);
+      if (!sourceDays || sourceDays.length === 0) {
+        showToast('⚠️ 남미 황금 여정 데이터를 불러올 수 없습니다.');
+        return;
+      }
+
+      trip.days = JSON.parse(JSON.stringify(sourceDays));
+      trip.durationDays = trip.days.length;
+      if (is21) {
+        trip.startDate = '2026-10-12';
+        trip.endDate = '2026-11-01';
+      } else {
+        trip.startDate = '2026-10-11';
+        trip.endDate = '2026-11-01';
+      }
+      trip.countries = ["미국", "페루", "아르헨티나", "브라질"];
+      trip.countryFlags = ["🇺🇸", "🇵🇪", "🇦🇷", "🇧🇷"];
+      trip.cities = ["로스앤젤레스", "리마", "파라카스·와카치나", "쿠스코", "마추픽추", "부에노스아이레스", "푸에르토 이과수", "리우데자네이루"];
+
+      saveTrips();
+      renderActiveTripWorkspace();
+      showToast(`✨ 남미 4개국 ${trip.durationDays}일 황금 여정이 성공적으로 적용되었습니다!`);
     }
 
     // ==========================================
@@ -3731,6 +3815,30 @@
       const aiBanner = document.getElementById('banner-ai-recommend');
 
       if (!trip.days || !Array.isArray(trip.days) || trip.days.length === 0) {
+        if (isSouthAmericaTrip(trip)) {
+          container.innerHTML = `
+            <div class="p-6 text-center rounded-2xl bg-[#0f1422] border border-amber-500/30 space-y-3 shadow-lg">
+              <span class="text-4xl">🌎</span>
+              <div class="text-base font-black text-white">남미 4개국 3주 실전 검증 황금 여정 풀 코스 자동 채우기</div>
+              <p class="text-xs text-slate-300 max-w-xl mx-auto leading-relaxed">
+                사용자 제작 실전 22일(10/11 출발) 및 21일(10/12 출발) 전 일정 30분 단위 정밀 타임라인, 이동 경로, 필수 팁 120+ 스팟을 1초 만에 불러옵니다.
+              </p>
+              <div class="flex items-center gap-2 pt-2 justify-center flex-wrap">
+                <button onclick="applySouthAmericaGoldenCourse(22)" class="px-4 py-2 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-slate-950 font-black rounded-xl text-xs shadow transition flex items-center gap-1.5 cursor-pointer">
+                  <i class="fa-solid fa-wand-magic-sparkles text-[11px]"></i>
+                  <span>22일 풀 코스 적용 (10/11 출발)</span>
+                </button>
+                <button onclick="applySouthAmericaGoldenCourse(21)" class="px-4 py-2 bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-slate-950 font-black rounded-xl text-xs shadow transition flex items-center gap-1.5 cursor-pointer">
+                  <i class="fa-solid fa-calendar-check text-[11px]"></i>
+                  <span>21일 최적화 코스 적용 (10/12 출발)</span>
+                </button>
+              </div>
+            </div>
+          `;
+          if (aiBanner) aiBanner.classList.add('hidden');
+          return;
+        }
+
         container.innerHTML = `
           <div class="p-8 text-center rounded-2xl bg-[#0f1422] border border-[#1e263c] space-y-3">
             <span class="text-3xl">📅</span>
@@ -3745,6 +3853,35 @@
       if (aiBanner) aiBanner.classList.add('hidden');
 
       let html = '';
+
+      // 남미 4개국 황금 코스 스마트 제안 배너 (v1.2.0)
+      if (isSouthAmericaTrip(trip)) {
+        const hasFewSpots = !trip.days || trip.days.length < 20 || 
+          trip.days.some(d => !d.spots || d.spots.length === 0 || d.spots.some(s => s.isDraft || (s.title && s.title.includes('맞춤 스팟'))));
+        if (hasFewSpots || trip.isSample) {
+          html += `
+            <div class="p-3.5 rounded-2xl bg-gradient-to-r from-amber-500/15 via-emerald-500/15 to-indigo-500/15 border border-amber-500/30 flex flex-col sm:flex-row items-center justify-between gap-3 shadow-md mb-3">
+              <div class="flex items-center gap-3">
+                <span class="w-9 h-9 rounded-xl bg-amber-500/20 text-amber-300 flex items-center justify-center text-lg shrink-0">🌎</span>
+                <div>
+                  <div class="font-black text-white text-xs sm:text-sm">남미 4개국 3주 실전 검증 황금 코스 자동 채우기</div>
+                  <p class="text-[11px] text-slate-300 mt-0.5">LA · 페루(리마/쿠스코/마추픽추) · 아르헨티나(부에노스) · 이과수 · 브라질(리우) 120+ 스팟</p>
+                </div>
+              </div>
+              <div class="flex items-center gap-2 shrink-0">
+                <button onclick="applySouthAmericaGoldenCourse(22)" class="px-3 py-1.5 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-slate-950 font-black rounded-xl text-xs shadow transition flex items-center gap-1.5 cursor-pointer" title="10월 11일 한국 출발 22일 풀 코스">
+                  <i class="fa-solid fa-wand-magic-sparkles text-[10px]"></i>
+                  <span>22일 풀 코스</span>
+                </button>
+                <button onclick="applySouthAmericaGoldenCourse(21)" class="px-3 py-1.5 bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-slate-950 font-black rounded-xl text-xs shadow transition flex items-center gap-1.5 cursor-pointer" title="10월 12일 한국 출발 21일 최적화 코스">
+                  <i class="fa-solid fa-calendar-check text-[10px]"></i>
+                  <span>21일 최적화</span>
+                </button>
+              </div>
+            </div>
+          `;
+        }
+      }
 
       // 운남 황금 코스 스마트 제안 배너 (v1.1.7)
       if (isYunnanTrip(trip)) {
@@ -6530,6 +6667,8 @@
       isModalFormDirty: isModalFormDirty,
       deleteSouthAmericaSample: deleteSouthAmericaSample,
       restoreSouthAmericaSample: restoreSouthAmericaSample,
+      applySouthAmericaGoldenCourse: applySouthAmericaGoldenCourse,
+      applyYunnanGoldenCourse: applyYunnanGoldenCourse,
       exportTripAsShareUrl: exportTripAsShareUrl,
       exportActiveTripShareLink: exportActiveTripShareLink,
       setHubStatusFilter: setHubStatusFilter,

@@ -1,5 +1,5 @@
 /**
- * Sulsul-Travel Built-in Knowledge Base (kb-travel.js) v1.1.9
+ * Sulsul-Travel Built-in Knowledge Base (kb-travel.js) v1.2.0
  * 100% Offline-First domain data for global travel, South America 3-week master plan,
  * multi-currency rates (including Argentina MEP rate), and packing checklists.
  */
@@ -359,65 +359,411 @@ const scheduleOct11Data = [
       }
     ];
 
-// 2. Transform into Sulsul-Travel Structured Days
-const saDays = scheduleOct11Data.map((d, idx) => {
-  const dayNum = idx + 1;
-  const locParts = (d.loc || '').split('·');
-  const cityName = locParts.length > 1 ? locParts[1].trim() : (d.loc || '');
-  const country = locParts[0].trim();
-  
-  const spots = (d.timeline || []).map(t => {
-    let cat = 'tour';
-    const icon = t.typeIcon || '';
-    if (/[✈️🚗🚌🚆🛬🛄]/.test(icon)) cat = 'flight';
-    else if (/[🍽️🥩🍔☕🥐🍲🥂]/.test(icon)) cat = 'food';
-    else if (/[🏨🛏️]/.test(icon)) cat = 'lodging';
-    else if (/[🛍️]/.test(icon)) cat = 'shopping';
+// 2. Pristine 21-Day South America Schedule Data (10/12 출발 21일 최적화 코스)
+const scheduleOct12Data = [
+      {
+        day: "DAY 01", date: "10월 12일 (월)", loc: "미국 · 로스앤젤레스(LA)", flight: "✈️ 인천(ICN) → LAX (시차로 10/12 당일 오전 도착)",
+        title: "태평양 건너 LA 도착! 산타모니카 해변 & 시차 적응",
+        desc: "인천 출발 후 시차로 인해 10/12 당일 오전 LA 도착. 입국 수속 후 산타모니카 피어와 인앤아웃 버거를 즐기고 시차에 적응합니다.",
+        timeline: [
+          { time: "08:00 - 11:00", typeIcon: "✈️", title: "인천국제공항 T1/T2 도착 및 출국 수속", desc: "수하물 위탁, ESTA 사전 확인, 환전 수령 및 보안검색 통과", tip: "국제선 3시간 전 공항 도착 필수" },
+          { time: "11:40 - 06:40", typeIcon: "✈️", title: "인천 → 로스앤젤레스(LAX) 비행", desc: "약 11시간 비행, 기내식 2회, 수면 (시차로 10/12 당일 오전 LAX 도착)", tip: "안대와 보습제 챙기기" },
+          { time: "06:40 - 08:30", typeIcon: "🛬", title: "LAX 공항 도착, 입국 심사(ESTA) 및 수하물 수령", desc: "ESTA 전용 키오스크/심사대 통과, 수하물 수령 후 LAX-it 이동", tip: "ESTA 출력본 소지" },
+          { time: "08:30 - 09:30", typeIcon: "🚗", title: "LAX-it 셔틀 → 산타모니카 숙소 우버 이동", desc: "우버 타고 산타모니카 해변 숙소 이동, 호텔 짐 보관(Luggage Drop)", tip: "얼리 체크인 가능 여부 문의" },
+          { time: "09:30 - 11:30", typeIcon: "☕", title: "오션 애비뉴 산책 & Philz Coffee 모히토 커피", desc: "캘리포니아 햇살을 맞으며 해변길 산책과 시원한 민트 커피 한 잔", tip: "선글라스 착용 필수" },
+          { time: "11:30 - 13:00", typeIcon: "📸", title: "산타모니카 피어 & 루트 66 종점 표지판 포토존", desc: "유서 깊은 목조 부두 피어 산책, 대륙 횡단 도로 Route 66 End of Trail 인증샷", tip: "퍼시픽 파크 롤러코스터 뷰" },
+          { time: "13:00 - 14:30", typeIcon: "🍔", title: "점심 식사: 서부 명물 '인앤아웃 버거'", desc: "더블더블 버거와 시크릿 메뉴 애니멀 스타일 감자튀김 & 밀크쉐이크", tip: "갓 튀겨낸 바삭한 감자튀김 맛보기" },
+          { time: "14:30 - 16:30", typeIcon: "🛍️", title: "서드 스트리트 프롬나드 산책 & 트레이더 조", desc: "보행자 전용 쇼핑거리 산책 및 트레이더 조 에코백 쇼핑", tip: "선물용 트레이더 조 간식 구매" },
+          { time: "16:30 - 17:30", typeIcon: "🏨", title: "호텔 체크인 & 1시간 샤워 및 파워냅", desc: "객실 입실 후 온수 샤워, 1시간 짧은 수면으로 시차 피로 완화", tip: "1시간 이상 자지 않도록 주의" },
+          { time: "17:30 - 19:30", typeIcon: "🌅", title: "팰리세이즈 파크 핑크빛 태평양 선셋 감상", desc: "절벽 위 야자수 공원에서 바다로 지는 석양 감상", tip: "골든아워 인생 사진 포인트" },
+          { time: "19:30 - 21:00", typeIcon: "🍽️", title: "저녁 식사: 해변가 캐주얼 씨푸드 다이닝", desc: "The Lobster 또는 Bubba Gump에서 새우 요리와 로컬 맥주", tip: "피어 입구 바다 뷰 테라스" },
+          { time: "21:00 ~", typeIcon: "🛏️", title: "호텔 복귀 및 시차 적응 취침", desc: "편의점에서 생수 구매 후 이른 취침", tip: "숙면으로 시차 적응 완료" }
+        ]
+      },
+      {
+        day: "DAY 02", date: "10월 13일 (화)", loc: "미국 LA → 페루 리마", flight: "🎬 LA 명소 투어 후 심야/오후 페루 리마행 탑승",
+        title: "할리우드·그리피스 천문대 투어 후 남미행 항공 탑승",
+        desc: "게티 센터, 할리우드, 그리피스 천문대 야경을 감상한 뒤 LAX 공항으로 이동하여 페루 리마행 항공편에 탑승합니다.",
+        timeline: [
+          { time: "08:00 - 09:00", typeIcon: "☕", title: "기상, 호텔 조식 및 체크아웃 (짐 보관)", desc: "체크아웃 후 짐을 호텔에 맡기거나 우버 트렁크에 싣고 출발", tip: "오늘 밤 비행기 탑승 복장 준비" },
+          { time: "09:00 - 12:00", typeIcon: "🏛️", title: "게티 센터(The Getty Center) 트램 & 명작 관람", desc: "무인 트램 타고 언덕 등반, 고흐의 '아이리스' 등 명화 감상과 정원 산책", tip: "화이트 건축물 사이 LA 도심 파노라마" },
+          { time: "12:00 - 14:00", typeIcon: "🍽️", title: "점심 식사: 오리지널 파머스 마켓 & 더 그로브", desc: "Pampas Grill 슈하스코 또는 로컬 푸드코트 점심 식사 및 분수대 산책", tip: "활기찬 마켓 분위기 만끽" },
+          { time: "14:00 - 16:00", typeIcon: "🌟", title: "할리우드 명예의 거리 & TCL 차이니즈 극장", desc: "돌비 극장과 스타 손도장 찾기 포토 타임", tip: "길거리 호객 주의" },
+          { time: "16:00 - 17:30", typeIcon: "🛍️", title: "비벌리힐스 로데오 드라이브 산책", desc: "명품 거리와 야자수 가로수길 윈도우 쇼핑", tip: "비벌리힐스 사인 인증샷" },
+          { time: "17:30 - 19:30", typeIcon: "🔭", title: "그리피스 천문대 관람 & <라라랜드> 석양 야경", desc: "할리우드 사인 조망과 LA 도심에 켜지는 보석빛 야경 감상", tip: "일몰 전 도착하여 노을부터 야경까지 감상" },
+          { time: "19:30 - 21:00", typeIcon: "🍽️", title: "저녁 식사: 한인타운 BCD 북창동순두부", desc: "남미 진입 전 따뜻하고 든든한 칼칼한 한식 식사", tip: "속이 편안한 순두부찌개 추천" },
+          { time: "21:00 - 22:30", typeIcon: "🚗", title: "LAX 톰 브래들리 국제선 터미널 우버 이동", desc: "공항 도착 후 LATAM 리마행 카운터 수속", tip: "국제선 3시간 전 도착" },
+          { time: "22:30 ~", typeIcon: "✈️", title: "LAX 출발 → 페루 리마(LIM) 심야 비행 탑승", desc: "적도를 통과하여 남미 대륙 진입! 기내 수면", tip: "내일 아침 리마 도착" }
+        ]
+      },
+      {
+        day: "DAY 03", date: "10월 14일 (수)", loc: "페루 · 리마(Lima)", flight: "✈️ 리마 도착 & 미라플로레스 휴식",
+        title: "남미 대륙 입성! 태평양 절벽 라르코마르 & 세비체 만찬",
+        desc: "리마 공항 도착 후 안전한 부촌 미라플로레스 호텔에 체크인하고, 태평양 절벽 라르코마르와 원조 세비체 미식을 즐깁니다.",
+        timeline: [
+          { time: "08:00 - 09:30", typeIcon: "🛬", title: "리마 호르헤 차베스 국제공항 도착 및 입국", desc: "입국 심사, 수하물 수령, 공식 택시 부스 결제", tip: "Green Taxi 정찰제 이용" },
+          { time: "09:30 - 10:30", typeIcon: "🚗", title: "미라플로레스 호텔 이동 및 얼리 체크인/짐 보관", desc: "치안이 우수한 해안 부촌 호텔 도착", tip: "프론트에 짐 보관 후 가벼운 옷차림 환복" },
+          { time: "10:30 - 12:30", typeIcon: "🌊", title: "사랑의 공원 & 라르코마르(Larcomar) 산책", desc: "태평양 해안 절벽을 파고든 복합 쇼핑몰과 가우디풍 모자이크 공원 산책", tip: "절벽 아래 시원한 파도 조망" },
+          { time: "12:30 - 14:00", typeIcon: "🍽️", title: "점심 식사: 세비체 명가 'La Mar' 만찬", desc: "신선한 흰살 생선 세비체와 보랏빛 옥수수 음료 치차 모라다", tip: "피스코 사워 곁들이기" },
+          { time: "14:00 - 16:30", typeIcon: "🎨", title: "예술가의 거리 '바랑코(Barranco)' 벽화 골목 산책", desc: "탄식의 다리와 감성 카페, 벽화 거리 도보 탐방", tip: "사진 찍기 좋은 보헤미안 거리" },
+          { time: "16:30 - 18:30", typeIcon: "🏨", title: "호텔 체크인 & 휴식", desc: "객실 입실 후 온수 샤워 및 휴식", tip: "내일 파라카스·와카치나 투어 준비" },
+          { time: "18:30 - 20:30", typeIcon: "🍽️", title: "저녁 식사: 미라플로레스 Panchita 안티쿠초", desc: "잉카 전통 특제 양념 소 심장 꼬치구이와 로모 살타도", tip: "육즙 가득한 페루 전통 요리" },
+          { time: "20:30 ~", typeIcon: "🛏️", title: "휴식 및 취침", desc: "내일 새벽 출발 투어를 위해 이른 취침", tip: "내일 06:30 기상" }
+        ]
+      },
+      {
+        day: "DAY 04", date: "10월 15일 (목)", loc: "파라카스 & 와카치나 사막", flight: "🚌 리마 남부 일일 풀코스 투어",
+        title: "바예스타 섬 펭귄·물개 투어 & 와카치나 듄 버기 샌드보딩",
+        desc: "새벽 파라카스로 이동하여 바예스타 섬 보트 투어를 즐기고, 와카치나 오아시스에서 스릴 넘치는 버기카와 샌드보딩 후 리마로 귀환합니다.",
+        timeline: [
+          { time: "06:30 - 07:00", typeIcon: "☕", title: "기상 및 투어 픽업 차량 탑승", desc: "리마 남부 일일 풀코스 전용 투어 차량 탑승", tip: "차량 내에서 조식 박스 섭취" },
+          { time: "07:00 - 10:00", typeIcon: "🚗", title: "리마 → 파라카스 이동 (팬아메리칸 고속도로)", desc: "태평양과 해안 사막 도로를 달려 파라카스 선착장 도착", tip: "창밖 태평양 해안선 감상" },
+          { time: "10:00 - 12:00", typeIcon: "🚤", title: "바예스타 섬(Islas Ballestas) 스피드보트 투어", desc: "사막 절벽 촛대 지상화, 수만 마리의 바다사자, 훔볼트 펭귄 근접 관람", tip: "모자와 바람막이 착용 권장" },
+          { time: "12:00 - 13:30", typeIcon: "🚗", title: "파라카스 → 와카치나 오아시스 차량 이동", desc: "이카 사막 한가운데 오아시스 마을 와카치나 도착", tip: "야자수가 둘러싼 호수 마을 진입" },
+          { time: "13:30 - 15:00", typeIcon: "🍽️", title: "점심 식사: 오아시스 호숫가 테라스 레스토랑", desc: "에메랄드빛 호수를 바라보며 로모 살타도와 시원한 맥주 식사", tip: "호숫가 산책과 사진 촬영" },
+          { time: "15:00 - 16:00", typeIcon: "🌴", title: "오아시스 둘레길 산책 & 이카 초코테하 쇼핑", desc: "피스코와 둘세데레체가 들어간 특산 초콜릿 구매", tip: "버기카 탑승 전 선글라스, 마스크 착용" },
+          { time: "16:00 - 18:00", typeIcon: "🚙", title: "익스트림 듄 버기카 질주 & 샌드보딩 & 사막 일몰", desc: "거대 모래 언덕을 가르는 롤러코스터 버기카와 샌드보딩, 붉게 물드는 사막 노을", tip: "엎드려 타는 샌드보딩이 스릴 최고" },
+          { time: "18:00 - 19:00", typeIcon: "🚿", title: "모래 털기 및 리마 귀환 차량 탑승", desc: "간단히 세안 후 리마행 전용 차량 탑승", tip: "간단한 간식과 음료 준비" },
+          { time: "19:00 - 23:00", typeIcon: "🚗", title: "이카 → 리마 복귀 (약 4시간)", desc: "차량 내에서 편안하게 취침하며 리마 복귀", tip: "휴식 취하기" },
+          { time: "23:00 ~", typeIcon: "🏨", title: "리마 호텔 복귀 및 취침", desc: "온수 샤워 후 내일 쿠스코 비행을 위해 숙면", tip: "내일 아침 다이아목스 반 알 복용" }
+        ]
+      },
+      {
+        day: "DAY 05", date: "10월 16일 (금)", loc: "페루 · 쿠스코(Cusco, 3,400m)", flight: "✈️ 리마 → 쿠스코 국내선 이동",
+        title: "잉카의 수도 쿠스코 입성 & 여유로운 고산 적응",
+        desc: "해발 3,400m 안데스 고산도시 쿠스코 도착! 코카차 음용과 3시간 침대 수면으로 고산에 철저히 적응합니다.",
+        timeline: [
+          { time: "07:00 - 08:00", typeIcon: "☕", title: "기상, 체크아웃 및 리마 공항 우버 이동", desc: "다이아목스 반 알 복용 후 공항 이동", tip: "손발 저림은 정상 반응" },
+          { time: "08:00 - 09:40", typeIcon: "✈️", title: "리마 공항 국내선 수속 및 탑승 대기", desc: "LATAM 항공 발권 및 수하물 위탁", tip: "좌측 A열 좌석 권장" },
+          { time: "09:40 - 11:00", typeIcon: "✈️", title: "리마 → 쿠스코 비행 (안데스 만년설 감상)", desc: "만년설 봉우리 상공 비행 후 쿠스코 착륙", tip: "창밖 설산 파노라마" },
+          { time: "11:00 - 12:00", typeIcon: "🛬", title: "쿠스코 공항 도착 및 아르마스 광장 호텔 이동", desc: "해발 3,400m 진입! 공식 택시 타고 역사지구 이동", tip: "천천히 호흡하며 슬로우 걷기" },
+          { time: "12:00 - 12:30", typeIcon: "☕", title: "호텔 체크인 & 웰컴 코카차 음용", desc: "따뜻한 코카차 2잔 천천히 마시기", tip: "혈중 산소포화도 상승" },
+          { time: "12:30 - 15:30", typeIcon: "🛏️", title: "★ [고산 적응] 호텔 침대 3시간 완전 수면", desc: "고산병 없는 여행을 위한 필수 휴식", tip: "달리기, 과식 절대 금지" },
+          { time: "15:30 - 17:30", typeIcon: "🚶", title: "아르마스 광장 & 12각의 돌 슬로우 산책", desc: "정교한 잉카 석조 기술의 정수 12각의 돌 포토존", tip: "천천히 걸으며 심장 무리 방지" },
+          { time: "17:30 - 18:30", typeIcon: "🍎", title: "산페드로 시장 구경 & 생과일 주스", desc: "다채로운 안데스 농산물과 수공예품 시장 구경", tip: "시장 활기 체감" },
+          { time: "18:30 - 20:00", typeIcon: "🍽️", title: "저녁 식사: 따뜻한 닭고기 수프 (음주 금지)", desc: "소화가 잘 되는 따뜻한 수프로 가벼운 식사", tip: "첫날 술은 절대 금지" },
+          { time: "20:00 - 21:00", typeIcon: "🎒", title: "내일 성스러운 계곡 1박 가방 패킹", desc: "큰 짐은 호텔에 맡기고 작은 배낭만 준비", tip: "기차 반입 규정 준수" },
+          { time: "21:00 ~", typeIcon: "🛏️", title: "미온수 마신 후 일찍 취침", desc: "충분한 수면으로 고산 완벽 적응", tip: "방 건조 시 젖은 수건 거치" }
+        ]
+      },
+      {
+        day: "DAY 06", date: "10월 17일 (토)", loc: "성스러운 계곡 → 아과스깔리엔떼스", flight: "🚆 성스러운 계곡 투어 & 잉카레일",
+        title: "친체로·살리네라스 소금염전 거쳐 마추픽추 기지 마을로",
+        desc: "잉카 직물 친체로, 모라이 계단식 농경지, 살리네라스 소금염전을 탐방하고 기차를 타고 마추픽추 마을(해발 2,040m)로 진입합니다.",
+        timeline: [
+          { time: "07:00 - 08:00", typeIcon: "☕", title: "호텔 조식, 캐리어 보관 및 투어 픽업", desc: "큰 짐 호텔 보관 후 전용 밴 탑승", tip: "모자와 썬크림 준비" },
+          { time: "08:00 - 09:30", typeIcon: "🧵", title: "친체로 전통 마을 알파카 염색 시연", desc: "자연 염료 알파카 털 직물 시연 및 알파카 먹이주기", tip: "알파카 머플러 쇼핑" },
+          { time: "09:30 - 11:30", typeIcon: "🌾", title: "모라이(Moray) 원형 계단식 농경지 탐방", desc: "잉카의 미기후 농업 실험지 관람", tip: "원형 테라스 장관" },
+          { time: "11:30 - 13:00", typeIcon: "🧂", title: "살리네라스(Salineras) 계단식 소금염전", desc: "붉은 협곡 속 3,000개 하얀 소금밭 조망", tip: "마라스 핑크 소금 구매" },
+          { time: "13:00 - 14:30", typeIcon: "🍽️", title: "점심 식사: 우루밤바 정원 뷔페", desc: "성스러운 계곡의 신선한 안데스 식재료 뷔페", tip: "구운 옥수수와 감자" },
+          { time: "14:30 - 16:30", typeIcon: "🏰", title: "오얀따이땀보 거대 석조 요새 탐방", desc: "태양의 신전으로 이어지는 웅장한 돌계단 등반", tip: "천천히 오르기" },
+          { time: "16:30 - 17:00", typeIcon: "🚶", title: "오얀따이땀보 기차역 도보 이동 및 개찰", desc: "기차역 이동 및 여권 확인", tip: "생수 1병 챙기기" },
+          { time: "17:00 - 18:45", typeIcon: "🚆", title: "파노라마 관광열차 탑승 (오얀따이땀보 → 아과스깔리엔떼스)", desc: "우루밤바 강 협곡을 달리는 기차 (통유리 천장)", tip: "안데스 정글 뷰" },
+          { time: "18:45 - 19:30", typeIcon: "🏨", title: "아과스깔리엔떼스 도착 및 호텔 체크인", desc: "해발 2,040m로 고도가 낮아져 머리가 맑아짐!", tip: "호텔 짐 풀기" },
+          { time: "19:30 - 21:00", typeIcon: "🍽️", title: "저녁 식사: 마을 광장 화덕 피자 & 수프", desc: "마을 골목 레스토랑에서 든든한 저녁 식사", tip: "내일 티켓, 여권 재확인" },
+          { time: "21:00 ~", typeIcon: "🛏️", title: "취침", desc: "내일 새벽 마추픽추 탐방을 위해 푹 숙면", tip: "내일 05:30 기상" }
+        ]
+      },
+      {
+        day: "DAY 07", date: "10월 18일 (일)", loc: "마추픽추 → 쿠스코", flight: "✨ 마추픽추 공식 탐방 후 기차 귀환",
+        title: "구름 위의 공중도시 마추픽추 감동 투어 후 쿠스코 복귀",
+        desc: "평생의 버킷리스트 마추픽추 서킷 2 정복! 페루레일 기차를 타고 쿠스코로 귀환하여 축하 만찬을 즐깁니다.",
+        timeline: [
+          { time: "05:30 - 06:30", typeIcon: "☕", title: "기상, 조식 샌드위치 수령 및 체크아웃", desc: "짐 챙겨 로비 출발", tip: "실물 여권 필수 지참" },
+          { time: "06:30 - 07:15", typeIcon: "🚌", title: "콘세투르 셔틀버스 탑승 (지그재그 25분 등반)", desc: "하이람 빙엄 산길 등반", tip: "우측 좌석 뷰 추천" },
+          { time: "07:15 - 07:30", typeIcon: "🎟️", title: "마추픽추 정문 도착 및 입장", desc: "서킷 2 티켓과 여권 대조", tip: "입구 화장실 이용" },
+          { time: "07:30 - 11:30", typeIcon: "🏛️", title: "★ [하이라이트] 마추픽추 서킷 2 (Circuit 2) 공식 투어", desc: "상부 테라스 엽서 뷰 & 라마 인생샷! 태양의 신전, 인티와타나 탐방", tip: "운무 걷히는 황홀한 광경" },
+          { time: "11:30 - 12:15", typeIcon: "🚌", title: "셔틀버스 탑승하여 마을 하산", desc: "아과스깔리엔떼스 복귀", tip: "여권 기념 도장 날인" },
+          { time: "12:15 - 14:00", typeIcon: "🍽️", title: "점심 식사: 마을 카페에서 쿠스케냐 맥주 & 식사", desc: "기분 좋은 완주 기념 점심", tip: "여유로운 식사" },
+          { time: "14:00 - 15:00", typeIcon: "🛍️", title: "수공예 시장 기념품 쇼핑", desc: "잉카 마그넷, 알파카 인형 쇼핑", tip: "선물용 기념품" },
+          { time: "15:00 - 17:15", typeIcon: "🚆", title: "기차 탑승 (아과스깔리엔떼스 → 오얀따이땀보)", desc: "비스타돔 열차 내 전통 가면 댄스 공연 감상", tip: "기내 즐거운 공연" },
+          { time: "17:15 - 19:00", typeIcon: "🚗", title: "오얀따이땀보 역 → 쿠스코 호텔 전용 밴 복귀", desc: "쿠스코 호텔 복귀 및 보관 짐 수령", tip: "호텔 룸 입실" },
+          { time: "19:00 - 21:00", typeIcon: "🍽️", title: "저녁 식사: 마추픽추 완주 기념 알파카 스테이크", desc: "Cicciolina 또는 Morena에서 최고급 디너", tip: "완주 자축 와인 1잔" },
+          { time: "21:00 ~", typeIcon: "🛏️", title: "호텔 휴식", desc: "벅찬 감동과 함께 편안한 수면", tip: "내일 아르헨티나 이동 준비" }
+        ]
+      },
+      {
+        day: "DAY 08", date: "10월 19일 (월)", loc: "쿠스코 → 부에노스아이레스", flight: "✈️ 남미 대이동 (CUZ → LIM 경유 → EZE)",
+        title: "안데스 산맥 넘어 탱고의 본고장 부에노스아이레스 도착",
+        desc: "쿠스코에서 리마를 경유하여 아르헨티나 부에노스아이레스(EZE)로 대이동! 시차 2시간을 전진하며 체크인합니다.",
+        timeline: [
+          { time: "06:00 - 07:00", typeIcon: "☕", title: "기상, 체크아웃 및 쿠스코 공항 택시 이동", desc: "공항 이동", tip: "아침 일찍 출발" },
+          { time: "07:00 - 08:30", typeIcon: "✈️", title: "쿠스코 공항 수속 (수하물 최종 EZE 연결)", desc: "LATAM 카운터 수속", tip: "수하물 태그 확인" },
+          { time: "08:30 - 10:00", typeIcon: "✈️", title: "쿠스코 → 리마 국내선 비행", desc: "안데스 산맥 통과", tip: "리마 착륙" },
+          { time: "10:00 - 13:00", typeIcon: "🛄", title: "리마 공항 환승 대기 & 점심 식사", desc: "Tanta 레스토랑 식사 및 국제선 출국 심사", tip: "환승 게이트 이동" },
+          { time: "13:00 - 19:30", typeIcon: "✈️", title: "리마 → 부에노스아이레스(EZE) 국제선 비행", desc: "약 4.5시간 비행 + 시차 2시간 빨라짐", tip: "기내 휴식" },
+          { time: "19:30 - 21:00", typeIcon: "🛬", title: "부에노스 EZE 공항 도착, 입국 심사 & Taxi Ezeiza 탑승", desc: "아르헨티나 입국 수속", tip: "공식 택시 부스 이용" },
+          { time: "21:00 - 22:00", typeIcon: "🏨", title: "팔레르모/레콜레타 숙소 체크인", desc: "유럽풍 부에노스아이레스 호텔 입실", tip: "신용카드 MEP 환율 자동 적용" },
+          { time: "22:00 ~", typeIcon: "🛏️", title: "가벼운 엠파나다 야식 후 취침", desc: "비행 피로 회복을 위한 휴식", tip: "숙면 취하기" }
+        ]
+      },
+      {
+        day: "DAY 09", date: "10월 20일 (화)", loc: "아르헨티나 · 부에노스아이레스", flight: "🥩 정통 아사도 & 탱고 쇼",
+        title: "5월 광장, 분홍 대통령궁 탐방과 환상의 오리지널 탱고 쇼",
+        desc: "5월 광장, 오벨리스크, 카미니토 예술 거리를 탐방하고 밤에는 최고급 아사도 스테이크와 관능적인 탱고 디너 쇼를 즐깁니다.",
+        timeline: [
+          { time: "08:00 - 09:00", typeIcon: "☕", title: "호텔 조식: 메디아루나 & 카페 코르타도", desc: "달콤한 크루아상과 커피", tip: "둘세데레체 잼" },
+          { time: "09:00 - 11:30", typeIcon: "🏛️", title: "5월 광장 & 분홍빛 대통령궁(Casa Rosada)", desc: "에비타 연설 발코니와 메트로폴리탄 대성당 관람", tip: "산 마르틴 영묘 관람" },
+          { time: "11:30 - 13:00", typeIcon: "🏙️", title: "7월 9일 대로 오벨리스크 & 콜론 극장", desc: "세계에서 가장 넓은 대로 인증샷", tip: "BA 조형물 앞 포토존" },
+          { time: "13:00 - 14:30", typeIcon: "☕", title: "점심 식사: 1858년 오픈 역사 카페 'Café Tortoni'", desc: "츄러스와 진한 핫초콜릿 & 엠파나다", tip: "클래식 명소" },
+          { time: "14:30 - 17:30", typeIcon: "🎨", title: "라 보카 카미니토(Caminito) 예술 거리", desc: "원색 양철 벽화 골목 산책과 즉석 탱고 감상", tip: "외곽 골목 벗어나지 말 것" },
+          { time: "17:30 - 19:00", typeIcon: "🏨", title: "호텔 복귀 & 탱고 디너쇼 환복 (스마트 캐주얼)", desc: "샤워 및 드레스업", tip: "단정한 복장 착용" },
+          { time: "19:00 - 21:00", typeIcon: "🥩", title: "탱고 쇼장 이동 & 최고급 아사도 풀코스 디너", desc: "꽃등심(Bife de Chorizo)과 말벡 와인 코스", tip: "Piazzolla / Madero Tango" },
+          { time: "21:00 - 22:45", typeIcon: "💃", title: "★ [공연] 관능과 격정의 정통 아르헨티나 탱고 쇼", desc: "최정상 댄서들과 라이브 오케스트라의 환상 쇼", tip: "무대 바로 앞 명당" },
+          { time: "22:45 ~", typeIcon: "🚗", title: "우버 타고 호텔 복귀 및 취침", desc: "호텔 정문 바로 하차", tip: "심야 도보 지양" }
+        ]
+      },
+      {
+        day: "DAY 10", date: "10월 21일 (수)", loc: "아르헨티나 · 부에노스아이레스", flight: "📚 엘 아테네오 서점 & 팔레르모",
+        title: "세계에서 가장 아름다운 극장 서점과 감성 골목 탐방",
+        desc: "에비타의 영묘 레콜레타, 오페라 극장 서점 엘 아테네오, 팔레르모 소호와 돈 훌리오 스테이크하우스를 만끽합니다.",
+        timeline: [
+          { time: "08:30 - 09:30", typeIcon: "☕", title: "호텔 조식", desc: "여유로운 아침", tip: "문화 산책 준비" },
+          { time: "09:30 - 12:00", typeIcon: "🏛️", title: "에비타가 잠든 야외 조각 묘원 '레콜레타 묘지'", desc: "에바 페론(에비타)의 묘와 대리석 예술 조각", tip: "국립미술관 외관 관람" },
+          { time: "12:00 - 14:00", typeIcon: "📚", title: "세계에서 가장 아름다운 서점 '엘 아테네오'", desc: "100년 된 오페라 극장 서점 무대 위 카페 커피", tip: "2층 발코니 뷰 포토존" },
+          { time: "14:00 - 16:30", typeIcon: "🛍️", title: "팔레르모 소호 감성 골목 & 하바나 알파호르 쇼핑", desc: "디자이너 부티크와 가죽 공방 거리", tip: "프리미엄 알파호르 구매" },
+          { time: "16:30 - 18:30", typeIcon: "🌆", title: "푸에르토 마데로 '여인의 다리' 수변 석양 산책", desc: "세련된 항구 수변 붉은 노을 감상", tip: "수변 야경 감상" },
+          { time: "18:30 - 21:30", typeIcon: "🥩", title: "★ [디너] 세계 50대 레스토랑 '돈 훌리오(Don Julio)'", desc: "두툼한 꽃등심(Ojo de Bife) 스테이크와 와인 만찬", tip: "최고의 아사도 식당" },
+          { time: "21:30 ~", typeIcon: "🏨", title: "우버 타고 호텔 복귀 및 짐 패킹", desc: "내일 이과수 비행 준비", tip: "수영복, 방수팩 챙기기" }
+        ]
+      },
+      {
+        day: "DAY 11", date: "10월 22일 (목)", loc: "부에노스아이레스 → 아르헨 이과수(IGR)", flight: "✈️ 아르헨 국내선: AEP → IGR",
+        title: "아르헨티나 국내선 타고 아열대 밀림 이과수로 진입",
+        desc: "접근성 좋은 시내 AEP 공항에서 비행기를 타고 푸에르토 이과수로 이동! 3국 국경 전망대와 열대 정글 리조트를 즐깁니다.",
+        timeline: [
+          { time: "08:00 - 09:00", typeIcon: "☕", title: "기상, 호텔 조식 및 체크아웃", desc: "캐리어 챙겨 체크아웃", tip: "AEP 공항은 시내에서 15분 거리" },
+          { time: "09:00 - 11:30", typeIcon: "✈️", title: "AEP 공항 이동 및 국내선 탑승 수속", desc: "수하물 위탁 및 게이트 대기", tip: "시간 절약 최고" },
+          { time: "11:30 - 13:20", typeIcon: "✈️", title: "AEP → 푸에르토 이과수(IGR) 비행 (약 1시간 50분)", desc: "붉은 흙과 초록 정글 상공 통과", tip: "아열대 기후 진입" },
+          { time: "13:20 - 14:30", typeIcon: "🛬", title: "이과수 IGR 공항 도착 및 리조트 이동", desc: "공항 공식 택시 타고 정글 리조트 이동", tip: "훈훈한 열대 공기" },
+          { time: "14:30 - 16:00", typeIcon: "🏨", title: "정글 리조트 체크인 및 야외 수영장 휴식", desc: "시원한 수영장에서 여유로운 힐링", tip: "물놀이 휴식" },
+          { time: "16:00 - 18:30", typeIcon: "🌊", title: "아르헨티나·브라질·파라과이 3국 국경 전망대", desc: "이과수 강과 파라나 강 만나는 Y자 국경 조망", tip: "석양 분수쇼 감상" },
+          { time: "18:30 - 20:30", typeIcon: "🍽️", title: "저녁 식사: 이과수 강물고기 '수루비' 요리", desc: "Aqva Restaurant에서 담백한 생선구이와 와인", tip: "로컬 특미 생선" },
+          { time: "20:30 ~", typeIcon: "🛏️", title: "내일 악마의 목구멍 대비 휴식", desc: "방수팩, 샌들, 우비 점검", tip: "100% 젖는 복장 준비" }
+        ]
+      },
+      {
+        day: "DAY 12", date: "10월 23일 (금)", loc: "아르헨티나 측 이과수 국립공원", flight: "🌊 악마의 목구멍 & 그란 아벤투라 보트",
+        title: "포효하는 악마의 목구멍 & 폭포 밑 스피드 보트 돌진",
+        desc: "생태 기차를 타고 악마의 목구멍 바로 앞까지! 폭포수 밑으로 돌진하는 그란 아벤투라 보트 투어로 온몸에 전율을 느낍니다.",
+        timeline: [
+          { time: "07:30 - 08:15", typeIcon: "☕", title: "호텔 조식 (샌들, 젖어도 되는 복장)", desc: "든든한 아침 식사 후 여벌 옷 백팩 패킹", tip: "방수팩 필수" },
+          { time: "08:15 - 09:00", typeIcon: "🚗", title: "아르헨티나 이과수 국립공원 이동 (09:00 입장)", desc: "개장 시간 맞춤 입장", tip: "모바일 QR 티켓" },
+          { time: "09:00 - 10:00", typeIcon: "🚂", title: "생태 기차 탑승 → 악마의 목구멍 역 이동", desc: "정글 기차 타고 이동", tip: "코아티 동물 주의" },
+          { time: "10:00 - 12:00", typeIcon: "🌊", title: "★ [하이라이트] '악마의 목구멍' 1.1km 수상 잔도", desc: "쏟아지는 천둥 굉음의 폭포수와 거대한 물안개·쌍무지개", tip: "압도적인 자연의 힘" },
+          { time: "12:00 - 13:00", typeIcon: "🥪", title: "센트럴 역 복귀 및 푸드코트 점심 식사", desc: "엠파나다와 샌드위치 식사", tip: "야외 음식 사수" },
+          { time: "13:00 - 14:30", typeIcon: "🌲", title: "상부 산책로(Paseo Superior) 폭포 절벽 트레킹", desc: "폭포 위에서 아래로 떨어지는 파노라마 감상", tip: "평탄한 데크로드" },
+          { time: "14:30 - 16:30", typeIcon: "🚤", title: "★ [보트 투어] '그란 아벤투라' 폭포 밑 돌진!", desc: "정글 트럭 통과 후 제트보트 타고 폭포수 속 물폭탄 샤워!", tip: "속옷까지 흠뻑 젖는 스릴" },
+          { time: "16:30 - 17:30", typeIcon: "🌿", title: "하부 산책로 뷰 & 마른 옷 환복 후 퇴장", desc: "폭포 하단 조망 후 공원 퇴장", tip: "뽀송한 옷 환복" },
+          { time: "17:30 - 19:30", typeIcon: "🏨", title: "호텔 복귀, 온수 샤워 및 휴식", desc: "리조트에서 따뜻한 샤워", tip: "휴식 취하기" },
+          { time: "19:30 - 21:30", typeIcon: "🍽️", title: "저녁 식사: 이과수 마을 정원 레스토랑 만찬", desc: "맛있는 저녁과 와인", tip: "내일 브라질 국경 통과 준비" },
+          { time: "21:30 ~", typeIcon: "🛏️", title: "취침", desc: "상쾌한 정글 숙면", tip: "내일 07:30 기상" }
+        ]
+      },
+      {
+        day: "DAY 13", date: "10월 24일 (토)", loc: "브라질 이과수(IGU) → 리우데자네이루", flight: "🚗 국경 통과 → ✈️ 브라질 국내선 (IGU → GIG)",
+        title: "브라질 측 파노라마 폭포 관람 후 국내선 타고 리우 입성",
+        desc: "택시로 30분 만에 국경을 통과하여 브라질 측 폭포 275개 전체 파노라마와 버드 파크를 보고, 국내선으로 리우에 입성합니다.",
+        timeline: [
+          { time: "07:30 - 08:30", typeIcon: "☕", title: "기상, 호텔 조식 및 체크아웃", desc: "모든 짐을 싣고 로비 대기", tip: "여권 필수 소지" },
+          { time: "08:30 - 09:30", typeIcon: "🚗", title: "★ [30분 국경 통과] 아르헨티나 → 브라질 이과수 이동", desc: "택시 탑승 → 양국 출입국 도장 날인 → 브라질 국립공원 도착", tip: "단 30분 만에 쾌속 국경 통과" },
+          { time: "09:30 - 10:00", typeIcon: "🛄", title: "정문 락커 캐리어 보관 & 공원 셔틀 탑승", desc: "큰 짐 안전 보관 후 2층 버스 탑승", tip: "2층 오픈탑 좌석" },
+          { time: "10:00 - 12:30", typeIcon: "🇧🇷", title: "브라질 측 이과수 275개 폭포 파노라마 & 전망 데크", desc: "폭포 전체가 한눈에 들어오는 압도적 파노라마 전경", tip: "물보라 전망 브릿지" },
+          { time: "12:30 - 13:30", typeIcon: "🍽️", title: "점심 식사: 폭포 뷰 뷔페 'Porto Canoas'", desc: "폭포 상류 강물 테라스에서 뷔페 식사", tip: "웅장한 폭포 소리" },
+          { time: "13:30 - 15:30", typeIcon: "🦜", title: "버드 파크(Parque das Aves) 열대 조류원", desc: "국립공원 맞은편. 거대 부리 왕부리새(토코투칸)와 앵무새 만남", tip: "투칸과 인생 사진" },
+          { time: "15:30 - 16:15", typeIcon: "🚗", title: "캐리어 수령 후 브라질 IGU 공항 택시 이동", desc: "버드파크에서 공항까지 단 5분 거리!", tip: "최적의 환승 동선" },
+          { time: "16:15 - 18:00", typeIcon: "✈️", title: "IGU 공항 국내선 수속 및 대기", desc: "GOL / LATAM 항공 수하물 위탁", tip: "치즈빵 간식" },
+          { time: "18:00 - 20:00", typeIcon: "✈️", title: "IGU → 리우데자네이루 국내선 비행 (약 2시간)", desc: "대서양 해안을 따라 리우 공항 도착", tip: "리우 해안 야경" },
+          { time: "20:00 - 21:30", typeIcon: "🛬", title: "리우 공항 도착 & 코파카바나 호텔 우버 이동", desc: "세계 3대 미항 코파카바나 해변 숙소 체크인", tip: "창밖 폰 노출 주의" },
+          { time: "21:30 ~", typeIcon: "🛏️", title: "코파카바나 파도 소리와 함께 휴식", desc: "쾌적한 숙면", tip: "편의점 생수 구매" }
+        ]
+      },
+      {
+        day: "DAY 14", date: "10월 25일 (일)", loc: "브라질 · 리우데자네이루", flight: "🏖️ 코파카바나 & 이파네마 해변",
+        title: "코파카바나 백사장 산책과 브라질 슈하스코 바베큐",
+        desc: "코파카바나와 이파네마 해변 산책, 원조 아사이 볼, 아르포아도르 바위의 일몰과 브라질 전통 무한리필 슈하스코 만찬을 즐깁니다.",
+        timeline: [
+          { time: "08:00 - 09:00", typeIcon: "☕", title: "호텔 조식: 망고, 파파야와 브라질 커피", desc: "신선한 열대 과일 아침", tip: "가벼운 해변 복장 외출" },
+          { time: "09:00 - 11:30", typeIcon: "🏖️", title: "코파카바나 해변 물결무늬 산책 & 코코넛 워터", desc: "흑백 모자이크 보도 걷기 및 생 코코넛 음용", tip: "휴대폰 스트랩 착용" },
+          { time: "11:30 - 13:30", typeIcon: "🏖️", title: "이파네마 해변(Ipanema Beach) 도보 이동", desc: "<이파네마의 여인> 노래 배경의 트렌디한 해변", tip: "두 형제 산 뷰" },
+          { time: "13:30 - 15:00", typeIcon: "🍧", title: "점심 식사: 원조 브라질 아사이 볼(Açaí Bowl)", desc: "Bibi Sucos에서 진한 아사이베리와 샌드위치", tip: "시원한 슈퍼푸드" },
+          { time: "15:00 - 17:00", typeIcon: "🛍️", title: "하바이아나스(Havaianas) 조리 샌들 쇼핑", desc: "다채로운 색상의 국민 조리 샌들 쇼핑", tip: "한국 대비 1/3 가격" },
+          { time: "17:00 - 18:30", typeIcon: "🌅", title: "★ [선셋] 아르포아도르 바위(Pedra do Arpoador) 일몰", desc: "이파네마 너머로 떨어지는 황금빛 노을과 박수 문화", tip: "감동적인 일몰" },
+          { time: "18:30 - 19:30", typeIcon: "🏨", title: "호텔 복귀 및 샤워, 환복", desc: "디너 복장으로 환복", tip: "우버 호출" },
+          { time: "19:30 - 21:30", typeIcon: "🥩", title: "★ [디너] 브라질 전통 슈하스코(Churrascaria) 만찬", desc: "Fogo de Chão에서 쇠꼬치 무한리필 삐까냐 스테이크", tip: "코인으로 조절" },
+          { time: "21:30 ~", typeIcon: "🍹", title: "카이피리냐(Caipirinha) 칵테일 한 잔 후 취침", desc: "상큼한 라임 칵테일과 함께 휴식", tip: "숙면 취하기" }
+        ]
+      },
+      {
+        day: "DAY 15", date: "10월 26일 (월)", loc: "브라질 · 리우데자네이루", flight: "🇧🇷 예수상 & 슈가로프(빵산)",
+        title: "코르코바두 거대 예수상과 빵산 케이블카 환상 일몰",
+        desc: "오전 산악 열차 타고 거대 예수상에 올라 리우 전경을 보고, 빵산 회전 케이블카에서 구아나바라 만 선셋을 감상합니다.",
+        timeline: [
+          { time: "07:30 - 08:15", typeIcon: "☕", title: "호텔 조식", desc: "랜드마크 투어 준비", tip: "오전 일찍 가야 안개 없음" },
+          { time: "08:15 - 08:45", typeIcon: "🚗", title: "우버 탑승 → 코스메 벨류 트램역 이동", desc: "산악 열차 탑승역 이동", tip: "모바일 QR 바우처" },
+          { time: "08:45 - 09:30", typeIcon: "🚋", title: "코르코바두 산악 트램 등반 (해발 710m)", desc: "티주카 국립공원 숲 통과", tip: "열차 우측 좌석 뷰" },
+          { time: "09:30 - 11:30", typeIcon: "🇧🇷", title: "★ [세계 7대 불가사의] 코르코바두 거대 예수상", desc: "38m 예수상 아래 펼쳐진 리우 도심과 바다 파노라마", tip: "바닥 누워 찍는 포토존" },
+          { time: "11:30 - 12:30", typeIcon: "🚋", title: "트램 하산 & 우버 탑승", desc: "보타포구 지구로 이동", tip: "기념품 미니어처" },
+          { time: "12:30 - 14:00", typeIcon: "🍽️", title: "점심 식사: 브라질 전통 스튜 페이조아다", desc: "검은콩과 고기를 푹 고은 전통 요리", tip: "오렌지와 함께 식사" },
+          { time: "14:00 - 16:00", typeIcon: "🌊", title: "우르카 지구 산책 & 붉은 해변(Praia Vermelha)", desc: "빵산 기슭의 고요한 해변 산책", tip: "붉은 모래사장" },
+          { time: "16:00 - 18:30", typeIcon: "🚠", title: "★ [선셋 타임] 팡디아수카르(빵산) 360도 케이블카", desc: "정상에서 바라보는 대서양과 구아나바라 만 노을", tip: "야경까지 보고 하산" },
+          { time: "18:30 - 20:30", typeIcon: "🍺", title: "우르카 해안 펍 'Bar Urca' 맥주 & 파스텔", desc: "바닷가 돌담에 앉아 즐기는 생맥주와 파스텔 튀김", tip: "로컬 감성 명소" },
+          { time: "20:30 ~", typeIcon: "🏨", title: "우버 타고 호텔 복귀 및 휴식", desc: "편안한 휴식", tip: "내일 역사지구 탐방" }
+        ]
+      },
+      {
+        day: "DAY 16", date: "10월 27일 (화)", loc: "브라질 · 리우데자네이루", flight: "🎨 셀라론 계단 & 라파 지구",
+        title: "세계의 타일이 모인 셀라론 계단과 메트로폴리타나 대성당",
+        desc: "215개 타일 셀라론 계단, 피라미드 대성당, 130년 역사의 콜롬보 제과점과 보타니컬 가든을 산책합니다.",
+        timeline: [
+          { time: "08:30 - 09:30", typeIcon: "☕", title: "호텔 조식", desc: "여유로운 아침", tip: "밝은 옷 착용 추천" },
+          { time: "09:30 - 10:00", typeIcon: "🚗", title: "우버 탑승 → 라파 셀라론 계단 이동", desc: "역사 지구 이동", tip: "오전 10시 선제 도착" },
+          { time: "10:00 - 11:30", typeIcon: "🎨", title: "★ [인생샷] 셀라론 계단(Escadaria Selarón)", desc: "전 세계 2,000여 개 타일로 장식된 화려한 계단", tip: "한국 타일 찾기 미션" },
+          { time: "11:30 - 13:00", typeIcon: "⛪", title: "메트로폴리타나 대성당 & 라파 수도교", desc: "60m 스테인드글라스 피라미드 대성당과 하얀 수도교", tip: "영롱한 빛의 내부" },
+          { time: "13:00 - 14:30", typeIcon: "☕", title: "점심 식사: 1894년 'Confeitaria Colombo' 브런치", desc: "프랑스풍 왕실 제과점에서 샌드위치와 디저트", tip: "클래식 럭셔리 분위기" },
+          { time: "14:30 - 17:00", typeIcon: "🌿", title: "리우 식물원(Jardim Botânico) 힐링 산책", desc: "거대 황제 야자수 가로수길과 아마존 수련 숲길", tip: "평화로운 힐링" },
+          { time: "17:00 - 19:00", typeIcon: "🛍️", title: "기린 프로폴리스 & 옐로우 버번 커피 쇼핑", desc: "약국에서 그린 프로폴리스 스프레이, 마트에서 원두 구매", tip: "인기 기념품 쇼핑" },
+          { time: "19:00 - 21:00", typeIcon: "🍽️", title: "저녁 식사: 산타 테레사 언덕 정원 레스토랑 'Aprazível'", desc: "숲속 야경을 바라보며 즐기는 로맨틱 디너", tip: "특제 카사바 요리" },
+          { time: "21:00 ~", typeIcon: "🏨", title: "우버 타고 호텔 복귀", desc: "호텔 휴식", tip: "내일 마지막 여유 준비" }
+        ]
+      },
+      {
+        day: "DAY 17", date: "10월 28일 (수)", loc: "브라질 · 리우데자네이루", flight: "🌿 보타니컬 가든 & 하바이아나스",
+        title: "리우 식물원 힐링 산책과 즐거운 기념품 쇼핑",
+        desc: "해변에서의 여유로운 휴식과 추가 쇼핑, 리우의 낭만을 가득 담는 힐링의 날입니다.",
+        timeline: [
+          { time: "09:00 - 10:30", typeIcon: "☕", title: "늦잠 후 여유로운 조식 & 브런치", desc: "충분한 수면 후 맛있는 아침", tip: "컨디션 충전" },
+          { time: "10:30 - 13:30", typeIcon: "🏖️", title: "코파카바나 해변 선베드 일광욕 & 물놀이", desc: "파도 소리를 들으며 해변 힐링", tip: "구운 치즈 간식" },
+          { time: "13:30 - 15:00", typeIcon: "🍽️", title: "점심 식사: 해변 레스토랑 그릴 피쉬", desc: "신선한 해산물과 샐러드", tip: "시원한 음료 곁들이기" },
+          { time: "15:00 - 17:30", typeIcon: "🛍️", title: "하바이아나스 추가 쇼핑 & 로컬 부티크", desc: "지인 선물용 조리 샌들과 소품 쇼핑", tip: "색상별 조리 샌들" },
+          { time: "17:30 - 19:00", typeIcon: "🌅", title: "해변 테라스에서 석양 감상", desc: "붉게 물드는 대서양 노을", tip: "감성 가득한 시간" },
+          { time: "19:00 - 21:00", typeIcon: "🍽️", title: "저녁 식사: 리우 시내 테라스 카페 디너", desc: "맛있는 파스타와 스테이크", tip: "여유로운 저녁" },
+          { time: "21:00 ~", typeIcon: "🏨", title: "호텔 복귀 및 휴식", desc: "편안한 수면", tip: "숙면 취하기" }
+        ]
+      },
+      {
+        day: "DAY 18", date: "10월 29일 (목)", loc: "브라질 · 리우데자네이루", flight: "🌅 마지막 여유 & 굿바이 리우",
+        title: "마지막 해변 휴식과 남미 여행 완주 축하 갈라 디너",
+        desc: "마지막 해변 여유, 캐리어 꼼꼼한 패킹, 3주간의 대장정을 성공적으로 마무리하는 환송 만찬을 즐깁니다.",
+        timeline: [
+          { time: "09:00 - 10:30", typeIcon: "☕", title: "호텔 조식 및 아침 산책", desc: "마지막 코파카바나 아침", tip: "기분 좋은 아침" },
+          { time: "10:30 - 13:30", typeIcon: "🏖️", title: "마지막 해변 일광욕 & 산책", desc: "코파카바나 백사장에서의 마지막 여유", tip: "기억에 남기기" },
+          { time: "13:30 - 15:00", typeIcon: "🍽️", title: "점심 식사: 캐주얼 비치 다이닝", desc: "맛있는 버거와 주스", tip: "여유로운 식사" },
+          { time: "15:00 - 17:30", typeIcon: "🧳", title: "호텔 룸 최종 캐리어 짐 패킹 & 무게 체크", desc: "기념품 완충 포장 및 수하물 23kg 확인", tip: "휴대용 저울 체크" },
+          { time: "17:30 - 19:00", typeIcon: "🌅", title: "마지막 해넘이 감상 & 여정 회고", desc: "3주간의 사진을 보며 추억 나누기", tip: "감동적인 순간" },
+          { time: "19:00 - 21:30", typeIcon: "🥂", title: "★ [갈라 디너] 3주 완주 축하 굿바이 만찬", desc: "최고급 레스토랑에서 샴페인 건배 만찬", tip: "성공적인 완주 자축" },
+          { time: "21:30 ~", typeIcon: "🛏️", title: "호텔 휴식", desc: "내일 출국을 위해 숙면", tip: "체크아웃 11:00" }
+        ]
+      },
+      {
+        day: "DAY 19", date: "10월 30일 (금)", loc: "리우데자네이루 출발 → 기내", flight: "✈️ 리우 GIG 공항 귀국편 탑승",
+        title: "남미를 뒤로하고 대한민국 귀국길 탑승",
+        desc: "체크아웃 후 리우 갈레앙 공항으로 이동하여 출국 수속을 마치고 인천행 장거리 국제선에 탑승합니다.",
+        timeline: [
+          { time: "08:30 - 10:00", typeIcon: "☕", title: "기상, 아침 식사 및 최종 짐 점검", desc: "여권, 항공권 크로스백 소지", tip: "객실 내 소지품 확인" },
+          { time: "10:00 - 11:00", typeIcon: "🏨", title: "호텔 체크아웃 & 우버 호출", desc: "체크아웃 완료", tip: "공항으로 이동" },
+          { time: "11:00 - 12:00", typeIcon: "🚗", title: "우버 탑승 → 리우 갈레앙 공항(GIG) 이동", desc: "고속도로 타고 터미널 2 이동", tip: "국제선 4시간 전 도착" },
+          { time: "12:00 - 15:30", typeIcon: "✈️", title: "GIG 공항 수속, 출국 심사 & 면세점 대기", desc: "수하물 인천까지 연결 위탁", tip: "남은 헤알화 소진" },
+          { time: "15:30 ~", typeIcon: "✈️", title: "인천행 국제선 비행기 탑승 및 이륙", desc: "남미 대륙 이륙! 기내식 및 기내 수면", tip: "기내 휴식" }
+        ]
+      },
+      {
+        day: "DAY 20", date: "10월 31일 (토)", loc: "기내 비행 및 환승", flight: "✈️ 태평양 횡단 비행",
+        title: "날짜변경선 통과 및 기내 휴식",
+        desc: "경유 공항 환승 대기 및 태평양 횡단 비행을 이어가며 날짜변경선을 통과합니다.",
+        timeline: [
+          { time: "00:00 - 12:00", typeIcon: "✈️", title: "1구간 비행 및 경유 공항 환승", desc: "환승 보안검색 후 인천행 게이트 이동", tip: "환승 대기 스트레칭" },
+          { time: "12:00 - 24:00", typeIcon: "✈️", title: "태평양 횡단 비행 & 날짜변경선 통과", desc: "인천을 향해 비행하며 하루 전진", tip: "한국 시차 맞춤 수면" }
+        ]
+      },
+      {
+        day: "DAY 21", date: "11월 01일 (일)", loc: "대한민국 · 인천국제공항(ICN)", flight: "🎉 금의환향 인천 도착",
+        title: "인천국제공항 무사 도착! 안전하게 여행 완료",
+        desc: "오후 인천공항 도착! 자동출입국 심사 및 짐을 찾아 귀가 후 따뜻한 집밥과 휴식으로 3주 대장정을 완성합니다.",
+        timeline: [
+          { time: "16:00 - 17:30", typeIcon: "🇰🇷", title: "인천공항 T1/T2 무사 착륙 & 입국 수속", desc: "자동출입국 심사 통과 및 수하물 수령", tip: "세관 성실 신고" },
+          { time: "17:30 - 19:00", typeIcon: "🚗", title: "공항철도/리무진/자차 탑승 후 안전 귀가", desc: "집으로 이동하며 안부 연락", tip: "집 도착" },
+          { time: "19:00 - 21:00", typeIcon: "🍲", title: "귀국 축하 저녁 식사: 얼큰한 김치찌개", desc: "그리웠던 한국의 맛 만끽!", tip: "기념품 정리" },
+          { time: "21:00 ~", typeIcon: "🛏️", title: "내 집 침대에서 꿀맛 같은 숙면", desc: "월요일 출근 전 완벽한 휴식으로 3주 남미 여행 성공적 완성!", tip: "인생 최고의 추억 달성!" }
+        ]
+      }
+    ];
 
-    let curr = 'USD';
-    if (d.loc.indexOf('미국') !== -1 || d.loc.indexOf('LA') !== -1) curr = 'USD';
-    else if (d.loc.indexOf('페루') !== -1 || d.loc.indexOf('쿠스코') !== -1 || d.loc.indexOf('리마') !== -1 || d.loc.indexOf('마추픽추') !== -1) curr = 'PEN';
-    else if (d.loc.indexOf('아르헨') !== -1 || d.loc.indexOf('부에노스') !== -1 || d.loc.indexOf('이과수') !== -1) curr = 'ARS';
-    else if (d.loc.indexOf('브라질') !== -1 || d.loc.indexOf('리우') !== -1) curr = 'BRL';
-    else if (d.loc.indexOf('대한민국') !== -1 || d.loc.indexOf('인천') !== -1) curr = 'KRW';
+// 3. Transform into Sulsul-Travel Structured Days
+function transformRawScheduleToDays(rawSchedule) {
+  return rawSchedule.map((d, idx) => {
+    const dayNum = idx + 1;
+    const locParts = (d.loc || '').split('·');
+    const cityName = locParts.length > 1 ? locParts[1].trim() : (d.loc || '');
+    const country = locParts[0].trim();
+    
+    const spots = (d.timeline || []).map(t => {
+      let cat = 'tour';
+      const icon = t.typeIcon || '';
+      if (icon.includes('✈') || icon.includes('🚗') || icon.includes('🚌') || icon.includes('🚆') || icon.includes('🛬') || icon.includes('🛄') || icon.includes('🚙') || icon.includes('🚤') || icon.includes('🚂') || icon.includes('🚋') || icon.includes('🚠')) {
+        cat = 'flight';
+      } else if (icon.includes('🍽') || icon.includes('🥩') || icon.includes('🍔') || icon.includes('☕') || icon.includes('🥐') || icon.includes('🍲') || icon.includes('🥂') || icon.includes('🍹') || icon.includes('🍺') || icon.includes('🍧') || icon.includes('🥪')) {
+        cat = 'food';
+      } else if (icon.includes('🏨') || icon.includes('🛏') || icon.includes('🚿')) {
+        cat = 'lodging';
+      } else if (icon.includes('🛍') || icon.includes('🧳')) {
+        cat = 'shopping';
+      }
+
+      let curr = 'USD';
+      const locStr = d.loc || '';
+      if (locStr.includes('미국') || locStr.includes('LA')) curr = 'USD';
+      else if (locStr.includes('페루') || locStr.includes('쿠스코') || locStr.includes('리마') || locStr.includes('마추픽추') || locStr.includes('와카치나')) curr = 'PEN';
+      else if (locStr.includes('아르헨') || locStr.includes('부에노스') || locStr.includes('이과수')) curr = 'ARS';
+      else if (locStr.includes('브라질') || locStr.includes('리우')) curr = 'BRL';
+      else if (locStr.includes('대한민국') || locStr.includes('인천')) curr = 'KRW';
+
+      return {
+        time: t.time,
+        typeIcon: t.typeIcon || '📍',
+        title: t.title,
+        desc: t.desc || '',
+        tip: t.tip || '',
+        cat: cat,
+        cost: 0,
+        curr: curr,
+        isDraft: false
+      };
+    });
+
+    let flag = '📍';
+    const locStr = d.loc || '';
+    if (locStr.includes('미국') || locStr.includes('LA')) flag = '🇺🇸';
+    else if (locStr.includes('페루') || locStr.includes('쿠스코') || locStr.includes('리마') || locStr.includes('마추픽추') || locStr.includes('와카치나')) flag = '🇵🇪';
+    else if (locStr.includes('아르헨') || locStr.includes('부에노스')) flag = '🇦🇷';
+    else if (locStr.includes('브라질') || locStr.includes('리우')) flag = '🇧🇷';
+    else if (locStr.includes('대한민국') || locStr.includes('인천')) flag = '🇰🇷';
 
     return {
-      time: t.time,
-      typeIcon: t.typeIcon || '📍',
-      title: t.title,
-      desc: t.desc || '',
-      tip: t.tip || '',
-      cat: cat,
-      cost: 0,
-      curr: curr,
-      isDraft: false
+      dayNum: dayNum,
+      date: d.date,
+      loc: d.loc,
+      cityName: cityName,
+      country: country,
+      flag: flag,
+      title: d.title,
+      desc: d.desc,
+      flight: d.flight,
+      spots: spots
     };
   });
+}
 
-  let flag = '📍';
-  if (d.loc.indexOf('미국') !== -1 || d.loc.indexOf('LA') !== -1) flag = '🇺🇸';
-  else if (d.loc.indexOf('페루') !== -1 || d.loc.indexOf('쿠스코') !== -1 || d.loc.indexOf('리마') !== -1 || d.loc.indexOf('마추픽추') !== -1) flag = '🇵🇪';
-  else if (d.loc.indexOf('아르헨') !== -1 || d.loc.indexOf('부에노스') !== -1) flag = '🇦🇷';
-  else if (d.loc.indexOf('브라질') !== -1 || d.loc.indexOf('리우') !== -1) flag = '🇧🇷';
-  else if (d.loc.indexOf('대한민국') !== -1 || d.loc.indexOf('인천') !== -1) flag = '🇰🇷';
-
-  return {
-    dayNum: dayNum,
-    date: d.date,
-    loc: d.loc,
-    cityName: cityName,
-    country: country,
-    flag: flag,
-    title: d.title,
-    desc: d.desc,
-    flight: d.flight,
-    spots: spots
-  };
-});
+const saDays = transformRawScheduleToDays(scheduleOct11Data);
+const saDays21 = transformRawScheduleToDays(scheduleOct12Data);
 
 window.KB_TRAVEL = {
-  version: "1.0.3",
-  
+  version: "1.2.0",
+  scheduleOct11Data: scheduleOct11Data,
+  scheduleOct12Data: scheduleOct12Data,
+  saDays: saDays,
+  saDays21: saDays21,
+
   currencies: {
     KRW: { name: "대한민국 원", symbol: "₩", rateToUSD: 1350, step: 1000, flag: "🇰🇷" },
     USD: { name: "미국 달러", symbol: "$", rateToUSD: 1.0, step: 1, flag: "🇺🇸" },
@@ -723,6 +1069,26 @@ window.KB_TRAVEL = {
 
   // 남미 4개국 3주 최적화 황금 여정 (맛보기 완성형 마스터 플랜)
   templates: {
+    south_america_21d: {
+      id: "trip_sa_showcase_21d",
+      title: "남미 4개국 3주 최적화 황금 여정 (21일 코스)",
+      subtitle: "LA 2일 + 페루(리마/이카/쿠스코/마추픽추) + 아르헨티나(부에노스아이레스) + 이과수 폭포 + 브라질(리우)",
+      isSample: false,
+      status: "upcoming",
+      startDate: "2026-10-12",
+      endDate: "2026-11-01",
+      durationDays: 21,
+      countries: ["미국", "페루", "아르헨티나", "브라질"],
+      countryFlags: ["🇺🇸", "🇵🇪", "🇦🇷", "🇧🇷"],
+      cities: ["로스앤젤레스", "리마", "파라카스·와카치나", "쿠스코", "마추픽추", "부에노스아이레스", "푸에르토 이과수", "리우데자네이루"],
+      currency: "KRW",
+      budget: 8200000,
+      style: "10/12 출발 21일 최적화 코스 + 마추픽추 서킷2 + 이과수 국경통과",
+      coverImg: "south_america_illustrated_map.jpg",
+      coverEmoji: "🌎",
+      days: saDays21,
+      scheduleVariant: 21
+    },
     south_america_22d: {
       id: "trip_sa_showcase_22d",
       title: "남미 4개국 3주 최적화 황금 여정",
@@ -793,3 +1159,10 @@ window.KB_TRAVEL = {
     { cat: "의류 및 장비", items: ["경량 패딩 / 윈드브레이커 (쿠스코 일교차 15℃)", "1회용 우비 3개 (마추픽추 운무 및 이과수 필수)", "선글라스 & 챙 넓은 모자 (사막/고산 자외선)", "편안한 트레킹화/운동화", "수영복 또는 래시가드 (이과수 보트)"] }
   ]
 };
+// Global convenience aliases
+if (typeof window !== 'undefined') {
+  window.scheduleOct11Data = scheduleOct11Data;
+  window.scheduleOct12Data = scheduleOct12Data;
+  window.saDays = saDays;
+  window.saDays21 = saDays21;
+}

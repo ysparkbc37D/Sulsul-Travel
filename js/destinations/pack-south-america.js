@@ -225,10 +225,18 @@
     },
 
     hasGoldenCourse: true,
-    getGoldenItinerary() {
-      if (typeof scheduleOct11Data !== 'undefined') {
-        return scheduleOct11Data;
+    getGoldenItinerary(durationDays) {
+      if (window.KB_TRAVEL) {
+        if (durationDays === 21 && window.KB_TRAVEL.saDays21) {
+          return window.KB_TRAVEL.saDays21;
+        }
+        if (window.KB_TRAVEL.saDays) {
+          return window.KB_TRAVEL.saDays;
+        }
       }
+      if (durationDays === 21 && typeof saDays21 !== 'undefined') return saDays21;
+      if (typeof saDays !== 'undefined') return saDays;
+      if (typeof scheduleOct11Data !== 'undefined') return scheduleOct11Data;
       return [];
     }
   };
