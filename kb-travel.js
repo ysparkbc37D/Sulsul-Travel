@@ -1,5 +1,5 @@
 /**
- * Sulsul-Travel Built-in Knowledge Base (kb-travel.js) v1.1.0
+ * Sulsul-Travel Built-in Knowledge Base (kb-travel.js) v1.1.1
  * 100% Offline-First domain data for global travel, South America 3-week master plan,
  * multi-currency rates (including Argentina MEP rate), and packing checklists.
  */
