@@ -470,6 +470,17 @@
         margin: 14mm 10mm 14mm 10mm;
       }
     }
+
+    /* Mobile Viewport Overflow Prevention */
+    html, body {
+      overflow-x: hidden;
+      width: 100%;
+      max-width: 100vw;
+      box-sizing: border-box;
+    }
+    *, *:before, *:after {
+      box-sizing: border-box;
+    }
   </style>
 
   <!-- Knowledge Base Seed -->
@@ -478,66 +489,55 @@
 <body class="min-h-screen bg-[#f7f6f2] text-[#1c1917] flex flex-col antialiased selection:bg-amber-500/20 selection:text-amber-900">
 
   <!-- ========================================== -->
-  <!-- 1. 최상단 앱 헤더 (Sulsul-Diary Warm Cream Luxury) -->
+  <!-- 1. 최상단 앱 헤더 (Sulsul-Diary Warm Cream Luxury - Mobile Slim) -->
   <!-- ========================================== -->
-  <header class="sticky top-0 z-30 bg-[#f7f6f2]/95 backdrop-blur-md border-b border-[#e8e2d5] px-4 py-3 shadow-[0_2px_12px_rgba(0,0,0,0.03)]">
-    <div class="max-w-6xl mx-auto flex items-center justify-between gap-3">
+  <header class="sticky top-0 z-30 bg-[#f7f6f2]/95 backdrop-blur-md border-b border-[#e8e2d5] px-3 sm:px-4 py-2.5 sm:py-3 shadow-[0_2px_12px_rgba(0,0,0,0.03)]">
+    <div class="max-w-6xl mx-auto flex items-center justify-between gap-2 sm:gap-3">
       <!-- 좌측 로고 및 버전 -->
-      <div class="flex items-center gap-3 cursor-pointer select-none" onclick="switchView('hub')">
-        <span class="w-9 h-9 rounded-xl bg-gradient-to-br from-[#d7a643] via-[#b8860b] to-[#a2601b] flex items-center justify-center text-white font-serif-brand font-black shadow-md shadow-amber-900/15">
-          <i class="fa-solid fa-compass text-sm"></i>
+      <div class="flex items-center gap-2 sm:gap-2.5 cursor-pointer select-none min-w-0" onclick="switchView('hub')">
+        <span class="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-gradient-to-br from-[#d7a643] via-[#b8860b] to-[#a2601b] flex items-center justify-center text-white font-serif-brand font-black shadow-md shadow-amber-900/15 shrink-0">
+          <i class="fa-solid fa-compass text-xs sm:text-sm"></i>
         </span>
-        <div>
-          <div class="flex items-center gap-2">
-            <h1 class="font-serif-brand text-xl sm:text-2xl font-bold tracking-tight text-[#1c1917] flex items-center gap-2">
+        <div class="min-w-0">
+          <div class="flex items-center gap-1.5">
+            <h1 class="font-serif-brand text-base sm:text-xl font-bold tracking-tight text-[#1c1917] whitespace-nowrap">
               Sulsul Travel
             </h1>
+            <span id="app-ver-badge" class="px-1.5 py-0.5 rounded-md theme-card-subtle text-[#a2601b] dark:text-[#d4af37] text-[10px] font-bold font-mono shadow-inner cursor-default shrink-0" title="술술트래블 엔진 버전">v1.0.9</span>
           </div>
-          <p id="header-trip-name" class="text-[11px] text-[#78716c] truncate max-w-[190px] sm:max-w-xs font-normal">인생의 모든 여정을 기록하는 다이어리</p>
+          <p id="header-trip-name" class="text-[10px] sm:text-[11px] text-[#78716c] truncate max-w-[110px] sm:max-w-xs font-normal">인생의 모든 여정을 기록하는 다이어리</p>
         </div>
       </div>
 
-      <!-- 우측 액션 클러스터 (요청 순서: 버전 -> 통계 -> 구글맵 -> 설정 -> + 추가) -->
-      <div class="flex items-center gap-1.5 sm:gap-2">
-        <!-- 1. 버전 뱃지 (Sulsul-Diary 테마) -->
-        <span id="app-ver-badge" class="px-2 py-1 rounded-lg theme-card-subtle text-[#a2601b] dark:text-[#d4af37] text-[11px] font-bold font-mono shadow-inner cursor-default" title="술술트래블 엔진 버전">v1.0.8</span>
-
-        <!-- 1.5 2-Tone 컬러 테마 전환 버튼 (☀️/🌙) -->
-        <button id="header-btn-theme" onclick="toggleTheme()" class="w-8 h-8 sm:w-9 sm:h-9 rounded-xl theme-card-subtle flex items-center justify-center transition shadow-sm cursor-pointer" title="라이트 그레이 / 딥 블랙 테마 전환">
-          <span id="header-theme-icon" class="text-sm">🌙</span>
-        </button>
-
-        <!-- 2. 통계 버튼 (📊) -->
+      <!-- 우측 액션 클러스터 (모바일 최적 4대 필수 버튼: 통계 -> AI비서 -> 설정 -> + 추가) -->
+      <div class="flex items-center gap-1 sm:gap-1.5 shrink-0">
+        <!-- 1. 통계 버튼 (📊) -->
         <button onclick="toggleAnalyticsView()" class="w-8 h-8 sm:w-9 sm:h-9 rounded-xl theme-card-subtle flex items-center justify-center transition shadow-sm cursor-pointer" title="평생 여행 누적 통계 열람">
           <span class="text-sm">📊</span>
         </button>
 
-        <!-- 3. 구글맵/노선지도 버튼 (🗺️) -->
-        <button onclick="openRouteMapModal()" class="w-8 h-8 sm:w-9 sm:h-9 rounded-xl theme-card-subtle flex items-center justify-center transition shadow-sm cursor-pointer" title="세계 및 남미 비행 궤적 지도">
-          <span class="text-sm">🗺️</span>
-        </button>
-
-        <!-- 4. 설정 버튼 (🎛️) -->
-        <button onclick="openSettingsModal()" class="w-8 h-8 sm:w-9 sm:h-9 rounded-xl theme-card-subtle flex items-center justify-center transition shadow-sm cursor-pointer" title="앱 설정 & 데이터 아카이브">
-          <span class="text-sm">🎛️</span>
-        </button>
-
-        <!-- 5. + 추가 버튼 (시그니처 골드 액션) -->
-        <button id="header-btn-create-trip" onclick="openCreateTripModal()" class="px-3 sm:px-3.5 py-1.5 rounded-xl btn-gold text-xs font-black flex items-center gap-1.5 shadow-sm transition cursor-pointer" title="새 여행 추가 및 AI 일정 설계">
-          <i class="fa-solid fa-plus text-[11px]"></i>
-          <span>추가</span>
-        </button>
-
-        <!-- AI 비서 챗봇 버튼 -->
+        <!-- 2. AI 비서 챗봇 버튼 (✨) -->
         <button onclick="openModal('modal-ai-chat')" class="w-8 h-8 sm:w-9 sm:h-9 rounded-xl theme-card-subtle text-[#a2601b] dark:text-[#d4af37] flex items-center justify-center transition shadow-sm cursor-pointer" title="술술 AI 여행 비서">
           <i class="fa-solid fa-wand-magic-sparkles text-xs"></i>
         </button>
 
+        <!-- 3. 설정 버튼 (🎛️) -->
+        <button onclick="openSettingsModal()" class="w-8 h-8 sm:w-9 sm:h-9 rounded-xl theme-card-subtle flex items-center justify-center transition shadow-sm cursor-pointer" title="앱 설정 & 클라우드 동기화">
+          <span class="text-sm">🎛️</span>
+        </button>
+
+        <!-- 4. + 추가 버튼 (시그니처 골드 액션) -->
+        <button id="header-btn-create-trip" onclick="openCreateTripModal()" class="px-2.5 sm:px-3.5 py-1.5 rounded-xl btn-gold text-xs font-black flex items-center gap-1 shadow-sm transition cursor-pointer" title="새 여행 추가 및 AI 일정 설계">
+          <i class="fa-solid fa-plus text-[10px]"></i>
+          <span>추가</span>
+        </button>
+
         <!-- 히든 보조 버튼들 (Mandatory IDs & 워크스페이스 상태 보존) -->
+        <button id="header-btn-theme" onclick="toggleTheme()" class="hidden" title="테마 전환"><span id="header-theme-icon">🌙</span></button>
         <button id="btn-native-install" onclick="handleInstallButtonClick()" class="hidden" title="PWA 설치"><span id="btn-native-install-txt">설치</span></button>
         <button id="header-btn-share" onclick="openShareModal()" class="hidden" title="동행 공유"></button>
-        <button id="header-btn-back-hub" onclick="switchView('hub')" class="hidden px-2.5 py-1.5 theme-card-subtle rounded-xl text-xs font-bold transition flex items-center gap-1 shadow-sm cursor-pointer">
-          <i class="fa-solid fa-arrow-left text-[11px] text-[#a2601b]"></i>
+        <button id="header-btn-back-hub" onclick="switchView('hub')" class="hidden px-2 py-1.5 theme-card-subtle rounded-xl text-xs font-bold transition flex items-center gap-1 shadow-sm cursor-pointer">
+          <i class="fa-solid fa-arrow-left text-[10px] text-[#a2601b]"></i>
           <span>허브</span>
         </button>
       </div>
@@ -701,8 +701,12 @@
         </div>
 
         <!-- 완주 보고서 / 인쇄 및 4대 요약 통계 -->
-        <div class="flex items-center gap-3 sm:gap-4 shrink-0 flex-wrap justify-end">
-          <button onclick="openPdfReportModal()" class="px-3 py-1.5 rounded-xl bg-gradient-to-r from-amber-500/15 to-emerald-500/15 hover:from-amber-500/25 hover:to-emerald-500/25 border border-amber-500/30 text-amber-300 hover:text-white text-xs font-bold flex items-center gap-1.5 shadow-sm transition" title="완주 리포트 및 포토북 인쇄/PDF 저장">
+        <div class="flex items-center gap-2 sm:gap-3 shrink-0 flex-wrap justify-end">
+          <button onclick="openRouteMapModal()" class="px-2.5 sm:px-3 py-1.5 rounded-xl bg-[#141c2e] hover:bg-[#1e263c] border border-[#23304c] text-amber-300 hover:text-white text-xs font-bold flex items-center gap-1.5 shadow-sm transition cursor-pointer" title="세계 및 남미 비행 궤적 지도">
+            <i class="fa-solid fa-earth-americas text-amber-400"></i>
+            <span>경로 지도</span>
+          </button>
+          <button onclick="openPdfReportModal()" class="px-2.5 sm:px-3 py-1.5 rounded-xl bg-gradient-to-r from-amber-500/15 to-emerald-500/15 hover:from-amber-500/25 hover:to-emerald-500/25 border border-amber-500/30 text-amber-300 hover:text-white text-xs font-bold flex items-center gap-1.5 shadow-sm transition" title="완주 리포트 및 포토북 인쇄/PDF 저장">
             <i class="fa-solid fa-file-pdf text-rose-400"></i>
             <span>여행 보고서/PDF</span>
           </button>
@@ -1757,30 +1761,83 @@
       <div class="p-4 rounded-xl bg-[#faf8f5] border border-[#e8e2d5] space-y-3">
         <div class="flex items-center justify-between">
           <span class="text-xs font-black text-[#1c1917] flex items-center gap-1.5">
-            <i class="fa-solid fa-cloud-arrow-up text-indigo-600"></i>
-            <span>공유 클라우드 DB & 동행자 공유 안내</span>
+            <i class="fa-solid fa-share-nodes text-indigo-600"></i>
+            <span>동행자 1클릭 URL 일정 공유 (서버 불필요)</span>
           </span>
-          <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">100% 서버리스 PWA</span>
+          <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">100% 서버리스</span>
         </div>
         <div class="text-[11px] text-[#78716c] leading-relaxed space-y-1.5 bg-white p-3 rounded-xl border border-[#e8e2d5]">
           <p class="font-bold text-[#1c1917] flex items-center gap-1">
             <i class="fa-solid fa-circle-check text-emerald-600 text-[10px]"></i>
-            중앙 웹 서버 없이 안전하게 공유하는 원리
+            친구·가족과 손쉽게 여행 일정을 공유하는 방법
           </p>
           <p>
-            술술트래블은 외부 중앙 서버를 두지 않고, 사용자의 기기(로컬 브라우저)에 단독으로 데이터를 저장합니다. (서버 비용 0원, 완벽한 개인정보 보호)
-          </p>
-          <p>
-            동행자와 일정을 공유할 때는 아래 버튼을 눌러 **URL 데이터 패킹 공유 링크**를 생성하세요. 링크를 열면 동행자의 스마트폰에도 동일한 여행 카드가 즉시 복제 및 생성됩니다!
+            별도 회원가입이나 로그인 없이, 아래 버튼을 눌러 생성되는 <b>URL 압축 링크</b>를 카카오톡이나 메시지로 전달하세요. 동행자가 링크를 누르면 상대방 스마트폰에 동일한 여행 카드가 즉시 복제됩니다!
           </p>
         </div>
-        <button onclick="exportActiveTripShareLink()" class="w-full py-2.5 rounded-xl btn-gold text-xs font-black flex items-center justify-center gap-2 shadow-sm cursor-pointer">
+        <button onclick="exportActiveTripShareLink()" class="w-full py-2.5 rounded-xl btn-gold text-xs font-black flex items-center justify-center gap-2 shadow-sm transition cursor-pointer">
           <i class="fa-solid fa-share-nodes text-xs"></i>
           <span>현재 여행 원클릭 공유 링크 복사 (URL 압축 패킹)</span>
         </button>
       </div>
 
-      <!-- 3. Google Gemini API 개인 키 설정 -->
+      <!-- 2.5 세계 및 남미 비행 궤적 지도 열람 -->
+      <div class="p-4 rounded-xl bg-white border border-[#e8e2d5] space-y-2.5 shadow-sm">
+        <div class="flex items-center justify-between">
+          <span class="text-xs font-black text-[#1c1917] flex items-center gap-1.5">
+            <i class="fa-solid fa-earth-americas text-[#a2601b]"></i>
+            <span>세계 지도 & 비행 궤적 인터랙티브 맵</span>
+          </span>
+          <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-[#fdf6ec] text-[#a2601b] border border-[#f5dfb8]">글로벌 맵</span>
+        </div>
+        <p class="text-[11px] text-[#78716c] leading-relaxed">
+          인천 출발부터 페루, 볼리비아, 칠레, 아르헨티나 및 귀국까지의 대륙 간 비행 궤적과 핵심 경유지를 대형 지도로 시각화합니다.
+        </p>
+        <button onclick="closeModal('modal-settings'); openRouteMapModal();" class="w-full py-2.5 rounded-xl bg-[#faf8f5] hover:bg-[#f0ece1] border border-[#e8e2d5] text-[#1c1917] text-xs font-bold transition flex items-center justify-center gap-2 cursor-pointer shadow-sm">
+          <i class="fa-solid fa-plane-departure text-[#a2601b]"></i>
+          <span>세계 지도 및 비행 궤적 열기</span>
+        </button>
+      </div>
+
+      <!-- 3. GitHub Gist 클라우드 동기화 (PC ↔ 스마트폰 양방향 동기화) -->
+      <div class="p-4 rounded-xl bg-white border border-[#e8e2d5] space-y-3 shadow-sm">
+        <div class="flex items-center justify-between">
+          <span class="text-xs font-black text-[#1c1917] flex items-center gap-1.5">
+            <i class="fa-brands fa-github text-[#1c1917]"></i>
+            <span>GitHub Gist 클라우드 동기화 (PC ↔ 스마트폰)</span>
+          </span>
+          <span id="gist-sync-status-badge" class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-slate-100 text-slate-700 border border-slate-200">연결 대기</span>
+        </div>
+        <p class="text-[11px] text-[#78716c] leading-relaxed">
+          별도 유료 DB 서버 없이, 본인의 GitHub Personal Access Token(PAT)과 Secret Gist를 통해 PC와 모바일 간에 데이터를 안전하게 무제한 백업/복원합니다.
+        </p>
+        <div class="space-y-2 text-xs">
+          <div>
+            <label class="block text-[11px] font-bold text-[#44403c] mb-1">GitHub Personal Access Token (PAT)</label>
+            <input type="password" id="cfg-github-pat" placeholder="ghp_... (gist 권한 필요)" class="w-full px-3 py-2 bg-[#faf8f5] border border-[#e8e2d5] rounded-xl text-xs text-[#1c1917] focus:outline-none focus:border-[#a2601b]">
+          </div>
+          <div>
+            <label class="block text-[11px] font-bold text-[#44403c] mb-1">Gist ID (첫 백업 시 자동 발급)</label>
+            <div class="flex items-center gap-2">
+              <input type="text" id="cfg-github-gist" placeholder="비워두면 첫 백업 시 자동 생성" class="flex-1 px-3 py-2 bg-[#faf8f5] border border-[#e8e2d5] rounded-xl text-xs text-[#1c1917] focus:outline-none focus:border-[#a2601b]">
+              <button onclick="saveGithubSyncConfig(true)" class="px-3 py-2 rounded-xl bg-[#faf8f5] hover:bg-[#f0ece1] border border-[#e8e2d5] text-[#1c1917] text-xs font-bold transition shrink-0 cursor-pointer">저장</button>
+            </div>
+          </div>
+        </div>
+        <div class="grid grid-cols-2 gap-2 pt-1">
+          <button id="btn-gist-push" onclick="syncToGist()" class="py-2.5 px-3 rounded-xl btn-gold text-xs font-black flex items-center justify-center gap-1.5 shadow-sm transition cursor-pointer">
+            <i class="fa-solid fa-cloud-arrow-up"></i>
+            <span>클라우드 백업 (Push)</span>
+          </button>
+          <button id="btn-gist-pull" onclick="syncFromGist()" class="py-2.5 px-3 rounded-xl bg-[#faf8f5] hover:bg-[#f0ece1] border border-[#e8e2d5] text-[#1c1917] text-xs font-bold flex items-center justify-center gap-1.5 transition cursor-pointer">
+            <i class="fa-solid fa-cloud-arrow-down text-emerald-600"></i>
+            <span>클라우드 복원 (Pull)</span>
+          </button>
+        </div>
+        <p id="gist-last-sync-time" class="text-[10px] text-stone-400 text-center">마지막 동기화: 동기화 기록 없음</p>
+      </div>
+
+      <!-- 4. Google Gemini API 개인 키 설정 -->
       <div class="p-4 rounded-xl bg-white border border-[#e8e2d5] space-y-2.5 shadow-sm">
         <div class="flex items-center justify-between">
           <span class="text-xs font-black text-[#1c1917] flex items-center gap-1.5">
@@ -1798,21 +1855,24 @@
         </div>
       </div>
 
-      <!-- 4. PWA 단독 앱 설치 및 오프라인 모드 -->
+      <!-- 5. PWA 단독 앱 설치 및 오프라인 모드 상태 -->
       <div class="p-4 rounded-xl bg-white border border-[#e8e2d5] flex items-center justify-between gap-3 shadow-sm">
         <div>
           <div class="text-xs font-black text-[#1c1917] flex items-center gap-1.5">
             <i class="fa-solid fa-mobile-screen-button text-[#a2601b]"></i>
-            <span>홈 화면에 앱(PWA) 설치</span>
+            <span>홈 화면에 앱(PWA) 설치 & 구동 상태</span>
           </div>
           <div class="text-[11px] text-[#78716c] mt-0.5">인터넷 없는 비행기 안에서도 100% 작동합니다.</div>
+          <div class="mt-1.5">
+            <span id="settings-pwa-status" class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 border border-slate-200">웹 브라우저로 실행 중</span>
+          </div>
         </div>
-        <button onclick="handleInstallButtonClick()" class="px-3.5 py-1.5 rounded-xl bg-[#faf8f5] hover:bg-[#f0ece1] border border-[#e8e2d5] text-[#1c1917] text-xs font-bold transition shrink-0 cursor-pointer">
+        <button onclick="handleInstallButtonClick()" class="px-3.5 py-1.5 rounded-xl btn-gold text-xs font-bold transition shrink-0 cursor-pointer shadow-sm">
           앱 설치
         </button>
       </div>
 
-      <!-- 5. 전체 데이터 JSON 백업 및 복원 -->
+      <!-- 6. 전체 데이터 JSON 백업 및 복원 -->
       <div class="p-4 rounded-xl bg-white border border-[#e8e2d5] space-y-2.5 shadow-sm">
         <span class="text-xs font-black text-[#1c1917] flex items-center gap-1.5">
           <i class="fa-solid fa-file-arrow-down text-sky-600"></i>
@@ -1906,7 +1966,7 @@
     }
 
     // 앱 버전 및 글로벌 네임스페이스 (Sulsul-Travel Invariant Rule R-10, R-11, R-12, R-13, R-14, R-15)
-    const APP_VER = '1.0.8';
+    const APP_VER = '1.0.9';
 
     // ══════════════════════════════════════════
     // [Two-Tone Theme System] 라이트 그레이 & 딥 블랙 테마 엔진
@@ -2202,6 +2262,12 @@
       const modalKeyInput = document.getElementById('modal-cfg-gemini-key');
       if (modalKeyInput) {
         modalKeyInput.value = State.geminiKey || '';
+      }
+      if (typeof updateGithubSyncUi === 'function') {
+        updateGithubSyncUi();
+      }
+      if (typeof updatePwaUiState === 'function') {
+        updatePwaUiState();
       }
       openModal('modal-settings');
     }
@@ -2557,6 +2623,9 @@
                   <div class="text-xs font-bold text-[#1c1917]">₩${(totalSpent/10000).toFixed(0)}만 / <span class="text-stone-500 font-normal">₩${(budget/10000).toFixed(0)}만</span></div>
                 </div>
                 <div class="flex items-center gap-1.5" onclick="event.stopPropagation()">
+                  <button onclick="openRouteMapModal(); event.stopPropagation();" class="w-8 h-8 rounded-xl bg-[#faf8f5] hover:bg-amber-50 text-[#78716c] hover:text-[#a2601b] border border-[#e8e2d5] flex items-center justify-center text-xs transition cursor-pointer" title="세계 및 남미 비행 궤적 지도">
+                    <i class="fa-solid fa-earth-americas text-amber-600"></i>
+                  </button>
                   <button onclick="openTripPdfReport('${trip.id}', event)" class="w-8 h-8 rounded-xl bg-[#faf8f5] hover:bg-amber-50 text-[#78716c] hover:text-[#a2601b] border border-[#e8e2d5] flex items-center justify-center text-xs transition cursor-pointer" title="PDF 리포트">
                     <i class="fa-solid fa-file-pdf text-rose-500"></i>
                   </button>
@@ -2585,6 +2654,9 @@
 
                 <div class="relative z-10 flex items-center gap-1.5">
                   ${ddayBadge}
+                  <button onclick="openRouteMapModal(); event.stopPropagation();" class="w-7 h-7 rounded-lg bg-white/90 hover:bg-amber-50 text-stone-600 hover:text-amber-800 border border-[#e8e2d5] flex items-center justify-center text-xs shadow-sm transition cursor-pointer" title="세계 및 남미 비행 궤적 지도">
+                    <i class="fa-solid fa-earth-americas text-amber-600"></i>
+                  </button>
                   <button onclick="openTripPdfReport('${trip.id}', event)" class="w-7 h-7 rounded-lg bg-white/90 hover:bg-white text-stone-600 hover:text-amber-800 border border-[#e8e2d5] flex items-center justify-center text-xs shadow-sm transition cursor-pointer" title="여행 보고서 & PDF">
                     <i class="fa-solid fa-file-pdf text-rose-500"></i>
                   </button>
@@ -2625,6 +2697,10 @@
                 </div>
 
                 <div class="pt-2 flex items-center gap-2">
+                  <button onclick="openRouteMapModal(); event.stopPropagation();" class="py-2 px-2.5 rounded-xl bg-[#faf8f5] hover:bg-amber-50 text-[#78716c] hover:text-[#a2601b] border border-[#e8e2d5] text-xs font-bold transition flex items-center justify-center gap-1 shadow-sm" title="경로 지도">
+                    <i class="fa-solid fa-earth-americas text-amber-600"></i>
+                    <span>지도</span>
+                  </button>
                   <button class="flex-1 py-2 rounded-xl btn-gold text-xs font-black transition flex items-center justify-center gap-1.5 shadow-sm">
                     <span>다이어리 열기</span>
                     <i class="fa-solid fa-arrow-right text-[10px]"></i>
@@ -3401,15 +3477,23 @@
 
     function updatePwaUiState() {
       const installed = isInstalled();
+      const settingsPwaBadge = document.getElementById('settings-pwa-status');
+      if (settingsPwaBadge) {
+        if (installed) {
+          settingsPwaBadge.className = "text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200";
+          settingsPwaBadge.innerText = "✅ PWA 단독 앱으로 구동 중";
+        } else {
+          settingsPwaBadge.className = "text-[10px] font-bold px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 border border-slate-200";
+          settingsPwaBadge.innerText = "웹 브라우저로 실행 중 (홈 화면 설치 가능)";
+        }
+      }
+
       const btn = document.getElementById('btn-native-install');
       const btnTxt = document.getElementById('btn-native-install-txt');
       if (btn) {
-        if (installed) {
-          btn.className = "px-2.5 py-1.5 bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 rounded-lg text-xs font-bold flex items-center gap-1.5 transition";
-          if (btnTxt) btnTxt.innerText = "PWA 구동 중";
-        } else {
-          btn.className = "px-2.5 py-1.5 btn-gold rounded-lg text-xs font-black flex items-center gap-1.5 transition shadow-sm cursor-pointer pulse-gold";
-          if (btnTxt) btnTxt.innerText = "앱 설치";
+        btn.className = "hidden"; // 모바일 뷰포트 헤더 슬림화를 위해 헤더 버튼은 항상 숨김 유지
+        if (btnTxt) {
+          btnTxt.innerText = installed ? "PWA 구동 중" : "앱 설치";
         }
       }
       renderSmartWelcomeBanner();
@@ -4265,6 +4349,211 @@
       reader.readAsText(file);
     }
 
+    // ==========================================
+    // [13.5] GitHub Gist 클라우드 동기화 엔진 (PC ↔ 스마트폰 양방향 동기화)
+    // ==========================================
+    function getGithubSyncConfig() {
+      return {
+        pat: (localStorage.getItem('st_github_pat') || '').trim(),
+        gistId: (localStorage.getItem('st_github_gist') || '').trim()
+      };
+    }
+
+    function saveGithubSyncConfig(showFeedback = false) {
+      const patInput = document.getElementById('cfg-github-pat');
+      const gistInput = document.getElementById('cfg-github-gist');
+      if (patInput) {
+        localStorage.setItem('st_github_pat', patInput.value.trim());
+      }
+      if (gistInput) {
+        localStorage.setItem('st_github_gist', gistInput.value.trim());
+      }
+      updateGithubSyncUi();
+      if (showFeedback) {
+        showToast('💾 GitHub 동기화 설정이 저장되었습니다.');
+      }
+    }
+
+    function updateGithubSyncUi() {
+      const cfg = getGithubSyncConfig();
+      const patInput = document.getElementById('cfg-github-pat');
+      const gistInput = document.getElementById('cfg-github-gist');
+      const statusBadge = document.getElementById('gist-sync-status-badge');
+      const lastSyncEl = document.getElementById('gist-last-sync-time');
+
+      if (patInput && !patInput.value) patInput.value = cfg.pat;
+      if (gistInput && !gistInput.value) gistInput.value = cfg.gistId;
+
+      if (statusBadge) {
+        if (cfg.pat && cfg.gistId) {
+          statusBadge.className = "text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200";
+          statusBadge.innerText = "연결 완료 (준비됨)";
+        } else if (cfg.pat) {
+          statusBadge.className = "text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-50 text-amber-700 border border-amber-200";
+          statusBadge.innerText = "PAT 등록됨 (첫 백업 대기)";
+        } else {
+          statusBadge.className = "text-[10px] font-bold px-2 py-0.5 rounded-full bg-slate-100 text-slate-700 border border-slate-200";
+          statusBadge.innerText = "연결 대기";
+        }
+      }
+
+      const lastSyncTime = localStorage.getItem('st_github_last_sync');
+      if (lastSyncEl) {
+        lastSyncEl.innerText = lastSyncTime ? `마지막 동기화: ${lastSyncTime}` : '마지막 동기화: 동기화 기록 없음';
+      }
+    }
+
+    async function syncToGist() {
+      saveGithubSyncConfig(false);
+      const cfg = getGithubSyncConfig();
+      if (!cfg.pat) {
+        alert('GitHub Personal Access Token (PAT)을 먼저 입력해 주세요.\n\n(GitHub > Settings > Developer Settings > Personal access tokens 에서 "gist" 권한으로 발급)');
+        return;
+      }
+
+      const btnPush = document.getElementById('btn-gist-push');
+      const origText = btnPush ? btnPush.innerHTML : '';
+      if (btnPush) {
+        btnPush.disabled = true;
+        btnPush.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> 백업 중...';
+      }
+
+      try {
+        const payload = {
+          version: APP_VER,
+          updatedAt: new Date().toISOString(),
+          trips: State.trips
+        };
+        const contentStr = JSON.stringify(payload, null, 2);
+
+        let url = 'https://api.github.com/gists';
+        let method = 'POST';
+
+        const gistBody = {
+          description: `Sulsul Travel Cloud Backup (${new Date().toLocaleString('ko-KR')})`,
+          public: false,
+          files: {
+            "sulsul_travel_data.json": {
+              content: contentStr
+            }
+          }
+        };
+
+        if (cfg.gistId) {
+          url = `https://api.github.com/gists/${encodeURIComponent(cfg.gistId)}`;
+          method = 'PATCH';
+        }
+
+        const res = await fetch(url, {
+          method: method,
+          headers: {
+            'Authorization': `Bearer ${cfg.pat}`,
+            'Accept': 'application/vnd.github+json',
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(gistBody)
+        });
+
+        if (!res.ok) {
+          const errData = await res.json().catch(() => ({}));
+          throw new Error(errData.message || `HTTP ${res.status}`);
+        }
+
+        const data = await res.json();
+        const newGistId = data.id;
+        localStorage.setItem('st_github_gist', newGistId);
+        const gistInput = document.getElementById('cfg-github-gist');
+        if (gistInput) gistInput.value = newGistId;
+
+        const nowStr = new Date().toLocaleString('ko-KR');
+        localStorage.setItem('st_github_last_sync', `${nowStr} (백업)`);
+        updateGithubSyncUi();
+
+        showToast(`☁️ GitHub Gist 백업 성공! (Gist ID: ${newGistId.slice(0, 8)}...)`);
+        alert(`[☁️ GitHub Gist 클라우드 백업 성공]\n\n총 ${State.trips.length}개의 여행 데이터가 GitHub Gist에 안전하게 백업되었습니다.\n\n다른 기기(스마트폰/PC)에서 복원할 때:\n1. 동일한 PAT를 입력\n2. Gist ID: ${newGistId}\n3. [클라우드 복원 (Pull)]을 누르면 즉시 동기화됩니다!`);
+      } catch (err) {
+        console.error('[GistPush] error:', err);
+        alert(`GitHub Gist 백업 실패: ${err.message}\nPAT 권한(gist 체크 여부)을 확인해주세요.`);
+      } finally {
+        if (btnPush) {
+          btnPush.disabled = false;
+          btnPush.innerHTML = origText;
+        }
+      }
+    }
+
+    async function syncFromGist() {
+      saveGithubSyncConfig(false);
+      const cfg = getGithubSyncConfig();
+      if (!cfg.pat) {
+        alert('GitHub Personal Access Token (PAT)을 먼저 입력해 주세요.');
+        return;
+      }
+      if (!cfg.gistId) {
+        alert('복원할 Gist ID를 입력해 주세요. (PC에서 먼저 [클라우드 백업]을 진행하면 자동 발급됩니다)');
+        return;
+      }
+
+      if (!confirm(`GitHub Gist(${cfg.gistId.slice(0, 8)}...)에서 데이터를 내려받아 현재 기기의 데이터를 갱신하시겠습니까?`)) {
+        return;
+      }
+
+      const btnPull = document.getElementById('btn-gist-pull');
+      const origText = btnPull ? btnPull.innerHTML : '';
+      if (btnPull) {
+        btnPull.disabled = true;
+        btnPull.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> 복원 중...';
+      }
+
+      try {
+        const res = await fetch(`https://api.github.com/gists/${encodeURIComponent(cfg.gistId)}`, {
+          headers: {
+            'Authorization': `Bearer ${cfg.pat}`,
+            'Accept': 'application/vnd.github+json'
+          }
+        });
+
+        if (!res.ok) {
+          const errData = await res.json().catch(() => ({}));
+          throw new Error(errData.message || `HTTP ${res.status}`);
+        }
+
+        const data = await res.json();
+        const fileObj = data.files['sulsul_travel_data.json'] || Object.values(data.files)[0];
+        if (!fileObj || !fileObj.content) {
+          throw new Error('Gist 파일 내용을 찾을 수 없습니다.');
+        }
+
+        const imported = JSON.parse(fileObj.content);
+        if (imported.trips && Array.isArray(imported.trips)) {
+          State.trips = imported.trips;
+          if (State.trips.length > 0) {
+            State.activeTripId = State.trips[0].id;
+          }
+          saveTrips();
+          const nowStr = new Date().toLocaleString('ko-KR');
+          localStorage.setItem('st_github_last_sync', `${nowStr} (복원)`);
+          updateGithubSyncUi();
+          renderHub();
+          if (State.currentView === 'workspace') {
+            renderActiveTripWorkspace();
+          }
+          showToast(`📥 GitHub Gist 복원 완료! 총 ${State.trips.length}개 여정`);
+          alert(`[📥 GitHub Gist 동기화 완료]\n\n최신 데이터(${State.trips.length}개 여행)가 성공적으로 복원되었습니다.`);
+        } else {
+          throw new Error('올바른 술술트래블 데이터 구조가 아닙니다.');
+        }
+      } catch (err) {
+        console.error('[GistPull] error:', err);
+        alert(`GitHub Gist 복원 실패: ${err.message}\nGist ID와 토큰을 확인해 주세요.`);
+      } finally {
+        if (btnPull) {
+          btnPull.disabled = false;
+          btnPull.innerHTML = origText;
+        }
+      }
+    }
+
     function saveGeminiKey() {
       const raw = document.getElementById('cfg-gemini-key').value;
       const k = cleanApiKey(raw);
@@ -5047,7 +5336,11 @@
       openRouteMapModal: openRouteMapModal,
       openSettingsModal: openSettingsModal,
       setTheme: setTheme,
-      toggleTheme: toggleTheme
+      toggleTheme: toggleTheme,
+      getGithubSyncConfig: getGithubSyncConfig,
+      saveGithubSyncConfig: saveGithubSyncConfig,
+      syncToGist: syncToGist,
+      syncFromGist: syncFromGist
     };
   </script>
 </body>
