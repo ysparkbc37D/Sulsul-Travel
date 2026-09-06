@@ -14,12 +14,12 @@
   </script>
 
   <!-- PWA Meta & Icons -->
-  <link rel="manifest" href="manifest.webmanifest?v=1.1.3">
+  <link rel="manifest" href="manifest.webmanifest?v=1.1.4">
   <meta name="theme-color" content="#f5f5f7">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
-  <link rel="icon" type="image/png" href="icons/icon-192.png?v=1.1.3">
-  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png?v=1.1.3">
+  <link rel="icon" type="image/png" href="icons/icon-192.png?v=1.1.4">
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png?v=1.1.4">
 
   <!-- Editorial Luxury Serif Fonts (Cormorant Garamond / Playfair Display) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -71,10 +71,10 @@
       --surface3: #e8e8ed;
       --line: #d6d6d6;          /* Apple Pebble Hairline */
       --line2: #c5c5c8;
-      --ink: #1d1d1f;           /* Apple Space Black (WCAG AAA) */
-      --ink2: #555555;          /* High contrast Subtext (WCAG AA 4.5:1+) */
-      --ink3: #707070;          /* Muted metadata */
-      --accent: #a2601b;        /* Whisky Gold Amber */
+      --ink: #111827;           /* Pitch Charcoal Black (WCAG AAA 16:1) */
+      --ink2: #374151;          /* Slate 700 - High Contrast Subtext (WCAG AAA 8:1) */
+      --ink3: #4b5563;          /* Slate 600 - Secondary Metadata (WCAG AA 5.5:1) */
+      --accent: #92400e;        /* Deep Whisky Amber (7.2:1 contrast) */
       --accent2: #c9962f;
       --accent-bg: #f5ede2;
       --accent-line: #dfd1be;
@@ -211,23 +211,28 @@
 
     /* Sulsul Two-Tone Luxury UI Tokens & Buttons */
     .btn-gold {
-      background: linear-gradient(180deg, #d7a643, #a2601b) !important;
-      color: #ffffff !important;
-      font-weight: 800;
-      border: none;
-      box-shadow: 0 4px 14px rgba(162, 96, 27, 0.25);
+      background: linear-gradient(180deg, #d4af37, #b8860b) !important;
+      color: #0b0c0e !important;
+      font-weight: 900 !important;
+      border: 1px solid rgba(0, 0, 0, 0.12) !important;
+      box-shadow: 0 4px 14px rgba(184, 134, 11, 0.3) !important;
       transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .btn-gold * {
+      color: #0b0c0e !important;
+      font-weight: 900 !important;
     }
     :root[data-theme="dark"] .btn-gold {
       background: linear-gradient(180deg, #e5b654, #bd8a2a) !important;
       color: #0b0c0e !important;
-      box-shadow: 0 4px 14px rgba(212, 175, 55, 0.25);
+      box-shadow: 0 4px 14px rgba(212, 175, 55, 0.25) !important;
     }
-    .btn-gold *, :root[data-theme="dark"] .btn-gold * {
-      color: inherit !important;
+    :root[data-theme="dark"] .btn-gold * {
+      color: #0b0c0e !important;
+      font-weight: 900 !important;
     }
     .btn-gold:hover {
-      box-shadow: 0 6px 20px rgba(162, 96, 27, 0.35);
+      box-shadow: 0 6px 20px rgba(162, 96, 27, 0.4);
       transform: translateY(-1px);
     }
     .btn-gold:active {
@@ -237,7 +242,7 @@
       background: var(--surface2) !important;
       border: 1px solid var(--line) !important;
       color: var(--ink) !important;
-      font-weight: 600;
+      font-weight: 700 !important;
       transition: all 0.18s ease;
     }
     .btn-surface:hover {
@@ -359,11 +364,19 @@
     }
 
     /* High Contrast Text Rules */
-    :root[data-theme="light"] .text-white:not(.keep-white):not(.btn-gold):not(.btn-gold *):not(.badge-solid):not(.badge-solid *):not(.tab-install-active):not(.hub-tab-active):not(.nav-tab-active):not([class*="bg-emerald-"]):not([class*="bg-amber-5"]):not([class*="bg-rose-"]):not([class*="bg-indigo-"]):not([class*="bg-blue-"]):not([class*="bg-[#1c1917]"]):not([class*="bg-sky-"]):not([class*="bg-purple-"]) {
+    :root[data-theme="light"] .text-white:not(.keep-white):not(.btn-gold):not(.btn-gold *):not(.badge-solid):not(.badge-solid *):not(.tab-install-active):not(.hub-tab-active):not(.nav-tab-active):not([class*="bg-emerald-"]):not([class*="bg-amber-"]):not([class*="bg-rose-"]):not([class*="bg-indigo-"]):not([class*="bg-blue-"]):not([class*="bg-[#1c1917]"]):not([class*="bg-[#111827]"]):not([class*="bg-[#1d1d1f]"]):not([class*="bg-stone-9"]):not([class*="bg-slate-9"]):not([class*="bg-black"]):not(#btn-theme-light):not(#btn-theme-light *) {
       color: var(--ink) !important;
     }
     :root[data-theme="dark"] .text-white {
       color: var(--ink) !important;
+    }
+
+    /* Dark surface elements MUST have clear white text */
+    .bg-\[\#111827\], .bg-\[\#1d1d1f\], .bg-\[\#1c1917\], .bg-\[\#0b0c0e\], .bg-stone-900, .bg-slate-900, .bg-black {
+      color: #ffffff !important;
+    }
+    .bg-\[\#111827\] *, .bg-\[\#1d1d1f\] *, .bg-\[\#1c1917\] *, .bg-\[\#0b0c0e\] *, .bg-stone-900 *, .bg-slate-900 *, .bg-black * {
+      color: inherit !important;
     }
     .text-\[\#1c1917\], .text-\[\#292524\], .text-\[\#44403c\] {
       color: var(--ink) !important;
@@ -496,13 +509,13 @@
     <div class="max-w-6xl mx-auto flex items-center justify-between gap-2 sm:gap-3">
       <!-- 좌측 로고 및 버전 (불변 브랜드 블록: 어느 화면에서나 항상 안정적으로 고정) -->
       <div class="flex items-center gap-2 sm:gap-2.5 cursor-pointer select-none shrink-0" onclick="switchView('hub')" title="술술트래블 홈(허브)으로 이동">
-        <img src="icons/icon-192.png?v=1.1.3" alt="Sulsul Travel" class="w-8 h-8 sm:w-9 sm:h-9 rounded-xl shadow-md shadow-amber-900/15 shrink-0 object-cover border border-[#e8e2d5] dark:border-[var(--line)]">
+        <img src="icons/icon-192.png?v=1.1.4" alt="Sulsul Travel" class="w-8 h-8 sm:w-9 sm:h-9 rounded-xl shadow-md shadow-amber-900/15 shrink-0 object-cover border border-[#e8e2d5] dark:border-[var(--line)]">
         <div class="min-w-0">
           <div class="flex items-center gap-1.5">
             <h1 class="font-serif-brand text-base sm:text-xl font-bold tracking-tight text-[#1c1917] dark:text-[#ededed] whitespace-nowrap">
               Sulsul Travel
             </h1>
-            <span id="app-ver-badge" class="px-1.5 py-0.5 rounded-md theme-card-subtle text-[#a2601b] dark:text-[#d4af37] text-[10px] font-bold font-mono shadow-inner cursor-default shrink-0" title="술술트래블 엔진 버전">v1.1.3</span>
+            <span id="app-ver-badge" class="px-1.5 py-0.5 rounded-md theme-card-subtle text-[#a2601b] dark:text-[#d4af37] text-[10px] font-bold font-mono shadow-inner cursor-default shrink-0" title="술술트래블 엔진 버전">v1.1.4</span>
           </div>
           <p id="header-trip-name" class="text-[10px] sm:text-[11px] text-[#78716c] dark:text-stone-400 truncate max-w-[120px] sm:max-w-xs font-normal">인생의 모든 여정을 기록하는 다이어리</p>
         </div>
@@ -1671,41 +1684,41 @@
             <i class="fa-solid fa-circle-half-stroke text-[#a2601b] dark:text-[#d4af37]"></i>
             <span>컬러 테마 설정 (Two-Tone Theme)</span>
           </span>
-          <span id="settings-current-theme-badge" class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-500/10 text-[#a2601b] dark:text-[#d4af37] border border-amber-500/20">라이트 그레이</span>
+          <span id="settings-current-theme-badge" class="text-[10px] font-black px-2.5 py-0.5 rounded-full bg-amber-100 dark:bg-amber-950/50 text-amber-950 dark:text-amber-300 border border-amber-300 dark:border-amber-700">라이트 그레이</span>
         </div>
         <p class="text-[11px] leading-relaxed" style="color: var(--ink2);">
           주간 시인성이 뛰어난 애플 포그 <b>라이트 그레이</b>와 야간 눈부심을 줄인 <b>딥 블랙(Deep Onyx)</b> 럭셔리 모드를 자유롭게 전환할 수 있습니다.
         </p>
         <div class="grid grid-cols-2 gap-2 pt-1">
-          <button id="btn-theme-light" onclick="setTheme('light')" class="py-2.5 px-3 rounded-xl border font-bold text-xs flex items-center justify-center gap-2 transition cursor-pointer">
-            <span>☀️</span>
-            <span>라이트 그레이</span>
+          <button id="btn-theme-light" onclick="setTheme('light')" class="py-2.5 px-3 rounded-xl border font-black text-xs flex items-center justify-center gap-2 transition cursor-pointer">
+            <span class="text-sm">☀️</span>
+            <span id="btn-theme-light-txt">라이트 그레이</span>
           </button>
-          <button id="btn-theme-dark" onclick="setTheme('dark')" class="py-2.5 px-3 rounded-xl border font-bold text-xs flex items-center justify-center gap-2 transition cursor-pointer">
-            <span>🌙</span>
-            <span>딥 블랙</span>
+          <button id="btn-theme-dark" onclick="setTheme('dark')" class="py-2.5 px-3 rounded-xl border font-black text-xs flex items-center justify-center gap-2 transition cursor-pointer">
+            <span class="text-sm">🌙</span>
+            <span id="btn-theme-dark-txt">딥 블랙</span>
           </button>
         </div>
       </div>
 
       <!-- 1. 남미 22일 예제 가이드 삭제 및 복원 관리 -->
-      <div class="p-4 rounded-xl bg-white border border-[#e8e2d5] space-y-2.5 shadow-sm">
+      <div class="p-4 rounded-xl bg-white dark:bg-[#16181d] border border-[#e8e2d5] dark:border-stone-800 space-y-2.5 shadow-sm">
         <div class="flex items-center justify-between">
-          <span class="text-xs font-black text-[#1c1917] flex items-center gap-1.5">
+          <span class="text-xs font-black text-[#1c1917] dark:text-[#ededed] flex items-center gap-1.5">
             <i class="fa-solid fa-map-location-dot text-[#a2601b]"></i>
             <span>남미 4개국 22일 가이드 예제 관리</span>
           </span>
-          <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-[#fdf6ec] text-[#a2601b] border border-[#f5dfb8]">공식 가이드</span>
+          <span class="text-[10px] font-black px-2.5 py-0.5 rounded-full bg-amber-100 dark:bg-amber-950/50 text-amber-950 dark:text-amber-300 border border-amber-300 dark:border-amber-700">공식 가이드</span>
         </div>
-        <p class="text-[11px] text-[#78716c] leading-relaxed">
+        <p class="text-[11px] text-[#78716c] dark:text-stone-400 leading-relaxed">
           초기 제공되는 [2026 남미 4개국 3주 최적화 황금 여정] 22일 가이드 예제를 삭제하여 나만의 여행만 심플하게 관리하거나, 언제든 원본 가이드로 즉시 복원할 수 있습니다.
         </p>
         <div class="flex items-center gap-2 pt-1">
-          <button onclick="deleteSouthAmericaSample()" class="flex-1 py-2 px-3 rounded-xl bg-rose-50 hover:bg-rose-100 border border-rose-200 text-rose-700 font-bold text-xs flex items-center justify-center gap-1.5 transition cursor-pointer">
+          <button onclick="deleteSouthAmericaSample()" class="flex-1 py-2.5 px-3 rounded-xl bg-rose-100 hover:bg-rose-200 dark:bg-rose-950/40 border border-rose-300 dark:border-rose-800 text-rose-900 dark:text-rose-200 font-black text-xs flex items-center justify-center gap-1.5 transition cursor-pointer shadow-sm">
             <i class="fa-regular fa-trash-can text-xs"></i>
             <span>남미 22일 예제 삭제</span>
           </button>
-          <button onclick="restoreSouthAmericaSample()" class="flex-1 py-2 px-3 rounded-xl bg-[#fdf6ec] hover:bg-[#faebd7] border border-[#f5dfb8] text-[#a2601b] font-bold text-xs flex items-center justify-center gap-1.5 transition cursor-pointer">
+          <button onclick="restoreSouthAmericaSample()" class="flex-1 py-2.5 px-3 rounded-xl bg-amber-100 hover:bg-amber-200 dark:bg-amber-950/40 border border-amber-300 dark:border-amber-700 text-amber-950 dark:text-amber-200 font-black text-xs flex items-center justify-center gap-1.5 transition cursor-pointer shadow-sm">
             <i class="fa-solid fa-wand-magic-sparkles text-xs"></i>
             <span>예제 다시 불러오기</span>
           </button>
@@ -1713,17 +1726,17 @@
       </div>
 
       <!-- 2. 공유 클라우드 DB & 동행자 공유 (Zero-Backend 아키텍처) -->
-      <div class="p-4 rounded-xl bg-[#faf8f5] border border-[#e8e2d5] space-y-3">
+      <div class="p-4 rounded-xl bg-[#faf8f5] dark:bg-[#121316] border border-[#e8e2d5] dark:border-stone-800 space-y-3">
         <div class="flex items-center justify-between">
-          <span class="text-xs font-black text-[#1c1917] flex items-center gap-1.5">
-            <i class="fa-solid fa-share-nodes text-indigo-600"></i>
+          <span class="text-xs font-black text-[#1c1917] dark:text-[#ededed] flex items-center gap-1.5">
+            <i class="fa-solid fa-share-nodes text-indigo-600 dark:text-indigo-400"></i>
             <span>동행자 1클릭 URL 일정 공유 (서버 불필요)</span>
           </span>
-          <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">100% 서버리스</span>
+          <span class="text-[10px] font-black px-2.5 py-0.5 rounded-full bg-emerald-100 dark:bg-emerald-950/50 text-emerald-900 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-700">100% 서버리스</span>
         </div>
-        <div class="text-[11px] text-[#78716c] leading-relaxed space-y-1.5 bg-white p-3 rounded-xl border border-[#e8e2d5]">
-          <p class="font-bold text-[#1c1917] flex items-center gap-1">
-            <i class="fa-solid fa-circle-check text-emerald-600 text-[10px]"></i>
+        <div class="text-[11px] text-[#374151] dark:text-stone-300 leading-relaxed space-y-1.5 bg-white dark:bg-[#16181d] p-3.5 rounded-xl border border-[#d1d5db] dark:border-stone-700 shadow-sm">
+          <p class="font-black text-[#111827] dark:text-white flex items-center gap-1.5">
+            <i class="fa-solid fa-circle-check text-emerald-600 dark:text-emerald-400 text-xs"></i>
             친구·가족과 손쉽게 여행 일정을 공유하는 방법
           </p>
           <p>
@@ -2175,7 +2188,7 @@
     window.showToast = showToast;
 
     // 앱 버전 및 글로벌 네임스페이스 (Sulsul-Travel Invariant Rule R-10, R-11, R-12, R-13, R-14, R-15)
-    const APP_VER = '1.1.3';
+    const APP_VER = '1.1.4';
 
     // ══════════════════════════════════════════
     // [Two-Tone Theme System] 라이트 그레이 & 딥 블랙 테마 엔진
@@ -2208,20 +2221,37 @@
         headerBtn.setAttribute('title', isDark ? '라이트 그레이 테마로 전환' : '딥 블랙 테마로 전환');
       }
 
-      // 2. 설정 모달 테마 뱃지 및 버튼 활성 상태
+      // 2. 설정 모달 테마 뱃지 및 버튼 활성 상태 (술술실록 18호: 텍스트 증발 방어)
       const badge = document.getElementById('settings-current-theme-badge');
       if (badge) {
         badge.innerText = isDark ? '딥 블랙 (Deep Onyx)' : '라이트 그레이 (Apple Fog)';
       }
       const btnLight = document.getElementById('btn-theme-light');
       const btnDark = document.getElementById('btn-theme-dark');
+      const btnLightTxt = document.getElementById('btn-theme-light-txt');
+      const btnDarkTxt = document.getElementById('btn-theme-dark-txt');
+
       if (btnLight && btnDark) {
         if (isDark) {
-          btnDark.className = "py-2.5 px-3 rounded-xl bg-[#d4af37] text-[#0b0c0e] border border-[#d4af37] font-black text-xs flex items-center justify-center gap-2 shadow-sm transition ring-2 ring-amber-400/30";
-          btnLight.className = "py-2.5 px-3 rounded-xl bg-[var(--surface2)] text-[var(--ink2)] border border-[var(--line)] font-semibold text-xs flex items-center justify-center gap-2 hover:text-[var(--ink)] transition";
+          btnDark.className = "py-2.5 px-3 rounded-xl bg-[#d4af37] border border-[#d4af37] font-black text-xs flex items-center justify-center gap-2 shadow-sm transition ring-2 ring-amber-400/40 cursor-pointer";
+          btnDark.style.backgroundColor = '#d4af37';
+          btnDark.style.color = '#0b0c0e';
+          if (btnDarkTxt) { btnDarkTxt.style.color = '#0b0c0e'; btnDarkTxt.style.fontWeight = '900'; }
+
+          btnLight.className = "py-2.5 px-3 rounded-xl bg-[var(--surface2)] border border-[var(--line)] font-bold text-xs flex items-center justify-center gap-2 transition cursor-pointer";
+          btnLight.style.backgroundColor = 'var(--surface2)';
+          btnLight.style.color = 'var(--ink)';
+          if (btnLightTxt) { btnLightTxt.style.color = 'var(--ink)'; btnLightTxt.style.fontWeight = '700'; }
         } else {
-          btnLight.className = "py-2.5 px-3 rounded-xl bg-[#1d1d1f] text-white border border-[#1d1d1f] font-black text-xs flex items-center justify-center gap-2 shadow-sm transition ring-2 ring-stone-900/20";
-          btnDark.className = "py-2.5 px-3 rounded-xl bg-[var(--surface2)] text-[var(--ink2)] border border-[var(--line)] font-semibold text-xs flex items-center justify-center gap-2 hover:text-[var(--ink)] transition";
+          btnLight.className = "py-2.5 px-3 rounded-xl bg-[#111827] border border-[#111827] font-black text-xs flex items-center justify-center gap-2 shadow-sm transition ring-2 ring-stone-900/30 cursor-pointer";
+          btnLight.style.backgroundColor = '#111827';
+          btnLight.style.color = '#ffffff';
+          if (btnLightTxt) { btnLightTxt.style.color = '#ffffff'; btnLightTxt.style.fontWeight = '900'; }
+
+          btnDark.className = "py-2.5 px-3 rounded-xl bg-[var(--surface2)] border border-[var(--line)] font-bold text-xs flex items-center justify-center gap-2 transition cursor-pointer";
+          btnDark.style.backgroundColor = 'var(--surface2)';
+          btnDark.style.color = 'var(--ink)';
+          if (btnDarkTxt) { btnDarkTxt.style.color = 'var(--ink)'; btnDarkTxt.style.fontWeight = '700'; }
         }
       }
 
