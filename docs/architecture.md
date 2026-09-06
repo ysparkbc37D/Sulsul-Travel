@@ -1,4 +1,8 @@
-# 🏗️ Sulsul-Travel Architecture & Orchestration Model
+# 술술트래블 아키텍처 문서
+
+> 아래는 초기 설계의 역사적 기록이며 현재 구현 및 목표 구조와 차이가 있습니다. 최신 설계는 [확장 아키텍처](architecture-vnext.md), [AI 오케스트레이션](orchestration.md), [UI/UX 명세](ux-blueprint.md), [개발 모델](development-model.md)을 기준으로 합니다. 현재 실제 여행 저장 키는 `st_trips_v2`입니다. AI 및 미캐시 지도 자원은 네트워크가 필요합니다. 아래 고정 모델 목록·무조건 오프라인·정확한 환율 표현은 현재 동작의 보증이 아닙니다.
+
+# 초기 Architecture & Orchestration Model
 
 ## 1. 개요 (Overview)
 술술트래블(Sulsul-Travel)은 **술술다이어리(Sulsul-Diary)**의 엔터프라이즈 프론트엔드 오케스트레이션 아키텍처를 계승하여 구축된 여행 특화 PWA입니다.

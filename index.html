@@ -548,6 +548,7 @@
   <script src="js/destinations/pack-default.js"></script>
   <script src="js/destinations/pack-south-america.js"></script>
   <script src="js/destinations/pack-yunnan.js"></script>
+  <script src="js/infrastructure/storage/legacy-trip-repository.js"></script>
 </head>
 <body class="min-h-screen bg-[#f7f6f2] text-[#1c1917] flex flex-col antialiased selection:bg-amber-500/20 selection:text-amber-900">
 
@@ -564,7 +565,7 @@
             <h1 class="font-serif-brand text-base sm:text-xl font-bold tracking-tight text-[#1c1917] dark:text-[#ededed] whitespace-nowrap">
               Sulsul Travel
             </h1>
-            <span id="app-ver-badge" onclick="event.stopPropagation(); openVersionHistoryModal()" class="px-1.5 py-0.5 rounded-md theme-card-subtle hover:border-amber-500/60 hover:text-amber-600 dark:hover:text-amber-300 text-[#a2601b] dark:text-[#d4af37] text-[10px] font-bold font-mono shadow-inner cursor-pointer shrink-0 transition" title="버전 업데이트 기록 보기 (클릭)">v1.2.3</span>
+            <span id="app-ver-badge" onclick="event.stopPropagation(); openVersionHistoryModal()" class="px-1.5 py-0.5 rounded-md theme-card-subtle hover:border-amber-500/60 hover:text-amber-600 dark:hover:text-amber-300 text-[#a2601b] dark:text-[#d4af37] text-[10px] font-bold font-mono shadow-inner cursor-pointer shrink-0 transition" title="버전 업데이트 기록 보기 (클릭)">v1.2.4</span>
           </div>
           <p id="header-trip-name" class="text-[10px] sm:text-[11px] text-[#78716c] dark:text-stone-400 truncate max-w-[120px] sm:max-w-xs font-normal">인생의 모든 여정을 기록하는 다이어리</p>
         </div>
@@ -1686,8 +1687,40 @@
       </div>
 
       <div class="flex items-center gap-3 pt-2">
-        <button onclick="closeModal('modal-ai-trip')" class="flex-1 py-2.5 rounded-xl bg-[#141c2e] text-slate-300 font-bold text-xs">취소</button>
-        <button onclick="generateAiItinerary()" class="flex-1 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 text-slate-950 font-black text-xs shadow-md">일정 생성 시작</button>
+        <button onclick="cancelActiveAiJob(); closeModal('modal-ai-trip')" class="flex-1 py-2.5 rounded-xl bg-[#141c2e] text-slate-300 font-bold text-xs">취소</button>
+        <button id="btn-generate-ai-itinerary" onclick="generateAiItinerary()" class="flex-1 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 text-slate-950 font-black text-xs shadow-md disabled:opacity-50">일정 생성 시작</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- AI 초안 검토 모달: 원본은 승인 전까지 변경하지 않음 -->
+  <div id="modal-ai-draft-review" class="sheet-container sheet-closed">
+    <div class="sheet-scrim" onclick="closeModal('modal-ai-draft-review')"></div>
+    <div class="sheet-box p-6 sm:p-7 space-y-4" role="dialog" aria-modal="true" aria-labelledby="ai-draft-review-title">
+      <div class="flex items-center justify-between border-b border-[#1e263c] pb-3">
+        <div>
+          <div class="flex items-center gap-2">
+            <span class="w-8 h-8 rounded-lg bg-amber-500/20 text-amber-400 flex items-center justify-center"><i class="fa-solid fa-wand-magic-sparkles"></i></span>
+            <h3 id="ai-draft-review-title" class="text-base font-black text-white">AI 초안 검토</h3>
+          </div>
+          <p id="ai-draft-review-subtitle" class="text-[11px] text-slate-400 mt-1">원본과 제안을 확인한 뒤 적용하세요.</p>
+        </div>
+        <button onclick="closeModal('modal-ai-draft-review')" class="w-11 h-11 text-slate-400 hover:text-white" aria-label="초안 검토 닫기">✕</button>
+      </div>
+      <div id="ai-draft-review-status" class="p-3 rounded-xl bg-amber-500/10 border border-amber-500/25 text-xs text-amber-200" aria-live="polite"></div>
+      <div class="grid sm:grid-cols-2 gap-3 max-h-[48vh] overflow-y-auto">
+        <section class="p-3 rounded-xl bg-[#080b12] border border-[#1e263c]">
+          <h4 class="text-[11px] font-black text-slate-400 mb-2">현재 원본</h4>
+          <div id="ai-draft-review-original" class="text-xs text-slate-200 leading-relaxed whitespace-pre-wrap break-words"></div>
+        </section>
+        <section class="p-3 rounded-xl bg-[#080b12] border border-amber-500/30">
+          <h4 class="text-[11px] font-black text-amber-400 mb-2">AI 제안</h4>
+          <div id="ai-draft-review-proposal" class="text-xs text-slate-100 leading-relaxed whitespace-pre-wrap break-words"></div>
+        </section>
+      </div>
+      <div class="flex items-center gap-3 pt-2">
+        <button onclick="rejectActiveAiDraft()" class="flex-1 min-h-11 rounded-xl bg-[#141c2e] text-slate-300 font-bold text-xs">초안 버리기</button>
+        <button id="btn-apply-ai-draft" onclick="approveActiveAiDraft()" class="flex-1 min-h-11 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 text-slate-950 font-black text-xs shadow-md">검토 후 적용</button>
       </div>
     </div>
   </div>
@@ -2045,7 +2078,7 @@
             <i class="fa-solid fa-clock-rotate-left text-[#a2601b] dark:text-[#d4af37]"></i>
             <span>술술트래블 엔진 버전 & 릴리즈 히스토리</span>
           </span>
-          <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-500/10 text-[#a2601b] dark:text-[#d4af37] border border-amber-500/30">v1.2.0</span>
+          <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-500/10 text-[#a2601b] dark:text-[#d4af37] border border-amber-500/30">v1.2.4</span>
         </div>
         <p class="text-[11px] text-[#78716c] dark:text-stone-400 leading-relaxed">
           술술 오도미터 순차 올림 원칙에 따른 전체 버전별 기능 추가, UI/UX 개선, 버그 해결 이력을 확인합니다.
@@ -2299,14 +2332,34 @@
 
       <!-- 버전 목록 스크롤 영역 -->
       <div class="flex-1 overflow-y-auto space-y-3 pr-1 text-xs">
-        <!-- v1.2.3 (Current) -->
+        <!-- v1.2.4 (Current) -->
+        <div class="p-4 rounded-2xl bg-amber-500/5 dark:bg-amber-500/10 border-2 border-amber-500/40 space-y-2.5 shadow-sm relative overflow-hidden">
+          <div class="flex items-center justify-between gap-2">
+            <div class="flex items-center gap-2 min-w-0">
+              <span class="px-2 py-0.5 rounded-lg bg-amber-500 text-black font-black text-xs shadow-sm shrink-0">v1.2.4</span>
+              <span class="text-xs font-black text-[#1c1917] dark:text-white">AI 초안 검토와 원본 보호 오케스트레이션</span>
+            </div>
+            <span class="px-2 py-0.5 rounded-full text-[10px] font-black bg-emerald-100 text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300 border border-emerald-300 shrink-0">최신 버전</span>
+          </div>
+          <div class="text-[11px] text-[#44403c] dark:text-stone-300 space-y-1.5 leading-relaxed">
+            <div><b>일정·여행기·영수증 AI 초안 검토</b>: AI 결과를 원본에 바로 쓰지 않고 비교 화면에서 승인한 뒤 적용합니다.</div>
+            <div><b>충돌·중복·저장 실패 방어</b>: 여행 revision과 작업 ID를 이용해 늦은 응답, 중복 승인, 저장 실패로부터 기록을 보호합니다.</div>
+            <div><b>OCR 실패 안전화</b>: 인식 실패 시 예제 금액을 자동 입력하지 않고 직접 입력할 수 있도록 현재 폼을 유지합니다.</div>
+          </div>
+          <div class="text-[10px] text-stone-400 dark:text-stone-500 pt-1 border-t border-amber-500/20 flex items-center justify-between">
+            <span>📅 2026-09-07 릴리즈</span>
+            <span class="font-mono">st-shell-v1.2.4</span>
+          </div>
+        </div>
+
+        <!-- v1.2.3 -->
         <div class="p-4 rounded-2xl bg-amber-500/5 dark:bg-amber-500/10 border-2 border-amber-500/40 space-y-2.5 shadow-sm relative overflow-hidden">
           <div class="flex items-center justify-between">
             <div class="flex items-center gap-2">
               <span class="px-2 py-0.5 rounded-lg bg-amber-500 text-black font-black text-xs shadow-sm">v1.2.3</span>
               <span class="text-xs font-black text-[#1c1917] dark:text-white">평생 세계 및 대종단 등록된 모든 여행 궤적 통합 표기 엔진</span>
             </div>
-            <span class="px-2 py-0.5 rounded-full text-[10px] font-black bg-emerald-100 text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300 border border-emerald-300">최신 버전 (Current)</span>
+            <span class="px-2 py-0.5 rounded-full text-[10px] font-black bg-stone-100 text-stone-600 dark:bg-stone-800 dark:text-stone-300 border border-stone-300 dark:border-stone-700">이전 버전</span>
           </div>
           <div class="text-[11px] text-[#44403c] dark:text-stone-300 space-y-1.5 leading-relaxed">
             <div class="flex items-start gap-1.5">
@@ -2527,7 +2580,7 @@
 
       <!-- 모달 푸터 -->
       <div class="pt-3 border-t border-[#e8e2d5] dark:border-stone-800 flex items-center justify-between shrink-0">
-        <span class="text-[11px] text-stone-400 dark:text-stone-500 font-mono">Sulsul Travel Engine v1.2.0</span>
+        <span class="text-[11px] text-stone-400 dark:text-stone-500 font-mono">Sulsul Travel Engine v1.2.4</span>
         <button onclick="closeModal('modal-version-history')" class="px-4 py-2 rounded-xl bg-[#faf8f5] dark:bg-stone-800 hover:bg-[#f0ece1] dark:hover:bg-stone-700 border border-[#e8e2d5] dark:border-stone-700 text-[#1c1917] dark:text-[#ededed] text-xs font-bold transition cursor-pointer shadow-sm">
           닫기
         </button>
@@ -2590,7 +2643,7 @@
     window.showToast = showToast;
 
     // 앱 버전 및 글로벌 네임스페이스 (Sulsul-Travel Invariant Rule R-10, R-11, R-12, R-13, R-14, R-15)
-    const APP_VER = '1.2.3';
+    const APP_VER = '1.2.4';
 
     // ══════════════════════════════════════════
     // [Two-Tone Theme System] 라이트 그레이 & 딥 블랙 테마 엔진
@@ -2715,8 +2768,14 @@
       map: null,
       mapMarkers: [],
       mapPolyline: null,
-      deferredPrompt: null
+      deferredPrompt: null,
+      activeAiJobId: null,
+      aiDraftKind: null,
+      storageRecovery: null
     };
+
+    const TripRepository = new window.SulsulTravel.LegacyTripRepository(localStorage);
+    let aiOrchestratorPromise = null;
 
     // ==========================================
     // 앱 초기화 및 시드 로드
@@ -2734,14 +2793,11 @@
       setTheme(savedTheme);
 
       // 1. LocalStorage에서 여행 컬렉션 로드 (하위 호환 마이그레이션)
-      const rawV2 = localStorage.getItem('st_trips_v2');
-      if (rawV2) {
-        try {
-          State.trips = JSON.parse(rawV2);
-        } catch (e) {
-          console.warn('[Storage] Corrupt st_trips_v2, reinitializing');
-          State.trips = [];
-        }
+      const loadedTrips = TripRepository.loadAll();
+      State.trips = loadedTrips.trips;
+      State.storageRecovery = loadedTrips.recoveredFromCorruption ? loadedTrips : null;
+      if (loadedTrips.recoveredFromCorruption) {
+        console.warn('[Storage] Corrupt st_trips_v2 preserved as:', loadedTrips.backupKey);
       }
 
       // 2. 구버전 st_current_trip 마이그레이션
@@ -2767,7 +2823,7 @@
         State.activeTripId = State.trips[0].id;
       }
 
-      saveTrips();
+      saveTrips({ bump: false });
       updateHubFilterDropdowns();
       updateHubViewModeButtonUi();
       renderConceptChips();
@@ -2775,6 +2831,9 @@
       renderActiveTripWorkspace();
       updateGeminiKeyUi();
       checkStartupInstallOnboarding();
+      if (State.storageRecovery) {
+        showToast('⚠️ 손상된 여행 데이터를 별도 백업하고 복구 모드로 시작했습니다.', 5000);
+      }
     }
 
     function getSouthAmericaSourceDays(variant = 22) {
@@ -2867,12 +2926,16 @@
       showToast('✨ 남미 4개국 22일 가이드 예제가 성공적으로 복원되었습니다!');
     }
 
-    function saveTrips() {
+    function saveTrips({ bump = true } = {}) {
       try {
-        localStorage.setItem('st_trips_v2', JSON.stringify(State.trips));
+        State.trips = TripRepository.saveAll(State.trips, {
+          bumpTripId: bump ? State.activeTripId : null
+        });
+        return true;
       } catch (err) {
         console.error('[Storage] QuotaExceededError or write failed:', err);
         showToast('⚠️ 로컬 저장 공간이 부족합니다. 오래된 사진이나 데이터를 정리해주세요.');
+        return false;
       }
     }
 
@@ -5775,7 +5838,7 @@
               <i class="fa-solid fa-wand-magic-sparkles text-[10px]"></i> AI 감성 에세이 윤문
             </button>
           </label>
-          <textarea id="journal-text-input" rows="4" placeholder="오늘 하루 인상 깊었던 순간, 감정, 만난 사람들의 이야기를 자유롭게 적어보세요..." class="w-full p-3 bg-[#080b12] border border-[#1a2236] rounded-xl text-xs text-slate-200 placeholder-slate-600 focus:outline-none focus:border-amber-500 leading-relaxed">${journalEntry.text || ''}</textarea>
+          <textarea id="journal-text-input" rows="4" placeholder="오늘 하루 인상 깊었던 순간, 감정, 만난 사람들의 이야기를 자유롭게 적어보세요..." class="w-full p-3 bg-[#080b12] border border-[#1a2236] rounded-xl text-xs text-slate-200 placeholder-slate-600 focus:outline-none focus:border-amber-500 leading-relaxed">${escapeHtml(journalEntry.text || '')}</textarea>
           <div class="flex justify-end">
             <button onclick="saveJournalText()" class="px-4 py-2 bg-[#141c2e] hover:bg-[#1a263e] border border-[#23304c] text-amber-400 font-black rounded-xl text-xs transition">
               일기 저장
@@ -6682,7 +6745,7 @@
     // ==========================================
     const AI_MODELS = ['gemini-2.0-flash', 'gemini-1.5-flash', 'gemini-2.5-flash'];
 
-    async function callGeminiApiWithFallback(prompt) {
+    async function callGeminiApiWithFallback(prompt, options = {}) {
       const rawKey = State.geminiKey || localStorage.getItem('st_gemini_key');
       const key = cleanApiKey(rawKey);
       if (!key) {
@@ -6695,8 +6758,16 @@
       let lastError = null;
       for (const model of AI_MODELS) {
         let timeoutId = null;
+        let upstreamAbort = null;
         try {
+          if (options.signal?.aborted) {
+            const cancelled = new Error('CANCELLED');
+            cancelled.code = 'CANCELLED';
+            throw cancelled;
+          }
           const controller = new AbortController();
+          upstreamAbort = () => controller.abort(options.signal.reason);
+          options.signal?.addEventListener('abort', upstreamAbort, { once: true });
           // Sulsul-Diary 실록 4.3.9 교훈: 구글 AI 큐 지연 시 무한 대기 방지 12초 타임아웃
           timeoutId = setTimeout(() => controller.abort(), 12000);
           const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${encodeURIComponent(key)}`;
@@ -6707,6 +6778,7 @@
             signal: controller.signal
           });
           clearTimeout(timeoutId);
+          options.signal?.removeEventListener('abort', upstreamAbort);
 
           if (res.ok) {
             const data = await res.json();
@@ -6735,6 +6807,8 @@
           }
         } catch (e) {
           if (timeoutId) clearTimeout(timeoutId);
+          if (upstreamAbort) options.signal?.removeEventListener('abort', upstreamAbort);
+          if (options.signal?.aborted || e.code === 'CANCELLED') throw e;
           if (e.code === 'INVALID_API_KEY' || e.code === 'QUOTA_EXCEEDED') throw e;
           console.warn(`[AI] Model ${model} failed or timed out:`, e.name || e);
           if (!lastError) {
@@ -6750,74 +6824,285 @@
       throw finalErr;
     }
 
-    async function generateAiItinerary() {
-      const trip = getActiveTrip();
-      const userPrompt = document.getElementById('ai-trip-prompt').value.trim();
-      const loader = document.getElementById('ai-trip-loading');
-      loader.classList.remove('hidden');
+    async function getAiOrchestrator() {
+      if (!aiOrchestratorPromise) {
+        aiOrchestratorPromise = import('./js/application/orchestration.mjs').then(({ Orchestrator }) =>
+          new Orchestrator({
+            online: () => navigator.onLine,
+            timeoutMs: 40000,
+            maxAttempts: 3,
+            generate: generateAiDraftPayload,
+            validate: validateAiDraftPayload,
+            applyDraft: applyAiDraftPayload
+          })
+        );
+      }
+      return aiOrchestratorPromise;
+    }
 
-      const systemPrompt = `당신은 세계 최고 권위의 여행 플래너입니다.
-여행지: ${(trip.countries || []).join(', ')}
-기간: ${trip.durationDays || 5}일간
-요청 테마: ${userPrompt || trip.style || '랜드마크 & 미식'}
+    function parseJsonBlock(text, opening, closing) {
+      if (String(text || '').length > 500000) throw new Error('INVALID_OUTPUT');
+      const start = String(text || '').indexOf(opening);
+      const end = String(text || '').lastIndexOf(closing);
+      if (start < 0 || end < start) throw new Error('INVALID_OUTPUT');
+      return JSON.parse(String(text).slice(start, end + 1));
+    }
 
-위 여행의 일자별 30분 단위 추천 일정을 JSON으로 생성하세요.
-출력 형식은 반드시 아래 JSON 규격만 출력하세요:
-[
-  {
-    "dayNum": 1,
-    "title": "Day 1 제목",
-    "city": "도시명",
-    "spots": [
-      { "time": "09:00", "cat": "tour", "title": "방문 장소", "desc": "상세 설명", "tip": "꿀팁", "cost": "예상비용" },
-      { "time": "12:30", "cat": "food", "title": "식당", "desc": "대표 메뉴", "tip": "예약팁", "cost": "비용" }
-    ]
-  }
-]`;
+    async function generateAiDraftPayload(job, { signal }) {
+      if (job.kind === 'itinerary') {
+        const raw = await callGeminiApiWithFallback(job.input.prompt, { signal });
+        return { days: parseJsonBlock(raw, '[', ']'), source: 'gemini' };
+      }
+      if (job.kind === 'journal') {
+        const text = await callGeminiApiWithFallback(job.input.prompt, { signal });
+        return { text: String(text || '').trim(), source: 'gemini' };
+      }
+      if (job.kind === 'receipt') {
+        const raw = await callGeminiVisionApiWithFallback(
+          job.input.prompt, job.input.base64, job.input.mimeType, { signal }
+        );
+        return { receipt: parseJsonBlock(raw, '{', '}'), source: 'gemini-vision' };
+      }
+      throw new Error('UNSUPPORTED_AI_JOB');
+    }
 
-      try {
-        const resultText = await callGeminiApiWithFallback(systemPrompt);
-        const jsonMatch = resultText.match(/\[[\s\S]*\]/);
-        if (jsonMatch) {
-          const parsedDays = JSON.parse(jsonMatch[0]);
-          parsedDays.forEach(d => {
-            (d.spots || []).forEach(s => s.isDraft = true);
+    function validateAiDraftPayload(payload, job) {
+      if (job.kind === 'journal') return typeof payload?.text === 'string' && payload.text.length > 0 && payload.text.length <= 20000;
+      if (job.kind === 'receipt') {
+        const receipt = payload?.receipt;
+        return receipt && typeof receipt.merchant === 'string' && receipt.merchant.trim() && receipt.merchant.length <= 200 &&
+          Number.isFinite(Number(receipt.amount)) && Number(receipt.amount) > 0 && Number(receipt.amount) <= 1000000000000 &&
+          ['USD', 'KRW', 'ARS', 'PEN', 'BRL', 'EUR'].includes(receipt.currency) &&
+          ['food', 'flight', 'lodging', 'tour', 'shopping', 'etc'].includes(receipt.category) &&
+          (!receipt.date || /^\d{4}-\d{2}-\d{2}$/.test(receipt.date));
+      }
+      if (job.kind === 'itinerary') {
+        if (!Array.isArray(payload?.days) || payload.days.length < 1 || payload.days.length > 60) return false;
+        const dayNumbers = new Set();
+        return payload.days.every(day => {
+          const dayNum = Number(day.dayNum);
+          if (!Number.isInteger(dayNum) || dayNum < 1 || dayNum > 365 || dayNumbers.has(dayNum) ||
+              !Array.isArray(day.spots) || day.spots.length > 48) return false;
+          dayNumbers.add(dayNum);
+          return day.spots.every(spot => {
+            const timeMatch = /^(\d{2}):(\d{2})$/.exec(spot.time || '');
+            return typeof spot.title === 'string' && spot.title.trim() && spot.title.length <= 200 &&
+              timeMatch && Number(timeMatch[1]) < 24 && Number(timeMatch[2]) < 60;
           });
-          trip.days = parsedDays;
-          saveTrips();
-          closeModal('modal-ai-trip', true);
-          renderTimelineTab();
-          renderDynamicIllustratedRouteMap(trip);
-          alert('AI 추천 일정이 성공적으로 생성되었습니다!');
+        });
+      }
+      return false;
+    }
+
+    function plainAiValue(value, maxLength = 1000) {
+      return String(value ?? '').replace(/[<>]/g, '').slice(0, maxLength);
+    }
+
+    function mergeItineraryProposal(trip, proposedDays) {
+      if (!Array.isArray(trip.days)) trip.days = [];
+      proposedDays.forEach((proposed, proposalIndex) => {
+        const dayNum = Number(proposed.dayNum) || proposalIndex + 1;
+        let target = trip.days.find(day => Number(day.dayNum) === dayNum);
+        if (!target) {
+          target = {
+            dayNum,
+            title: plainAiValue(proposed.title || `Day ${dayNum} 추천 일정`, 200),
+            city: plainAiValue(proposed.city, 100),
+            date: plainAiValue(proposed.date, 40),
+            spots: []
+          };
+          trip.days.push(target);
         }
-      } catch (err) {
-        if (err.code === 'GEMINI_KEY_MISSING' || err.message === 'GEMINI_KEY_MISSING') {
-          alert('설정(⚙️) 탭에서 개인 Gemini API 키를 먼저 입력해 주세요.');
-          openSettingsModal();
-        } else {
-          // Fallback offline mock generator
-          generateOfflineMockItinerary(trip);
-          closeModal('modal-ai-trip', true);
-          renderTimelineTab();
-          renderDynamicIllustratedRouteMap(trip);
-          alert('오프라인 스마트 지식 베이스를 바탕으로 30분 단위 추천 일정을 주입하였습니다.');
+        if (!Array.isArray(target.spots)) target.spots = [];
+        (proposed.spots || []).forEach((spot, spotIndex) => {
+          const duplicate = target.spots.some(existing =>
+            existing.time === spot.time && String(existing.title).trim() === String(spot.title).trim()
+          );
+          if (!duplicate) {
+            const cat = ['tour', 'food', 'flight', 'lodging', 'shopping', 'etc'].includes(spot.cat) ? spot.cat : 'etc';
+            target.spots.push({
+              id: `spot_ai_${Date.now()}_${dayNum}_${spotIndex}`,
+              time: spot.time,
+              cat,
+              typeIcon: getCategoryIcon(cat),
+              title: plainAiValue(spot.title, 200),
+              desc: plainAiValue(spot.desc, 1000),
+              tip: plainAiValue(spot.tip, 500),
+              cost: plainAiValue(spot.cost, 100),
+              isDraft: false,
+              aiGenerated: true
+            });
+          }
+        });
+        target.spots.sort((a, b) => String(a.time || '').localeCompare(String(b.time || '')));
+      });
+      trip.days.sort((a, b) => Number(a.dayNum || 0) - Number(b.dayNum || 0));
+    }
+
+    async function applyAiDraftPayload(job) {
+      if (job.kind === 'receipt') {
+        const trip = State.trips.find(item => item.id === job.tripId);
+        if (!trip || trip.id !== State.activeTripId || trip.revision !== job.baseRevision) return 'conflict';
+        const receipt = job.draft.receipt;
+        document.getElementById('exp-form-title').value = receipt.merchant;
+        document.getElementById('exp-form-curr').value = receipt.currency;
+        document.getElementById('exp-form-amount').value = receipt.amount;
+        document.getElementById('exp-form-cat').value = receipt.category;
+        if (receipt.date) document.getElementById('exp-form-date').value = receipt.date;
+        return 'applied';
+      }
+
+      const result = TripRepository.applyDraft(State.trips, {
+        tripId: job.tripId,
+        baseRevision: job.baseRevision,
+        jobId: job.id,
+        mutate: (trip) => {
+          if (job.kind === 'itinerary') mergeItineraryProposal(trip, job.draft.days);
+          if (job.kind === 'journal') {
+            if (!trip.journals) trip.journals = {};
+            const current = trip.journals[job.input.dayIndex] || { text: '', photos: [] };
+            current.originalText = job.input.sourceText;
+            current.text = job.draft.text;
+            current.aiDraftAcceptedAt = new Date().toISOString();
+            trip.journals[job.input.dayIndex] = current;
+          }
         }
-      } finally {
-        loader.classList.add('hidden');
+      });
+      if (result.status === 'applied' && result.trips) State.trips = result.trips;
+      return result.status;
+    }
+
+    function describeItinerary(days) {
+      const count = (days || []).reduce((sum, day) => sum + (day.spots || []).length, 0);
+      return `${(days || []).length}일 · ${count}개 일정\n` + (days || []).slice(0, 8).map(day =>
+        `Day ${day.dayNum}: ${(day.spots || []).slice(0, 3).map(spot => `${spot.time} ${spot.title}`).join(' / ')}`
+      ).join('\n');
+    }
+
+    async function renderAiDraftReview(jobId) {
+      const flow = await getAiOrchestrator();
+      const job = flow.get(jobId);
+      const trip = State.trips.find(item => item.id === job.tripId);
+      const title = document.getElementById('ai-draft-review-title');
+      const subtitle = document.getElementById('ai-draft-review-subtitle');
+      const original = document.getElementById('ai-draft-review-original');
+      const proposal = document.getElementById('ai-draft-review-proposal');
+      const status = document.getElementById('ai-draft-review-status');
+      State.aiDraftKind = job.kind;
+      title.textContent = job.kind === 'itinerary' ? 'AI 일정 제안 검토' : job.kind === 'journal' ? 'AI 여행기 초안 검토' : '영수증 판독 결과 검토';
+      subtitle.textContent = `${trip?.title || '여행'} · 승인 전에는 원본이 바뀌지 않습니다.`;
+      if (job.kind === 'itinerary') {
+        original.textContent = describeItinerary(trip?.days || []);
+        proposal.textContent = describeItinerary(job.draft.days);
+        status.textContent = '기존 일정은 유지하고, 같은 시간·제목이 아닌 제안만 추가합니다.';
+      } else if (job.kind === 'journal') {
+        original.textContent = job.input.sourceText;
+        proposal.textContent = job.draft.text;
+        status.textContent = '원문은 originalText로 보존하고 승인한 문장만 여행기에 적용합니다.';
+      } else {
+        original.textContent = '현재 입력 폼은 변경되지 않았습니다.';
+        const r = job.draft.receipt;
+        proposal.textContent = `${r.merchant}\n${r.amount} ${r.currency}\n${r.category}${r.date ? `\n${r.date}` : ''}`;
+        status.textContent = '판독값을 확인한 뒤 적용하세요. 적용 후에도 지출 저장 전 수정할 수 있습니다.';
+      }
+      document.getElementById('btn-apply-ai-draft').disabled = false;
+      openModal('modal-ai-draft-review');
+    }
+
+    async function startAiDraftJob(request) {
+      const flow = await getAiOrchestrator();
+      const existing = flow.enqueue(request);
+      State.activeAiJobId = existing.id;
+      const result = await flow.run(existing.id);
+      if (result.state === 'awaiting_review') {
+        await renderAiDraftReview(result.id);
+      } else if (result.state === 'waiting_network') {
+        showToast('오프라인 상태입니다. 기록은 유지되며 연결 후 다시 생성할 수 있습니다.', 4500);
+      } else if (result.state === 'failed') {
+        const messages = {
+          GEMINI_KEY_MISSING: 'Gemini API 키를 먼저 등록해 주세요.',
+          INVALID_API_KEY: '등록한 Gemini API 키를 확인해 주세요.',
+          QUOTA_EXCEEDED: 'AI 사용 한도에 도달했습니다. 잠시 후 다시 시도해 주세요.',
+          INVALID_OUTPUT: 'AI 응답 형식을 확인할 수 없어 원본에 적용하지 않았습니다.',
+          TIMEOUT: 'AI 응답 시간이 초과됐습니다. 원본은 그대로 보관되어 있습니다.'
+        };
+        showToast(`⚠️ ${messages[result.errorCode] || 'AI 초안을 만들지 못했습니다. 원본은 그대로 보관되어 있습니다.'}`, 5000);
+      } else if (result.state === 'cancelled') {
+        flow.forget(result.id);
+      }
+      return result;
+    }
+
+    async function approveActiveAiDraft() {
+      if (!State.activeAiJobId) return;
+      const button = document.getElementById('btn-apply-ai-draft');
+      button.disabled = true;
+      const flow = await getAiOrchestrator();
+      const result = await flow.approve(State.activeAiJobId);
+      if (result.state === 'applied') {
+        flow.forget(State.activeAiJobId);
+        State.activeAiJobId = null;
+        closeModal('modal-ai-draft-review', true);
+        if (result.kind === 'receipt') openModal('modal-expense');
+        else renderActiveTripWorkspace();
+        showToast(result.kind === 'itinerary' ? '✅ 기존 일정을 보존하고 AI 제안을 추가했습니다.' :
+          result.kind === 'journal' ? '✅ 원문을 보존하고 여행기 초안을 적용했습니다.' : '✅ 판독값을 입력 폼에 적용했습니다.');
+      } else if (result.state === 'conflict') {
+        document.getElementById('ai-draft-review-status').textContent = '초안 생성 후 원본이 변경되었습니다. 현재 내용을 보호하기 위해 적용을 중단했습니다. 새로 생성해 주세요.';
+        showToast('⚠️ 원본 변경이 감지되어 AI 초안을 적용하지 않았습니다.', 4500);
+        flow.forget(State.activeAiJobId);
+        State.activeAiJobId = null;
+      } else {
+        button.disabled = false;
+        showToast('⚠️ 저장하지 못했습니다. 초안은 검토 화면에 남아 있습니다.', 4500);
       }
     }
 
-    function generateOfflineMockItinerary(trip) {
-      (trip.days || []).forEach((d) => {
-        d.spots = [
-          { time: "09:00", cat: "tour", typeIcon: "🏛️", title: `${d.city || '현지'} 핵심 랜드마크 오픈런`, desc: "오전 인파가 적은 골든아워에 방문", tip: "편안한 운동화 착용", cost: "현지 입장료", isDraft: true },
-          { time: "12:30", cat: "food", typeIcon: "🍽️", title: "현지 정통 대표 맛집 점심 식사", desc: "구글 평점 4.5 이상 검증 식당", tip: "창가 좌석 선점", cost: "약 30,000원", isDraft: true },
-          { time: "15:00", cat: "shopping", typeIcon: "🛍️", title: "전통 거리 산책 및 로컬 기념품 쇼핑", desc: "특산물 및 마켓 투어", tip: "소매치기 주의", cost: "자유 쇼핑", isDraft: true },
-          { time: "18:30", cat: "tour", typeIcon: "🌅", title: "선셋 골든아워 조망 및 디너", desc: "노을 명소 감상", tip: "일몰 30분 전 도착", cost: "약 45,000원", isDraft: true }
-        ];
-      });
-      saveTrips();
-      renderDynamicIllustratedRouteMap(trip);
+    async function rejectActiveAiDraft() {
+      if (State.activeAiJobId) {
+        const flow = await getAiOrchestrator();
+        flow.reject(State.activeAiJobId);
+        flow.forget(State.activeAiJobId);
+      }
+      State.activeAiJobId = null;
+      closeModal('modal-ai-draft-review', true);
+      showToast('AI 초안을 버렸습니다. 원본은 변경되지 않았습니다.');
+    }
+
+    async function cancelActiveAiJob() {
+      if (State.activeAiJobId) {
+        const flow = await getAiOrchestrator();
+        flow.cancel(State.activeAiJobId);
+        State.activeAiJobId = null;
+      }
+    }
+
+    async function generateAiItinerary() {
+      const trip = getActiveTrip();
+      if (!trip) return;
+      const userPrompt = document.getElementById('ai-trip-prompt').value.trim();
+      const loader = document.getElementById('ai-trip-loading');
+      const button = document.getElementById('btn-generate-ai-itinerary');
+      if (button?.disabled) return;
+      if (button) button.disabled = true;
+      loader.classList.remove('hidden');
+      const prompt = `당신은 여행 일정 편집자입니다. 확정 사실을 지어내지 말고 추천 후보만 만드세요.
+여행지: ${(trip.countries || []).join(', ')}
+기간: ${trip.durationDays || 5}일
+테마: ${userPrompt || trip.style || '랜드마크 & 미식'}
+JSON 배열만 출력하세요. 각 day는 dayNum, title, city, spots를 포함하고 각 spot은 time(HH:MM), cat, title, desc, tip, cost를 포함해야 합니다.`;
+      try {
+        const id = `itinerary:${trip.id}:${trip.revision}:${Date.now()}`;
+        const result = await startAiDraftJob({ id, tripId: trip.id, targetId: 'itinerary',
+          kind: 'itinerary', baseRevision: trip.revision || 0, input: { prompt } });
+        if (result.state === 'awaiting_review') closeModal('modal-ai-trip', true);
+      } catch (error) {
+        console.warn('[AI Draft] itinerary failed:', error?.message);
+        showToast('⚠️ 일정 초안을 시작하지 못했습니다. 잠시 후 다시 시도해 주세요.');
+      } finally {
+        loader.classList.add('hidden');
+        if (button) button.disabled = false;
+      }
     }
 
     async function sendAiChatMessage() {
@@ -6950,18 +7235,37 @@
     }
 
     async function generateAiJournalEssay() {
-      const trip = getActiveTrip();
-      const currentText = document.getElementById('journal-text-input').value.trim();
+      let trip = getActiveTrip();
+      const input = document.getElementById('journal-text-input');
+      const currentText = input.value.trim();
       if (!currentText) {
         alert('일기장에 몇 가지 단어나 문장을 먼저 적어주세요.');
         return;
       }
-
+      const dayIndex = State.activeJournalDay;
+      if (!trip.journals) trip.journals = {};
+      if (!trip.journals[dayIndex]) trip.journals[dayIndex] = { text: '', photos: [] };
+      trip.journals[dayIndex].text = currentText;
+      if (!saveTrips()) {
+        showToast('⚠️ 원문을 먼저 저장하지 못해 AI 윤문을 시작하지 않았습니다.', 4500);
+        return;
+      }
+      trip = State.trips.find(item => item.id === trip.id);
+      const prompt = `당신은 여행 에세이 편집자입니다. 제공된 원문에 없는 방문 장소, 인물, 사건, 감정, 금액을 새로 만들지 마세요.
+원문의 사실과 말투를 보존하면서 자연스러운 1인칭 한국어 여행기 1~2문단으로 다듬으세요.
+원문: ${currentText}`;
       try {
-        const essay = await callGeminiApiWithFallback(`당신은 감성 여행 에세이 작가입니다. 여행자가 남긴 메모를 바탕으로 아름다운 1인칭 여행 에세이(1~2문단)로 윤문하세요: "${currentText}"`);
-        document.getElementById('journal-text-input').value = essay;
-      } catch(e) {
-        alert('AI 윤문 서비스가 일시적으로 오프라인입니다.');
+        await startAiDraftJob({
+          id: `journal:${trip.id}:${dayIndex}:${trip.revision}:${Date.now()}`,
+          tripId: trip.id,
+          targetId: `journal-day-${dayIndex}`,
+          kind: 'journal',
+          baseRevision: trip.revision || 0,
+          input: { prompt, dayIndex, sourceText: currentText }
+        });
+      } catch (error) {
+        console.warn('[AI Draft] journal failed:', error?.message);
+        showToast('⚠️ 여행기 초안을 시작하지 못했습니다. 저장된 원문은 그대로입니다.', 4500);
       }
     }
 
@@ -7569,7 +7873,7 @@
       if (input) input.click();
     }
 
-    async function callGeminiVisionApiWithFallback(prompt, base64Data, mimeType) {
+    async function callGeminiVisionApiWithFallback(prompt, base64Data, mimeType, options = {}) {
       const rawKey = State.geminiKey || localStorage.getItem('st_gemini_key');
       const key = cleanApiKey(rawKey);
       if (!key) {
@@ -7580,11 +7884,19 @@
 
       for (const model of AI_MODELS) {
         let timeoutId = null;
+        let upstreamAbort = null;
         try {
+          if (options.signal?.aborted) {
+            const cancelled = new Error('CANCELLED');
+            cancelled.code = 'CANCELLED';
+            throw cancelled;
+          }
           const controller = new AbortController();
+          upstreamAbort = () => controller.abort(options.signal.reason);
+          options.signal?.addEventListener('abort', upstreamAbort, { once: true });
           // Sulsul-Diary 실록 4.3.9 교훈: 멀티모달 비전 OCR 12초 타임아웃
           timeoutId = setTimeout(() => controller.abort(), 12000);
-          const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${key}`;
+          const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${encodeURIComponent(key)}`;
           const payload = {
             contents: [
               {
@@ -7608,6 +7920,7 @@
             signal: controller.signal
           });
           clearTimeout(timeoutId);
+          options.signal?.removeEventListener('abort', upstreamAbort);
 
           if (res.ok) {
             const data = await res.json();
@@ -7617,21 +7930,12 @@
           }
         } catch (e) {
           if (timeoutId) clearTimeout(timeoutId);
+          if (upstreamAbort) options.signal?.removeEventListener('abort', upstreamAbort);
+          if (options.signal?.aborted || e.code === 'CANCELLED') throw e;
           console.warn(`[Vision AI] Model ${model} failed or timed out, attempting next fallback:`, e.name || e);
         }
       }
       throw new Error('ALL_VISION_MODELS_FAILED');
-    }
-
-    function mockReceiptOcr() {
-      const mocks = [
-        { merchant: "Don Julio Parrilla (부에노스아이레스 아사도)", currency: "ARS", amount: 89000, category: "food", notes: "꽃등심 아사도 2인 + 말벡 와인 1병 (MEP 환율 적용)" },
-        { merchant: "Cevichería La Mar (리마 원조 세비체)", currency: "PEN", amount: 115, category: "food", notes: "클래식 세비체 & 피스코 사워 2잔" },
-        { merchant: "PeruRail Vistadome (마추픽추 열차)", currency: "USD", amount: 185, category: "flight", notes: "오얀타이탐보-아구아스칼리엔테스 왕복" },
-        { merchant: "San Blas Boutique Hotel Cusco", currency: "USD", amount: 95, category: "lodging", notes: "스탠다드 더블룸 1박 (조식 포함)" },
-        { merchant: "Fogo de Chão (리우데자네이루 슈하스코)", currency: "BRL", amount: 260, category: "food", notes: "프리미엄 슈하스코 뷔페 & 카이피리냐" }
-      ];
-      return mocks[Math.floor(Math.random() * mocks.length)];
     }
 
     function handleReceiptScan(event) {
@@ -7673,37 +7977,25 @@
   "currency": "USD 또는 KRW 또는 ARS 또는 PEN 또는 BRL 또는 EUR",
   "amount": 숫자만 (소수점 포함 가능, 쉼표 제외),
   "category": "food" (식비) 또는 "flight" (항공/교통) 또는 "lodging" (숙박) 또는 "tour" (관광/투어) 또는 "shopping" (쇼핑) 또는 "etc" (기타),
-  "date": "YYYY-MM-DD" (영수증에 명시된 일자, 없으면 오늘 일자)
+  "date": "YYYY-MM-DD" (영수증에 명시된 경우만, 없으면 빈 문자열)
 }
 반드시 JSON 문자열 외에 아무런 마크다운이나 텍스트를 출력하지 마세요.`;
-
-          let resultData = null;
           try {
-            const rawText = await callGeminiVisionApiWithFallback(visionPrompt, compressedBase64, 'image/jpeg');
-            const match = rawText.match(/\{[\s\S]*\}/);
-            if (match) {
-              resultData = JSON.parse(match[0]);
-            }
+            const trip = getActiveTrip();
+            if (!trip) throw new Error('TRIP_NOT_FOUND');
+            await startAiDraftJob({
+              id: `receipt:${trip.id}:${trip.revision}:${Date.now()}`,
+              tripId: trip.id,
+              targetId: 'expense-form',
+              kind: 'receipt',
+              baseRevision: trip.revision || 0,
+              input: { prompt: visionPrompt, base64: compressedBase64, mimeType: 'image/jpeg' }
+            });
           } catch (err) {
-            console.warn('[Vision AI] Fallback to mock OCR:', err.message);
-            resultData = mockReceiptOcr();
-            if (err.message === 'GEMINI_KEY_MISSING') {
-              alert('💡 Gemini API 키 미등록: 남미 스마트 모의 영수증으로 자동 입력되었습니다. [설정] 탭에서 개인 API 키를 등록하시면 실시간 AI 분석이 가능합니다.');
-            } else {
-              alert('💡 네트워크 상태 또는 AI 지연으로 남미 스마트 모의 영수증 데이터로 자동 채움되었습니다.');
-            }
+            console.warn('[Vision AI] OCR draft failed:', err?.message);
+            showToast('⚠️ 영수증을 읽지 못했습니다. 입력값은 바꾸지 않았으며 직접 입력할 수 있습니다.', 5000);
           } finally {
             if (loader) loader.classList.add('hidden');
-          }
-
-          if (resultData) {
-            document.getElementById('exp-form-title').value = resultData.merchant || '현지 지출 항목';
-            document.getElementById('exp-form-curr').value = resultData.currency || 'KRW';
-            document.getElementById('exp-form-amount').value = resultData.amount || '';
-            document.getElementById('exp-form-cat').value = resultData.category || 'food';
-            if (resultData.date) {
-              document.getElementById('exp-form-date').value = resultData.date;
-            }
           }
         };
         img.src = e.target.result;
@@ -7896,7 +8188,7 @@
                     <span>${j.mood || '🤩 감동'}</span>
                   </div>
                 </div>
-                ${j.text ? `<p class="text-xs text-slate-300 leading-relaxed whitespace-pre-wrap">${j.text}</p>` : ''}
+                ${j.text ? `<p class="text-xs text-slate-300 leading-relaxed whitespace-pre-wrap">${escapeHtml(j.text)}</p>` : ''}
                 ${photosHtml ? `<div class="grid grid-cols-2 sm:grid-cols-3 gap-3 pt-2">${photosHtml}</div>` : ''}
               </div>
             `;
@@ -8021,6 +8313,7 @@
 
     // 글로벌 네임스페이스 노출
     window.SulsulTravel = {
+      ...window.SulsulTravel,
       version: APP_VER,
       State: State,
       initApp: initApp,
@@ -8032,6 +8325,9 @@
       simulateGpsLocation: simulateGpsLocation,
       triggerReceiptScan: triggerReceiptScan,
       handleReceiptScan: handleReceiptScan,
+      approveActiveAiDraft: approveActiveAiDraft,
+      rejectActiveAiDraft: rejectActiveAiDraft,
+      cancelActiveAiJob: cancelActiveAiJob,
       openPdfReportModal: openPdfReportModal,
       openTripPdfReport: openTripPdfReport,
       triggerPrintReport: triggerPrintReport,

@@ -152,6 +152,9 @@ if (-not (Test-Path $edgePath)) { $edgePath = "C:\Program Files\Microsoft\Edge\A
 
 if (Test-Path $edgePath) {
     $tempHarness = Join-Path $baseDir "temp_verify_harness.html"
+    $tempRoot = [System.IO.Path]::GetFullPath([System.IO.Path]::GetTempPath())
+    $tempProfile = Join-Path $tempRoot ("sulsul-edge-verify-" + [System.Guid]::NewGuid().ToString("N"))
+    [void](New-Item -ItemType Directory -Path $tempProfile -Force)
     $errorTrap = '<script>window.__errors = []; window.onerror = function(m, u, l){ window.__errors.push(m + "@" + l); };</script>'
     $checkSnippet = '<script>window.addEventListener("DOMContentLoaded", function(){ var d = document.createElement("div"); d.id = "V8_GATE_CHECK"; d.setAttribute("data-sulsul", typeof window.SulsulTravel !== "undefined"); d.setAttribute("data-ver", window.SulsulTravel ? window.SulsulTravel.version : ""); d.setAttribute("data-errs", (window.__errors||[]).length); document.body.appendChild(d); });</script>'
 
@@ -161,33 +164,154 @@ if (Test-Path $edgePath) {
 
     try {
         $fileUri = [System.Uri]::new($tempHarness).AbsoluteUri
+        $portProbe = [System.Net.Sockets.TcpListener]::new([System.Net.IPAddress]::Loopback, 0)
+        $portProbe.Start()
+        $debugPort = ([System.Net.IPEndPoint]$portProbe.LocalEndpoint).Port
+        $portProbe.Stop()
+
         $psi = New-Object System.Diagnostics.ProcessStartInfo
         $psi.FileName = $edgePath
-        $psi.Arguments = "--headless=new --disable-gpu --allow-file-access-from-files --dump-dom `"$fileUri`""
+        $psi.Arguments = "--headless=new --disable-gpu --no-first-run --disable-default-apps --disable-extensions --allow-file-access-from-files --remote-debugging-port=$debugPort --remote-allow-origins=* --user-data-dir=`"$tempProfile`" `"$fileUri`""
         $psi.UseShellExecute = $false
-        $psi.RedirectStandardOutput = $true
-        $psi.RedirectStandardError = $true
         $psi.CreateNoWindow = $true
 
         $proc = [System.Diagnostics.Process]::Start($psi)
-        $domOutput = $proc.StandardOutput.ReadToEnd()
-        [void]$proc.WaitForExit(10000)
+        $pageTarget = $null
+        $browserInfo = $null
+        $discoveryDeadline = [DateTime]::UtcNow.AddSeconds(12)
+        do {
+            try {
+                $targets = Invoke-RestMethod -Uri "http://127.0.0.1:$debugPort/json/list" -TimeoutSec 2
+                $browserInfo = Invoke-RestMethod -Uri "http://127.0.0.1:$debugPort/json/version" -TimeoutSec 2
+                $pageTarget = $null
+                foreach ($candidate in $targets) {
+                    if ($candidate.type -eq "page" -and $candidate.url -eq $fileUri) {
+                        $pageTarget = $candidate
+                        break
+                    }
+                }
+                if (-not $pageTarget) {
+                    foreach ($candidate in $targets) {
+                        if ($candidate.type -eq "page") {
+                            $pageTarget = $candidate
+                            break
+                        }
+                    }
+                }
+            } catch {
+                $pageTarget = $null
+            }
+            if (-not $pageTarget) { Start-Sleep -Milliseconds 250 }
+        } while (-not $pageTarget -and [DateTime]::UtcNow -lt $discoveryDeadline)
 
-        $gateCheckMatch = [regex]::Match($domOutput, 'id="V8_GATE_CHECK"[^>]*data-sulsul="([^"]+)"[^>]*data-ver="([^"]+)"[^>]*data-errs="([^"]+)"')
-        if ($gateCheckMatch.Success) {
-            $sulsulReady = ($gateCheckMatch.Groups[1].Value -eq "true")
-            $v8Ver = $gateCheckMatch.Groups[2].Value
-            $errCount = [int]$gateCheckMatch.Groups[3].Value
+        if (-not $pageTarget -or -not $pageTarget.webSocketDebuggerUrl) {
+            throw "Edge DevTools endpoint did not expose the verification page within 12 seconds."
+        }
+        $pageSocketUrl = "$($pageTarget.webSocketDebuggerUrl)"
 
-            $v8Pass = $sulsulReady -and ($errCount -eq 0) -and ($v8Ver -eq $appVer)
-            Report-Gate "Headless Edge V8 Engine Parsing & Zero Runtime Errors" $v8Pass "SulsulTravel: $sulsulReady | V8 Ver: v$v8Ver | Runtime Errors: $errCount"
-        } else {
-            Report-Gate "Headless Edge V8 Engine Parsing" $false "V8 Gate check node was not rendered within timeout"
+        function Invoke-CdpCommand {
+            param(
+                [Parameter(Mandatory=$true)][string]$WebSocketUrl,
+                [Parameter(Mandatory=$true)][string]$Method,
+                [hashtable]$Params = @{}
+            )
+
+            $socket = [System.Net.WebSockets.ClientWebSocket]::new()
+            # Do not route loopback CDP traffic through a corporate/system proxy.
+            $socket.Options.Proxy = [System.Net.GlobalProxySelection]::GetEmptyWebProxy()
+            $timeout = [System.Threading.CancellationTokenSource]::new()
+            $timeout.CancelAfter(8000)
+            try {
+                $socketUri = [System.Uri]::new($WebSocketUrl, [System.UriKind]::Absolute)
+                if (-not $socketUri.IsAbsoluteUri) { throw "DevTools returned an invalid websocket URL: $WebSocketUrl" }
+                $socket.ConnectAsync($socketUri, $timeout.Token).GetAwaiter().GetResult()
+                $request = @{ id = 1; method = $Method; params = $Params }
+                $requestBytes = [System.Text.Encoding]::UTF8.GetBytes(($request | ConvertTo-Json -Compress -Depth 12))
+                $requestSegment = [System.ArraySegment[byte]]::new($requestBytes)
+                $socket.SendAsync($requestSegment, [System.Net.WebSockets.WebSocketMessageType]::Text, $true, $timeout.Token).GetAwaiter().GetResult()
+
+                while ($true) {
+                    $stream = [System.IO.MemoryStream]::new()
+                    do {
+                        $buffer = [byte[]]::new(65536)
+                        $receiveSegment = [System.ArraySegment[byte]]::new($buffer)
+                        $received = $socket.ReceiveAsync($receiveSegment, $timeout.Token).GetAwaiter().GetResult()
+                        if ($received.MessageType -eq [System.Net.WebSockets.WebSocketMessageType]::Close) {
+                            throw "DevTools websocket closed before returning a response."
+                        }
+                        $stream.Write($buffer, 0, $received.Count)
+                    } while (-not $received.EndOfMessage)
+
+                    $message = [System.Text.Encoding]::UTF8.GetString($stream.ToArray()) | ConvertFrom-Json
+                    $stream.Dispose()
+                    if ($message.id -eq 1) { return $message }
+                }
+            } finally {
+                $socket.Dispose()
+                $timeout.Dispose()
+            }
+        }
+
+        $evaluation = @'
+new Promise(function(resolve) {
+  function readGate() {
+    setTimeout(function() {
+      var node = document.getElementById("V8_GATE_CHECK");
+      resolve(JSON.stringify({
+        ready: document.readyState,
+        sulsul: !!(node && node.getAttribute("data-sulsul") === "true"),
+        ver: node ? node.getAttribute("data-ver") : "",
+        errors: node ? Number(node.getAttribute("data-errs")) : -1
+      }));
+    }, 750);
+  }
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", readGate, { once: true });
+  } else {
+    readGate();
+  }
+})
+'@
+        $cdpResponse = Invoke-CdpCommand -WebSocketUrl $pageSocketUrl -Method "Runtime.evaluate" -Params @{
+            expression = $evaluation
+            awaitPromise = $true
+            returnByValue = $true
+        }
+        if ($cdpResponse.result.exceptionDetails) {
+            throw "V8 evaluation failed: $($cdpResponse.result.exceptionDetails.text)"
+        }
+
+        $gateResult = $cdpResponse.result.result.value | ConvertFrom-Json
+        $sulsulReady = [bool]$gateResult.sulsul
+        $v8Ver = [string]$gateResult.ver
+        $errCount = [int]$gateResult.errors
+        # External CDN assets can leave a valid app at "interactive" while they
+        # finish. The injected gate itself proves DOMContentLoaded has fired.
+        $v8Pass = ($gateResult.ready -ne "loading") -and $sulsulReady -and ($errCount -eq 0) -and ($v8Ver -eq $appVer)
+        Report-Gate "Headless Edge V8 Engine Parsing & Zero Runtime Errors" $v8Pass "Ready: $($gateResult.ready) | SulsulTravel: $sulsulReady | V8 Ver: v$v8Ver | Runtime Errors: $errCount"
+
+        if ($browserInfo.webSocketDebuggerUrl) {
+            $browserSocketUrl = "$($browserInfo.webSocketDebuggerUrl)"
+            try { [void](Invoke-CdpCommand -WebSocketUrl $browserSocketUrl -Method "Browser.close") } catch {}
         }
     } catch {
         Report-Gate "Headless Edge V8 Execution" $false $_.Exception.Message
     } finally {
+        if ($proc -and -not $proc.HasExited) {
+            try { $proc.Kill($true) } catch { try { $proc.Kill() } catch {} }
+            try { [void]$proc.WaitForExit(3000) } catch {}
+        }
         if (Test-Path $tempHarness) { Remove-Item $tempHarness -Force }
+        if (Test-Path $tempProfile) {
+            $resolvedProfile = [System.IO.Path]::GetFullPath($tempProfile)
+            $profileLeaf = Split-Path $resolvedProfile -Leaf
+            if ($resolvedProfile.StartsWith($tempRoot, [System.StringComparison]::OrdinalIgnoreCase) -and $profileLeaf.StartsWith("sulsul-edge-verify-")) {
+                for ($cleanupAttempt = 0; $cleanupAttempt -lt 12 -and (Test-Path -LiteralPath $resolvedProfile); $cleanupAttempt++) {
+                    Remove-Item -LiteralPath $resolvedProfile -Recurse -Force -ErrorAction SilentlyContinue
+                    if (Test-Path -LiteralPath $resolvedProfile) { Start-Sleep -Milliseconds 250 }
+                }
+            }
+        }
     }
 } else {
     Write-Host "  [ SKIP ] Microsoft Edge not found at standard path, skipped V8 headless execution." -ForegroundColor DarkYellow

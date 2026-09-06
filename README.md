@@ -1,5 +1,7 @@
 # ✈️ 술술트래블 (Sulsul-Travel) - AI 여행 어시스턴트 & 데일리 다이어리
 
+> **v1.2.4 확장 개발 (2026-09-07)**: [아키텍처](docs/architecture-vnext.md) · [AI 오케스트레이션](docs/orchestration.md) · [UI/UX 명세](docs/ux-blueprint.md) · [개발 모델/백로그](docs/development-model.md). 일정·여행기·영수증 AI는 초안 검토 후 적용하도록 앱에 연결되었습니다. 계약 테스트: `node --test tests/*.test.mjs`. ‘오늘/빠른 기록’ 중심의 새 정보 구조와 IndexedDB 이전은 후속입니다. 아래 초기 소개의 완전 오프라인·고정 모델·환율 정확성 표현은 보증이 아니며 최신 설계의 기능 경계를 참고하세요.
+
 [![PWA Ready](https://img.shields.io/badge/PWA-Ready-22c55e.svg?style=flat-square&logo=pwa)](https://github.com/ysparkbc37D/Sulsul-Travel)
 [![Zero Backend](https://img.shields.io/badge/Zero--Backend-100%25%20Offline--First-3b82f6.svg?style=flat-square)](https://github.com/ysparkbc37D/Sulsul-Travel)
 [![Gemini AI](https://img.shields.io/badge/AI-Gemini%20Multi--Model%20Fallback-f59e0b.svg?style=flat-square&logo=google)](https://github.com/ysparkbc37D/Sulsul-Travel)
