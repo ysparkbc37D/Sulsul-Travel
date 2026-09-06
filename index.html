@@ -14,7 +14,7 @@
   </script>
 
   <!-- PWA Meta & Icons -->
-  <link rel="manifest" href="manifest.webmanifest?v=1.1.5">
+  <link rel="manifest" href="manifest.webmanifest?v=1.1.6">
   <meta name="theme-color" content="#f5f5f7">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
@@ -517,7 +517,7 @@
             <h1 class="font-serif-brand text-base sm:text-xl font-bold tracking-tight text-[#1c1917] dark:text-[#ededed] whitespace-nowrap">
               Sulsul Travel
             </h1>
-            <span id="app-ver-badge" class="px-1.5 py-0.5 rounded-md theme-card-subtle text-[#a2601b] dark:text-[#d4af37] text-[10px] font-bold font-mono shadow-inner cursor-default shrink-0" title="술술트래블 엔진 버전">v1.1.5</span>
+            <span id="app-ver-badge" class="px-1.5 py-0.5 rounded-md theme-card-subtle text-[#a2601b] dark:text-[#d4af37] text-[10px] font-bold font-mono shadow-inner cursor-default shrink-0" title="술술트래블 엔진 버전">v1.1.6</span>
           </div>
           <p id="header-trip-name" class="text-[10px] sm:text-[11px] text-[#78716c] dark:text-stone-400 truncate max-w-[120px] sm:max-w-xs font-normal">인생의 모든 여정을 기록하는 다이어리</p>
         </div>
@@ -568,72 +568,76 @@
     <!-- 스마트 웰컴 배너 (미설치 시 최상단 안내 및 원클릭 설치) -->
     <div id="smart-welcome-banner" class="hidden"></div>
 
-    <!-- 상태 필터 탭 바 (Sulsul-Diary 스크린샷 100% 일치) -->
-    <div class="flex items-center gap-2 overflow-x-auto pb-1 no-scrollbar text-xs">
-      <button onclick="setHubStatusFilter('all')" id="tab-filter-all" class="px-3.5 py-1.5 rounded-full font-bold transition whitespace-nowrap hub-tab-active shadow-sm cursor-pointer">
-        전체 <span id="count-filter-all" class="ml-1 opacity-80 text-[11px]">0</span>
-      </button>
-      <button onclick="setHubStatusFilter('ongoing')" id="tab-filter-ongoing" class="px-3.5 py-1.5 rounded-full font-bold transition whitespace-nowrap hub-tab-inactive cursor-pointer">
-        진행중 <span id="count-filter-ongoing" class="ml-1 text-[11px]">0</span>
-      </button>
-      <button onclick="setHubStatusFilter('planned')" id="tab-filter-planned" class="px-3.5 py-1.5 rounded-full font-bold transition whitespace-nowrap hub-tab-inactive cursor-pointer">
-        예정 <span id="count-filter-planned" class="ml-1 text-[11px]">0</span>
-      </button>
-      <button onclick="setHubStatusFilter('completed')" id="tab-filter-completed" class="px-3.5 py-1.5 rounded-full font-bold transition whitespace-nowrap hub-tab-inactive cursor-pointer">
-        완료 <span id="count-filter-completed" class="ml-1 text-[11px]">0</span>
-      </button>
-      <button onclick="setHubStatusFilter('bucketlist')" id="tab-filter-bucketlist" class="px-3.5 py-1.5 rounded-full font-bold transition whitespace-nowrap hub-tab-inactive cursor-pointer">
-        버킷리스트 <span id="count-filter-bucketlist" class="ml-1 text-[11px]">0</span>
-      </button>
-    </div>
-
-    <!-- 검색 및 다차원 정밀 필터 툴바 -->
-    <div class="p-3 sm:p-3.5 rounded-2xl bg-white border border-[#e8e2d5] shadow-[0_2px_10px_rgba(0,0,0,0.02)] flex flex-col md:flex-row gap-2.5 items-stretch md:items-center justify-between">
-      <!-- 실시간 검색창 -->
-      <div class="relative flex-1">
-        <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-stone-400 text-xs"></i>
-        <input id="hub-search-input" type="text" placeholder="여행지, 국가, 도시, 테마, 컨셉 검색..." oninput="handleHubFilterChange()" class="w-full pl-9 pr-4 py-2 bg-[#faf8f5] border border-[#e8e2d5] rounded-xl text-xs text-[#1c1917] placeholder-stone-400 focus:outline-none focus:border-[#a2601b] transition shadow-inner">
+    <!-- 통합 스마트 여행 필터 & 검색 허브 (100% 모바일 1화면 최적화, 스크롤 0px) -->
+    <div class="p-2.5 sm:p-3.5 rounded-2xl bg-white dark:bg-[#16181d] border border-[#e8e2d5] dark:border-stone-800 shadow-[0_2px_12px_rgba(0,0,0,0.03)] space-y-2.5">
+      
+      <!-- 1. 상태 5대 세그먼트 탭 (360px 모바일 완벽 1줄 균등 분할) -->
+      <div class="grid grid-cols-5 gap-1 p-1 rounded-xl bg-[#f5f4ef] dark:bg-stone-900 border border-[#e8e2d5]/60 dark:border-stone-800 text-[11px] font-bold select-none">
+        <button onclick="setHubStatusFilter('all')" id="tab-filter-all" class="py-1.5 rounded-lg transition text-center hub-tab-active shadow-sm cursor-pointer truncate">
+          전체 <span id="count-filter-all" class="text-[10px] opacity-80">0</span>
+        </button>
+        <button onclick="setHubStatusFilter('ongoing')" id="tab-filter-ongoing" class="py-1.5 rounded-lg transition text-center hub-tab-inactive cursor-pointer truncate">
+          <span class="sm:hidden">진행</span><span class="hidden sm:inline">진행중</span> <span id="count-filter-ongoing" class="text-[10px]">0</span>
+        </button>
+        <button onclick="setHubStatusFilter('planned')" id="tab-filter-planned" class="py-1.5 rounded-lg transition text-center hub-tab-inactive cursor-pointer truncate">
+          예정 <span id="count-filter-planned" class="text-[10px]">0</span>
+        </button>
+        <button onclick="setHubStatusFilter('completed')" id="tab-filter-completed" class="py-1.5 rounded-lg transition text-center hub-tab-inactive cursor-pointer truncate">
+          완료 <span id="count-filter-completed" class="text-[10px]">0</span>
+        </button>
+        <button onclick="setHubStatusFilter('bucketlist')" id="tab-filter-bucketlist" class="py-1.5 rounded-lg transition text-center hub-tab-inactive cursor-pointer truncate" title="버킷리스트">
+          <span class="sm:hidden">버킷</span><span class="hidden sm:inline">버킷리스트</span> <span id="count-filter-bucketlist" class="text-[10px]">0</span>
+        </button>
       </div>
 
-      <!-- 드롭다운 필터 클러스터 -->
-      <div class="flex items-center gap-2 overflow-x-auto pb-1 sm:pb-0 shrink-0">
+      <!-- 2. 실시간 통합 검색창 + 리셋 / 뷰 모드 전환 버튼 -->
+      <div class="flex items-center gap-1.5 sm:gap-2">
+        <div class="relative flex-1">
+          <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-stone-400 text-xs"></i>
+          <input id="hub-search-input" type="text" placeholder="여행지, 국가, 도시, 컨셉 검색..." oninput="handleHubFilterChange()" class="w-full pl-8 pr-3 py-2 bg-[#faf8f5] dark:bg-[#0f1117] border border-[#e8e2d5] dark:border-stone-700 rounded-xl text-xs text-[#1c1917] dark:text-[#ededed] placeholder-stone-400 focus:outline-none focus:border-[#a2601b] transition shadow-inner">
+        </div>
+
+        <!-- 필터 초기화 버튼 -->
+        <button onclick="resetHubFilters()" class="w-8 h-8 rounded-xl bg-[#faf8f5] dark:bg-[#0f1117] hover:bg-[#f0ece1] dark:hover:bg-stone-800 border border-[#e8e2d5] dark:border-stone-700 text-[#78716c] dark:text-stone-300 flex items-center justify-center transition cursor-pointer shrink-0 shadow-sm" title="필터 초기화">
+          <i class="fa-solid fa-arrow-rotate-right text-xs"></i>
+        </button>
+
+        <!-- 보기 방식 전환 (격자 / 목록) -->
+        <button id="btn-hub-view-mode" onclick="toggleHubViewMode()" class="h-8 px-2.5 rounded-xl bg-[#faf8f5] dark:bg-[#0f1117] hover:bg-[#f0ece1] dark:hover:bg-stone-800 border border-[#e8e2d5] dark:border-stone-700 text-[#1c1917] dark:text-[#ededed] text-xs font-bold transition flex items-center gap-1 cursor-pointer shrink-0 shadow-sm" title="보기 방식 전환 (격자/목록)">
+          <i id="btn-hub-view-mode-icon" class="fa-solid fa-table-cells text-xs text-[#a2601b]"></i>
+          <span id="btn-hub-view-mode-txt" class="hidden sm:inline text-[11px]">격자</span>
+        </button>
+      </div>
+
+      <!-- 3. 드롭다운 3대 정밀 필터 (모바일 3컬럼 완벽 1줄 배치, 1픽셀도 잘림 없음) -->
+      <div class="grid grid-cols-3 gap-1.5 sm:gap-2">
         <!-- 국가 필터 -->
-        <select id="hub-filter-country" onchange="handleHubFilterChange()" class="px-3 py-2 bg-[#faf8f5] border border-[#e8e2d5] rounded-xl text-xs font-semibold text-[#44403c] focus:outline-none focus:border-[#a2601b] cursor-pointer">
+        <select id="hub-filter-country" onchange="handleHubFilterChange()" class="w-full px-2 py-1.5 bg-[#faf8f5] dark:bg-[#0f1117] border border-[#e8e2d5] dark:border-stone-700 rounded-xl text-[11px] sm:text-xs font-bold text-[#44403c] dark:text-stone-200 focus:outline-none focus:border-[#a2601b] cursor-pointer truncate shadow-sm">
           <option value="all">전체 국가</option>
         </select>
 
         <!-- 컨셉 필터 -->
-        <select id="hub-filter-concept" onchange="handleHubFilterChange()" class="px-3 py-2 bg-[#faf8f5] border border-[#e8e2d5] rounded-xl text-xs font-semibold text-[#44403c] focus:outline-none focus:border-[#a2601b] cursor-pointer">
+        <select id="hub-filter-concept" onchange="handleHubFilterChange()" class="w-full px-2 py-1.5 bg-[#faf8f5] dark:bg-[#0f1117] border border-[#e8e2d5] dark:border-stone-700 rounded-xl text-[11px] sm:text-xs font-bold text-[#44403c] dark:text-stone-200 focus:outline-none focus:border-[#a2601b] cursor-pointer truncate shadow-sm">
           <option value="all">전체 컨셉</option>
           <option value="배낭">🎒 배낭여행</option>
           <option value="럭셔리">👑 럭셔리</option>
           <option value="가족">👨‍👩‍👧 가족여행</option>
           <option value="맛집">🍽️ 맛집/미식</option>
           <option value="가성비">💰 가성비</option>
-          <option value="자연">🏞️ 대자연/트레킹</option>
+          <option value="자연">🏞️ 대자연</option>
           <option value="문화">🏛️ 역사/문화</option>
-          <option value="힐링">🧘 힐링/휴양</option>
+          <option value="힐링">🧘 힐링</option>
         </select>
 
         <!-- 정렬 필터 -->
-        <select id="hub-filter-sort" onchange="handleHubFilterChange()" class="px-3 py-2 bg-[#faf8f5] border border-[#e8e2d5] rounded-xl text-xs font-semibold text-[#44403c] focus:outline-none focus:border-[#a2601b] cursor-pointer">
+        <select id="hub-filter-sort" onchange="handleHubFilterChange()" class="w-full px-2 py-1.5 bg-[#faf8f5] dark:bg-[#0f1117] border border-[#e8e2d5] dark:border-stone-700 rounded-xl text-[11px] sm:text-xs font-bold text-[#44403c] dark:text-stone-200 focus:outline-none focus:border-[#a2601b] cursor-pointer truncate shadow-sm">
           <option value="latest">최신 등록순</option>
           <option value="date-asc">출발일 빠른순</option>
           <option value="budget-desc">예산 높은순</option>
           <option value="budget-asc">예산 낮은순</option>
         </select>
-
-        <!-- 필터 리셋 버튼 -->
-        <button onclick="resetHubFilters()" class="p-2 rounded-xl bg-[#faf8f5] hover:bg-[#f0ece1] border border-[#e8e2d5] text-[#78716c] hover:text-[#1c1917] transition cursor-pointer" title="필터 초기화">
-          <i class="fa-solid fa-arrow-rotate-right text-xs"></i>
-        </button>
-
-        <!-- 뷰 모드 전환 버튼 (카드 뷰 <-> 리스트 뷰) -->
-        <button id="btn-hub-view-mode" onclick="toggleHubViewMode()" class="px-3 py-2 rounded-xl bg-[#faf8f5] hover:bg-[#f0ece1] border border-[#e8e2d5] text-[#1c1917] text-xs font-bold transition flex items-center gap-1.5 cursor-pointer shadow-sm" title="보기 방식 전환 (격자/목록)">
-          <i id="btn-hub-view-mode-icon" class="fa-solid fa-table-cells text-xs text-[#a2601b]"></i>
-          <span id="btn-hub-view-mode-txt" class="hidden sm:inline">격자</span>
-        </button>
       </div>
+
     </div>
 
     <!-- 여행 카드 목록 섹션 헤더 -->
@@ -2224,7 +2228,7 @@
     window.showToast = showToast;
 
     // 앱 버전 및 글로벌 네임스페이스 (Sulsul-Travel Invariant Rule R-10, R-11, R-12, R-13, R-14, R-15)
-    const APP_VER = '1.1.5';
+    const APP_VER = '1.1.6';
 
     // ══════════════════════════════════════════
     // [Two-Tone Theme System] 라이트 그레이 & 딥 블랙 테마 엔진
@@ -2872,9 +2876,9 @@
         const btn = document.getElementById(`tab-filter-${s}`);
         if (!btn) return;
         if (s === status) {
-          btn.className = 'px-3.5 py-1.5 rounded-full font-bold transition whitespace-nowrap hub-tab-active shadow-sm cursor-pointer';
+          btn.className = 'py-1.5 rounded-lg font-bold transition text-center hub-tab-active shadow-sm cursor-pointer truncate';
         } else {
-          btn.className = 'px-3.5 py-1.5 rounded-full font-bold transition whitespace-nowrap hub-tab-inactive cursor-pointer';
+          btn.className = 'py-1.5 rounded-lg font-bold transition text-center hub-tab-inactive cursor-pointer truncate';
         }
       });
       renderTripCards();
