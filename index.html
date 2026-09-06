@@ -502,7 +502,7 @@
             <h1 class="font-serif-brand text-base sm:text-xl font-bold tracking-tight text-[#1c1917] whitespace-nowrap">
               Sulsul Travel
             </h1>
-            <span id="app-ver-badge" class="px-1.5 py-0.5 rounded-md theme-card-subtle text-[#a2601b] dark:text-[#d4af37] text-[10px] font-bold font-mono shadow-inner cursor-default shrink-0" title="술술트래블 엔진 버전">v1.1.1</span>
+            <span id="app-ver-badge" class="px-1.5 py-0.5 rounded-md theme-card-subtle text-[#a2601b] dark:text-[#d4af37] text-[10px] font-bold font-mono shadow-inner cursor-default shrink-0" title="술술트래블 엔진 버전">v1.1.2</span>
           </div>
           <p id="header-trip-name" class="text-[10px] sm:text-[11px] text-[#78716c] truncate max-w-[110px] sm:max-w-xs font-normal">인생의 모든 여정을 기록하는 다이어리</p>
         </div>
@@ -1894,12 +1894,36 @@
           </div>
         </details>
 
-        <!-- 입력 폼 -->
-        <div>
-          <label class="block text-[11px] font-bold text-[#44403c] mb-1">발급받은 Gemini API 키 입력</label>
+        <!-- 입력 폼 & 실시간 연동 상태 -->
+        <div class="space-y-2.5 pt-2 border-t border-[#e8e2d5] dark:border-stone-800">
+          <div class="flex items-center justify-between">
+            <label class="block text-[11px] font-bold text-[#44403c] dark:text-stone-300">발급받은 Gemini API 키</label>
+            <span id="gemini-key-status-badge" class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-stone-100 dark:bg-stone-800 text-stone-600 dark:text-stone-300 border border-stone-200 dark:border-stone-700 flex items-center gap-1">
+              <i class="fa-solid fa-circle-exclamation text-amber-500"></i> 미등록 (오프라인 모드)
+            </span>
+          </div>
+
           <div class="flex items-center gap-2">
-            <input type="password" id="modal-cfg-gemini-key" placeholder="AIzaSy... 형태의 키를 붙여넣으세요" class="flex-1 px-3 py-2 bg-[#faf8f5] border border-[#e8e2d5] rounded-xl text-xs text-[#1c1917] focus:outline-none focus:border-[#a2601b]">
-            <button onclick="saveGeminiKeyFromModal()" class="btn-gold px-4 py-2 rounded-xl text-xs font-bold shrink-0 cursor-pointer shadow-sm">저장</button>
+            <div class="relative flex-1">
+              <input type="password" id="modal-cfg-gemini-key" placeholder="AIzaSy... 형태의 키를 붙여넣으세요" class="w-full pl-3 pr-9 py-2 bg-[#faf8f5] dark:bg-[#16181d] border border-[#e8e2d5] dark:border-stone-700 rounded-xl text-xs text-[#1c1917] dark:text-[#ededed] focus:outline-none focus:border-[#a2601b] font-mono transition">
+              <button type="button" onclick="toggleGeminiKeyVisibility()" id="btn-toggle-gemini-key" title="키 표시/숨김" class="absolute right-2.5 top-1/2 -translate-y-1/2 text-stone-400 hover:text-stone-700 dark:hover:text-stone-200 text-xs p-1 cursor-pointer">
+                <i id="icon-gemini-key-eye" class="fa-solid fa-eye"></i>
+              </button>
+            </div>
+            <button id="btn-save-gemini-key" onclick="saveGeminiKeyFromModal()" class="btn-gold px-4 py-2 rounded-xl text-xs font-bold shrink-0 cursor-pointer shadow-sm transition-all flex items-center gap-1">
+              <span>저장</span>
+            </button>
+          </div>
+
+          <div class="flex items-center justify-between pt-0.5">
+            <div class="text-[11px] text-[#78716c] dark:text-stone-400 flex items-center gap-1.5">
+              <span>등록 키:</span>
+              <code id="gemini-key-preview-text" class="font-mono text-[#a2601b] dark:text-amber-400 font-bold bg-amber-500/10 px-1.5 py-0.5 rounded text-[10px]">미등록</code>
+            </div>
+            <button type="button" id="btn-test-gemini-key" onclick="testGeminiApiKey()" class="px-3 py-1 rounded-lg bg-amber-500/10 hover:bg-amber-500/20 text-[#a2601b] dark:text-[#d4af37] text-[11px] font-bold border border-amber-500/30 transition flex items-center gap-1 cursor-pointer">
+              <i class="fa-solid fa-bolt-lightning text-[10px]"></i>
+              <span>연결 테스트</span>
+            </button>
           </div>
         </div>
       </div>
@@ -2014,8 +2038,29 @@
       return String(k).replace(/[\u200B-\u200D\uFEFF\s"'`]/g, '').trim();
     }
 
+    // 전역 토스트 알림 엔진 (Sulsul-Travel Global Toast System)
+    function showToast(msg, duration = 2500) {
+      if (!msg) return;
+      let toast = document.getElementById('sulsul-global-toast');
+      if (!toast) {
+        toast = document.createElement('div');
+        toast.id = 'sulsul-global-toast';
+        toast.className = 'fixed bottom-6 left-1/2 -translate-x-1/2 z-[9999] px-4 py-2.5 rounded-2xl bg-[#1c1917]/95 dark:bg-[#16181d]/95 text-white dark:text-[#ededed] text-xs font-bold shadow-2xl border border-amber-500/30 backdrop-blur-md transition-all duration-300 pointer-events-none flex items-center gap-2 max-w-[90vw] text-center opacity-0 translate-y-4';
+        document.body.appendChild(toast);
+      }
+      toast.innerHTML = msg;
+      toast.classList.remove('opacity-0', 'translate-y-4');
+      toast.classList.add('opacity-100', 'translate-y-0');
+      if (window.__toastTimer) clearTimeout(window.__toastTimer);
+      window.__toastTimer = setTimeout(() => {
+        toast.classList.remove('opacity-100', 'translate-y-0');
+        toast.classList.add('opacity-0', 'translate-y-4');
+      }, duration);
+    }
+    window.showToast = showToast;
+
     // 앱 버전 및 글로벌 네임스페이스 (Sulsul-Travel Invariant Rule R-10, R-11, R-12, R-13, R-14, R-15)
-    const APP_VER = '1.1.1';
+    const APP_VER = '1.1.2';
 
     // ══════════════════════════════════════════
     // [Two-Tone Theme System] 라이트 그레이 & 딥 블랙 테마 엔진
@@ -2181,6 +2226,7 @@
       renderConceptChips();
       renderHub();
       renderActiveTripWorkspace();
+      updateGeminiKeyUi();
       checkStartupInstallOnboarding();
     }
 
@@ -2308,9 +2354,13 @@
     }
 
     function openSettingsModal() {
-      const modalKeyInput = document.getElementById('modal-cfg-gemini-key');
-      if (modalKeyInput) {
-        modalKeyInput.value = State.geminiKey || '';
+      if (typeof updateGeminiKeyUi === 'function') {
+        updateGeminiKeyUi();
+      } else {
+        const modalKeyInput = document.getElementById('modal-cfg-gemini-key');
+        if (modalKeyInput) {
+          modalKeyInput.value = State.geminiKey || '';
+        }
       }
       if (typeof updateGithubSyncUi === 'function') {
         updateGithubSyncUi();
@@ -2321,6 +2371,60 @@
       openModal('modal-settings');
     }
 
+    function updateGeminiKeyUi() {
+      const currentKey = State.geminiKey || '';
+      const input = document.getElementById('modal-cfg-gemini-key');
+      if (input && input.value !== currentKey) {
+        input.value = currentKey;
+      }
+      const tabKey = document.getElementById('cfg-gemini-key');
+      if (tabKey && tabKey.value !== currentKey) {
+        tabKey.value = currentKey;
+      }
+
+      const badge = document.getElementById('gemini-key-status-badge');
+      const preview = document.getElementById('gemini-key-preview-text');
+
+      if (currentKey && currentKey.length > 5) {
+        if (badge) {
+          badge.className = 'text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-100 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-700 flex items-center gap-1';
+          badge.innerHTML = '<i class="fa-solid fa-circle-check text-emerald-600"></i> API 키 등록됨';
+        }
+        if (preview) {
+          const prefix = currentKey.slice(0, 6);
+          const suffix = currentKey.length > 10 ? currentKey.slice(-4) : '••••';
+          preview.innerText = `${prefix}••••${suffix} (${currentKey.length}자)`;
+        }
+      } else {
+        if (badge) {
+          badge.className = 'text-[10px] font-bold px-2 py-0.5 rounded-full bg-stone-100 dark:bg-stone-800 text-stone-600 dark:text-stone-300 border border-stone-200 dark:border-stone-700 flex items-center gap-1';
+          badge.innerHTML = '<i class="fa-solid fa-circle-exclamation text-amber-500"></i> 미등록 (오프라인 모드)';
+        }
+        if (preview) {
+          preview.innerText = '미등록';
+        }
+      }
+    }
+
+    function toggleGeminiKeyVisibility() {
+      const input = document.getElementById('modal-cfg-gemini-key');
+      const icon = document.getElementById('icon-gemini-key-eye');
+      if (!input) return;
+      if (input.type === 'password') {
+        input.type = 'text';
+        if (icon) {
+          icon.classList.remove('fa-eye');
+          icon.classList.add('fa-eye-slash');
+        }
+      } else {
+        input.type = 'password';
+        if (icon) {
+          icon.classList.remove('fa-eye-slash');
+          icon.classList.add('fa-eye');
+        }
+      }
+    }
+
     function saveGeminiKeyFromModal() {
       const input = document.getElementById('modal-cfg-gemini-key');
       if (!input) return;
@@ -2329,7 +2433,80 @@
       localStorage.setItem('st_gemini_key', cleanKey);
       const tabKey = document.getElementById('cfg-gemini-key');
       if (tabKey) tabKey.value = cleanKey;
+
+      updateGeminiKeyUi();
+
+      const btn = document.getElementById('btn-save-gemini-key');
+      if (btn) {
+        const origHtml = btn.innerHTML;
+        btn.innerHTML = '<i class="fa-solid fa-check"></i> <span>저장됨!</span>';
+        btn.classList.add('bg-emerald-600', 'text-white');
+        setTimeout(() => {
+          btn.innerHTML = origHtml;
+          btn.classList.remove('bg-emerald-600', 'text-white');
+        }, 1500);
+      }
+
       showToast(cleanKey ? '🔑 Gemini API 키가 안전하게 저장되었습니다.' : 'API 키가 삭제되었습니다.');
+    }
+
+    async function testGeminiApiKey() {
+      const input = document.getElementById('modal-cfg-gemini-key');
+      const testBtn = document.getElementById('btn-test-gemini-key');
+      const candidateKey = cleanApiKey(input ? input.value : State.geminiKey);
+
+      if (!candidateKey) {
+        showToast('⚠️ 먼저 Gemini API 키를 입력해 주세요.');
+        if (input) input.focus();
+        return;
+      }
+
+      State.geminiKey = candidateKey;
+      localStorage.setItem('st_gemini_key', candidateKey);
+      updateGeminiKeyUi();
+
+      const origHtml = testBtn ? testBtn.innerHTML : '';
+      if (testBtn) {
+        testBtn.disabled = true;
+        testBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin text-[10px]"></i> <span>연결 확인 중...</span>';
+      }
+
+      try {
+        const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${encodeURIComponent(candidateKey)}`;
+        const res = await fetch(endpoint, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            contents: [{ parts: [{ text: "ping" }] }]
+          })
+        });
+
+        const data = await res.json();
+        if (res.ok && data.candidates && data.candidates.length > 0) {
+          if (testBtn) {
+            testBtn.innerHTML = '<i class="fa-solid fa-circle-check text-emerald-500"></i> <span class="text-emerald-600 dark:text-emerald-400">정상 작동!</span>';
+          }
+          showToast('✅ Gemini AI 연결 성공! 30분 일정 & 윤문이 활성화되었습니다.');
+        } else {
+          const errMsg = (data.error && data.error.message) ? data.error.message : (res.statusText || '응답 오류');
+          if (testBtn) {
+            testBtn.innerHTML = '<i class="fa-solid fa-circle-xmark text-rose-500"></i> <span class="text-rose-600 dark:text-rose-400">연결 실패</span>';
+          }
+          showToast(`❌ API 키 연결 실패: ${errMsg.slice(0, 60)}`);
+        }
+      } catch (err) {
+        if (testBtn) {
+          testBtn.innerHTML = '<i class="fa-solid fa-triangle-exclamation text-amber-500"></i> <span class="text-amber-600">오프라인/네트워크</span>';
+        }
+        showToast(`⚠️ 네트워크 오류: ${err.message || '인터넷 연결 상태를 확인해주세요.'}`);
+      } finally {
+        setTimeout(() => {
+          if (testBtn) {
+            testBtn.disabled = false;
+            testBtn.innerHTML = origHtml;
+          }
+        }, 3000);
+      }
     }
 
     // ==========================================
@@ -4282,7 +4459,7 @@
       } catch (err) {
         if (err.message === 'GEMINI_KEY_MISSING') {
           alert('설정(⚙️) 탭에서 개인 Gemini API 키를 먼저 입력해 주세요.');
-          openModal('modal-api-settings');
+          openSettingsModal();
         } else {
           // Fallback offline mock generator
           generateOfflineMockItinerary(trip);
@@ -4604,12 +4781,16 @@
     }
 
     function saveGeminiKey() {
-      const raw = document.getElementById('cfg-gemini-key').value;
+      const input = document.getElementById('cfg-gemini-key');
+      const raw = input ? input.value : '';
       const k = cleanApiKey(raw);
       State.geminiKey = k;
       localStorage.setItem('st_gemini_key', k);
-      document.getElementById('cfg-gemini-key').value = k;
-      closeModal('modal-api-settings', true);
+      if (input) input.value = k;
+      const modalKey = document.getElementById('modal-cfg-gemini-key');
+      if (modalKey) modalKey.value = k;
+      if (typeof updateGeminiKeyUi === 'function') updateGeminiKeyUi();
+      closeModal('modal-settings', true);
       showToast('🔑 Gemini API 키가 정제되어 안전하게 저장되었습니다.');
     }
 
@@ -5389,7 +5570,12 @@
       getGithubSyncConfig: getGithubSyncConfig,
       saveGithubSyncConfig: saveGithubSyncConfig,
       syncToGist: syncToGist,
-      syncFromGist: syncFromGist
+      syncFromGist: syncFromGist,
+      showToast: showToast,
+      saveGeminiKeyFromModal: saveGeminiKeyFromModal,
+      updateGeminiKeyUi: updateGeminiKeyUi,
+      toggleGeminiKeyVisibility: toggleGeminiKeyVisibility,
+      testGeminiApiKey: testGeminiApiKey
     };
   </script>
 </body>
