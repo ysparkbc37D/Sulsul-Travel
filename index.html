@@ -5,9 +5,17 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <title>술술트래블 (Sulsul-Travel) - 인생 여행 다이어리 & AI 어시스턴트</title>
 
+  <!-- 2-Tone Theme FOUC Prevention Script -->
+  <script>
+    (function() {
+      var savedTheme = localStorage.getItem('st_theme') || 'light';
+      document.documentElement.setAttribute('data-theme', savedTheme);
+    })();
+  </script>
+
   <!-- PWA Meta & Icons -->
   <link rel="manifest" href="manifest.webmanifest">
-  <meta name="theme-color" content="#f7f6f2">
+  <meta name="theme-color" content="#f5f5f7">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
@@ -53,25 +61,79 @@
   <style>
     @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
     
-    :root {
-      --bg: #f7f6f2;
-      --card-bg: #ffffff;
-      --card-border: #e8e2d5;
-      --accent: #a2601b;
+    /* ══════════════ Sulsul-Diary Two-Tone Theme System (Light Gray & Deep Black) ══════════════ */
+    :root, :root[data-theme="light"] {
+      color-scheme: light;
+      --bg: #f5f5f7;            /* Apple Fog Canvas */
+      --surface: #ffffff;       /* Apple Pure White Surface */
+      --surface2: #f0f0f4;      /* Apple Concrete Inline */
+      --surface3: #e8e8ed;
+      --line: #d6d6d6;          /* Apple Pebble Hairline */
+      --line2: #c5c5c8;
+      --ink: #1d1d1f;           /* Apple Space Black (WCAG AAA) */
+      --ink2: #555555;          /* High contrast Subtext (WCAG AA 4.5:1+) */
+      --ink3: #707070;          /* Muted metadata */
+      --accent: #a2601b;        /* Whisky Gold Amber */
       --accent2: #c9962f;
       --accent-bg: #f5ede2;
       --accent-line: #dfd1be;
-      --text-main: #1c1917;
-      --text-sub: #78716c;
+      --card-bg: #ffffff;
+      --card-border: #d6d6d6;
+      --header-bg: rgba(245, 245, 247, 0.94);
+      --header-border: #d6d6d6;
+      --tab-active-bg: #1d1d1f;
+      --tab-active-text: #ffffff;
+      --banner-bg: #f5ede2;
+      --banner-border: #dfd1be;
+      --banner-title: #1d1d1f;
+      --banner-sub: #44403c;
+      --input-bg: #ffffff;
+      --input-border: #d6d6d6;
+      --serif: 'Cormorant Garamond', 'Playfair Display', 'Noto Serif KR', Georgia, serif;
+    }
+
+    :root[data-theme="dark"] {
+      color-scheme: dark;
+      --bg: #0b0c0e;            /* Deep Onyx Pure Black */
+      --surface: #16181d;       /* Card & Sheet Surface */
+      --surface2: #1e2026;      /* Secondary Surface */
+      --surface3: #262930;
+      --line: rgba(255, 255, 255, 0.08);   /* Hairline Border */
+      --line2: rgba(255, 255, 255, 0.16);
+      --ink: #ededed;           /* Eye-comfort Off-white */
+      --ink2: #a1a1aa;          /* High contrast Subtext */
+      --ink3: #71717a;          /* Muted metadata */
+      --accent: #d4af37;        /* Champagne Gold */
+      --accent2: #c89b58;       /* Warm Amber */
+      --accent-bg: rgba(212, 175, 55, 0.12);
+      --accent-line: rgba(212, 175, 55, 0.3);
+      --card-bg: #16181d;
+      --card-border: rgba(255, 255, 255, 0.08);
+      --header-bg: rgba(11, 12, 14, 0.94);
+      --header-border: rgba(255, 255, 255, 0.08);
+      --tab-active-bg: #d4af37;
+      --tab-active-text: #0b0c0e;
+      --banner-bg: #1e2026;
+      --banner-border: rgba(212, 175, 55, 0.3);
+      --banner-title: #ededed;
+      --banner-sub: #a1a1aa;
+      --input-bg: #16181d;
+      --input-border: rgba(255, 255, 255, 0.12);
       --serif: 'Cormorant Garamond', 'Playfair Display', 'Noto Serif KR', Georgia, serif;
     }
 
     body {
       font-family: 'Pretendard Variable', Pretendard, -apple-system, BlinkMacSystemFont, system-ui, 'Segoe UI', Roboto, sans-serif;
-      background-color: var(--bg);
-      color: var(--text-main);
+      background-color: var(--bg) !important;
+      color: var(--ink) !important;
       -webkit-tap-highlight-color: transparent;
       user-select: none;
+      transition: background-color 0.2s ease, color 0.2s ease;
+    }
+    header {
+      background-color: var(--header-bg) !important;
+      border-color: var(--header-border) !important;
+      transition: background-color 0.2s ease, border-color 0.2s ease;
     }
     .font-serif-brand {
       font-family: var(--serif);
@@ -80,9 +142,9 @@
       user-select: text;
     }
     ::-webkit-scrollbar { width: 6px; height: 6px; }
-    ::-webkit-scrollbar-track { background: #f7f6f2; }
-    ::-webkit-scrollbar-thumb { background: #dfd1be; border-radius: 4px; }
-    ::-webkit-scrollbar-thumb:hover { background: #c5b59f; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: var(--line2); border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--ink3); }
     
     /* Bottom Sheet / Modal System (Sulsul-Travel Invariant R-9) */
     .sheet-container {
@@ -112,7 +174,7 @@
     .sheet-scrim {
       position: absolute;
       inset: 0;
-      background: rgba(28, 25, 23, 0.45);
+      background: rgba(11, 12, 14, 0.55);
       backdrop-filter: blur(8px);
       -webkit-backdrop-filter: blur(8px);
       transition: opacity 0.25s ease-out;
@@ -122,12 +184,12 @@
       width: 100%;
       max-width: 680px;
       max-height: 92vh;
-      background: #ffffff;
-      color: #1c1917;
+      background: var(--surface) !important;
+      color: var(--ink) !important;
       border-top-left-radius: 1.5rem;
       border-top-right-radius: 1.5rem;
-      border: 1px solid #e8e2d5;
-      border-bottom: none;
+      border: 1px solid var(--line) !important;
+      border-bottom: none !important;
       box-shadow: 0 -20px 50px rgba(0, 0, 0, 0.15), 0 0 30px rgba(162, 96, 27, 0.05);
       display: flex;
       flex-direction: column;
@@ -141,22 +203,29 @@
       }
       .sheet-box {
         border-radius: 1.5rem;
-        border-bottom: 1px solid #e8e2d5;
+        border-bottom: 1px solid var(--line) !important;
         max-height: 85vh;
       }
     }
 
-    /* Sulsul-Diary Warm Cream Luxury UI Tokens & Buttons */
+    /* Sulsul Two-Tone Luxury UI Tokens & Buttons */
     .btn-gold {
-      background: linear-gradient(180deg, #d7a643, #a2601b);
-      color: #ffffff;
+      background: linear-gradient(180deg, #d7a643, #a2601b) !important;
+      color: #ffffff !important;
       font-weight: 800;
       border: none;
       box-shadow: 0 4px 14px rgba(162, 96, 27, 0.25);
       transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
     }
+    :root[data-theme="dark"] .btn-gold {
+      background: linear-gradient(180deg, #e5b654, #bd8a2a) !important;
+      color: #0b0c0e !important;
+      box-shadow: 0 4px 14px rgba(212, 175, 55, 0.25);
+    }
+    .btn-gold *, :root[data-theme="dark"] .btn-gold * {
+      color: inherit !important;
+    }
     .btn-gold:hover {
-      background: linear-gradient(180deg, #e5b654, #bd8a2a);
       box-shadow: 0 6px 20px rgba(162, 96, 27, 0.35);
       transform: translateY(-1px);
     }
@@ -164,16 +233,16 @@
       transform: translateY(0);
     }
     .btn-surface {
-      background: #f7f5f0;
-      border: 1px solid #e7e0d3;
-      color: #44403c;
+      background: var(--surface2) !important;
+      border: 1px solid var(--line) !important;
+      color: var(--ink) !important;
       font-weight: 600;
       transition: all 0.18s ease;
     }
     .btn-surface:hover {
-      background: #eee8dc;
-      border-color: #d6ccbd;
-      color: #1c1917;
+      background: var(--surface3) !important;
+      border-color: var(--line2) !important;
+      color: var(--ink) !important;
     }
     @keyframes pulseGold {
       0%, 100% { box-shadow: 0 0 0 0 rgba(162, 96, 27, 0.4); }
@@ -183,49 +252,144 @@
       animation: pulseGold 2s infinite;
     }
 
-    /* Sulsul-Diary Warm Cream Luxury Palette Global Bridge */
-    body {
-      background-color: #f7f6f2 !important;
-      color: #1c1917 !important;
-    }
+    /* Semantic Card & Surface Bridge */
     .theme-card {
-      background-color: #ffffff;
-      border: 1px solid #e8e2d5;
+      background-color: var(--surface) !important;
+      border: 1px solid var(--line) !important;
+      color: var(--ink) !important;
       box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
     }
     .theme-card-subtle {
-      background-color: #fcfbf9;
-      border: 1px solid #ede8df;
+      background-color: var(--surface2) !important;
+      border: 1px solid var(--line) !important;
+      color: var(--ink) !important;
     }
-    .bg-\[\#080b12\] {
-      background-color: #f7f6f2 !important;
+
+    /* Hero / Notice Banner */
+    .theme-banner {
+      background-color: var(--banner-bg) !important;
+      border: 1px solid var(--banner-border) !important;
     }
-    .bg-\[\#0f1422\] {
-      background-color: #ffffff !important;
-      border-color: #e8e2d5 !important;
+    .theme-banner-title {
+      color: var(--banner-title) !important;
     }
-    .bg-\[\#141c2e\] {
-      background-color: #fcfbf9 !important;
-      border-color: #e8e2d5 !important;
-      color: #1c1917 !important;
+    .theme-banner-sub {
+      color: var(--banner-sub) !important;
     }
-    .border-\[\#1e263c\], .border-\[\#1a2236\], .border-\[\#23304c\] {
-      border-color: #e8e2d5 !important;
+
+    /* Tabs: PWA Install Modal */
+    .tab-install-active {
+      background-color: var(--tab-active-bg) !important;
+      color: var(--tab-active-text) !important;
+      border: 1px solid transparent !important;
     }
-    .text-white {
-      color: #1c1917 !important;
+    .tab-install-inactive {
+      background-color: transparent !important;
+      color: var(--ink2) !important;
+      border: 1px solid transparent !important;
     }
-    .text-slate-100, .text-slate-200 {
-      color: #292524 !important;
+    .tab-install-inactive:hover {
+      color: var(--ink) !important;
+      background-color: var(--surface2) !important;
     }
-    .text-slate-300, .text-slate-400 {
-      color: #78716c !important;
+
+    /* Tabs: Hub Status Filter */
+    .hub-tab-active {
+      background-color: var(--tab-active-bg) !important;
+      color: var(--tab-active-text) !important;
+      border: 1px solid transparent !important;
     }
-    .text-slate-500 {
-      color: #a8a29e !important;
+    .hub-tab-inactive {
+      background-color: var(--surface) !important;
+      border: 1px solid var(--line) !important;
+      color: var(--ink2) !important;
     }
-    .btn-gold, .btn-gold * {
-      color: #ffffff !important;
+    .hub-tab-inactive:hover {
+      color: var(--ink) !important;
+      border-color: var(--accent) !important;
+    }
+
+    /* Tabs: Workspace Main Nav */
+    .nav-tab-active {
+      background-color: var(--tab-active-bg) !important;
+      color: var(--tab-active-text) !important;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1) !important;
+    }
+    .nav-tab-inactive {
+      background-color: transparent !important;
+      color: var(--ink2) !important;
+    }
+    .nav-tab-inactive:hover {
+      color: var(--ink) !important;
+      background-color: var(--surface2) !important;
+    }
+
+    /* Tabs: Plan Subtabs */
+    .subtab-active {
+      background-color: var(--surface2) !important;
+      color: var(--accent) !important;
+      border: 1px solid var(--line) !important;
+    }
+    :root[data-theme="dark"] .subtab-active {
+      border-color: var(--line2) !important;
+    }
+    .subtab-inactive {
+      background-color: transparent !important;
+      color: var(--ink2) !important;
+      border: 1px solid transparent !important;
+    }
+    .subtab-inactive:hover {
+      color: var(--ink) !important;
+      background-color: var(--surface2) !important;
+    }
+
+    /* Color Mapping Bridge for Existing HTML Utility Classes */
+    .bg-\[\#080b12\], .bg-\[\#f7f6f2\] {
+      background-color: var(--bg) !important;
+    }
+    .bg-\[\#0f1422\], .bg-white {
+      background-color: var(--surface) !important;
+    }
+    .bg-\[\#141c2e\], .bg-\[\#faf8f5\], .bg-\[\#fcfbf9\] {
+      background-color: var(--surface2) !important;
+    }
+    .border-\[\#1e263c\], .border-\[\#1a2236\], .border-\[\#23304c\], .border-\[\#e8e2d5\], .border-\[\#ede8df\] {
+      border-color: var(--line) !important;
+    }
+
+    /* High Contrast Text Rules */
+    :root[data-theme="light"] .text-white:not(.keep-white):not(.btn-gold):not(.btn-gold *):not(.badge-solid):not(.badge-solid *):not(.tab-install-active):not(.hub-tab-active):not(.nav-tab-active):not([class*="bg-emerald-"]):not([class*="bg-amber-5"]):not([class*="bg-rose-"]):not([class*="bg-indigo-"]):not([class*="bg-blue-"]):not([class*="bg-[#1c1917]"]):not([class*="bg-sky-"]):not([class*="bg-purple-"]) {
+      color: var(--ink) !important;
+    }
+    :root[data-theme="dark"] .text-white {
+      color: var(--ink) !important;
+    }
+    .text-\[\#1c1917\], .text-\[\#292524\], .text-\[\#44403c\] {
+      color: var(--ink) !important;
+    }
+    .text-\[\#78716c\], .text-\[\#a8a29e\], .text-slate-400, .text-slate-500, .text-stone-400, .text-stone-500 {
+      color: var(--ink2) !important;
+    }
+    .text-slate-300, .text-slate-200, .text-slate-100 {
+      color: var(--ink) !important;
+    }
+
+    /* High Contrast Amber Accent (WCAG AA 4.5:1+ in both themes) */
+    :root[data-theme="light"] .text-amber-400 {
+      color: #b45309 !important;
+    }
+    :root[data-theme="dark"] .text-amber-400 {
+      color: #fbbf24 !important;
+    }
+
+    /* Inputs & Form Controls */
+    input, textarea, select {
+      background-color: var(--input-bg) !important;
+      border: 1px solid var(--input-border) !important;
+      color: var(--ink) !important;
+    }
+    input::placeholder, textarea::placeholder {
+      color: var(--ink3) !important;
     }
 
     /* Leaflet Overrides */
@@ -336,20 +500,25 @@
       <!-- 우측 액션 클러스터 (요청 순서: 버전 -> 통계 -> 구글맵 -> 설정 -> + 추가) -->
       <div class="flex items-center gap-1.5 sm:gap-2">
         <!-- 1. 버전 뱃지 (Sulsul-Diary 테마) -->
-        <span id="app-ver-badge" class="px-2 py-1 rounded-lg bg-[#f0ece1] text-[#a2601b] border border-[#e2dad0] text-[11px] font-bold font-mono shadow-inner cursor-default" title="술술트래블 엔진 버전">v1.0.7</span>
+        <span id="app-ver-badge" class="px-2 py-1 rounded-lg theme-card-subtle text-[#a2601b] dark:text-[#d4af37] text-[11px] font-bold font-mono shadow-inner cursor-default" title="술술트래블 엔진 버전">v1.0.8</span>
+
+        <!-- 1.5 2-Tone 컬러 테마 전환 버튼 (☀️/🌙) -->
+        <button id="header-btn-theme" onclick="toggleTheme()" class="w-8 h-8 sm:w-9 sm:h-9 rounded-xl theme-card-subtle flex items-center justify-center transition shadow-sm cursor-pointer" title="라이트 그레이 / 딥 블랙 테마 전환">
+          <span id="header-theme-icon" class="text-sm">🌙</span>
+        </button>
 
         <!-- 2. 통계 버튼 (📊) -->
-        <button onclick="toggleAnalyticsView()" class="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-[#ffffff] hover:bg-[#faf8f5] border border-[#e8e2d5] text-[#57534e] hover:text-[#1c1917] flex items-center justify-center transition shadow-sm cursor-pointer" title="평생 여행 누적 통계 열람">
+        <button onclick="toggleAnalyticsView()" class="w-8 h-8 sm:w-9 sm:h-9 rounded-xl theme-card-subtle flex items-center justify-center transition shadow-sm cursor-pointer" title="평생 여행 누적 통계 열람">
           <span class="text-sm">📊</span>
         </button>
 
         <!-- 3. 구글맵/노선지도 버튼 (🗺️) -->
-        <button onclick="openRouteMapModal()" class="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-[#ffffff] hover:bg-[#faf8f5] border border-[#e8e2d5] text-[#57534e] hover:text-[#1c1917] flex items-center justify-center transition shadow-sm cursor-pointer" title="세계 및 남미 비행 궤적 지도">
+        <button onclick="openRouteMapModal()" class="w-8 h-8 sm:w-9 sm:h-9 rounded-xl theme-card-subtle flex items-center justify-center transition shadow-sm cursor-pointer" title="세계 및 남미 비행 궤적 지도">
           <span class="text-sm">🗺️</span>
         </button>
 
         <!-- 4. 설정 버튼 (🎛️) -->
-        <button onclick="openSettingsModal()" class="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-[#ffffff] hover:bg-[#faf8f5] border border-[#e8e2d5] text-[#57534e] hover:text-[#1c1917] flex items-center justify-center transition shadow-sm cursor-pointer" title="앱 설정 & 데이터 아카이브">
+        <button onclick="openSettingsModal()" class="w-8 h-8 sm:w-9 sm:h-9 rounded-xl theme-card-subtle flex items-center justify-center transition shadow-sm cursor-pointer" title="앱 설정 & 데이터 아카이브">
           <span class="text-sm">🎛️</span>
         </button>
 
@@ -360,14 +529,14 @@
         </button>
 
         <!-- AI 비서 챗봇 버튼 -->
-        <button onclick="openModal('modal-ai-chat')" class="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-[#ffffff] hover:bg-[#faf8f5] border border-[#e8e2d5] text-[#a2601b] flex items-center justify-center transition shadow-sm cursor-pointer" title="술술 AI 여행 비서">
+        <button onclick="openModal('modal-ai-chat')" class="w-8 h-8 sm:w-9 sm:h-9 rounded-xl theme-card-subtle text-[#a2601b] dark:text-[#d4af37] flex items-center justify-center transition shadow-sm cursor-pointer" title="술술 AI 여행 비서">
           <i class="fa-solid fa-wand-magic-sparkles text-xs"></i>
         </button>
 
         <!-- 히든 보조 버튼들 (Mandatory IDs & 워크스페이스 상태 보존) -->
         <button id="btn-native-install" onclick="handleInstallButtonClick()" class="hidden" title="PWA 설치"><span id="btn-native-install-txt">설치</span></button>
         <button id="header-btn-share" onclick="openShareModal()" class="hidden" title="동행 공유"></button>
-        <button id="header-btn-back-hub" onclick="switchView('hub')" class="hidden px-2.5 py-1.5 bg-[#ffffff] hover:bg-[#faf8f5] border border-[#e8e2d5] text-[#1c1917] rounded-xl text-xs font-bold transition flex items-center gap-1 shadow-sm cursor-pointer">
+        <button id="header-btn-back-hub" onclick="switchView('hub')" class="hidden px-2.5 py-1.5 theme-card-subtle rounded-xl text-xs font-bold transition flex items-center gap-1 shadow-sm cursor-pointer">
           <i class="fa-solid fa-arrow-left text-[11px] text-[#a2601b]"></i>
           <span>허브</span>
         </button>
@@ -385,19 +554,19 @@
 
     <!-- 상태 필터 탭 바 (Sulsul-Diary 스크린샷 100% 일치) -->
     <div class="flex items-center gap-2 overflow-x-auto pb-1 no-scrollbar text-xs">
-      <button onclick="setHubStatusFilter('all')" id="tab-filter-all" class="px-3.5 py-1.5 rounded-full font-bold transition whitespace-nowrap bg-[#1c1917] text-white shadow-sm cursor-pointer">
+      <button onclick="setHubStatusFilter('all')" id="tab-filter-all" class="px-3.5 py-1.5 rounded-full font-bold transition whitespace-nowrap hub-tab-active shadow-sm cursor-pointer">
         전체 <span id="count-filter-all" class="ml-1 opacity-80 text-[11px]">0</span>
       </button>
-      <button onclick="setHubStatusFilter('ongoing')" id="tab-filter-ongoing" class="px-3.5 py-1.5 rounded-full font-bold transition whitespace-nowrap bg-white border border-[#e8e2d5] text-[#78716c] hover:text-[#1c1917] hover:border-[#dfd7ca] cursor-pointer">
+      <button onclick="setHubStatusFilter('ongoing')" id="tab-filter-ongoing" class="px-3.5 py-1.5 rounded-full font-bold transition whitespace-nowrap hub-tab-inactive cursor-pointer">
         진행중 <span id="count-filter-ongoing" class="ml-1 text-[11px]">0</span>
       </button>
-      <button onclick="setHubStatusFilter('planned')" id="tab-filter-planned" class="px-3.5 py-1.5 rounded-full font-bold transition whitespace-nowrap bg-white border border-[#e8e2d5] text-[#78716c] hover:text-[#1c1917] hover:border-[#dfd7ca] cursor-pointer">
+      <button onclick="setHubStatusFilter('planned')" id="tab-filter-planned" class="px-3.5 py-1.5 rounded-full font-bold transition whitespace-nowrap hub-tab-inactive cursor-pointer">
         예정 <span id="count-filter-planned" class="ml-1 text-[11px]">0</span>
       </button>
-      <button onclick="setHubStatusFilter('completed')" id="tab-filter-completed" class="px-3.5 py-1.5 rounded-full font-bold transition whitespace-nowrap bg-white border border-[#e8e2d5] text-[#78716c] hover:text-[#1c1917] hover:border-[#dfd7ca] cursor-pointer">
+      <button onclick="setHubStatusFilter('completed')" id="tab-filter-completed" class="px-3.5 py-1.5 rounded-full font-bold transition whitespace-nowrap hub-tab-inactive cursor-pointer">
         완료 <span id="count-filter-completed" class="ml-1 text-[11px]">0</span>
       </button>
-      <button onclick="setHubStatusFilter('bucketlist')" id="tab-filter-bucketlist" class="px-3.5 py-1.5 rounded-full font-bold transition whitespace-nowrap bg-white border border-[#e8e2d5] text-[#78716c] hover:text-[#1c1917] hover:border-[#dfd7ca] cursor-pointer">
+      <button onclick="setHubStatusFilter('bucketlist')" id="tab-filter-bucketlist" class="px-3.5 py-1.5 rounded-full font-bold transition whitespace-nowrap hub-tab-inactive cursor-pointer">
         버킷리스트 <span id="count-filter-bucketlist" class="ml-1 text-[11px]">0</span>
       </button>
     </div>
@@ -566,23 +735,23 @@
 
     <!-- 워크스페이스 메인 5대 탭 네비게이션 -->
     <nav class="flex items-center gap-1.5 p-1 bg-[#0f1422] rounded-xl border border-[#1e263c] overflow-x-auto no-scrollbar">
-      <button id="nav-tab-plan" onclick="switchTab('plan')" class="flex-1 min-w-[75px] py-2 px-3 rounded-lg text-xs font-bold flex items-center justify-center gap-1.5 transition bg-amber-500 text-slate-950 shadow-sm">
+      <button id="nav-tab-plan" onclick="switchTab('plan')" class="flex-1 min-w-[75px] py-2 px-3 rounded-lg text-xs font-bold flex items-center justify-center gap-1.5 transition nav-tab-active shadow-sm">
         <i class="fa-regular fa-calendar-check text-xs"></i>
         <span>일정/지도</span>
       </button>
-      <button id="nav-tab-expenses" onclick="switchTab('expenses')" class="flex-1 min-w-[75px] py-2 px-3 rounded-lg text-xs font-bold flex items-center justify-center gap-1.5 transition text-slate-400 hover:text-white hover:bg-[#141c2e]">
+      <button id="nav-tab-expenses" onclick="switchTab('expenses')" class="flex-1 min-w-[75px] py-2 px-3 rounded-lg text-xs font-bold flex items-center justify-center gap-1.5 transition nav-tab-inactive">
         <i class="fa-solid fa-receipt text-xs"></i>
         <span>가계부</span>
       </button>
-      <button id="nav-tab-journal" onclick="switchTab('journal')" class="flex-1 min-w-[75px] py-2 px-3 rounded-lg text-xs font-bold flex items-center justify-center gap-1.5 transition text-slate-400 hover:text-white hover:bg-[#141c2e]">
+      <button id="nav-tab-journal" onclick="switchTab('journal')" class="flex-1 min-w-[75px] py-2 px-3 rounded-lg text-xs font-bold flex items-center justify-center gap-1.5 transition nav-tab-inactive">
         <i class="fa-solid fa-camera-retro text-xs"></i>
         <span>포토일기</span>
       </button>
-      <button id="nav-tab-checklist" onclick="switchTab('checklist')" class="flex-1 min-w-[75px] py-2 px-3 rounded-lg text-xs font-bold flex items-center justify-center gap-1.5 transition text-slate-400 hover:text-white hover:bg-[#141c2e]">
+      <button id="nav-tab-checklist" onclick="switchTab('checklist')" class="flex-1 min-w-[75px] py-2 px-3 rounded-lg text-xs font-bold flex items-center justify-center gap-1.5 transition nav-tab-inactive">
         <i class="fa-solid fa-list-check text-xs"></i>
         <span>준비물</span>
       </button>
-      <button id="nav-tab-sync" onclick="switchTab('sync')" class="flex-1 min-w-[75px] py-2 px-3 rounded-lg text-xs font-bold flex items-center justify-center gap-1.5 transition text-slate-400 hover:text-white hover:bg-[#141c2e]">
+      <button id="nav-tab-sync" onclick="switchTab('sync')" class="flex-1 min-w-[75px] py-2 px-3 rounded-lg text-xs font-bold flex items-center justify-center gap-1.5 transition nav-tab-inactive">
         <i class="fa-solid fa-cloud-arrow-up text-xs"></i>
         <span>공유/설정</span>
       </button>
@@ -596,16 +765,16 @@
       <!-- 서브 탭 (타임라인 / 인터랙티브 지도 / 12대 예약가이드 / 8대 도시간략) -->
       <div class="flex items-center justify-between gap-2 flex-wrap pb-1">
         <div class="inline-flex p-1 rounded-xl bg-[#0f1422] border border-[#1e263c] gap-1">
-          <button id="btn-subtab-timeline" onclick="switchPlanSubTab('timeline')" class="px-3 py-1.5 rounded-lg text-xs font-bold bg-[#141c2e] text-amber-400 border border-[#23304c] shadow-sm flex items-center gap-1.5">
+          <button id="btn-subtab-timeline" onclick="switchPlanSubTab('timeline')" class="px-3 py-1.5 rounded-lg text-xs font-bold subtab-active shadow-sm flex items-center gap-1.5">
             <i class="fa-solid fa-timeline text-[11px]"></i> 30분 시간표
           </button>
-          <button id="btn-subtab-map" onclick="switchPlanSubTab('map')" class="px-3 py-1.5 rounded-lg text-xs font-bold text-slate-400 hover:text-white flex items-center gap-1.5">
+          <button id="btn-subtab-map" onclick="switchPlanSubTab('map')" class="px-3 py-1.5 rounded-lg text-xs font-bold subtab-inactive flex items-center gap-1.5">
             <i class="fa-solid fa-earth-americas text-[11px]"></i> 인터랙티브 지도
           </button>
-          <button id="btn-subtab-booking" onclick="switchPlanSubTab('booking')" class="px-3 py-1.5 rounded-lg text-xs font-bold text-slate-400 hover:text-white flex items-center gap-1.5">
+          <button id="btn-subtab-booking" onclick="switchPlanSubTab('booking')" class="px-3 py-1.5 rounded-lg text-xs font-bold subtab-inactive flex items-center gap-1.5">
             <i class="fa-solid fa-ticket text-[11px]"></i> 12대 필수 예약
           </button>
-          <button id="btn-subtab-cityguide" onclick="switchPlanSubTab('cityguide')" class="px-3 py-1.5 rounded-lg text-xs font-bold text-slate-400 hover:text-white flex items-center gap-1.5">
+          <button id="btn-subtab-cityguide" onclick="switchPlanSubTab('cityguide')" class="px-3 py-1.5 rounded-lg text-xs font-bold subtab-inactive flex items-center gap-1.5">
             <i class="fa-solid fa-city text-[11px]"></i> 8대 도시 가이드
           </button>
         </div>
@@ -1022,22 +1191,22 @@
   <div id="modal-install-guide" class="sheet-container sheet-closed">
     <div class="sheet-scrim" onclick="closeModal('modal-install-guide')"></div>
     <div class="sheet-box p-6 sm:p-7 space-y-4">
-      <div class="flex items-center justify-between border-b border-[#1e263c] pb-3">
+      <div class="flex items-center justify-between border-b border-[var(--line)] pb-3">
         <div class="flex items-center gap-2.5">
-          <span class="w-8 h-8 rounded-lg bg-amber-500/20 text-amber-400 border border-amber-500/30 flex items-center justify-center text-sm font-black shadow-sm">📲</span>
+          <span class="w-8 h-8 rounded-lg bg-amber-500/20 text-[#a2601b] dark:text-[#d4af37] border border-amber-500/30 flex items-center justify-center text-sm font-black shadow-sm">📲</span>
           <div>
-            <h3 class="text-base font-black text-white">홈 화면에 앱(PWA) 바로 설치</h3>
-            <p class="text-[11px] text-slate-400">단독 앱 실행 & 영구 보관 저장소 보호</p>
+            <h3 class="text-base font-black" style="color: var(--ink);">홈 화면에 앱(PWA) 바로 설치</h3>
+            <p class="text-[11px]" style="color: var(--ink2);">단독 앱 실행 & 영구 보관 저장소 보호</p>
           </div>
         </div>
-        <button onclick="closeModal('modal-install-guide')" class="text-slate-400 hover:text-white text-base p-1" title="닫기">✕</button>
+        <button onclick="closeModal('modal-install-guide')" class="text-base p-1 hover:opacity-75 transition cursor-pointer" style="color: var(--ink2);" title="닫기">✕</button>
       </div>
 
-      <!-- 헤더 히어로 배너 (Sulsul-Diary 다크 럭셔리 스타일) -->
-      <div class="p-3.5 rounded-xl bg-gradient-to-br from-amber-500/15 via-[#161d2e] to-[#0f1422] border border-amber-500/30 text-center space-y-1">
-        <div class="text-[10px] font-black tracking-widest text-amber-400">🌟 WELCOME TO SULSUL TRAVEL</div>
-        <div class="text-sm font-black text-white">술술트래블 200% 활용을 위한 <span class="text-amber-400">필수 안심 세팅</span></div>
-        <div class="text-[11px] text-slate-300 leading-relaxed mt-1">
+      <!-- 헤더 히어로 배너 (2-Tone 테마 호환 고대비 카드) -->
+      <div class="p-3.5 rounded-xl theme-banner text-center space-y-1">
+        <div class="text-[10px] font-black tracking-widest text-[#a2601b] dark:text-[#d4af37]">🌟 WELCOME TO SULSUL TRAVEL</div>
+        <div class="text-sm font-black theme-banner-title">술술트래블 200% 활용을 위한 <span class="text-[#a2601b] dark:text-[#d4af37]">필수 안심 세팅</span></div>
+        <div class="text-[11px] theme-banner-sub leading-relaxed mt-1">
           일반 웹사이트는 7일간 방치 시 캐시가 삭제될 수 있습니다. <b>홈 화면에 앱(PWA)으로 설치하면 운영체제가 데이터를 영구 보호</b>하여 비행기 모드에서도 안전하게 보관됩니다.
         </div>
       </div>
@@ -1045,32 +1214,32 @@
       <!-- 동적 인터랙티브 설치 영역 (앱 상태 / 인앱 브라우저 / 1-탭 설치 버튼) -->
       <div id="install-guide-dynamic-box">
         <div class="space-y-2">
-          <button id="btn-modal-direct-install" onclick="triggerNativeInstall()" class="btn-gold w-full py-3.5 px-4 rounded-xl text-sm font-black flex items-center justify-center gap-2 cursor-pointer pulse-gold shadow-lg shadow-amber-500/20">
+          <button id="btn-modal-direct-install" onclick="triggerNativeInstall()" class="btn-gold w-full py-3.5 px-4 rounded-xl text-sm font-black flex items-center justify-center gap-2 cursor-pointer pulse-gold shadow-lg">
             <i class="fa-solid fa-download text-sm"></i>
             <span>📲 지금 바로 홈 화면에 앱 설치하기</span>
           </button>
-          <div class="text-[11px] text-slate-400 text-center">
+          <div class="text-[11px] text-center" style="color: var(--ink2);">
             (터치 시 브라우저 설치 팝업이 바로 뜹니다. 메뉴의 [앱 설치]로도 가능)
           </div>
         </div>
       </div>
 
       <!-- 플랫폼 3대 탭 -->
-      <div class="flex items-center gap-1.5 p-1 bg-[#080b12] rounded-xl border border-[#1e263c]">
-        <button onclick="switchInstallTab('ios')" id="tab-inst-ios" class="flex-1 py-1.5 text-xs font-bold rounded-lg text-slate-400 hover:text-white transition">🍎 iPhone / iPad</button>
-        <button onclick="switchInstallTab('android')" id="tab-inst-android" class="flex-1 py-1.5 text-xs font-bold rounded-lg bg-gradient-to-r from-amber-500/20 to-amber-600/20 text-amber-300 border border-amber-500/40">🤖 Android</button>
-        <button onclick="switchInstallTab('pc')" id="tab-inst-pc" class="flex-1 py-1.5 text-xs font-bold rounded-lg text-slate-400 hover:text-white transition">💻 PC (Edge/Chrome)</button>
+      <div class="flex items-center gap-1.5 p-1 rounded-xl theme-card-subtle">
+        <button onclick="switchInstallTab('ios')" id="tab-inst-ios" class="flex-1 py-1.5 text-xs font-semibold rounded-lg tab-install-inactive transition">🍎 iPhone / iPad</button>
+        <button onclick="switchInstallTab('android')" id="tab-inst-android" class="flex-1 py-1.5 text-xs font-black rounded-lg tab-install-active shadow-sm">🤖 Android</button>
+        <button onclick="switchInstallTab('pc')" id="tab-inst-pc" class="flex-1 py-1.5 text-xs font-semibold rounded-lg tab-install-inactive transition">💻 PC (Edge/Chrome)</button>
       </div>
 
       <!-- iOS 안내 -->
-      <div id="inst-guide-ios" class="hidden space-y-2 text-xs text-slate-300">
-        <div class="p-3 bg-[#080b12] rounded-xl border border-[#1a2236] space-y-2 leading-relaxed">
-          <div class="font-bold text-amber-400 flex items-center gap-1.5">
+      <div id="inst-guide-ios" class="hidden space-y-2 text-xs" style="color: var(--ink);">
+        <div class="p-3 theme-card-subtle rounded-xl space-y-2 leading-relaxed">
+          <div class="font-bold text-[#a2601b] dark:text-[#d4af37] flex items-center gap-1.5">
             <span>🍎 아이폰·아이패드 3단계 설치법:</span>
           </div>
           <div class="flex items-start gap-2.5">
             <span class="w-5 h-5 rounded-full bg-amber-500 text-slate-950 font-black flex items-center justify-center text-[10px] shrink-0 mt-0.5">1</span>
-            <div>사파리(Safari) 화면 하단 중앙의 <b>공유 버튼 ( <svg class="inline-block w-3.5 h-3.5 align-middle text-amber-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 15V4"/><path d="m8 8 4-4 4 4"/><path d="M5 13v6a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-6"/></svg> )</b>을 터치합니다.</div>
+            <div>사파리(Safari) 화면 하단 중앙의 <b>공유 버튼 ( <svg class="inline-block w-3.5 h-3.5 align-middle text-[#a2601b] dark:text-[#d4af37]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 15V4"/><path d="m8 8 4-4 4 4"/><path d="M5 13v6a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-6"/></svg> )</b>을 터치합니다.</div>
           </div>
           <div class="flex items-start gap-2.5">
             <span class="w-5 h-5 rounded-full bg-amber-500 text-slate-950 font-black flex items-center justify-center text-[10px] shrink-0 mt-0.5">2</span>
@@ -1084,8 +1253,8 @@
       </div>
 
       <!-- Android 안내 -->
-      <div id="inst-guide-android" class="space-y-2 text-xs text-slate-300">
-        <div class="p-3 bg-[#080b12] rounded-xl border border-[#1a2236] space-y-2 leading-relaxed">
+      <div id="inst-guide-android" class="space-y-2 text-xs" style="color: var(--ink);">
+        <div class="p-3 theme-card-subtle rounded-xl space-y-2 leading-relaxed">
           <div class="flex items-start gap-2.5">
             <span class="w-5 h-5 rounded-full bg-amber-500 text-slate-950 font-black flex items-center justify-center text-[10px] shrink-0 mt-0.5">1</span>
             <div>상단 <b>[📲 지금 바로 홈 화면에 앱 설치하기]</b> 버튼을 누르면 1초 만에 설치 팝업이 뜹니다.</div>
@@ -1098,8 +1267,8 @@
       </div>
 
       <!-- PC 안내 -->
-      <div id="inst-guide-pc" class="hidden space-y-2 text-xs text-slate-300">
-        <div class="p-3 bg-[#080b12] rounded-xl border border-[#1a2236] space-y-2 leading-relaxed">
+      <div id="inst-guide-pc" class="hidden space-y-2 text-xs" style="color: var(--ink);">
+        <div class="p-3 theme-card-subtle rounded-xl space-y-2 leading-relaxed">
           <div class="flex items-start gap-2.5">
             <span class="w-5 h-5 rounded-full bg-sky-500 text-slate-950 font-black flex items-center justify-center text-[10px] shrink-0 mt-0.5">1</span>
             <div>브라우저(Edge / Chrome) 주소창 오른쪽 끝의 <b>[설치 아이콘(🖥️ / ➕)]</b>을 클릭합니다.</div>
@@ -1111,7 +1280,7 @@
         </div>
       </div>
 
-      <button onclick="closeModal('modal-install-guide')" class="w-full py-2.5 rounded-xl btn-surface text-slate-200 hover:text-white font-bold text-xs transition cursor-pointer">
+      <button onclick="closeModal('modal-install-guide')" class="w-full py-2.5 rounded-xl btn-surface font-bold text-xs transition cursor-pointer">
         확인 완료
       </button>
     </div>
@@ -1536,6 +1705,30 @@
         <button onclick="closeModal('modal-settings')" class="w-7 h-7 rounded-lg bg-[#faf8f5] hover:bg-[#f0ece1] text-[#78716c] hover:text-[#1c1917] flex items-center justify-center text-sm transition cursor-pointer">✕</button>
       </div>
 
+      <!-- 0. 컬러 테마 설정 (Sulsul-Diary 정통 라이트 그레이 & 딥 블랙) -->
+      <div class="p-4 rounded-xl theme-card space-y-2.5 shadow-sm">
+        <div class="flex items-center justify-between">
+          <span class="text-xs font-black flex items-center gap-1.5" style="color: var(--ink);">
+            <i class="fa-solid fa-circle-half-stroke text-[#a2601b] dark:text-[#d4af37]"></i>
+            <span>컬러 테마 설정 (Two-Tone Theme)</span>
+          </span>
+          <span id="settings-current-theme-badge" class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-500/10 text-[#a2601b] dark:text-[#d4af37] border border-amber-500/20">라이트 그레이</span>
+        </div>
+        <p class="text-[11px] leading-relaxed" style="color: var(--ink2);">
+          주간 시인성이 뛰어난 애플 포그 <b>라이트 그레이</b>와 야간 눈부심을 줄인 <b>딥 블랙(Deep Onyx)</b> 럭셔리 모드를 자유롭게 전환할 수 있습니다.
+        </p>
+        <div class="grid grid-cols-2 gap-2 pt-1">
+          <button id="btn-theme-light" onclick="setTheme('light')" class="py-2.5 px-3 rounded-xl border font-bold text-xs flex items-center justify-center gap-2 transition cursor-pointer">
+            <span>☀️</span>
+            <span>라이트 그레이</span>
+          </button>
+          <button id="btn-theme-dark" onclick="setTheme('dark')" class="py-2.5 px-3 rounded-xl border font-bold text-xs flex items-center justify-center gap-2 transition cursor-pointer">
+            <span>🌙</span>
+            <span>딥 블랙</span>
+          </button>
+        </div>
+      </div>
+
       <!-- 1. 남미 22일 예제 가이드 삭제 및 복원 관리 -->
       <div class="p-4 rounded-xl bg-white border border-[#e8e2d5] space-y-2.5 shadow-sm">
         <div class="flex items-center justify-between">
@@ -1713,7 +1906,62 @@
     }
 
     // 앱 버전 및 글로벌 네임스페이스 (Sulsul-Travel Invariant Rule R-10, R-11, R-12, R-13, R-14, R-15)
-    const APP_VER = '1.0.7';
+    const APP_VER = '1.0.8';
+
+    // ══════════════════════════════════════════
+    // [Two-Tone Theme System] 라이트 그레이 & 딥 블랙 테마 엔진
+    // ══════════════════════════════════════════
+    function setTheme(theme) {
+      if (theme !== 'dark') theme = 'light';
+      document.documentElement.setAttribute('data-theme', theme);
+      localStorage.setItem('st_theme', theme);
+      updateThemeUi(theme);
+    }
+
+    function toggleTheme() {
+      const current = document.documentElement.getAttribute('data-theme') || 'light';
+      const next = current === 'dark' ? 'light' : 'dark';
+      setTheme(next);
+      if (typeof showToast === 'function') {
+        showToast(next === 'dark' ? '🌙 딥 블랙 럭셔리 테마가 적용되었습니다.' : '☀️ 라이트 그레이 정통 테마가 적용되었습니다.');
+      }
+    }
+
+    function updateThemeUi(theme) {
+      const isDark = theme === 'dark';
+      // 1. 헤더 테마 아이콘 및 툴팁
+      const headerIcon = document.getElementById('header-theme-icon');
+      if (headerIcon) {
+        headerIcon.innerText = isDark ? '☀️' : '🌙';
+      }
+      const headerBtn = document.getElementById('header-btn-theme');
+      if (headerBtn) {
+        headerBtn.setAttribute('title', isDark ? '라이트 그레이 테마로 전환' : '딥 블랙 테마로 전환');
+      }
+
+      // 2. 설정 모달 테마 뱃지 및 버튼 활성 상태
+      const badge = document.getElementById('settings-current-theme-badge');
+      if (badge) {
+        badge.innerText = isDark ? '딥 블랙 (Deep Onyx)' : '라이트 그레이 (Apple Fog)';
+      }
+      const btnLight = document.getElementById('btn-theme-light');
+      const btnDark = document.getElementById('btn-theme-dark');
+      if (btnLight && btnDark) {
+        if (isDark) {
+          btnDark.className = "py-2.5 px-3 rounded-xl bg-[#d4af37] text-[#0b0c0e] border border-[#d4af37] font-black text-xs flex items-center justify-center gap-2 shadow-sm transition ring-2 ring-amber-400/30";
+          btnLight.className = "py-2.5 px-3 rounded-xl bg-[var(--surface2)] text-[var(--ink2)] border border-[var(--line)] font-semibold text-xs flex items-center justify-center gap-2 hover:text-[var(--ink)] transition";
+        } else {
+          btnLight.className = "py-2.5 px-3 rounded-xl bg-[#1d1d1f] text-white border border-[#1d1d1f] font-black text-xs flex items-center justify-center gap-2 shadow-sm transition ring-2 ring-stone-900/20";
+          btnDark.className = "py-2.5 px-3 rounded-xl bg-[var(--surface2)] text-[var(--ink2)] border border-[var(--line)] font-semibold text-xs flex items-center justify-center gap-2 hover:text-[var(--ink)] transition";
+        }
+      }
+
+      // 3. 브라우저 최상단 시스템 메타 컬러 동기화
+      const metaTheme = document.querySelector('meta[name="theme-color"]');
+      if (metaTheme) {
+        metaTheme.setAttribute('content', isDark ? '#0b0c0e' : '#f5f5f7');
+      }
+    }
 
     // 여행 컨셉 마스터 데이터 (Sulsul-Diary 테마)
     const TRAVEL_CONCEPTS = [
@@ -1780,6 +2028,10 @@
     });
 
     function initApp() {
+      // 0. 컬러 테마 초기화 (Two-Tone Theme System)
+      const savedTheme = localStorage.getItem('st_theme') || 'light';
+      setTheme(savedTheme);
+
       // 1. LocalStorage에서 여행 컬렉션 로드 (하위 호환 마이그레이션)
       const rawV2 = localStorage.getItem('st_trips_v2');
       if (rawV2) {
@@ -2015,9 +2267,9 @@
         const btn = document.getElementById(`tab-filter-${s}`);
         if (!btn) return;
         if (s === status) {
-          btn.className = 'px-3.5 py-1.5 rounded-full font-bold transition whitespace-nowrap bg-[#1c1917] text-white shadow-sm cursor-pointer';
+          btn.className = 'px-3.5 py-1.5 rounded-full font-bold transition whitespace-nowrap hub-tab-active shadow-sm cursor-pointer';
         } else {
-          btn.className = 'px-3.5 py-1.5 rounded-full font-bold transition whitespace-nowrap bg-white border border-[#e8e2d5] text-[#78716c] hover:text-[#1c1917] hover:border-[#dfd7ca] cursor-pointer';
+          btn.className = 'px-3.5 py-1.5 rounded-full font-bold transition whitespace-nowrap hub-tab-inactive cursor-pointer';
         }
       });
       renderTripCards();
@@ -2463,10 +2715,10 @@
         const btn = document.getElementById(`nav-tab-${t}`);
         const view = document.getElementById(`tab-content-${t}`);
         if (t === tabId) {
-          btn.className = "flex-1 min-w-[75px] py-2 px-3 rounded-lg text-xs font-bold flex items-center justify-center gap-1.5 transition bg-amber-500 text-slate-950 shadow-sm";
+          btn.className = "flex-1 min-w-[75px] py-2 px-3 rounded-lg text-xs font-bold flex items-center justify-center gap-1.5 transition nav-tab-active shadow-sm";
           view.classList.remove('hidden');
         } else {
-          btn.className = "flex-1 min-w-[75px] py-2 px-3 rounded-lg text-xs font-bold flex items-center justify-center gap-1.5 transition text-slate-400 hover:text-white hover:bg-[#141c2e]";
+          btn.className = "flex-1 min-w-[75px] py-2 px-3 rounded-lg text-xs font-bold flex items-center justify-center gap-1.5 transition nav-tab-inactive";
           view.classList.add('hidden');
         }
       });
@@ -2480,10 +2732,10 @@
         const btn = document.getElementById(`btn-subtab-${st}`);
         const view = document.getElementById(`subtab-view-${st}`);
         if (st === subTabId) {
-          btn.className = "px-3 py-1.5 rounded-lg text-xs font-bold bg-[#141c2e] text-amber-400 border border-[#23304c] shadow-sm flex items-center gap-1.5";
+          btn.className = "px-3 py-1.5 rounded-lg text-xs font-bold subtab-active shadow-sm flex items-center gap-1.5";
           view.classList.remove('hidden');
         } else {
-          btn.className = "px-3 py-1.5 rounded-lg text-xs font-bold text-slate-400 hover:text-white flex items-center gap-1.5";
+          btn.className = "px-3 py-1.5 rounded-lg text-xs font-bold subtab-inactive flex items-center gap-1.5";
           view.classList.add('hidden');
         }
       });
@@ -3363,10 +3615,10 @@
         const view = document.getElementById(`inst-guide-${p}`);
         if (btn && view) {
           if (p === platform) {
-            btn.className = "flex-1 py-1.5 text-xs font-bold rounded-lg bg-gradient-to-r from-amber-500/20 to-amber-600/20 text-amber-300 border border-amber-500/40 shadow-sm transition";
+            btn.className = "flex-1 py-1.5 text-xs font-black rounded-lg tab-install-active shadow-sm transition";
             view.classList.remove('hidden');
           } else {
-            btn.className = "flex-1 py-1.5 text-xs font-bold rounded-lg text-slate-400 hover:text-white transition";
+            btn.className = "flex-1 py-1.5 text-xs font-semibold rounded-lg tab-install-inactive transition";
             view.classList.add('hidden');
           }
         }
@@ -4793,7 +5045,9 @@
       toggleHubViewMode: toggleHubViewMode,
       toggleAnalyticsView: toggleAnalyticsView,
       openRouteMapModal: openRouteMapModal,
-      openSettingsModal: openSettingsModal
+      openSettingsModal: openSettingsModal,
+      setTheme: setTheme,
+      toggleTheme: toggleTheme
     };
   </script>
 </body>

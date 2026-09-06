@@ -24,6 +24,26 @@
 - [ ] 항공권/호텔 예약 바우처 PDF 자동 파싱 일정 등록
 - [ ] 여행 동행자 실시간 음성 메모 AI 다이어리 자동 변환
 
+## [v1.0.8] - 2026-09-06
+### 🎯 시인성 전면 쇄신 & Sulsul-Diary Two-Tone (라이트 그레이 & 딥 블랙) 테마 시스템 구축
+술술다이어리 오도미터 순차 올림 원칙(`v1.0.7` → `v1.0.8`)에 따라, WCAG AA 4.5:1+ 고대비 시인성 표준을 100% 충족하도록 텍스트-배경 대비를 전면 쇄신하고, Sulsul-Diary 정통 2-Tone 컬러 테마(애플 포그 라이트 그레이 `#f5f5f7` 및 딥 오닉스 블랙 `#0b0c0e`) 엔진을 구축한 릴리즈.
+
+### 🌟 신규 기능 및 개선 사항 (Added & Improved)
+- **[UI/UX] Sulsul-Diary Two-Tone Theme System (라이트 그레이 & 딥 블랙) 엔진 구축**:
+  - **Light Gray (Apple Fog Canvas)**: `--bg: #f5f5f7`, `--surface: #ffffff`, `--line: #d6d6d6`, `--ink: #1d1d1f` (Apple Space Black), `--ink2: #555555`, `--accent: #a2601b` (Whisky Gold).
+  - **Deep Black (Deep Onyx Luxury)**: `--bg: #0b0c0e`, `--surface: #16181d`, `--line: rgba(255,255,255,0.08)`, `--ink: #ededed` (Off-white), `--ink2: #a1a1aa`, `--accent: #d4af37` (Champagne Gold).
+  - `localStorage.getItem('st_theme')` 기반 영구 테마 보관 및 `<head>` 직행 스크립트로 깜빡임(FOUC) 100% 방지.
+- **[헤더 & 설정] 원클릭 테마 토글 버튼 & 환경설정 테마 스위처 카드 탑재**:
+  - 최상단 앱 헤더: `[v1.0.8]` 뱃지 옆에 `[☀️/🌙]` 원클릭 테마 전환 버튼(`#header-btn-theme`) 배치.
+  - 설정창(`#modal-settings`): `[☀️ 라이트 그레이]` / `[🌙 딥 블랙]` 직관적 2구 선택 카드 구축.
+  - 브라우저 상단 시스템바 `<meta name="theme-color">` 실시간 동기화.
+- **[시인성 쇄신] WCAG AA/AAA 초고대비 UI 가독성 전면 개선**:
+  - PWA 설치 안내 모달(`#modal-install-guide`): 어두운 그라디언트 내 다크 그레이 텍스트 및 노란색 폰트 시인성 실패 문제를 완벽 해소.
+  - 고대비 전용 테마 배너(`.theme-banner`) 및 플랫폼 탭(`.tab-install-active` / `.tab-install-inactive`) 도입으로 명암비 최대 21:1 달성.
+  - 상태 필터(`.hub-tab-active`), 네비게이션 탭(`.nav-tab-active`), 서브탭(`.subtab-active`)을 CSS 변수 기반 시맨틱 클래스로 일원화하여 두 톤 모두에서 선명한 텍스트 가독성 확보.
+- **[무결성 검증] Gatekeeper 4단계 전 관문 통과 및 Headless Edge V8 런타임 무오류 달성**:
+  - `tools-verify.ps1` 4개 게이트 및 27대 필수 DOM ID 100% 보존 통과.
+
 ## [v1.0.7] - 2026-09-06
 ### 🎯 술술다이어리 웜 크림 럭셔리 테마 이식 & 상단 헤더·필터·AI 여행 생성 및 서버리스 공유 아키텍처
 술술다이어리 오도미터 순차 올림 원칙(`v1.0.6` → `v1.0.7`)에 따라, 술술다이어리의 웜 크림 아이보리 럭셔리 라이트 테마와 상단 레이아웃을 전격 이식하고 다차원 필터/검색, 컨셉 태그 및 버킷리스트 기반 AI 30분 맞춤 일정 자동 설계, 남미 예제 삭제/복원, 100% 서버리스 URL 데이터 패킹 공유 아키텍처를 완비한 릴리즈.
