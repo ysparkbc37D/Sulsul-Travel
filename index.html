@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ko" class="dark">
+<html lang="ko">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
@@ -7,10 +7,15 @@
 
   <!-- PWA Meta & Icons -->
   <link rel="manifest" href="manifest.webmanifest">
-  <meta name="theme-color" content="#080b12">
+  <meta name="theme-color" content="#f7f6f2">
   <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+
+  <!-- Editorial Luxury Serif Fonts (Cormorant Garamond / Playfair Display) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700;800&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
 
   <!-- Tailwind CSS & FontAwesome -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -30,14 +35,14 @@
         extend: {
           colors: {
             brand: {
-              gold: '#f59e0b',
-              goldLight: '#fbbf24',
-              emerald: '#10b981',
-              dark: '#080b12',
-              card: '#0f1422',
-              cardHover: '#141c2e',
-              border: '#1e263c',
-              borderLight: '#2a3652'
+              gold: '#a2601b',
+              goldLight: '#d7a643',
+              emerald: '#059669',
+              dark: '#1c1917',
+              card: '#ffffff',
+              cardHover: '#fcfbf9',
+              border: '#e8e2d5',
+              borderLight: '#f0ece1'
             }
           }
         }
@@ -48,20 +53,36 @@
   <style>
     @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
     
+    :root {
+      --bg: #f7f6f2;
+      --card-bg: #ffffff;
+      --card-border: #e8e2d5;
+      --accent: #a2601b;
+      --accent2: #c9962f;
+      --accent-bg: #f5ede2;
+      --accent-line: #dfd1be;
+      --text-main: #1c1917;
+      --text-sub: #78716c;
+      --serif: 'Cormorant Garamond', 'Playfair Display', 'Noto Serif KR', Georgia, serif;
+    }
+
     body {
-      font-family: 'Pretendard Variable', Pretendard, -apple-system, BlinkMacSystemFont, system-ui, 'Segoe UI', Roboto, Helvetica, Arial, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
-      background-color: #080b12;
-      color: #f1f5f9;
+      font-family: 'Pretendard Variable', Pretendard, -apple-system, BlinkMacSystemFont, system-ui, 'Segoe UI', Roboto, sans-serif;
+      background-color: var(--bg);
+      color: var(--text-main);
       -webkit-tap-highlight-color: transparent;
       user-select: none;
+    }
+    .font-serif-brand {
+      font-family: var(--serif);
     }
     input, textarea, select {
       user-select: text;
     }
     ::-webkit-scrollbar { width: 6px; height: 6px; }
-    ::-webkit-scrollbar-track { background: #080b12; }
-    ::-webkit-scrollbar-thumb { background: #1e263c; border-radius: 4px; }
-    ::-webkit-scrollbar-thumb:hover { background: #2a3652; }
+    ::-webkit-scrollbar-track { background: #f7f6f2; }
+    ::-webkit-scrollbar-thumb { background: #dfd1be; border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: #c5b59f; }
     
     /* Bottom Sheet / Modal System (Sulsul-Travel Invariant R-9) */
     .sheet-container {
@@ -91,9 +112,9 @@
     .sheet-scrim {
       position: absolute;
       inset: 0;
-      background: rgba(4, 7, 14, 0.78);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
+      background: rgba(28, 25, 23, 0.45);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
       transition: opacity 0.25s ease-out;
     }
     .sheet-box {
@@ -101,12 +122,13 @@
       width: 100%;
       max-width: 680px;
       max-height: 92vh;
-      background: #0f1422;
+      background: #ffffff;
+      color: #1c1917;
       border-top-left-radius: 1.5rem;
       border-top-right-radius: 1.5rem;
-      border: 1px solid #1e263c;
+      border: 1px solid #e8e2d5;
       border-bottom: none;
-      box-shadow: 0 -20px 50px rgba(0, 0, 0, 0.8), 0 0 30px rgba(245, 158, 11, 0.05);
+      box-shadow: 0 -20px 50px rgba(0, 0, 0, 0.15), 0 0 30px rgba(162, 96, 27, 0.05);
       display: flex;
       flex-direction: column;
       transform: translateY(0);
@@ -119,65 +141,110 @@
       }
       .sheet-box {
         border-radius: 1.5rem;
-        border-bottom: 1px solid #1e263c;
+        border-bottom: 1px solid #e8e2d5;
         max-height: 85vh;
       }
     }
 
-    /* Sulsul-Diary Dark Luxury UI Tokens & Buttons */
+    /* Sulsul-Diary Warm Cream Luxury UI Tokens & Buttons */
     .btn-gold {
-      background: linear-gradient(180deg, #d7a643, #bd8a2a);
-      color: #1a1306;
+      background: linear-gradient(180deg, #d7a643, #a2601b);
+      color: #ffffff;
       font-weight: 800;
       border: none;
-      box-shadow: inset 0 1px 0 rgba(255,255,255,0.35), 0 4px 14px rgba(212, 175, 55, 0.25);
+      box-shadow: 0 4px 14px rgba(162, 96, 27, 0.25);
       transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
     }
     .btn-gold:hover {
-      background: linear-gradient(180deg, #e5b654, #ca9632);
-      box-shadow: inset 0 1px 0 rgba(255,255,255,0.45), 0 6px 20px rgba(212, 175, 55, 0.38);
+      background: linear-gradient(180deg, #e5b654, #bd8a2a);
+      box-shadow: 0 6px 20px rgba(162, 96, 27, 0.35);
       transform: translateY(-1px);
     }
     .btn-gold:active {
       transform: translateY(0);
     }
     .btn-surface {
-      background: #141c2e;
-      border: 1px solid #23304c;
-      color: #cbd5e1;
+      background: #f7f5f0;
+      border: 1px solid #e7e0d3;
+      color: #44403c;
       font-weight: 600;
       transition: all 0.18s ease;
     }
     .btn-surface:hover {
-      background: #1a263e;
-      border-color: #3b4d75;
-      color: #ffffff;
+      background: #eee8dc;
+      border-color: #d6ccbd;
+      color: #1c1917;
     }
     @keyframes pulseGold {
-      0%, 100% { box-shadow: 0 0 0 0 rgba(212, 175, 55, 0.5); }
-      50% { box-shadow: 0 0 0 6px rgba(212, 175, 55, 0); }
+      0%, 100% { box-shadow: 0 0 0 0 rgba(162, 96, 27, 0.4); }
+      50% { box-shadow: 0 0 0 6px rgba(162, 96, 27, 0); }
     }
     .pulse-gold {
       animation: pulseGold 2s infinite;
     }
 
-    /* Leaflet Dark Theme Overrides */
+    /* Sulsul-Diary Warm Cream Luxury Palette Global Bridge */
+    body {
+      background-color: #f7f6f2 !important;
+      color: #1c1917 !important;
+    }
+    .theme-card {
+      background-color: #ffffff;
+      border: 1px solid #e8e2d5;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
+    }
+    .theme-card-subtle {
+      background-color: #fcfbf9;
+      border: 1px solid #ede8df;
+    }
+    .bg-\[\#080b12\] {
+      background-color: #f7f6f2 !important;
+    }
+    .bg-\[\#0f1422\] {
+      background-color: #ffffff !important;
+      border-color: #e8e2d5 !important;
+    }
+    .bg-\[\#141c2e\] {
+      background-color: #fcfbf9 !important;
+      border-color: #e8e2d5 !important;
+      color: #1c1917 !important;
+    }
+    .border-\[\#1e263c\], .border-\[\#1a2236\], .border-\[\#23304c\] {
+      border-color: #e8e2d5 !important;
+    }
+    .text-white {
+      color: #1c1917 !important;
+    }
+    .text-slate-100, .text-slate-200 {
+      color: #292524 !important;
+    }
+    .text-slate-300, .text-slate-400 {
+      color: #78716c !important;
+    }
+    .text-slate-500 {
+      color: #a8a29e !important;
+    }
+    .btn-gold, .btn-gold * {
+      color: #ffffff !important;
+    }
+
+    /* Leaflet Overrides */
     #leaflet-route-map {
       width: 100%;
       height: 480px;
       border-radius: 1rem;
       z-index: 10;
-      background: #080b12;
+      background: #f7f6f2;
     }
     .leaflet-popup-content-wrapper {
-      background: #0f1422 !important;
-      color: #f1f5f9 !important;
-      border: 1px solid #2a3652 !important;
+      background: #ffffff !important;
+      color: #1c1917 !important;
+      border: 1px solid #e8e2d5 !important;
       border-radius: 0.75rem !important;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.8) !important;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.1) !important;
     }
     .leaflet-popup-tip {
-      background: #0f1422 !important;
+      background: #ffffff !important;
     }
     .gold-marker-pin {
       width: 32px;
@@ -244,61 +311,65 @@
   <!-- Knowledge Base Seed -->
   <script src="kb-travel.js"></script>
 </head>
-<body class="min-h-screen bg-[#080b12] text-slate-100 flex flex-col antialiased selection:bg-amber-500/30 selection:text-amber-200">
+<body class="min-h-screen bg-[#f7f6f2] text-[#1c1917] flex flex-col antialiased selection:bg-amber-500/20 selection:text-amber-900">
 
   <!-- ========================================== -->
-  <!-- 1. 최상단 앱 헤더 (Glassmorphic) -->
+  <!-- 1. 최상단 앱 헤더 (Sulsul-Diary Warm Cream Luxury) -->
   <!-- ========================================== -->
-  <header class="sticky top-0 z-30 bg-[#080b12]/90 backdrop-blur-xl border-b border-[#1a2236] px-4 py-3">
-    <div class="max-w-5xl mx-auto flex items-center justify-between gap-3">
+  <header class="sticky top-0 z-30 bg-[#f7f6f2]/95 backdrop-blur-md border-b border-[#e8e2d5] px-4 py-3 shadow-[0_2px_12px_rgba(0,0,0,0.03)]">
+    <div class="max-w-6xl mx-auto flex items-center justify-between gap-3">
       <!-- 좌측 로고 및 버전 -->
-      <div class="flex items-center gap-2.5 cursor-pointer" onclick="switchView('hub')">
-        <span class="w-8 h-8 rounded-xl bg-gradient-to-br from-amber-400 via-amber-500 to-emerald-500 flex items-center justify-center text-slate-950 font-black shadow-lg shadow-amber-500/20">
-          <i class="fa-solid fa-plane-departure text-xs"></i>
+      <div class="flex items-center gap-3 cursor-pointer select-none" onclick="switchView('hub')">
+        <span class="w-9 h-9 rounded-xl bg-gradient-to-br from-[#d7a643] via-[#b8860b] to-[#a2601b] flex items-center justify-center text-white font-serif-brand font-black shadow-md shadow-amber-900/15">
+          <i class="fa-solid fa-compass text-sm"></i>
         </span>
         <div>
-          <h1 class="text-base font-black tracking-tight text-white flex items-center gap-1.5">
-            술술트래블 <span id="app-ver-badge" class="text-[10px] font-bold px-1.5 py-0.5 rounded bg-amber-500/10 text-amber-400 border border-amber-500/20">v1.0.6</span>
-          </h1>
-          <p id="header-trip-name" class="text-[11px] text-slate-400 truncate max-w-[180px] sm:max-w-xs font-medium">인생의 모든 여정을 기록하는 다이어리</p>
+          <div class="flex items-center gap-2">
+            <h1 class="font-serif-brand text-xl sm:text-2xl font-bold tracking-tight text-[#1c1917] flex items-center gap-2">
+              Sulsul Travel
+            </h1>
+          </div>
+          <p id="header-trip-name" class="text-[11px] text-[#78716c] truncate max-w-[190px] sm:max-w-xs font-normal">인생의 모든 여정을 기록하는 다이어리</p>
         </div>
       </div>
 
-      <!-- 우측 빠른 액션 버튼들 -->
-      <div class="flex items-center gap-2">
-        <!-- PWA 스마트 앱 설치 버튼 (미설치 시 골드 하이라이트) -->
-        <button id="btn-native-install" onclick="handleInstallButtonClick()" class="px-2.5 py-1.5 btn-gold rounded-lg text-xs font-black flex items-center gap-1.5 transition shadow-sm cursor-pointer" title="홈 화면에 단독 앱(PWA) 설치">
-          <i class="fa-solid fa-mobile-screen-button text-[11px]"></i>
-          <span id="btn-native-install-txt" class="hidden sm:inline">앱 설치</span>
+      <!-- 우측 액션 클러스터 (요청 순서: 버전 -> 통계 -> 구글맵 -> 설정 -> + 추가) -->
+      <div class="flex items-center gap-1.5 sm:gap-2">
+        <!-- 1. 버전 뱃지 (Sulsul-Diary 테마) -->
+        <span id="app-ver-badge" class="px-2 py-1 rounded-lg bg-[#f0ece1] text-[#a2601b] border border-[#e2dad0] text-[11px] font-bold font-mono shadow-inner cursor-default" title="술술트래블 엔진 버전">v1.0.7</span>
+
+        <!-- 2. 통계 버튼 (📊) -->
+        <button onclick="toggleAnalyticsView()" class="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-[#ffffff] hover:bg-[#faf8f5] border border-[#e8e2d5] text-[#57534e] hover:text-[#1c1917] flex items-center justify-center transition shadow-sm cursor-pointer" title="평생 여행 누적 통계 열람">
+          <span class="text-sm">📊</span>
         </button>
 
-        <!-- 앱 설치 가이드 버튼 -->
-        <button onclick="openInstallGuideModal()" class="px-2.5 py-1.5 bg-[#141c2e] hover:bg-[#1a263e] border border-[#23304c] text-slate-300 hover:text-white rounded-lg text-xs font-semibold flex items-center gap-1.5 transition" title="홈 화면에 앱 추가하는 법">
-          <i class="fa-solid fa-book-open text-[11px] text-amber-400"></i>
-          <span class="hidden sm:inline">설치 가이드</span>
+        <!-- 3. 구글맵/노선지도 버튼 (🗺️) -->
+        <button onclick="openRouteMapModal()" class="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-[#ffffff] hover:bg-[#faf8f5] border border-[#e8e2d5] text-[#57534e] hover:text-[#1c1917] flex items-center justify-center transition shadow-sm cursor-pointer" title="세계 및 남미 비행 궤적 지도">
+          <span class="text-sm">🗺️</span>
         </button>
 
-        <!-- 워크스페이스 상태 시 [동행 공유/클라우드] 버튼 -->
-        <button id="header-btn-share" onclick="openShareModal()" class="hidden px-2.5 py-1.5 bg-indigo-500/15 hover:bg-indigo-500/25 border border-indigo-500/30 text-indigo-300 hover:text-white rounded-lg text-xs font-bold transition flex items-center gap-1.5" title="동행자 초대 및 클라우드 DB 동기화">
-          <i class="fa-solid fa-cloud-arrow-up text-[11px]"></i>
-          <span class="hidden sm:inline">동행 공유</span>
+        <!-- 4. 설정 버튼 (🎛️) -->
+        <button onclick="openSettingsModal()" class="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-[#ffffff] hover:bg-[#faf8f5] border border-[#e8e2d5] text-[#57534e] hover:text-[#1c1917] flex items-center justify-center transition shadow-sm cursor-pointer" title="앱 설정 & 데이터 아카이브">
+          <span class="text-sm">🎛️</span>
         </button>
 
-        <!-- 새 여행 만들기 (허브 뷰 전용) -->
-        <button id="header-btn-create-trip" onclick="openCreateTripModal()" class="px-3 py-1.5 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-slate-950 font-black rounded-lg text-xs flex items-center gap-1.5 shadow-md shadow-amber-500/10 transition">
-          <i class="fa-solid fa-plus text-[10px]"></i>
-          <span>새 여행</span>
-        </button>
-
-        <!-- 허브로 돌아가기 (워크스페이스 전용) -->
-        <button id="header-btn-back-hub" onclick="switchView('hub')" class="hidden px-2.5 py-1.5 bg-[#141c2e] hover:bg-[#1a263e] border border-[#23304c] text-slate-300 hover:text-white rounded-lg text-xs font-bold transition flex items-center gap-1">
-          <i class="fa-solid fa-arrow-left text-[11px]"></i>
-          <span>허브</span>
+        <!-- 5. + 추가 버튼 (시그니처 골드 액션) -->
+        <button id="header-btn-create-trip" onclick="openCreateTripModal()" class="px-3 sm:px-3.5 py-1.5 rounded-xl btn-gold text-xs font-black flex items-center gap-1.5 shadow-sm transition cursor-pointer" title="새 여행 추가 및 AI 일정 설계">
+          <i class="fa-solid fa-plus text-[11px]"></i>
+          <span>추가</span>
         </button>
 
         <!-- AI 비서 챗봇 버튼 -->
-        <button onclick="openModal('modal-ai-chat')" class="w-8 h-8 rounded-lg bg-[#141c2e] hover:bg-[#1a263e] border border-[#23304c] text-amber-400 flex items-center justify-center transition" title="술술 AI 여행 비서">
+        <button onclick="openModal('modal-ai-chat')" class="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-[#ffffff] hover:bg-[#faf8f5] border border-[#e8e2d5] text-[#a2601b] flex items-center justify-center transition shadow-sm cursor-pointer" title="술술 AI 여행 비서">
           <i class="fa-solid fa-wand-magic-sparkles text-xs"></i>
+        </button>
+
+        <!-- 히든 보조 버튼들 (Mandatory IDs & 워크스페이스 상태 보존) -->
+        <button id="btn-native-install" onclick="handleInstallButtonClick()" class="hidden" title="PWA 설치"><span id="btn-native-install-txt">설치</span></button>
+        <button id="header-btn-share" onclick="openShareModal()" class="hidden" title="동행 공유"></button>
+        <button id="header-btn-back-hub" onclick="switchView('hub')" class="hidden px-2.5 py-1.5 bg-[#ffffff] hover:bg-[#faf8f5] border border-[#e8e2d5] text-[#1c1917] rounded-xl text-xs font-bold transition flex items-center gap-1 shadow-sm cursor-pointer">
+          <i class="fa-solid fa-arrow-left text-[11px] text-[#a2601b]"></i>
+          <span>허브</span>
         </button>
       </div>
     </div>
@@ -307,68 +378,133 @@
   <!-- ========================================== -->
   <!-- 2. 인생 여행 허브 뷰 (VIEW-HUB) -->
   <!-- ========================================== -->
-  <main id="view-hub" class="flex-1 max-w-5xl mx-auto w-full px-4 py-6 space-y-6">
+  <main id="view-hub" class="flex-1 max-w-6xl mx-auto w-full px-4 py-5 sm:py-6 space-y-5">
     
     <!-- 스마트 웰컴 배너 (미설치 시 최상단 안내 및 원클릭 설치) -->
     <div id="smart-welcome-banner" class="hidden"></div>
 
-    <!-- 평생 여행 누적 통계 대시보드 (Lifetime Analytics Banner) -->
-    <section id="lifetime-analytics" class="relative overflow-hidden rounded-2xl bg-gradient-to-br from-[#0f1422] via-[#0f1422] to-[#162035] border border-[#1e263c] p-5 sm:p-6 shadow-xl shadow-black/40">
-      <div class="absolute -right-16 -top-16 w-56 h-56 bg-amber-500/10 rounded-full blur-3xl pointer-events-none"></div>
-      <div class="absolute -left-16 -bottom-16 w-56 h-56 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none"></div>
+    <!-- 상태 필터 탭 바 (Sulsul-Diary 스크린샷 100% 일치) -->
+    <div class="flex items-center gap-2 overflow-x-auto pb-1 no-scrollbar text-xs">
+      <button onclick="setHubStatusFilter('all')" id="tab-filter-all" class="px-3.5 py-1.5 rounded-full font-bold transition whitespace-nowrap bg-[#1c1917] text-white shadow-sm cursor-pointer">
+        전체 <span id="count-filter-all" class="ml-1 opacity-80 text-[11px]">0</span>
+      </button>
+      <button onclick="setHubStatusFilter('ongoing')" id="tab-filter-ongoing" class="px-3.5 py-1.5 rounded-full font-bold transition whitespace-nowrap bg-white border border-[#e8e2d5] text-[#78716c] hover:text-[#1c1917] hover:border-[#dfd7ca] cursor-pointer">
+        진행중 <span id="count-filter-ongoing" class="ml-1 text-[11px]">0</span>
+      </button>
+      <button onclick="setHubStatusFilter('planned')" id="tab-filter-planned" class="px-3.5 py-1.5 rounded-full font-bold transition whitespace-nowrap bg-white border border-[#e8e2d5] text-[#78716c] hover:text-[#1c1917] hover:border-[#dfd7ca] cursor-pointer">
+        예정 <span id="count-filter-planned" class="ml-1 text-[11px]">0</span>
+      </button>
+      <button onclick="setHubStatusFilter('completed')" id="tab-filter-completed" class="px-3.5 py-1.5 rounded-full font-bold transition whitespace-nowrap bg-white border border-[#e8e2d5] text-[#78716c] hover:text-[#1c1917] hover:border-[#dfd7ca] cursor-pointer">
+        완료 <span id="count-filter-completed" class="ml-1 text-[11px]">0</span>
+      </button>
+      <button onclick="setHubStatusFilter('bucketlist')" id="tab-filter-bucketlist" class="px-3.5 py-1.5 rounded-full font-bold transition whitespace-nowrap bg-white border border-[#e8e2d5] text-[#78716c] hover:text-[#1c1917] hover:border-[#dfd7ca] cursor-pointer">
+        버킷리스트 <span id="count-filter-bucketlist" class="ml-1 text-[11px]">0</span>
+      </button>
+    </div>
 
+    <!-- 검색 및 다차원 정밀 필터 툴바 -->
+    <div class="p-3 sm:p-3.5 rounded-2xl bg-white border border-[#e8e2d5] shadow-[0_2px_10px_rgba(0,0,0,0.02)] flex flex-col md:flex-row gap-2.5 items-stretch md:items-center justify-between">
+      <!-- 실시간 검색창 -->
+      <div class="relative flex-1">
+        <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-stone-400 text-xs"></i>
+        <input id="hub-search-input" type="text" placeholder="여행지, 국가, 도시, 테마, 컨셉 검색..." oninput="handleHubFilterChange()" class="w-full pl-9 pr-4 py-2 bg-[#faf8f5] border border-[#e8e2d5] rounded-xl text-xs text-[#1c1917] placeholder-stone-400 focus:outline-none focus:border-[#a2601b] transition shadow-inner">
+      </div>
+
+      <!-- 드롭다운 필터 클러스터 -->
+      <div class="flex items-center gap-2 overflow-x-auto pb-1 sm:pb-0 shrink-0">
+        <!-- 국가 필터 -->
+        <select id="hub-filter-country" onchange="handleHubFilterChange()" class="px-3 py-2 bg-[#faf8f5] border border-[#e8e2d5] rounded-xl text-xs font-semibold text-[#44403c] focus:outline-none focus:border-[#a2601b] cursor-pointer">
+          <option value="all">전체 국가</option>
+        </select>
+
+        <!-- 컨셉 필터 -->
+        <select id="hub-filter-concept" onchange="handleHubFilterChange()" class="px-3 py-2 bg-[#faf8f5] border border-[#e8e2d5] rounded-xl text-xs font-semibold text-[#44403c] focus:outline-none focus:border-[#a2601b] cursor-pointer">
+          <option value="all">전체 컨셉</option>
+          <option value="배낭">🎒 배낭여행</option>
+          <option value="럭셔리">👑 럭셔리</option>
+          <option value="가족">👨‍👩‍👧 가족여행</option>
+          <option value="맛집">🍽️ 맛집/미식</option>
+          <option value="가성비">💰 가성비</option>
+          <option value="자연">🏞️ 대자연/트레킹</option>
+          <option value="문화">🏛️ 역사/문화</option>
+          <option value="힐링">🧘 힐링/휴양</option>
+        </select>
+
+        <!-- 정렬 필터 -->
+        <select id="hub-filter-sort" onchange="handleHubFilterChange()" class="px-3 py-2 bg-[#faf8f5] border border-[#e8e2d5] rounded-xl text-xs font-semibold text-[#44403c] focus:outline-none focus:border-[#a2601b] cursor-pointer">
+          <option value="latest">최신 등록순</option>
+          <option value="date-asc">출발일 빠른순</option>
+          <option value="budget-desc">예산 높은순</option>
+          <option value="budget-asc">예산 낮은순</option>
+        </select>
+
+        <!-- 필터 리셋 버튼 -->
+        <button onclick="resetHubFilters()" class="p-2 rounded-xl bg-[#faf8f5] hover:bg-[#f0ece1] border border-[#e8e2d5] text-[#78716c] hover:text-[#1c1917] transition cursor-pointer" title="필터 초기화">
+          <i class="fa-solid fa-arrow-rotate-right text-xs"></i>
+        </button>
+
+        <!-- 뷰 모드 전환 버튼 (카드 뷰 <-> 리스트 뷰) -->
+        <button id="btn-hub-view-mode" onclick="toggleHubViewMode()" class="px-3 py-2 rounded-xl bg-[#faf8f5] hover:bg-[#f0ece1] border border-[#e8e2d5] text-[#1c1917] text-xs font-bold transition flex items-center gap-1.5 cursor-pointer shadow-sm" title="보기 방식 전환 (격자/목록)">
+          <i id="btn-hub-view-mode-icon" class="fa-solid fa-table-cells text-xs text-[#a2601b]"></i>
+          <span id="btn-hub-view-mode-txt" class="hidden sm:inline">격자</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- 평생 여행 누적 통계 대시보드 (Lifetime Analytics Card) -->
+    <section id="lifetime-analytics" class="relative overflow-hidden rounded-2xl bg-white border border-[#e8e2d5] p-5 sm:p-6 shadow-[0_2px_14px_rgba(0,0,0,0.03)]">
       <div class="relative z-10 flex flex-col md:flex-row md:items-center md:justify-between gap-5">
         <div>
-          <div class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-400 text-xs font-bold mb-2">
+          <div class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#fdf6ec] border border-[#f5dfb8] text-[#a2601b] text-xs font-bold mb-2">
             <i class="fa-solid fa-passport text-[11px]"></i>
             <span>인생 여행 아카이브 · 평생 다이어리</span>
           </div>
-          <h2 class="text-xl sm:text-2xl font-black text-white tracking-tight">나의 평생 여행 발자취</h2>
-          <p class="text-xs text-slate-400 mt-1">기록된 모든 여행의 국가, 도시, 경비와 사진이 안전하게 보관됩니다.</p>
+          <h2 class="text-xl sm:text-2xl font-black text-[#1c1917] tracking-tight">나의 평생 여행 발자취</h2>
+          <p class="text-xs text-[#78716c] mt-1">기록된 모든 여행의 국가, 도시, 경비와 사진이 안전하게 보관됩니다.</p>
         </div>
 
         <!-- 6대 누적 스펙 그리드 -->
         <div class="grid grid-cols-3 sm:grid-cols-6 gap-2 sm:gap-3 text-center">
-          <div class="p-2.5 rounded-xl bg-[#080b12]/70 border border-[#1e263c]">
-            <div class="text-[11px] text-slate-400 font-medium">총 여정</div>
-            <div id="stat-lt-trips" class="text-base sm:text-lg font-black text-amber-400 mt-0.5">0개</div>
+          <div class="p-2.5 rounded-xl bg-[#faf8f5] border border-[#e8e2d5]">
+            <div class="text-[11px] text-[#78716c] font-medium">총 여정</div>
+            <div id="stat-lt-trips" class="text-base sm:text-lg font-black text-[#a2601b] mt-0.5">0개</div>
           </div>
-          <div class="p-2.5 rounded-xl bg-[#080b12]/70 border border-[#1e263c]">
-            <div class="text-[11px] text-slate-400 font-medium">방문 국가</div>
-            <div id="stat-lt-countries" class="text-base sm:text-lg font-black text-emerald-400 mt-0.5">0개국</div>
+          <div class="p-2.5 rounded-xl bg-[#faf8f5] border border-[#e8e2d5]">
+            <div class="text-[11px] text-[#78716c] font-medium">방문 국가</div>
+            <div id="stat-lt-countries" class="text-base sm:text-lg font-black text-emerald-700 mt-0.5">0개국</div>
           </div>
-          <div class="p-2.5 rounded-xl bg-[#080b12]/70 border border-[#1e263c]">
-            <div class="text-[11px] text-slate-400 font-medium">방문 도시</div>
-            <div id="stat-lt-cities" class="text-base sm:text-lg font-black text-sky-400 mt-0.5">0개</div>
+          <div class="p-2.5 rounded-xl bg-[#faf8f5] border border-[#e8e2d5]">
+            <div class="text-[11px] text-[#78716c] font-medium">방문 도시</div>
+            <div id="stat-lt-cities" class="text-base sm:text-lg font-black text-sky-700 mt-0.5">0개</div>
           </div>
-          <div class="p-2.5 rounded-xl bg-[#080b12]/70 border border-[#1e263c]">
-            <div class="text-[11px] text-slate-400 font-medium">여행 일수</div>
-            <div id="stat-lt-days" class="text-base sm:text-lg font-black text-indigo-400 mt-0.5">0일</div>
+          <div class="p-2.5 rounded-xl bg-[#faf8f5] border border-[#e8e2d5]">
+            <div class="text-[11px] text-[#78716c] font-medium">여행 일수</div>
+            <div id="stat-lt-days" class="text-base sm:text-lg font-black text-indigo-700 mt-0.5">0일</div>
           </div>
-          <div class="p-2.5 rounded-xl bg-[#080b12]/70 border border-[#1e263c]">
-            <div class="text-[11px] text-slate-400 font-medium">누적 지출</div>
-            <div id="stat-lt-expenses" class="text-base sm:text-lg font-black text-rose-400 mt-0.5">₩0</div>
+          <div class="p-2.5 rounded-xl bg-[#faf8f5] border border-[#e8e2d5]">
+            <div class="text-[11px] text-[#78716c] font-medium">누적 지출</div>
+            <div id="stat-lt-expenses" class="text-base sm:text-lg font-black text-rose-700 mt-0.5">₩0</div>
           </div>
-          <div class="p-2.5 rounded-xl bg-[#080b12]/70 border border-[#1e263c]">
-            <div class="text-[11px] text-slate-400 font-medium">기록 일기</div>
-            <div id="stat-lt-diaries" class="text-base sm:text-lg font-black text-purple-400 mt-0.5">0편</div>
+          <div class="p-2.5 rounded-xl bg-[#faf8f5] border border-[#e8e2d5]">
+            <div class="text-[11px] text-[#78716c] font-medium">기록 일기</div>
+            <div id="stat-lt-diaries" class="text-base sm:text-lg font-black text-purple-700 mt-0.5">0편</div>
           </div>
         </div>
       </div>
     </section>
 
     <!-- 여행 카드 목록 섹션 헤더 -->
-    <div class="flex items-center justify-between pt-2">
+    <div class="flex items-center justify-between pt-1">
       <div class="flex items-center gap-2">
-        <h3 class="text-base sm:text-lg font-black text-white">등록된 여행 컬렉션</h3>
-        <span id="badge-trips-count" class="px-2 py-0.5 rounded-full bg-slate-800 text-slate-300 text-xs font-bold">0</span>
+        <h3 class="text-base sm:text-lg font-black text-[#1c1917]">등록된 여행 컬렉션</h3>
+        <span id="badge-trips-count" class="px-2 py-0.5 rounded-full bg-[#f0ece1] text-[#a2601b] font-bold text-xs">0</span>
       </div>
-      <button onclick="openCreateTripModal()" class="text-xs font-bold text-amber-400 hover:text-amber-300 flex items-center gap-1 transition">
+      <button onclick="openCreateTripModal()" class="text-xs font-bold text-[#a2601b] hover:text-[#8a5015] flex items-center gap-1 transition cursor-pointer">
         <i class="fa-solid fa-plus text-[10px]"></i> 새 여행 만들기
       </button>
     </div>
 
-    <!-- 여행 카드 그리드 컨테이너 -->
+    <!-- 여행 카드 그리드/리스트 컨테이너 -->
     <div id="trip-cards-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
       <!-- 동적 렌더링 영역 -->
     </div>
@@ -1074,38 +1210,44 @@
   <!-- 7. 기존 업무 모달들 (Create Trip, Spot, Expense, AI Trip, AI Chat) -->
   <!-- ========================================== -->
   
-  <!-- 새 여행 만들기 모달 -->
+  <!-- 새 여행 만들기 모달 (Sulsul-Diary Warm Cream Luxury) -->
   <div id="modal-create-trip" class="sheet-container sheet-closed">
     <div class="sheet-scrim" onclick="closeModal('modal-create-trip')"></div>
-    <div class="sheet-box p-6 sm:p-7 space-y-4">
-      <div class="flex items-center justify-between border-b border-[#1e263c] pb-3">
-        <h3 class="text-base font-black text-white flex items-center gap-2">
-          <i class="fa-solid fa-plane text-amber-400"></i> 새 여행 다이어리 만들기
-        </h3>
-        <button onclick="closeModal('modal-create-trip')" class="text-slate-400 hover:text-white text-base">✕</button>
+    <div class="sheet-box max-w-xl p-5 sm:p-7 space-y-4 max-h-[92vh] overflow-y-auto">
+      <div class="flex items-center justify-between border-b border-[#e8e2d5] pb-3 shrink-0">
+        <div class="flex items-center gap-2.5">
+          <span class="w-8 h-8 rounded-xl bg-[#fdf6ec] text-[#a2601b] border border-[#f5dfb8] flex items-center justify-center text-sm shadow-inner">
+            <i class="fa-solid fa-plane-departure"></i>
+          </span>
+          <div>
+            <h3 class="text-base font-black text-[#1c1917]">새 여행 다이어리 등록 & AI 맞춤 설계</h3>
+            <p class="text-[11px] text-[#78716c]">인생의 특별한 여정을 등록하고 AI로 일자별 상세 일정을 자동 생성합니다.</p>
+          </div>
+        </div>
+        <button onclick="closeModal('modal-create-trip')" class="w-7 h-7 rounded-lg bg-[#faf8f5] hover:bg-[#f0ece1] text-[#78716c] hover:text-[#1c1917] flex items-center justify-center text-sm transition cursor-pointer">✕</button>
       </div>
 
       <div class="space-y-3 text-xs">
         <div>
-          <label class="font-bold text-slate-300 block mb-1">여행 제목</label>
-          <input type="text" id="trip-form-title" placeholder="예: 2026 스페인 & 포르투갈 미식 기행" class="w-full px-3 py-2 bg-[#080b12] border border-[#1e263c] rounded-xl text-white focus:outline-none focus:border-amber-500">
+          <label class="font-bold text-[#1c1917] block mb-1">여행 제목 <span class="text-rose-500">*</span></label>
+          <input type="text" id="trip-form-title" placeholder="예: 2026 스페인 & 포르투갈 미식 기행" class="w-full px-3 py-2 bg-[#faf8f5] border border-[#e8e2d5] rounded-xl text-[#1c1917] focus:outline-none focus:border-[#a2601b]">
         </div>
 
         <div class="grid grid-cols-2 gap-3">
           <div>
-            <label class="font-bold text-slate-300 block mb-1">시작일</label>
-            <input type="date" id="trip-form-start" class="w-full px-3 py-2 bg-[#080b12] border border-[#1e263c] rounded-xl text-white focus:outline-none focus:border-amber-500">
+            <label class="font-bold text-[#1c1917] block mb-1">출발일</label>
+            <input type="date" id="trip-form-start" class="w-full px-3 py-2 bg-[#faf8f5] border border-[#e8e2d5] rounded-xl text-[#1c1917] focus:outline-none focus:border-[#a2601b]">
           </div>
           <div>
-            <label class="font-bold text-slate-300 block mb-1">종료일</label>
-            <input type="date" id="trip-form-end" class="w-full px-3 py-2 bg-[#080b12] border border-[#1e263c] rounded-xl text-white focus:outline-none focus:border-amber-500">
+            <label class="font-bold text-[#1c1917] block mb-1">종료일</label>
+            <input type="date" id="trip-form-end" class="w-full px-3 py-2 bg-[#faf8f5] border border-[#e8e2d5] rounded-xl text-[#1c1917] focus:outline-none focus:border-[#a2601b]">
           </div>
         </div>
 
         <div class="grid grid-cols-2 gap-3">
           <div>
-            <label class="font-bold text-slate-300 block mb-1">기준 통화</label>
-            <select id="trip-form-curr" class="w-full px-3 py-2 bg-[#080b12] border border-[#1e263c] rounded-xl text-white focus:outline-none focus:border-amber-500">
+            <label class="font-bold text-[#1c1917] block mb-1">기준 통화</label>
+            <select id="trip-form-curr" class="w-full px-3 py-2 bg-[#faf8f5] border border-[#e8e2d5] rounded-xl text-[#1c1917] focus:outline-none focus:border-[#a2601b] cursor-pointer">
               <option value="KRW">KRW (대한민국 원)</option>
               <option value="USD">USD (미국 달러)</option>
               <option value="EUR">EUR (유로)</option>
@@ -1116,25 +1258,56 @@
             </select>
           </div>
           <div>
-            <label class="font-bold text-slate-300 block mb-1">총 목표 예산</label>
-            <input type="number" id="trip-form-budget" placeholder="예: 5000000" class="w-full px-3 py-2 bg-[#080b12] border border-[#1e263c] rounded-xl text-white focus:outline-none focus:border-amber-500">
+            <label class="font-bold text-[#1c1917] block mb-1">총 목표 예산</label>
+            <input type="number" id="trip-form-budget" placeholder="예: 5000000" class="w-full px-3 py-2 bg-[#faf8f5] border border-[#e8e2d5] rounded-xl text-[#1c1917] focus:outline-none focus:border-[#a2601b]">
           </div>
         </div>
 
         <div>
-          <label class="font-bold text-slate-300 block mb-1">방문 국가 (쉼표 구분)</label>
-          <input type="text" id="trip-form-countries" placeholder="예: 스페인, 포르투갈" class="w-full px-3 py-2 bg-[#080b12] border border-[#1e263c] rounded-xl text-white focus:outline-none focus:border-amber-500">
+          <label class="font-bold text-[#1c1917] block mb-1">방문 국가 / 지역 (쉼표 구분)</label>
+          <input type="text" id="trip-form-countries" placeholder="예: 스페인, 포르투갈 (바르셀로나, 리스본)" class="w-full px-3 py-2 bg-[#faf8f5] border border-[#e8e2d5] rounded-xl text-[#1c1917] focus:outline-none focus:border-[#a2601b]">
+        </div>
+
+        <!-- 여행 컨셉 멀티 칩 선택 -->
+        <div>
+          <label class="font-bold text-[#1c1917] block mb-1.5">여행 컨셉 및 테마 (복수 선택 가능)</label>
+          <div id="trip-form-concept-chips" class="flex flex-wrap gap-1.5">
+            <!-- 동적 렌더링 영역 -->
+          </div>
+        </div>
+
+        <!-- 가고픈 여행지 / 버킷리스트 메모 -->
+        <div>
+          <label class="font-bold text-[#1c1917] block mb-1">가고픈 여행지 · 버킷리스트 메모</label>
+          <textarea id="trip-form-wishlist" rows="2" placeholder="꼭 가고 싶은 스팟이나 경험하고픈 활동을 적어주세요. AI가 일정 설계 시 적극 반영합니다. (예: 사그라다 파밀리아 내부 관람, 타파스 골목 투어, 신트라 페나성...)" class="w-full px-3 py-2 bg-[#faf8f5] border border-[#e8e2d5] rounded-xl text-[#1c1917] placeholder-stone-400 focus:outline-none focus:border-[#a2601b]"></textarea>
         </div>
 
         <div>
-          <label class="font-bold text-slate-300 block mb-1">여행 스타일 / 테마</label>
-          <input type="text" id="trip-form-style" placeholder="예: 미식 투어 + 가우디 건축 기행 + 렌터카 여행" class="w-full px-3 py-2 bg-[#080b12] border border-[#1e263c] rounded-xl text-white focus:outline-none focus:border-amber-500">
+          <label class="font-bold text-[#1c1917] block mb-1">여행 스타일 한 줄 요약</label>
+          <input type="text" id="trip-form-style" placeholder="예: 미식 투어 + 가우디 건축 기행 + 힐링 산책" class="w-full px-3 py-2 bg-[#faf8f5] border border-[#e8e2d5] rounded-xl text-[#1c1917] focus:outline-none focus:border-[#a2601b]">
         </div>
+
+        <!-- AI 자동 30분 일정 설계 토글 -->
+        <label class="flex items-start gap-3 p-3.5 rounded-xl bg-[#fdf6ec] border border-[#f5dfb8] cursor-pointer shadow-sm">
+          <input type="checkbox" id="trip-form-ai-auto" checked class="mt-0.5 w-4 h-4 text-[#a2601b] rounded focus:ring-amber-500">
+          <div>
+            <div class="font-bold text-xs text-[#a2601b] flex items-center gap-1.5">
+              <i class="fa-solid fa-wand-magic-sparkles"></i>
+              <span>AI 맞춤 30분 단위 일정 자동 설계 탑재</span>
+            </div>
+            <div class="text-[11px] text-[#78716c] mt-0.5 leading-relaxed">
+              체크 시 등록과 동시에 일자별 최적 30분 추천 스팟을 자동 생성하여 즉시 여행 카드를 완성합니다.
+            </div>
+          </div>
+        </label>
       </div>
 
-      <div class="flex items-center gap-3 pt-2">
-        <button onclick="closeModal('modal-create-trip')" class="flex-1 py-2.5 rounded-xl bg-[#141c2e] text-slate-300 font-bold text-xs">취소</button>
-        <button onclick="submitCreateTrip()" class="flex-1 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 text-slate-950 font-black text-xs shadow-md">새 여행 등록</button>
+      <div class="flex items-center gap-3 pt-2 border-t border-[#e8e2d5]">
+        <button onclick="closeModal('modal-create-trip')" class="flex-1 py-2.5 rounded-xl bg-[#faf8f5] hover:bg-[#f0ece1] border border-[#e8e2d5] text-[#78716c] font-bold text-xs transition cursor-pointer">취소</button>
+        <button onclick="submitCreateTrip()" class="flex-1 py-2.5 rounded-xl btn-gold text-xs font-black shadow-md cursor-pointer flex items-center justify-center gap-1.5">
+          <i class="fa-solid fa-plus text-[11px]"></i>
+          <span>새 여행 등록하기</span>
+        </button>
       </div>
     </div>
   </div>
@@ -1344,6 +1517,169 @@
   </div>
 
   <!-- ========================================== -->
+  <!-- 7.5 설정 & 아카이브 관리 모달 (MODAL-SETTINGS) -->
+  <!-- ========================================== -->
+  <div id="modal-settings" class="sheet-container sheet-closed">
+    <div class="sheet-scrim" onclick="closeModal('modal-settings')"></div>
+    <div class="sheet-box max-w-xl p-5 sm:p-7 space-y-5 max-h-[90vh] overflow-y-auto">
+      <!-- 헤더 -->
+      <div class="flex items-center justify-between border-b border-[#e8e2d5] pb-3 shrink-0">
+        <div class="flex items-center gap-2.5">
+          <span class="w-8 h-8 rounded-xl bg-[#fdf6ec] text-[#a2601b] border border-[#f5dfb8] flex items-center justify-center text-sm shadow-inner">
+            <i class="fa-solid fa-sliders"></i>
+          </span>
+          <div>
+            <h3 class="text-base font-black text-[#1c1917]">술술트래블 환경설정 & 아카이브</h3>
+            <p class="text-[11px] text-[#78716c]">데이터 보관, 남미 가이드 관리, Gemini API 키 및 클라우드 공유</p>
+          </div>
+        </div>
+        <button onclick="closeModal('modal-settings')" class="w-7 h-7 rounded-lg bg-[#faf8f5] hover:bg-[#f0ece1] text-[#78716c] hover:text-[#1c1917] flex items-center justify-center text-sm transition cursor-pointer">✕</button>
+      </div>
+
+      <!-- 1. 남미 22일 예제 가이드 삭제 및 복원 관리 -->
+      <div class="p-4 rounded-xl bg-white border border-[#e8e2d5] space-y-2.5 shadow-sm">
+        <div class="flex items-center justify-between">
+          <span class="text-xs font-black text-[#1c1917] flex items-center gap-1.5">
+            <i class="fa-solid fa-map-location-dot text-[#a2601b]"></i>
+            <span>남미 4개국 22일 가이드 예제 관리</span>
+          </span>
+          <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-[#fdf6ec] text-[#a2601b] border border-[#f5dfb8]">공식 가이드</span>
+        </div>
+        <p class="text-[11px] text-[#78716c] leading-relaxed">
+          초기 제공되는 [2026 남미 4개국 3주 최적화 황금 여정] 22일 가이드 예제를 삭제하여 나만의 여행만 심플하게 관리하거나, 언제든 원본 가이드로 즉시 복원할 수 있습니다.
+        </p>
+        <div class="flex items-center gap-2 pt-1">
+          <button onclick="deleteSouthAmericaSample()" class="flex-1 py-2 px-3 rounded-xl bg-rose-50 hover:bg-rose-100 border border-rose-200 text-rose-700 font-bold text-xs flex items-center justify-center gap-1.5 transition cursor-pointer">
+            <i class="fa-regular fa-trash-can text-xs"></i>
+            <span>남미 22일 예제 삭제</span>
+          </button>
+          <button onclick="restoreSouthAmericaSample()" class="flex-1 py-2 px-3 rounded-xl bg-[#fdf6ec] hover:bg-[#faebd7] border border-[#f5dfb8] text-[#a2601b] font-bold text-xs flex items-center justify-center gap-1.5 transition cursor-pointer">
+            <i class="fa-solid fa-wand-magic-sparkles text-xs"></i>
+            <span>예제 다시 불러오기</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- 2. 공유 클라우드 DB & 동행자 공유 (Zero-Backend 아키텍처) -->
+      <div class="p-4 rounded-xl bg-[#faf8f5] border border-[#e8e2d5] space-y-3">
+        <div class="flex items-center justify-between">
+          <span class="text-xs font-black text-[#1c1917] flex items-center gap-1.5">
+            <i class="fa-solid fa-cloud-arrow-up text-indigo-600"></i>
+            <span>공유 클라우드 DB & 동행자 공유 안내</span>
+          </span>
+          <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">100% 서버리스 PWA</span>
+        </div>
+        <div class="text-[11px] text-[#78716c] leading-relaxed space-y-1.5 bg-white p-3 rounded-xl border border-[#e8e2d5]">
+          <p class="font-bold text-[#1c1917] flex items-center gap-1">
+            <i class="fa-solid fa-circle-check text-emerald-600 text-[10px]"></i>
+            중앙 웹 서버 없이 안전하게 공유하는 원리
+          </p>
+          <p>
+            술술트래블은 외부 중앙 서버를 두지 않고, 사용자의 기기(로컬 브라우저)에 단독으로 데이터를 저장합니다. (서버 비용 0원, 완벽한 개인정보 보호)
+          </p>
+          <p>
+            동행자와 일정을 공유할 때는 아래 버튼을 눌러 **URL 데이터 패킹 공유 링크**를 생성하세요. 링크를 열면 동행자의 스마트폰에도 동일한 여행 카드가 즉시 복제 및 생성됩니다!
+          </p>
+        </div>
+        <button onclick="exportActiveTripShareLink()" class="w-full py-2.5 rounded-xl btn-gold text-xs font-black flex items-center justify-center gap-2 shadow-sm cursor-pointer">
+          <i class="fa-solid fa-share-nodes text-xs"></i>
+          <span>현재 여행 원클릭 공유 링크 복사 (URL 압축 패킹)</span>
+        </button>
+      </div>
+
+      <!-- 3. Google Gemini API 개인 키 설정 -->
+      <div class="p-4 rounded-xl bg-white border border-[#e8e2d5] space-y-2.5 shadow-sm">
+        <div class="flex items-center justify-between">
+          <span class="text-xs font-black text-[#1c1917] flex items-center gap-1.5">
+            <i class="fa-solid fa-key text-amber-600"></i>
+            <span>Google Gemini AI 개인 키 (선택 사항)</span>
+          </span>
+          <span class="text-[10px] font-medium text-stone-500">Google AI Studio</span>
+        </div>
+        <p class="text-[11px] text-[#78716c]">
+          개인 API 키를 등록하시면 AI 30분 단위 일정 설계 및 포토 다이어리 감성 윤문 기능을 무제한으로 사용하실 수 있습니다.
+        </p>
+        <div class="flex items-center gap-2">
+          <input type="password" id="modal-cfg-gemini-key" placeholder="AI Studio에서 발급받은 Gemini API 키 입력" class="flex-1 px-3 py-2 bg-[#faf8f5] border border-[#e8e2d5] rounded-xl text-xs text-[#1c1917] focus:outline-none focus:border-[#a2601b]">
+          <button onclick="saveGeminiKeyFromModal()" class="btn-gold px-4 py-2 rounded-xl text-xs font-bold shrink-0 cursor-pointer">저장</button>
+        </div>
+      </div>
+
+      <!-- 4. PWA 단독 앱 설치 및 오프라인 모드 -->
+      <div class="p-4 rounded-xl bg-white border border-[#e8e2d5] flex items-center justify-between gap-3 shadow-sm">
+        <div>
+          <div class="text-xs font-black text-[#1c1917] flex items-center gap-1.5">
+            <i class="fa-solid fa-mobile-screen-button text-[#a2601b]"></i>
+            <span>홈 화면에 앱(PWA) 설치</span>
+          </div>
+          <div class="text-[11px] text-[#78716c] mt-0.5">인터넷 없는 비행기 안에서도 100% 작동합니다.</div>
+        </div>
+        <button onclick="handleInstallButtonClick()" class="px-3.5 py-1.5 rounded-xl bg-[#faf8f5] hover:bg-[#f0ece1] border border-[#e8e2d5] text-[#1c1917] text-xs font-bold transition shrink-0 cursor-pointer">
+          앱 설치
+        </button>
+      </div>
+
+      <!-- 5. 전체 데이터 JSON 백업 및 복원 -->
+      <div class="p-4 rounded-xl bg-white border border-[#e8e2d5] space-y-2.5 shadow-sm">
+        <span class="text-xs font-black text-[#1c1917] flex items-center gap-1.5">
+          <i class="fa-solid fa-file-arrow-down text-sky-600"></i>
+          <span>전체 여행 데이터 JSON 백업 및 복원</span>
+        </span>
+        <p class="text-[11px] text-[#78716c]">
+          등록된 모든 여행 카드, 스팟 일정, 가계부 지출, 다이어리 기록을 단일 JSON 파일로 안전하게 백업합니다.
+        </p>
+        <div class="flex items-center gap-2 pt-1">
+          <button onclick="exportAllDataAsJson()" class="flex-1 py-2 px-3 rounded-xl bg-[#faf8f5] hover:bg-[#f0ece1] border border-[#e8e2d5] text-[#1c1917] font-bold text-xs flex items-center justify-center gap-1.5 transition cursor-pointer">
+            <i class="fa-solid fa-download text-[11px] text-[#a2601b]"></i>
+            <span>JSON 백업 다운로드</span>
+          </button>
+          <label class="flex-1 py-2 px-3 rounded-xl bg-[#faf8f5] hover:bg-[#f0ece1] border border-[#e8e2d5] text-[#1c1917] font-bold text-xs flex items-center justify-center gap-1.5 transition cursor-pointer">
+            <i class="fa-solid fa-upload text-[11px] text-emerald-700"></i>
+            <span>백업 복원 (JSON)</span>
+            <input type="file" onchange="importDataFromJson(event)" accept=".json" class="hidden">
+          </label>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================== -->
+  <!-- 7.6 세계 & 남미 비행 궤적 지도 모달 (MODAL-ROUTE-MAP) -->
+  <!-- ========================================== -->
+  <div id="modal-route-map" class="sheet-container sheet-closed">
+    <div class="sheet-scrim" onclick="closeModal('modal-route-map')"></div>
+    <div class="sheet-box max-w-4xl p-5 sm:p-6 space-y-4 max-h-[92vh] flex flex-col">
+      <div class="flex items-center justify-between border-b border-[#e8e2d5] pb-3 shrink-0">
+        <div class="flex items-center gap-2.5">
+          <span class="w-8 h-8 rounded-xl bg-[#fdf6ec] text-[#a2601b] border border-[#f5dfb8] flex items-center justify-center text-sm shadow-inner">
+            <i class="fa-solid fa-earth-americas"></i>
+          </span>
+          <div>
+            <h3 class="text-base font-black text-[#1c1917]">세계 및 남미 대종단 비행 궤적 노선도</h3>
+            <p class="text-[11px] text-[#78716c]">인천 ⇄ LA 스탑오버 ⇄ 페루 ⇄ 볼리비아 ⇄ 칠레 ⇄ 아르헨티나 ⇄ 브라질</p>
+          </div>
+        </div>
+        <button onclick="closeModal('modal-route-map')" class="w-7 h-7 rounded-lg bg-[#faf8f5] hover:bg-[#f0ece1] text-[#78716c] hover:text-[#1c1917] flex items-center justify-center text-sm transition cursor-pointer">✕</button>
+      </div>
+
+      <!-- 일러스트 노선도 뷰어 -->
+      <div class="flex-1 overflow-y-auto rounded-2xl bg-stone-100 border border-[#e8e2d5] p-2 flex items-center justify-center">
+        <img src="south_america_illustrated_map.jpg" alt="남미 대종단 일러스트 지도" class="max-h-[55vh] w-auto object-contain rounded-xl shadow-md">
+      </div>
+
+      <!-- 주요 거점 구글 지도 링크 클러스터 -->
+      <div class="pt-2 border-t border-[#e8e2d5] flex items-center gap-2 overflow-x-auto pb-1 text-xs shrink-0">
+        <span class="font-bold text-[#78716c] shrink-0 text-[11px]">📍 구글 지도 바로가기:</span>
+        <a href="https://www.google.com/maps/search/?api=1&query=Machu+Picchu+Peru" target="_blank" rel="noopener noreferrer" class="px-2.5 py-1 rounded-lg bg-white hover:bg-stone-50 border border-[#e8e2d5] text-[#1c1917] font-semibold shrink-0 transition">🇵🇪 마추픽추</a>
+        <a href="https://www.google.com/maps/search/?api=1&query=Salar+de+Uyuni+Bolivia" target="_blank" rel="noopener noreferrer" class="px-2.5 py-1 rounded-lg bg-white hover:bg-stone-50 border border-[#e8e2d5] text-[#1c1917] font-semibold shrink-0 transition">🇧🇴 우유니 소금사막</a>
+        <a href="https://www.google.com/maps/search/?api=1&query=San+Pedro+de+Atacama+Chile" target="_blank" rel="noopener noreferrer" class="px-2.5 py-1 rounded-lg bg-white hover:bg-stone-50 border border-[#e8e2d5] text-[#1c1917] font-semibold shrink-0 transition">🇨🇱 아타카마 사막</a>
+        <a href="https://www.google.com/maps/search/?api=1&query=Iguazu+Falls+Argentina" target="_blank" rel="noopener noreferrer" class="px-2.5 py-1 rounded-lg bg-white hover:bg-stone-50 border border-[#e8e2d5] text-[#1c1917] font-semibold shrink-0 transition">🇦🇷 이과수 폭포</a>
+        <a href="https://www.google.com/maps/search/?api=1&query=Christ+the+Redeemer+Rio+de+Janeiro" target="_blank" rel="noopener noreferrer" class="px-2.5 py-1 rounded-lg bg-white hover:bg-stone-50 border border-[#e8e2d5] text-[#1c1917] font-semibold shrink-0 transition">🇧🇷 리우 거대 예수상</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================== -->
   <!-- 8. 메인 자바스크립트 로직 -->
   <!-- ========================================== -->
   <script>
@@ -1377,7 +1713,19 @@
     }
 
     // 앱 버전 및 글로벌 네임스페이스 (Sulsul-Travel Invariant Rule R-10, R-11, R-12, R-13, R-14, R-15)
-    const APP_VER = '1.0.6';
+    const APP_VER = '1.0.7';
+
+    // 여행 컨셉 마스터 데이터 (Sulsul-Diary 테마)
+    const TRAVEL_CONCEPTS = [
+      { id: '배낭', label: '🎒 배낭여행' },
+      { id: '럭셔리', label: '👑 럭셔리' },
+      { id: '가족', label: '👨‍👩‍👧 가족여행' },
+      { id: '맛집', label: '🍽️ 맛집/미식' },
+      { id: '가성비', label: '💰 가성비' },
+      { id: '자연', label: '🏞️ 대자연/트레킹' },
+      { id: '문화', label: '🏛️ 역사/문화' },
+      { id: '힐링', label: '🧘 힐링/휴양' }
+    ];
 
     // 전역 상태 스토어 (Multi-Trip State)
     const State = {
@@ -1392,6 +1740,17 @@
       isMepEnabled: true,
       allTimelinesExpanded: false,
       geminiKey: cleanApiKey(localStorage.getItem('st_gemini_key') || ''),
+      
+      // Sulsul-Diary Hub Filters & View Mode (v1.0.7)
+      hubViewMode: localStorage.getItem('st_hub_view_mode') || 'grid', // 'grid' | 'list'
+      hubFilters: {
+        status: 'all',    // 'all' | 'ongoing' | 'planned' | 'completed' | 'bucketlist'
+        search: '',
+        country: 'all',
+        concept: 'all',
+        sort: 'latest'    // 'latest' | 'date-asc' | 'budget-desc' | 'budget-asc'
+      },
+      createTripSelectedConcepts: ['배낭', '자연'],
       
       // GPS Radar State (R-13)
       gps: {
@@ -1444,8 +1803,11 @@
         }
       }
 
-      // 3. 22일 남미 대종단 완성형 쇼케이스 샘플 시드 주입 (미존재 시)
+      // 3. 22일 남미 대종단 완성형 쇼케이스 샘플 시드 주입 (미삭제 시)
       ensureShowcaseTripExists();
+
+      // 4. URL 데이터 패킹 공유 임포트 확인 (Zero-Backend)
+      checkUrlShareImportOnStartup();
 
       // 기본 활성 여행 선택
       if (!State.activeTripId && State.trips.length > 0) {
@@ -1453,12 +1815,18 @@
       }
 
       saveTrips();
+      updateHubFilterDropdowns();
+      updateHubViewModeButtonUi();
+      renderConceptChips();
       renderHub();
       renderActiveTripWorkspace();
       checkStartupInstallOnboarding();
     }
 
     function ensureShowcaseTripExists() {
+      if (localStorage.getItem('st_sa_sample_deleted') === 'true') {
+        return;
+      }
       const showcaseId = 'trip_sa_showcase_22d';
       const exists = State.trips.find(t => t.id === showcaseId);
       
@@ -1468,9 +1836,45 @@
         seedTpl.expenses = window.KB_TRAVEL.seedExpenses ? JSON.parse(JSON.stringify(window.KB_TRAVEL.seedExpenses)) : [];
         seedTpl.journals = window.KB_TRAVEL.seedJournals ? JSON.parse(JSON.stringify(window.KB_TRAVEL.seedJournals)) : {};
         seedTpl.checklist = window.KB_TRAVEL.defaultChecklist ? JSON.parse(JSON.stringify(window.KB_TRAVEL.defaultChecklist)) : [];
-        seedTpl.roomCode = 'SA-2026'; // 기본 쇼케이스 룸코드
+        seedTpl.roomCode = 'SA-2026';
+        seedTpl.concepts = ['배낭', '자연', '문화', '맛집'];
+        seedTpl.isSample = true;
         State.trips.unshift(seedTpl);
       }
+    }
+
+    function deleteSouthAmericaSample() {
+      const targetId = 'trip_sa_showcase_22d';
+      const idx = State.trips.findIndex(t => t.id === targetId || (t.title && t.title.includes('남미 4개국')));
+      if (idx === -1) {
+        showToast('ℹ️ 현재 등록된 남미 22일 가이드 예제가 없습니다.');
+        return;
+      }
+      if (confirm('초기 탑재된 [2026 남미 4개국 22일 가이드 예제]를 삭제하시겠습니까?\n\n(설정창에서 언제든 다시 복원할 수 있습니다)')) {
+        State.trips.splice(idx, 1);
+        localStorage.setItem('st_sa_sample_deleted', 'true');
+        if (State.activeTripId === targetId) {
+          State.activeTripId = State.trips[0] ? State.trips[0].id : null;
+        }
+        saveTrips();
+        updateHubFilterDropdowns();
+        renderHub();
+        closeModal('modal-settings');
+        showToast('🗑️ 남미 22일 예제 가이드가 삭제되었습니다.');
+        if (!State.trips.length || State.currentView === 'workspace') {
+          switchView('hub');
+        }
+      }
+    }
+
+    function restoreSouthAmericaSample() {
+      localStorage.removeItem('st_sa_sample_deleted');
+      ensureShowcaseTripExists();
+      saveTrips();
+      updateHubFilterDropdowns();
+      renderHub();
+      closeModal('modal-settings');
+      showToast('✨ 남미 4개국 22일 가이드 예제가 성공적으로 복원되었습니다!');
     }
 
     function saveTrips() {
@@ -1526,6 +1930,42 @@
     }
 
     // ==========================================
+    // 상단 헤더 액션 함수들 (v1.0.7)
+    // ==========================================
+    function toggleAnalyticsView() {
+      if (State.currentView === 'workspace') {
+        const topAnalytics = document.getElementById('top-analytics');
+        if (topAnalytics) topAnalytics.scrollIntoView({ behavior: 'smooth' });
+      } else {
+        const ltAnalytics = document.getElementById('lifetime-analytics');
+        if (ltAnalytics) ltAnalytics.scrollIntoView({ behavior: 'smooth' });
+      }
+    }
+
+    function openRouteMapModal() {
+      openModal('modal-route-map');
+    }
+
+    function openSettingsModal() {
+      const modalKeyInput = document.getElementById('modal-cfg-gemini-key');
+      if (modalKeyInput) {
+        modalKeyInput.value = State.geminiKey || '';
+      }
+      openModal('modal-settings');
+    }
+
+    function saveGeminiKeyFromModal() {
+      const input = document.getElementById('modal-cfg-gemini-key');
+      if (!input) return;
+      const cleanKey = cleanApiKey(input.value);
+      State.geminiKey = cleanKey;
+      localStorage.setItem('st_gemini_key', cleanKey);
+      const tabKey = document.getElementById('cfg-gemini-key');
+      if (tabKey) tabKey.value = cleanKey;
+      showToast(cleanKey ? '🔑 Gemini API 키가 안전하게 저장되었습니다.' : 'API 키가 삭제되었습니다.');
+    }
+
+    // ==========================================
     // 허브 렌더링 (평생 통계 & 트립 카드)
     // ==========================================
     function renderHub() {
@@ -1568,27 +2008,236 @@
       document.getElementById('badge-trips-count').innerText = totalTrips;
     }
 
+    function setHubStatusFilter(status) {
+      State.hubFilters.status = status;
+      const statuses = ['all', 'ongoing', 'planned', 'completed', 'bucketlist'];
+      statuses.forEach(s => {
+        const btn = document.getElementById(`tab-filter-${s}`);
+        if (!btn) return;
+        if (s === status) {
+          btn.className = 'px-3.5 py-1.5 rounded-full font-bold transition whitespace-nowrap bg-[#1c1917] text-white shadow-sm cursor-pointer';
+        } else {
+          btn.className = 'px-3.5 py-1.5 rounded-full font-bold transition whitespace-nowrap bg-white border border-[#e8e2d5] text-[#78716c] hover:text-[#1c1917] hover:border-[#dfd7ca] cursor-pointer';
+        }
+      });
+      renderTripCards();
+    }
+
+    function handleHubFilterChange() {
+      const searchInput = document.getElementById('hub-search-input');
+      const countrySelect = document.getElementById('hub-filter-country');
+      const conceptSelect = document.getElementById('hub-filter-concept');
+      const sortSelect = document.getElementById('hub-filter-sort');
+
+      if (searchInput) State.hubFilters.search = searchInput.value.trim().toLowerCase();
+      if (countrySelect) State.hubFilters.country = countrySelect.value;
+      if (conceptSelect) State.hubFilters.concept = conceptSelect.value;
+      if (sortSelect) State.hubFilters.sort = sortSelect.value;
+
+      renderTripCards();
+    }
+
+    function resetHubFilters() {
+      State.hubFilters = {
+        status: 'all',
+        search: '',
+        country: 'all',
+        concept: 'all',
+        sort: 'latest'
+      };
+      const sInput = document.getElementById('hub-search-input');
+      const cSelect = document.getElementById('hub-filter-country');
+      const cpSelect = document.getElementById('hub-filter-concept');
+      const stSelect = document.getElementById('hub-filter-sort');
+      if (sInput) sInput.value = '';
+      if (cSelect) cSelect.value = 'all';
+      if (cpSelect) cpSelect.value = 'all';
+      if (stSelect) stSelect.value = 'latest';
+
+      setHubStatusFilter('all');
+    }
+
+    function toggleHubViewMode() {
+      State.hubViewMode = State.hubViewMode === 'grid' ? 'list' : 'grid';
+      localStorage.setItem('st_hub_view_mode', State.hubViewMode);
+      updateHubViewModeButtonUi();
+      renderTripCards();
+    }
+
+    function updateHubViewModeButtonUi() {
+      const btnIcon = document.getElementById('btn-hub-view-mode-icon');
+      const btnTxt = document.getElementById('btn-hub-view-mode-txt');
+      if (!btnIcon || !btnTxt) return;
+      if (State.hubViewMode === 'list') {
+        btnIcon.className = 'fa-solid fa-list-ul text-xs text-[#a2601b]';
+        btnTxt.innerText = '목록';
+      } else {
+        btnIcon.className = 'fa-solid fa-table-cells text-xs text-[#a2601b]';
+        btnTxt.innerText = '격자';
+      }
+    }
+
+    function updateHubFilterDropdowns() {
+      const countrySelect = document.getElementById('hub-filter-country');
+      if (!countrySelect) return;
+      const countriesSet = new Set();
+      State.trips.forEach(t => {
+        (t.countries || []).forEach(c => countriesSet.add(c));
+      });
+      let html = '<option value="all">전체 국가</option>';
+      Array.from(countriesSet).sort().forEach(c => {
+        html += `<option value="${escapeHtml(c)}">${escapeHtml(c)}</option>`;
+      });
+      countrySelect.innerHTML = html;
+      if (State.hubFilters.country) {
+        countrySelect.value = State.hubFilters.country;
+      }
+    }
+
+    function renderConceptChips() {
+      const container = document.getElementById('trip-form-concept-chips');
+      if (!container) return;
+      container.innerHTML = TRAVEL_CONCEPTS.map(c => {
+        const isSelected = State.createTripSelectedConcepts.includes(c.id);
+        return `
+          <button type="button" onclick="toggleConceptChip('${c.id}')" class="px-2.5 py-1 rounded-lg text-xs font-semibold transition cursor-pointer ${isSelected ? 'bg-[#1c1917] text-white shadow-sm' : 'bg-white border border-[#e8e2d5] text-[#57534e] hover:border-[#dfd7ca]'}">
+            ${c.label}
+          </button>
+        `;
+      }).join('');
+    }
+
+    function toggleConceptChip(conceptId) {
+      const idx = State.createTripSelectedConcepts.indexOf(conceptId);
+      if (idx >= 0) {
+        State.createTripSelectedConcepts.splice(idx, 1);
+      } else {
+        State.createTripSelectedConcepts.push(conceptId);
+      }
+      renderConceptChips();
+    }
+
     function renderTripCards() {
       const grid = document.getElementById('trip-cards-grid');
       if (!grid) return;
 
-      // Sulsul-Diary 실록 4.4.1 & 4.4.2: 럭셔리 빈 상태(Empty State) 엠블럼 및 다이렉트 액션 UI
-      if (!State.trips || State.trips.length === 0) {
+      if (State.hubViewMode === 'list') {
+        grid.className = 'space-y-3.5 max-w-5xl mx-auto';
+      } else {
+        grid.className = 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5';
+      }
+
+      // 탭 카운터 계산
+      let countAll = State.trips.length;
+      let countOngoing = 0;
+      let countPlanned = 0;
+      let countCompleted = 0;
+      let countBucketlist = 0;
+
+      const now = new Date();
+
+      State.trips.forEach(trip => {
+        if (trip.startDate) {
+          const start = new Date(trip.startDate);
+          const diffDays = Math.ceil((start - now) / (1000 * 60 * 60 * 24));
+          const dur = trip.durationDays || (trip.days ? trip.days.length : 22);
+          if (diffDays > 0) {
+            countPlanned++;
+          } else if (diffDays >= -dur) {
+            countOngoing++;
+          } else {
+            countCompleted++;
+          }
+        } else {
+          countBucketlist++;
+        }
+        if (trip.isBucketlist) {
+          countBucketlist++;
+        }
+      });
+
+      const elAll = document.getElementById('count-filter-all');
+      const elOngoing = document.getElementById('count-filter-ongoing');
+      const elPlanned = document.getElementById('count-filter-planned');
+      const elCompleted = document.getElementById('count-filter-completed');
+      const elBucketlist = document.getElementById('count-filter-bucketlist');
+      if (elAll) elAll.innerText = countAll;
+      if (elOngoing) elOngoing.innerText = countOngoing;
+      if (elPlanned) elPlanned.innerText = countPlanned;
+      if (elCompleted) elCompleted.innerText = countCompleted;
+      if (elBucketlist) elBucketlist.innerText = countBucketlist;
+
+      // 필터링 적용
+      let filtered = State.trips.filter(trip => {
+        if (State.hubFilters.status !== 'all') {
+          if (State.hubFilters.status === 'bucketlist') {
+            if (!trip.isBucketlist && trip.startDate && trip.endDate) return false;
+          } else if (trip.startDate) {
+            const start = new Date(trip.startDate);
+            const diffDays = Math.ceil((start - now) / (1000 * 60 * 60 * 24));
+            const dur = trip.durationDays || (trip.days ? trip.days.length : 22);
+            if (State.hubFilters.status === 'ongoing' && !(diffDays <= 0 && diffDays >= -dur)) return false;
+            if (State.hubFilters.status === 'planned' && !(diffDays > 0)) return false;
+            if (State.hubFilters.status === 'completed' && !(diffDays < -dur)) return false;
+          } else {
+            return false;
+          }
+        }
+
+        if (State.hubFilters.search) {
+          const q = State.hubFilters.search;
+          const searchCorpus = [
+            trip.title,
+            trip.subtitle,
+            trip.style,
+            (trip.countries || []).join(' '),
+            (trip.cities || []).join(' '),
+            (trip.concepts || []).join(' '),
+            trip.wishlist || ''
+          ].join(' ').toLowerCase();
+          if (!searchCorpus.includes(q)) return false;
+        }
+
+        if (State.hubFilters.country && State.hubFilters.country !== 'all') {
+          const matchCountry = (trip.countries || []).some(c => c.toLowerCase().includes(State.hubFilters.country.toLowerCase()));
+          if (!matchCountry) return false;
+        }
+
+        if (State.hubFilters.concept && State.hubFilters.concept !== 'all') {
+          const matchConcept = (trip.concepts || []).includes(State.hubFilters.concept) ||
+            (trip.style || '').includes(State.hubFilters.concept);
+          if (!matchConcept) return false;
+        }
+
+        return true;
+      });
+
+      // 정렬 적용
+      if (State.hubFilters.sort === 'date-asc') {
+        filtered.sort((a, b) => (a.startDate || '9999').localeCompare(b.startDate || '9999'));
+      } else if (State.hubFilters.sort === 'budget-desc') {
+        filtered.sort((a, b) => (b.budget || 0) - (a.budget || 0));
+      } else if (State.hubFilters.sort === 'budget-asc') {
+        filtered.sort((a, b) => (a.budget || 0) - (b.budget || 0));
+      }
+
+      // Empty State
+      if (filtered.length === 0) {
         grid.innerHTML = `
-          <div class="col-span-full p-10 text-center rounded-2xl bg-[#0f1422] border border-[#1e263c] space-y-4 shadow-xl">
-            <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-amber-500/20 to-amber-600/10 border border-amber-500/30 text-amber-400 mx-auto flex items-center justify-center text-3xl shadow-inner pulse-gold">
-              ✈️
+          <div class="col-span-full p-10 text-center rounded-2xl bg-white border border-[#e8e2d5] space-y-4 shadow-sm">
+            <div class="w-16 h-16 rounded-2xl bg-[#fdf6ec] border border-[#f5dfb8] text-[#a2601b] mx-auto flex items-center justify-center text-2xl shadow-inner pulse-gold">
+              <i class="fa-solid fa-compass"></i>
             </div>
             <div class="space-y-1">
-              <h3 class="text-base font-black text-white">등록된 여행 다이어리가 없습니다</h3>
-              <p class="text-xs text-slate-400">새로운 여정을 시작하거나 22일 남미 대종단 완성형 샘플을 복원해 보세요.</p>
+              <h3 class="text-base font-black text-[#1c1917]">해당 조건의 여행이 없습니다</h3>
+              <p class="text-xs text-[#78716c]">필터를 초기화하거나 새로운 여행 다이어리를 등록해 보세요.</p>
             </div>
             <div class="flex items-center justify-center gap-2.5 pt-2 flex-wrap">
+              <button onclick="resetHubFilters()" class="px-4 py-2 rounded-xl bg-[#faf8f5] hover:bg-[#f0ece1] border border-[#e8e2d5] text-[#1c1917] text-xs font-bold transition cursor-pointer">
+                필터 초기화
+              </button>
               <button onclick="openCreateTripModal()" class="btn-gold px-4 py-2 rounded-xl text-xs font-black shadow-md cursor-pointer">
                 + 새 여행 만들기
-              </button>
-              <button onclick="ensureShowcaseTripExists(); renderHub(); showToast('✨ 남미 대종단 22일 완성 샘플이 복원되었습니다!');" class="btn-surface px-4 py-2 rounded-xl text-xs font-bold cursor-pointer hover:text-white">
-                ✨ 맛보기 샘플 복구
               </button>
             </div>
           </div>
@@ -1598,98 +2247,141 @@
 
       let html = '';
 
-      State.trips.forEach(trip => {
-        // 지출 및 예산 계산
+      filtered.forEach(trip => {
         let totalSpent = 0;
         (trip.expenses || []).forEach(e => totalSpent += (e.krw || 0));
         const budget = trip.budget || 5000000;
         const pct = Math.min(100, Math.round((totalSpent / budget) * 100)) || 0;
 
-        // D-Day 또는 완료 계산
         let ddayBadge = '';
         if (trip.startDate) {
-          const now = new Date();
           const start = new Date(trip.startDate);
           const diffDays = Math.ceil((start - now) / (1000 * 60 * 60 * 24));
+          const dur = trip.durationDays || (trip.days ? trip.days.length : 22);
           if (diffDays > 0) {
-            ddayBadge = `<span class="px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-400 border border-amber-500/30 text-[11px] font-black">D-${diffDays}</span>`;
-          } else if (diffDays >= -(trip.durationDays || 22)) {
-            ddayBadge = `<span class="px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 text-[11px] font-black">여행 중 ✈️</span>`;
+            ddayBadge = `<span class="px-2 py-0.5 rounded-full bg-[#fdf6ec] text-[#a2601b] border border-[#f5dfb8] text-[11px] font-black">D-${diffDays}</span>`;
+          } else if (diffDays >= -dur) {
+            ddayBadge = `<span class="px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 text-[11px] font-black">여행 중 ✈️</span>`;
           } else {
-            ddayBadge = `<span class="px-2 py-0.5 rounded-full bg-slate-800 text-slate-300 border border-slate-700 text-[11px] font-bold">완료된 여정</span>`;
+            ddayBadge = `<span class="px-2 py-0.5 rounded-full bg-stone-100 text-stone-600 border border-stone-200 text-[11px] font-bold">완료</span>`;
           }
+        } else {
+          ddayBadge = `<span class="px-2 py-0.5 rounded-full bg-indigo-50 text-indigo-700 border border-indigo-200 text-[11px] font-bold">버킷리스트</span>`;
         }
 
         const sampleBadge = trip.isSample ? 
-          `<span class="px-2 py-0.5 rounded-full bg-gradient-to-r from-amber-500/20 to-emerald-500/20 text-amber-300 border border-amber-500/30 text-[10px] font-black">✨ 맛보기 완성 샘플</span>` : '';
+          `<span class="px-2 py-0.5 rounded-full bg-[#fdf6ec] text-[#a2601b] border border-[#f5dfb8] text-[10px] font-bold">✨ 공식 가이드 예제</span>` : '';
 
-        const roomBadge = trip.roomCode ?
-          `<span class="px-2 py-0.5 rounded bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 text-[10px] font-bold font-mono">👥 ${trip.roomCode}</span>` : '';
+        const conceptChips = (trip.concepts || []).slice(0, 3).map(c => `
+          <span class="px-1.5 py-0.5 rounded bg-stone-100 text-stone-700 text-[10px] font-medium border border-stone-200">#${escapeHtml(c)}</span>
+        `).join('');
 
-        html += `
-          <div class="group relative rounded-2xl bg-[#0f1422] border border-[#1e263c] hover:border-amber-500/30 transition-all duration-200 overflow-hidden flex flex-col shadow-lg hover:-translate-y-1">
-            <!-- 상단 커버 바 -->
-            <div class="h-28 bg-gradient-to-r from-slate-900 via-[#141c2e] to-slate-900 p-4 flex items-start justify-between relative overflow-hidden">
-              <div class="absolute inset-0 bg-cover bg-center opacity-30 group-hover:scale-105 transition-transform duration-500" style="background-image: url('${trip.coverImg || 'south_america_illustrated_map.jpg'}')"></div>
-              <div class="absolute inset-0 bg-gradient-to-t from-[#0f1422] to-transparent"></div>
-              
-              <div class="relative z-10 flex items-center gap-2 flex-wrap">
-                ${sampleBadge}
-                ${roomBadge}
+        if (State.hubViewMode === 'list') {
+          // Elegant List View Mode (Sulsul-Diary UI)
+          html += `
+            <div class="group rounded-2xl bg-white border border-[#e8e2d5] hover:border-[#a2601b]/50 p-4 transition-all duration-200 shadow-[0_2px_10px_rgba(0,0,0,0.02)] hover:shadow-md flex flex-col sm:flex-row sm:items-center justify-between gap-4 cursor-pointer" onclick="openTripWorkspace('${trip.id}')">
+              <div class="flex items-center gap-3.5 min-w-0">
+                <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-[#fdf6ec] to-[#f5dfb8] border border-[#e8e2d5] flex items-center justify-center text-2xl shrink-0 group-hover:scale-105 transition-transform">
+                  ${trip.coverEmoji || '🌎'}
+                </div>
+                <div class="min-w-0">
+                  <div class="flex items-center gap-2 flex-wrap">
+                    <h4 class="text-sm sm:text-base font-black text-[#1c1917] group-hover:text-[#a2601b] transition truncate">${escapeHtml(trip.title)}</h4>
+                    ${sampleBadge}
+                    ${ddayBadge}
+                  </div>
+                  <div class="flex items-center gap-2 mt-1 text-xs text-[#78716c] flex-wrap">
+                    <span>${trip.startDate || '일정 미정'} ~ ${trip.endDate || ''} (${trip.durationDays || 22}일)</span>
+                    <span class="text-stone-300">•</span>
+                    <span>${(trip.countries || []).join(', ') || '전세계'}</span>
+                    ${conceptChips}
+                  </div>
+                </div>
               </div>
 
-              <div class="relative z-10 flex items-center gap-1.5">
-                ${ddayBadge}
-                <!-- 완주 보고서 & 포토북 버튼 -->
-                <button onclick="openTripPdfReport('${trip.id}', event)" class="w-7 h-7 rounded-lg bg-[#080b12]/80 hover:bg-amber-500/20 border border-slate-700 hover:border-amber-500/30 text-slate-400 hover:text-amber-400 flex items-center justify-center text-xs transition" title="여행 보고서 & 포토북 인쇄/PDF">
-                  <i class="fa-solid fa-file-pdf text-rose-400"></i>
-                </button>
-                <!-- 안전 삭제 버튼 (Confirm Modal 트리거) -->
-                <button onclick="requestDeleteTrip('${trip.id}', event)" class="w-7 h-7 rounded-lg bg-[#080b12]/80 hover:bg-rose-500/20 border border-slate-700 hover:border-rose-500/30 text-slate-400 hover:text-rose-400 flex items-center justify-center text-xs transition" title="여행 삭제">
-                  <i class="fa-regular fa-trash-can"></i>
-                </button>
+              <div class="flex items-center justify-between sm:justify-end gap-3 shrink-0 pt-2 sm:pt-0 border-t sm:border-t-0 border-[#f0ece1]">
+                <div class="text-right">
+                  <div class="text-[10px] text-[#78716c]">지출 / 예산 (${pct}%)</div>
+                  <div class="text-xs font-bold text-[#1c1917]">₩${(totalSpent/10000).toFixed(0)}만 / <span class="text-stone-500 font-normal">₩${(budget/10000).toFixed(0)}만</span></div>
+                </div>
+                <div class="flex items-center gap-1.5" onclick="event.stopPropagation()">
+                  <button onclick="openTripPdfReport('${trip.id}', event)" class="w-8 h-8 rounded-xl bg-[#faf8f5] hover:bg-amber-50 text-[#78716c] hover:text-[#a2601b] border border-[#e8e2d5] flex items-center justify-center text-xs transition cursor-pointer" title="PDF 리포트">
+                    <i class="fa-solid fa-file-pdf text-rose-500"></i>
+                  </button>
+                  <button onclick="requestDeleteTrip('${trip.id}', event)" class="w-8 h-8 rounded-xl bg-[#faf8f5] hover:bg-rose-50 text-[#78716c] hover:text-rose-600 border border-[#e8e2d5] flex items-center justify-center text-xs transition cursor-pointer" title="여행 삭제">
+                    <i class="fa-regular fa-trash-can"></i>
+                  </button>
+                  <button onclick="openTripWorkspace('${trip.id}')" class="px-3 py-1.5 rounded-xl btn-gold text-xs font-bold shadow-sm transition flex items-center gap-1">
+                    <span>열기</span>
+                    <i class="fa-solid fa-chevron-right text-[10px]"></i>
+                  </button>
+                </div>
               </div>
             </div>
+          `;
+        } else {
+          // Standard Card Grid Mode (Warm Cream Luxury)
+          html += `
+            <div class="group relative rounded-2xl bg-white border border-[#e8e2d5] hover:border-[#a2601b]/50 transition-all duration-200 overflow-hidden flex flex-col shadow-[0_2px_12px_rgba(0,0,0,0.03)] hover:shadow-lg hover:-translate-y-1">
+              <div class="h-28 bg-gradient-to-r from-[#fdf6ec] via-[#faf8f5] to-[#f5dfb8] p-3.5 flex items-start justify-between relative overflow-hidden">
+                <div class="absolute inset-0 bg-cover bg-center opacity-40 group-hover:scale-105 transition-transform duration-500" style="background-image: url('${trip.coverImg || 'south_america_illustrated_map.jpg'}')"></div>
+                <div class="absolute inset-0 bg-gradient-to-t from-white via-transparent to-transparent"></div>
+                
+                <div class="relative z-10 flex items-center gap-1.5 flex-wrap">
+                  ${sampleBadge}
+                </div>
 
-            <!-- 카드 본문 -->
-            <div class="p-4 flex-1 flex flex-col justify-between space-y-3 cursor-pointer" onclick="openTripWorkspace('${trip.id}')">
-              <div>
-                <div class="flex items-center gap-2">
-                  <span class="text-2xl">${trip.coverEmoji || '🌎'}</span>
-                  <div class="min-w-0 flex-1">
-                    <h4 class="text-base font-black text-white truncate group-hover:text-amber-400 transition">${trip.title}</h4>
-                    <p class="text-[11px] text-slate-400 truncate mt-0.5">${trip.subtitle || trip.style || '인생의 특별한 여정'}</p>
+                <div class="relative z-10 flex items-center gap-1.5">
+                  ${ddayBadge}
+                  <button onclick="openTripPdfReport('${trip.id}', event)" class="w-7 h-7 rounded-lg bg-white/90 hover:bg-white text-stone-600 hover:text-amber-800 border border-[#e8e2d5] flex items-center justify-center text-xs shadow-sm transition cursor-pointer" title="여행 보고서 & PDF">
+                    <i class="fa-solid fa-file-pdf text-rose-500"></i>
+                  </button>
+                  <button onclick="requestDeleteTrip('${trip.id}', event)" class="w-7 h-7 rounded-lg bg-white/90 hover:bg-rose-50 text-stone-600 hover:text-rose-600 border border-[#e8e2d5] flex items-center justify-center text-xs shadow-sm transition cursor-pointer" title="여행 삭제">
+                    <i class="fa-regular fa-trash-can"></i>
+                  </button>
+                </div>
+              </div>
+
+              <div class="p-4 flex-1 flex flex-col justify-between space-y-3 cursor-pointer" onclick="openTripWorkspace('${trip.id}')">
+                <div>
+                  <div class="flex items-center gap-2.5">
+                    <span class="text-2xl">${trip.coverEmoji || '🌎'}</span>
+                    <div class="min-w-0 flex-1">
+                      <h4 class="text-base font-black text-[#1c1917] truncate group-hover:text-[#a2601b] transition">${escapeHtml(trip.title)}</h4>
+                      <p class="text-[11px] text-[#78716c] truncate mt-0.5">${escapeHtml(trip.subtitle || trip.style || '인생의 특별한 여정')}</p>
+                    </div>
+                  </div>
+
+                  <div class="mt-2.5 flex items-center gap-1.5 flex-wrap">
+                    ${conceptChips}
+                  </div>
+
+                  <div class="mt-3 flex items-center justify-between text-xs text-[#78716c] pt-2 border-t border-[#f0ece1]">
+                    <span>${trip.startDate || '일정 미정'} ~ ${trip.endDate || ''}</span>
+                    <span class="font-bold text-[#1c1917]">${trip.durationDays || (trip.days ? trip.days.length : 22)}일간</span>
                   </div>
                 </div>
 
-                <!-- 일정 및 방문 국가 정보 -->
-                <div class="mt-3 flex items-center justify-between text-xs text-slate-400 pt-2 border-t border-[#1a2236]">
-                  <span>${trip.startDate || '2026.10.11'} ~ ${trip.endDate || '2026.11.01'}</span>
-                  <span class="font-bold text-slate-300">${trip.durationDays || (trip.days ? trip.days.length : 22)}일간</span>
+                <div class="space-y-1.5 pt-1">
+                  <div class="flex items-center justify-between text-[11px]">
+                    <span class="text-[#78716c]">지출액 / 목표 예산</span>
+                    <span class="font-bold text-[#1c1917]">₩${totalSpent.toLocaleString()} <span class="text-stone-400 font-normal">/ ₩${budget.toLocaleString()}</span></span>
+                  </div>
+                  <div class="w-full bg-[#f0ece1] rounded-full h-1.5 overflow-hidden">
+                    <div class="bg-gradient-to-r from-[#d7a643] to-[#a2601b] h-full rounded-full" style="width: ${pct}%"></div>
+                  </div>
                 </div>
-              </div>
 
-              <!-- 예산 소진 프로그레스 바 -->
-              <div class="space-y-1.5 pt-1">
-                <div class="flex items-center justify-between text-[11px]">
-                  <span class="text-slate-400">지출액 / 목표 예산</span>
-                  <span class="font-bold text-slate-200">₩${totalSpent.toLocaleString()} <span class="text-slate-500 font-normal">/ ₩${budget.toLocaleString()}</span></span>
+                <div class="pt-2 flex items-center gap-2">
+                  <button class="flex-1 py-2 rounded-xl btn-gold text-xs font-black transition flex items-center justify-center gap-1.5 shadow-sm">
+                    <span>다이어리 열기</span>
+                    <i class="fa-solid fa-arrow-right text-[10px]"></i>
+                  </button>
                 </div>
-                <div class="w-full bg-[#080b12] rounded-full h-1.5 overflow-hidden">
-                  <div class="bg-gradient-to-r from-emerald-500 to-amber-500 h-full rounded-full" style="width: ${pct}%"></div>
-                </div>
-              </div>
-
-              <!-- 진입 버튼 바 -->
-              <div class="pt-2 flex items-center gap-2">
-                <button class="flex-1 py-2 rounded-xl bg-[#141c2e] hover:bg-[#1e2a44] text-amber-400 group-hover:text-slate-950 group-hover:bg-gradient-to-r group-hover:from-amber-500 group-hover:to-amber-600 border border-[#23304c] group-hover:border-transparent text-xs font-black transition flex items-center justify-center gap-1.5 shadow-sm">
-                  <span>다이어리 열기</span>
-                  <i class="fa-solid fa-arrow-right text-[10px]"></i>
-                </button>
               </div>
             </div>
-          </div>
-        `;
+          `;
+        }
       });
 
       grid.innerHTML = html;
@@ -2696,25 +3388,113 @@
     }
 
     function copyTripShareLink() {
+      exportActiveTripShareLink();
+    }
+
+    // ==========================================
+    // [10.5] 100% 서버리스 Zero-Backend URL 패킹 공유 시스템
+    // ==========================================
+    function exportTripAsShareUrl(tripId) {
+      const trip = State.trips.find(t => t.id === tripId) || getActiveTrip();
+      if (!trip) return null;
+      try {
+        const payload = {
+          ver: APP_VER,
+          trip: {
+            id: 'trip_' + Date.now(),
+            title: trip.title,
+            subtitle: trip.subtitle || trip.style || '',
+            startDate: trip.startDate || '',
+            endDate: trip.endDate || '',
+            durationDays: trip.durationDays || 5,
+            currency: trip.currency || 'KRW',
+            budget: trip.budget || 3000000,
+            countries: trip.countries || [],
+            cities: trip.cities || [],
+            coverEmoji: trip.coverEmoji || '✈️',
+            concepts: trip.concepts || [],
+            wishlist: trip.wishlist || '',
+            roomCode: trip.roomCode || 'SA-2026',
+            days: trip.days || [],
+            expenses: trip.expenses || [],
+            journals: trip.journals || {},
+            checklist: trip.checklist || []
+          }
+        };
+        const jsonStr = JSON.stringify(payload);
+        let packed = '';
+        if (window.LZString && typeof window.LZString.compressToEncodedURIComponent === 'function') {
+          packed = window.LZString.compressToEncodedURIComponent(jsonStr);
+        } else {
+          packed = encodeURIComponent(btoa(unescape(encodeURIComponent(jsonStr))));
+        }
+        const baseUrl = window.location.origin + window.location.pathname;
+        return `${baseUrl}#share=${packed}`;
+      } catch (e) {
+        console.error('[ShareExport] error:', e);
+        return null;
+      }
+    }
+
+    function exportActiveTripShareLink() {
       const trip = getActiveTrip();
-      if (!trip) return;
+      if (!trip) {
+        showToast('공유할 여행 카드가 없습니다.');
+        return;
+      }
+      const shareUrl = exportTripAsShareUrl(trip.id);
+      if (shareUrl) {
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(shareUrl).then(() => {
+            alert(`[🔗 100% 서버리스 여행 공유 링크 복사 완료]\n\n동행자에게 카카오톡이나 메시지로 링크를 전달하세요.\n동행자가 링크를 열면 스마트폰에 동일한 여행 카드가 즉시 복제됩니다!\n\n${shareUrl}`);
+          }).catch(() => {
+            prompt('아래 공유 링크를 복사하세요:', shareUrl);
+          });
+        } else {
+          prompt('아래 공유 링크를 복사하세요:', shareUrl);
+        }
+      } else {
+        showToast('공유 링크 생성에 실패했습니다.');
+      }
+    }
 
-      const baseUrl = window.location.origin + window.location.pathname;
-      const shareUrl = `${baseUrl}?room=${trip.roomCode || 'SA-2026'}`;
-
-      navigator.clipboard.writeText(shareUrl).then(() => {
-        alert(`초대 링크가 클립보드에 복사되었습니다!\n카카오톡이나 문자로 동행자에게 전달하세요.\n\n${shareUrl}`);
-      }).catch(() => {
-        prompt('아래 링크를 복사하세요:', shareUrl);
-      });
+    function checkUrlShareImportOnStartup() {
+      try {
+        const hash = window.location.hash || '';
+        if (hash.startsWith('#share=')) {
+          const packed = hash.substring(7);
+          let jsonStr = '';
+          if (window.LZString && typeof window.LZString.decompressFromEncodedURIComponent === 'function') {
+            jsonStr = window.LZString.decompressFromEncodedURIComponent(packed);
+          }
+          if (!jsonStr) {
+            try {
+              jsonStr = decodeURIComponent(escape(atob(decodeURIComponent(packed))));
+            } catch(e) {}
+          }
+          if (jsonStr) {
+            const parsed = JSON.parse(jsonStr);
+            if (parsed && parsed.trip) {
+              const incoming = parsed.trip;
+              incoming.id = 'trip_imp_' + Date.now();
+              incoming.title = incoming.title + ' (공유받음)';
+              State.trips.unshift(incoming);
+              State.activeTripId = incoming.id;
+              saveTrips();
+              history.replaceState(null, '', window.location.pathname + window.location.search);
+              showToast(`🎉 공유받은 여행 [${incoming.title}]이 등록되었습니다!`);
+              switchView('workspace');
+            }
+          }
+        }
+      } catch (err) {
+        console.warn('[ShareImport] check failed:', err);
+      }
     }
 
     function syncCurrentTripToCloud() {
       const trip = getActiveTrip();
       if (!trip) return;
-
-      // Cloud KV Sync Simulator & Local persistence
-      // Supports instant zero-backend sync
       alert(`[☁️ 클라우드 동기화 완료]\n룸코드 [${trip.roomCode}]의 최신 일정과 가계부 데이터가 동행자 공유 DB에 성공적으로 동기화되었습니다!`);
       renderActiveTripWorkspace();
     }
@@ -2726,7 +3506,6 @@
         return;
       }
 
-      // Check if already in trips
       let existing = State.trips.find(t => t.roomCode === code);
       if (existing) {
         State.activeTripId = existing.id;
@@ -2736,7 +3515,6 @@
         return;
       }
 
-      // Clone showcase or create shared room
       const newTrip = JSON.parse(JSON.stringify(State.trips[0]));
       newTrip.id = 'trip_shared_' + Date.now();
       newTrip.title = `[동행 공유] ${newTrip.title}`;
@@ -2790,7 +3568,69 @@
       if (startInput) startInput.value = today;
       const endInput = document.getElementById('trip-form-end');
       if (endInput) endInput.value = '';
+      const wishlistInput = document.getElementById('trip-form-wishlist');
+      if (wishlistInput) wishlistInput.value = '';
+      const aiAutoCheck = document.getElementById('trip-form-ai-auto');
+      if (aiAutoCheck) aiAutoCheck.checked = true;
+
+      State.createTripSelectedConcepts = ['배낭', '자연'];
+      renderConceptChips();
       openModal('modal-create-trip');
+    }
+
+    function generateAutoSpotsForTrip(destination, durationDays, concepts, wishlist) {
+      const conceptList = (concepts && concepts.length > 0) ? concepts : ['자유여행', '명소탐방'];
+      const conceptStr = conceptList.join(', ');
+      const wishlistItems = wishlist ? wishlist.split(/[,\n]/).map(s => s.trim()).filter(Boolean) : [];
+      
+      const spotScheduleTemplates = [
+        { time: '09:00', prefix: '모닝 산책 & 로컬 브런치', estCost: 15000 },
+        { time: '10:30', prefix: '대표 랜드마크 & 명소 탐방', estCost: 25000 },
+        { time: '12:30', prefix: '현지인 추천 시그니처 미식 런치', estCost: 30000 },
+        { time: '14:30', prefix: '테마 맞춤 익스피리언스', estCost: 35000 },
+        { time: '17:00', prefix: '감성 카페 & 로컬 마켓 투어', estCost: 20000 },
+        { time: '19:00', prefix: '선셋 전망 & 디너 코스', estCost: 50000 },
+        { time: '21:00', prefix: '야경 감상 및 하루 다이어리 기록', estCost: 0 }
+      ];
+
+      const days = [];
+      let wishIndex = 0;
+
+      for (let i = 1; i <= durationDays; i++) {
+        const daySpots = [];
+        spotScheduleTemplates.forEach((tpl, sIdx) => {
+          let spotName = `${destination} ${tpl.prefix}`;
+          let spotMemo = `[컨셉: ${conceptStr}] 30분 단위 최적화 동선`;
+
+          if ((sIdx === 1 || sIdx === 3) && wishIndex < wishlistItems.length) {
+            spotName = `⭐ ${wishlistItems[wishIndex]}`;
+            spotMemo = `[버킷리스트] 희망 방문 스팟 탐방 (${conceptStr})`;
+            wishIndex++;
+          } else if (sIdx === 3) {
+            spotName = `${destination} ${conceptList[(i - 1) % conceptList.length]} 맞춤 스팟`;
+          }
+
+          daySpots.push({
+            id: 'spot_' + Date.now() + '_' + i + '_' + sIdx,
+            time: tpl.time,
+            title: spotName,
+            memo: spotMemo,
+            cost: tpl.estCost,
+            currency: 'KRW',
+            completed: false
+          });
+        });
+
+        days.push({
+          dayNum: i,
+          title: `Day ${i} ${destination} ${conceptList[(i - 1) % conceptList.length] || '여행'}`,
+          date: `Day ${i}`,
+          city: destination,
+          spots: daySpots
+        });
+      }
+
+      return days;
     }
 
     function submitCreateTrip() {
@@ -2801,6 +3641,8 @@
       const budget = parseInt(document.getElementById('trip-form-budget').value) || 3000000;
       const countriesStr = document.getElementById('trip-form-countries').value.trim();
       const style = document.getElementById('trip-form-style').value.trim();
+      const wishlist = document.getElementById('trip-form-wishlist') ? document.getElementById('trip-form-wishlist').value.trim() : '';
+      const aiAuto = document.getElementById('trip-form-ai-auto') ? document.getElementById('trip-form-ai-auto').checked : true;
 
       if (!title) {
         alert('여행 제목을 입력해 주세요.');
@@ -2813,22 +3655,29 @@
         durationDays = Math.max(1, Math.ceil((new Date(end) - new Date(start)) / (1000 * 60 * 60 * 24)) + 1);
       }
 
-      // 일자 배열 초기화
-      const days = [];
-      for (let i = 1; i <= durationDays; i++) {
-        days.push({
-          dayNum: i,
-          title: `Day ${i} 여행 일정`,
-          date: `Day ${i}`,
-          city: countries[0] || '도시',
-          spots: []
-        });
+      const concepts = (State.createTripSelectedConcepts && State.createTripSelectedConcepts.length > 0)
+        ? State.createTripSelectedConcepts.slice()
+        : ['자유여행'];
+
+      let days = [];
+      if (aiAuto) {
+        days = generateAutoSpotsForTrip(countries[0] || '여행지', durationDays, concepts, wishlist);
+      } else {
+        for (let i = 1; i <= durationDays; i++) {
+          days.push({
+            dayNum: i,
+            title: `Day ${i} 여행 일정`,
+            date: `Day ${i}`,
+            city: countries[0] || '도시',
+            spots: []
+          });
+        }
       }
 
       const newTrip = {
         id: 'trip_' + Date.now(),
         title: title,
-        subtitle: style || '나만의 특별한 여정',
+        subtitle: style || concepts.join(' · ') || '나만의 특별한 여정',
         startDate: start,
         endDate: end,
         durationDays: durationDays,
@@ -2837,6 +3686,9 @@
         countries: countries,
         cities: [countries[0] || '여행지'],
         coverEmoji: '✈️',
+        concepts: concepts,
+        wishlist: wishlist,
+        isBucketlist: (!start && !end),
         roomCode: 'TRIP-' + Math.floor(1000 + Math.random() * 9000),
         days: days,
         expenses: [],
@@ -2852,10 +3704,15 @@
       State.trips.unshift(newTrip);
       State.activeTripId = newTrip.id;
       saveTrips();
+      updateHubFilterDropdowns();
       closeModal('modal-create-trip', true);
 
       switchView('workspace');
-      openModal('modal-ai-trip'); // 신규 등록 후 즉시 AI 일정 추천 모달 연결
+      if (aiAuto) {
+        showToast('✨ AI 30분 맞춤 일정이 포함된 여행 카드가 생성되었습니다!');
+      } else {
+        openModal('modal-ai-trip');
+      }
     }
 
     function openAddSpotModal() {
@@ -3925,7 +4782,18 @@
       cleanApiKey: cleanApiKey,
       closeModal: closeModal,
       safeCloseModal: safeCloseModal,
-      isModalFormDirty: isModalFormDirty
+      isModalFormDirty: isModalFormDirty,
+      deleteSouthAmericaSample: deleteSouthAmericaSample,
+      restoreSouthAmericaSample: restoreSouthAmericaSample,
+      exportTripAsShareUrl: exportTripAsShareUrl,
+      exportActiveTripShareLink: exportActiveTripShareLink,
+      setHubStatusFilter: setHubStatusFilter,
+      handleHubFilterChange: handleHubFilterChange,
+      resetHubFilters: resetHubFilters,
+      toggleHubViewMode: toggleHubViewMode,
+      toggleAnalyticsView: toggleAnalyticsView,
+      openRouteMapModal: openRouteMapModal,
+      openSettingsModal: openSettingsModal
     };
   </script>
 </body>
