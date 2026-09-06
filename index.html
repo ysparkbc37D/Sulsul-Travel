@@ -14,7 +14,7 @@
   </script>
 
   <!-- PWA Meta & Icons -->
-  <link rel="manifest" href="manifest.webmanifest?v=1.1.8">
+  <link rel="manifest" href="manifest.webmanifest?v=1.1.9">
   <meta name="theme-color" content="#f5f5f7">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
@@ -390,9 +390,45 @@
       color: var(--ink) !important;
     }
 
-    /* High Contrast Amber Accent (WCAG AA 4.5:1+ in both themes) */
+    /* High Contrast Amber Accent & Universal Tip Box (WCAG AAA 7:1+) */
+    .tip-box {
+      background-color: #fef3c7 !important;
+      border: 1px solid #fde68a !important;
+      color: #78350f !important;
+    }
+    .tip-box * {
+      color: inherit !important;
+    }
+    :root[data-theme="dark"] .tip-box {
+      background-color: rgba(245, 158, 11, 0.12) !important;
+      border: 1px solid rgba(245, 158, 11, 0.25) !important;
+      color: #fde68a !important;
+    }
+    :root[data-theme="light"] .text-amber-300,
+    :root[data-theme="light"] .text-amber-300\/90,
+    :root[data-theme="light"] .text-amber-200,
+    :root[data-theme="light"] .text-amber-100 {
+      color: #92400e !important;
+      font-weight: 700 !important;
+    }
     :root[data-theme="light"] .text-amber-400 {
       color: #b45309 !important;
+      font-weight: 700 !important;
+    }
+    :root[data-theme="light"] [class*="bg-amber-"] {
+      background-color: #fef3c7 !important;
+      border-color: #fde68a !important;
+    }
+    :root[data-theme="light"] [class*="bg-amber-"] .text-amber-300,
+    :root[data-theme="light"] [class*="bg-amber-"] .text-amber-300\/90,
+    :root[data-theme="light"] [class*="bg-amber-"] .text-amber-400 {
+      color: #78350f !important;
+      font-weight: 700 !important;
+    }
+    :root[data-theme="dark"] .text-amber-300,
+    :root[data-theme="dark"] .text-amber-300\/90,
+    :root[data-theme="dark"] .text-amber-200 {
+      color: #fde68a !important;
     }
     :root[data-theme="dark"] .text-amber-400 {
       color: #fbbf24 !important;
@@ -521,7 +557,7 @@
             <h1 class="font-serif-brand text-base sm:text-xl font-bold tracking-tight text-[#1c1917] dark:text-[#ededed] whitespace-nowrap">
               Sulsul Travel
             </h1>
-            <span id="app-ver-badge" class="px-1.5 py-0.5 rounded-md theme-card-subtle text-[#a2601b] dark:text-[#d4af37] text-[10px] font-bold font-mono shadow-inner cursor-default shrink-0" title="술술트래블 엔진 버전">v1.1.8</span>
+            <span id="app-ver-badge" onclick="event.stopPropagation(); openVersionHistoryModal()" class="px-1.5 py-0.5 rounded-md theme-card-subtle hover:border-amber-500/60 hover:text-amber-600 dark:hover:text-amber-300 text-[#a2601b] dark:text-[#d4af37] text-[10px] font-bold font-mono shadow-inner cursor-pointer shrink-0 transition" title="버전 업데이트 기록 보기 (클릭)">v1.1.9</span>
           </div>
           <p id="header-trip-name" class="text-[10px] sm:text-[11px] text-[#78716c] dark:text-stone-400 truncate max-w-[120px] sm:max-w-xs font-normal">인생의 모든 여정을 기록하는 다이어리</p>
         </div>
@@ -1983,6 +2019,24 @@
           </label>
         </div>
       </div>
+
+      <!-- 7. 술술트래블 엔진 버전 및 업데이트 기록 -->
+      <div class="p-4 rounded-xl bg-white dark:bg-[#16181d] border border-[#e8e2d5] dark:border-stone-800 space-y-2.5 shadow-sm">
+        <div class="flex items-center justify-between">
+          <span class="text-xs font-black text-[#1c1917] dark:text-[#ededed] flex items-center gap-1.5">
+            <i class="fa-solid fa-clock-rotate-left text-[#a2601b] dark:text-[#d4af37]"></i>
+            <span>술술트래블 엔진 버전 & 릴리즈 히스토리</span>
+          </span>
+          <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-500/10 text-[#a2601b] dark:text-[#d4af37] border border-amber-500/30">v1.1.9</span>
+        </div>
+        <p class="text-[11px] text-[#78716c] dark:text-stone-400 leading-relaxed">
+          술술 오도미터 순차 올림 원칙에 따른 전체 버전별 기능 추가, UI/UX 개선, 버그 해결 이력을 확인합니다.
+        </p>
+        <button onclick="closeModal('modal-settings'); openVersionHistoryModal();" class="w-full py-2.5 rounded-xl bg-[#faf8f5] dark:bg-stone-800 hover:bg-[#f0ece1] dark:hover:bg-stone-700 border border-[#e8e2d5] dark:border-stone-700 text-[#1c1917] dark:text-[#ededed] text-xs font-bold transition flex items-center justify-center gap-2 cursor-pointer shadow-sm">
+          <i class="fa-solid fa-list-check text-[#a2601b] dark:text-[#d4af37]"></i>
+          <span>버전 업데이트 기록 전체 열람</span>
+        </button>
+      </div>
     </div>
   </div>
 
@@ -2179,6 +2233,207 @@
   </div>
 
   <!-- ========================================== -->
+  <!-- 7.8 버전 업데이트 기록 모달 (MODAL-VERSION-HISTORY) -->
+  <!-- ========================================== -->
+  <div id="modal-version-history" class="sheet-container sheet-closed">
+    <div class="sheet-scrim" onclick="closeModal('modal-version-history')"></div>
+    <div class="sheet-box max-w-2xl p-5 sm:p-6 space-y-4 max-h-[90vh] flex flex-col bg-white dark:bg-[#16181d] text-[#1c1917] dark:text-[#ededed]">
+      <!-- 모달 헤더 -->
+      <div class="flex items-center justify-between border-b border-[#e8e2d5] dark:border-stone-800 pb-3 shrink-0">
+        <div class="flex items-center gap-2.5">
+          <span class="w-8 h-8 rounded-xl bg-amber-500/15 text-[#a2601b] dark:text-[#d4af37] border border-amber-500/30 flex items-center justify-center text-sm shadow-inner">
+            <i class="fa-solid fa-clock-rotate-left"></i>
+          </span>
+          <div>
+            <div class="flex items-center gap-2">
+              <h3 class="text-base font-black text-[#1c1917] dark:text-[#ededed]">술술트래블 릴리즈 히스토리</h3>
+              <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-500/10 text-[#a2601b] dark:text-amber-300 border border-amber-500/30">Release Notes</span>
+            </div>
+            <p class="text-[11px] text-[#78716c] dark:text-stone-400">술술 오도미터 순차 올림 원칙에 따른 공식 업데이트 기록</p>
+          </div>
+        </div>
+        <button onclick="closeModal('modal-version-history')" class="w-7 h-7 rounded-lg bg-[#faf8f5] dark:bg-stone-800 hover:bg-[#f0ece1] dark:hover:bg-stone-700 text-[#78716c] dark:text-stone-300 flex items-center justify-center text-sm transition cursor-pointer" title="닫기">✕</button>
+      </div>
+
+      <!-- 버전 목록 스크롤 영역 -->
+      <div class="flex-1 overflow-y-auto space-y-3 pr-1 text-xs">
+        <!-- v1.1.9 (Current) -->
+        <div class="p-4 rounded-2xl bg-amber-500/5 dark:bg-amber-500/10 border-2 border-amber-500/40 space-y-2.5 shadow-sm relative overflow-hidden">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-2">
+              <span class="px-2 py-0.5 rounded-lg bg-amber-500 text-black font-black text-xs shadow-sm">v1.1.9</span>
+              <span class="text-xs font-black text-[#1c1917] dark:text-white">팁 박스 초고대비 색감 쇄신 & 버전 히스토리 모달</span>
+            </div>
+            <span class="px-2 py-0.5 rounded-full text-[10px] font-black bg-emerald-100 text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300 border border-emerald-300">최신 버전 (Current)</span>
+          </div>
+          <div class="text-[11px] text-[#44403c] dark:text-stone-300 space-y-1.5 leading-relaxed">
+            <div class="flex items-start gap-1.5">
+              <span class="text-amber-600 dark:text-amber-400 font-bold shrink-0">🎨</span>
+              <div><b>라이트 테마 팁 박스 초고대비(WCAG AAA 7:1+) 색감 쇄신</b>: 타임라인 스팟 팁, 필수 예약 꿀팁, 거점 도시 주의사항, 다이내믹 서머리 안내문의 흐릿한 연노랑 글자 증발 문제를 원천 해결하고, 앰버 계열 전용 고대비 규칙(7:1~9:1 대비)을 적용하여 실외에서도 100% 선명하게 읽을 수 있도록 개선.</div>
+            </div>
+            <div class="flex items-start gap-1.5">
+              <span class="text-amber-600 dark:text-amber-400 font-bold shrink-0">📜</span>
+              <div><b>버전 뱃지 원클릭 릴리즈 히스토리 뷰어 탑재</b>: 상단 헤더의 버전 뱃지(v1.1.9) 또는 설정 모달을 클릭하여 전체 버전별 변경사항을 즉시 열람할 수 있는 전용 모달 창(<code>modal-version-history</code>) 구축.</div>
+            </div>
+          </div>
+          <div class="text-[10px] text-stone-400 dark:text-stone-500 pt-1 border-t border-amber-500/20 flex items-center justify-between">
+            <span>📅 2026-09-06 릴리즈</span>
+            <span class="font-mono">st-shell-v1.1.9</span>
+          </div>
+        </div>
+
+        <!-- v1.1.8 -->
+        <div class="p-3.5 rounded-xl bg-stone-50 dark:bg-stone-900/50 border border-stone-200 dark:border-stone-800 space-y-2">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-2">
+              <span class="px-1.5 py-0.5 rounded-md bg-stone-200 dark:bg-stone-800 text-stone-800 dark:text-stone-200 font-bold text-[11px] font-mono">v1.1.8</span>
+              <span class="font-bold text-[#1c1917] dark:text-stone-200">목적지 플러그인 지식 팩(DKP) 레지스트리 구축 & 모놀리스 코드 분리</span>
+            </div>
+            <span class="text-[10px] text-stone-400">2026-09-06</span>
+          </div>
+          <p class="text-[11px] text-[#78716c] dark:text-stone-400 leading-relaxed">
+            단일 HTML 모놀리스 구조를 타파하고 플러그인형 DKP 레지스트리(<code>destination-registry.js</code>, <code>pack-south-america.js</code>, <code>pack-yunnan.js</code>, <code>pack-default.js</code>)로 분리. 신규 여행지 추가 시 무수정 확장성 확보.
+          </p>
+        </div>
+
+        <!-- v1.1.7 -->
+        <div class="p-3.5 rounded-xl bg-stone-50 dark:bg-stone-900/50 border border-stone-200 dark:border-stone-800 space-y-2">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-2">
+              <span class="px-1.5 py-0.5 rounded-md bg-stone-200 dark:bg-stone-800 text-stone-800 dark:text-stone-200 font-bold text-[11px] font-mono">v1.1.7</span>
+              <span class="font-bold text-[#1c1917] dark:text-stone-200">신규 여행(중국운남 등) 내 남미 데이터 침범 차단 & 워크스페이스 완전 동적화</span>
+            </div>
+            <span class="text-[10px] text-stone-400">2026-09-06</span>
+          </div>
+          <p class="text-[11px] text-[#78716c] dark:text-stone-400 leading-relaxed">
+            신규 여행 진입 시 GPS 레이더의 쿠스코 누출을 차단하고 쿤밍/석림/리장 11대 스팟 연동. 중국 운남 12박 13일 황금 코스 자동 생성 스마트 배너 장착.
+          </p>
+        </div>
+
+        <!-- v1.1.6 -->
+        <div class="p-3.5 rounded-xl bg-stone-50 dark:bg-stone-900/50 border border-stone-200 dark:border-stone-800 space-y-2">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-2">
+              <span class="px-1.5 py-0.5 rounded-md bg-stone-200 dark:bg-stone-800 text-stone-800 dark:text-stone-200 font-bold text-[11px] font-mono">v1.1.6</span>
+              <span class="font-bold text-[#1c1917] dark:text-stone-200">모바일 1화면 최적화 통합 스마트 필터 허브 쇄신</span>
+            </div>
+            <span class="text-[10px] text-stone-400">2026-09-06</span>
+          </div>
+          <p class="text-[11px] text-[#78716c] dark:text-stone-400 leading-relaxed">
+            모바일(360~390px) 가로 스크롤 및 잘림 현상을 해결하기 위해 iOS 스타일 5분할 세그먼트 컨트롤 및 3컬럼 드롭다운 일체형 카드 허브 구축.
+          </p>
+        </div>
+
+        <!-- v1.1.5 -->
+        <div class="p-3.5 rounded-xl bg-stone-50 dark:bg-stone-900/50 border border-stone-200 dark:border-stone-800 space-y-2">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-2">
+              <span class="px-1.5 py-0.5 rounded-md bg-stone-200 dark:bg-stone-800 text-stone-800 dark:text-stone-200 font-bold text-[11px] font-mono">v1.1.5</span>
+              <span class="font-bold text-[#1c1917] dark:text-stone-200">Gemini API 키 보안 잠금 UX & 안드로이드 PWA 고유 파일명 배포</span>
+            </div>
+            <span class="text-[10px] text-stone-400">2026-09-06</span>
+          </div>
+          <p class="text-[11px] text-[#78716c] dark:text-stone-400 leading-relaxed">
+            개인 키 노출 원천 차단을 위한 마스킹 잠금 처리, Google WebAPK 캐시 우회를 위한 <code>-v115</code> 고유 아이콘 파일명 배포 및 재설치 정밀 가이드.
+          </p>
+        </div>
+
+        <!-- v1.1.4 -->
+        <div class="p-3.5 rounded-xl bg-stone-50 dark:bg-stone-900/50 border border-stone-200 dark:border-stone-800 space-y-2">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-2">
+              <span class="px-1.5 py-0.5 rounded-md bg-stone-200 dark:bg-stone-800 text-stone-800 dark:text-stone-200 font-bold text-[11px] font-mono">v1.1.4</span>
+              <span class="font-bold text-[#1c1917] dark:text-stone-200">텍스트 가독성·초고대비(WCAG AAA) 쇄신 & 테마 버튼 증발 해결</span>
+            </div>
+            <span class="text-[10px] text-stone-400">2026-09-06</span>
+          </div>
+          <p class="text-[11px] text-[#78716c] dark:text-stone-400 leading-relaxed">
+            블랙 버튼 위 블랙 텍스트 증발 결함 원천 해결. 골드 버튼 텍스트를 피치 블랙(9.2:1 대비)으로 승격하여 강한 햇빛 아래 시인성 확보.
+          </p>
+        </div>
+
+        <!-- v1.1.3 -->
+        <div class="p-3.5 rounded-xl bg-stone-50 dark:bg-stone-900/50 border border-stone-200 dark:border-stone-800 space-y-2">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-2">
+              <span class="px-1.5 py-0.5 rounded-md bg-stone-200 dark:bg-stone-800 text-stone-800 dark:text-stone-200 font-bold text-[11px] font-mono">v1.1.3</span>
+              <span class="font-bold text-[#1c1917] dark:text-stone-200">통계 전용 모달 창 분리, 최상단 헤더 불변 고정 & PWA 캐시 무효화</span>
+            </div>
+            <span class="text-[10px] text-stone-400">2026-09-06</span>
+          </div>
+          <p class="text-[11px] text-[#78716c] dark:text-stone-400 leading-relaxed">
+            인라인 통계 카드를 상단 📊 클릭 시 열리는 슬라이드업 모달(<code>modal-analytics</code>)로 개편. 좌측 브랜드 블록 고정.
+          </p>
+        </div>
+
+        <!-- v1.1.2 -->
+        <div class="p-3.5 rounded-xl bg-stone-50 dark:bg-stone-900/50 border border-stone-200 dark:border-stone-800 space-y-2">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-2">
+              <span class="px-1.5 py-0.5 rounded-md bg-stone-200 dark:bg-stone-800 text-stone-800 dark:text-stone-200 font-bold text-[11px] font-mono">v1.1.2</span>
+              <span class="font-bold text-[#1c1917] dark:text-stone-200">Gemini API 키 저장 신뢰도 확보 & 전역 토스트 엔진 공식 탑재</span>
+            </div>
+            <span class="text-[10px] text-stone-400">2026-09-06</span>
+          </div>
+          <p class="text-[11px] text-[#78716c] dark:text-stone-400 leading-relaxed">
+            전역 토스트 알림 엔진(<code>showToast</code>) 공식 탑재 및 실시간 API 키 연결 테스트 엔진 도입.
+          </p>
+        </div>
+
+        <!-- v1.1.1 -->
+        <div class="p-3.5 rounded-xl bg-stone-50 dark:bg-stone-900/50 border border-stone-200 dark:border-stone-800 space-y-2">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-2">
+              <span class="px-1.5 py-0.5 rounded-md bg-stone-200 dark:bg-stone-800 text-stone-800 dark:text-stone-200 font-bold text-[11px] font-mono">v1.1.1</span>
+              <span class="font-bold text-[#1c1917] dark:text-stone-200">세계 지도 & 비행 궤적 인터랙티브 맵 뷰어 탑재</span>
+            </div>
+            <span class="text-[10px] text-stone-400">2026-09-05</span>
+          </div>
+          <p class="text-[11px] text-[#78716c] dark:text-stone-400 leading-relaxed">
+            대륙 간 비행 궤적과 거점 도시를 고화질 일러스트로 한눈에 볼 수 있는 맵 모달(<code>modal-route-map</code>) 신설.
+          </p>
+        </div>
+
+        <!-- v1.1.0 -->
+        <div class="p-3.5 rounded-xl bg-stone-50 dark:bg-stone-900/50 border border-stone-200 dark:border-stone-800 space-y-2">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-2">
+              <span class="px-1.5 py-0.5 rounded-md bg-stone-200 dark:bg-stone-800 text-stone-800 dark:text-stone-200 font-bold text-[11px] font-mono">v1.1.0</span>
+              <span class="font-bold text-[#1c1917] dark:text-stone-200">술술 오도미터 첫 자릿수 올림 (1.0 → 1.1) & 멀티 트립 엔진 안정화</span>
+            </div>
+            <span class="text-[10px] text-stone-400">2026-09-05</span>
+          </div>
+          <p class="text-[11px] text-[#78716c] dark:text-stone-400 leading-relaxed">
+            단일 남미 여행 뷰어에서 평생의 모든 여행을 관리하는 인생 여행 다이어리 허브 엔진으로 대도약.
+          </p>
+        </div>
+
+        <!-- v1.0.0 -->
+        <div class="p-3.5 rounded-xl bg-stone-50 dark:bg-stone-900/50 border border-stone-200 dark:border-stone-800 space-y-2">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-2">
+              <span class="px-1.5 py-0.5 rounded-md bg-stone-200 dark:bg-stone-800 text-stone-800 dark:text-stone-200 font-bold text-[11px] font-mono">v1.0.0</span>
+              <span class="font-bold text-[#1c1917] dark:text-stone-200">술술트래블 공식 출범</span>
+            </div>
+            <span class="text-[10px] text-stone-400">2026-09-04</span>
+          </div>
+          <p class="text-[11px] text-[#78716c] dark:text-stone-400 leading-relaxed">
+            인생 남미 22일 대종단 여행 가이드, 30분 단위 타임라인, 다통화 가계부, 감성 포토 다이어리, 100% 오프라인 PWA 최초 런칭.
+          </p>
+        </div>
+      </div>
+
+      <!-- 모달 푸터 -->
+      <div class="pt-3 border-t border-[#e8e2d5] dark:border-stone-800 flex items-center justify-between shrink-0">
+        <span class="text-[11px] text-stone-400 dark:text-stone-500 font-mono">Sulsul Travel Engine v1.1.9</span>
+        <button onclick="closeModal('modal-version-history')" class="px-4 py-2 rounded-xl bg-[#faf8f5] dark:bg-stone-800 hover:bg-[#f0ece1] dark:hover:bg-stone-700 border border-[#e8e2d5] dark:border-stone-700 text-[#1c1917] dark:text-[#ededed] text-xs font-bold transition cursor-pointer shadow-sm">
+          닫기
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================== -->
   <!-- 8. 메인 자바스크립트 로직 -->
   <!-- ========================================== -->
   <script>
@@ -2233,7 +2488,7 @@
     window.showToast = showToast;
 
     // 앱 버전 및 글로벌 네임스페이스 (Sulsul-Travel Invariant Rule R-10, R-11, R-12, R-13, R-14, R-15)
-    const APP_VER = '1.1.8';
+    const APP_VER = '1.1.9';
 
     // ══════════════════════════════════════════
     // [Two-Tone Theme System] 라이트 그레이 & 딥 블랙 테마 엔진
@@ -2611,6 +2866,10 @@
 
     function openRouteMapModal() {
       openModal('modal-route-map');
+    }
+
+    function openVersionHistoryModal() {
+      openModal('modal-version-history');
     }
 
     function openSettingsModal() {
@@ -3528,7 +3787,7 @@
                   ${draftBadge}
                 </div>
                 ${spot.desc ? `<p class="text-[11px] text-slate-400 mt-1 leading-relaxed">${spot.desc}</p>` : ''}
-                ${spot.tip ? `<div class="text-[10px] text-amber-300/90 bg-amber-500/10 px-2 py-1 rounded border border-amber-500/20 mt-1.5">💡 ${spot.tip}</div>` : ''}
+                ${spot.tip ? `<div class="tip-box text-[10px] text-amber-900 dark:text-amber-300 bg-amber-100 dark:bg-amber-500/10 px-2.5 py-1.5 rounded-lg border border-amber-300 dark:border-amber-500/20 mt-1.5 font-medium leading-relaxed">💡 ${spot.tip}</div>` : ''}
               </div>
               <div class="shrink-0 flex items-center gap-1">
                 ${spot.cost ? `<span class="text-[10px] text-emerald-400 font-semibold hidden sm:inline mr-1">${spot.cost}</span>` : ''}
@@ -3793,7 +4052,7 @@
               <h4 class="text-xs font-black text-white mt-1.5">${b.title}</h4>
               <p class="text-[11px] text-slate-400 mt-1 leading-relaxed">${b.desc}</p>
               <div class="text-[10px] text-slate-500 mt-1">예상 비용: <span class="text-slate-300 font-semibold">${b.cost}</span></div>
-              <div class="text-[10px] text-amber-300/90 bg-amber-500/10 p-1.5 rounded border border-amber-500/20 mt-1.5">💡 ${b.tip}</div>
+              <div class="tip-box text-[10px] text-amber-900 dark:text-amber-300 bg-amber-100 dark:bg-amber-500/10 p-2 rounded-lg border border-amber-300 dark:border-amber-500/20 mt-1.5 font-medium leading-relaxed">💡 ${b.tip}</div>
             </div>
 
             <div class="pt-2">
@@ -3828,12 +4087,12 @@
           <div class="col-span-1 md:col-span-2 p-4 rounded-xl bg-gradient-to-r from-amber-500/10 via-emerald-500/10 to-sky-500/10 border border-amber-500/30 space-y-2">
             <div class="flex items-center gap-2">
               <span class="text-base">${pack.flag || '📌'}</span>
-              <h4 class="text-xs sm:text-sm font-black text-amber-300">${sn.title}</h4>
+              <h4 class="text-xs sm:text-sm font-black text-amber-950 dark:text-amber-300">${sn.title}</h4>
             </div>
             <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 text-[11px] text-slate-300 pt-1">
               ${(sn.tips || []).map(t => `
                 <div class="p-2.5 rounded-lg bg-[#080b12] border border-[#1e263c]">
-                  <div class="font-bold text-amber-400 flex items-center gap-1 mb-1">
+                  <div class="font-bold text-amber-900 dark:text-amber-400 flex items-center gap-1 mb-1">
                     <i class="fa-solid fa-check text-[10px]"></i> ${t.title}
                   </div>
                   <div class="text-slate-400 leading-relaxed">${t.desc}</div>
@@ -3939,7 +4198,7 @@
               <p class="text-[11px] text-slate-400">${d.intro}</p>
               <div class="text-emerald-400 text-[11px] font-bold pt-1">🍽️ 대표 먹거리</div>
               <div class="text-[11px] text-slate-400">${d.food}</div>
-              <div class="text-amber-300 text-[10px] bg-amber-500/10 p-2 rounded border border-amber-500/20 mt-1.5">
+              <div class="tip-box text-amber-900 dark:text-amber-300 text-[10px] bg-amber-100 dark:bg-amber-500/10 p-2 rounded-lg border border-amber-300 dark:border-amber-500/20 mt-1.5 font-medium leading-relaxed">
                 💡 ${d.caution}
               </div>
             </div>
@@ -3999,7 +4258,7 @@
               </div>
               <h4 class="text-xs font-black text-white mt-1.5">${s.title}</h4>
               ${s.desc ? `<p class="text-[11px] text-slate-400 mt-1 leading-relaxed">${s.desc}</p>` : ''}
-              ${s.tip ? `<div class="text-[10px] text-amber-300/90 bg-amber-500/10 p-1.5 rounded border border-amber-500/20 mt-1.5">💡 ${s.tip}</div>` : ''}
+              ${s.tip ? `<div class="tip-box text-[10px] text-amber-900 dark:text-amber-300 bg-amber-100 dark:bg-amber-500/10 p-2 rounded-lg border border-amber-300 dark:border-amber-500/20 mt-1.5 font-medium leading-relaxed">💡 ${s.tip}</div>` : ''}
             </div>
 
             <div class="pt-2">
@@ -6281,6 +6540,7 @@
       openAnalyticsModal: openAnalyticsModal,
       switchAnalyticsTab: switchAnalyticsTab,
       openRouteMapModal: openRouteMapModal,
+      openVersionHistoryModal: openVersionHistoryModal,
       openSettingsModal: openSettingsModal,
       setTheme: setTheme,
       toggleTheme: toggleTheme,
