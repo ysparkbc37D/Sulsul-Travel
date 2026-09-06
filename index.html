@@ -564,7 +564,7 @@
             <h1 class="font-serif-brand text-base sm:text-xl font-bold tracking-tight text-[#1c1917] dark:text-[#ededed] whitespace-nowrap">
               Sulsul Travel
             </h1>
-            <span id="app-ver-badge" onclick="event.stopPropagation(); openVersionHistoryModal()" class="px-1.5 py-0.5 rounded-md theme-card-subtle hover:border-amber-500/60 hover:text-amber-600 dark:hover:text-amber-300 text-[#a2601b] dark:text-[#d4af37] text-[10px] font-bold font-mono shadow-inner cursor-pointer shrink-0 transition" title="버전 업데이트 기록 보기 (클릭)">v1.2.2</span>
+            <span id="app-ver-badge" onclick="event.stopPropagation(); openVersionHistoryModal()" class="px-1.5 py-0.5 rounded-md theme-card-subtle hover:border-amber-500/60 hover:text-amber-600 dark:hover:text-amber-300 text-[#a2601b] dark:text-[#d4af37] text-[10px] font-bold font-mono shadow-inner cursor-pointer shrink-0 transition" title="버전 업데이트 기록 보기 (클릭)">v1.2.3</span>
           </div>
           <p id="header-trip-name" class="text-[10px] sm:text-[11px] text-[#78716c] dark:text-stone-400 truncate max-w-[120px] sm:max-w-xs font-normal">인생의 모든 여정을 기록하는 다이어리</p>
         </div>
@@ -890,9 +890,15 @@
               </h3>
               <p id="map-view-header-desc" class="text-[11px] text-slate-400 mt-0.5">거점 핀을 클릭하면 해당 도시로 카메라가 줌인되며 상세 지도와 구글 지도 연동이 활성화됩니다.</p>
             </div>
-            <button onclick="resetMapToWorldView()" class="px-2.5 py-1 bg-[#141c2e] hover:bg-[#1a263e] border border-[#23304c] text-slate-300 rounded-lg text-xs font-semibold self-start sm:self-auto">
-              <i class="fa-solid fa-globe text-[11px] mr-1"></i> 전체 보기
-            </button>
+            <div class="flex items-center gap-1.5 self-start sm:self-auto flex-wrap">
+              <button onclick="resetMapToWorldView()" class="px-2.5 py-1 bg-[#141c2e] hover:bg-[#1a263e] border border-[#23304c] text-slate-300 rounded-lg text-xs font-semibold cursor-pointer transition">
+                <i class="fa-solid fa-globe text-[11px] mr-1"></i> 전체 보기
+              </button>
+              <button id="btn-toggle-all-trips-map" onclick="toggleAllTripsOnWorkspaceMap()" class="px-2.5 py-1 bg-[#141c2e] hover:bg-[#1a263e] border border-[#23304c] text-amber-400 hover:text-amber-300 rounded-lg text-xs font-semibold flex items-center gap-1 cursor-pointer transition" title="등록된 모든 여행의 궤적과 거점을 함께 표시합니다">
+                <i class="fa-solid fa-earth-americas text-[11px]"></i>
+                <span id="btn-toggle-all-trips-label">🌐 전체 여행 궤적</span>
+              </button>
+            </div>
           </div>
 
           <!-- 상단 빠른 도시 선택 탭 바 (Pills) -->
@@ -2140,7 +2146,7 @@
                 <div class="text-[10px] text-[#78716c] dark:text-stone-400">인터랙티브 지도 및 주요 거점 좌표를 확인하세요.</div>
               </div>
             </div>
-            <button onclick="closeModal('modal-analytics'); navigateToInteractiveMap();" class="px-3 py-1.5 rounded-xl btn-gold text-xs font-bold shrink-0 cursor-pointer shadow-sm">
+            <button onclick="closeModal('modal-analytics'); openGlobalRouteMapModal();" class="px-3 py-1.5 rounded-xl btn-gold text-xs font-bold shrink-0 cursor-pointer shadow-sm">
               지도 열기
             </button>
           </div>
@@ -2293,33 +2299,47 @@
 
       <!-- 버전 목록 스크롤 영역 -->
       <div class="flex-1 overflow-y-auto space-y-3 pr-1 text-xs">
-        <!-- v1.2.2 (Current) -->
+        <!-- v1.2.3 (Current) -->
         <div class="p-4 rounded-2xl bg-amber-500/5 dark:bg-amber-500/10 border-2 border-amber-500/40 space-y-2.5 shadow-sm relative overflow-hidden">
           <div class="flex items-center justify-between">
             <div class="flex items-center gap-2">
-              <span class="px-2 py-0.5 rounded-lg bg-amber-500 text-black font-black text-xs shadow-sm">v1.2.2</span>
-              <span class="text-xs font-black text-[#1c1917] dark:text-white">여행별 인터랙티브 지도(Leaflet) 직접 연결 & 동적 헤더·거점 매칭 쇄신</span>
+              <span class="px-2 py-0.5 rounded-lg bg-amber-500 text-black font-black text-xs shadow-sm">v1.2.3</span>
+              <span class="text-xs font-black text-[#1c1917] dark:text-white">평생 세계 및 대종단 등록된 모든 여행 궤적 통합 표기 엔진</span>
             </div>
             <span class="px-2 py-0.5 rounded-full text-[10px] font-black bg-emerald-100 text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300 border border-emerald-300">최신 버전 (Current)</span>
           </div>
           <div class="text-[11px] text-[#44403c] dark:text-stone-300 space-y-1.5 leading-relaxed">
             <div class="flex items-start gap-1.5">
-              <span class="text-amber-600 dark:text-amber-400 font-bold shrink-0">🧭</span>
-              <div><b>상단 지구본 버튼 인터랙티브 지도 직접 연결</b>: 헤더의 지도 버튼 클릭 시 정적 캡처 모달을 거치지 않고 각 여행(중국 운남 vs 남미 등)에 100% 매칭되는 인터랙티브 지도(Leaflet)로 즉시 탭 전환 및 스크롤 이동(<code>navigateToInteractiveMap</code>).</div>
+              <span class="text-amber-600 dark:text-amber-400 font-bold shrink-0">🌐</span>
+              <div><b>평생 여행 발자취 통합 세계 노선도 구축</b>: 통계 대시보드의 '세계 및 대종단 비행 궤적 노선도' 클릭 시 등록된 모든 여행(중국 운남, 남미 4개국 등)의 전 세계 비행 궤적과 거점 핀을 멀티 컬러 팔레트로 하나의 지도에 동시 시각화.</div>
             </div>
             <div class="flex items-start gap-1.5">
-              <span class="text-amber-600 dark:text-amber-400 font-bold shrink-0">🇨🇳</span>
-              <div><b>중국 운남 등 여행별 지도 헤더 & 거점 카드 완전 동기화</b>: 지도 헤더의 '남미 대종단' 고정 텍스트를 제거하고, 중국 운남 여행 시 <code>🇨🇳 중국 운남 13일 황금 코스 인터랙티브 궤적</code> 및 쿤밍 1순위 포커싱으로 실시간 동적 렌더링.</div>
+              <span class="text-amber-600 dark:text-amber-400 font-bold shrink-0">🎨</span>
+              <div><b>여행별 고유 색상 및 대륙 간 비행 트랙</b>: 남미는 앰버/골드(<code>#f59e0b</code>), 중국 운남은 에메랄드(<code>#10b981</code>) 등 여행별 고유 시그니처 컬러를 부여하고, 노선도 탭에서도 대륙 간 비행 환승 브릿지 체계 지원.</div>
             </div>
             <div class="flex items-start gap-1.5">
-              <span class="text-amber-600 dark:text-amber-400 font-bold shrink-0">🌏</span>
-              <div><b>여행지별 맞춤 아이콘 및 툴팁 체계 확립</b>: 아시아/중국은 <code>fa-earth-asia</code>, 미주/남미는 <code>fa-earth-americas</code>, 전역은 <code>fa-map-location-dot</code>으로 지능형 적응.</div>
+              <span class="text-amber-600 dark:text-amber-400 font-bold shrink-0">🗺️</span>
+              <div><b>메인 인터랙티브 지도 전체 궤적 토글 추가</b>: 워크스페이스 메인 지도 상단에 <code>[🌐 전체 여행 궤적]</code> 토글 버튼을 추가하여, 단일 여행 집중 모드와 전 여정 오버레이 모드를 원클릭으로 자유롭게 전환.</div>
             </div>
           </div>
           <div class="text-[10px] text-stone-400 dark:text-stone-500 pt-1 border-t border-amber-500/20 flex items-center justify-between">
             <span>📅 2026-09-06 릴리즈</span>
-            <span class="font-mono">st-shell-v1.2.2</span>
+            <span class="font-mono">st-shell-v1.2.3</span>
           </div>
+        </div>
+
+        <!-- v1.2.2 -->
+        <div class="p-3.5 rounded-xl bg-stone-50 dark:bg-stone-900/50 border border-stone-200 dark:border-stone-800 space-y-2">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-2">
+              <span class="px-1.5 py-0.5 rounded-md bg-stone-200 dark:bg-stone-800 text-stone-800 dark:text-stone-200 font-bold text-[11px] font-mono">v1.2.2</span>
+              <span class="font-bold text-[#1c1917] dark:text-stone-200">여행별 인터랙티브 지도(Leaflet) 직접 연결 & 동적 헤더·거점 매칭 쇄신</span>
+            </div>
+            <span class="text-[10px] text-stone-400">2026-09-06</span>
+          </div>
+          <p class="text-[11px] text-[#78716c] dark:text-stone-400 leading-relaxed">
+            상단 지구본 버튼 클릭 시 각 여행(중국 운남 vs 남미)에 100% 일치하는 인터랙티브 지도(Leaflet)로 즉시 탭 이동 및 거점 핀 실시간 동기화.
+          </p>
         </div>
 
         <!-- v1.2.1 -->
@@ -2570,7 +2590,7 @@
     window.showToast = showToast;
 
     // 앱 버전 및 글로벌 네임스페이스 (Sulsul-Travel Invariant Rule R-10, R-11, R-12, R-13, R-14, R-15)
-    const APP_VER = '1.2.2';
+    const APP_VER = '1.2.3';
 
     // ══════════════════════════════════════════
     // [Two-Tone Theme System] 라이트 그레이 & 딥 블랙 테마 엔진
@@ -3044,14 +3064,26 @@
 
       if (tab === 'satellite') {
         setTimeout(() => {
-          initOrUpdateRouteMapLeaflet(getActiveTrip());
+          if (window.__routeMapIsGlobalAllTrips) {
+            initOrUpdateRouteMapLeaflet(null, true);
+          } else {
+            initOrUpdateRouteMapLeaflet(getActiveTrip());
+          }
         }, 80);
+      } else if (tab === 'metro') {
+        if (window.__routeMapIsGlobalAllTrips) {
+          renderGlobalIllustratedRouteMap(State.trips);
+        }
       }
     }
 
-    function jumpToTripDay(dayNum) {
+    function jumpToTripDay(dayNum, tripId) {
       closeModal('modal-route-map', true);
-      switchTab('plan');
+      if (tripId && State.activeTripId !== tripId) {
+        openTripWorkspace(tripId);
+      } else {
+        switchTab('plan');
+      }
       switchPlanSubTab('timeline');
       setTimeout(() => {
         const accordionHeader = document.getElementById(`day-header-${dayNum}`);
@@ -3085,19 +3117,80 @@
       '푸에르토 이과수': [-25.6953, -54.4367],
       '이과수': [-25.6953, -54.4367],
       '리우데자네이루': [-22.9068, -43.1729],
+      '리우': [-22.9068, -43.1729],
       '쿤밍': [25.0406, 102.7122],
+      '석림': [24.8167, 103.3250],
       '대리': [25.6065, 100.2676],
+      '따리': [25.6967, 100.1652],
       '여강': [26.8721, 100.2299],
+      '리장': [26.8721, 100.2345],
+      '옥룡설산': [27.1086, 100.1878],
+      '호도협': [27.1833, 100.1333],
       '샹그릴라': [27.8269, 99.7072],
       '도쿄': [35.6762, 139.6503],
       '오사카': [34.6937, 135.5023],
+      '교토': [35.0116, 135.7681],
+      '후쿠오카': [33.5904, 130.4017],
       '파리': [48.8566, 2.3522],
+      '런던': [51.5074, -0.1278],
       '로마': [41.9028, 12.4964],
       '바르셀로나': [41.3851, 2.1734],
-      '방콕': [13.7563, 100.5018]
+      '마드리드': [40.4168, -3.7038],
+      '프라하': [50.0755, 14.4378],
+      '비엔나': [48.2082, 16.3738],
+      '인터라켄': [46.6863, 7.8632],
+      '방콕': [13.7563, 100.5018],
+      '다낭': [16.0544, 108.2022],
+      '발리': [-8.4095, 115.1889],
+      '싱가포르': [1.3521, 103.8198],
+      '시드니': [-33.8688, 151.2093],
+      '뉴욕': [40.7128, -74.0060],
+      '하와이': [21.3069, -157.8583],
+      '호놀룰루': [21.3069, -157.8583]
     };
 
-    function initOrUpdateRouteMapLeaflet(trip) {
+    function getTripGeoData(trip) {
+      if (!trip) return { latlngs: [], bounds: null };
+      const pack = resolveTripPack(trip);
+      let latlngs = [];
+
+      if (pack && pack.geo && pack.geo.flightRoutes && pack.geo.flightRoutes.length > 0) {
+        const dests = Array.isArray(pack.geo.destinations) ? pack.geo.destinations : Object.values(pack.geo.destinations || {});
+        latlngs = pack.geo.flightRoutes.map((coord, idx) => {
+          let name = `거점 #${idx + 1}`;
+          let dest = dests.find(d => Math.abs(d.lat - coord[0]) < 0.1 && Math.abs(d.lng - coord[1]) < 0.1);
+          if (!dest && dests[idx]) dest = dests[idx];
+          if (dest) name = dest.nameKo || (dest.name ? dest.name.split(' ')[0] : dest.id);
+          return { name, latlng: coord, idx: idx + 1, dest };
+        });
+      } else {
+        const rawCities = trip.cities || [];
+        const cities = rawCities.length > 0 ? rawCities : (trip.days ? trip.days.map(d => d.city || (d.title ? d.title.split(' ')[0] : null)).filter(Boolean) : []);
+        const uniqueCities = [];
+        cities.forEach(c => {
+          if (!uniqueCities.includes(c)) uniqueCities.push(c);
+        });
+
+        uniqueCities.forEach((c, idx) => {
+          let coord = CITY_GEO_COORDS[c];
+          if (!coord) {
+            Object.keys(CITY_GEO_COORDS).forEach(k => {
+              if (c.includes(k) || k.includes(c)) coord = CITY_GEO_COORDS[k];
+            });
+          }
+          if (coord) {
+            latlngs.push({ name: c, latlng: coord, idx: idx + 1 });
+          }
+        });
+      }
+
+      return {
+        latlngs,
+        bounds: (latlngs.length > 0 && typeof L !== 'undefined') ? L.latLngBounds(latlngs.map(l => l.latlng)) : null
+      };
+    }
+
+    function initOrUpdateRouteMapLeaflet(trip, isGlobal) {
       const container = document.getElementById('routemap-leaflet-container');
       if (!container || typeof L === 'undefined') return;
 
@@ -3105,7 +3198,7 @@
         routeMapLeafletInstance = L.map('routemap-leaflet-container', {
           zoomControl: true,
           attributionControl: false
-        }).setView([-14.0, -65.0], 3);
+        }).setView([15.0, 10.0], 2);
 
         L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
           maxZoom: 18
@@ -3119,48 +3212,369 @@
       }
       routeMapLeafletInstance.__markers = [];
 
-      const cities = (trip && trip.cities) ? trip.cities : [];
-      const latlngs = [];
+      const TRIP_PALETTES = [
+        { stroke: '#f59e0b', fill: '#f59e0b', border: '#fbbf24', text: '#fef3c7', name: '골드' },
+        { stroke: '#10b981', fill: '#10b981', border: '#34d399', text: '#d1fae5', name: '에메랄드' },
+        { stroke: '#0284c7', fill: '#0284c7', border: '#38bdf8', text: '#e0f2fe', name: '스카이블루' },
+        { stroke: '#f43f5e', fill: '#f43f5e', border: '#fb7185', text: '#ffe4e6', name: '로즈' },
+        { stroke: '#8b5cf6', fill: '#8b5cf6', border: '#a78bfa', text: '#ede9fe', name: '퍼플' }
+      ];
 
-      cities.forEach((c, idx) => {
-        let coord = CITY_GEO_COORDS[c];
-        if (!coord) {
-          Object.keys(CITY_GEO_COORDS).forEach(k => {
-            if (c.includes(k) || k.includes(c)) coord = CITY_GEO_COORDS[k];
-          });
+      const isGlobalMode = isGlobal || window.__routeMapIsGlobalAllTrips;
+
+      if (isGlobalMode) {
+        const allTrips = (State.trips && State.trips.length > 0) ? State.trips : [getActiveTrip()].filter(Boolean);
+        const allBoundsCoords = [];
+        window.__globalTripBoundsMap = {};
+
+        allTrips.forEach((t, tIdx) => {
+          let palette = TRIP_PALETTES[tIdx % TRIP_PALETTES.length];
+          if (isSouthAmericaTrip(t)) palette = TRIP_PALETTES[0];
+          else if (isYunnanTrip(t)) palette = TRIP_PALETTES[1];
+
+          const geo = getTripGeoData(t);
+          if (geo.bounds) {
+            window.__globalTripBoundsMap[t.id] = geo.bounds;
+          }
+
+          if (geo.latlngs.length > 0) {
+            geo.latlngs.forEach(l => allBoundsCoords.push(l.latlng));
+
+            if (geo.latlngs.length > 1) {
+              const polyline = L.polyline(geo.latlngs.map(l => l.latlng), {
+                color: palette.stroke,
+                weight: 3.5,
+                dashArray: '6, 6',
+                opacity: 0.88
+              }).addTo(routeMapLeafletInstance);
+              routeMapLeafletInstance.__markers.push(polyline);
+            }
+
+            geo.latlngs.forEach(l => {
+              const marker = L.circleMarker(l.latlng, {
+                radius: 8,
+                fillColor: palette.fill,
+                color: '#ffffff',
+                weight: 2,
+                opacity: 1,
+                fillOpacity: 0.95
+              }).addTo(routeMapLeafletInstance);
+
+              const popupHtml = `
+                <div class="text-xs p-1" style="min-width: 160px;">
+                  <div class="flex items-center gap-1.5 border-b border-stone-200 dark:border-stone-700 pb-1 mb-1">
+                    <span>${t.coverEmoji || '✈️'}</span>
+                    <b class="text-xs text-[#1c1917] dark:text-white">${l.name}</b>
+                    <span class="text-[9px] px-1.5 py-0.2 rounded font-bold" style="background:${palette.border};color:#000;">#${l.idx}</span>
+                  </div>
+                  <div class="text-[11px] text-stone-600 dark:text-stone-300 font-semibold mb-1">${t.title}</div>
+                  <div class="flex items-center gap-1.5 mt-2">
+                    <button onclick="closeModal('modal-route-map'); selectTripAndOpenWorkspace('${t.id}', '${l.name}');" class="px-2 py-1 rounded bg-amber-500/20 hover:bg-amber-500/30 text-amber-600 dark:text-amber-400 font-bold text-[10px] cursor-pointer">이 여정 열기</button>
+                    <a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(l.name + ' ' + (t.title || ''))}" target="_blank" rel="noopener noreferrer" class="px-2 py-1 rounded bg-stone-100 hover:bg-stone-200 dark:bg-stone-800 text-stone-700 dark:text-stone-300 font-bold text-[10px]">구글 지도</a>
+                  </div>
+                </div>
+              `;
+              marker.bindPopup(popupHtml);
+              routeMapLeafletInstance.__markers.push(marker);
+            });
+          }
+        });
+
+        if (allBoundsCoords.length > 1) {
+          const bounds = L.latLngBounds(allBoundsCoords);
+          routeMapLeafletInstance.fitBounds(bounds, { padding: [50, 50], maxZoom: 6 });
+        } else if (allBoundsCoords.length === 1) {
+          routeMapLeafletInstance.setView(allBoundsCoords[0], 5);
         }
-        if (coord) {
-          latlngs.push({ name: c, latlng: coord, idx: idx + 1 });
-          const marker = L.circleMarker(coord, {
+
+        const linksContainer = document.getElementById('modal-route-map-links');
+        if (linksContainer) {
+          let buttonsHtml = `
+            <span class="font-bold text-[#78716c] dark:text-stone-400 shrink-0 text-[11px]">🌍 대륙/여정 줌인:</span>
+            <button onclick="zoomGlobalRouteMap('all')" class="px-2.5 py-1 rounded-lg bg-amber-500/20 hover:bg-amber-500/30 border border-amber-500/40 text-[#a2601b] dark:text-[#d4af37] font-bold shrink-0 transition text-[11px] cursor-pointer">
+              🌐 전 세계 궤적
+            </button>
+          `;
+          allTrips.forEach((t, tIdx) => {
+            let palette = TRIP_PALETTES[tIdx % TRIP_PALETTES.length];
+            if (isSouthAmericaTrip(t)) palette = TRIP_PALETTES[0];
+            else if (isYunnanTrip(t)) palette = TRIP_PALETTES[1];
+
+            const shortTitle = t.title ? t.title.split(' ')[0] : '여정';
+            const cityCount = (t.cities && t.cities.length > 0) ? t.cities.length : (t.days ? t.days.length : 0);
+            buttonsHtml += `
+              <button onclick="zoomGlobalRouteMap('${t.id}')" class="px-2.5 py-1 rounded-lg bg-white dark:bg-stone-800 hover:bg-stone-50 dark:hover:bg-stone-700 border border-[#e8e2d5] dark:border-stone-700 text-[#1c1917] dark:text-stone-200 font-bold shrink-0 transition flex items-center gap-1.5 text-[11px] cursor-pointer">
+                <span class="w-2 h-2 rounded-full shrink-0" style="background:${palette.stroke};"></span>
+                <span>${t.coverEmoji || '✈️'}</span>
+                <span>${shortTitle} (${cityCount}개 거점)</span>
+              </button>
+            `;
+          });
+          linksContainer.innerHTML = buttonsHtml;
+        }
+      } else {
+        if (!trip) trip = getActiveTrip();
+        if (!trip) return;
+
+        const geo = getTripGeoData(trip);
+        const isYN = isYunnanTrip(trip);
+        const pinColor = isYN ? '#10b981' : '#f59e0b';
+        const polyColor = isYN ? '#059669' : '#0284c7';
+
+        geo.latlngs.forEach(l => {
+          const marker = L.circleMarker(l.latlng, {
             radius: 8,
-            fillColor: '#f59e0b',
+            fillColor: pinColor,
             color: '#ffffff',
             weight: 2,
             opacity: 1,
             fillOpacity: 0.9
           }).addTo(routeMapLeafletInstance);
 
-          marker.bindPopup(`<b>${c}</b><br><span class="text-xs">정거장 #${idx + 1}</span>`);
+          marker.bindPopup(`<b>${l.name}</b><br><span class="text-xs">정거장 #${l.idx}</span>`);
           routeMapLeafletInstance.__markers.push(marker);
+        });
+
+        if (geo.latlngs.length > 1) {
+          const polyline = L.polyline(geo.latlngs.map(l => l.latlng), {
+            color: polyColor,
+            weight: 3,
+            dashArray: '6, 6',
+            opacity: 0.85
+          }).addTo(routeMapLeafletInstance);
+          routeMapLeafletInstance.__markers.push(polyline);
+
+          routeMapLeafletInstance.fitBounds(polyline.getBounds(), { padding: [40, 40] });
+        } else if (geo.latlngs.length === 1) {
+          routeMapLeafletInstance.setView(geo.latlngs[0].latlng, 10);
         }
-      });
-
-      if (latlngs.length > 1) {
-        const polyline = L.polyline(latlngs.map(l => l.latlng), {
-          color: '#0284c7',
-          weight: 3,
-          dashArray: '6, 6',
-          opacity: 0.85
-        }).addTo(routeMapLeafletInstance);
-        routeMapLeafletInstance.__markers.push(polyline);
-
-        routeMapLeafletInstance.fitBounds(polyline.getBounds(), { padding: [40, 40] });
-      } else if (latlngs.length === 1) {
-        routeMapLeafletInstance.setView(latlngs[0].latlng, 10);
       }
     }
 
+    function zoomGlobalRouteMap(tripId) {
+      if (!routeMapLeafletInstance) return;
+      if (tripId === 'all') {
+        const allTrips = (State.trips && State.trips.length > 0) ? State.trips : [getActiveTrip()].filter(Boolean);
+        const allCoords = [];
+        allTrips.forEach(t => {
+          const geo = getTripGeoData(t);
+          geo.latlngs.forEach(l => allCoords.push(l.latlng));
+        });
+        if (allCoords.length > 1) {
+          routeMapLeafletInstance.fitBounds(L.latLngBounds(allCoords), { padding: [50, 50], maxZoom: 6 });
+        }
+      } else if (window.__globalTripBoundsMap && window.__globalTripBoundsMap[tripId]) {
+        routeMapLeafletInstance.fitBounds(window.__globalTripBoundsMap[tripId], { padding: [40, 40], maxZoom: 8 });
+      }
+    }
+
+    function selectTripAndOpenWorkspace(tripId, cityKey) {
+      closeModal('modal-route-map');
+      if (tripId && State.activeTripId !== tripId) {
+        openTripWorkspace(tripId);
+      } else {
+        switchView('workspace');
+      }
+      if (cityKey) {
+        setTimeout(() => {
+          navigateToInteractiveMap(cityKey);
+        }, 150);
+      }
+    }
+
+    function renderGlobalIllustratedRouteMap(allTrips) {
+      if (!allTrips || allTrips.length === 0) {
+        allTrips = (State.trips && State.trips.length > 0) ? State.trips : [getActiveTrip()].filter(Boolean);
+      }
+      if (!allTrips || allTrips.length === 0) return;
+
+      const titleEl = document.getElementById('modal-route-map-title');
+      const subEl = document.getElementById('modal-route-map-subtitle');
+      const metroContainer = document.getElementById('routemap-view-metro');
+      const iconEl = document.getElementById('modal-route-map-icon');
+      const btnOriginal = document.getElementById('btn-routemap-tab-original');
+
+      let allCountries = new Set();
+      let allCities = new Set();
+      let totalDays = 0;
+
+      allTrips.forEach(t => {
+        (t.countries || []).forEach(c => allCountries.add(c));
+        (t.cities || []).forEach(c => allCities.add(c));
+        totalDays += (t.durationDays || (t.days ? t.days.length : 0) || 0);
+      });
+
+      if (titleEl) {
+        titleEl.innerText = '나의 평생 세계 및 대종단 비행 궤적 통합 노선도';
+      }
+      if (subEl) {
+        subEl.innerText = `총 ${allTrips.length}개 여정 · ${allCountries.size}개국 · ${allCities.size}개 거점 · ${totalDays}일간의 대종단 궤적`;
+      }
+      if (iconEl) {
+        iconEl.className = 'fa-solid fa-earth-americas';
+      }
+      if (btnOriginal) {
+        btnOriginal.classList.remove('hidden');
+      }
+
+      if (!metroContainer) return;
+
+      let metroHtml = `
+        <!-- 평생 발자취 요약 배너 -->
+        <div class="p-3.5 sm:p-4 rounded-xl bg-gradient-to-r from-amber-500/10 via-emerald-500/10 to-sky-500/10 dark:from-amber-950/30 dark:via-emerald-950/30 dark:to-sky-950/30 border border-amber-500/30 dark:border-amber-700/40 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 shadow-sm">
+          <div class="flex items-center gap-3">
+            <span class="text-2xl">🗺️</span>
+            <div>
+              <div class="text-xs sm:text-sm font-black text-[#1c1917] dark:text-white">
+                평생 누적 발자취: 총 ${allTrips.length}개 대장정 · ${allCountries.size}개국 · ${allCities.size}개 거점
+              </div>
+              <div class="text-[11px] text-[#78716c] dark:text-stone-300 mt-0.5">
+                등록된 모든 여행의 궤적을 확인하세요. 거점 카드를 누르면 해당 여정으로 즉시 전환됩니다.
+              </div>
+            </div>
+          </div>
+          <button onclick="switchRouteMapTab('satellite')" class="px-3 py-1.5 rounded-xl btn-gold text-xs font-bold shrink-0 flex items-center gap-1.5 shadow-sm cursor-pointer">
+            <i class="fa-solid fa-satellite text-xs"></i>
+            <span>전 세계 위성 궤적 보기</span>
+          </button>
+        </div>
+
+        <div class="space-y-6 pt-2">
+      `;
+
+      allTrips.forEach((trip, tIdx) => {
+        const isSA = isSouthAmericaTrip(trip);
+        const isYN = isYunnanTrip(trip);
+        const flag = (trip.countries && trip.countries.length > 0) ? (isYN ? '🇨🇳' : (isSA ? '🌎' : '✈️')) : (trip.coverEmoji || '✈️');
+        const tripCities = trip.cities || [];
+
+        metroHtml += `
+          <div class="p-4 rounded-2xl bg-white dark:bg-[#151922] border border-[#e8e2d5] dark:border-stone-800 shadow-sm space-y-3">
+            <!-- 여행 헤더 배너 -->
+            <div class="flex items-center justify-between border-b border-stone-200 dark:border-stone-800 pb-2.5">
+              <div class="flex items-center gap-2.5">
+                <span class="text-2xl">${flag}</span>
+                <div>
+                  <h4 class="text-xs sm:text-sm font-black text-[#1c1917] dark:text-white flex items-center gap-1.5">
+                    <span>${trip.title}</span>
+                    <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-stone-100 dark:bg-stone-800 text-stone-600 dark:text-stone-300">
+                      ${trip.durationDays || (trip.days ? trip.days.length : 0)}일정
+                    </span>
+                  </h4>
+                  <div class="text-[10px] text-stone-500 dark:text-stone-400 mt-0.5">
+                    ${(trip.countries && trip.countries.length > 0) ? trip.countries.join(' ⇄ ') : '맞춤 여행'}
+                  </div>
+                </div>
+              </div>
+              <button onclick="closeModal('modal-route-map'); selectTripAndOpenWorkspace('${trip.id}');" class="px-2.5 py-1 rounded-lg bg-amber-500/15 hover:bg-amber-500/25 text-[#a2601b] dark:text-[#d4af37] text-xs font-bold transition flex items-center gap-1 cursor-pointer">
+                <span>이 여정 열기</span>
+                <i class="fa-solid fa-arrow-right text-[10px]"></i>
+              </button>
+            </div>
+
+            <!-- 여행 거점 카드 그리드 -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2.5">
+        `;
+
+        if (trip.days && trip.days.length > 0) {
+          const stations = [];
+          trip.days.forEach(d => {
+            const rawCity = d.city || (d.title ? d.title.split(' ')[0] : `Day ${d.dayNum}`);
+            const cityClean = rawCity.replace(/·/g, '·').trim();
+            let lastSt = stations[stations.length - 1];
+            if (!lastSt || lastSt.cityName !== cityClean) {
+              stations.push({
+                cityName: cityClean,
+                startDay: d.dayNum,
+                endDay: d.dayNum,
+                spots: [...(d.spots || [])],
+                landmark: (d.spots && d.spots[0] && d.spots[0].title) || d.title || ''
+              });
+            } else {
+              lastSt.endDay = d.dayNum;
+              if (d.spots) lastSt.spots = lastSt.spots.concat(d.spots);
+            }
+          });
+
+          stations.forEach((st, sIdx) => {
+            const dayText = st.startDay === st.endDay ? `Day ${st.startDay}` : `Day ${st.startDay}~${st.endDay}`;
+            metroHtml += `
+              <div class="p-3 rounded-xl bg-stone-50 dark:bg-[#0c0e14] border border-[#e8e2d5] dark:border-stone-800 hover:border-amber-500/50 transition-all flex flex-col justify-between space-y-2">
+                <div>
+                  <div class="flex items-center justify-between gap-1.5">
+                    <div class="flex items-center gap-1.5 min-w-0">
+                      <span class="w-5 h-5 rounded-md bg-amber-500/20 text-amber-900 dark:text-amber-300 flex items-center justify-center text-[10px] font-black shrink-0">
+                        ${sIdx + 1}
+                      </span>
+                      <h5 class="text-xs font-black text-[#1c1917] dark:text-white truncate">${st.cityName}</h5>
+                    </div>
+                    <span class="px-1.5 py-0.5 rounded text-[10px] font-mono font-bold bg-stone-200 dark:bg-stone-800 text-stone-700 dark:text-stone-300 shrink-0">
+                      ${dayText}
+                    </span>
+                  </div>
+                  <div class="text-[11px] text-stone-600 dark:text-stone-300 font-medium mt-1.5 flex items-start gap-1">
+                    <span class="text-amber-600 dark:text-amber-400 font-bold shrink-0">🎯</span>
+                    <span class="line-clamp-2">${st.landmark || '랜드마크 및 명소 탐방'}</span>
+                  </div>
+                </div>
+                <div class="pt-1 border-t border-stone-200 dark:border-stone-800 flex items-center justify-between gap-2">
+                  <button onclick="jumpToTripDay(${st.startDay}, '${trip.id}')" class="flex-1 py-1 rounded bg-amber-500/15 hover:bg-amber-500/25 text-[#a2601b] dark:text-[#d4af37] text-[10px] font-bold transition flex items-center justify-center gap-1 cursor-pointer">
+                    <i class="fa-regular fa-calendar-check text-[9px]"></i> 일정보기
+                  </button>
+                  <a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(st.cityName + ' ' + (st.landmark || ''))}" target="_blank" rel="noopener noreferrer" class="px-2 py-1 rounded bg-stone-200 dark:bg-stone-800 hover:bg-stone-300 text-stone-700 dark:text-stone-300 text-[10px] font-bold transition flex items-center gap-1 cursor-pointer">
+                    <i class="fa-solid fa-location-dot text-[9px]"></i> 지도
+                  </a>
+                </div>
+              </div>
+            `;
+          });
+        } else {
+          tripCities.forEach((c, cIdx) => {
+            metroHtml += `
+              <div class="p-3 rounded-xl bg-stone-50 dark:bg-[#0c0e14] border border-[#e8e2d5] dark:border-stone-800 flex items-center justify-between gap-2">
+                <div class="flex items-center gap-2">
+                  <span class="w-5 h-5 rounded-md bg-amber-500/20 text-amber-900 dark:text-amber-300 flex items-center justify-center text-[10px] font-black">
+                    ${cIdx + 1}
+                  </span>
+                  <span class="text-xs font-black text-[#1c1917] dark:text-white">${c}</span>
+                </div>
+                <a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(c + ' ' + trip.title)}" target="_blank" rel="noopener noreferrer" class="px-2 py-1 rounded bg-stone-200 dark:bg-stone-800 text-[10px] font-bold">
+                  지도
+                </a>
+              </div>
+            `;
+          });
+        }
+
+        metroHtml += `
+            </div>
+          </div>
+        `;
+
+        if (tIdx < allTrips.length - 1) {
+          const nextTrip = allTrips[tIdx + 1];
+          metroHtml += `
+            <div class="flex flex-col items-center justify-center py-1">
+              <div class="w-0.5 h-3 border-l-2 border-dashed border-sky-400 dark:border-sky-700"></div>
+              <div class="px-3 py-1 rounded-full bg-sky-100 dark:bg-sky-950 text-sky-900 dark:text-sky-300 border border-sky-300 dark:border-sky-800 text-[10px] font-black shadow-sm flex items-center gap-1.5 my-1">
+                <span>✈️</span>
+                <span>[${trip.title.split(' ')[0]}] ➔ [${nextTrip.title.split(' ')[0]}] 대륙 간 비행로 연결 (Global Flight Track)</span>
+              </div>
+              <div class="w-0.5 h-3 border-l-2 border-dashed border-sky-400 dark:border-sky-700"></div>
+            </div>
+          `;
+        }
+      });
+
+      metroHtml += `</div>`;
+      metroContainer.innerHTML = metroHtml;
+    }
+
     function renderDynamicIllustratedRouteMap(trip) {
+      if (window.__routeMapIsGlobalAllTrips) {
+        renderGlobalIllustratedRouteMap(State.trips);
+        return;
+      }
       if (!trip) trip = getActiveTrip();
       if (!trip) return;
 
@@ -3555,11 +3969,153 @@
       }, 100);
     }
 
-    function openRouteMapModal() {
-      const trip = getActiveTrip();
-      renderDynamicIllustratedRouteMap(trip);
+    function openRouteMapModal(trip) {
+      window.__routeMapIsGlobalAllTrips = false;
+      const t = trip || getActiveTrip();
+      renderDynamicIllustratedRouteMap(t);
       openModal('modal-route-map');
       switchRouteMapTab('metro');
+    }
+
+    function openGlobalRouteMapModal() {
+      window.__routeMapIsGlobalAllTrips = true;
+      const allTrips = (State.trips && State.trips.length > 0) ? State.trips : [getActiveTrip()].filter(Boolean);
+      renderGlobalIllustratedRouteMap(allTrips);
+      openModal('modal-route-map');
+      switchRouteMapTab('satellite');
+    }
+
+    let isAllTripsWorkspaceMapActive = false;
+
+    function toggleAllTripsOnWorkspaceMap() {
+      if (!State.map) return;
+      isAllTripsWorkspaceMapActive = !isAllTripsWorkspaceMapActive;
+      const btn = document.getElementById('btn-toggle-all-trips-map');
+      const label = document.getElementById('btn-toggle-all-trips-label');
+
+      if (isAllTripsWorkspaceMapActive) {
+        if (btn) {
+          btn.className = 'px-2.5 py-1 bg-amber-500/20 hover:bg-amber-500/30 border border-amber-500/50 text-amber-300 rounded-lg text-xs font-bold flex items-center gap-1 cursor-pointer transition shadow-sm';
+        }
+        if (label) label.innerText = '🎯 현재 여정만 보기';
+
+        renderAllTripsOnWorkspaceMap();
+      } else {
+        if (btn) {
+          btn.className = 'px-2.5 py-1 bg-[#141c2e] hover:bg-[#1a263e] border border-[#23304c] text-amber-400 hover:text-amber-300 rounded-lg text-xs font-semibold flex items-center gap-1 cursor-pointer transition';
+        }
+        if (label) label.innerText = '🌐 전체 여행 궤적';
+
+        initOrUpdateLeafletMap();
+      }
+    }
+
+    function renderAllTripsOnWorkspaceMap() {
+      if (!State.map) return;
+
+      // 1. 기존 마커 및 폴리라인 정리
+      State.mapMarkers.forEach(m => State.map.removeLayer(m));
+      State.mapMarkers = [];
+      if (State.mapPolyline) {
+        State.map.removeLayer(State.mapPolyline);
+        State.mapPolyline = null;
+      }
+      if (State.extraPolylines) {
+        State.extraPolylines.forEach(p => State.map.removeLayer(p));
+      }
+      State.extraPolylines = [];
+
+      const allTrips = (State.trips && State.trips.length > 0) ? State.trips : [getActiveTrip()].filter(Boolean);
+      const allCoords = [];
+      const pillsContainer = document.getElementById('map-quick-cities');
+
+      // 2. 상단 퀵 버튼을 여행별 거점으로 재구성
+      if (pillsContainer) {
+        let pillsHtml = '';
+        allTrips.forEach(trip => {
+          const pack = resolveTripPack(trip);
+          const flag = (pack && pack.flag) || trip.coverEmoji || '📍';
+          const dests = (pack && pack.geo && pack.geo.destinations) ? 
+            (Array.isArray(pack.geo.destinations) ? pack.geo.destinations : Object.values(pack.geo.destinations)) : [];
+          if (dests.length > 0) {
+            dests.slice(0, 4).forEach(d => {
+              pillsHtml += `
+                <button onclick="focusCityOnMap('${d.id}')" class="px-2.5 py-1 rounded-lg bg-[#141c2e] hover:bg-[#1e2a44] border border-[#23304c] text-slate-200 font-bold shrink-0">
+                  ${d.flag || flag} ${d.nameKo || (d.name ? d.name.split(' ')[0] : d.id)}
+                </button>
+              `;
+            });
+          } else {
+            (trip.cities || [trip.title]).slice(0, 3).forEach(c => {
+              pillsHtml += `
+                <button class="px-2.5 py-1 rounded-lg bg-[#141c2e] border border-[#23304c] text-slate-200 font-bold shrink-0">
+                  ${flag} ${c}
+                </button>
+              `;
+            });
+          }
+        });
+        pillsContainer.innerHTML = pillsHtml;
+      }
+
+      // 3. 여행별 궤적 및 핀 렌더링
+      const TRIP_PALETTES = [
+        { stroke: '#f59e0b', fill: '#f59e0b', border: '#fbbf24', text: '#fef3c7' },
+        { stroke: '#10b981', fill: '#10b981', border: '#34d399', text: '#d1fae5' },
+        { stroke: '#0284c7', fill: '#0284c7', border: '#38bdf8', text: '#e0f2fe' },
+        { stroke: '#f43f5e', fill: '#f43f5e', border: '#fb7185', text: '#ffe4e6' },
+        { stroke: '#8b5cf6', fill: '#8b5cf6', border: '#a78bfa', text: '#ede9fe' }
+      ];
+
+      allTrips.forEach((trip, tIdx) => {
+        let palette = TRIP_PALETTES[tIdx % TRIP_PALETTES.length];
+        if (isSouthAmericaTrip(trip)) palette = TRIP_PALETTES[0];
+        else if (isYunnanTrip(trip)) palette = TRIP_PALETTES[1];
+
+        const geo = getTripGeoData(trip);
+        if (geo.latlngs.length > 0) {
+          geo.latlngs.forEach(l => allCoords.push(l.latlng));
+
+          if (geo.latlngs.length > 1) {
+            const poly = L.polyline(geo.latlngs.map(l => l.latlng), {
+              color: palette.stroke,
+              weight: 3.5,
+              dashArray: '6, 8',
+              opacity: 0.88
+            }).addTo(State.map);
+            State.extraPolylines.push(poly);
+          }
+
+          geo.latlngs.forEach(l => {
+            const iconHtml = `<div class="gold-marker-pin" style="background:${palette.fill};border-color:${palette.border};">${l.idx}</div>`;
+            const customIcon = L.divIcon({ html: iconHtml, className: 'custom-gold-pin', iconSize: [32, 32], iconAnchor: [16, 16] });
+            const marker = L.marker(l.latlng, { icon: customIcon })
+              .addTo(State.map)
+              .bindPopup(`
+                <div class="text-xs p-1">
+                  <div class="font-black text-amber-400 text-sm">${trip.coverEmoji || '📍'} ${l.name}</div>
+                  <div class="text-slate-300 text-[11px] mt-0.5">${trip.title} (정거장 #${l.idx})</div>
+                  <div class="mt-2 flex items-center gap-1">
+                    <a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(l.name + ' ' + trip.title)}" target="_blank" rel="noopener noreferrer" class="px-2 py-1 bg-sky-500/20 text-sky-300 rounded text-[10px] font-bold">구글 지도 길찾기</a>
+                  </div>
+                </div>
+              `);
+            State.mapMarkers.push(marker);
+          });
+        }
+      });
+
+      // 4. 지도 줌을 모든 여행을 포괄하도록 자동 조정
+      if (allCoords.length > 1) {
+        const bounds = L.latLngBounds(allCoords);
+        State.map.fitBounds(bounds, { padding: [50, 50], maxZoom: 6 });
+      }
+
+      // 5. 헤더 설명 업데이트
+      const mapHDesc = document.getElementById('map-view-header-desc');
+      if (mapHDesc) {
+        mapHDesc.innerText = `총 ${allTrips.length}개 여정의 전 세계 비행 궤적 및 거점을 동시 표시 중입니다. (골드: 남미 / 에메랄드: 운남)`;
+      }
     }
 
     function updateAiChatStatusBadge() {
