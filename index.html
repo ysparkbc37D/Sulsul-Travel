@@ -523,7 +523,14 @@
       }
     }
 
-    /* Mobile Viewport Overflow Prevention */
+    /* Mobile Viewport Overflow Prevention & Clean Scrollbars */
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
     html, body {
       overflow-x: hidden;
       width: 100%;
@@ -557,7 +564,7 @@
             <h1 class="font-serif-brand text-base sm:text-xl font-bold tracking-tight text-[#1c1917] dark:text-[#ededed] whitespace-nowrap">
               Sulsul Travel
             </h1>
-            <span id="app-ver-badge" onclick="event.stopPropagation(); openVersionHistoryModal()" class="px-1.5 py-0.5 rounded-md theme-card-subtle hover:border-amber-500/60 hover:text-amber-600 dark:hover:text-amber-300 text-[#a2601b] dark:text-[#d4af37] text-[10px] font-bold font-mono shadow-inner cursor-pointer shrink-0 transition" title="버전 업데이트 기록 보기 (클릭)">v1.2.0</span>
+            <span id="app-ver-badge" onclick="event.stopPropagation(); openVersionHistoryModal()" class="px-1.5 py-0.5 rounded-md theme-card-subtle hover:border-amber-500/60 hover:text-amber-600 dark:hover:text-amber-300 text-[#a2601b] dark:text-[#d4af37] text-[10px] font-bold font-mono shadow-inner cursor-pointer shrink-0 transition" title="버전 업데이트 기록 보기 (클릭)">v1.2.2</span>
           </div>
           <p id="header-trip-name" class="text-[10px] sm:text-[11px] text-[#78716c] dark:text-stone-400 truncate max-w-[120px] sm:max-w-xs font-normal">인생의 모든 여정을 기록하는 다이어리</p>
         </div>
@@ -717,14 +724,14 @@
         </div>
       </div>
 
-      <!-- 우측 빠른 액션: 통계 모달 열기 + 경로 지도 + 동행 공유 -->
+      <!-- 우측 빠른 액션: 통계 모달 열기 + 인터랙티브 지도 네비게이션 + 동행 공유 (v1.2.2) -->
       <div class="flex items-center gap-1.5 shrink-0">
         <button onclick="openAnalyticsModal('workspace')" class="px-2.5 py-1.5 rounded-xl theme-card-subtle text-xs font-bold flex items-center gap-1 shadow-sm transition cursor-pointer" title="여정 정밀 통계 열람">
           <i class="fa-solid fa-chart-pie text-amber-500 text-[11px]"></i>
           <span class="hidden sm:inline">통계</span>
         </button>
-        <button onclick="openRouteMapModal()" class="px-2.5 py-1.5 rounded-xl theme-card-subtle text-xs font-bold flex items-center gap-1 shadow-sm transition cursor-pointer" title="세계 및 남미 비행 궤적 지도">
-          <i class="fa-solid fa-earth-americas text-sky-500 text-[11px]"></i>
+        <button id="ws-btn-header-map" onclick="navigateToInteractiveMap()" class="px-2.5 py-1.5 rounded-xl theme-card-subtle text-xs font-bold flex items-center gap-1 shadow-sm transition cursor-pointer" title="인터랙티브 지도 보기">
+          <i id="ws-icon-header-map" class="fa-solid fa-map-location-dot text-sky-500 text-[11px]"></i>
           <span class="hidden sm:inline">지도</span>
         </button>
         <button onclick="openShareModal()" class="px-2.5 py-1.5 rounded-xl btn-gold text-xs font-bold flex items-center gap-1 shadow-sm transition cursor-pointer" title="동행자 공유 링크 복사">
@@ -764,25 +771,25 @@
     <div id="tab-content-plan" class="tab-view space-y-4">
       
       <!-- 서브 탭 (타임라인 / 인터랙티브 지도 / 12대 예약가이드 / 8대 도시간략) -->
-      <div class="flex items-center justify-between gap-2 flex-wrap pb-1">
-        <div class="inline-flex p-1 rounded-xl bg-[#0f1422] border border-[#1e263c] gap-1">
-          <button id="btn-subtab-timeline" onclick="switchPlanSubTab('timeline')" class="px-3 py-1.5 rounded-lg text-xs font-bold subtab-active shadow-sm flex items-center gap-1.5">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-1">
+        <div id="plan-subtabs-nav" class="w-full sm:w-auto flex items-center p-1 rounded-xl bg-[#0f1422] border border-[#1e263c] gap-1 overflow-x-auto no-scrollbar shrink-0">
+          <button id="btn-subtab-timeline" onclick="switchPlanSubTab('timeline')" class="px-3 py-1.5 rounded-lg text-xs font-bold subtab-active shadow-sm flex items-center gap-1.5 shrink-0 whitespace-nowrap">
             <i class="fa-solid fa-timeline text-[11px]"></i> 30분 시간표
           </button>
-          <button id="btn-subtab-map" onclick="switchPlanSubTab('map')" class="px-3 py-1.5 rounded-lg text-xs font-bold subtab-inactive flex items-center gap-1.5">
-            <i class="fa-solid fa-earth-americas text-[11px]"></i> 인터랙티브 지도
+          <button id="btn-subtab-map" onclick="switchPlanSubTab('map')" class="px-3 py-1.5 rounded-lg text-xs font-bold subtab-inactive flex items-center gap-1.5 shrink-0 whitespace-nowrap">
+            <i id="icon-subtab-map" class="fa-solid fa-map-location-dot text-[11px]"></i> 인터랙티브 지도
           </button>
-          <button id="btn-subtab-booking" onclick="switchPlanSubTab('booking')" class="px-3 py-1.5 rounded-lg text-xs font-bold subtab-inactive flex items-center gap-1.5">
+          <button id="btn-subtab-booking" onclick="switchPlanSubTab('booking')" class="px-3 py-1.5 rounded-lg text-xs font-bold subtab-inactive flex items-center gap-1.5 shrink-0 whitespace-nowrap">
             <i id="icon-subtab-booking" class="fa-solid fa-ticket text-[11px]"></i>
             <span id="label-subtab-booking">12대 필수 예약</span>
           </button>
-          <button id="btn-subtab-cityguide" onclick="switchPlanSubTab('cityguide')" class="px-3 py-1.5 rounded-lg text-xs font-bold subtab-inactive flex items-center gap-1.5">
+          <button id="btn-subtab-cityguide" onclick="switchPlanSubTab('cityguide')" class="px-3 py-1.5 rounded-lg text-xs font-bold subtab-inactive flex items-center gap-1.5 shrink-0 whitespace-nowrap">
             <i id="icon-subtab-cityguide" class="fa-solid fa-city text-[11px]"></i>
             <span id="label-subtab-cityguide">8대 도시 가이드</span>
           </button>
         </div>
 
-        <div class="flex items-center gap-2">
+        <div class="flex items-center gap-2 justify-end shrink-0">
           <button id="btn-toggle-all-tl" onclick="toggleAllTimelines()" class="px-2.5 py-1.5 rounded-lg bg-[#0f1422] border border-[#1e263c] hover:bg-[#141c2e] text-slate-300 text-xs font-semibold flex items-center gap-1 transition">
             <i class="fa-solid fa-up-down text-[10px]"></i> 전체 펼치기
           </button>
@@ -810,12 +817,12 @@
             </div>
           </div>
 
-          <div class="flex items-center gap-2 flex-wrap sm:justify-end">
+          <div class="w-full sm:w-auto flex items-center gap-2 min-w-0 flex-wrap sm:flex-nowrap sm:justify-end">
             <!-- 거점 모의 GPS 시뮬레이터 (국내/실내 테스트 지원) -->
-            <select id="select-sim-gps" onchange="simulateGpsLocation(this.value)" class="px-2.5 py-1.5 bg-[#080b12] border border-[#23304c] rounded-xl text-xs text-amber-300 font-semibold focus:outline-none focus:border-amber-500">
+            <select id="select-sim-gps" onchange="simulateGpsLocation(this.value)" class="w-full sm:w-auto max-w-full truncate px-2.5 py-1.5 bg-[#080b12] border border-[#23304c] rounded-xl text-xs text-amber-300 font-semibold focus:outline-none focus:border-amber-500">
               <option value="">🎯 모의 GPS 위치 테스트</option>
             </select>
-            <button onclick="requestCurrentGpsLocation()" class="px-3 py-1.5 bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-slate-950 text-xs font-black rounded-xl flex items-center gap-1.5 shadow transition">
+            <button onclick="requestCurrentGpsLocation()" class="shrink-0 px-3 py-1.5 bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-slate-950 text-xs font-black rounded-xl flex items-center gap-1.5 shadow transition">
               <i class="fa-solid fa-location-crosshairs text-[11px]"></i> 내 위치 탐색
             </button>
           </div>
@@ -878,13 +885,13 @@
           <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
             <div>
               <h3 class="text-sm sm:text-base font-black text-white flex items-center gap-2">
-                <i class="fa-solid fa-map-location-dot text-amber-400"></i>
-                <span>인터랙티브 세계 노선 & 거점 도시 드릴다운 지도</span>
+                <span id="map-view-header-flag" class="text-lg">🗺️</span>
+                <span id="map-view-header-title">인터랙티브 거점 동선 & 도시 드릴다운 지도</span>
               </h3>
-              <p class="text-[11px] text-slate-400 mt-0.5">도시 핀을 클릭하면 해당 도시로 카메라가 줌인되며 상세 지도와 구글 지도 연동이 활성화됩니다.</p>
+              <p id="map-view-header-desc" class="text-[11px] text-slate-400 mt-0.5">거점 핀을 클릭하면 해당 도시로 카메라가 줌인되며 상세 지도와 구글 지도 연동이 활성화됩니다.</p>
             </div>
             <button onclick="resetMapToWorldView()" class="px-2.5 py-1 bg-[#141c2e] hover:bg-[#1a263e] border border-[#23304c] text-slate-300 rounded-lg text-xs font-semibold self-start sm:self-auto">
-              <i class="fa-solid fa-globe text-[11px] mr-1"></i> 세계 전체 보기
+              <i class="fa-solid fa-globe text-[11px] mr-1"></i> 전체 보기
             </button>
           </div>
 
@@ -910,7 +917,7 @@
                 <div class="flex items-center gap-2">
                   <span id="map-city-flag" class="text-xl">🇵🇪</span>
                   <h4 id="map-city-name" class="text-base font-black text-white">쿠스코 (Cusco)</h4>
-                  <span id="map-city-altitude" class="px-2 py-0.5 rounded bg-purple-500/20 text-purple-300 border border-purple-500/30 text-[10px] font-bold">⚠️ 고산 3,400m</span>
+                  <span id="map-city-altitude" class="px-2 py-0.5 rounded bg-purple-100 text-purple-950 border border-purple-300 dark:bg-purple-950/70 dark:text-purple-300 dark:border-purple-800 text-[10px] font-bold">⚠️ 고산 3,400m</span>
                 </div>
                 <p id="map-city-currency" class="text-[11px] text-slate-400 mt-0.5">통화: PEN (솔) · 환율 약 360원</p>
               </div>
@@ -1684,10 +1691,15 @@
     <div class="sheet-scrim" onclick="closeModal('modal-ai-chat')"></div>
     <div class="sheet-box p-5 sm:p-6 flex flex-col h-[75vh]">
       <div class="flex items-center justify-between border-b border-[#1e263c] pb-3 shrink-0">
-        <div class="flex items-center gap-2">
-          <span class="w-8 h-8 rounded-lg bg-amber-500/20 text-amber-400 flex items-center justify-center text-sm">✨</span>
+        <div class="flex items-center gap-2.5">
+          <span class="w-8 h-8 rounded-lg bg-amber-500/20 text-amber-400 flex items-center justify-center text-sm shrink-0">✨</span>
           <div>
-            <h3 class="text-base font-black text-white">술술트래블 AI 여행 비서</h3>
+            <div class="flex items-center gap-2">
+              <h3 class="text-sm sm:text-base font-black text-white">술술트래블 AI 여행 비서</h3>
+              <span id="ai-chat-status-pill" class="text-[9px] font-bold px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 flex items-center gap-1">
+                <i class="fa-solid fa-circle text-[6px]"></i> <span>연결 확인 중</span>
+              </span>
+            </div>
             <p class="text-[10px] text-slate-400">치안, 맛집 추천, 환율, 고산병 등 무엇이든 물어보세요.</p>
           </div>
         </div>
@@ -2125,11 +2137,11 @@
               <span class="w-8 h-8 rounded-xl bg-amber-500/10 text-amber-600 flex items-center justify-center text-sm"><i class="fa-solid fa-earth-americas"></i></span>
               <div>
                 <div class="text-xs font-black text-[#1c1917] dark:text-[#ededed]">세계 및 대종단 비행 궤적 노선도</div>
-                <div class="text-[10px] text-[#78716c] dark:text-stone-400">일러스트 지도 및 주요 거점 좌표를 확인하세요.</div>
+                <div class="text-[10px] text-[#78716c] dark:text-stone-400">인터랙티브 지도 및 주요 거점 좌표를 확인하세요.</div>
               </div>
             </div>
-            <button onclick="closeModal('modal-analytics'); openRouteMapModal();" class="px-3 py-1.5 rounded-xl btn-gold text-xs font-bold shrink-0 cursor-pointer shadow-sm">
-              노선도 열기
+            <button onclick="closeModal('modal-analytics'); navigateToInteractiveMap();" class="px-3 py-1.5 rounded-xl btn-gold text-xs font-bold shrink-0 cursor-pointer shadow-sm">
+              지도 열기
             </button>
           </div>
         </div>
@@ -2181,8 +2193,8 @@
 
             <!-- 액션 버튼 -->
             <div class="flex items-center justify-end gap-2 pt-2 border-t border-[#e8e2d5] dark:border-stone-800">
-              <button onclick="closeModal('modal-analytics'); openRouteMapModal();" class="px-3 py-1.5 rounded-xl theme-card-subtle text-xs font-bold flex items-center gap-1.5 shadow-sm transition cursor-pointer">
-                <i class="fa-solid fa-earth-americas text-amber-500"></i>
+              <button onclick="closeModal('modal-analytics'); navigateToInteractiveMap();" class="px-3 py-1.5 rounded-xl theme-card-subtle text-xs font-bold flex items-center gap-1.5 shadow-sm transition cursor-pointer" title="인터랙티브 지도 바로가기">
+                <i class="fa-solid fa-map-location-dot text-amber-500"></i>
                 <span>경로 지도</span>
               </button>
               <button onclick="closeModal('modal-analytics'); openPdfReportModal();" class="px-3 py-1.5 rounded-xl btn-gold text-xs font-bold flex items-center gap-1.5 shadow-sm transition cursor-pointer">
@@ -2201,33 +2213,57 @@
   <!-- ========================================== -->
   <div id="modal-route-map" class="sheet-container sheet-closed">
     <div class="sheet-scrim" onclick="closeModal('modal-route-map')"></div>
-    <div class="sheet-box max-w-4xl p-5 sm:p-6 space-y-4 max-h-[92vh] flex flex-col">
-      <div class="flex items-center justify-between border-b border-[#e8e2d5] pb-3 shrink-0">
-        <div class="flex items-center gap-2.5">
-          <span class="w-8 h-8 rounded-xl bg-[#fdf6ec] text-[#a2601b] border border-[#f5dfb8] flex items-center justify-center text-sm shadow-inner">
-            <i class="fa-solid fa-earth-americas"></i>
+    <div class="sheet-box max-w-4xl p-4 sm:p-6 space-y-3 sm:space-y-4 max-h-[94vh] flex flex-col bg-white dark:bg-[#121624] text-[#1c1917] dark:text-[#ededed]">
+      <!-- 모달 상단 헤더 -->
+      <div class="flex items-center justify-between border-b border-[#e8e2d5] dark:border-stone-800 pb-3 shrink-0">
+        <div class="flex items-center gap-2.5 min-w-0">
+          <span class="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-[#fdf6ec] dark:bg-amber-950/40 text-[#a2601b] dark:text-[#d4af37] border border-[#f5dfb8] dark:border-amber-900/50 flex items-center justify-center text-sm shadow-inner shrink-0">
+            <i id="modal-route-map-icon" class="fa-solid fa-map-location-dot"></i>
           </span>
-          <div>
-            <h3 class="text-base font-black text-[#1c1917]">세계 및 남미 대종단 비행 궤적 노선도</h3>
-            <p class="text-[11px] text-[#78716c]">인천 ⇄ LA 스탑오버 ⇄ 페루 ⇄ 볼리비아 ⇄ 칠레 ⇄ 아르헨티나 ⇄ 브라질</p>
+          <div class="min-w-0">
+            <h3 id="modal-route-map-title" class="text-sm sm:text-base font-black truncate">여정 비행 궤적 & 관광 일러스트 노선도</h3>
+            <p id="modal-route-map-subtitle" class="text-[10px] sm:text-[11px] text-[#78716c] dark:text-stone-400 truncate">여행 거점 동선 및 이동 궤적</p>
           </div>
         </div>
-        <button onclick="closeModal('modal-route-map')" class="w-7 h-7 rounded-lg bg-[#faf8f5] hover:bg-[#f0ece1] text-[#78716c] hover:text-[#1c1917] flex items-center justify-center text-sm transition cursor-pointer">✕</button>
+        <button onclick="closeModal('modal-route-map')" class="w-7 h-7 rounded-lg bg-[#faf8f5] dark:bg-stone-800 hover:bg-[#f0ece1] text-[#78716c] hover:text-[#1c1917] dark:hover:text-white flex items-center justify-center text-sm transition cursor-pointer shrink-0">✕</button>
       </div>
 
-      <!-- 일러스트 노선도 뷰어 -->
-      <div class="flex-1 overflow-y-auto rounded-2xl bg-stone-100 border border-[#e8e2d5] p-2 flex items-center justify-center">
-        <img src="south_america_illustrated_map.jpg" alt="남미 대종단 일러스트 지도" class="max-h-[55vh] w-auto object-contain rounded-xl shadow-md">
+      <!-- 3대 뷰어 탭 네비게이션 -->
+      <div class="flex items-center justify-between gap-2 border-b border-[#e8e2d5] dark:border-stone-800 pb-2 shrink-0">
+        <div class="flex items-center gap-1 sm:gap-1.5 p-1 rounded-xl bg-stone-100 dark:bg-stone-900/80 text-xs font-bold overflow-x-auto no-scrollbar">
+          <button id="btn-routemap-tab-metro" onclick="switchRouteMapTab('metro')" class="px-2.5 sm:px-3 py-1.5 rounded-lg transition-all shadow-sm bg-white dark:bg-stone-800 text-[#a2601b] dark:text-[#d4af37] flex items-center gap-1.5 shrink-0 whitespace-nowrap">
+            <i class="fa-solid fa-route text-xs"></i>
+            <span>관광 일러스트 노선도</span>
+          </button>
+          <button id="btn-routemap-tab-satellite" onclick="switchRouteMapTab('satellite')" class="px-2.5 sm:px-3 py-1.5 rounded-lg text-stone-500 hover:text-stone-900 dark:hover:text-stone-200 transition-all flex items-center gap-1.5 shrink-0 whitespace-nowrap">
+            <i class="fa-solid fa-satellite text-xs"></i>
+            <span>인터랙티브 위성 궤적</span>
+          </button>
+          <button id="btn-routemap-tab-original" onclick="switchRouteMapTab('original')" class="px-2.5 sm:px-3 py-1.5 rounded-lg text-stone-500 hover:text-stone-900 dark:hover:text-stone-200 transition-all flex items-center gap-1.5 shrink-0 whitespace-nowrap">
+            <i class="fa-solid fa-image text-xs"></i>
+            <span>원본 가이드 인포그래픽</span>
+          </button>
+        </div>
       </div>
 
-      <!-- 주요 거점 구글 지도 링크 클러스터 -->
-      <div class="pt-2 border-t border-[#e8e2d5] flex items-center gap-2 overflow-x-auto pb-1 text-xs shrink-0">
-        <span class="font-bold text-[#78716c] shrink-0 text-[11px]">📍 구글 지도 바로가기:</span>
-        <a href="https://www.google.com/maps/search/?api=1&query=Machu+Picchu+Peru" target="_blank" rel="noopener noreferrer" class="px-2.5 py-1 rounded-lg bg-white hover:bg-stone-50 border border-[#e8e2d5] text-[#1c1917] font-semibold shrink-0 transition">🇵🇪 마추픽추</a>
-        <a href="https://www.google.com/maps/search/?api=1&query=Salar+de+Uyuni+Bolivia" target="_blank" rel="noopener noreferrer" class="px-2.5 py-1 rounded-lg bg-white hover:bg-stone-50 border border-[#e8e2d5] text-[#1c1917] font-semibold shrink-0 transition">🇧🇴 우유니 소금사막</a>
-        <a href="https://www.google.com/maps/search/?api=1&query=San+Pedro+de+Atacama+Chile" target="_blank" rel="noopener noreferrer" class="px-2.5 py-1 rounded-lg bg-white hover:bg-stone-50 border border-[#e8e2d5] text-[#1c1917] font-semibold shrink-0 transition">🇨🇱 아타카마 사막</a>
-        <a href="https://www.google.com/maps/search/?api=1&query=Iguazu+Falls+Argentina" target="_blank" rel="noopener noreferrer" class="px-2.5 py-1 rounded-lg bg-white hover:bg-stone-50 border border-[#e8e2d5] text-[#1c1917] font-semibold shrink-0 transition">🇦🇷 이과수 폭포</a>
-        <a href="https://www.google.com/maps/search/?api=1&query=Christ+the+Redeemer+Rio+de+Janeiro" target="_blank" rel="noopener noreferrer" class="px-2.5 py-1 rounded-lg bg-white hover:bg-stone-50 border border-[#e8e2d5] text-[#1c1917] font-semibold shrink-0 transition">🇧🇷 리우 거대 예수상</a>
+      <!-- 뷰어 1: 동적 뱀 모양 메트로 스타일 관광 일러스트 노선도 (Serpentine Metro Journey Track) -->
+      <div id="routemap-view-metro" class="flex-1 overflow-y-auto rounded-2xl bg-[#faf8f5] dark:bg-[#0c0e14] border border-[#e8e2d5] dark:border-stone-800 p-3 sm:p-5 space-y-4">
+        <!-- 동적 렌더링 컨테이너 -->
+      </div>
+
+      <!-- 뷰어 2: 인터랙티브 Leaflet 위성 궤적 지도 -->
+      <div id="routemap-view-satellite" class="hidden flex-1 rounded-2xl bg-stone-100 dark:bg-stone-900 border border-[#e8e2d5] dark:border-stone-800 overflow-hidden relative min-h-[350px]">
+        <div id="routemap-leaflet-container" class="w-full h-full min-h-[350px]"></div>
+      </div>
+
+      <!-- 뷰어 3: 원본 고화질 인포그래픽 뷰어 -->
+      <div id="routemap-view-original" class="hidden flex-1 overflow-y-auto rounded-2xl bg-stone-100 dark:bg-stone-900 border border-[#e8e2d5] dark:border-stone-800 p-2 flex items-center justify-center min-h-[350px]">
+        <img id="routemap-original-img" src="south_america_illustrated_map.jpg" alt="남미 대종단 일러스트 지도" class="max-h-[55vh] w-auto object-contain rounded-xl shadow-md">
+      </div>
+
+      <!-- 주요 거점 구글 지도 링크 클러스터 (동적 생성) -->
+      <div id="modal-route-map-links" class="pt-2 border-t border-[#e8e2d5] dark:border-stone-800 flex items-center gap-2 overflow-x-auto pb-1 text-xs shrink-0 no-scrollbar">
+        <!-- 동적 렌더링 -->
       </div>
     </div>
   </div>
@@ -2257,29 +2293,61 @@
 
       <!-- 버전 목록 스크롤 영역 -->
       <div class="flex-1 overflow-y-auto space-y-3 pr-1 text-xs">
-        <!-- v1.2.0 (Current) -->
+        <!-- v1.2.2 (Current) -->
         <div class="p-4 rounded-2xl bg-amber-500/5 dark:bg-amber-500/10 border-2 border-amber-500/40 space-y-2.5 shadow-sm relative overflow-hidden">
           <div class="flex items-center justify-between">
             <div class="flex items-center gap-2">
-              <span class="px-2 py-0.5 rounded-lg bg-amber-500 text-black font-black text-xs shadow-sm">v1.2.0</span>
-              <span class="text-xs font-black text-[#1c1917] dark:text-white">남미 3주 풀 코스(22일/21일) 120+ 스팟 탑재 & 스마트 자동 채우기</span>
+              <span class="px-2 py-0.5 rounded-lg bg-amber-500 text-black font-black text-xs shadow-sm">v1.2.2</span>
+              <span class="text-xs font-black text-[#1c1917] dark:text-white">여행별 인터랙티브 지도(Leaflet) 직접 연결 & 동적 헤더·거점 매칭 쇄신</span>
             </div>
             <span class="px-2 py-0.5 rounded-full text-[10px] font-black bg-emerald-100 text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300 border border-emerald-300">최신 버전 (Current)</span>
           </div>
           <div class="text-[11px] text-[#44403c] dark:text-stone-300 space-y-1.5 leading-relaxed">
             <div class="flex items-start gap-1.5">
-              <span class="text-amber-600 dark:text-amber-400 font-bold shrink-0">🌎</span>
-              <div><b>남미 4개국 3주 실전 검증 황금 여정 풀 코스 전면 탑재</b>: 미국 LA, 페루(리마/이카/쿠스코/마추픽추), 아르헨티나(부에노스아이레스), 이과수 폭포, 브라질(리우) 등 22일(10/11 출발) 및 21일(10/12 출발) 전 일정 30분 단위 정밀 타임라인 120여 개 스팟과 세부 팁, 경비, 이동수단 전면 탑재.</div>
+              <span class="text-amber-600 dark:text-amber-400 font-bold shrink-0">🧭</span>
+              <div><b>상단 지구본 버튼 인터랙티브 지도 직접 연결</b>: 헤더의 지도 버튼 클릭 시 정적 캡처 모달을 거치지 않고 각 여행(중국 운남 vs 남미 등)에 100% 매칭되는 인터랙티브 지도(Leaflet)로 즉시 탭 전환 및 스크롤 이동(<code>navigateToInteractiveMap</code>).</div>
             </div>
             <div class="flex items-start gap-1.5">
-              <span class="text-amber-600 dark:text-amber-400 font-bold shrink-0">⚡</span>
-              <div><b>스마트 자동 채우기 & 자가 치유(Self-Healing)</b>: 샘플 일정 빈 껍데기 버그를 원천 차단하고, 타임라인 및 설정창에서 클릭 1번으로 22일 풀 코스 또는 21일 최적화 코스를 즉시 덮어씌워 자동 완성하는 스마트 액션 배너 지원.</div>
+              <span class="text-amber-600 dark:text-amber-400 font-bold shrink-0">🇨🇳</span>
+              <div><b>중국 운남 등 여행별 지도 헤더 & 거점 카드 완전 동기화</b>: 지도 헤더의 '남미 대종단' 고정 텍스트를 제거하고, 중국 운남 여행 시 <code>🇨🇳 중국 운남 13일 황금 코스 인터랙티브 궤적</code> 및 쿤밍 1순위 포커싱으로 실시간 동적 렌더링.</div>
+            </div>
+            <div class="flex items-start gap-1.5">
+              <span class="text-amber-600 dark:text-amber-400 font-bold shrink-0">🌏</span>
+              <div><b>여행지별 맞춤 아이콘 및 툴팁 체계 확립</b>: 아시아/중국은 <code>fa-earth-asia</code>, 미주/남미는 <code>fa-earth-americas</code>, 전역은 <code>fa-map-location-dot</code>으로 지능형 적응.</div>
             </div>
           </div>
           <div class="text-[10px] text-stone-400 dark:text-stone-500 pt-1 border-t border-amber-500/20 flex items-center justify-between">
             <span>📅 2026-09-06 릴리즈</span>
-            <span class="font-mono">st-shell-v1.2.0</span>
+            <span class="font-mono">st-shell-v1.2.2</span>
           </div>
+        </div>
+
+        <!-- v1.2.1 -->
+        <div class="p-3.5 rounded-xl bg-stone-50 dark:bg-stone-900/50 border border-stone-200 dark:border-stone-800 space-y-2">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-2">
+              <span class="px-1.5 py-0.5 rounded-md bg-stone-200 dark:bg-stone-800 text-stone-800 dark:text-stone-200 font-bold text-[11px] font-mono">v1.2.1</span>
+              <span class="font-bold text-[#1c1917] dark:text-stone-200">모바일 UI 오버플로우 방어 & 동적 일러스트 노선도 & Gemini AI 연동 고도화</span>
+            </div>
+            <span class="text-[10px] text-stone-400">2026-09-06</span>
+          </div>
+          <p class="text-[11px] text-[#78716c] dark:text-stone-400 leading-relaxed">
+            모바일 뷰포트 오버플로우 원천 방어, 핑크/라벤더 폰트 시인성(WCAG AAA) 쇄신, 동적 관광 일러스트 노선도 엔진 탑재 및 Gemini 2.0 Flash 실시간 연동.
+          </p>
+        </div>
+
+        <!-- v1.2.0 -->
+        <div class="p-3.5 rounded-xl bg-stone-50 dark:bg-stone-900/50 border border-stone-200 dark:border-stone-800 space-y-2">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-2">
+              <span class="px-1.5 py-0.5 rounded-md bg-stone-200 dark:bg-stone-800 text-stone-800 dark:text-stone-200 font-bold text-[11px] font-mono">v1.2.0</span>
+              <span class="font-bold text-[#1c1917] dark:text-stone-200">남미 3주 풀 코스(22일/21일) 120+ 스팟 탑재 & 스마트 자동 채우기</span>
+            </div>
+            <span class="text-[10px] text-stone-400">2026-09-06</span>
+          </div>
+          <p class="text-[11px] text-[#78716c] dark:text-stone-400 leading-relaxed">
+            미국 LA, 페루, 아르헨티나, 브라질 22일/21일 전 일정 30분 단위 타임라인 120여 개 스팟 탑재 및 스마트 자동 채우기 지원.
+          </p>
         </div>
 
         <!-- v1.1.9 -->
@@ -2502,7 +2570,7 @@
     window.showToast = showToast;
 
     // 앱 버전 및 글로벌 네임스페이스 (Sulsul-Travel Invariant Rule R-10, R-11, R-12, R-13, R-14, R-15)
-    const APP_VER = '1.2.0';
+    const APP_VER = '1.2.2';
 
     // ══════════════════════════════════════════
     // [Two-Tone Theme System] 라이트 그레이 & 딥 블랙 테마 엔진
@@ -2948,8 +3016,564 @@
       openAnalyticsModal();
     }
 
+    // ==========================================
+    // [4.5] 동적 관광 일러스트 노선도 & 3대 맵 뷰어 엔진 (v1.2.1)
+    // ==========================================
+    let currentRouteMapTab = 'metro';
+    let routeMapLeafletInstance = null;
+
+    function switchRouteMapTab(tab) {
+      currentRouteMapTab = tab;
+      const btnMetro = document.getElementById('btn-routemap-tab-metro');
+      const btnSatellite = document.getElementById('btn-routemap-tab-satellite');
+      const btnOriginal = document.getElementById('btn-routemap-tab-original');
+      const viewMetro = document.getElementById('routemap-view-metro');
+      const viewSatellite = document.getElementById('routemap-view-satellite');
+      const viewOriginal = document.getElementById('routemap-view-original');
+
+      const activeBtnClass = "px-2.5 sm:px-3 py-1.5 rounded-lg transition-all shadow-sm bg-white dark:bg-stone-800 text-[#a2601b] dark:text-[#d4af37] flex items-center gap-1.5 shrink-0 whitespace-nowrap";
+      const inactiveBtnClass = "px-2.5 sm:px-3 py-1.5 rounded-lg text-stone-500 hover:text-stone-900 dark:hover:text-stone-200 transition-all flex items-center gap-1.5 shrink-0 whitespace-nowrap";
+
+      if (btnMetro) btnMetro.className = (tab === 'metro') ? activeBtnClass : inactiveBtnClass;
+      if (btnSatellite) btnSatellite.className = (tab === 'satellite') ? activeBtnClass : inactiveBtnClass;
+      if (btnOriginal) btnOriginal.className = (tab === 'original') ? activeBtnClass : inactiveBtnClass;
+
+      if (viewMetro) viewMetro.classList.toggle('hidden', tab !== 'metro');
+      if (viewSatellite) viewSatellite.classList.toggle('hidden', tab !== 'satellite');
+      if (viewOriginal) viewOriginal.classList.toggle('hidden', tab !== 'original');
+
+      if (tab === 'satellite') {
+        setTimeout(() => {
+          initOrUpdateRouteMapLeaflet(getActiveTrip());
+        }, 80);
+      }
+    }
+
+    function jumpToTripDay(dayNum) {
+      closeModal('modal-route-map', true);
+      switchTab('plan');
+      switchPlanSubTab('timeline');
+      setTimeout(() => {
+        const accordionHeader = document.getElementById(`day-header-${dayNum}`);
+        if (accordionHeader) {
+          const content = document.getElementById(`day-content-${dayNum}`);
+          if (content && content.classList.contains('hidden')) {
+            accordionHeader.click();
+          }
+          accordionHeader.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+      }, 250);
+    }
+
+    const CITY_GEO_COORDS = {
+      '로스앤젤레스': [34.0522, -118.2437],
+      'LA': [34.0522, -118.2437],
+      '리마': [-12.0464, -77.0428],
+      '이카': [-14.0678, -75.7286],
+      '와카치나': [-14.0875, -75.7626],
+      '파라카스': [-13.8407, -76.2464],
+      '파라카스·와카치나': [-14.0875, -75.7626],
+      '쿠스코': [-13.5319, -71.9675],
+      '마추픽추': [-13.1631, -72.5450],
+      '라파즈': [-16.5000, -68.1500],
+      '우유니': [-20.4637, -66.8250],
+      '아타카마': [-22.9087, -68.1997],
+      '산티아고': [-33.4489, -70.6693],
+      '푸에르토나탈레스': [-51.7269, -72.5068],
+      '엘칼라파테': [-50.3375, -72.2647],
+      '부에노스아이레스': [-34.6037, -58.3816],
+      '푸에르토 이과수': [-25.6953, -54.4367],
+      '이과수': [-25.6953, -54.4367],
+      '리우데자네이루': [-22.9068, -43.1729],
+      '쿤밍': [25.0406, 102.7122],
+      '대리': [25.6065, 100.2676],
+      '여강': [26.8721, 100.2299],
+      '샹그릴라': [27.8269, 99.7072],
+      '도쿄': [35.6762, 139.6503],
+      '오사카': [34.6937, 135.5023],
+      '파리': [48.8566, 2.3522],
+      '로마': [41.9028, 12.4964],
+      '바르셀로나': [41.3851, 2.1734],
+      '방콕': [13.7563, 100.5018]
+    };
+
+    function initOrUpdateRouteMapLeaflet(trip) {
+      const container = document.getElementById('routemap-leaflet-container');
+      if (!container || typeof L === 'undefined') return;
+
+      if (!routeMapLeafletInstance) {
+        routeMapLeafletInstance = L.map('routemap-leaflet-container', {
+          zoomControl: true,
+          attributionControl: false
+        }).setView([-14.0, -65.0], 3);
+
+        L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+          maxZoom: 18
+        }).addTo(routeMapLeafletInstance);
+      }
+
+      routeMapLeafletInstance.invalidateSize();
+
+      if (routeMapLeafletInstance.__markers) {
+        routeMapLeafletInstance.__markers.forEach(m => m.remove());
+      }
+      routeMapLeafletInstance.__markers = [];
+
+      const cities = (trip && trip.cities) ? trip.cities : [];
+      const latlngs = [];
+
+      cities.forEach((c, idx) => {
+        let coord = CITY_GEO_COORDS[c];
+        if (!coord) {
+          Object.keys(CITY_GEO_COORDS).forEach(k => {
+            if (c.includes(k) || k.includes(c)) coord = CITY_GEO_COORDS[k];
+          });
+        }
+        if (coord) {
+          latlngs.push({ name: c, latlng: coord, idx: idx + 1 });
+          const marker = L.circleMarker(coord, {
+            radius: 8,
+            fillColor: '#f59e0b',
+            color: '#ffffff',
+            weight: 2,
+            opacity: 1,
+            fillOpacity: 0.9
+          }).addTo(routeMapLeafletInstance);
+
+          marker.bindPopup(`<b>${c}</b><br><span class="text-xs">정거장 #${idx + 1}</span>`);
+          routeMapLeafletInstance.__markers.push(marker);
+        }
+      });
+
+      if (latlngs.length > 1) {
+        const polyline = L.polyline(latlngs.map(l => l.latlng), {
+          color: '#0284c7',
+          weight: 3,
+          dashArray: '6, 6',
+          opacity: 0.85
+        }).addTo(routeMapLeafletInstance);
+        routeMapLeafletInstance.__markers.push(polyline);
+
+        routeMapLeafletInstance.fitBounds(polyline.getBounds(), { padding: [40, 40] });
+      } else if (latlngs.length === 1) {
+        routeMapLeafletInstance.setView(latlngs[0].latlng, 10);
+      }
+    }
+
+    function renderDynamicIllustratedRouteMap(trip) {
+      if (!trip) trip = getActiveTrip();
+      if (!trip) return;
+
+      const titleEl = document.getElementById('modal-route-map-title');
+      const subEl = document.getElementById('modal-route-map-subtitle');
+      const metroContainer = document.getElementById('routemap-view-metro');
+      const linksContainer = document.getElementById('modal-route-map-links');
+      const btnOriginal = document.getElementById('btn-routemap-tab-original');
+
+      if (titleEl) {
+        titleEl.innerText = `${trip.title || trip.name || '여행'} 비행 궤적 & 관광 일러스트 노선도`;
+      }
+      if (subEl) {
+        const countryList = (trip.countries && trip.countries.length > 0) ? trip.countries.join(' ⇄ ') : '여행 거점 동선';
+        subEl.innerText = `${trip.durationDays || 22}일간의 여정 · ${countryList}`;
+      }
+
+      const isSA = isSouthAmericaTrip(trip);
+      const isYN = isYunnanTrip(trip);
+      const iconEl = document.getElementById('modal-route-map-icon');
+      if (iconEl) {
+        if (isYN) {
+          iconEl.className = 'fa-solid fa-earth-asia';
+        } else if (isSA) {
+          iconEl.className = 'fa-solid fa-earth-americas';
+        } else {
+          iconEl.className = 'fa-solid fa-map-location-dot';
+        }
+      }
+      if (btnOriginal) {
+        btnOriginal.classList.toggle('hidden', !isSA);
+      }
+
+      let stations = [];
+      const days = trip.days || [];
+
+      if (days.length > 0) {
+        let currentStation = null;
+
+        days.forEach((d) => {
+          const rawCity = d.city || (d.title ? d.title.split(' ')[0] : `Day ${d.dayNum}`);
+          const cityClean = rawCity.replace(/·/g, '·').trim();
+
+          if (!currentStation || currentStation.cityName !== cityClean) {
+            if (currentStation) {
+              stations.push(currentStation);
+            }
+            currentStation = {
+              cityName: cityClean,
+              startDay: d.dayNum,
+              endDay: d.dayNum,
+              spots: [...(d.spots || [])],
+              transitMode: 'land',
+              country: '',
+              flag: '🌎',
+              landmark: '',
+              landmarkEmoji: '📍'
+            };
+          } else {
+            currentStation.endDay = d.dayNum;
+            currentStation.spots = currentStation.spots.concat(d.spots || []);
+          }
+
+          const textCorpus = (d.title + ' ' + (d.spots || []).map(s => s.title + ' ' + (s.desc||'')).join(' ')).toLowerCase();
+          if (textCorpus.includes('항공') || textCorpus.includes('비행기') || textCorpus.includes('공항') || textCorpus.includes('flight') || textCorpus.includes('탑승')) {
+            if (currentStation) currentStation.transitMode = 'flight';
+          }
+        });
+        if (currentStation) {
+          stations.push(currentStation);
+        }
+      } else {
+        const cities = trip.cities || ['출발지', '도착지'];
+        stations = cities.map((c, idx) => ({
+          cityName: c,
+          startDay: idx + 1,
+          endDay: idx + 1,
+          spots: [],
+          transitMode: (idx === 0 || idx === cities.length - 2) ? 'flight' : 'land',
+          country: '',
+          flag: '🌎',
+          landmark: c + ' 중심가',
+          landmarkEmoji: '📍'
+        }));
+      }
+
+      const dests = (window.KB_TRAVEL && window.KB_TRAVEL.destinations) ? window.KB_TRAVEL.destinations : {};
+
+      stations.forEach((st) => {
+        let matchedDest = null;
+        Object.keys(dests).forEach(k => {
+          if (dests[k].name && (dests[k].name.includes(st.cityName) || st.cityName.includes(dests[k].name))) {
+            matchedDest = dests[k];
+          }
+        });
+
+        if (matchedDest) {
+          st.flag = matchedDest.flag || '🌎';
+          st.country = matchedDest.country || '';
+          if (matchedDest.highlights && matchedDest.highlights.length > 0) {
+            st.landmark = matchedDest.highlights[0];
+          }
+        }
+
+        const cn = st.cityName;
+        if (cn.includes('로스앤젤레스') || cn.includes('LA')) {
+          st.landmarkEmoji = '🎬';
+          st.flag = '🇺🇸';
+          st.country = '미국';
+          if (!st.landmark) st.landmark = '산타모니카 피어';
+        } else if (cn.includes('리마')) {
+          st.landmarkEmoji = '🌊';
+          st.flag = '🇵🇪';
+          st.country = '페루';
+          if (!st.landmark) st.landmark = '미라플로레스 절벽 & 사랑의 공원';
+        } else if (cn.includes('와카치나') || cn.includes('이카') || cn.includes('파라카스')) {
+          st.landmarkEmoji = '🏜️';
+          st.flag = '🇵🇪';
+          st.country = '페루';
+          if (!st.landmark) st.landmark = '사막 오아시스 버기 & 샌드보딩';
+        } else if (cn.includes('마추픽추')) {
+          st.landmarkEmoji = '⛰️';
+          st.flag = '🇵🇪';
+          st.country = '페루';
+          if (!st.landmark) st.landmark = '잉카 공중도시 망지기의 집';
+        } else if (cn.includes('쿠스코')) {
+          st.landmarkEmoji = '🦙';
+          st.flag = '🇵🇪';
+          st.country = '페루';
+          if (!st.landmark) st.landmark = '아르마스 광장 & 12각의 돌';
+        } else if (cn.includes('우유니')) {
+          st.landmarkEmoji = '🧂';
+          st.flag = '🇧🇴';
+          st.country = '볼리비아';
+          if (!st.landmark) st.landmark = '우유니 소금사막 & 기차무덤';
+        } else if (cn.includes('라파즈')) {
+          st.landmarkEmoji = '🚠';
+          st.flag = '🇧🇴';
+          st.country = '볼리비아';
+          if (!st.landmark) st.landmark = '미 텔레페리코 케이블카 & 마녀시장';
+        } else if (cn.includes('아타카마') || cn.includes('칼라마')) {
+          st.landmarkEmoji = '🪐';
+          st.flag = '🇨🇱';
+          st.country = '칠레';
+          if (!st.landmark) st.landmark = '달의 계곡 & 사막 은하수';
+        } else if (cn.includes('산티아고')) {
+          st.landmarkEmoji = '🍷';
+          st.flag = '🇨🇱';
+          st.country = '칠레';
+          if (!st.landmark) st.landmark = '산 크리스토발 언덕 & 아르마스 광장';
+        } else if (cn.includes('토레스') || cn.includes('푸에르토나탈레스')) {
+          st.landmarkEmoji = '🏔️';
+          st.flag = '🇨🇱';
+          st.country = '칠레';
+          if (!st.landmark) st.landmark = '토레스 델 파이네 삼봉 트레킹';
+        } else if (cn.includes('칼라파테') || cn.includes('빙하')) {
+          st.landmarkEmoji = '❄️';
+          st.flag = '🇦🇷';
+          st.country = '아르헨티나';
+          if (!st.landmark) st.landmark = '페리토 모레노 대빙하 트레킹';
+        } else if (cn.includes('피츠로이') || cn.includes('샬텐')) {
+          st.landmarkEmoji = '🧗';
+          st.flag = '🇦🇷';
+          st.country = '아르헨티나';
+          if (!st.landmark) st.landmark = '파타고니아 피츠로이 설산 뷰';
+        } else if (cn.includes('부에노스')) {
+          st.landmarkEmoji = '🥩';
+          st.flag = '🇦🇷';
+          st.country = '아르헨티나';
+          if (!st.landmark) st.landmark = '5월 광장 & 돈 훌리오 아사도';
+        } else if (cn.includes('이과수')) {
+          st.landmarkEmoji = '🌊';
+          st.flag = (cn.includes('브라질')) ? '🇧🇷' : '🇦🇷';
+          st.country = (cn.includes('브라질')) ? '브라질' : '아르헨티나';
+          if (!st.landmark) st.landmark = '악마의 목구멍 대폭포';
+        } else if (cn.includes('리우')) {
+          st.landmarkEmoji = '🗽';
+          st.flag = '🇧🇷';
+          st.country = '브라질';
+          if (!st.landmark) st.landmark = '코르코바두 거대 예수상 & 코파카바나';
+        } else if (cn.includes('쿤밍')) {
+          st.landmarkEmoji = '🌸';
+          st.flag = '🇨🇳';
+          st.country = '중국';
+          if (!st.landmark) st.landmark = '석림 세계자연유산 & 취호공원';
+        } else if (cn.includes('대리') || cn.includes('따리')) {
+          st.landmarkEmoji = '🏯';
+          st.flag = '🇨🇳';
+          st.country = '중국';
+          if (!st.landmark) st.landmark = '얼하이호 호수 & 숭성사 삼탑';
+        } else if (cn.includes('여강') || cn.includes('리장')) {
+          st.landmarkEmoji = '🏔️';
+          st.flag = '🇨🇳';
+          st.country = '중국';
+          if (!st.landmark) st.landmark = '옥룡설산 빙천공원 & 여강고성';
+        } else if (cn.includes('샹그릴라')) {
+          st.landmarkEmoji = '🛕';
+          st.flag = '🇨🇳';
+          st.country = '중국';
+          if (!st.landmark) st.landmark = '송찬림사 & 두커종 고성';
+        }
+
+        if (!st.landmark && st.spots.length > 0) {
+          st.landmark = st.spots[0].title;
+          if (st.spots[0].typeIcon) st.landmarkEmoji = st.spots[0].typeIcon;
+        }
+      });
+
+      const countryGroups = [];
+      stations.forEach((st, idx) => {
+        const countryKey = st.country || st.flag || '여정 구간';
+        let grp = countryGroups.find(g => g.name === countryKey);
+        if (!grp) {
+          grp = {
+            name: countryKey,
+            flag: st.flag,
+            stations: []
+          };
+          countryGroups.push(grp);
+        }
+        grp.stations.push({ ...st, globalIdx: idx });
+      });
+
+      if (metroContainer) {
+        let metroHtml = `
+          <!-- 여정 요약 통계 & 범례 바 -->
+          <div class="p-3 sm:p-4 rounded-xl bg-[#faf8f5] dark:bg-stone-900 border border-[#e8e2d5] dark:border-stone-800 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2.5 shadow-sm">
+            <div class="flex items-center gap-2">
+              <span class="text-xl">🗺️</span>
+              <div>
+                <div class="text-xs font-black text-[#1c1917] dark:text-white">
+                  총 ${countryGroups.length}개국 · ${stations.length}개 거점 정거장 · ${trip.durationDays || 22}일간의 대장정
+                </div>
+                <div class="text-[10px] text-[#78716c] dark:text-stone-400">
+                  각 거점을 탭하면 구글 지도 길찾기 또는 상세 일정으로 즉시 이동합니다.
+                </div>
+              </div>
+            </div>
+            <div class="flex items-center gap-2 text-[10px] shrink-0 font-bold">
+              <span class="px-2 py-0.5 rounded-md bg-sky-100 dark:bg-sky-950/60 text-sky-900 dark:text-sky-300 border border-sky-300 dark:border-sky-800 flex items-center gap-1">
+                <i class="fa-solid fa-plane text-[9px]"></i> 항공 이동 (하늘길)
+              </span>
+              <span class="px-2 py-0.5 rounded-md bg-amber-100 dark:bg-amber-950/60 text-amber-900 dark:text-amber-300 border border-amber-300 dark:border-amber-800 flex items-center gap-1">
+                <i class="fa-solid fa-bus text-[9px]"></i> 육로/열차 (대지길)
+              </span>
+            </div>
+          </div>
+
+          <!-- 국가별 메트로 여정 라인 (Serpentine Track) -->
+          <div class="space-y-4 pt-1">
+        `;
+
+        countryGroups.forEach((grp, grpIdx) => {
+          const isFirstGrp = grpIdx === 0;
+          const isLastGrp = grpIdx === countryGroups.length - 1;
+
+          metroHtml += `
+            <div class="p-3.5 sm:p-4 rounded-2xl bg-white dark:bg-[#151922] border border-[#e8e2d5] dark:border-stone-800 shadow-sm space-y-3">
+              <!-- 국가 헤더 배너 -->
+              <div class="flex items-center justify-between border-b border-stone-200 dark:border-stone-800 pb-2">
+                <div class="flex items-center gap-2">
+                  <span class="text-2xl">${grp.flag}</span>
+                  <div>
+                    <h4 class="text-xs sm:text-sm font-black text-[#1c1917] dark:text-white flex items-center gap-1.5">
+                      <span>${grp.name}</span>
+                      <span class="text-[10px] font-bold px-2 py-0.2 rounded-full bg-stone-100 dark:bg-stone-800 text-stone-600 dark:text-stone-300">
+                        ${grp.stations.length}개 거점
+                      </span>
+                    </h4>
+                  </div>
+                </div>
+                ${isFirstGrp ? '<span class="text-[10px] font-black px-2 py-0.5 rounded-full bg-emerald-100 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 border border-emerald-300">🛫 여행 출발 (IN)</span>' : ''}
+                ${isLastGrp ? '<span class="text-[10px] font-black px-2 py-0.5 rounded-full bg-rose-100 dark:bg-rose-950/60 text-rose-800 dark:text-rose-300 border border-rose-300">🛬 귀국 (OUT)</span>' : ''}
+              </div>
+
+              <!-- 국가 내 정거장 트랙 -->
+              <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2.5">
+          `;
+
+          grp.stations.forEach((st) => {
+            const dayText = st.startDay === st.endDay ? `Day ${st.startDay}` : `Day ${st.startDay}~${st.endDay}`;
+            const gmapQuery = encodeURIComponent(`${st.cityName} ${st.landmark || ''}`);
+
+            metroHtml += `
+              <div class="p-3 rounded-xl bg-stone-50 dark:bg-[#0c0e14] border border-[#e8e2d5] dark:border-stone-800 hover:border-amber-500/50 transition-all flex flex-col justify-between space-y-2">
+                <div>
+                  <div class="flex items-center justify-between gap-1.5">
+                    <div class="flex items-center gap-1.5 min-w-0">
+                      <span class="w-6 h-6 rounded-lg bg-amber-500/20 text-amber-900 dark:text-amber-300 flex items-center justify-center text-xs font-bold shrink-0">
+                        ${st.landmarkEmoji}
+                      </span>
+                      <h5 class="text-xs font-black text-[#1c1917] dark:text-white truncate">${st.cityName}</h5>
+                    </div>
+                    <span class="px-1.5 py-0.5 rounded text-[10px] font-mono font-bold bg-stone-200 dark:bg-stone-800 text-stone-700 dark:text-stone-300 shrink-0">
+                      ${dayText}
+                    </span>
+                  </div>
+
+                  <div class="text-[11px] text-stone-600 dark:text-stone-300 font-medium mt-1.5 flex items-start gap-1">
+                    <span class="text-amber-600 dark:text-amber-400 font-bold shrink-0">🎯</span>
+                    <span class="line-clamp-2">${st.landmark || '랜드마크 및 미식 탐방'}</span>
+                  </div>
+                </div>
+
+                <div class="pt-1 border-t border-stone-200 dark:border-stone-800 flex items-center justify-between gap-2">
+                  <button onclick="jumpToTripDay(${st.startDay})" class="flex-1 py-1 rounded bg-amber-500/15 hover:bg-amber-500/25 text-[#a2601b] dark:text-[#d4af37] text-[10px] font-bold transition flex items-center justify-center gap-1 cursor-pointer">
+                    <i class="fa-regular fa-calendar-check text-[9px]"></i> 일정보기
+                  </button>
+                  <a href="https://www.google.com/maps/search/?api=1&query=${gmapQuery}" target="_blank" rel="noopener noreferrer" class="px-2 py-1 rounded bg-stone-200 dark:bg-stone-800 hover:bg-stone-300 text-stone-700 dark:text-stone-300 text-[10px] font-bold transition flex items-center gap-1 cursor-pointer">
+                    <i class="fa-solid fa-location-dot text-[9px]"></i> 지도
+                  </a>
+                </div>
+              </div>
+            `;
+          });
+
+          metroHtml += `
+              </div>
+            </div>
+          `;
+
+          if (!isLastGrp) {
+            const nextGrp = countryGroups[grpIdx + 1];
+            const isFlight = (grp.name.includes('미국') || grp.name.includes('페루') || grp.name.includes('아르헨티나') || grp.name.includes('중국'));
+            const transitIcon = isFlight ? '✈️' : '🚌';
+            const transitLabel = isFlight ? '항공 이동 (국제선/국내선 비행 궤적)' : '육로/국경 이동 (우등버스 / 열차 트랙)';
+            const borderStyle = isFlight ? 'border-dashed border-sky-400 dark:border-sky-700' : 'border-solid border-amber-400 dark:border-amber-700';
+            const badgeStyle = isFlight ? 'bg-sky-100 dark:bg-sky-950 text-sky-900 dark:text-sky-300 border-sky-300 dark:border-sky-800' : 'bg-amber-100 dark:bg-amber-950 text-amber-900 dark:text-amber-300 border-amber-300 dark:border-amber-800';
+
+            metroHtml += `
+              <div class="flex flex-col items-center justify-center py-1">
+                <div class="w-0.5 h-3 border-l-2 ${borderStyle}"></div>
+                <div class="px-3 py-1 rounded-full ${badgeStyle} border text-[10px] font-black shadow-sm flex items-center gap-1.5 my-1">
+                  <span>${transitIcon}</span>
+                  <span>${grp.name} ➔ ${nextGrp ? nextGrp.name : '다음 목적지'} ${transitLabel}</span>
+                </div>
+                <div class="w-0.5 h-3 border-l-2 ${borderStyle}"></div>
+              </div>
+            `;
+          }
+        });
+
+        metroHtml += `</div>`;
+        metroContainer.innerHTML = metroHtml;
+      }
+
+      if (linksContainer) {
+        let quickLinks = [];
+        stations.forEach(st => {
+          if (st.landmark && !quickLinks.some(q => q.title === st.landmark)) {
+            quickLinks.push({
+              title: st.cityName + ' ' + (st.landmark.split(' ')[0]),
+              query: `${st.cityName} ${st.landmark}`,
+              flag: st.flag
+            });
+          }
+        });
+
+        if (quickLinks.length > 0) {
+          linksContainer.innerHTML = `
+            <span class="font-bold text-[#78716c] dark:text-stone-400 shrink-0 text-[11px]">📍 구글 지도 바로가기:</span>
+            ${quickLinks.slice(0, 8).map(q => `
+              <a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(q.query)}" target="_blank" rel="noopener noreferrer" class="px-2.5 py-1 rounded-lg bg-white dark:bg-stone-800 hover:bg-stone-50 dark:hover:bg-stone-700 border border-[#e8e2d5] dark:border-stone-700 text-[#1c1917] dark:text-stone-200 font-semibold shrink-0 transition flex items-center gap-1 text-[11px]">
+                <span>${q.flag}</span>
+                <span>${q.title}</span>
+              </a>
+            `).join('')}
+          `;
+        }
+      }
+    }
+
+    function navigateToInteractiveMap(focusCityId) {
+      const trip = getActiveTrip();
+      if (!trip) return;
+      // 1. 메인 탭을 일정/지도로 전환
+      switchTab('plan');
+      // 2. 서브탭을 인터랙티브 지도로 전환
+      switchPlanSubTab('map');
+      // 3. 지도 뷰 컨테이너로 부드럽게 스크롤 및 리사이즈 갱신
+      setTimeout(() => {
+        const mapSection = document.getElementById('subtab-view-map');
+        if (mapSection) {
+          mapSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+        if (State.map) {
+          State.map.invalidateSize();
+        }
+        if (focusCityId && typeof focusCityOnMap === 'function') {
+          focusCityOnMap(focusCityId);
+        }
+      }, 100);
+    }
+
     function openRouteMapModal() {
+      const trip = getActiveTrip();
+      renderDynamicIllustratedRouteMap(trip);
       openModal('modal-route-map');
+      switchRouteMapTab('metro');
+    }
+
+    function updateAiChatStatusBadge() {
+      const pill = document.getElementById('ai-chat-status-pill');
+      if (!pill) return;
+      const rawKey = State.geminiKey || localStorage.getItem('st_gemini_key');
+      const key = cleanApiKey(rawKey);
+      if (key && key.length > 5) {
+        pill.className = 'text-[9px] font-bold px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 flex items-center gap-1';
+        pill.innerHTML = '<i class="fa-solid fa-circle text-[6px]"></i> <span>Gemini 2.0 Flash 연동됨</span>';
+      } else {
+        pill.className = 'text-[9px] font-bold px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-400 border border-amber-500/30 flex items-center gap-1';
+        pill.innerHTML = '<i class="fa-solid fa-triangle-exclamation text-[8px]"></i> <span>오프라인 (키 미등록)</span>';
+      }
     }
 
     function openVersionHistoryModal() {
@@ -3525,6 +4149,10 @@
           <span class="px-1.5 py-0.5 rounded bg-stone-100 text-stone-700 text-[10px] font-medium border border-stone-200">#${escapeHtml(c)}</span>
         `).join('');
 
+        const isTripYn = trip.id && trip.id.includes('yunnan');
+        const tripMapIcon = isTripYn ? 'fa-solid fa-earth-asia text-emerald-600' : 'fa-solid fa-earth-americas text-amber-600';
+        const tripMapTitle = isTripYn ? '중국 운남 인터랙티브 지도' : '인터랙티브 경로 지도';
+
         if (State.hubViewMode === 'list') {
           // Elegant List View Mode (Sulsul-Diary UI)
           html += `
@@ -3554,8 +4182,8 @@
                   <div class="text-xs font-bold text-[#1c1917]">₩${(totalSpent/10000).toFixed(0)}만 / <span class="text-stone-500 font-normal">₩${(budget/10000).toFixed(0)}만</span></div>
                 </div>
                 <div class="flex items-center gap-1.5" onclick="event.stopPropagation()">
-                  <button onclick="openRouteMapModal(); event.stopPropagation();" class="w-8 h-8 rounded-xl bg-[#faf8f5] hover:bg-amber-50 text-[#78716c] hover:text-[#a2601b] border border-[#e8e2d5] flex items-center justify-center text-xs transition cursor-pointer" title="세계 및 남미 비행 궤적 지도">
-                    <i class="fa-solid fa-earth-americas text-amber-600"></i>
+                  <button onclick="openTripWorkspace('${trip.id}'); navigateToInteractiveMap(); event.stopPropagation();" class="w-8 h-8 rounded-xl bg-[#faf8f5] hover:bg-amber-50 text-[#78716c] hover:text-[#a2601b] border border-[#e8e2d5] flex items-center justify-center text-xs transition cursor-pointer" title="${tripMapTitle}">
+                    <i class="${tripMapIcon}"></i>
                   </button>
                   <button onclick="openTripPdfReport('${trip.id}', event)" class="w-8 h-8 rounded-xl bg-[#faf8f5] hover:bg-amber-50 text-[#78716c] hover:text-[#a2601b] border border-[#e8e2d5] flex items-center justify-center text-xs transition cursor-pointer" title="PDF 리포트">
                     <i class="fa-solid fa-file-pdf text-rose-500"></i>
@@ -3585,8 +4213,8 @@
 
                 <div class="relative z-10 flex items-center gap-1.5">
                   ${ddayBadge}
-                  <button onclick="openRouteMapModal(); event.stopPropagation();" class="w-7 h-7 rounded-lg bg-white/90 hover:bg-amber-50 text-stone-600 hover:text-amber-800 border border-[#e8e2d5] flex items-center justify-center text-xs shadow-sm transition cursor-pointer" title="세계 및 남미 비행 궤적 지도">
-                    <i class="fa-solid fa-earth-americas text-amber-600"></i>
+                  <button onclick="openTripWorkspace('${trip.id}'); navigateToInteractiveMap(); event.stopPropagation();" class="w-7 h-7 rounded-lg bg-white/90 hover:bg-amber-50 text-stone-600 hover:text-amber-800 border border-[#e8e2d5] flex items-center justify-center text-xs shadow-sm transition cursor-pointer" title="${tripMapTitle}">
+                    <i class="${tripMapIcon}"></i>
                   </button>
                   <button onclick="openTripPdfReport('${trip.id}', event)" class="w-7 h-7 rounded-lg bg-white/90 hover:bg-white text-stone-600 hover:text-amber-800 border border-[#e8e2d5] flex items-center justify-center text-xs shadow-sm transition cursor-pointer" title="여행 보고서 & PDF">
                     <i class="fa-solid fa-file-pdf text-rose-500"></i>
@@ -3628,8 +4256,8 @@
                 </div>
 
                 <div class="pt-2 flex items-center gap-2">
-                  <button onclick="openRouteMapModal(); event.stopPropagation();" class="py-2 px-2.5 rounded-xl bg-[#faf8f5] hover:bg-amber-50 text-[#78716c] hover:text-[#a2601b] border border-[#e8e2d5] text-xs font-bold transition flex items-center justify-center gap-1 shadow-sm" title="경로 지도">
-                    <i class="fa-solid fa-earth-americas text-amber-600"></i>
+                  <button onclick="openTripWorkspace('${trip.id}'); navigateToInteractiveMap(); event.stopPropagation();" class="py-2 px-2.5 rounded-xl bg-[#faf8f5] hover:bg-amber-50 text-[#78716c] hover:text-[#a2601b] border border-[#e8e2d5] text-xs font-bold transition flex items-center justify-center gap-1 shadow-sm" title="${tripMapTitle}">
+                    <i class="${tripMapIcon}"></i>
                     <span>지도</span>
                   </button>
                   <button class="flex-1 py-2 rounded-xl btn-gold text-xs font-black transition flex items-center justify-center gap-1.5 shadow-sm">
@@ -3743,6 +4371,25 @@
         if (bookingIcon) bookingIcon.className = `fa-solid ${pack.bookings.subtabIcon} text-[11px]`;
         if (cityguideLabel) cityguideLabel.innerText = pack.cities.subtabTitle;
         if (cityguideIcon) cityguideIcon.className = `fa-solid ${pack.cities.subtabIcon} text-[11px]`;
+      }
+
+      // 상단 헤더 지도 버튼 및 서브탭 지도 아이콘 동적 갱신 (v1.2.2)
+      const btnHeaderMap = document.getElementById('ws-btn-header-map');
+      const iconHeaderMap = document.getElementById('ws-icon-header-map');
+      const iconSubtabMap = document.getElementById('icon-subtab-map');
+
+      if (isYunnanTrip(trip)) {
+        if (btnHeaderMap) btnHeaderMap.title = '중국 운남 인터랙티브 지도 보기';
+        if (iconHeaderMap) iconHeaderMap.className = 'fa-solid fa-earth-asia text-emerald-500 text-[11px]';
+        if (iconSubtabMap) iconSubtabMap.className = 'fa-solid fa-earth-asia text-[11px]';
+      } else if (isSouthAmericaTrip(trip)) {
+        if (btnHeaderMap) btnHeaderMap.title = '남미 4개국 인터랙티브 지도 보기';
+        if (iconHeaderMap) iconHeaderMap.className = 'fa-solid fa-earth-americas text-amber-500 text-[11px]';
+        if (iconSubtabMap) iconSubtabMap.className = 'fa-solid fa-earth-americas text-[11px]';
+      } else {
+        if (btnHeaderMap) btnHeaderMap.title = `${trip.title || '여행'} 인터랙티브 지도 보기`;
+        if (iconHeaderMap) iconHeaderMap.className = 'fa-solid fa-map-location-dot text-sky-500 text-[11px]';
+        if (iconSubtabMap) iconSubtabMap.className = 'fa-solid fa-map-location-dot text-[11px]';
       }
 
       // 탭별 렌더러 호출
@@ -4018,6 +4665,26 @@
       const trip = getActiveTrip();
       const pack = resolveTripPack(trip);
 
+      // 지도 뷰 헤더 타이틀 및 설명 동적 갱신 (v1.2.2)
+      const mapHFlag = document.getElementById('map-view-header-flag');
+      const mapHTitle = document.getElementById('map-view-header-title');
+      const mapHDesc = document.getElementById('map-view-header-desc');
+      if (mapHTitle) {
+        if (isYunnanTrip(trip)) {
+          if (mapHFlag) mapHFlag.innerText = '🇨🇳';
+          mapHTitle.innerText = '중국 운남 13일 황금 코스 인터랙티브 궤적 & 거점 가이드';
+          if (mapHDesc) mapHDesc.innerText = '쿤밍·석림·따리·리장·옥룡설산·호도협·샹그릴라 거점 핀을 터치하면 상세 가이드와 구글 지도 길찾기가 연동됩니다.';
+        } else if (isSouthAmericaTrip(trip)) {
+          if (mapHFlag) mapHFlag.innerText = '🌎';
+          mapHTitle.innerText = '남미 4개국 22일 대종단 인터랙티브 궤적 & 도시 가이드';
+          if (mapHDesc) mapHDesc.innerText = '도시 핀을 클릭하면 해당 도시로 카메라가 줌인되며 상세 지도와 구글 지도 연동이 활성화됩니다.';
+        } else {
+          if (mapHFlag) mapHFlag.innerText = (pack && pack.flag) || trip.coverEmoji || '🗺️';
+          mapHTitle.innerText = `${trip.title || '여정'} 인터랙티브 궤적 & 거점 가이드`;
+          if (mapHDesc) mapHDesc.innerText = '거점 핀을 클릭하면 해당 도시로 카메라가 줌인되며 상세 가이드가 활성화됩니다.';
+        }
+      }
+
       const centerCoord = (pack && pack.geo && pack.geo.centerCoord) ? pack.geo.centerCoord : [20.0, 0.0];
       const initialZoom = (pack && pack.geo && pack.geo.defaultZoom) ? pack.geo.defaultZoom : 2;
 
@@ -4094,6 +4761,26 @@
             <button class="px-2.5 py-1 rounded-lg bg-[#141c2e] border border-[#23304c] text-slate-200 font-bold shrink-0">📍 ${c}</button>
           `).join('');
         }
+        const flagEl = document.getElementById('map-city-flag');
+        const nameEl = document.getElementById('map-city-name');
+        const altEl = document.getElementById('map-city-altitude');
+        const currEl = document.getElementById('map-city-currency');
+        const spotsList = document.getElementById('map-city-spots');
+        const foodsList = document.getElementById('map-city-foods');
+        const tipsEl = document.getElementById('map-city-tips');
+        const gmapBtn = document.getElementById('btn-google-maps-link');
+
+        if (flagEl) flagEl.innerText = trip.coverEmoji || '📍';
+        if (nameEl) nameEl.innerText = (trip.cities && trip.cities[0]) || trip.title || '여행 거점';
+        if (altEl) altEl.innerText = '맞춤 여정';
+        if (currEl) currEl.innerText = trip.currency ? `통화: ${trip.currency}` : '';
+        if (spotsList) {
+          const firstSpots = (trip.days && trip.days[0] && trip.days[0].spots) ? trip.days[0].spots : [];
+          spotsList.innerHTML = firstSpots.length > 0 ? firstSpots.slice(0, 4).map(s => `<li>• ${s.title}</li>`).join('') : '<li>• 자유 일정 등록 중</li>';
+        }
+        if (foodsList) foodsList.innerText = '현지 로컬 미식 및 랜드마크 탐방';
+        if (tipsEl) tipsEl.innerText = '현지 치안 및 필수 준비물을 사전에 점검하세요.';
+        if (gmapBtn) gmapBtn.href = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent((trip.cities && trip.cities[0]) || trip.title || '')}`;
       }
 
       // 지도 리사이징 강제 갱신
@@ -4294,7 +4981,7 @@
                   <span class="text-xl">${d.flag || '🌎'}</span>
                   <h4 class="text-xs sm:text-sm font-black text-white">${d.name}</h4>
                 </div>
-                <span class="text-[10px] text-purple-300 px-2 py-0.5 rounded bg-purple-500/20 border border-purple-500/30">${d.altitude}</span>
+                <span class="text-[10px] font-bold text-purple-950 dark:text-purple-300 px-2 py-0.5 rounded bg-purple-100 dark:bg-purple-950/70 border border-purple-300 dark:border-purple-800">${d.altitude}</span>
               </div>
 
               <div class="text-xs text-slate-300 space-y-1">
@@ -5437,22 +6124,26 @@
     // ==========================================
     // [12] AI Multi-Model Fallback Engine (R-5)
     // ==========================================
-    const AI_MODELS = ['gemini-2.5-flash', 'gemini-2.0-flash', 'gemini-1.5-flash'];
+    const AI_MODELS = ['gemini-2.0-flash', 'gemini-1.5-flash', 'gemini-2.5-flash'];
 
     async function callGeminiApiWithFallback(prompt) {
       const rawKey = State.geminiKey || localStorage.getItem('st_gemini_key');
       const key = cleanApiKey(rawKey);
       if (!key) {
-        throw new Error('GEMINI_KEY_MISSING');
+        const err = new Error('GEMINI_KEY_MISSING');
+        err.code = 'GEMINI_KEY_MISSING';
+        err.userMessage = 'Gemini API 키가 등록되지 않았습니다.';
+        throw err;
       }
 
+      let lastError = null;
       for (const model of AI_MODELS) {
         let timeoutId = null;
         try {
           const controller = new AbortController();
-          // Sulsul-Diary 실록 4.3.9 교훈: 구글 AI 큐 지연 시 무한 대기 방지 10초 타임아웃
-          timeoutId = setTimeout(() => controller.abort(), 10000);
-          const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${key}`;
+          // Sulsul-Diary 실록 4.3.9 교훈: 구글 AI 큐 지연 시 무한 대기 방지 12초 타임아웃
+          timeoutId = setTimeout(() => controller.abort(), 12000);
+          const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${encodeURIComponent(key)}`;
           const res = await fetch(url, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -5460,18 +6151,47 @@
             signal: controller.signal
           });
           clearTimeout(timeoutId);
+
           if (res.ok) {
             const data = await res.json();
-            if (data.candidates && data.candidates[0].content && data.candidates[0].content.parts[0].text) {
+            if (data.candidates && data.candidates[0] && data.candidates[0].content && data.candidates[0].content.parts && data.candidates[0].content.parts[0].text) {
               return data.candidates[0].content.parts[0].text;
+            }
+          } else {
+            let errBody = null;
+            try { errBody = await res.json(); } catch(_) {}
+            const errMsg = errBody?.error?.message || res.statusText || `HTTP ${res.status}`;
+            console.warn(`[AI] Model ${model} returned HTTP ${res.status}:`, errMsg);
+            lastError = { status: res.status, message: errMsg, model: model };
+
+            if (res.status === 400 && (errMsg.includes('API key not valid') || errMsg.includes('API_KEY_INVALID'))) {
+              const keyErr = new Error('INVALID_API_KEY');
+              keyErr.code = 'INVALID_API_KEY';
+              keyErr.userMessage = '등록된 Gemini API 키가 유효하지 않습니다. Google AI Studio에서 발급받은 정확한 키(AIzaSy...)를 확인해 주세요.';
+              throw keyErr;
+            }
+            if (res.status === 429) {
+              const quotaErr = new Error('QUOTA_EXCEEDED');
+              quotaErr.code = 'QUOTA_EXCEEDED';
+              quotaErr.userMessage = 'Google Gemini API 무료 일일 한도(Quota)가 일시적으로 소진되었습니다. 잠시 후 다시 시도해 주세요.';
+              throw quotaErr;
             }
           }
         } catch (e) {
           if (timeoutId) clearTimeout(timeoutId);
-          console.warn(`[AI] Model ${model} failed or timed out, attempting next fallback:`, e.name || e);
+          if (e.code === 'INVALID_API_KEY' || e.code === 'QUOTA_EXCEEDED') throw e;
+          console.warn(`[AI] Model ${model} failed or timed out:`, e.name || e);
+          if (!lastError) {
+            lastError = { status: 0, message: e.message || '네트워크 오류 또는 타임아웃', model: model };
+          }
         }
       }
-      throw new Error('ALL_AI_MODELS_FAILED');
+
+      const finalErr = new Error('ALL_AI_MODELS_FAILED');
+      finalErr.code = 'ALL_AI_MODELS_FAILED';
+      finalErr.details = lastError;
+      finalErr.userMessage = lastError ? `AI 서버 오류 (${lastError.message})` : 'AI 서비스에 연결할 수 없습니다.';
+      throw finalErr;
     }
 
     async function generateAiItinerary() {
@@ -5511,10 +6231,11 @@
           saveTrips();
           closeModal('modal-ai-trip', true);
           renderTimelineTab();
+          renderDynamicIllustratedRouteMap(trip);
           alert('AI 추천 일정이 성공적으로 생성되었습니다!');
         }
       } catch (err) {
-        if (err.message === 'GEMINI_KEY_MISSING') {
+        if (err.code === 'GEMINI_KEY_MISSING' || err.message === 'GEMINI_KEY_MISSING') {
           alert('설정(⚙️) 탭에서 개인 Gemini API 키를 먼저 입력해 주세요.');
           openSettingsModal();
         } else {
@@ -5522,6 +6243,7 @@
           generateOfflineMockItinerary(trip);
           closeModal('modal-ai-trip', true);
           renderTimelineTab();
+          renderDynamicIllustratedRouteMap(trip);
           alert('오프라인 스마트 지식 베이스를 바탕으로 30분 단위 추천 일정을 주입하였습니다.');
         }
       } finally {
@@ -5530,7 +6252,7 @@
     }
 
     function generateOfflineMockItinerary(trip) {
-      (trip.days || []).forEach((d, idx) => {
+      (trip.days || []).forEach((d) => {
         d.spots = [
           { time: "09:00", cat: "tour", typeIcon: "🏛️", title: `${d.city || '현지'} 핵심 랜드마크 오픈런`, desc: "오전 인파가 적은 골든아워에 방문", tip: "편안한 운동화 착용", cost: "현지 입장료", isDraft: true },
           { time: "12:30", cat: "food", typeIcon: "🍽️", title: "현지 정통 대표 맛집 점심 식사", desc: "구글 평점 4.5 이상 검증 식당", tip: "창가 좌석 선점", cost: "약 30,000원", isDraft: true },
@@ -5539,6 +6261,7 @@
         ];
       });
       saveTrips();
+      renderDynamicIllustratedRouteMap(trip);
     }
 
     async function sendAiChatMessage() {
@@ -5549,28 +6272,121 @@
       const container = document.getElementById('ai-chat-messages');
       container.innerHTML += `
         <div class="flex items-start justify-end gap-2">
-          <div class="p-3 rounded-xl bg-amber-500 text-slate-950 font-medium max-w-[85%]">${text}</div>
+          <div class="p-3 rounded-xl bg-amber-500 text-slate-950 font-medium max-w-[85%]">${escapeHtml(text)}</div>
           <span class="w-6 h-6 rounded-full bg-slate-700 text-white font-bold flex items-center justify-center text-[10px] shrink-0">나</span>
         </div>
       `;
       input.value = '';
       container.scrollTop = container.scrollHeight;
 
+      // 1. 대기 중 스피너 표시
+      const loadingId = 'ai-chat-thinking-' + Date.now();
+      container.innerHTML += `
+        <div id="${loadingId}" class="flex items-start gap-2">
+          <span class="w-6 h-6 rounded-full bg-amber-500 text-slate-950 font-bold flex items-center justify-center text-[10px] shrink-0">AI</span>
+          <div class="p-3 rounded-xl bg-[#141c2e] border border-[#23304c] text-slate-400 text-xs flex items-center gap-2 max-w-[85%] animate-pulse">
+            <i class="fa-solid fa-spinner fa-spin text-amber-400 text-xs"></i>
+            <span>AI 비서가 답변을 생각하고 있습니다...</span>
+          </div>
+        </div>
+      `;
+      container.scrollTop = container.scrollHeight;
+
       try {
-        const reply = await callGeminiApiWithFallback(`당신은 술술트래블의 AI 여행 비서입니다. 친절하고 전문적으로 한국어로 3줄 이내로 답변하세요. 질문: ${text}`);
+        const trip = getActiveTrip();
+        const tripContext = trip ? ` (현재 열람 중인 여행: ${trip.title || trip.name || '미정'}, 방문국: ${(trip.countries||[]).join(', ')})` : '';
+        const prompt = `당신은 술술트래블(Sulsul-Travel)의 전문 AI 여행 비서입니다. 친절하고 신뢰감 있게 한국어로 3~4줄 이내로 답변하세요.${tripContext}\n질문: ${text}`;
+
+        const reply = await callGeminiApiWithFallback(prompt);
+        const loaderElem = document.getElementById(loadingId);
+        if (loaderElem) loaderElem.remove();
+
+        const formattedReply = escapeHtml(reply).replace(/\n/g, '<br>');
         container.innerHTML += `
           <div class="flex items-start gap-2">
             <span class="w-6 h-6 rounded-full bg-amber-500 text-slate-950 font-bold flex items-center justify-center text-[10px] shrink-0">AI</span>
-            <div class="p-3 rounded-xl bg-[#141c2e] border border-[#23304c] text-slate-200 leading-relaxed max-w-[85%]">${reply}</div>
+            <div class="p-3 rounded-xl bg-[#141c2e] border border-[#23304c] text-slate-200 leading-relaxed max-w-[85%]">${formattedReply}</div>
           </div>
         `;
       } catch (err) {
+        const loaderElem = document.getElementById(loadingId);
+        if (loaderElem) loaderElem.remove();
+
+        let errorHtml = '';
+        if (err.code === 'GEMINI_KEY_MISSING' || err.message === 'GEMINI_KEY_MISSING') {
+          errorHtml = `
+            <div class="space-y-2">
+              <div class="font-bold text-amber-400 flex items-center gap-1.5">
+                <i class="fa-solid fa-key"></i> Gemini API 키가 아직 설정되지 않았습니다
+              </div>
+              <p class="text-slate-300 leading-relaxed">
+                실시간 맞춤형 AI 여행 비서를 사용하시려면 상단 [⚙️ 설정]에서 개인 Google Gemini API 키를 등록해 주세요.
+              </p>
+              <div class="pt-1 flex items-center gap-2">
+                <button onclick="closeModal('modal-ai-chat'); openSettingsModal();" class="px-3 py-1.5 rounded-lg bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold text-xs flex items-center gap-1 transition shadow cursor-pointer">
+                  <i class="fa-solid fa-gear text-[10px]"></i> API 키 등록하러 가기
+                </button>
+              </div>
+              <div class="text-[11px] text-slate-400 pt-1.5 border-t border-[#23304c]">
+                💡 <strong>오프라인 기본 가이드:</strong> 아르헨티나에서는 MEP 우대 신용카드 결제를 이용하시고, 쿠스코(3,400m)에서는 첫날 3시간 휴식을 잊지 마세요!
+              </div>
+            </div>
+          `;
+        } else if (err.code === 'INVALID_API_KEY') {
+          errorHtml = `
+            <div class="space-y-2">
+              <div class="font-bold text-rose-400 flex items-center gap-1.5">
+                <i class="fa-solid fa-circle-exclamation"></i> 등록된 API 키 오류 (400)
+              </div>
+              <p class="text-slate-300 leading-relaxed">
+                입력하신 Gemini API 키가 올바르지 않습니다. Google AI Studio에서 발급받은 정확한 키(AIzaSy...)를 다시 확인해 주세요.
+              </p>
+              <div class="pt-1 flex items-center gap-2">
+                <button onclick="closeModal('modal-ai-chat'); openSettingsModal();" class="px-3 py-1.5 rounded-lg bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold text-xs flex items-center gap-1 transition shadow cursor-pointer">
+                  <i class="fa-solid fa-pen-to-square text-[10px]"></i> 키 다시 입력하기
+                </button>
+              </div>
+            </div>
+          `;
+        } else if (err.code === 'QUOTA_EXCEEDED') {
+          errorHtml = `
+            <div class="space-y-2">
+              <div class="font-bold text-amber-400 flex items-center gap-1.5">
+                <i class="fa-solid fa-hourglass-half"></i> 일일 무료 할당량 초과 (429)
+              </div>
+              <p class="text-slate-300 leading-relaxed">
+                구글 Gemini API의 무료 일일 호출 한도가 일시적으로 초과되었습니다. 잠시 후 다시 질문해 주세요.
+              </p>
+              <div class="text-[11px] text-slate-400 pt-1 border-t border-[#23304c]">
+                💡 <strong>오프라인 비상 팁:</strong> 남미 고산지대에서는 소로체필(Sorojchi Pills)을 상비하시고 물을 충분히 섭취하세요.
+              </div>
+            </div>
+          `;
+        } else {
+          errorHtml = `
+            <div class="space-y-2">
+              <div class="font-bold text-amber-400 flex items-center gap-1.5">
+                <i class="fa-solid fa-wifi"></i> 일시적 연결 오류 / 오프라인 전환
+              </div>
+              <p class="text-slate-300 leading-relaxed">
+                ${escapeHtml(err.userMessage || '네트워크 연결이 불안정하여 오프라인 모드로 자동 전환되었습니다.')}
+              </p>
+              <div class="text-[11px] text-slate-400 pt-1.5 border-t border-[#23304c]">
+                💡 <strong>오프라인 추천 팁:</strong> 아르헨티나에서는 MEP 우대 신용카드 결제를 이용하시고, 쿠스코(3,400m)에서는 첫날 3시간 휴식을 잊지 마세요!
+              </div>
+              <div class="pt-1 flex items-center gap-2">
+                <button onclick="closeModal('modal-ai-chat'); openSettingsModal();" class="px-2.5 py-1 rounded bg-[#080b12] border border-[#23304c] text-amber-300 hover:text-white text-[11px] font-bold cursor-pointer">
+                  ⚙️ API 키 연결 상태 점검
+                </button>
+              </div>
+            </div>
+          `;
+        }
+
         container.innerHTML += `
           <div class="flex items-start gap-2">
             <span class="w-6 h-6 rounded-full bg-amber-500 text-slate-950 font-bold flex items-center justify-center text-[10px] shrink-0">AI</span>
-            <div class="p-3 rounded-xl bg-[#141c2e] border border-[#23304c] text-slate-200 leading-relaxed max-w-[85%]">
-              현재 오프라인 모드입니다. 아르헨티나에서는 MEP 우대 신용카드 결제를 이용하시고, 쿠스코(3,400m)에서는 첫날 3시간 휴식을 잊지 마세요!
-            </div>
+            <div class="p-3 rounded-xl bg-[#141c2e] border border-[#23304c] text-slate-200 leading-relaxed max-w-[85%]">${errorHtml}</div>
           </div>
         `;
       }
@@ -5888,6 +6704,12 @@
       if (m) {
         m.classList.remove('sheet-closed');
         document.body.style.overflow = 'hidden';
+      }
+      if (modalId === 'modal-ai-chat') {
+        if (typeof updateAiChatStatusBadge === 'function') updateAiChatStatusBadge();
+      }
+      if (modalId === 'modal-route-map') {
+        if (typeof renderDynamicIllustratedRouteMap === 'function') renderDynamicIllustratedRouteMap(getActiveTrip());
       }
     }
 
@@ -6679,6 +7501,7 @@
       openAnalyticsModal: openAnalyticsModal,
       switchAnalyticsTab: switchAnalyticsTab,
       openRouteMapModal: openRouteMapModal,
+      navigateToInteractiveMap: navigateToInteractiveMap,
       openVersionHistoryModal: openVersionHistoryModal,
       openSettingsModal: openSettingsModal,
       setTheme: setTheme,
@@ -6693,7 +7516,10 @@
       toggleGeminiKeyVisibility: toggleGeminiKeyVisibility,
       testGeminiApiKey: testGeminiApiKey,
       DestinationRegistry: window.DestinationRegistry,
-      resolveTripPack: resolveTripPack
+      resolveTripPack: resolveTripPack,
+      renderDynamicIllustratedRouteMap: renderDynamicIllustratedRouteMap,
+      switchRouteMapTab: switchRouteMapTab,
+      updateAiChatStatusBadge: updateAiChatStatusBadge
     };
   </script>
 </body>
