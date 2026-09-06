@@ -34,7 +34,7 @@ test('release version is synchronized', () => {
   const app = html.match(/const APP_VER\s*=\s*'([^']+)'/)?.[1];
   const worker = sw.match(/const V\s*=\s*'st-shell-v([^']+)'/)?.[1];
   const release = changelog.match(/## \[v([^\]]+)\]/)?.[1];
-  assert.equal(app, '1.2.4');
+  assert.equal(app, '1.2.5');
   assert.equal(worker, app);
   assert.equal(release, app);
 });
