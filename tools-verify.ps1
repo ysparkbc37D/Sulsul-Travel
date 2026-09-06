@@ -30,6 +30,11 @@ $iconApple = Join-Path $baseDir "icons\apple-touch-icon.png"
 $iconMask192 = Join-Path $baseDir "icons\icon-maskable-192.png"
 $iconMask512 = Join-Path $baseDir "icons\icon-maskable-512.png"
 
+$dkpRegistry = Join-Path $baseDir "js\destinations\destination-registry.js"
+$dkpDefault = Join-Path $baseDir "js\destinations\pack-default.js"
+$dkpSouthAmerica = Join-Path $baseDir "js\destinations\pack-south-america.js"
+$dkpYunnan = Join-Path $baseDir "js\destinations\pack-yunnan.js"
+
 $allPassed = $true
 
 function Report-Gate($name, $passed, $details) {
@@ -47,13 +52,14 @@ function Report-Gate($name, $passed, $details) {
 # [Gate 1/4] Checking Essential Files
 # ---------------------------------------------------------------
 Write-Host ""
-Write-Host "[1/4] Checking Essential Repository & PWA Asset Files..." -ForegroundColor Yellow
+Write-Host "[1/4] Checking Essential Repository, DKP Modules & PWA Asset Files..." -ForegroundColor Yellow
 
 $coreFiles = @(
     $indexHtmlPath, $swJsPath, $manifestPath, $kbPath, 
     $changelogPath, $sillokPath, $devPath, $readmePath, 
     $servePath, $mapImgPath, $icon192, $icon512, $iconApple, 
-    $iconMask192, $iconMask512
+    $iconMask192, $iconMask512,
+    $dkpRegistry, $dkpDefault, $dkpSouthAmerica, $dkpYunnan
 )
 
 $missingFiles = @()
@@ -63,7 +69,7 @@ foreach ($f in $coreFiles) {
     }
 }
 $sillokName = if ($sillokFile) { $sillokFile.Name } else { "술술트래블신록.md" }
-Report-Gate "All Core Repository, Documentation & Icon Assets Exist" ($missingFiles.Count -eq 0) "Checked: $($coreFiles.Count) files (Chronicle: $sillokName) $(if($missingFiles){'| Missing: ' + ($missingFiles -join ', ')})"
+Report-Gate "All Core Repository, DKP Knowledge Packs & Icon Assets Exist" ($missingFiles.Count -eq 0) "Checked: $($coreFiles.Count) files (Chronicle: $sillokName) $(if($missingFiles){'| Missing: ' + ($missingFiles -join ', ')})"
 
 # ---------------------------------------------------------------
 # [Gate 2/4] Verifying Version Consistency Across Sources

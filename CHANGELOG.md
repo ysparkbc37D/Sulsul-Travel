@@ -24,6 +24,23 @@
 - [ ] 항공권/호텔 예약 바우처 PDF 자동 파싱 일정 등록
 - [ ] 여행 동행자 실시간 음성 메모 AI 다이어리 자동 변환
 
+## [v1.1.8] - 2026-09-06
+### 🧩 목적지 플러그인 지식 팩(DKP) 레지스트리 구축 & 모놀리스 코드 분리 아키텍처 개편
+술술 오도미터 순차 올림 원칙(`v1.1.7` → `v1.1.8`)에 따른 개발 아키텍처 구조 혁신 릴리즈.
+1. **목적지 지식 팩(Destination Knowledge Pack, DKP) 레지스트리 아키텍처 도입**:
+   - 기존 `index.html` 단일 파일 내 하드코딩되어 있던 목적지별(남미, 운남 등) 데이터와 비즈니스 로직을 플러그인 형태의 독립 모듈로 완전 분리 (`js/destinations/` 디렉터리 신설).
+   - `destination-registry.js`: 목적지 지식 팩 자동 매칭(`resolve(trip)`), 등록(`register(pack)`), 기본 팩 폴백(`setDefaultPack(pack)`)을 관장하는 중앙 레지스트리 엔진.
+   - `pack-default.js`: 사용자 등록 여행지의 일자와 스팟 데이터를 실시간 분석하여 모의 GPS, 도시 요약, 필수 체크리스트를 자동 생성하는 범용 동적 폴백 팩.
+   - `pack-south-america.js`: 16개 핵심 명소, 8대 도시, 12대 필수 예약, 항공/이동 경로 좌표를 캡슐화한 22일 남미 대종단 마스터 팩.
+   - `pack-yunnan.js`: 11개 핵심 스팟, 5대 거점 도시, 알리페이/옥룡설산 특화 가이드, 12박 13일 황금 코스 자동 생성기를 내장한 중국 운남성 특화 팩.
+2. **모놀리스 `index.html` 코드 다이어트 및 DKP 전역 연동**:
+   - 지도 엔진(`initOrUpdateLeafletMap`, `focusCityOnMap`, `resetMapToWorldView`): 목적지별 하드코딩 분기(`isSA`, `isYN`)를 제거하고 `resolveTripPack(trip)` 기반 단일 파이프라인으로 통합.
+   - GPS 레이더(`populateSimGpsOptions`, `renderGpsRadar`, `simulateGpsLocation`, `updateGpsRadarUI`): 레거시 `GPS_KNOWN_SPOTS`, `GPS_DEMO_PRESETS` 상수를 제거하고 활성 팩의 `geo.simPresets` 및 `geo.knownSpots`로부터 실시간 쿼리.
+   - 신규 여행 생성(`submitCreateTrip`): DKP `getGoldenItinerary()` 및 `pack.geo.destinations`와 자동 연동되어 새로운 목적지 추가 시 한 줄의 메인 코드 수정 없이도 완벽 지원.
+3. **No-Build / Zero-Backend & R-10 불변 법칙 100% 계승**:
+   - `npm` 빌드 도구 없이 브라우저 로컬 더블클릭(`file:///`)과 `tools-serve.ps1`, GitHub Pages 어디서나 즉시 구동.
+   - 불변 법칙 R-10의 27대 필수 DOM ID 보존 및 Service Worker(`st-shell-v1.1.8`) 오프라인 프리캐시 자산 등록 완료.
+
 ## [v1.1.7] - 2026-09-06
 ### 🌏 신규 여행(중국운남여행 등) 내 남미 레거시 데이터 침범 결함 원천 해결 & 워크스페이스 전역 완전 동적화
 술술 오도미터 순차 올림 원칙(`v1.1.6` → `v1.1.7`)에 따른 멀티 트립 아키텍처 전역 동적화 릴리즈.
