@@ -1,5 +1,5 @@
 // Sulsul-Travel Service Worker
-const V = 'st-shell-v1.1.4';
+const V = 'st-shell-v1.1.5';
 const CACHE_NAME = V;
 
 const PRECACHE_ASSETS = [
@@ -12,7 +12,14 @@ const PRECACHE_ASSETS = [
   './icons/icon-512.png',
   './icons/icon-maskable-192.png',
   './icons/icon-maskable-512.png',
-  './icons/apple-touch-icon.png'
+  './icons/apple-touch-icon.png',
+  './icons/icon-192-v115.png',
+  './icons/icon-512-v115.png',
+  './icons/icon-maskable-192-v115.png',
+  './icons/icon-maskable-512-v115.png',
+  './icons/apple-touch-icon-v115.png',
+  './favicon.png',
+  './favicon.ico'
 ];
 
 self.addEventListener('install', (event) => {

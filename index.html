@@ -14,12 +14,14 @@
   </script>
 
   <!-- PWA Meta & Icons -->
-  <link rel="manifest" href="manifest.webmanifest?v=1.1.4">
+  <link rel="manifest" href="manifest.webmanifest?v=1.1.5">
   <meta name="theme-color" content="#f5f5f7">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
-  <link rel="icon" type="image/png" href="icons/icon-192.png?v=1.1.4">
-  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png?v=1.1.4">
+  <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192-v115.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon.png">
+  <link rel="shortcut icon" href="favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="icons/apple-touch-icon-v115.png">
 
   <!-- Editorial Luxury Serif Fonts (Cormorant Garamond / Playfair Display) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -509,13 +511,13 @@
     <div class="max-w-6xl mx-auto flex items-center justify-between gap-2 sm:gap-3">
       <!-- 좌측 로고 및 버전 (불변 브랜드 블록: 어느 화면에서나 항상 안정적으로 고정) -->
       <div class="flex items-center gap-2 sm:gap-2.5 cursor-pointer select-none shrink-0" onclick="switchView('hub')" title="술술트래블 홈(허브)으로 이동">
-        <img src="icons/icon-192.png?v=1.1.4" alt="Sulsul Travel" class="w-8 h-8 sm:w-9 sm:h-9 rounded-xl shadow-md shadow-amber-900/15 shrink-0 object-cover border border-[#e8e2d5] dark:border-[var(--line)]">
+        <img src="icons/icon-192-v115.png" alt="Sulsul Travel" class="w-8 h-8 sm:w-9 sm:h-9 rounded-xl shadow-md shadow-amber-900/15 shrink-0 object-cover border border-[#e8e2d5] dark:border-[var(--line)]">
         <div class="min-w-0">
           <div class="flex items-center gap-1.5">
             <h1 class="font-serif-brand text-base sm:text-xl font-bold tracking-tight text-[#1c1917] dark:text-[#ededed] whitespace-nowrap">
               Sulsul Travel
             </h1>
-            <span id="app-ver-badge" class="px-1.5 py-0.5 rounded-md theme-card-subtle text-[#a2601b] dark:text-[#d4af37] text-[10px] font-bold font-mono shadow-inner cursor-default shrink-0" title="술술트래블 엔진 버전">v1.1.4</span>
+            <span id="app-ver-badge" class="px-1.5 py-0.5 rounded-md theme-card-subtle text-[#a2601b] dark:text-[#d4af37] text-[10px] font-bold font-mono shadow-inner cursor-default shrink-0" title="술술트래블 엔진 버전">v1.1.5</span>
           </div>
           <p id="header-trip-name" class="text-[10px] sm:text-[11px] text-[#78716c] dark:text-stone-400 truncate max-w-[120px] sm:max-w-xs font-normal">인생의 모든 여정을 기록하는 다이어리</p>
         </div>
@@ -1185,13 +1187,23 @@
         </div>
       </div>
 
-      <!-- 새 공식 곰돌이 아이콘 반영 안내 팁 -->
-      <div class="p-3 rounded-xl bg-amber-500/10 dark:bg-amber-500/15 border border-amber-500/30 flex items-start gap-2.5 text-xs text-[#a2601b] dark:text-amber-300">
-        <span class="text-base shrink-0">💡</span>
-        <div class="space-y-0.5">
-          <div class="font-bold">새 황금 날개 곰돌이 아이콘 반영 안내</div>
-          <div class="text-[11px] text-[#78716c] dark:text-stone-300 leading-relaxed">
-            스마트폰 OS(iOS/Android) 특성상 기존에 홈 화면에 추가했던 아이콘은 정적 비트맵으로 고정됩니다. 기존 아이콘을 삭제하신 후 <b>[홈 화면에 추가]</b>를 1회 다시 진행하시면 귀여운 신규 공식 곰돌이 캐리어 아이콘으로 즉시 교체됩니다!
+      <!-- 새 공식 곰돌이 아이콘 반영 및 비행기 아이콘 해결 안내 -->
+      <div class="p-3 rounded-xl bg-amber-500/10 dark:bg-amber-500/15 border border-amber-500/30 space-y-2 text-xs">
+        <div class="flex items-center gap-2 font-black text-[#a2601b] dark:text-amber-300">
+          <span class="text-base shrink-0">📢</span>
+          <span>앱 실행 / 설치 시 비행기 아이콘이 뜨는 이유 & 10초 해결법</span>
+        </div>
+        <div class="text-[11px] text-[#4b5563] dark:text-stone-300 leading-relaxed space-y-1.5">
+          <p>
+            스마트폰에 <b>이미 설치된 술술트래블 앱(WebAPK)은 OS 내부 패키지에 이전 비행기 아이콘이 영구 고정</b>되어 있어, 웹사이트가 업데이트되어도 실행 화면(스플래시)과 홈 아이콘이 자동으로 바뀌지 않습니다.
+          </p>
+          <div class="p-2.5 rounded-lg bg-white/80 dark:bg-stone-900/60 border border-amber-500/20 space-y-1 text-[#1c1917] dark:text-stone-200">
+            <div class="font-bold text-[#a2601b] dark:text-amber-300">👉 새 황금 날개 곰돌이 아이콘 적용 방법 (10초):</div>
+            <ol class="list-decimal list-inside space-y-0.5 text-[10.5px]">
+              <li>스마트폰 홈 화면에서 기존 <b>'술술트래블'</b> 앱을 길게 눌러 <b>[설치 삭제(삭제)]</b>합니다.</li>
+              <li>브라우저(Chrome / 삼성 인터넷)로 술술트래블에 다시 접속합니다.</li>
+              <li>브라우저 메뉴(⋮)에서 <b>[앱 설치]</b> 또는 <b>[홈 화면에 추가]</b>를 진행하면 <b>새 공식 곰돌이 아이콘</b>으로 즉시 설치됩니다!</li>
+            </ol>
           </div>
         </div>
       </div>
@@ -1866,24 +1878,35 @@
             </span>
           </div>
 
+          <!-- 키 입력 / 잠금 필드 -->
           <div class="flex items-center gap-2">
             <div class="relative flex-1">
               <input type="password" id="modal-cfg-gemini-key" placeholder="AIzaSy... 형태의 키를 붙여넣으세요" class="w-full pl-3 pr-9 py-2 bg-[#faf8f5] dark:bg-[#16181d] border border-[#e8e2d5] dark:border-stone-700 rounded-xl text-xs text-[#1c1917] dark:text-[#ededed] focus:outline-none focus:border-[#a2601b] font-mono transition">
               <button type="button" onclick="toggleGeminiKeyVisibility()" id="btn-toggle-gemini-key" title="키 표시/숨김" class="absolute right-2.5 top-1/2 -translate-y-1/2 text-stone-400 hover:text-stone-700 dark:hover:text-stone-200 text-xs p-1 cursor-pointer">
                 <i id="icon-gemini-key-eye" class="fa-solid fa-eye"></i>
               </button>
+              <div id="icon-gemini-key-locked" class="hidden absolute right-3 top-1/2 -translate-y-1/2 text-emerald-600 dark:text-emerald-400 text-xs" title="보안 잠금 보관 중">
+                <i class="fa-solid fa-lock"></i>
+              </div>
             </div>
-            <button id="btn-save-gemini-key" onclick="saveGeminiKeyFromModal()" class="btn-gold px-4 py-2 rounded-xl text-xs font-bold shrink-0 cursor-pointer shadow-sm transition-all flex items-center gap-1">
-              <span>저장</span>
+            <!-- 저장 / 변경 액션 버튼 -->
+            <button id="btn-save-gemini-key" onclick="handleGeminiKeyMainAction()" class="btn-gold px-3.5 py-2 rounded-xl text-xs font-bold shrink-0 cursor-pointer shadow-sm transition-all flex items-center gap-1">
+              <span id="btn-save-gemini-key-txt">저장</span>
+            </button>
+            <button id="btn-cancel-gemini-key" onclick="cancelGeminiKeyEdit()" class="hidden px-2.5 py-2 rounded-xl bg-stone-100 dark:bg-stone-800 hover:bg-stone-200 text-stone-700 dark:text-stone-300 text-xs font-bold shrink-0 border border-stone-200 dark:border-stone-700 cursor-pointer transition">
+              취소
+            </button>
+            <button id="btn-delete-gemini-key" onclick="deleteGeminiKey()" title="등록된 API 키 삭제" class="hidden px-2.5 py-2 rounded-xl bg-rose-50 dark:bg-rose-950/40 hover:bg-rose-100 text-rose-700 dark:text-rose-300 text-xs font-bold shrink-0 border border-rose-200 dark:border-rose-800 cursor-pointer transition">
+              <i class="fa-solid fa-trash-can"></i>
             </button>
           </div>
 
           <div class="flex items-center justify-between pt-0.5">
-            <div class="text-[11px] text-[#78716c] dark:text-stone-400 flex items-center gap-1.5">
-              <span>등록 키:</span>
-              <code id="gemini-key-preview-text" class="font-mono text-[#a2601b] dark:text-amber-400 font-bold bg-amber-500/10 px-1.5 py-0.5 rounded text-[10px]">미등록</code>
+            <div class="text-[11px] text-[#78716c] dark:text-stone-400 flex items-center gap-1.5 min-w-0">
+              <span class="shrink-0">상태:</span>
+              <span id="gemini-key-preview-text" class="font-semibold text-emerald-700 dark:text-emerald-400 truncate text-[11px]">미등록</span>
             </div>
-            <button type="button" id="btn-test-gemini-key" onclick="testGeminiApiKey()" class="px-3 py-1 rounded-lg bg-amber-500/10 hover:bg-amber-500/20 text-[#a2601b] dark:text-[#d4af37] text-[11px] font-bold border border-amber-500/30 transition flex items-center gap-1 cursor-pointer">
+            <button type="button" id="btn-test-gemini-key" onclick="testGeminiApiKey()" class="px-3 py-1 rounded-lg bg-amber-500/10 hover:bg-amber-500/20 text-[#a2601b] dark:text-[#d4af37] text-[11px] font-bold border border-amber-500/30 transition flex items-center gap-1 cursor-pointer shrink-0">
               <i class="fa-solid fa-bolt-lightning text-[10px]"></i>
               <span>연결 테스트</span>
             </button>
@@ -1904,15 +1927,28 @@
               <span id="settings-pwa-status" class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-slate-100 dark:bg-stone-800 text-slate-600 dark:text-stone-300 border border-slate-200 dark:border-stone-700">웹 브라우저로 실행 중</span>
             </div>
           </div>
-          <button onclick="handleInstallButtonClick()" class="px-3.5 py-1.5 rounded-xl btn-gold text-xs font-bold transition shrink-0 cursor-pointer shadow-sm">
+          <button id="btn-settings-install" onclick="handleInstallButtonClick()" class="px-3.5 py-1.5 rounded-xl btn-gold text-xs font-bold transition shrink-0 cursor-pointer shadow-sm">
             앱 설치
           </button>
         </div>
-        <!-- 곰돌이 아이콘 캐시 안내 팁 -->
-        <div class="p-2.5 rounded-lg bg-amber-500/10 border border-amber-500/25 flex items-start gap-2 text-[11px] text-[#78716c] dark:text-stone-300">
-          <span class="text-amber-500 shrink-0 mt-0.5">💡</span>
-          <div>
-            <span class="font-bold text-[#1c1917] dark:text-[#ededed]">새 공식 곰돌이 아이콘 반영 안내:</span> 스마트폰 OS 특성상 기존에 홈 화면에 추가했던 바로가기는 비트맵이 고정됩니다. 기존 아이콘을 삭제 후 <b>[홈 화면에 추가]</b>를 1회 다시 진행하시면 새 황금 날개 곰돌이 아이콘으로 즉시 교체됩니다!
+        <!-- PWA 곰돌이 아이콘 갱신 및 재설치 정밀 안내 배너 -->
+        <div class="p-3 rounded-xl bg-amber-500/10 dark:bg-amber-500/15 border border-amber-500/30 space-y-2 text-xs">
+          <div class="flex items-center gap-2 font-black text-[#a2601b] dark:text-amber-300">
+            <span class="text-base shrink-0">📢</span>
+            <span>앱 실행 / 설치 시 비행기 아이콘이 뜨는 이유 & 10초 해결법</span>
+          </div>
+          <div class="text-[11px] text-[#4b5563] dark:text-stone-300 leading-relaxed space-y-1.5">
+            <p>
+              스마트폰에 <b>이미 설치된 술술트래블 앱(WebAPK)은 OS 내부 패키지에 이전 비행기 아이콘이 영구 고정</b>되어 있어, 웹사이트가 업데이트되어도 실행 화면(스플래시)과 홈 아이콘이 자동으로 바뀌지 않습니다.
+            </p>
+            <div class="p-2.5 rounded-lg bg-white/80 dark:bg-stone-900/60 border border-amber-500/20 space-y-1 text-[#1c1917] dark:text-stone-200">
+              <div class="font-bold text-[#a2601b] dark:text-amber-300">👉 새 황금 날개 곰돌이 아이콘 적용 방법 (10초):</div>
+              <ol class="list-decimal list-inside space-y-0.5 text-[10.5px]">
+                <li>스마트폰 홈 화면에서 기존 <b>'술술트래블'</b> 앱을 길게 눌러 <b>[설치 삭제(삭제)]</b>합니다.</li>
+                <li>브라우저(Chrome / 삼성 인터넷)로 술술트래블에 다시 접속합니다.</li>
+                <li>브라우저 메뉴(⋮)에서 <b>[앱 설치]</b> 또는 <b>[홈 화면에 추가]</b>를 진행하면 <b>새 공식 곰돌이 아이콘</b>으로 즉시 설치됩니다!</li>
+              </ol>
+            </div>
           </div>
         </div>
       </div>
@@ -2188,7 +2224,7 @@
     window.showToast = showToast;
 
     // 앱 버전 및 글로벌 네임스페이스 (Sulsul-Travel Invariant Rule R-10, R-11, R-12, R-13, R-14, R-15)
-    const APP_VER = '1.1.4';
+    const APP_VER = '1.1.5';
 
     // ══════════════════════════════════════════
     // [Two-Tone Theme System] 라이트 그레이 & 딥 블랙 테마 엔진
@@ -2546,45 +2582,139 @@
       openModal('modal-settings');
     }
 
+    let isGeminiKeyEditMode = false;
+
     function updateGeminiKeyUi() {
       const currentKey = State.geminiKey || '';
       const input = document.getElementById('modal-cfg-gemini-key');
-      if (input && input.value !== currentKey) {
-        input.value = currentKey;
-      }
       const tabKey = document.getElementById('cfg-gemini-key');
+      const eyeBtn = document.getElementById('btn-toggle-gemini-key');
+      const lockedIcon = document.getElementById('icon-gemini-key-locked');
+      const mainBtn = document.getElementById('btn-save-gemini-key');
+      const mainBtnTxt = document.getElementById('btn-save-gemini-key-txt');
+      const cancelBtn = document.getElementById('btn-cancel-gemini-key');
+      const deleteBtn = document.getElementById('btn-delete-gemini-key');
+      const badge = document.getElementById('gemini-key-status-badge');
+      const preview = document.getElementById('gemini-key-preview-text');
+
       if (tabKey && tabKey.value !== currentKey) {
         tabKey.value = currentKey;
       }
 
-      const badge = document.getElementById('gemini-key-status-badge');
-      const preview = document.getElementById('gemini-key-preview-text');
+      const hasRegisteredKey = currentKey && currentKey.length > 5;
 
-      if (currentKey && currentKey.length > 5) {
+      if (hasRegisteredKey && !isGeminiKeyEditMode) {
+        // [1] 보안 잠금 및 비활성화 상태 (사용자 보안 최우선)
+        if (input) {
+          input.value = '••••••••••••••••••••••••';
+          input.disabled = true;
+          input.readOnly = true;
+          input.type = 'password';
+          input.className = "w-full pl-3 pr-9 py-2 bg-stone-100 dark:bg-stone-800/70 border border-stone-200 dark:border-stone-700 rounded-xl text-xs text-stone-500 select-none cursor-not-allowed font-mono transition";
+        }
+        if (eyeBtn) eyeBtn.classList.add('hidden');
+        if (lockedIcon) lockedIcon.classList.remove('hidden');
+        
         if (badge) {
-          badge.className = 'text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-100 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-700 flex items-center gap-1';
-          badge.innerHTML = '<i class="fa-solid fa-circle-check text-emerald-600"></i> API 키 등록됨';
+          badge.className = 'text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-emerald-100 dark:bg-emerald-950/60 text-emerald-900 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-700 flex items-center gap-1';
+          badge.innerHTML = '<i class="fa-solid fa-shield-halved text-emerald-600"></i> 등록 완료 (보안 잠금)';
         }
         if (preview) {
-          const prefix = currentKey.slice(0, 6);
-          const suffix = currentKey.length > 10 ? currentKey.slice(-4) : '••••';
-          preview.innerText = `${prefix}••••${suffix} (${currentKey.length}자)`;
+          preview.className = "font-semibold text-emerald-700 dark:text-emerald-400 truncate text-[11px]";
+          preview.innerHTML = `<i class="fa-solid fa-lock text-[10px] mr-1"></i>기기 보안 저장소 보관 중 (총 ${currentKey.length}자 등록됨)`;
         }
+        if (mainBtn && mainBtnTxt) {
+          mainBtn.className = "px-3.5 py-2 rounded-xl text-xs font-bold shrink-0 cursor-pointer transition-all flex items-center gap-1 bg-amber-500/15 hover:bg-amber-500/25 text-[#a2601b] dark:text-[#d4af37] border border-amber-500/30";
+          mainBtnTxt.innerHTML = '<i class="fa-solid fa-pen-to-square text-[10px]"></i> <span>키 변경</span>';
+        }
+        if (cancelBtn) cancelBtn.classList.add('hidden');
+        if (deleteBtn) deleteBtn.classList.remove('hidden');
       } else {
-        if (badge) {
-          badge.className = 'text-[10px] font-bold px-2 py-0.5 rounded-full bg-stone-100 dark:bg-stone-800 text-stone-600 dark:text-stone-300 border border-stone-200 dark:border-stone-700 flex items-center gap-1';
-          badge.innerHTML = '<i class="fa-solid fa-circle-exclamation text-amber-500"></i> 미등록 (오프라인 모드)';
+        // [2] 신규 입력 또는 키 변경(편집) 모드
+        if (input) {
+          input.disabled = false;
+          input.readOnly = false;
+          if (!isGeminiKeyEditMode) {
+            input.value = currentKey;
+          }
+          input.className = "w-full pl-3 pr-9 py-2 bg-[#faf8f5] dark:bg-[#16181d] border border-[#e8e2d5] dark:border-stone-700 rounded-xl text-xs text-[#1c1917] dark:text-[#ededed] focus:outline-none focus:border-[#a2601b] font-mono transition";
         }
-        if (preview) {
-          preview.innerText = '미등록';
+        if (eyeBtn) eyeBtn.classList.remove('hidden');
+        if (lockedIcon) lockedIcon.classList.add('hidden');
+
+        if (hasRegisteredKey) {
+          if (badge) {
+            badge.className = 'text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-amber-100 dark:bg-amber-950/60 text-amber-900 dark:text-amber-300 border border-amber-300 dark:border-amber-700 flex items-center gap-1';
+            badge.innerHTML = '<i class="fa-solid fa-pen text-amber-600"></i> 새 키 입력 중';
+          }
+          if (preview) {
+            preview.className = "font-medium text-stone-500 dark:text-stone-400 truncate text-[11px]";
+            preview.innerText = "새 API 키를 붙여넣고 [저장]을 누르세요.";
+          }
+          if (cancelBtn) cancelBtn.classList.remove('hidden');
+          if (deleteBtn) deleteBtn.classList.remove('hidden');
+        } else {
+          if (badge) {
+            badge.className = 'text-[10px] font-bold px-2 py-0.5 rounded-full bg-stone-100 dark:bg-stone-800 text-stone-600 dark:text-stone-300 border border-stone-200 dark:border-stone-700 flex items-center gap-1';
+            badge.innerHTML = '<i class="fa-solid fa-circle-exclamation text-amber-500"></i> 미등록 (오프라인 모드)';
+          }
+          if (preview) {
+            preview.className = "font-medium text-stone-400 truncate text-[11px]";
+            preview.innerText = "등록된 키 없음 (AI 기능 사용 시 등록 필요)";
+          }
+          if (cancelBtn) cancelBtn.classList.add('hidden');
+          if (deleteBtn) deleteBtn.classList.add('hidden');
+        }
+
+        if (mainBtn && mainBtnTxt) {
+          mainBtn.className = "btn-gold px-4 py-2 rounded-xl text-xs font-bold shrink-0 cursor-pointer shadow-sm transition-all flex items-center gap-1";
+          mainBtnTxt.innerHTML = '<i class="fa-solid fa-check text-[10px]"></i> <span>저장</span>';
         }
       }
+    }
+
+    function handleGeminiKeyMainAction() {
+      const currentKey = State.geminiKey || '';
+      const hasRegisteredKey = currentKey && currentKey.length > 5;
+      if (hasRegisteredKey && !isGeminiKeyEditMode) {
+        // Switch to edit mode
+        isGeminiKeyEditMode = true;
+        updateGeminiKeyUi();
+        const input = document.getElementById('modal-cfg-gemini-key');
+        if (input) {
+          input.value = '';
+          input.focus();
+        }
+      } else {
+        // Save action
+        saveGeminiKeyFromModal();
+      }
+    }
+
+    function cancelGeminiKeyEdit() {
+      isGeminiKeyEditMode = false;
+      updateGeminiKeyUi();
+    }
+
+    function deleteGeminiKey() {
+      if (!confirm('등록된 Gemini API 키를 정말로 삭제하시겠습니까?\n삭제 시 AI 일정 생성 및 윤문 기능이 오프라인 모드로 전환됩니다.')) {
+        return;
+      }
+      State.geminiKey = '';
+      localStorage.removeItem('st_gemini_key');
+      const tabKey = document.getElementById('cfg-gemini-key');
+      if (tabKey) tabKey.value = '';
+      const input = document.getElementById('modal-cfg-gemini-key');
+      if (input) input.value = '';
+      isGeminiKeyEditMode = false;
+      updateGeminiKeyUi();
+      showToast('🗑️ Gemini API 키가 안전하게 삭제되었습니다.');
     }
 
     function toggleGeminiKeyVisibility() {
       const input = document.getElementById('modal-cfg-gemini-key');
       const icon = document.getElementById('icon-gemini-key-eye');
-      if (!input) return;
+      if (!input || input.disabled) return;
       if (input.type === 'password') {
         input.type = 'text';
         if (icon) {
@@ -2604,41 +2734,49 @@
       const input = document.getElementById('modal-cfg-gemini-key');
       if (!input) return;
       const cleanKey = cleanApiKey(input.value);
+      if (!cleanKey) {
+        showToast('⚠️ 유효한 API 키를 입력해 주세요 (AI Studio에서 발급받은 키).');
+        input.focus();
+        return;
+      }
       State.geminiKey = cleanKey;
       localStorage.setItem('st_gemini_key', cleanKey);
       const tabKey = document.getElementById('cfg-gemini-key');
       if (tabKey) tabKey.value = cleanKey;
 
+      isGeminiKeyEditMode = false;
       updateGeminiKeyUi();
 
-      const btn = document.getElementById('btn-save-gemini-key');
-      if (btn) {
-        const origHtml = btn.innerHTML;
-        btn.innerHTML = '<i class="fa-solid fa-check"></i> <span>저장됨!</span>';
-        btn.classList.add('bg-emerald-600', 'text-white');
-        setTimeout(() => {
-          btn.innerHTML = origHtml;
-          btn.classList.remove('bg-emerald-600', 'text-white');
-        }, 1500);
-      }
-
-      showToast(cleanKey ? '🔑 Gemini API 키가 안전하게 저장되었습니다.' : 'API 키가 삭제되었습니다.');
+      showToast('🔒 Gemini API 키가 안전하게 등록 및 보안 잠금되었습니다.');
     }
 
     async function testGeminiApiKey() {
+      const currentKey = State.geminiKey || '';
       const input = document.getElementById('modal-cfg-gemini-key');
       const testBtn = document.getElementById('btn-test-gemini-key');
-      const candidateKey = cleanApiKey(input ? input.value : State.geminiKey);
+      
+      // Use candidate from input if user is actively entering one, otherwise use safely stored key
+      let candidateKey = (isGeminiKeyEditMode && input && input.value.trim()) 
+        ? cleanApiKey(input.value) 
+        : cleanApiKey(currentKey);
 
       if (!candidateKey) {
         showToast('⚠️ 먼저 Gemini API 키를 입력해 주세요.');
-        if (input) input.focus();
+        if (input) {
+          isGeminiKeyEditMode = true;
+          updateGeminiKeyUi();
+          input.focus();
+        }
         return;
       }
 
-      State.geminiKey = candidateKey;
-      localStorage.setItem('st_gemini_key', candidateKey);
-      updateGeminiKeyUi();
+      // If user typed a valid new candidate key in edit mode, save it
+      if (isGeminiKeyEditMode && candidateKey) {
+        State.geminiKey = candidateKey;
+        localStorage.setItem('st_gemini_key', candidateKey);
+        isGeminiKeyEditMode = false;
+        updateGeminiKeyUi();
+      }
 
       const origHtml = testBtn ? testBtn.innerHTML : '';
       if (testBtn) {
@@ -2659,19 +2797,19 @@
         const data = await res.json();
         if (res.ok && data.candidates && data.candidates.length > 0) {
           if (testBtn) {
-            testBtn.innerHTML = '<i class="fa-solid fa-circle-check text-emerald-500"></i> <span class="text-emerald-600 dark:text-emerald-400">정상 작동!</span>';
+            testBtn.innerHTML = '<i class="fa-solid fa-circle-check text-emerald-500"></i> <span class="text-emerald-600 dark:text-emerald-400 font-bold">정상 작동!</span>';
           }
           showToast('✅ Gemini AI 연결 성공! 30분 일정 & 윤문이 활성화되었습니다.');
         } else {
           const errMsg = (data.error && data.error.message) ? data.error.message : (res.statusText || '응답 오류');
           if (testBtn) {
-            testBtn.innerHTML = '<i class="fa-solid fa-circle-xmark text-rose-500"></i> <span class="text-rose-600 dark:text-rose-400">연결 실패</span>';
+            testBtn.innerHTML = '<i class="fa-solid fa-circle-xmark text-rose-500"></i> <span class="text-rose-600 dark:text-rose-400 font-bold">연결 실패</span>';
           }
           showToast(`❌ API 키 연결 실패: ${errMsg.slice(0, 60)}`);
         }
       } catch (err) {
         if (testBtn) {
-          testBtn.innerHTML = '<i class="fa-solid fa-triangle-exclamation text-amber-500"></i> <span class="text-amber-600">오프라인/네트워크</span>';
+          testBtn.innerHTML = '<i class="fa-solid fa-triangle-exclamation text-amber-500"></i> <span class="text-amber-600 font-bold">오프라인/네트워크</span>';
         }
         showToast(`⚠️ 네트워크 오류: ${err.message || '인터넷 연결 상태를 확인해주세요.'}`);
       } finally {
@@ -3908,11 +4046,22 @@
       const settingsPwaBadge = document.getElementById('settings-pwa-status');
       if (settingsPwaBadge) {
         if (installed) {
-          settingsPwaBadge.className = "text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200";
+          settingsPwaBadge.className = "text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800";
           settingsPwaBadge.innerText = "✅ PWA 단독 앱으로 구동 중";
         } else {
-          settingsPwaBadge.className = "text-[10px] font-bold px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 border border-slate-200";
+          settingsPwaBadge.className = "text-[10px] font-bold px-2 py-0.5 rounded-full bg-slate-100 dark:bg-stone-800 text-slate-600 dark:text-stone-300 border border-slate-200 dark:border-stone-700";
           settingsPwaBadge.innerText = "웹 브라우저로 실행 중 (홈 화면 설치 가능)";
+        }
+      }
+
+      const settingsInstallBtn = document.getElementById('btn-settings-install');
+      if (settingsInstallBtn) {
+        if (installed) {
+          settingsInstallBtn.className = "px-3.5 py-1.5 rounded-xl bg-stone-100 dark:bg-stone-800 text-stone-500 dark:text-stone-400 text-xs font-bold transition shrink-0 border border-stone-200 dark:border-stone-700 cursor-default";
+          settingsInstallBtn.innerHTML = '<i class="fa-solid fa-circle-check text-emerald-600 dark:text-emerald-400"></i> 설치됨';
+        } else {
+          settingsInstallBtn.className = "px-3.5 py-1.5 rounded-xl btn-gold text-xs font-bold transition shrink-0 cursor-pointer shadow-sm";
+          settingsInstallBtn.innerText = "앱 설치";
         }
       }
 
