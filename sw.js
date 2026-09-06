@@ -1,5 +1,5 @@
 // Sulsul-Travel Service Worker
-const V = 'st-shell-v1.1.2';
+const V = 'st-shell-v1.1.3';
 const CACHE_NAME = V;
 
 const PRECACHE_ASSETS = [
@@ -10,6 +10,8 @@ const PRECACHE_ASSETS = [
   './south_america_illustrated_map.jpg',
   './icons/icon-192.png',
   './icons/icon-512.png',
+  './icons/icon-maskable-192.png',
+  './icons/icon-maskable-512.png',
   './icons/apple-touch-icon.png'
 ];
 

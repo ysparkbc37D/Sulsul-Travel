@@ -14,12 +14,12 @@
   </script>
 
   <!-- PWA Meta & Icons -->
-  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="manifest" href="manifest.webmanifest?v=1.1.3">
   <meta name="theme-color" content="#f5f5f7">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
-  <link rel="icon" type="image/png" href="icons/icon-192.png">
-  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+  <link rel="icon" type="image/png" href="icons/icon-192.png?v=1.1.3">
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png?v=1.1.3">
 
   <!-- Editorial Luxury Serif Fonts (Cormorant Garamond / Playfair Display) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -494,24 +494,24 @@
   <!-- ========================================== -->
   <header class="sticky top-0 z-30 bg-[#f7f6f2]/95 backdrop-blur-md border-b border-[#e8e2d5] px-3 sm:px-4 py-2.5 sm:py-3 shadow-[0_2px_12px_rgba(0,0,0,0.03)]">
     <div class="max-w-6xl mx-auto flex items-center justify-between gap-2 sm:gap-3">
-      <!-- 좌측 로고 및 버전 -->
-      <div class="flex items-center gap-2 sm:gap-2.5 cursor-pointer select-none min-w-0" onclick="switchView('hub')">
-        <img src="icons/icon-192.png" alt="Sulsul Travel" class="w-8 h-8 sm:w-9 sm:h-9 rounded-xl shadow-md shadow-amber-900/15 shrink-0 object-cover border border-[#e8e2d5] dark:border-[var(--line)]">
+      <!-- 좌측 로고 및 버전 (불변 브랜드 블록: 어느 화면에서나 항상 안정적으로 고정) -->
+      <div class="flex items-center gap-2 sm:gap-2.5 cursor-pointer select-none shrink-0" onclick="switchView('hub')" title="술술트래블 홈(허브)으로 이동">
+        <img src="icons/icon-192.png?v=1.1.3" alt="Sulsul Travel" class="w-8 h-8 sm:w-9 sm:h-9 rounded-xl shadow-md shadow-amber-900/15 shrink-0 object-cover border border-[#e8e2d5] dark:border-[var(--line)]">
         <div class="min-w-0">
           <div class="flex items-center gap-1.5">
-            <h1 class="font-serif-brand text-base sm:text-xl font-bold tracking-tight text-[#1c1917] whitespace-nowrap">
+            <h1 class="font-serif-brand text-base sm:text-xl font-bold tracking-tight text-[#1c1917] dark:text-[#ededed] whitespace-nowrap">
               Sulsul Travel
             </h1>
-            <span id="app-ver-badge" class="px-1.5 py-0.5 rounded-md theme-card-subtle text-[#a2601b] dark:text-[#d4af37] text-[10px] font-bold font-mono shadow-inner cursor-default shrink-0" title="술술트래블 엔진 버전">v1.1.2</span>
+            <span id="app-ver-badge" class="px-1.5 py-0.5 rounded-md theme-card-subtle text-[#a2601b] dark:text-[#d4af37] text-[10px] font-bold font-mono shadow-inner cursor-default shrink-0" title="술술트래블 엔진 버전">v1.1.3</span>
           </div>
-          <p id="header-trip-name" class="text-[10px] sm:text-[11px] text-[#78716c] truncate max-w-[110px] sm:max-w-xs font-normal">인생의 모든 여정을 기록하는 다이어리</p>
+          <p id="header-trip-name" class="text-[10px] sm:text-[11px] text-[#78716c] dark:text-stone-400 truncate max-w-[120px] sm:max-w-xs font-normal">인생의 모든 여정을 기록하는 다이어리</p>
         </div>
       </div>
 
-      <!-- 우측 액션 클러스터 (모바일 최적 4대 필수 버튼: 통계 -> AI비서 -> 설정 -> + 추가) -->
+      <!-- 우측 액션 클러스터 (모바일 최적 4대 필수 버튼 유지: 통계 -> AI비서 -> 설정 -> +추가/‹허브) -->
       <div class="flex items-center gap-1 sm:gap-1.5 shrink-0">
-        <!-- 1. 통계 버튼 (📊) -->
-        <button onclick="toggleAnalyticsView()" class="w-8 h-8 sm:w-9 sm:h-9 rounded-xl theme-card-subtle flex items-center justify-center transition shadow-sm cursor-pointer" title="평생 여행 누적 통계 열람">
+        <!-- 1. 통계 버튼 (📊 - 전용 통계 모달 창 열기) -->
+        <button onclick="toggleAnalyticsView()" class="w-8 h-8 sm:w-9 sm:h-9 rounded-xl theme-card-subtle flex items-center justify-center transition shadow-sm cursor-pointer" title="술술 통계 대시보드 열람">
           <span class="text-sm">📊</span>
         </button>
 
@@ -525,20 +525,22 @@
           <span class="text-sm">🎛️</span>
         </button>
 
-        <!-- 4. + 추가 버튼 (시그니처 골드 액션) -->
+        <!-- 4. + 추가 버튼 (허브 모드 활성 시 노출) -->
         <button id="header-btn-create-trip" onclick="openCreateTripModal()" class="px-2.5 sm:px-3.5 py-1.5 rounded-xl btn-gold text-xs font-black flex items-center gap-1 shadow-sm transition cursor-pointer" title="새 여행 추가 및 AI 일정 설계">
           <i class="fa-solid fa-plus text-[10px]"></i>
           <span>추가</span>
+        </button>
+
+        <!-- 4-ALT. ‹ 허브 복귀 버튼 (워크스페이스 모드 활성 시 노출) -->
+        <button id="header-btn-back-hub" onclick="switchView('hub')" class="hidden px-2.5 sm:px-3 py-1.5 rounded-xl btn-gold text-xs font-black transition flex items-center gap-1 shadow-sm cursor-pointer" title="인생 여행 허브로 돌아가기">
+          <i class="fa-solid fa-arrow-left text-[10px]"></i>
+          <span>허브</span>
         </button>
 
         <!-- 히든 보조 버튼들 (Mandatory IDs & 워크스페이스 상태 보존) -->
         <button id="header-btn-theme" onclick="toggleTheme()" class="hidden" title="테마 전환"><span id="header-theme-icon">🌙</span></button>
         <button id="btn-native-install" onclick="handleInstallButtonClick()" class="hidden" title="PWA 설치"><span id="btn-native-install-txt">설치</span></button>
         <button id="header-btn-share" onclick="openShareModal()" class="hidden" title="동행 공유"></button>
-        <button id="header-btn-back-hub" onclick="switchView('hub')" class="hidden px-2 py-1.5 theme-card-subtle rounded-xl text-xs font-bold transition flex items-center gap-1 shadow-sm cursor-pointer">
-          <i class="fa-solid fa-arrow-left text-[10px] text-[#a2601b]"></i>
-          <span>허브</span>
-        </button>
       </div>
     </div>
   </header>
@@ -619,48 +621,6 @@
       </div>
     </div>
 
-    <!-- 평생 여행 누적 통계 대시보드 (Lifetime Analytics Card) -->
-    <section id="lifetime-analytics" class="relative overflow-hidden rounded-2xl bg-white border border-[#e8e2d5] p-5 sm:p-6 shadow-[0_2px_14px_rgba(0,0,0,0.03)]">
-      <div class="relative z-10 flex flex-col md:flex-row md:items-center md:justify-between gap-5">
-        <div>
-          <div class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#fdf6ec] border border-[#f5dfb8] text-[#a2601b] text-xs font-bold mb-2">
-            <i class="fa-solid fa-passport text-[11px]"></i>
-            <span>인생 여행 아카이브 · 평생 다이어리</span>
-          </div>
-          <h2 class="text-xl sm:text-2xl font-black text-[#1c1917] tracking-tight">나의 평생 여행 발자취</h2>
-          <p class="text-xs text-[#78716c] mt-1">기록된 모든 여행의 국가, 도시, 경비와 사진이 안전하게 보관됩니다.</p>
-        </div>
-
-        <!-- 6대 누적 스펙 그리드 -->
-        <div class="grid grid-cols-3 sm:grid-cols-6 gap-2 sm:gap-3 text-center">
-          <div class="p-2.5 rounded-xl bg-[#faf8f5] border border-[#e8e2d5]">
-            <div class="text-[11px] text-[#78716c] font-medium">총 여정</div>
-            <div id="stat-lt-trips" class="text-base sm:text-lg font-black text-[#a2601b] mt-0.5">0개</div>
-          </div>
-          <div class="p-2.5 rounded-xl bg-[#faf8f5] border border-[#e8e2d5]">
-            <div class="text-[11px] text-[#78716c] font-medium">방문 국가</div>
-            <div id="stat-lt-countries" class="text-base sm:text-lg font-black text-emerald-700 mt-0.5">0개국</div>
-          </div>
-          <div class="p-2.5 rounded-xl bg-[#faf8f5] border border-[#e8e2d5]">
-            <div class="text-[11px] text-[#78716c] font-medium">방문 도시</div>
-            <div id="stat-lt-cities" class="text-base sm:text-lg font-black text-sky-700 mt-0.5">0개</div>
-          </div>
-          <div class="p-2.5 rounded-xl bg-[#faf8f5] border border-[#e8e2d5]">
-            <div class="text-[11px] text-[#78716c] font-medium">여행 일수</div>
-            <div id="stat-lt-days" class="text-base sm:text-lg font-black text-indigo-700 mt-0.5">0일</div>
-          </div>
-          <div class="p-2.5 rounded-xl bg-[#faf8f5] border border-[#e8e2d5]">
-            <div class="text-[11px] text-[#78716c] font-medium">누적 지출</div>
-            <div id="stat-lt-expenses" class="text-base sm:text-lg font-black text-rose-700 mt-0.5">₩0</div>
-          </div>
-          <div class="p-2.5 rounded-xl bg-[#faf8f5] border border-[#e8e2d5]">
-            <div class="text-[11px] text-[#78716c] font-medium">기록 일기</div>
-            <div id="stat-lt-diaries" class="text-base sm:text-lg font-black text-purple-700 mt-0.5">0편</div>
-          </div>
-        </div>
-      </div>
-    </section>
-
     <!-- 여행 카드 목록 섹션 헤더 -->
     <div class="flex items-center justify-between pt-1">
       <div class="flex items-center gap-2">
@@ -683,58 +643,37 @@
   <!-- ========================================== -->
   <main id="view-workspace" class="hidden flex-1 max-w-5xl mx-auto w-full px-4 py-4 space-y-4">
     
-    <!-- 실시간 종합 통계 배너 (Top Analytics Dashboard) -->
-    <section id="top-analytics" class="rounded-2xl bg-[#0f1422] border border-[#1e263c] p-4 shadow-lg">
-      <div class="flex flex-wrap items-center justify-between gap-4">
-        <!-- 현재 여행 메타 -->
-        <div class="flex items-center gap-3">
-          <span id="ws-trip-emoji" class="w-12 h-12 rounded-xl bg-[#141c2e] border border-[#23304c] flex items-center justify-center text-2xl shrink-0">🌎</span>
-          <div>
-            <div class="flex items-center gap-2 flex-wrap">
-              <h2 id="ws-trip-title" class="text-base sm:text-lg font-black text-white truncate max-w-xs">남미 4개국 3주 최적화 황금 여정</h2>
-              <span id="ws-trip-dday" class="px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-400 border border-amber-500/30 text-[11px] font-black">D-35</span>
-              <span id="ws-share-badge" class="hidden px-2 py-0.5 rounded-full bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 text-[10px] font-bold">👥 동행 공유 중</span>
-            </div>
-            <p id="ws-trip-dates" class="text-xs text-slate-400 mt-0.5">2026.10.11 ~ 2026.11.01 (22일간)</p>
+    <!-- 워크스페이스 상단 슬림 메타 바 (모바일 친화 1줄 요약 + 퀵 액션) -->
+    <div class="p-3 sm:p-3.5 rounded-2xl bg-white dark:bg-[#16181d] border border-[#e8e2d5] dark:border-stone-800 shadow-sm flex items-center justify-between gap-2.5">
+      <div class="flex items-center gap-2.5 min-w-0 flex-1">
+        <button onclick="switchView('hub')" class="w-8 h-8 rounded-xl theme-card-subtle flex items-center justify-center text-xs font-bold shrink-0 text-[#a2601b] hover:text-[#8a5015] transition cursor-pointer" title="인생 여행 허브로 돌아가기">
+          <i class="fa-solid fa-arrow-left"></i>
+        </button>
+        <div class="min-w-0 flex-1">
+          <div class="flex items-center gap-2">
+            <h2 id="ws-trip-sub-title" class="text-xs sm:text-sm font-black text-[#1c1917] dark:text-[#ededed] truncate">남미 4개국 3주 최적화 황금 여정</h2>
+            <span id="ws-trip-sub-dday" class="px-2 py-0.5 rounded-full bg-amber-500/20 text-[#a2601b] dark:text-amber-300 border border-amber-500/30 text-[10px] font-black shrink-0">D-35</span>
           </div>
-        </div>
-
-        <!-- 완주 보고서 / 인쇄 및 4대 요약 통계 -->
-        <div class="flex items-center gap-2 sm:gap-3 shrink-0 flex-wrap justify-end">
-          <button onclick="openRouteMapModal()" class="px-2.5 sm:px-3 py-1.5 rounded-xl bg-[#141c2e] hover:bg-[#1e263c] border border-[#23304c] text-amber-300 hover:text-white text-xs font-bold flex items-center gap-1.5 shadow-sm transition cursor-pointer" title="세계 및 남미 비행 궤적 지도">
-            <i class="fa-solid fa-earth-americas text-amber-400"></i>
-            <span>경로 지도</span>
-          </button>
-          <button onclick="openPdfReportModal()" class="px-2.5 sm:px-3 py-1.5 rounded-xl bg-gradient-to-r from-amber-500/15 to-emerald-500/15 hover:from-amber-500/25 hover:to-emerald-500/25 border border-amber-500/30 text-amber-300 hover:text-white text-xs font-bold flex items-center gap-1.5 shadow-sm transition" title="완주 리포트 및 포토북 인쇄/PDF 저장">
-            <i class="fa-solid fa-file-pdf text-rose-400"></i>
-            <span>여행 보고서/PDF</span>
-          </button>
-          <div>
-            <div class="text-[10px] text-slate-400 font-medium">총 지출 / 목표 예산</div>
-            <div class="text-xs sm:text-sm font-black text-white mt-0.5">
-              <span id="stat-ws-spent" class="text-amber-400">₩0</span> / <span id="stat-ws-budget">₩8,500,000</span>
-            </div>
-          </div>
-          <div class="hidden sm:block">
-            <div class="text-[10px] text-slate-400 font-medium">방문 국가/도시</div>
-            <div id="stat-ws-places" class="text-xs sm:text-sm font-black text-slate-200 mt-0.5">4개국 8도시</div>
-          </div>
-          <div class="hidden sm:block">
-            <div class="text-[10px] text-slate-400 font-medium">다이어리 / 사진</div>
-            <div id="stat-ws-diaries" class="text-xs sm:text-sm font-black text-slate-200 mt-0.5">0편 / 0장</div>
-          </div>
+          <p id="ws-trip-sub-dates" class="text-[10px] text-[#78716c] dark:text-stone-400 truncate mt-0.5">2026.10.11 ~ 2026.11.01 (22일간)</p>
         </div>
       </div>
 
-      <!-- 예산 소진율 프로그레스 바 -->
-      <div class="mt-3 pt-3 border-t border-[#1a2236] flex items-center gap-3">
-        <span class="text-[11px] text-slate-400 font-medium shrink-0">예산 소진율</span>
-        <div class="flex-1 bg-[#080b12] rounded-full h-2 overflow-hidden p-0.5">
-          <div id="stat-ws-progress-bar" class="bg-gradient-to-r from-emerald-500 via-amber-500 to-rose-500 h-full rounded-full transition-all duration-500" style="width: 15%"></div>
-        </div>
-        <span id="stat-ws-progress-text" class="text-xs font-bold text-amber-400 shrink-0">15%</span>
+      <!-- 우측 빠른 액션: 통계 모달 열기 + 경로 지도 + 동행 공유 -->
+      <div class="flex items-center gap-1.5 shrink-0">
+        <button onclick="openAnalyticsModal('workspace')" class="px-2.5 py-1.5 rounded-xl theme-card-subtle text-xs font-bold flex items-center gap-1 shadow-sm transition cursor-pointer" title="여정 정밀 통계 열람">
+          <i class="fa-solid fa-chart-pie text-amber-500 text-[11px]"></i>
+          <span class="hidden sm:inline">통계</span>
+        </button>
+        <button onclick="openRouteMapModal()" class="px-2.5 py-1.5 rounded-xl theme-card-subtle text-xs font-bold flex items-center gap-1 shadow-sm transition cursor-pointer" title="세계 및 남미 비행 궤적 지도">
+          <i class="fa-solid fa-earth-americas text-sky-500 text-[11px]"></i>
+          <span class="hidden sm:inline">지도</span>
+        </button>
+        <button onclick="openShareModal()" class="px-2.5 py-1.5 rounded-xl btn-gold text-xs font-bold flex items-center gap-1 shadow-sm transition cursor-pointer" title="동행자 공유 링크 복사">
+          <i class="fa-solid fa-share-nodes text-[11px]"></i>
+          <span>공유</span>
+        </button>
       </div>
-    </section>
+    </div>
 
     <!-- 워크스페이스 메인 5대 탭 네비게이션 -->
     <nav class="flex items-center gap-1.5 p-1 bg-[#0f1422] rounded-xl border border-[#1e263c] overflow-x-auto no-scrollbar">
@@ -1229,6 +1168,17 @@
           </button>
           <div class="text-[11px] text-center" style="color: var(--ink2);">
             (터치 시 브라우저 설치 팝업이 바로 뜹니다. 메뉴의 [앱 설치]로도 가능)
+          </div>
+        </div>
+      </div>
+
+      <!-- 새 공식 곰돌이 아이콘 반영 안내 팁 -->
+      <div class="p-3 rounded-xl bg-amber-500/10 dark:bg-amber-500/15 border border-amber-500/30 flex items-start gap-2.5 text-xs text-[#a2601b] dark:text-amber-300">
+        <span class="text-base shrink-0">💡</span>
+        <div class="space-y-0.5">
+          <div class="font-bold">새 황금 날개 곰돌이 아이콘 반영 안내</div>
+          <div class="text-[11px] text-[#78716c] dark:text-stone-300 leading-relaxed">
+            스마트폰 OS(iOS/Android) 특성상 기존에 홈 화면에 추가했던 아이콘은 정적 비트맵으로 고정됩니다. 기존 아이콘을 삭제하신 후 <b>[홈 화면에 추가]</b>를 1회 다시 진행하시면 귀여운 신규 공식 곰돌이 캐리어 아이콘으로 즉시 교체됩니다!
           </div>
         </div>
       </div>
@@ -1929,20 +1879,29 @@
       </div>
 
       <!-- 5. PWA 단독 앱 설치 및 오프라인 모드 상태 -->
-      <div class="p-4 rounded-xl bg-white border border-[#e8e2d5] flex items-center justify-between gap-3 shadow-sm">
-        <div>
-          <div class="text-xs font-black text-[#1c1917] flex items-center gap-1.5">
-            <i class="fa-solid fa-mobile-screen-button text-[#a2601b]"></i>
-            <span>홈 화면에 앱(PWA) 설치 & 구동 상태</span>
+      <div class="p-4 rounded-xl bg-white dark:bg-[#16181d] border border-[#e8e2d5] dark:border-stone-800 space-y-3 shadow-sm">
+        <div class="flex items-center justify-between gap-3">
+          <div>
+            <div class="text-xs font-black text-[#1c1917] dark:text-[#ededed] flex items-center gap-1.5">
+              <i class="fa-solid fa-mobile-screen-button text-[#a2601b]"></i>
+              <span>홈 화면에 앱(PWA) 설치 & 구동 상태</span>
+            </div>
+            <div class="text-[11px] text-[#78716c] dark:text-stone-400 mt-0.5">인터넷 없는 비행기 안에서도 100% 작동합니다.</div>
+            <div class="mt-1.5">
+              <span id="settings-pwa-status" class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-slate-100 dark:bg-stone-800 text-slate-600 dark:text-stone-300 border border-slate-200 dark:border-stone-700">웹 브라우저로 실행 중</span>
+            </div>
           </div>
-          <div class="text-[11px] text-[#78716c] mt-0.5">인터넷 없는 비행기 안에서도 100% 작동합니다.</div>
-          <div class="mt-1.5">
-            <span id="settings-pwa-status" class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 border border-slate-200">웹 브라우저로 실행 중</span>
+          <button onclick="handleInstallButtonClick()" class="px-3.5 py-1.5 rounded-xl btn-gold text-xs font-bold transition shrink-0 cursor-pointer shadow-sm">
+            앱 설치
+          </button>
+        </div>
+        <!-- 곰돌이 아이콘 캐시 안내 팁 -->
+        <div class="p-2.5 rounded-lg bg-amber-500/10 border border-amber-500/25 flex items-start gap-2 text-[11px] text-[#78716c] dark:text-stone-300">
+          <span class="text-amber-500 shrink-0 mt-0.5">💡</span>
+          <div>
+            <span class="font-bold text-[#1c1917] dark:text-[#ededed]">새 공식 곰돌이 아이콘 반영 안내:</span> 스마트폰 OS 특성상 기존에 홈 화면에 추가했던 바로가기는 비트맵이 고정됩니다. 기존 아이콘을 삭제 후 <b>[홈 화면에 추가]</b>를 1회 다시 진행하시면 새 황금 날개 곰돌이 아이콘으로 즉시 교체됩니다!
           </div>
         </div>
-        <button onclick="handleInstallButtonClick()" class="px-3.5 py-1.5 rounded-xl btn-gold text-xs font-bold transition shrink-0 cursor-pointer shadow-sm">
-          앱 설치
-        </button>
       </div>
 
       <!-- 6. 전체 데이터 JSON 백업 및 복원 -->
@@ -1964,6 +1923,162 @@
             <span>백업 복원 (JSON)</span>
             <input type="file" onchange="importDataFromJson(event)" accept=".json" class="hidden">
           </label>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================== -->
+  <!-- 7.55 술술 통계 대시보드 모달 (MODAL-ANALYTICS) -->
+  <!-- ========================================== -->
+  <div id="modal-analytics" class="sheet-container sheet-closed">
+    <div class="sheet-scrim" onclick="closeModal('modal-analytics')"></div>
+    <div class="sheet-box max-w-2xl p-5 sm:p-6 space-y-4 max-h-[90vh] flex flex-col bg-white dark:bg-[#16181d] text-[#1c1917] dark:text-[#ededed]">
+      <!-- 헤더 -->
+      <div class="flex items-center justify-between border-b border-[#e8e2d5] dark:border-stone-800 pb-3 shrink-0">
+        <div class="flex items-center gap-2.5">
+          <span class="w-8 h-8 rounded-xl bg-amber-500/15 text-[#a2601b] dark:text-[#d4af37] border border-amber-500/30 flex items-center justify-center text-sm shadow-inner">
+            <i class="fa-solid fa-chart-pie"></i>
+          </span>
+          <div>
+            <h3 class="text-base font-black text-[#1c1917] dark:text-[#ededed]">술술 통계 대시보드</h3>
+            <p class="text-[11px] text-[#78716c] dark:text-stone-400">나의 평생 발자취 및 현재 여정 종합 분석</p>
+          </div>
+        </div>
+        <button onclick="closeModal('modal-analytics')" class="w-7 h-7 rounded-lg bg-[#faf8f5] dark:bg-stone-800 hover:bg-[#f0ece1] dark:hover:bg-stone-700 text-[#78716c] dark:text-stone-300 flex items-center justify-center text-sm transition cursor-pointer" title="닫기">✕</button>
+      </div>
+
+      <!-- 듀얼 탭 스위처: [평생 여행 발자취] vs [현재 여정 분석] -->
+      <div class="flex items-center gap-1.5 p-1 bg-[#ede8df] dark:bg-[#1e2026] rounded-xl shrink-0">
+        <button id="btn-tab-stat-lifetime" onclick="switchAnalyticsTab('lifetime')" class="flex-1 py-1.5 px-3 rounded-lg text-xs font-bold transition flex items-center justify-center gap-1.5 shadow-sm bg-white dark:bg-[#16181d] text-[#1c1917] dark:text-white cursor-pointer">
+          <i class="fa-solid fa-passport text-[11px] text-[#a2601b]"></i>
+          <span>평생 여행 발자취</span>
+        </button>
+        <button id="btn-tab-stat-workspace" onclick="switchAnalyticsTab('workspace')" class="flex-1 py-1.5 px-3 rounded-lg text-xs font-bold transition flex items-center justify-center gap-1.5 text-stone-500 hover:text-stone-800 dark:hover:text-stone-300 cursor-pointer">
+          <i class="fa-solid fa-plane-departure text-[11px]"></i>
+          <span id="tab-stat-ws-title">현재 여정 분석</span>
+        </button>
+      </div>
+
+      <!-- 스크롤 가능한 통계 본문 -->
+      <div class="flex-1 overflow-y-auto space-y-4 pr-1">
+        <!-- 1. 평생 누적 통계 패널 (LIFETIME-ANALYTICS - R-10 필수 ID) -->
+        <div id="stat-panel-lifetime" class="space-y-3">
+          <section id="lifetime-analytics" class="relative overflow-hidden rounded-2xl bg-white dark:bg-[#16181d] border border-[#e8e2d5] dark:border-stone-800 p-4 sm:p-5 shadow-sm space-y-3.5">
+            <div class="flex items-center justify-between">
+              <div>
+                <div class="text-xs font-black text-[#1c1917] dark:text-[#ededed] flex items-center gap-1.5">
+                  <i class="fa-solid fa-compass text-[#a2601b]"></i>
+                  <span>평생 여행 아카이브 요약</span>
+                </div>
+                <div class="text-[11px] text-[#78716c] dark:text-stone-400 mt-0.5">기록된 모든 여정의 누적 발자취입니다.</div>
+              </div>
+              <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-500/10 text-[#a2601b] dark:text-amber-300 border border-amber-500/20">
+                100% 로컬 영구 보관
+              </span>
+            </div>
+
+            <!-- 6대 누적 스펙 그리드 -->
+            <div class="grid grid-cols-3 sm:grid-cols-6 gap-2 text-center">
+              <div class="p-2.5 rounded-xl bg-[#faf8f5] dark:bg-[#121316] border border-[#e8e2d5] dark:border-stone-800">
+                <div class="text-[10px] text-[#78716c] dark:text-stone-400 font-medium">총 여정</div>
+                <div id="stat-lt-trips" class="text-base sm:text-lg font-black text-[#a2601b] dark:text-[#d4af37] mt-0.5">0개</div>
+              </div>
+              <div class="p-2.5 rounded-xl bg-[#faf8f5] dark:bg-[#121316] border border-[#e8e2d5] dark:border-stone-800">
+                <div class="text-[10px] text-[#78716c] dark:text-stone-400 font-medium">방문 국가</div>
+                <div id="stat-lt-countries" class="text-base sm:text-lg font-black text-emerald-600 dark:text-emerald-400 mt-0.5">0개국</div>
+              </div>
+              <div class="p-2.5 rounded-xl bg-[#faf8f5] dark:bg-[#121316] border border-[#e8e2d5] dark:border-stone-800">
+                <div class="text-[10px] text-[#78716c] dark:text-stone-400 font-medium">방문 도시</div>
+                <div id="stat-lt-cities" class="text-base sm:text-lg font-black text-sky-600 dark:text-sky-400 mt-0.5">0개</div>
+              </div>
+              <div class="p-2.5 rounded-xl bg-[#faf8f5] dark:bg-[#121316] border border-[#e8e2d5] dark:border-stone-800">
+                <div class="text-[10px] text-[#78716c] dark:text-stone-400 font-medium">여행 일수</div>
+                <div id="stat-lt-days" class="text-base sm:text-lg font-black text-indigo-600 dark:text-indigo-400 mt-0.5">0일</div>
+              </div>
+              <div class="p-2.5 rounded-xl bg-[#faf8f5] dark:bg-[#121316] border border-[#e8e2d5] dark:border-stone-800">
+                <div class="text-[10px] text-[#78716c] dark:text-stone-400 font-medium">누적 지출</div>
+                <div id="stat-lt-expenses" class="text-base sm:text-lg font-black text-rose-600 dark:text-rose-400 mt-0.5">₩0</div>
+              </div>
+              <div class="p-2.5 rounded-xl bg-[#faf8f5] dark:bg-[#121316] border border-[#e8e2d5] dark:border-stone-800">
+                <div class="text-[10px] text-[#78716c] dark:text-stone-400 font-medium">기록 일기</div>
+                <div id="stat-lt-diaries" class="text-base sm:text-lg font-black text-purple-600 dark:text-purple-400 mt-0.5">0편</div>
+              </div>
+            </div>
+          </section>
+
+          <!-- 대륙별 및 비행 궤적 노선도 바로가기 -->
+          <div class="p-3.5 rounded-2xl bg-white dark:bg-[#16181d] border border-[#e8e2d5] dark:border-stone-800 flex items-center justify-between gap-3 shadow-sm">
+            <div class="flex items-center gap-2.5">
+              <span class="w-8 h-8 rounded-xl bg-amber-500/10 text-amber-600 flex items-center justify-center text-sm"><i class="fa-solid fa-earth-americas"></i></span>
+              <div>
+                <div class="text-xs font-black text-[#1c1917] dark:text-[#ededed]">세계 및 대종단 비행 궤적 노선도</div>
+                <div class="text-[10px] text-[#78716c] dark:text-stone-400">일러스트 지도 및 주요 거점 좌표를 확인하세요.</div>
+              </div>
+            </div>
+            <button onclick="closeModal('modal-analytics'); openRouteMapModal();" class="px-3 py-1.5 rounded-xl btn-gold text-xs font-bold shrink-0 cursor-pointer shadow-sm">
+              노선도 열기
+            </button>
+          </div>
+        </div>
+
+        <!-- 2. 현재 여행 상세 통계 패널 (TOP-ANALYTICS - R-10 필수 ID) -->
+        <div id="stat-panel-workspace" class="hidden space-y-3">
+          <section id="top-analytics" class="rounded-2xl bg-white dark:bg-[#16181d] border border-[#e8e2d5] dark:border-stone-800 p-4 sm:p-5 shadow-sm space-y-3.5">
+            <!-- 현재 여행 메타 -->
+            <div class="flex items-center gap-3">
+              <span id="ws-trip-emoji" class="w-11 h-11 rounded-xl bg-[#faf8f5] dark:bg-[#121316] border border-[#e8e2d5] dark:border-stone-700 flex items-center justify-center text-xl shrink-0">🌎</span>
+              <div class="min-w-0 flex-1">
+                <div class="flex items-center gap-2 flex-wrap">
+                  <h2 id="ws-trip-title" class="text-sm sm:text-base font-black text-[#1c1917] dark:text-[#ededed] truncate">남미 4개국 3주 최적화 황금 여정</h2>
+                  <span id="ws-trip-dday" class="px-2 py-0.5 rounded-full bg-amber-500/20 text-[#a2601b] dark:text-amber-300 border border-amber-500/30 text-[10px] font-black shrink-0">D-35</span>
+                  <span id="ws-share-badge" class="hidden px-2 py-0.5 rounded-full bg-indigo-500/20 text-indigo-700 dark:text-indigo-300 border border-indigo-500/30 text-[10px] font-bold shrink-0">👥 동행 공유 중</span>
+                </div>
+                <p id="ws-trip-dates" class="text-[11px] text-[#78716c] dark:text-stone-400 mt-0.5">2026.10.11 ~ 2026.11.01 (22일간)</p>
+              </div>
+            </div>
+
+            <!-- 예산 소진율 프로그레스 바 -->
+            <div class="p-3 rounded-xl bg-[#faf8f5] dark:bg-[#121316] border border-[#e8e2d5] dark:border-stone-800 space-y-1.5">
+              <div class="flex items-center justify-between text-xs font-bold">
+                <span class="text-[#78716c] dark:text-stone-400 flex items-center gap-1"><i class="fa-solid fa-chart-pie text-[#a2601b]"></i> 예산 소진율</span>
+                <span id="stat-ws-progress-text" class="text-[#a2601b] dark:text-amber-400 font-mono">15%</span>
+              </div>
+              <div class="w-full bg-stone-200 dark:bg-stone-800 rounded-full h-2.5 overflow-hidden p-0.5">
+                <div id="stat-ws-progress-bar" class="bg-gradient-to-r from-emerald-500 via-amber-500 to-rose-500 h-full rounded-full transition-all duration-500" style="width: 15%"></div>
+              </div>
+            </div>
+
+            <!-- 요약 지표 카드 3종 -->
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 text-center">
+              <div class="p-2.5 rounded-xl bg-[#faf8f5] dark:bg-[#121316] border border-[#e8e2d5] dark:border-stone-800">
+                <div class="text-[10px] text-[#78716c] dark:text-stone-400 font-medium">총 지출 / 목표 예산</div>
+                <div class="text-xs sm:text-sm font-black text-[#1c1917] dark:text-[#ededed] mt-0.5">
+                  <span id="stat-ws-spent" class="text-[#a2601b] dark:text-amber-400 font-mono">₩0</span> / <span id="stat-ws-budget" class="font-mono text-stone-500">₩8,500,000</span>
+                </div>
+              </div>
+              <div class="p-2.5 rounded-xl bg-[#faf8f5] dark:bg-[#121316] border border-[#e8e2d5] dark:border-stone-800">
+                <div class="text-[10px] text-[#78716c] dark:text-stone-400 font-medium">방문 국가 / 도시</div>
+                <div id="stat-ws-places" class="text-xs sm:text-sm font-black text-emerald-700 dark:text-emerald-400 mt-0.5">4개국 8도시</div>
+              </div>
+              <div class="p-2.5 rounded-xl bg-[#faf8f5] dark:bg-[#121316] border border-[#e8e2d5] dark:border-stone-800">
+                <div class="text-[10px] text-[#78716c] dark:text-stone-400 font-medium">다이어리 / 사진</div>
+                <div id="stat-ws-diaries" class="text-xs sm:text-sm font-black text-indigo-700 dark:text-indigo-400 mt-0.5">0편 / 0장</div>
+              </div>
+            </div>
+
+            <!-- 액션 버튼 -->
+            <div class="flex items-center justify-end gap-2 pt-2 border-t border-[#e8e2d5] dark:border-stone-800">
+              <button onclick="closeModal('modal-analytics'); openRouteMapModal();" class="px-3 py-1.5 rounded-xl theme-card-subtle text-xs font-bold flex items-center gap-1.5 shadow-sm transition cursor-pointer">
+                <i class="fa-solid fa-earth-americas text-amber-500"></i>
+                <span>경로 지도</span>
+              </button>
+              <button onclick="closeModal('modal-analytics'); openPdfReportModal();" class="px-3 py-1.5 rounded-xl btn-gold text-xs font-bold flex items-center gap-1.5 shadow-sm transition cursor-pointer">
+                <i class="fa-solid fa-file-pdf text-rose-500"></i>
+                <span>완주 보고서</span>
+              </button>
+            </div>
+          </section>
         </div>
       </div>
     </div>
@@ -2060,7 +2175,7 @@
     window.showToast = showToast;
 
     // 앱 버전 및 글로벌 네임스페이스 (Sulsul-Travel Invariant Rule R-10, R-11, R-12, R-13, R-14, R-15)
-    const APP_VER = '1.1.2';
+    const APP_VER = '1.1.3';
 
     // ══════════════════════════════════════════
     // [Two-Tone Theme System] 라이트 그레이 & 딥 블랙 테마 엔진
@@ -2309,23 +2424,22 @@
       const btnShare = document.getElementById('header-btn-share');
 
       if (viewName === 'hub') {
-        vHub.classList.remove('hidden');
-        vWs.classList.add('hidden');
-        btnBackHub.classList.add('hidden');
-        btnCreateTrip.classList.remove('hidden');
-        btnShare.classList.add('hidden');
-        document.getElementById('header-trip-name').innerText = '인생의 모든 여정을 기록하는 다이어리';
+        if (vHub) vHub.classList.remove('hidden');
+        if (vWs) vWs.classList.add('hidden');
+        if (btnBackHub) btnBackHub.classList.add('hidden');
+        if (btnCreateTrip) btnCreateTrip.classList.remove('hidden');
+        if (btnShare) btnShare.classList.add('hidden');
+        const headerTripName = document.getElementById('header-trip-name');
+        if (headerTripName) headerTripName.innerText = '인생의 모든 여정을 기록하는 다이어리';
         renderHub();
       } else {
-        vHub.classList.add('hidden');
-        vWs.classList.remove('hidden');
-        btnBackHub.classList.remove('hidden');
-        btnCreateTrip.classList.add('hidden');
-        btnShare.classList.remove('hidden');
-        const activeTrip = getActiveTrip();
-        if (activeTrip) {
-          document.getElementById('header-trip-name').innerText = activeTrip.title;
-        }
+        if (vHub) vHub.classList.add('hidden');
+        if (vWs) vWs.classList.remove('hidden');
+        if (btnBackHub) btnBackHub.classList.remove('hidden');
+        if (btnCreateTrip) btnCreateTrip.classList.add('hidden');
+        if (btnShare) btnShare.classList.add('hidden');
+        const headerTripName = document.getElementById('header-trip-name');
+        if (headerTripName) headerTripName.innerText = '여행 다이어리 기록 중 ✈️';
         renderActiveTripWorkspace();
       }
       window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -2337,16 +2451,47 @@
     }
 
     // ==========================================
-    // 상단 헤더 액션 함수들 (v1.0.7)
+    // 전용 통계 모달 창 및 상단 액션 (v1.1.3)
     // ==========================================
-    function toggleAnalyticsView() {
-      if (State.currentView === 'workspace') {
-        const topAnalytics = document.getElementById('top-analytics');
-        if (topAnalytics) topAnalytics.scrollIntoView({ behavior: 'smooth' });
-      } else {
-        const ltAnalytics = document.getElementById('lifetime-analytics');
-        if (ltAnalytics) ltAnalytics.scrollIntoView({ behavior: 'smooth' });
+    function openAnalyticsModal(defaultTab) {
+      if (typeof renderLifetimeAnalytics === 'function') {
+        renderLifetimeAnalytics();
       }
+      const activeTrip = getActiveTrip();
+      const tabWsTitle = document.getElementById('tab-stat-ws-title');
+      if (tabWsTitle) {
+        tabWsTitle.innerText = activeTrip ? `${activeTrip.title.slice(0, 10)}... 분석` : '현재 여정 분석';
+      }
+
+      const tabToOpen = defaultTab || (State.currentView === 'workspace' ? 'workspace' : 'lifetime');
+      switchAnalyticsTab(tabToOpen);
+      openModal('modal-analytics');
+    }
+
+    function switchAnalyticsTab(tab) {
+      const btnLifetime = document.getElementById('btn-tab-stat-lifetime');
+      const btnWorkspace = document.getElementById('btn-tab-stat-workspace');
+      const panelLifetime = document.getElementById('stat-panel-lifetime');
+      const panelWorkspace = document.getElementById('stat-panel-workspace');
+
+      const activeClass = "flex-1 py-1.5 px-3 rounded-lg text-xs font-bold transition flex items-center justify-center gap-1.5 shadow-sm bg-white dark:bg-[#16181d] text-[#1c1917] dark:text-white cursor-pointer";
+      const inactiveClass = "flex-1 py-1.5 px-3 rounded-lg text-xs font-bold transition flex items-center justify-center gap-1.5 text-stone-500 hover:text-stone-800 dark:hover:text-stone-300 cursor-pointer";
+
+      if (tab === 'workspace') {
+        if (btnWorkspace) btnWorkspace.className = activeClass;
+        if (btnLifetime) btnLifetime.className = inactiveClass;
+        if (panelWorkspace) panelWorkspace.classList.remove('hidden');
+        if (panelLifetime) panelLifetime.classList.add('hidden');
+      } else {
+        if (btnLifetime) btnLifetime.className = activeClass;
+        if (btnWorkspace) btnWorkspace.className = inactiveClass;
+        if (panelLifetime) panelLifetime.classList.remove('hidden');
+        if (panelWorkspace) panelWorkspace.classList.add('hidden');
+      }
+    }
+
+    function toggleAnalyticsView() {
+      openAnalyticsModal();
     }
 
     function openRouteMapModal() {
@@ -2948,11 +3093,38 @@
       const trip = getActiveTrip();
       if (!trip) return;
 
-      // 헤더 & 배너 바인딩
-      document.getElementById('header-trip-name').innerText = trip.title;
+      // 헤더 & 서브헤더 & 배너 바인딩
+      const subTitle = document.getElementById('ws-trip-sub-title');
+      const subDates = document.getElementById('ws-trip-sub-dates');
+      const subDDay = document.getElementById('ws-trip-sub-dday');
+      const wsDDay = document.getElementById('ws-trip-dday');
+
+      if (subTitle) subTitle.innerText = trip.title;
       document.getElementById('ws-trip-title').innerText = trip.title;
       document.getElementById('ws-trip-emoji').innerText = trip.coverEmoji || '🌎';
-      document.getElementById('ws-trip-dates').innerText = `${trip.startDate || ''} ~ ${trip.endDate || ''} (${trip.durationDays || 22}일간)`;
+
+      const dateStr = `${trip.startDate || ''} ~ ${trip.endDate || ''} (${trip.durationDays || 22}일간)`;
+      document.getElementById('ws-trip-dates').innerText = dateStr;
+      if (subDates) subDates.innerText = dateStr;
+
+      // D-Day 실시간 계산
+      let ddayText = 'D-Day';
+      if (trip.startDate) {
+        const start = new Date(trip.startDate);
+        const diffDays = Math.ceil((start - new Date()) / (1000 * 60 * 60 * 24));
+        const dur = trip.durationDays || (trip.days ? trip.days.length : 22);
+        if (diffDays > 0) {
+          ddayText = `D-${diffDays}`;
+        } else if (diffDays >= -dur) {
+          ddayText = '여행 중 ✈️';
+        } else {
+          ddayText = '완료';
+        }
+      } else {
+        ddayText = '버킷리스트';
+      }
+      if (wsDDay) wsDDay.innerText = ddayText;
+      if (subDDay) subDDay.innerText = ddayText;
 
       // 동행 공유 뱃지 & 룸코드
       const shareBadge = document.getElementById('ws-share-badge');
@@ -5563,6 +5735,8 @@
       resetHubFilters: resetHubFilters,
       toggleHubViewMode: toggleHubViewMode,
       toggleAnalyticsView: toggleAnalyticsView,
+      openAnalyticsModal: openAnalyticsModal,
+      switchAnalyticsTab: switchAnalyticsTab,
       openRouteMapModal: openRouteMapModal,
       openSettingsModal: openSettingsModal,
       setTheme: setTheme,
