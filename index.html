@@ -14,7 +14,7 @@
   </script>
 
   <!-- PWA Meta & Icons -->
-  <link rel="manifest" href="manifest.webmanifest?v=1.1.6">
+  <link rel="manifest" href="manifest.webmanifest?v=1.1.7">
   <meta name="theme-color" content="#f5f5f7">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
@@ -517,7 +517,7 @@
             <h1 class="font-serif-brand text-base sm:text-xl font-bold tracking-tight text-[#1c1917] dark:text-[#ededed] whitespace-nowrap">
               Sulsul Travel
             </h1>
-            <span id="app-ver-badge" class="px-1.5 py-0.5 rounded-md theme-card-subtle text-[#a2601b] dark:text-[#d4af37] text-[10px] font-bold font-mono shadow-inner cursor-default shrink-0" title="술술트래블 엔진 버전">v1.1.6</span>
+            <span id="app-ver-badge" class="px-1.5 py-0.5 rounded-md theme-card-subtle text-[#a2601b] dark:text-[#d4af37] text-[10px] font-bold font-mono shadow-inner cursor-default shrink-0" title="술술트래블 엔진 버전">v1.1.7</span>
           </div>
           <p id="header-trip-name" class="text-[10px] sm:text-[11px] text-[#78716c] dark:text-stone-400 truncate max-w-[120px] sm:max-w-xs font-normal">인생의 모든 여정을 기록하는 다이어리</p>
         </div>
@@ -733,10 +733,12 @@
             <i class="fa-solid fa-earth-americas text-[11px]"></i> 인터랙티브 지도
           </button>
           <button id="btn-subtab-booking" onclick="switchPlanSubTab('booking')" class="px-3 py-1.5 rounded-lg text-xs font-bold subtab-inactive flex items-center gap-1.5">
-            <i class="fa-solid fa-ticket text-[11px]"></i> 12대 필수 예약
+            <i id="icon-subtab-booking" class="fa-solid fa-ticket text-[11px]"></i>
+            <span id="label-subtab-booking">12대 필수 예약</span>
           </button>
           <button id="btn-subtab-cityguide" onclick="switchPlanSubTab('cityguide')" class="px-3 py-1.5 rounded-lg text-xs font-bold subtab-inactive flex items-center gap-1.5">
-            <i class="fa-solid fa-city text-[11px]"></i> 8대 도시 가이드
+            <i id="icon-subtab-cityguide" class="fa-solid fa-city text-[11px]"></i>
+            <span id="label-subtab-cityguide">8대 도시 가이드</span>
           </button>
         </div>
 
@@ -769,17 +771,9 @@
           </div>
 
           <div class="flex items-center gap-2 flex-wrap sm:justify-end">
-            <!-- 남미 8대 거점 모의 GPS 시뮬레이터 (국내/실내 테스트 지원) -->
+            <!-- 거점 모의 GPS 시뮬레이터 (국내/실내 테스트 지원) -->
             <select id="select-sim-gps" onchange="simulateGpsLocation(this.value)" class="px-2.5 py-1.5 bg-[#080b12] border border-[#23304c] rounded-xl text-xs text-amber-300 font-semibold focus:outline-none focus:border-amber-500">
               <option value="">🎯 모의 GPS 위치 테스트</option>
-              <option value="cuz_plaza">🇵🇪 쿠스코 아르마스 광장 (페루)</option>
-              <option value="mp_guard">🇵🇪 마추픽추 서킷2 망지기의 집</option>
-              <option value="lim_amor">🇵🇪 리마 미라플로레스 사랑의 공원</option>
-              <option value="desert_buggy">🇵🇪 와카치나 사막 오아시스 버기존</option>
-              <option value="bue_donjulio">🇦🇷 부에노스 돈 훌리오 아사도</option>
-              <option value="igu_throat">🇦🇷 이과수 악마의 목구멍 폭포</option>
-              <option value="rio_cristo">🇧🇷 리우 코르코바두 예수상</option>
-              <option value="lax_pier">🇺🇸 LA 산타모니카 피어</option>
             </select>
             <button onclick="requestCurrentGpsLocation()" class="px-3 py-1.5 bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-slate-950 text-xs font-black rounded-xl flex items-center gap-1.5 shadow transition">
               <i class="fa-solid fa-location-crosshairs text-[11px]"></i> 내 위치 탐색
@@ -855,7 +849,7 @@
           </div>
 
           <!-- 상단 빠른 도시 선택 탭 바 (Pills) -->
-          <div class="flex items-center gap-1.5 overflow-x-auto pb-1 no-scrollbar text-xs">
+          <div id="map-quick-cities" class="flex items-center gap-1.5 overflow-x-auto pb-1 no-scrollbar text-xs">
             <button onclick="focusCityOnMap('lax')" class="px-2.5 py-1 rounded-lg bg-[#141c2e] hover:bg-[#1e2a44] border border-[#23304c] text-slate-200 font-bold shrink-0">🇺🇸 LA</button>
             <button onclick="focusCityOnMap('lim')" class="px-2.5 py-1 rounded-lg bg-[#141c2e] hover:bg-[#1e2a44] border border-[#23304c] text-slate-200 font-bold shrink-0">🇵🇪 리마</button>
             <button onclick="focusCityOnMap('desert')" class="px-2.5 py-1 rounded-lg bg-[#141c2e] hover:bg-[#1e2a44] border border-[#23304c] text-slate-200 font-bold shrink-0">🏜️ 이카/와카치나</button>
@@ -914,22 +908,29 @@
         </div>
       </div>
 
-      <!-- [SUBTAB 3] 12대 필수 공식 예약 가이드 뷰 -->
+      <!-- [SUBTAB 3] 12대 필수 공식 예약 가이드 뷰 (또는 여행 필수 체크/예약) -->
       <div id="subtab-view-booking" class="hidden space-y-3">
         <div class="p-4 rounded-2xl bg-[#0f1422] border border-[#1e263c]">
           <h3 class="text-sm font-black text-white flex items-center gap-2 mb-1">
-            <i class="fa-solid fa-ticket text-amber-400"></i>
-            <span>남미 여행 12대 필수 사전 예약 공식 가이드</span>
+            <i id="booking-header-icon" class="fa-solid fa-ticket text-amber-400"></i>
+            <span id="booking-header-title">남미 여행 12대 필수 사전 예약 공식 가이드</span>
           </h3>
-          <p class="text-xs text-slate-400">마추픽추 입장권, 파노라마 열차, 국립공원 등 매진되기 전 공식 사이트에서 직접 예약해야 하는 필수 리스트입니다.</p>
+          <p id="booking-header-desc" class="text-xs text-slate-400">마추픽추 입장권, 파노라마 열차, 국립공원 등 매진되기 전 공식 사이트에서 직접 예약해야 하는 필수 리스트입니다.</p>
         </div>
         <div id="booking-cards-container" class="grid grid-cols-1 md:grid-cols-2 gap-3">
           <!-- 동적 렌더링 -->
         </div>
       </div>
 
-      <!-- [SUBTAB 4] 8대 거점 도시 가이드 뷰 -->
+      <!-- [SUBTAB 4] 8대 거점 도시 가이드 뷰 (또는 여행지 스팟 모아보기) -->
       <div id="subtab-view-cityguide" class="hidden space-y-3">
+        <div id="cityguide-header-card" class="p-4 rounded-2xl bg-[#0f1422] border border-[#1e263c]">
+          <h3 class="text-sm font-black text-white flex items-center gap-2 mb-1">
+            <i id="cityguide-header-icon" class="fa-solid fa-city text-amber-400"></i>
+            <span id="cityguide-header-title">8대 거점 도시 가이드</span>
+          </h3>
+          <p id="cityguide-header-desc" class="text-xs text-slate-400">여행 거점 도시별 주요 랜드마크, 현지 필수 미식 및 고산병/안전 실전 팁을 안내합니다.</p>
+        </div>
         <div id="cityguide-cards-container" class="grid grid-cols-1 md:grid-cols-2 gap-3">
           <!-- 동적 렌더링 -->
         </div>
@@ -2228,7 +2229,7 @@
     window.showToast = showToast;
 
     // 앱 버전 및 글로벌 네임스페이스 (Sulsul-Travel Invariant Rule R-10, R-11, R-12, R-13, R-14, R-15)
-    const APP_VER = '1.1.6';
+    const APP_VER = '1.1.7';
 
     // ══════════════════════════════════════════
     // [Two-Tone Theme System] 라이트 그레이 & 딥 블랙 테마 엔진
@@ -2480,6 +2481,310 @@
 
     function getActiveTrip() {
       return State.trips.find(t => t.id === State.activeTripId) || State.trips[0];
+    }
+
+    // ==========================================
+    // 목적지 지능형 판별 엔진 & 글로벌/운남 지식베이스 (v1.1.7)
+    // ==========================================
+    function isSouthAmericaTrip(trip) {
+      if (!trip) return false;
+      const saKeywords = ['남미', '페루', '볼리비아', '칠레', '아르헨티나', '브라질', '우루과이', '콜롬비아', '에콰도르', '파타고니아', '마추픽추', '쿠스코', '우유니', '이과수', '리우', '리마', '부에노스'];
+      const text = [
+        trip.title || '',
+        trip.subtitle || '',
+        (trip.countries || []).join(' '),
+        (trip.cities || []).join(' ')
+      ].join(' ').toLowerCase();
+      return saKeywords.some(kw => text.includes(kw.toLowerCase()));
+    }
+
+    function isYunnanTrip(trip) {
+      if (!trip) return false;
+      if (isSouthAmericaTrip(trip)) return false;
+      const ynKeywords = ['운남', '윈난', 'yunnan', '쿤밍', '리장', '옥룡설산', '호도협', '샹그릴라', '따리', '대리', '석림', '중국'];
+      const text = [
+        trip.title || '',
+        trip.subtitle || '',
+        (trip.countries || []).join(' '),
+        (trip.cities || []).join(' ')
+      ].join(' ').toLowerCase();
+      return ynKeywords.some(kw => text.includes(kw.toLowerCase()));
+    }
+
+    const YUNNAN_KNOWN_SPOTS = [
+      { id: 'yn_cuihu', name: '쿤밍 취호공원 (翠湖公园)', city: '쿤밍', country: '중국', flag: '🇨🇳', cat: 'tour', lat: 25.0514, lng: 102.7042, tip: '비둘기와 갈매기 떼, 녹음이 우거진 쿤밍 시민들의 평화로운 도심 쉼터' },
+      { id: 'yn_shilin', name: '쿤밍 석림 (石林) 세계자연유산', city: '쿤밍', country: '중국', flag: '🇨🇳', cat: 'tour', lat: 24.8193, lng: 103.3248, tip: '2억 7천만 년의 카르스트 지형, 칼날처럼 솟은 웅장한 돌기둥 숲' },
+      { id: 'yn_mixian', name: '젠신위안 (建新园) 원조 윈난 과교미선', city: '쿤밍', country: '중국', flag: '🇨🇳', cat: 'food', lat: 25.0410, lng: 102.7160, tip: '펄펄 끓는 뜨거운 닭 육수에 얇게 썬 고기와 쌀국수를 즉석에서 말아먹는 진미' },
+      { id: 'yn_lijiang', name: '리장 고성 (丽江古城) & 사방가', city: '리장', country: '중국', flag: '🇨🇳', cat: 'tour', lat: 26.8721, lng: 100.2374, tip: '나시족의 천년 고도, 졸졸 흐르는 수로와 붉은 홍등 야경의 운치' },
+      { id: 'yn_mufu', name: '리장 목부 (木府) 나시족 토사 궁궐', city: '리장', country: '중국', flag: '🇨🇳', cat: 'tour', lat: 26.8689, lng: 100.2341, tip: '자금성을 본떠 지은 웅장한 목씨 세습 영주의 궁궐' },
+      { id: 'yn_yulong', name: '옥룡설산 (玉龙雪山) 해발 4,506m 빙천공원', city: '리장', country: '중국', flag: '🇨🇳', cat: 'tour', lat: 27.1264, lng: 100.1989, tip: '케이블카 탑승 전 휴대용 산소통 필수, 만년설산의 압도적 파노라마' },
+      { id: 'yn_lanyue', name: '람월곡 (蓝月谷) 백수하 에메랄드 호수', city: '리장', country: '중국', flag: '🇨🇳', cat: 'tour', lat: 27.1350, lng: 100.2280, tip: '설산 녹은 물이 만든 투명한 비취빛 계단식 호수와 백색 테라스' },
+      { id: 'yn_tiger', name: '호도협 (虎跳峡) 세계 3대 트레킹 협곡', city: '디칭', country: '중국', flag: '🇨🇳', cat: 'tour', lat: 27.1783, lng: 100.1256, tip: '금사강의 성난 격류가 바위를 때리는 대자연의 장관' },
+      { id: 'yn_songzan', name: '샹그릴라 송찬림사 (松赞林寺)', city: '샹그릴라', country: '중국', flag: '🇨🇳', cat: 'tour', lat: 27.8631, lng: 99.7044, tip: '운남 최대 티베트 불교 사원, 황금빛 지붕과 신비로운 경건함' },
+      { id: 'yn_dukezong', name: '두커종 고성 (独克宗古城) 세계 최대 마니차', city: '샹그릴라', country: '중국', flag: '🇨🇳', cat: 'tour', lat: 27.8144, lng: 99.7067, tip: '여럿이 함께 밀어야 돌아가는 거대한 황금 마니차를 세 바퀴 돌리며 소원 빌기' },
+      { id: 'yn_dali', name: '따리 고성 (大理古城) & 숭성사 삼탑', city: '따리', country: '중국', flag: '🇨🇳', cat: 'tour', lat: 25.6985, lng: 100.1654, tip: '창산과 얼하이호 사이에 안긴 여유로운 바이족의 옛 수도' }
+    ];
+
+    const YUNNAN_DESTINATIONS = {
+      kunming: {
+        name: '쿤밍 (Kunming · 昆明)',
+        flag: '🌸',
+        altitude: '해발 1,890m · 사계절 봄의 도시',
+        currency: 'CNY (위안) · 약 195원',
+        lat: 25.0453,
+        lng: 102.7097,
+        zoom: 11,
+        highlights: ['취호공원 & 연화지 산책', '유네스코 석림(石林) 카르스트', '젠신위안 원조 과교미선', '난핑제 보행자 거리 야경'],
+        foods: ['과교미선(过桥米线)', '보이차(普洱茶)', '야생버섯 전골(野生菌火锅)'],
+        tips: '사계절 온화하지만 일교차가 큽니다. 과교미선 육수가 매우 뜨거우니 그릇을 만지지 마세요.',
+        googleMapsQuery: 'Kunming Yunnan China'
+      },
+      dali: {
+        name: '따리 (Dali · 大理)',
+        flag: '⛵',
+        altitude: '해발 1,970m · 풍화설월의 고장',
+        currency: 'CNY (위안) · 약 195원',
+        lat: 25.6985,
+        lng: 100.1654,
+        zoom: 11,
+        highlights: ['따리 고성 복흥루 & 양인제', '숭성사 삼탑 문화구', '얼하이호 호반 전기자전거 투어', '시저우(喜洲) 고진 희주파파'],
+        foods: ['희주파파(喜洲粑粑)', '얼하이 은어 튀김', '바이족 삼도차(三道茶)'],
+        tips: '얼하이호 자전거 라이딩 시 자외선 차단제 필수. 따리 고성은 리장보다 한적하고 예술적인 분위기입니다.',
+        googleMapsQuery: 'Dali Ancient City Yunnan'
+      },
+      lijiang: {
+        name: '리장 (Lijiang · 丽江)',
+        flag: '🏮',
+        altitude: '해발 2,400m · 나시족 천년 고도',
+        currency: 'CNY (위안) · 약 195원',
+        lat: 26.8721,
+        lng: 100.2374,
+        zoom: 12,
+        highlights: ['리장 고성 사방가 야경', '목부(木府) 궁궐 탐방', '흑룡담공원 설산 조망', '수인인가(束河) 옛 마을'],
+        foods: ['납서 바비큐(纳西烤肉)', '야크 요구르트', '꽃 케이크(鲜花饼)'],
+        tips: '고성 바닥이 울퉁불퉁한 돌길이므로 편한 운동화 필수. 저녁 8시 이후 홍등 라이브 음악이 절정입니다.',
+        googleMapsQuery: 'Lijiang Old Town Yunnan China'
+      },
+      yulong: {
+        name: '옥룡설산 & 호도협',
+        flag: '🏔️',
+        altitude: '해발 3,100m~4,506m ⚠️ 고산지대',
+        currency: 'CNY (위안) · 약 195원',
+        lat: 27.1264,
+        lng: 100.1989,
+        zoom: 11,
+        highlights: ['옥룡설산 빙천공원(4506m)', '람월곡 에메랄드 호수', '호도협(虎跳峡) 금사강 트레킹', '인상리장 야외 가무극'],
+        foods: ['설산 닭백숙', '야크 육포', '보이차 티백'],
+        tips: '🚨 케이블카 탑승 전 휴대용 산소통 1인 1통 준비 필수! 람월곡에서는 야크를 타고 사진 촬영이 가능합니다.',
+        googleMapsQuery: 'Jade Dragon Snow Mountain Yunnan'
+      },
+      shangrila: {
+        name: '샹그릴라 (Shangri-La · 香格里拉)',
+        flag: '🛕',
+        altitude: '해발 3,280m · 잃어버린 지평선',
+        currency: 'CNY (위안) · 약 195원',
+        lat: 27.8144,
+        lng: 99.7067,
+        zoom: 12,
+        highlights: ['송찬림사(작은 포탈라궁)', '두커종 고성 거대 마니차', '푸다춰 국립공원 슈두호', '나파해 초원 승마'],
+        foods: ['야크 치즈 전골(牦牛肉火锅)', '버터차(酥油茶)', '보리 떡(糌粑)'],
+        tips: '티베트 고원 기후로 춥고 건조합니다. 사원 내부에서는 모자/선글라스를 벗고 시계 방향으로 돌아야 합니다.',
+        googleMapsQuery: 'Shangri-La Diqing Yunnan China'
+      }
+    };
+
+    const YUNNAN_13D_SCHEDULE = [
+      {
+        dayNum: 1,
+        title: "Day 1 인천 → 쿤밍(昆明) 입성 & 사계절 봄의 도시 취호공원",
+        date: "Day 1",
+        city: "쿤밍",
+        route: "인천공항 → 쿤밍 창수이 국제공항 → 취호공원 → 젠신위안",
+        spots: [
+          { time: "09:00", cat: "flight", typeIcon: "✈️", title: "인천(ICN) 출발 → 쿤밍(KMG) 직항 비행", desc: "약 4시간 30분 비행, 쿤밍 창수이 국제공항 도착 후 입국 수속", tip: "알리페이/위챗페이 트래블로그 연동 사전 확인", cost: "항공권", isDraft: false },
+          { time: "14:00", cat: "stay", typeIcon: "🏨", title: "쿤밍 시내 호텔 체크인 & 짐 보관", desc: "공항철도 또는 택시로 취호공원 인근 숙소 이동", tip: "고산 적응을 위해 첫날 과도한 운동 자제 (해발 1,890m)", cost: "숙박비", isDraft: false },
+          { time: "15:30", cat: "tour", typeIcon: "🌿", title: "취호공원(翠湖公园) & 강무당 산책", desc: "사계절 꽃이 피는 호수 산책, 운남 육군 강무당 옛터 관람", tip: "겨울철 시베리아 붉은부리갈매기 떼 먹이 주기 명소", cost: "무료", isDraft: false },
+          { time: "18:00", cat: "food", typeIcon: "🍜", title: "젠신위안(建新园) 원조 윈난 과교미선 디너", desc: "100년 전통, 펄펄 끓는 진한 닭 육수에 고기와 채소를 데쳐 먹는 시그니처 쌀국수", tip: "그릇 표면의 기름막이 온도를 유지하므로 숟가락 조심", cost: "약 8,000원", isDraft: false },
+          { time: "20:00", cat: "tour", typeIcon: "🏮", title: "난핑제(南屏街) 보행자 거리 & 쿤밍 야경 산책", desc: "금마벽계방 포토존 및 번화가 기념품 쇼핑", tip: "보이차 시음 및 꽃케이크(鲜花饼) 갓 구운 것 맛보기", cost: "자유 경비", isDraft: false }
+        ]
+      },
+      {
+        dayNum: 2,
+        title: "Day 2 유네스코 세계자연유산 석림(石林) & 고속철 따리(大理) 이동",
+        date: "Day 2",
+        city: "석림/따리",
+        route: "쿤밍 → 석림 카르스트 공원 → 쿤밍역 → 고속철 따리역",
+        spots: [
+          { time: "08:30", cat: "transport", typeIcon: "🚌", title: "쿤밍 동부버스터미널 → 석림 풍경구 전용 버스", desc: "약 1시간 30분 소요, 유네스코 카르스트 지형 이동", tip: "입장권 + 내부 전동차 티켓 패키지 구매 권장", cost: "약 15,000원", isDraft: false },
+          { time: "10:30", cat: "tour", typeIcon: "🗿", title: "대석림 & 소석림 기암괴석 미로 탐방", desc: "2억 7천만 년 전 바닷속 산호가 솟아오른 거대한 칼날 바위 숲, 아스마 전설 바위", tip: "편안한 트레킹화 필수, 좁은 바위 틈 통과 시 배낭 조심", cost: "약 25,000원", isDraft: false },
+          { time: "13:30", cat: "food", typeIcon: "🍽️", title: "이족(彝族) 전통 특색 로컬 런치", desc: "석림 인근 특산 이족식 장작 닭볶음 및 신선 채소 요리", tip: "향신료(고수) 조절 요청 가능", cost: "약 12,000원", isDraft: false },
+          { time: "16:00", cat: "transport", typeIcon: "🚅", title: "쿤밍역 → 따리역 고속철 탑승 (약 2시간)", desc: "현대식 고속철(CRH) 쾌속 이동, 창밖으로 펼쳐지는 운남 고원 풍경", tip: "12306 공식 예매 또는 트립닷컴 모바일 바우처 제시", cost: "약 28,000원", isDraft: false },
+          { time: "19:00", cat: "stay", typeIcon: "🏮", title: "따리 고성 도착 및 민숙(客栈) 체크인", desc: "바이족 전통 안뜰이 있는 고성 내 부티크 객잔 입실", tip: "고성 내 돌길이라 캐리어 바퀴 주의", cost: "숙박비", isDraft: false },
+          { time: "20:30", cat: "food", typeIcon: "🍻", title: "따리 인민로(人民路) 예술 카페 & 풍화설월 맥주", desc: "배낭여행자들의 성지, 버스킹 음악과 로컬 맥주 즐기기", tip: "풍화설월(风花雪月) 맥주 시음 추천", cost: "약 15,000원", isDraft: false }
+        ]
+      },
+      {
+        dayNum: 3,
+        title: "Day 3 바람과 꽃의 고장 따리(大理) & 얼하이호 자전거 라이딩",
+        date: "Day 3",
+        city: "따리",
+        route: "따리 고성 → 숭성사 삼탑 → 얼하이호 생태랑도 → 시저우 고진",
+        spots: [
+          { time: "09:00", cat: "tour", typeIcon: "🛕", title: "숭성사 삼탑(崇圣寺三塔) & 창산 파노라마", desc: "당나라 시대 1,200년 고탑, 연못에 비친 삼탑 반영(인증샷 명당)", tip: "오전 순광일 때 사진이 가장 잘 나옴", cost: "약 14,000원", isDraft: false },
+          { time: "11:30", cat: "tour", typeIcon: "🚲", title: "얼하이호(洱海) 호반 생태랑도 전기자전거 투어", desc: "끝없이 펼쳐진 푸른 호수를 따라 달리는 감성 힐링 로드", tip: "자외선 차단제 및 선글라스 필수 착용", cost: "약 10,000원", isDraft: false },
+          { time: "13:30", cat: "food", typeIcon: "🥟", title: "시저우(喜洲) 고진 & 화덕 희주파파 맛보기", desc: "바이족의 옛 중심지, 겉바속촉 고기/단팥 페이스트리 희주파파(喜洲粑粑)", tip: "노릇하게 갓 구운 것을 바로 길거리에서 시식", cost: "약 5,000원", isDraft: false },
+          { time: "15:30", cat: "tour", typeIcon: "🌾", title: "시저우 황금 보리밭 & 붉은 벽 인증샷", desc: "전통 바이족 삼합원 건축과 계절별 논밭 감성 사진 명당", tip: "커피 한잔 들고 논둑길 산책", cost: "약 6,000원", isDraft: false },
+          { time: "18:30", cat: "food", typeIcon: "🐟", title: "얼하이 자연산 생선 뚝배기 & 바이족 삼도차", desc: "달콤, 쌉싸름, 여운의 세 가지 맛을 주는 바이족 다도 체험", tip: "현지인 추천 미식 코스", cost: "약 20,000원", isDraft: false }
+        ]
+      },
+      {
+        dayNum: 4,
+        title: "Day 4 나시족 천년 고도 리장(丽江) 입성 & 목부 궁궐 탐방",
+        date: "Day 4",
+        city: "리장",
+        route: "따리역 → 리장역 고속철 → 리장 고성 사방가 → 목부",
+        spots: [
+          { time: "09:30", cat: "transport", typeIcon: "🚅", title: "따리 → 리장 고속철 이동 (약 1시간 20분)", desc: "해발 2,400m 리장 고원으로 이동", tip: "리장역 도착 후 101번 버스 또는 정품 택시 이용", cost: "약 16,000원", isDraft: false },
+          { time: "11:30", cat: "stay", typeIcon: "🏮", title: "리장 고성 옛 객잔 체크인 & 짐 정리", desc: "목조 2층 나시족 전통 양식 객잔, 안뜰 정원 휴식", tip: "해발 2,400m 도달, 미온수 자주 마시기", cost: "숙박비", isDraft: false },
+          { time: "13:00", cat: "food", typeIcon: "🍖", title: "나시족 전통 숯불 바비큐 & 병아리콩 묵(계두량분)", desc: "고소한 나시 바비큐와 시원한 양념의 계두량분 런치", tip: "사방가 주변 골목 현지인 식당", cost: "약 12,000원", isDraft: false },
+          { time: "14:30", cat: "tour", typeIcon: "🏯", title: "목부(木府) 궁궐 & 사자산 만고루 조망", desc: "‘북경에 자금성이 있다면 서남에는 목부가 있다’ 나시족 세습 토사의 웅장한 궁궐", tip: "만고루에 오르면 리장 고성 기와지붕 바다가 한눈에 조망됨", cost: "약 12,000원", isDraft: false },
+          { time: "18:30", cat: "tour", typeIcon: "✨", title: "리장 고성 사방가(四方街) 붉은 홍등 야경 & 수로 산책", desc: "천년의 세월을 간직한 조약돌 골목길, 흐르는 수로 옆 라이브 바 야경", tip: "밤 8시 사방가 광장에서 나시족 전통 군무 구경", cost: "무료", isDraft: false }
+        ]
+      },
+      {
+        dayNum: 5,
+        title: "Day 5 만년설의 기적 옥룡설산(4506m) & 백수하 람월곡 에메랄드 호수",
+        date: "Day 5",
+        city: "리장/옥룡설산",
+        route: "리장 고성 → 옥룡설산 관광센터 → 빙천공원 케이블카 → 람월곡",
+        spots: [
+          { time: "07:30", cat: "transport", typeIcon: "🚐", title: "옥룡설산 전용 셔틀 탑승 & 방한구 준비", desc: "해발 3,100m 관광센터 이동, 두꺼운 패딩 및 휴대용 산소통 대여", tip: "🚨 산소통 1인 1~2통 필수 지참, 고산 반응 대비 천천히 걷기", cost: "약 20,000원", isDraft: false },
+          { time: "09:00", cat: "tour", typeIcon: "🚠", title: "빙천공원 대케이블카 탑승 → 해발 4,506m 등정", desc: "구름을 뚫고 웅장한 만년빙하 전망대 도착, 데크길 따라 4,680m 기념비 도전", tip: "뛰거나 큰소리 금지, 어지러우면 즉시 산소 흡입", cost: "약 35,000원", isDraft: false },
+          { time: "12:00", cat: "tour", typeIcon: "🎭", title: "장이머우 감독 연출 '인상리장(印象丽江)' 대형 야외 공연", desc: "옥룡설산을 천연 배경으로 500여 명의 소수민족 주민들이 펼치는 감동의 대서사시", tip: "야외 원형 극장이므로 모자와 선글라스 필수", cost: "약 40,000원", isDraft: false },
+          { time: "14:00", cat: "tour", typeIcon: "💧", title: "람월곡(蓝月谷) 백수하 신비의 에메랄드 호수", desc: "만년설 녹은 석회질 물이 만들어낸 비취빛 계단식 호수와 백색 테라스", tip: "물가 야크 위에 앉아 설산 배경 사진 촬영 (소액 팁)", cost: "약 10,000원", isDraft: false },
+          { time: "18:00", cat: "food", typeIcon: "🍲", title: "설산 닭백숙 전골 & 야생버섯 볶음 디너", desc: "고산 트레킹 후 원기 회복을 위한 윈난 청정 닭백숙", tip: "따뜻한 국물로 체온 보온", cost: "약 25,000원", isDraft: false }
+        ]
+      },
+      {
+        dayNum: 6,
+        title: "Day 6 차마고도 첫 관문 수인인가(束河) 옛마을 & 흑룡담공원 설산 뷰",
+        date: "Day 6",
+        city: "리장",
+        route: "수인인가 고진 → 흑룡담공원 → 차마고도 박물관",
+        spots: [
+          { time: "09:30", cat: "tour", typeIcon: "🐴", title: "수인인가(束河古镇) 옛 마을 & 차마고도 마방 박물관", desc: "리장 고성보다 한적하고 고즈넉한 옛 마방들의 쉼터, 가죽 공예와 골목길", tip: "수로 옆 야외 카페에서 핸드드립 커피 한 잔", cost: "약 8,000원", isDraft: false },
+          { time: "12:30", cat: "food", typeIcon: "🥘", title: "수인인가 수로 옆 로컬 무지개송어 회 & 구이 런치", desc: "설산 맑은 물에서 자란 신선한 송어 요리", tip: "매콤한 양념구이 강력 추천", cost: "약 20,000원", isDraft: false },
+          { time: "15:00", cat: "tour", typeIcon: "🏞️", title: "흑룡담공원(黑龙潭公园) 득월루 설산 엽서 뷰", desc: "옥룡설산이 호수와 고풍스러운 정자에 그대로 비치는 운남 대표 포토존", tip: "오후 3~5시 잔잔한 수면에 비친 반영 촬영 골든아워", cost: "약 5,000원", isDraft: false },
+          { time: "18:30", cat: "food", typeIcon: "☕", title: "고성 전망 테라스 카페 & 꽃케이크 시식", desc: "노을 지는 설산 실루엣을 바라보며 마시는 운남 커피", tip: "선물용 꽃케이크(鲜花饼) 진공포장 구매", cost: "약 15,000원", isDraft: false }
+        ]
+      },
+      {
+        dayNum: 7,
+        title: "Day 7 세계 3대 트레킹 호도협(虎跳峡) 금사강 격류 탐방 & 샹그릴라 입성",
+        date: "Day 7",
+        city: "호도협/샹그릴라",
+        route: "리장 → 상호도협 → 호랑이 도약 바위 → 샹그릴라(해발 3280m)",
+        spots: [
+          { time: "08:00", cat: "transport", typeIcon: "🚐", title: "리장 → 상호도협 전용 셔틀 이동 (약 2시간)", desc: "옥룡설산과 하바설산 사이 깊은 협곡으로 진입", tip: "귀마개 또는 편한 트레킹 복장 착용", cost: "약 15,000원", isDraft: false },
+          { time: "10:30", cat: "tour", typeIcon: "🌊", title: "상호도협(上虎跳峡) 잔도 트레킹 & 격류 조망", desc: "성난 황토빛 금사강 물줄기가 바위를 때리는 압도적인 대자연, 호랑이가 뛰어넘었다는 전설의 바위", tip: "에스컬레이터 이용 시 편리하게 왕복 가능", cost: "약 20,000원", isDraft: false },
+          { time: "13:00", cat: "food", typeIcon: "🍲", title: "호도협 장선생 객잔/티나 객잔 전망 런치", desc: "협곡 절벽이 내려다보이는 테라스에서 토종 닭볶음 런치", tip: "탁 트인 뷰 감상", cost: "약 15,000원", isDraft: false },
+          { time: "15:00", cat: "transport", typeIcon: "🚌", title: "호도협 → 샹그릴라 고속도로 이동 (해발 3,280m 도달)", desc: "장엄한 티베트 고원 도로를 따라 잃어버린 지평선 샹그릴라 입성", tip: "🚨 고산병 증세 주의, 도착 후 절대 무리하지 말고 휴식", cost: "약 18,000원", isDraft: false },
+          { time: "18:00", cat: "stay", typeIcon: "🛕", title: "두커종 고성 내 티베트 전통 호텔 입실", desc: "산소 공급 장치가 구비된 고풍스러운 티베트 목조 호텔", tip: "방 안 산소 발생기 작동법 확인", cost: "숙박비", isDraft: false }
+        ]
+      },
+      {
+        dayNum: 8,
+        title: "Day 8 티베트 불교의 성지 송찬림사(松赞林寺) & 두커종 거대 마니차",
+        date: "Day 8",
+        city: "샹그릴라",
+        route: "송찬림사 → 라무양춰 호수 → 두커종 고성 귀산공원",
+        spots: [
+          { time: "09:30", cat: "tour", typeIcon: "🛕", title: "송찬림사(松赞林寺 · 작은 포탈라궁) 탐방", desc: "운남 최대의 티베트 불교 겔룩파(황모파) 사원, 황금빛 지붕과 신비로운 벽화", tip: "사원 입장 시 모자/선글라스 탈의, 시계 방향 순례", cost: "약 22,000원", isDraft: false },
+          { time: "12:00", cat: "tour", typeIcon: "💧", title: "라무양춰(拉姆央措) 성스러운 호수 둘레길", desc: "호수 건너편 전망대에서 송찬림사 전경 반영 촬영", tip: "티베트 스님들의 순례길 포토존", cost: "무료", isDraft: false },
+          { time: "13:30", cat: "food", typeIcon: "🥘", title: "티베트 정통 야크 고기 치즈 전골 & 버터차", desc: "깊은 풍미의 야크 전골과 짭조름하고 고소한 버터차(酥油茶)", tip: "버터차는 고산 적응과 체온 유지에 특효", cost: "약 25,000원", isDraft: false },
+          { time: "16:00", cat: "tour", typeIcon: "☸️", title: "두커종 고성 귀산공원 세계 최대 황금 마니차", desc: "높이 21m, 무게 60톤의 거대한 마니차를 여러 명이 힘을 모아 시계 방향으로 세 바퀴 돌리기", tip: "한 번 돌릴 때마다 불경 124만 번을 낭송한 공덕", cost: "무료", isDraft: false },
+          { time: "19:00", cat: "tour", typeIcon: "💃", title: "두커종 월광광장 티베트 가무 군무 참여", desc: "현지 장족 주민들과 함께 원을 그리며 춤추는 흥겨운 문화 체험", tip: "누구나 자유롭게 참여 가능", cost: "무료", isDraft: false }
+        ]
+      },
+      {
+        dayNum: 9,
+        title: "Day 9 중국 최초 국립공원 푸다춰(普达措) 원시림 & 슈두호 산책",
+        date: "Day 9",
+        city: "샹그릴라",
+        route: "푸다춰 국립공원 → 슈두호 데크길 → 밀림 생태",
+        spots: [
+          { time: "09:00", cat: "transport", typeIcon: "🚌", title: "샹그릴라 시내 → 푸다춰 국립공원 전용 버스", desc: "해발 3,500m~3,700m 청정 고원 원시 생태구역 이동", tip: "두꺼운 방한 외투 필수 지참", cost: "약 15,000원", isDraft: false },
+          { time: "10:30", cat: "tour", typeIcon: "🌲", title: "슈두호(属都湖) 3.3km 호반 원시림 목재 데크 산책", desc: "물안개 피어오르는 거울 같은 고산 호수와 수백 년 된 침엽수림, 다람쥐 먹이 주기", tip: "평탄한 데크길이라 걷기 매우 쾌적함", cost: "약 25,000원", isDraft: false },
+          { time: "13:30", cat: "food", typeIcon: "🍱", title: "공원 내 친환경 로컬 피크닉 런치", desc: "따뜻한 보리 떡(糌粑)과 야크 육포, 보온병 온수", tip: "쓰레기는 100% 되가져오기", cost: "약 10,000원", isDraft: false },
+          { time: "15:30", cat: "tour", typeIcon: "🐎", title: "목초지 야크 방목 풍경 & 샹그릴라 고원 평원", desc: "푸른 하늘 아래 평화롭게 풀을 뜯는 검은 야크 무리와 야생화 군락", tip: "대자연 힐링 명소", cost: "무료", isDraft: false },
+          { time: "18:30", cat: "food", typeIcon: "🍖", title: "티베트식 양갈비 구이 & 칭커주(보리 전통주) 만찬", desc: "참나무 숯불에 구운 부드러운 양갈비와 전통 곡주", tip: "과음은 고산지대에서 절대 금물, 맛보기 한 잔만 권장", cost: "약 30,000원", isDraft: false }
+        ]
+      },
+      {
+        dayNum: 10,
+        title: "Day 10 나파해(纳帕海) 이라초원 승마 & 티베트 전통 민가 방문",
+        date: "Day 10",
+        city: "샹그릴라",
+        route: "나파해 초원 → 수상 도로 드라이브 → 티베트 민가",
+        spots: [
+          { time: "09:30", cat: "tour", typeIcon: "🐎", title: "나파해(纳帕海) 이라초원 말 타기 체험", desc: "계절에 따라 호수가 되었다가 초원이 되는 신비한 습지, 티베트 마방과 함께 승마", tip: "승마 코스 사전 가격 확인 필수", cost: "약 35,000원", isDraft: false },
+          { time: "12:00", cat: "tour", typeIcon: "🚗", title: "나파해 환호 도로 & 수상 도로 포토존 드라이브", desc: "물이 차올라 호수 위를 달리는 듯한 유명한 드라이브 코스", tip: "SNS 인기 포토스팟", cost: "약 10,000원", isDraft: false },
+          { time: "13:30", cat: "food", typeIcon: "🥟", title: "티베트 전통 가옥 가정식 런치 & 요구르트", desc: "현지 장족 가정 방문, 갓 짠 신선한 야크 우유로 만든 수제 요구르트 시식", tip: "설탕을 듬뿍 뿌려 먹어야 제맛", cost: "약 15,000원", isDraft: false },
+          { time: "16:00", cat: "tour", typeIcon: "🎨", title: "탕카(Thangka) 불교 미술 그리기 공방 체험", desc: "천연 광물 안료로 그리는 티베트 전통 불화 예술 견학", tip: "섬세한 붓 터치 체험", cost: "약 10,000원", isDraft: false }
+        ]
+      },
+      {
+        dayNum: 11,
+        title: "Day 11 샹그릴라 → 쿤밍 고속철 복귀 & 보이차(普洱茶) 다도 체험",
+        date: "Day 11",
+        city: "샹그릴라/쿤밍",
+        route: "샹그릴라역 → 쿤밍역 CRH 고속철 → 쿤밍 시내 다도실",
+        spots: [
+          { time: "09:00", cat: "transport", typeIcon: "🚅", title: "샹그릴라역 → 쿤밍역 고속철 탑승 (약 4시간 30분)", desc: "개통된 샹그릴라-쿤밍 직통 고속철로 편리하게 귀환", tip: "설산과 협곡을 통과하는 철도 뷰", cost: "약 45,000원", isDraft: false },
+          { time: "14:00", cat: "stay", typeIcon: "🏨", title: "쿤밍 중심가 호텔 체크인", desc: "귀국 준비를 위해 공항 접근이 편리한 시내 호텔 투숙", tip: "남은 위안화 지출 계획 점검", cost: "숙박비", isDraft: false },
+          { time: "15:30", cat: "tour", typeIcon: "🍵", title: "윈난 보이차 전문 다원 정통 다도 체험", desc: "숙차와 생차의 차이점, 10년 이상 숙성된 진품 보이차 시음 및 보관법 전수", tip: "믿을 수 있는 인증 브랜드(맹해차창 등) 차 구매", cost: "약 20,000원", isDraft: false },
+          { time: "18:30", cat: "food", typeIcon: "🍲", title: "윈난 야생버섯 뚝배기 전골 (野生菌火锅)", desc: "송이버섯, 노루궁뎅이버섯 등 10여 가지 진귀한 운남 야생버섯의 깊은 육수", tip: "식당 타이머로 20분 이상 완벽히 끓인 후 시식 (식중독 예방)", cost: "약 35,000원", isDraft: false }
+        ]
+      },
+      {
+        dayNum: 12,
+        title: "Day 12 쿤밍 윈난성 박물관 & 아시아 최대 두난 화훼시장 투어",
+        date: "Day 12",
+        city: "쿤밍",
+        route: "윈난성 박물관 → 관도 고진 → 두난 화훼시장",
+        spots: [
+          { time: "09:30", cat: "tour", typeIcon: "🏛️", title: "윈난성 박물관(云南省博物馆) 고대 전인(滇) 문화 탐방", desc: "독특한 청동기 예술과 26개 소수민족의 찬란한 문화사 무료 관람", tip: "신분증(여권) 지참 필수", cost: "무료", isDraft: false },
+          { time: "12:30", cat: "food", typeIcon: "🍜", title: "관도 고진(官渡古镇) 로컬 미식 골목 런치", desc: "관도 파파 및 전통 쌀국수 로컬 맛집 탐방", tip: "활기찬 현지 전통 시장 분위기", cost: "약 10,000원", isDraft: false },
+          { time: "15:00", cat: "tour", typeIcon: "💐", title: "두난 화훼시장(斗南花市) 아시아 최대 꽃 경매 시장", desc: "전 세계로 수출되는 수억 송이의 생화 바다, kg 단위로 판매되는 신기한 꽃 시장", tip: "생화 말린 향수 및 꽃 기념품 쇼핑", cost: "약 10,000원", isDraft: false },
+          { time: "19:00", cat: "food", typeIcon: "🥟", title: "운남 여행 마무리 시그니처 미식 페어웰 디너", desc: "스팀팟 치킨(汽锅鸡)과 다채로운 운남 요리로 12일간의 여정 축하", tip: "가계부 최종 정산 및 추억 정리", cost: "약 30,000원", isDraft: false }
+        ]
+      },
+      {
+        dayNum: 13,
+        title: "Day 13 쿤밍 창수이 국제공항 → 인천 귀국 & 인생 다이어리 완성",
+        date: "Day 13",
+        city: "쿤밍/인천",
+        route: "호텔 체크아웃 → 창수이 공항 → 인천국제공항",
+        spots: [
+          { time: "09:00", cat: "stay", typeIcon: "🧳", title: "호텔 체크아웃 & 기념품 패킹 점검", desc: "보이차, 꽃케이크, 옥 장신구 수하물 규정 확인", tip: "위탁 수하물 무게 체크 (액체류 수하물로 부치기)", cost: "0원", isDraft: false },
+          { time: "10:30", cat: "transport", typeIcon: "🚕", title: "쿤밍 창수이 국제공항(KMG) 이동 및 출국 수속", desc: "공항철도 또는 택시 이동, 탑승구 게이트 대기", tip: "국제선 3시간 전 도착 필수", cost: "약 15,000원", isDraft: false },
+          { time: "13:00", cat: "flight", typeIcon: "✈️", title: "쿤밍 출발 → 인천(ICN) 비행 및 안전 귀국", desc: "약 4시간 비행 후 인천국제공항 도착, 술술트래블 운남 다이어리 완성", tip: "소중한 여행 일기 및 사진 공유", cost: "항공권", isDraft: false }
+        ]
+      }
+    ];
+
+    function applyYunnanGoldenCourse() {
+      const trip = getActiveTrip();
+      if (!trip) return;
+      if (!confirm('중국 운남 13일 황금 일정 코스(쿤밍·석림·따리·리장·옥룡설산·호도협·샹그릴라)를 현재 여행에 즉시 적용하시겠습니까?')) {
+        return;
+      }
+      trip.days = JSON.parse(JSON.stringify(YUNNAN_13D_SCHEDULE));
+      trip.durationDays = 13;
+      trip.cities = ['쿤밍', '따리', '리장', '옥룡설산', '호도협', '샹그릴라'];
+      saveTrips();
+      renderActiveTripWorkspace();
+      showToast('✨ 중국 운남 13일 황금 코스가 성공적으로 적용되었습니다!');
     }
 
     // ==========================================
@@ -3343,12 +3648,41 @@
       if (elSpent) elSpent.innerText = `₩${totalSpent.toLocaleString()}`;
       if (elBal) elBal.innerText = `₩${Math.max(0, budget - totalSpent).toLocaleString()}`;
 
+      // 서브탭 레이블 및 아이콘 동적 적응 (v1.1.7)
+      const isSA = isSouthAmericaTrip(trip);
+      const isYN = isYunnanTrip(trip);
+      const bookingLabel = document.getElementById('label-subtab-booking');
+      const bookingIcon = document.getElementById('icon-subtab-booking');
+      const cityguideLabel = document.getElementById('label-subtab-cityguide');
+      const cityguideIcon = document.getElementById('icon-subtab-cityguide');
+
+      if (isSA) {
+        if (bookingLabel) bookingLabel.innerText = '12대 필수 예약';
+        if (bookingIcon) bookingIcon.className = 'fa-solid fa-ticket text-[11px]';
+        if (cityguideLabel) cityguideLabel.innerText = '8대 도시 가이드';
+        if (cityguideIcon) cityguideIcon.className = 'fa-solid fa-city text-[11px]';
+      } else {
+        if (bookingLabel) bookingLabel.innerText = '여행 필수 체크/예약';
+        if (bookingIcon) bookingIcon.className = 'fa-solid fa-clipboard-check text-[11px]';
+        if (cityguideLabel) cityguideLabel.innerText = isYN ? '운남 5대 도시 가이드' : '여행지 스팟 모아보기';
+        if (cityguideIcon) cityguideIcon.className = isYN ? 'fa-solid fa-mountain-sun text-[11px]' : 'fa-solid fa-map-pin text-[11px]';
+      }
+
       // 탭별 렌더러 호출
       renderTimelineTab();
       renderExpensesTab();
       renderJournalTab();
       renderChecklistTab();
       renderGpsRadar();
+
+      // 활성 서브탭 내용 재동기화
+      if (State.planSubTab === 'booking') {
+        renderBookingGuides();
+      } else if (State.planSubTab === 'cityguide') {
+        renderCityGuides();
+      } else if (State.planSubTab === 'map') {
+        initOrUpdateLeafletMap();
+      }
     }
 
     // ==========================================
@@ -3403,7 +3737,7 @@
       const container = document.getElementById('days-accordion-container');
       const aiBanner = document.getElementById('banner-ai-recommend');
 
-      if (!trip.days || trip.days.length === 0) {
+      if (!trip.days || !Array.isArray(trip.days) || trip.days.length === 0) {
         container.innerHTML = `
           <div class="p-8 text-center rounded-2xl bg-[#0f1422] border border-[#1e263c] space-y-3">
             <span class="text-3xl">📅</span>
@@ -3418,6 +3752,29 @@
       if (aiBanner) aiBanner.classList.add('hidden');
 
       let html = '';
+
+      // 운남 황금 코스 스마트 제안 배너 (v1.1.7)
+      if (isYunnanTrip(trip)) {
+        const isDraftOrPlaceholder = !trip.days || !Array.isArray(trip.days) || trip.days.length === 0 || 
+          trip.days.some(d => (d.spots||[]).some(s => s.isDraft || (s.title && (s.title.includes('모닝 산책') || s.title.includes('맞춤 스팟')))));
+        if (isDraftOrPlaceholder) {
+          html += `
+            <div class="p-3.5 rounded-2xl bg-gradient-to-r from-emerald-500/15 via-teal-500/15 to-amber-500/15 border border-emerald-500/30 flex flex-col sm:flex-row items-center justify-between gap-3 shadow-md mb-3">
+              <div class="flex items-center gap-3">
+                <span class="w-9 h-9 rounded-xl bg-emerald-500/20 text-emerald-300 flex items-center justify-center text-lg shrink-0">🇨🇳</span>
+                <div>
+                  <div class="font-black text-white text-xs sm:text-sm">중국 운남 13일 황금 명소 코스 자동 채우기</div>
+                  <p class="text-[11px] text-slate-300 mt-0.5">쿤밍(석림) · 따리(얼하이) · 리장(옥룡설산) · 호도협 · 샹그릴라 실전 30분 단위 일정</p>
+                </div>
+              </div>
+              <button onclick="applyYunnanGoldenCourse()" class="px-3 py-1.5 bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-slate-950 font-black rounded-xl text-xs shrink-0 shadow transition flex items-center gap-1.5">
+                <i class="fa-solid fa-wand-magic-sparkles text-[10px]"></i>
+                <span>운남 일정 즉시 적용</span>
+              </button>
+            </div>
+          `;
+        }
+      }
       trip.days.forEach((day, dayIdx) => {
         let spotsHtml = '';
         (day.spots || []).forEach((spot, spotIdx) => {
@@ -3522,24 +3879,32 @@
     }
 
     // ==========================================
-    // [2] Leaflet 인터랙티브 지도 엔진 (World & Drill-Down)
+    // [2] Leaflet 인터랙티브 지도 엔진 (World & Drill-Down) (v1.1.7)
     // ==========================================
     function initOrUpdateLeafletMap() {
       const mapContainer = document.getElementById('leaflet-route-map');
       if (!mapContainer) return;
 
+      const trip = getActiveTrip();
+      const isSA = isSouthAmericaTrip(trip);
+      const isYN = isYunnanTrip(trip);
+
+      const centerCoord = isSA ? [-14.0, -65.0] : (isYN ? [26.2, 100.5] : [20.0, 0.0]);
+      const initialZoom = isSA ? 3 : (isYN ? 7 : 2);
+
       if (!State.map) {
-        // 남미 중심 기준 초기 지도 뷰
         State.map = L.map('leaflet-route-map', {
           zoomControl: true,
           attributionControl: false
-        }).setView([-14.0, -65.0], 3);
+        }).setView(centerCoord, initialZoom);
 
         // CartoDB Dark Matter 다크 럭셔리 타일 레이어
         L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
           maxZoom: 18,
           subdomains: 'abcd'
         }).addTo(State.map);
+      } else {
+        State.map.setView(centerCoord, initialZoom);
       }
 
       // 기존 마커 & 폴리라인 초기화
@@ -3547,179 +3912,429 @@
       State.mapMarkers = [];
       if (State.mapPolyline) State.map.removeLayer(State.mapPolyline);
 
-      const dests = window.KB_TRAVEL ? window.KB_TRAVEL.destinations : {};
-      const routePoints = [
-        [37.4602, 126.4407], // 인천
-        [34.0522, -118.2437], // LA
-        [-12.0464, -77.0428], // 리마
-        [-14.0875, -75.7626], // 이카
-        [-13.5319, -71.9675], // 쿠스코
-        [-13.1631, -72.5450], // 마추픽추
-        [-34.6037, -58.3816], // 부에노스아이레스
-        [-25.6953, -54.4367], // 이과수
-        [-22.9068, -43.1729]  // 리우
-      ];
+      const pillsContainer = document.getElementById('map-quick-cities');
 
-      // 황금빛 비행 노선 폴리라인
-      State.mapPolyline = L.polyline(routePoints, {
-        color: '#f59e0b',
-        weight: 3,
-        opacity: 0.8,
-        dashArray: '6, 8',
-        smoothFactor: 1
-      }).addTo(State.map);
-
-      // 거점 도시 커스텀 마커 핀 생성
-      Object.keys(dests).forEach((key, idx) => {
-        const d = dests[key];
-        if (d.lat && d.lng) {
-          const iconHtml = `<div class="gold-marker-pin">${idx + 1}</div>`;
-          const customIcon = L.divIcon({
-            html: iconHtml,
-            className: 'custom-gold-pin',
-            iconSize: [32, 32],
-            iconAnchor: [16, 16]
-          });
-
-          const marker = L.marker([d.lat, d.lng], { icon: customIcon })
-            .addTo(State.map)
-            .bindPopup(`
-              <div class="text-xs p-1">
-                <div class="font-black text-amber-400 text-sm">${d.name}</div>
-                <div class="text-slate-300 text-[11px] mt-0.5">${d.altitude}</div>
-                <div class="mt-2 flex items-center gap-1">
-                  <a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(d.googleMapsQuery || d.name)}" target="_blank" rel="noopener noreferrer" class="px-2 py-1 bg-sky-500/20 text-sky-300 rounded text-[10px] font-bold">구글 지도 길찾기</a>
-                </div>
-              </div>
-            `);
-
-          marker.on('click', () => {
-            focusCityOnMap(key);
-          });
-
-          State.mapMarkers.push(marker);
+      if (isSA) {
+        if (pillsContainer) {
+          pillsContainer.innerHTML = `
+            <button onclick="focusCityOnMap('lax')" class="px-2.5 py-1 rounded-lg bg-[#141c2e] hover:bg-[#1e2a44] border border-[#23304c] text-slate-200 font-bold shrink-0">🇺🇸 LA</button>
+            <button onclick="focusCityOnMap('lim')" class="px-2.5 py-1 rounded-lg bg-[#141c2e] hover:bg-[#1e2a44] border border-[#23304c] text-slate-200 font-bold shrink-0">🇵🇪 리마</button>
+            <button onclick="focusCityOnMap('desert')" class="px-2.5 py-1 rounded-lg bg-[#141c2e] hover:bg-[#1e2a44] border border-[#23304c] text-slate-200 font-bold shrink-0">🏜️ 이카/와카치나</button>
+            <button onclick="focusCityOnMap('cuz')" class="px-2.5 py-1 rounded-lg bg-[#141c2e] hover:bg-[#1e2a44] border border-[#23304c] text-slate-200 font-bold shrink-0">🦙 쿠스코</button>
+            <button onclick="focusCityOnMap('mp')" class="px-2.5 py-1 rounded-lg bg-[#141c2e] hover:bg-[#1e2a44] border border-[#23304c] text-slate-200 font-bold shrink-0">⛰️ 마추픽추</button>
+            <button onclick="focusCityOnMap('bue')" class="px-2.5 py-1 rounded-lg bg-[#141c2e] hover:bg-[#1e2a44] border border-[#23304c] text-slate-200 font-bold shrink-0">🇦🇷 부에노스아이레스</button>
+            <button onclick="focusCityOnMap('igu')" class="px-2.5 py-1 rounded-lg bg-[#141c2e] hover:bg-[#1e2a44] border border-[#23304c] text-slate-200 font-bold shrink-0">🌊 이과수 폭포</button>
+            <button onclick="focusCityOnMap('rio')" class="px-2.5 py-1 rounded-lg bg-[#141c2e] hover:bg-[#1e2a44] border border-[#23304c] text-slate-200 font-bold shrink-0">🇧🇷 리우데자네이루</button>
+          `;
         }
-      });
+
+        const dests = window.KB_TRAVEL ? window.KB_TRAVEL.destinations : {};
+        const routePoints = [
+          [37.4602, 126.4407], // 인천
+          [34.0522, -118.2437], // LA
+          [-12.0464, -77.0428], // 리마
+          [-14.0875, -75.7626], // 이카
+          [-13.5319, -71.9675], // 쿠스코
+          [-13.1631, -72.5450], // 마추픽추
+          [-34.6037, -58.3816], // 부에노스아이레스
+          [-25.6953, -54.4367], // 이과수
+          [-22.9068, -43.1729]  // 리우
+        ];
+
+        State.mapPolyline = L.polyline(routePoints, {
+          color: '#f59e0b', weight: 3, opacity: 0.8, dashArray: '6, 8', smoothFactor: 1
+        }).addTo(State.map);
+
+        Object.keys(dests).forEach((key, idx) => {
+          const d = dests[key];
+          if (d.lat && d.lng) {
+            const iconHtml = `<div class="gold-marker-pin">${idx + 1}</div>`;
+            const customIcon = L.divIcon({ html: iconHtml, className: 'custom-gold-pin', iconSize: [32, 32], iconAnchor: [16, 16] });
+            const marker = L.marker([d.lat, d.lng], { icon: customIcon })
+              .addTo(State.map)
+              .bindPopup(`
+                <div class="text-xs p-1">
+                  <div class="font-black text-amber-400 text-sm">${d.name}</div>
+                  <div class="text-slate-300 text-[11px] mt-0.5">${d.altitude}</div>
+                  <div class="mt-2 flex items-center gap-1">
+                    <a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(d.googleMapsQuery || d.name)}" target="_blank" rel="noopener noreferrer" class="px-2 py-1 bg-sky-500/20 text-sky-300 rounded text-[10px] font-bold">구글 지도 길찾기</a>
+                  </div>
+                </div>
+              `);
+            marker.on('click', () => { focusCityOnMap(key); });
+            State.mapMarkers.push(marker);
+          }
+        });
+        focusCityOnMap('cuz');
+      } else if (isYN) {
+        if (pillsContainer) {
+          pillsContainer.innerHTML = `
+            <button onclick="focusCityOnMap('kunming')" class="px-2.5 py-1 rounded-lg bg-[#141c2e] hover:bg-[#1e2a44] border border-[#23304c] text-slate-200 font-bold shrink-0">🌸 쿤밍</button>
+            <button onclick="focusCityOnMap('dali')" class="px-2.5 py-1 rounded-lg bg-[#141c2e] hover:bg-[#1e2a44] border border-[#23304c] text-slate-200 font-bold shrink-0">⛵ 따리</button>
+            <button onclick="focusCityOnMap('lijiang')" class="px-2.5 py-1 rounded-lg bg-[#141c2e] hover:bg-[#1e2a44] border border-[#23304c] text-slate-200 font-bold shrink-0">🏮 리장</button>
+            <button onclick="focusCityOnMap('yulong')" class="px-2.5 py-1 rounded-lg bg-[#141c2e] hover:bg-[#1e2a44] border border-[#23304c] text-slate-200 font-bold shrink-0">🏔️ 옥룡설산/호도협</button>
+            <button onclick="focusCityOnMap('shangrila')" class="px-2.5 py-1 rounded-lg bg-[#141c2e] hover:bg-[#1e2a44] border border-[#23304c] text-slate-200 font-bold shrink-0">🛕 샹그릴라</button>
+          `;
+        }
+
+        const ynPoints = [
+          [25.0453, 102.7097], // 쿤밍
+          [25.6985, 100.1654], // 따리
+          [26.8721, 100.2374], // 리장
+          [27.1264, 100.1989], // 옥룡설산
+          [27.1783, 100.1256], // 호도협
+          [27.8144, 99.7067]   // 샹그릴라
+        ];
+
+        State.mapPolyline = L.polyline(ynPoints, {
+          color: '#10b981', weight: 3, opacity: 0.8, dashArray: '6, 8', smoothFactor: 1
+        }).addTo(State.map);
+
+        Object.keys(YUNNAN_DESTINATIONS).forEach((key, idx) => {
+          const d = YUNNAN_DESTINATIONS[key];
+          if (d.lat && d.lng) {
+            const iconHtml = `<div class="gold-marker-pin" style="background:#10b981;border-color:#34d399;">${idx + 1}</div>`;
+            const customIcon = L.divIcon({ html: iconHtml, className: 'custom-gold-pin', iconSize: [32, 32], iconAnchor: [16, 16] });
+            const marker = L.marker([d.lat, d.lng], { icon: customIcon })
+              .addTo(State.map)
+              .bindPopup(`
+                <div class="text-xs p-1">
+                  <div class="font-black text-emerald-400 text-sm">${d.name}</div>
+                  <div class="text-slate-300 text-[11px] mt-0.5">${d.altitude}</div>
+                  <div class="mt-2 flex items-center gap-1">
+                    <a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(d.googleMapsQuery || d.name)}" target="_blank" rel="noopener noreferrer" class="px-2 py-1 bg-emerald-500/20 text-emerald-300 rounded text-[10px] font-bold">구글 지도 길찾기</a>
+                  </div>
+                </div>
+              `);
+            marker.on('click', () => { focusCityOnMap(key); });
+            State.mapMarkers.push(marker);
+          }
+        });
+        focusCityOnMap('kunming');
+      } else {
+        if (pillsContainer) {
+          pillsContainer.innerHTML = (trip.cities || [trip.title]).map(c => `
+            <button class="px-2.5 py-1 rounded-lg bg-[#141c2e] border border-[#23304c] text-slate-200 font-bold shrink-0">📍 ${c}</button>
+          `).join('');
+        }
+      }
 
       // 지도 리사이징 강제 갱신
       setTimeout(() => {
-        State.map.invalidateSize();
+        if (State.map) State.map.invalidateSize();
       }, 200);
     }
 
     function focusCityOnMap(cityKey) {
-      const dests = window.KB_TRAVEL ? window.KB_TRAVEL.destinations : {};
-      const d = dests[cityKey];
+      const trip = getActiveTrip();
+      const isSA = isSouthAmericaTrip(trip);
+      const isYN = isYunnanTrip(trip);
+
+      let d = null;
+      if (isSA) {
+        const dests = window.KB_TRAVEL ? window.KB_TRAVEL.destinations : {};
+        d = dests[cityKey];
+      } else if (isYN) {
+        d = YUNNAN_DESTINATIONS[cityKey];
+      }
+
       if (!d) return;
 
       if (State.map && d.lat && d.lng) {
-        State.map.flyTo([d.lat, d.lng], d.zoom || 13, {
-          animate: true,
-          duration: 1.5
-        });
-      }
-
-      // 하단 카드 업데이트
-      document.getElementById('map-city-flag').innerText = d.flag || '🌎';
-      document.getElementById('map-city-name').innerText = d.name;
-      document.getElementById('map-city-altitude').innerText = d.altitude;
-      document.getElementById('map-city-currency').innerText = `통화: ${d.currency} · 10월 최적 여행 시즌`;
-
-      const spotsList = document.getElementById('map-city-spots');
-      if (spotsList) {
-        spotsList.innerHTML = (d.highlights || []).map(h => `<li>• ${h}</li>`).join('');
-      }
-
-      const foodsList = document.getElementById('map-city-foods');
-      if (foodsList) {
-        foodsList.innerText = (d.foods || []).join(', ');
-      }
-
-      const tipsEl = document.getElementById('map-city-tips');
-      if (tipsEl) {
-        tipsEl.innerText = d.tips || '안전 수칙을 준수하세요.';
-      }
-
-      const gmapBtn = document.getElementById('btn-google-maps-link');
-      if (gmapBtn) {
-        gmapBtn.href = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(d.googleMapsQuery || d.name)}`;
-      }
-    }
-
-    function resetMapToWorldView() {
-      if (State.map) {
-        State.map.flyTo([-14.0, -65.0], 3, {
+        State.map.flyTo([d.lat, d.lng], d.zoom || 12, {
           animate: true,
           duration: 1.2
         });
       }
+
+      // 하단 카드 업데이트
+      const flagEl = document.getElementById('map-city-flag');
+      const nameEl = document.getElementById('map-city-name');
+      const altEl = document.getElementById('map-city-altitude');
+      const currEl = document.getElementById('map-city-currency');
+      const spotsList = document.getElementById('map-city-spots');
+      const foodsList = document.getElementById('map-city-foods');
+      const tipsEl = document.getElementById('map-city-tips');
+      const gmapBtn = document.getElementById('btn-google-maps-link');
+
+      if (flagEl) flagEl.innerText = d.flag || '📍';
+      if (nameEl) nameEl.innerText = d.name;
+      if (altEl) altEl.innerText = d.altitude;
+      if (currEl) currEl.innerText = `통화: ${d.currency}`;
+      if (spotsList) spotsList.innerHTML = (d.highlights || []).map(h => `<li>• ${h}</li>`).join('');
+      if (foodsList) foodsList.innerText = (d.foods || []).join(', ');
+      if (tipsEl) tipsEl.innerText = d.tips || '안전 수칙을 준수하세요.';
+      if (gmapBtn) gmapBtn.href = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(d.googleMapsQuery || d.name)}`;
+    }
+
+    function resetMapToWorldView() {
+      if (!State.map) return;
+      const trip = getActiveTrip();
+      if (isSouthAmericaTrip(trip)) {
+        State.map.flyTo([-14.0, -65.0], 3, { animate: true, duration: 1.2 });
+      } else if (isYunnanTrip(trip)) {
+        State.map.flyTo([26.2, 100.5], 7, { animate: true, duration: 1.2 });
+      } else {
+        State.map.flyTo([20.0, 0.0], 2, { animate: true, duration: 1.2 });
+      }
     }
 
     // ==========================================
-    // [3] 12대 공식 예약 가이드 렌더링
+    // [3] 예약 가이드 및 체크리스트 렌더링 (v1.1.7)
     // ==========================================
     function renderBookingGuides() {
+      const trip = getActiveTrip();
+      const isSA = isSouthAmericaTrip(trip);
+      const headerTitle = document.getElementById('booking-header-title');
+      const headerDesc = document.getElementById('booking-header-desc');
+      const headerIcon = document.getElementById('booking-header-icon');
       const container = document.getElementById('booking-cards-container');
-      if (!container || !window.KB_TRAVEL) return;
+      if (!container) return;
 
-      const guides = window.KB_TRAVEL.bookingGuides || [];
-      container.innerHTML = guides.map(b => `
-        <div class="p-4 rounded-xl bg-[#080b12] border border-[#1e263c] space-y-2 flex flex-col justify-between">
-          <div>
-            <div class="flex items-center justify-between gap-2">
-              <span class="px-2 py-0.5 rounded text-[10px] font-black ${b.tier === 'S' ? 'bg-rose-500/20 text-rose-300 border border-rose-500/30' : 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30'}">
-                ${b.tierName}
-              </span>
-              <span class="text-[10px] text-amber-400 font-bold">${b.dday}</span>
-            </div>
-            <h4 class="text-xs font-black text-white mt-1.5">${b.title}</h4>
-            <p class="text-[11px] text-slate-400 mt-1 leading-relaxed">${b.desc}</p>
-            <div class="text-[10px] text-slate-500 mt-1">예상 비용: <span class="text-slate-300 font-semibold">${b.cost}</span></div>
-            <div class="text-[10px] text-amber-300/90 bg-amber-500/10 p-1.5 rounded border border-amber-500/20 mt-1.5">💡 ${b.tip}</div>
-          </div>
+      if (isSA) {
+        if (headerTitle) headerTitle.innerText = '남미 여행 12대 필수 사전 예약 공식 가이드';
+        if (headerDesc) headerDesc.innerText = '마추픽추 입장권, 파노라마 열차, 국립공원 등 매진되기 전 공식 사이트에서 직접 예약해야 하는 필수 리스트입니다.';
+        if (headerIcon) headerIcon.className = 'fa-solid fa-ticket text-amber-400';
 
-          <div class="pt-2">
-            <a href="${b.url}" target="_blank" rel="noopener noreferrer" class="w-full py-1.5 bg-[#141c2e] hover:bg-[#1e2a44] border border-[#23304c] text-amber-400 rounded-lg text-xs font-bold flex items-center justify-center gap-1.5 transition">
-              <span>공식 포털 바로가기</span>
-              <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i>
-            </a>
-          </div>
-        </div>
-      `).join('');
-    }
-
-    // ==========================================
-    // [4] 8대 도시 가이드 렌더링
-    // ==========================================
-    function renderCityGuides() {
-      const container = document.getElementById('cityguide-cards-container');
-      if (!container || !window.KB_TRAVEL) return;
-
-      const dests = window.KB_TRAVEL.destinations || {};
-      container.innerHTML = Object.keys(dests).map(k => {
-        const d = dests[k];
-        return `
-          <div class="p-4 rounded-xl bg-[#080b12] border border-[#1e263c] space-y-2">
-            <div class="flex items-center justify-between">
-              <div class="flex items-center gap-2">
-                <span class="text-xl">${d.flag || '🌎'}</span>
-                <h4 class="text-xs sm:text-sm font-black text-white">${d.name}</h4>
+        const guides = (window.KB_TRAVEL && window.KB_TRAVEL.bookingGuides) ? window.KB_TRAVEL.bookingGuides : [];
+        container.innerHTML = guides.map(b => `
+          <div class="p-4 rounded-xl bg-[#080b12] border border-[#1e263c] space-y-2 flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between gap-2">
+                <span class="px-2 py-0.5 rounded text-[10px] font-black ${b.tier === 'S' ? 'bg-rose-500/20 text-rose-300 border border-rose-500/30' : 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30'}">
+                  ${b.tierName}
+                </span>
+                <span class="text-[10px] text-amber-400 font-bold">${b.dday}</span>
               </div>
-              <span class="text-[10px] text-purple-300 px-2 py-0.5 rounded bg-purple-500/20 border border-purple-500/30">${d.altitude}</span>
-            </div>
-
-            <div class="text-xs text-slate-300 space-y-1">
-              <div class="text-amber-400 text-[11px] font-bold">🎯 핵심 랜드마크</div>
-              <ul class="text-[11px] text-slate-400 pl-2">
-                ${(d.highlights || []).slice(0, 3).map(h => `<li>• ${h}</li>`).join('')}
-              </ul>
-              <div class="text-emerald-400 text-[11px] font-bold pt-1">🍽️ 대표 먹거리</div>
-              <div class="text-[11px] text-slate-400">${(d.foods || []).join(', ')}</div>
+              <h4 class="text-xs font-black text-white mt-1.5">${b.title}</h4>
+              <p class="text-[11px] text-slate-400 mt-1 leading-relaxed">${b.desc}</p>
+              <div class="text-[10px] text-slate-500 mt-1">예상 비용: <span class="text-slate-300 font-semibold">${b.cost}</span></div>
+              <div class="text-[10px] text-amber-300/90 bg-amber-500/10 p-1.5 rounded border border-amber-500/20 mt-1.5">💡 ${b.tip}</div>
             </div>
 
             <div class="pt-2">
-              <a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(d.googleMapsQuery || d.name)}" target="_blank" rel="noopener noreferrer" class="w-full py-1.5 bg-[#141c2e] hover:bg-[#1a263e] border border-[#23304c] text-sky-400 rounded-lg text-xs font-bold flex items-center justify-center gap-1.5 transition">
-                <i class="fa-solid fa-map-location-dot text-[11px]"></i> 구글 지도에서 도시 보기
+              <a href="${b.url}" target="_blank" rel="noopener noreferrer" class="w-full py-1.5 bg-[#141c2e] hover:bg-[#1e2a44] border border-[#23304c] text-amber-400 rounded-lg text-xs font-bold flex items-center justify-center gap-1.5 transition">
+                <span>공식 포털 바로가기</span>
+                <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i>
+              </a>
+            </div>
+          </div>
+        `).join('');
+      } else {
+        renderDynamicTripBookings(trip);
+      }
+    }
+
+    function renderDynamicTripBookings(trip) {
+      const headerTitle = document.getElementById('booking-header-title');
+      const headerDesc = document.getElementById('booking-header-desc');
+      const headerIcon = document.getElementById('booking-header-icon');
+      const container = document.getElementById('booking-cards-container');
+      if (!container) return;
+
+      if (headerTitle) headerTitle.innerText = `${trip.title} 필수 준비 & 예약 체크리스트`;
+      if (headerDesc) headerDesc.innerText = '항공권, 숙소, 현지 교통 및 필수 예약 항목을 사전에 점검하고 체크하세요.';
+      if (headerIcon) headerIcon.className = 'fa-solid fa-clipboard-check text-amber-400';
+
+      const isYN = isYunnanTrip(trip);
+      let specialAdviceHtml = '';
+      if (isYN) {
+        specialAdviceHtml = `
+          <div class="col-span-1 md:col-span-2 p-4 rounded-xl bg-gradient-to-r from-amber-500/10 via-emerald-500/10 to-sky-500/10 border border-amber-500/30 space-y-2">
+            <div class="flex items-center gap-2">
+              <span class="text-base">🇨🇳</span>
+              <h4 class="text-xs sm:text-sm font-black text-amber-300">중국 운남 여행 필수 사전 예약 & 결제 공식 가이드</h4>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 text-[11px] text-slate-300 pt-1">
+              <div class="p-2.5 rounded-lg bg-[#080b12] border border-[#1e263c]">
+                <div class="font-bold text-amber-400 flex items-center gap-1 mb-1">
+                  <i class="fa-solid fa-credit-card text-[10px]"></i> 알리페이 / 위챗페이
+                </div>
+                <div class="text-slate-400 leading-relaxed">한국 신용카드(트래블로그/월렛)를 알리페이(TourPass/신용카드 등록)에 사전 연동 필수 (현금 거의 안 받음).</div>
+              </div>
+              <div class="p-2.5 rounded-lg bg-[#080b12] border border-[#1e263c]">
+                <div class="font-bold text-rose-400 flex items-center gap-1 mb-1">
+                  <i class="fa-solid fa-mountain text-[10px]"></i> 옥룡설산 케이블카
+                </div>
+                <div class="text-slate-400 leading-relaxed">빙천공원(4506m) 케이블카는 매일 인원 제한이 엄격하므로 탑승 3~7일 전 공식 미니프로그램 사전 예매 필수.</div>
+              </div>
+              <div class="p-2.5 rounded-lg bg-[#080b12] border border-[#1e263c]">
+                <div class="font-bold text-sky-400 flex items-center gap-1 mb-1">
+                  <i class="fa-solid fa-train text-[10px]"></i> 중국 고속철 (12306)
+                </div>
+                <div class="text-slate-400 leading-relaxed">쿤밍-따리-리장 고속철은 출발 14일 전 오전 오픈런 예매. 트립닷컴 또는 공식 12306 영문 앱 활용.</div>
+              </div>
+            </div>
+          </div>
+        `;
+      }
+
+      const checklist = trip.checklist || [];
+      const checklistCardsHtml = checklist.map((item, idx) => `
+        <div class="p-3.5 rounded-xl bg-[#080b12] border border-[#1e263c] flex items-center justify-between gap-3">
+          <div class="flex items-center gap-2.5 flex-1 min-w-0">
+            <input type="checkbox" ${item.checked ? 'checked' : ''} onchange="toggleTripChecklistItem(${idx})" class="w-4 h-4 rounded text-amber-500 bg-[#141c2e] border-[#23304c] focus:ring-amber-500 focus:ring-offset-0 cursor-pointer shrink-0">
+            <span class="text-xs ${item.checked ? 'line-through text-slate-500' : 'text-slate-200 font-bold'} truncate">${item.text}</span>
+          </div>
+          <span class="px-2 py-0.5 rounded text-[10px] font-black shrink-0 ${item.urgent ? 'bg-rose-500/20 text-rose-300 border border-rose-500/30' : 'bg-slate-800 text-slate-400 border border-slate-700'}">
+            ${item.urgent ? '🚨 필수' : '일반'}
+          </span>
+        </div>
+      `).join('');
+
+      container.innerHTML = `
+        ${specialAdviceHtml}
+        <div class="col-span-1 md:col-span-2 flex items-center justify-between pt-1">
+          <span class="text-xs font-bold text-slate-300">📋 준비 항목 점검 (${checklist.filter(c => c.checked).length}/${checklist.length} 완료)</span>
+          <button onclick="openModal('modal-checklist-add')" class="px-2.5 py-1 bg-[#141c2e] hover:bg-[#1a263e] border border-[#23304c] text-amber-400 text-xs font-bold rounded-lg transition flex items-center gap-1">
+            <i class="fa-solid fa-plus text-[10px]"></i> 준비물 추가
+          </button>
+        </div>
+        ${checklistCardsHtml || '<div class="col-span-2 text-xs text-slate-500 py-4 text-center">등록된 사전 예약/준비물이 없습니다.</div>'}
+      `;
+    }
+
+    // ==========================================
+    // [4] 도시 가이드 & 스팟 요약 렌더링 (v1.1.7)
+    // ==========================================
+    function renderCityGuides() {
+      const trip = getActiveTrip();
+      const isSA = isSouthAmericaTrip(trip);
+      const isYN = isYunnanTrip(trip);
+      const headerTitle = document.getElementById('cityguide-header-title');
+      const headerDesc = document.getElementById('cityguide-header-desc');
+      const headerIcon = document.getElementById('cityguide-header-icon');
+      const container = document.getElementById('cityguide-cards-container');
+      if (!container) return;
+
+      if (isSA) {
+        if (headerTitle) headerTitle.innerText = '8대 거점 도시 가이드';
+        if (headerDesc) headerDesc.innerText = '남미 거점 도시별 주요 랜드마크, 현지 필수 미식 및 고산병/안전 실전 팁을 안내합니다.';
+        if (headerIcon) headerIcon.className = 'fa-solid fa-city text-amber-400';
+
+        const dests = (window.KB_TRAVEL && window.KB_TRAVEL.destinations) ? window.KB_TRAVEL.destinations : {};
+        container.innerHTML = Object.keys(dests).map(k => {
+          const d = dests[k];
+          return `
+            <div class="p-4 rounded-xl bg-[#080b12] border border-[#1e263c] space-y-2">
+              <div class="flex items-center justify-between">
+                <div class="flex items-center gap-2">
+                  <span class="text-xl">${d.flag || '🌎'}</span>
+                  <h4 class="text-xs sm:text-sm font-black text-white">${d.name}</h4>
+                </div>
+                <span class="text-[10px] text-purple-300 px-2 py-0.5 rounded bg-purple-500/20 border border-purple-500/30">${d.altitude}</span>
+              </div>
+
+              <div class="text-xs text-slate-300 space-y-1">
+                <div class="text-amber-400 text-[11px] font-bold">🎯 핵심 랜드마크</div>
+                <ul class="text-[11px] text-slate-400 pl-2">
+                  ${(d.highlights || []).slice(0, 3).map(h => `<li>• ${h}</li>`).join('')}
+                </ul>
+                <div class="text-emerald-400 text-[11px] font-bold pt-1">🍽️ 대표 먹거리</div>
+                <div class="text-[11px] text-slate-400">${(d.foods || []).join(', ')}</div>
+              </div>
+
+              <div class="pt-2">
+                <a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(d.googleMapsQuery || d.name)}" target="_blank" rel="noopener noreferrer" class="w-full py-1.5 bg-[#141c2e] hover:bg-[#1e2a44] border border-[#23304c] text-sky-400 rounded-lg text-xs font-bold flex items-center justify-center gap-1.5 transition">
+                  <i class="fa-solid fa-map-location-dot text-[10px]"></i>
+                  <span>구글 지도에서 ${d.name.split(' ')[0]} 보기</span>
+                </a>
+              </div>
+            </div>
+          `;
+        }).join('');
+      } else if (isYN) {
+        if (headerTitle) headerTitle.innerText = '중국 운남 5대 거점 도시 & 명소 가이드';
+        if (headerDesc) headerDesc.innerText = '쿤밍, 리장, 옥룡설산, 샹그릴라, 따리의 핵심 랜드마크와 시그니처 미식 정보입니다.';
+        if (headerIcon) headerIcon.className = 'fa-solid fa-mountain-sun text-amber-400';
+
+        container.innerHTML = Object.keys(YUNNAN_DESTINATIONS).map(k => {
+          const d = YUNNAN_DESTINATIONS[k];
+          return `
+            <div class="p-4 rounded-xl bg-[#080b12] border border-[#1e263c] space-y-2">
+              <div class="flex items-center justify-between">
+                <div class="flex items-center gap-2">
+                  <span class="text-xl">${d.flag || '🇨🇳'}</span>
+                  <h4 class="text-xs sm:text-sm font-black text-white">${d.name}</h4>
+                </div>
+                <span class="text-[10px] text-purple-300 px-2 py-0.5 rounded bg-purple-500/20 border border-purple-500/30">${d.altitude}</span>
+              </div>
+
+              <div class="text-xs text-slate-300 space-y-1">
+                <div class="text-amber-400 text-[11px] font-bold">🎯 핵심 랜드마크</div>
+                <ul class="text-[11px] text-slate-400 pl-2">
+                  ${(d.highlights || []).map(h => `<li>• ${h}</li>`).join('')}
+                </ul>
+                <div class="text-emerald-400 text-[11px] font-bold pt-1">🍽️ 대표 먹거리</div>
+                <div class="text-[11px] text-slate-400">${(d.foods || []).join(', ')}</div>
+                <div class="text-amber-300 text-[10px] bg-amber-500/10 p-2 rounded border border-amber-500/20 mt-1.5">
+                  💡 ${d.tips}
+                </div>
+              </div>
+
+              <div class="pt-2">
+                <a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(d.googleMapsQuery || d.name)}" target="_blank" rel="noopener noreferrer" class="w-full py-1.5 bg-[#141c2e] hover:bg-[#1e2a44] border border-[#23304c] text-sky-400 rounded-lg text-xs font-bold flex items-center justify-center gap-1.5 transition">
+                  <i class="fa-solid fa-map-location-dot text-[10px]"></i>
+                  <span>구글 지도에서 ${d.name.split(' ')[0]} 보기</span>
+                </a>
+              </div>
+            </div>
+          `;
+        }).join('');
+      } else {
+        renderDynamicTripSpotsSummary(trip);
+      }
+    }
+
+    function renderDynamicTripSpotsSummary(trip) {
+      const headerTitle = document.getElementById('cityguide-header-title');
+      const headerDesc = document.getElementById('cityguide-header-desc');
+      const headerIcon = document.getElementById('cityguide-header-icon');
+      const container = document.getElementById('cityguide-cards-container');
+      if (!container) return;
+
+      if (headerTitle) headerTitle.innerText = `${trip.title} 여행지 스팟 모아보기`;
+      if (headerDesc) headerDesc.innerText = '등록된 전체 일자별 스팟들을 한눈에 확인하고 바로 구글 지도로 이동할 수 있습니다.';
+      if (headerIcon) headerIcon.className = 'fa-solid fa-map-pin text-amber-400';
+
+      let allSpots = [];
+      (trip.days || []).forEach(d => {
+        (d.spots || []).forEach(s => {
+          allSpots.push({ ...s, dayTitle: d.title, dayNum: d.dayNum, city: d.city });
+        });
+      });
+
+      if (allSpots.length === 0) {
+        container.innerHTML = `
+          <div class="col-span-2 p-8 text-center rounded-2xl bg-[#080b12] border border-[#1e263c] space-y-2">
+            <span class="text-3xl">📍</span>
+            <div class="text-sm font-bold text-white">등록된 여행 스팟이 없습니다.</div>
+            <p class="text-xs text-slate-400">일정 탭에서 스팟을 추가하거나 AI 추천 일정을 생성해 보세요.</p>
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = allSpots.map(s => {
+        const gmapUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(s.title + ' ' + (s.city || ''))}`;
+        return `
+          <div class="p-3.5 rounded-xl bg-[#080b12] border border-[#1e263c] space-y-2 flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between gap-2">
+                <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-[#141c2e] text-amber-400 border border-[#23304c]">
+                  Day ${s.dayNum} · ${s.time}
+                </span>
+                ${s.cost ? `<span class="text-[10px] text-emerald-400 font-semibold">${s.cost}</span>` : ''}
+              </div>
+              <h4 class="text-xs font-black text-white mt-1.5">${s.title}</h4>
+              ${s.desc ? `<p class="text-[11px] text-slate-400 mt-1 leading-relaxed">${s.desc}</p>` : ''}
+              ${s.tip ? `<div class="text-[10px] text-amber-300/90 bg-amber-500/10 p-1.5 rounded border border-amber-500/20 mt-1.5">💡 ${s.tip}</div>` : ''}
+            </div>
+
+            <div class="pt-2">
+              <a href="${gmapUrl}" target="_blank" rel="noopener noreferrer" class="w-full py-1.5 bg-[#141c2e] hover:bg-[#1e2a44] border border-[#23304c] text-sky-400 rounded-lg text-xs font-bold flex items-center justify-center gap-1.5 transition">
+                <i class="fa-solid fa-map-location-dot text-[10px]"></i>
+                <span>구글 지도 길찾기</span>
               </a>
             </div>
           </div>
@@ -4577,8 +5192,27 @@
         : ['자유여행'];
 
       let days = [];
+      const tempTrip = { title, countries };
+      const isYN = isYunnanTrip(tempTrip);
+
       if (aiAuto) {
-        days = generateAutoSpotsForTrip(countries[0] || '여행지', durationDays, concepts, wishlist);
+        if (isYN) {
+          days = JSON.parse(JSON.stringify(YUNNAN_13D_SCHEDULE)).slice(0, durationDays);
+          for (let i = 14; i <= durationDays; i++) {
+            days.push({
+              dayNum: i,
+              title: `Day ${i} 윈난 자유 힐링 & 로컬 탐방`,
+              date: `Day ${i}`,
+              city: '쿤밍',
+              spots: [
+                { time: "10:00", cat: "tour", typeIcon: "☕", title: "골목길 감성 카페 & 보이차 티하우스", desc: "여유로운 로컬 힐링", tip: "자유 일정", cost: "10,000원", isDraft: false },
+                { time: "18:00", cat: "food", typeIcon: "🍲", title: "현지인 추천 단골 식당 디너", desc: "시그니처 미식 즐기기", tip: "예약 권장", cost: "25,000원", isDraft: false }
+              ]
+            });
+          }
+        } else {
+          days = generateAutoSpotsForTrip(countries[0] || '여행지', durationDays, concepts, wishlist);
+        }
       } else {
         for (let i = 1; i <= durationDays; i++) {
           days.push({
@@ -4591,18 +5225,21 @@
         }
       }
 
+      const tripCities = isYN ? ['쿤밍', '따리', '리장', '샹그릴라'] : [countries[0] || '여행지'];
+      const tripEmoji = isYN ? '🇨🇳' : '✈️';
+
       const newTrip = {
         id: 'trip_' + Date.now(),
         title: title,
-        subtitle: style || concepts.join(' · ') || '나만의 특별한 여정',
+        subtitle: style || concepts.join(' · ') || (isYN ? '사계절 봄의 도시 & 신비의 차마고도' : '나만의 특별한 여정'),
         startDate: start,
         endDate: end,
         durationDays: durationDays,
-        currency: curr,
+        currency: curr || (isYN ? 'CNY' : 'KRW'),
         budget: budget,
         countries: countries,
-        cities: [countries[0] || '여행지'],
-        coverEmoji: '✈️',
+        cities: tripCities,
+        coverEmoji: tripEmoji,
         concepts: concepts,
         wishlist: wishlist,
         isBucketlist: (!start && !end),
@@ -4610,7 +5247,14 @@
         days: days,
         expenses: [],
         journals: {},
-        checklist: [
+        checklist: isYN ? [
+          { text: '여권 유효기간 6개월 이상 확인', urgent: true, checked: false },
+          { text: '알리페이 / 위챗페이 트래블로그 카드 사전 등록', urgent: true, checked: false },
+          { text: '옥룡설산 케이블카 사전 예매', urgent: true, checked: false },
+          { text: '중국 고속철 (쿤밍-따리-리장) 예매', urgent: true, checked: false },
+          { text: '중국 데이터 eSIM 또는 유심 구매', urgent: false, checked: false },
+          { text: '상비약 (고산병약, 소화제, 지사제, 타이레놀)', urgent: true, checked: false }
+        ] : [
           { text: '여권 유효기간 6개월 이상 확인', urgent: true, checked: false },
           { text: '현지 통화 환전 또는 트래블로그/월렛 카드 발급', urgent: true, checked: false },
           { text: '여행자 보험 가입', urgent: true, checked: false },
@@ -5260,19 +5904,66 @@
       return R * c;
     }
 
-    function renderGpsRadar() {
-      if (!State.gps) {
-        State.gps = { lat: null, lng: null, mode: 'idle', label: '대기 중', nearestSpot: null, nearbySpots: [] };
+    function populateSimGpsOptions(trip) {
+      const select = document.getElementById('select-sim-gps');
+      if (!select) return;
+
+      if (isSouthAmericaTrip(trip)) {
+        select.innerHTML = `
+          <option value="">🎯 모의 GPS 위치 테스트</option>
+          <option value="cuz_plaza">🇵🇪 쿠스코 아르마스 광장 (페루)</option>
+          <option value="mp_guard">🇵🇪 마추픽추 서킷2 망지기의 집</option>
+          <option value="lim_amor">🇵🇪 리마 미라플로레스 사랑의 공원</option>
+          <option value="desert_buggy">🇵🇪 와카치나 사막 오아시스 버기존</option>
+          <option value="bue_donjulio">🇦🇷 부에노스 돈 훌리오 아사도</option>
+          <option value="igu_throat">🇦🇷 이과수 악마의 목구멍 폭포</option>
+          <option value="rio_cristo">🇧🇷 리우 코르코바두 예수상</option>
+          <option value="lax_pier">🇺🇸 LA 산타모니카 피어</option>
+        `;
+      } else if (isYunnanTrip(trip)) {
+        select.innerHTML = `
+          <option value="">🎯 운남 모의 GPS 위치 테스트</option>
+          <option value="yn_cuihu">🇨🇳 쿤밍 취호공원 (Kunming)</option>
+          <option value="yn_shilin">🇨🇳 쿤밍 석림 세계자연유산</option>
+          <option value="yn_lijiang">🇨🇳 리장 고성 사방가</option>
+          <option value="yn_yulong">🇨🇳 옥룡설산 빙천공원 (4506m)</option>
+          <option value="yn_tiger">🇨🇳 호도협 상호도협 트레킹</option>
+          <option value="yn_songzan">🇨🇳 샹그릴라 송찬림사</option>
+          <option value="yn_dali">🇨🇳 따리 고성 & 얼하이호</option>
+        `;
+      } else {
+        let opts = `<option value="">🎯 모의 GPS 위치 테스트</option>`;
+        (trip.cities || []).forEach((c, idx) => {
+          opts += `<option value="city_${idx}">📍 ${c} 중심</option>`;
+        });
+        select.innerHTML = opts;
       }
+    }
+
+    function renderGpsRadar() {
+      const trip = getActiveTrip();
+      populateSimGpsOptions(trip);
+
+      const tripId = trip ? trip.id : null;
+      if (!State.gps || State.gps.tripId !== tripId) {
+        State.gps = { tripId: tripId, lat: null, lng: null, mode: 'idle', label: '대기 중', nearestSpot: null, nearbySpots: [] };
+      }
+
       if (!State.gps.lat) {
-        // 기본 모의 위치: 쿠스코 아르마스 광장으로 안내
-        updateGpsRadarUI(-13.5168, -71.9789, '🎯 추천 기본 모의 위치 (쿠스코 광장)', 'sim');
+        if (isSouthAmericaTrip(trip)) {
+          updateGpsRadarUI(-13.5168, -71.9789, '🎯 추천 기본 모의 위치 (쿠스코 광장)', 'sim');
+        } else if (isYunnanTrip(trip)) {
+          updateGpsRadarUI(25.0514, 102.7042, '🎯 추천 기본 모의 위치 (쿤밍 취호공원)', 'sim');
+        } else {
+          updateGpsRadarUI(37.5665, 126.9780, '📡 내 위치를 탐색하여 주변 스팟을 확인하세요', 'idle');
+        }
       } else {
         updateGpsRadarUI(State.gps.lat, State.gps.lng, State.gps.label, State.gps.mode);
       }
     }
 
     function requestCurrentGpsLocation() {
+      const trip = getActiveTrip();
       const badge = document.getElementById('gps-status-badge');
       const desc = document.getElementById('gps-status-desc');
       if (badge) {
@@ -5283,7 +5974,8 @@
 
       if (!navigator.geolocation) {
         alert('현재 브라우저에서 GPS 지오로케이션을 지원하지 않습니다. 모의 위치를 이용해 주세요.');
-        simulateGpsLocation('cuz_plaza');
+        if (isSouthAmericaTrip(trip)) simulateGpsLocation('cuz_plaza');
+        else if (isYunnanTrip(trip)) simulateGpsLocation('yn_cuihu');
         return;
       }
 
@@ -5295,8 +5987,15 @@
         },
         (err) => {
           console.warn('[GPS] Geolocation error or denied:', err);
-          alert('GPS 신호 접근이 거부되었거나 수신할 수 없어 [쿠스코 아르마스 광장] 모의 위치로 자동 전환합니다.');
-          simulateGpsLocation('cuz_plaza');
+          if (isSouthAmericaTrip(trip)) {
+            alert('GPS 신호 접근이 거부되었거나 수신할 수 없어 [쿠스코 아르마스 광장] 모의 위치로 자동 전환합니다.');
+            simulateGpsLocation('cuz_plaza');
+          } else if (isYunnanTrip(trip)) {
+            alert('GPS 신호 접근이 거부되었거나 수신할 수 없어 [쿤밍 취호공원] 모의 위치로 자동 전환합니다.');
+            simulateGpsLocation('yn_cuihu');
+          } else {
+            alert('GPS 신호 접근이 거부되었거나 수신할 수 없습니다.');
+          }
         },
         { timeout: 8000, enableHighAccuracy: true }
       );
@@ -5304,15 +6003,27 @@
 
     function simulateGpsLocation(presetKey) {
       if (!presetKey) return;
-      const preset = GPS_DEMO_PRESETS[presetKey];
-      if (preset) {
-        const select = document.getElementById('select-sim-gps');
-        if (select) select.value = presetKey;
-        updateGpsRadarUI(preset.lat, preset.lng, `🎯 모의 GPS 시뮬레이션 (${preset.label})`, 'sim');
+      const trip = getActiveTrip();
+      const select = document.getElementById('select-sim-gps');
+      if (select) select.value = presetKey;
+
+      if (isSouthAmericaTrip(trip)) {
+        const preset = GPS_DEMO_PRESETS[presetKey];
+        if (preset) {
+          updateGpsRadarUI(preset.lat, preset.lng, `🎯 모의 GPS 시뮬레이션 (${preset.label})`, 'sim');
+        }
+      } else if (isYunnanTrip(trip)) {
+        const spot = YUNNAN_KNOWN_SPOTS.find(s => s.id === presetKey);
+        if (spot) {
+          updateGpsRadarUI(spot.lat, spot.lng, `🎯 운남 모의 GPS 시뮬레이션 (${spot.flag} ${spot.name})`, 'sim');
+        }
+      } else {
+        updateGpsRadarUI(37.5665, 126.9780, `🎯 모의 GPS 위치`, 'sim');
       }
     }
 
     function updateGpsRadarUI(lat, lng, labelText, mode) {
+      const trip = getActiveTrip();
       State.gps = {
         lat: lat,
         lng: lng,
@@ -5322,8 +6033,37 @@
         nearbySpots: []
       };
 
-      // 모든 알려진 스팟과의 거리 계산
-      const list = GPS_KNOWN_SPOTS.map(spot => {
+      let spotsToCompare = [];
+      if (isSouthAmericaTrip(trip)) {
+        spotsToCompare = GPS_KNOWN_SPOTS;
+      } else if (isYunnanTrip(trip)) {
+        spotsToCompare = YUNNAN_KNOWN_SPOTS;
+      } else {
+        (trip.days || []).forEach(d => {
+          (d.spots || []).forEach(s => {
+            if (s.lat && s.lng) {
+              spotsToCompare.push({
+                name: s.title,
+                city: d.city || '여행지',
+                country: (trip.countries || [])[0] || '해외',
+                flag: trip.coverEmoji || '📍',
+                cat: s.cat || 'tour',
+                lat: s.lat,
+                lng: s.lng,
+                tip: s.tip || s.memo || '일정 스팟'
+              });
+            }
+          });
+        });
+        if (spotsToCompare.length === 0) {
+          spotsToCompare = [
+            { name: `${(trip.cities||[])[0] || trip.title} 중심가`, city: (trip.cities||[])[0] || '도시', country: (trip.countries||[])[0] || '해외', flag: trip.coverEmoji || '📍', cat: 'tour', lat: lat, lng: lng, tip: '일정에 스팟을 추가하면 실시간 거리가 계산됩니다.' }
+          ];
+        }
+      }
+
+      // 거리 계산
+      const list = spotsToCompare.map(spot => {
         const distKm = calculateHaversineDistance(lat, lng, spot.lat, spot.lng);
         return {
           ...spot,
@@ -5343,8 +6083,8 @@
       if (badge) {
         badge.className = mode === 'live' ? 
           "text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/30" :
-          "text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/30";
-        badge.innerText = mode === 'live' ? "🟢 실시간 GPS 활성" : "🟡 모의 위치 모드";
+          (mode === 'idle' ? "text-[10px] font-bold px-2 py-0.5 rounded-full bg-slate-500/20 text-slate-300 border border-slate-500/30" : "text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/30");
+        badge.innerText = mode === 'live' ? "🟢 실시간 GPS 활성" : (mode === 'idle' ? "📡 대기 중" : "🟡 모의 위치 모드");
       }
       if (desc) desc.innerText = labelText;
 
@@ -5893,6 +6633,7 @@
       initApp: initApp,
       switchView: switchView,
       openTripWorkspace: openTripWorkspace,
+      switchPlanSubTab: switchPlanSubTab,
       showConfirmDelete: showConfirmDelete,
       requestCurrentGpsLocation: requestCurrentGpsLocation,
       simulateGpsLocation: simulateGpsLocation,
