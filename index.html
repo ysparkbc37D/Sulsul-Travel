@@ -565,7 +565,7 @@
             <h1 class="font-serif-brand text-base sm:text-xl font-bold tracking-tight text-[#1c1917] dark:text-[#ededed] whitespace-nowrap">
               Sulsul Travel
             </h1>
-            <span id="app-ver-badge" onclick="event.stopPropagation(); openVersionHistoryModal()" class="px-1.5 py-0.5 rounded-md theme-card-subtle hover:border-amber-500/60 hover:text-amber-600 dark:hover:text-amber-300 text-[#a2601b] dark:text-[#d4af37] text-[10px] font-bold font-mono shadow-inner cursor-pointer shrink-0 transition" title="버전 업데이트 기록 보기 (클릭)">v1.2.5</span>
+            <span id="app-ver-badge" onclick="event.stopPropagation(); openVersionHistoryModal()" class="px-1.5 py-0.5 rounded-md theme-card-subtle hover:border-amber-500/60 hover:text-amber-600 dark:hover:text-amber-300 text-[#a2601b] dark:text-[#d4af37] text-[10px] font-bold font-mono shadow-inner cursor-pointer shrink-0 transition" title="버전 업데이트 기록 보기 (클릭)">v1.2.6</span>
           </div>
           <p id="header-trip-name" class="text-[10px] sm:text-[11px] text-[#78716c] dark:text-stone-400 truncate max-w-[120px] sm:max-w-xs font-normal">인생의 모든 여정을 기록하는 다이어리</p>
         </div>
@@ -2332,24 +2332,38 @@
 
       <!-- 버전 목록 스크롤 영역 -->
       <div class="flex-1 overflow-y-auto space-y-3 pr-1 text-xs">
-        <!-- v1.2.5 (Current) -->
+        <!-- v1.2.6 (Current) -->
         <div class="p-4 rounded-2xl bg-amber-500/5 dark:bg-amber-500/10 border-2 border-amber-500/40 space-y-2.5 shadow-sm relative overflow-hidden">
           <div class="flex items-center justify-between gap-2">
             <div class="flex items-center gap-2 min-w-0">
-              <span class="px-2 py-0.5 rounded-lg bg-amber-500 text-black font-black text-xs shadow-sm shrink-0">v1.2.5</span>
-              <span class="text-xs font-black text-[#1c1917] dark:text-white">허브 카드 지도 중복 제거 & 대표 사진·히어로 카드 계층화</span>
+              <span class="px-2 py-0.5 rounded-lg bg-amber-500 text-black font-black text-xs shadow-sm shrink-0">v1.2.6</span>
+              <span class="text-xs font-black text-[#1c1917] dark:text-white">새 여행 등록 엔진 안정화 & 전 세계 맞춤 여정 지원</span>
             </div>
             <span class="px-2 py-0.5 rounded-full text-[10px] font-black bg-emerald-100 text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300 border border-emerald-300 shrink-0">최신 버전</span>
           </div>
           <div class="text-[11px] text-[#44403c] dark:text-stone-300 space-y-1.5 leading-relaxed">
-            <div><b>지도 정보 중복 100% 제거</b>: 카드 상단 우측에 중복 배치되어 있던 지도 버튼을 제거하고, 하단에 단일화하여 직관성 극대화.</div>
-            <div><b>여행 대표 사진(Cover Photo) 전용 공간</b>: 획일적인 남미 지도 배경을 제거하고, 내 스마트폰 갤러리의 인생 사진을 16:9 와이드 비율로 즉시 등록/교체할 수 있는 대표 사진 엔진 탑재.</div>
-            <div><b>대형 와이드 히어로 카드 vs 컴팩트 카드</b>: D-Day 임박/진행 중인 1순위 여정은 대형 와이드 히어로 카드로 주요 코스 스트립과 함께 부각하고, 지난 여행은 콤팩트 카드로 정돈.</div>
+            <div><b>새 여행 등록 먹통 현상 완전 해결</b>: `submitCreateTrip` 내 미선언 변수 참조 예외(ReferenceError)를 원천 차단하고 전체 생성 프로세스를 try-catch로 보호.</div>
+            <div><b>전 세계 맞춤 여정 스마트 분석</b>: 국가/지역명(괄호, 쉼표) 및 버킷리스트로부터 방문 도시 목록을 지능형 추출하여 맞춤 일정 생성.</div>
+            <div><b>목적지 국기 및 테마 자동 매칭</b>: 몽골(🇲🇳, 푸른 초원 테마), 일본, 미국, 유럽 등 전 세계 국가별 이모지 및 시그니처 테마 자동 프리셋 적용.</div>
           </div>
           <div class="text-[10px] text-stone-400 dark:text-stone-500 pt-1 border-t border-amber-500/20 flex items-center justify-between">
             <span>📅 2026-09-07 릴리즈</span>
-            <span class="font-mono">st-shell-v1.2.5</span>
+            <span class="font-mono">st-shell-v1.2.6</span>
           </div>
+        </div>
+
+        <!-- v1.2.5 -->
+        <div class="p-3.5 rounded-xl bg-stone-50 dark:bg-stone-900/50 border border-stone-200 dark:border-stone-800 space-y-2">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-2">
+              <span class="px-1.5 py-0.5 rounded-md bg-stone-200 dark:bg-stone-800 text-stone-800 dark:text-stone-200 font-bold text-[11px] font-mono">v1.2.5</span>
+              <span class="font-bold text-[#1c1917] dark:text-stone-200">허브 카드 지도 중복 제거 & 대표 사진·히어로 카드 계층화</span>
+            </div>
+            <span class="text-[10px] text-stone-400">2026-09-07</span>
+          </div>
+          <p class="text-[11px] text-[#78716c] dark:text-stone-400 leading-relaxed">
+            허브 카드 상단 지도 중복 제거, 16:9 와이드 대표 사진(Cover Photo) 캔버스 업로드 및 히어로 vs 컴팩트 카드 계층화.
+          </p>
         </div>
 
         <!-- v1.2.4 -->
@@ -2657,7 +2671,7 @@
     window.showToast = showToast;
 
     // 앱 버전 및 글로벌 네임스페이스 (Sulsul-Travel Invariant Rule R-10, R-11, R-12, R-13, R-14, R-15)
-    const APP_VER = '1.2.5';
+    const APP_VER = '1.2.6';
 
     // ══════════════════════════════════════════
     // [Two-Tone Theme System] 라이트 그레이 & 딥 블랙 테마 엔진
@@ -4664,6 +4678,17 @@
           accentColor: '#f59e0b',
           icon: '🦙',
           badgeText: '남미 대종단'
+        };
+      }
+      const isMongol = (trip.title && trip.title.includes('몽골')) || 
+        (trip.countries && trip.countries.some(c => c && c.includes('몽골')));
+      if (isMongol) {
+        return {
+          type: 'preset-mongolia',
+          bgGradient: 'bg-gradient-to-br from-sky-950 via-blue-900 to-[#0c1424]',
+          accentColor: '#38bdf8',
+          icon: '🇲🇳',
+          badgeText: '푸른 초원 몽골'
         };
       }
       // 4. 일반 여행 기본 프리셋
@@ -6821,104 +6846,180 @@
     }
 
     function submitCreateTrip() {
-      const title = document.getElementById('trip-form-title').value.trim();
-      const start = document.getElementById('trip-form-start').value;
-      const end = document.getElementById('trip-form-end').value;
-      const curr = document.getElementById('trip-form-curr').value;
-      const budget = parseInt(document.getElementById('trip-form-budget').value) || 3000000;
-      const countriesStr = document.getElementById('trip-form-countries').value.trim();
-      const style = document.getElementById('trip-form-style').value.trim();
-      const wishlist = document.getElementById('trip-form-wishlist') ? document.getElementById('trip-form-wishlist').value.trim() : '';
-      const aiAuto = document.getElementById('trip-form-ai-auto') ? document.getElementById('trip-form-ai-auto').checked : true;
+      try {
+        const title = document.getElementById('trip-form-title').value.trim();
+        const start = document.getElementById('trip-form-start').value;
+        const end = document.getElementById('trip-form-end').value;
+        const curr = document.getElementById('trip-form-curr').value;
+        const budget = parseInt(document.getElementById('trip-form-budget').value) || 3000000;
+        const countriesStr = document.getElementById('trip-form-countries').value.trim();
+        const style = document.getElementById('trip-form-style').value.trim();
+        const wishlist = document.getElementById('trip-form-wishlist') ? document.getElementById('trip-form-wishlist').value.trim() : '';
+        const aiAuto = document.getElementById('trip-form-ai-auto') ? document.getElementById('trip-form-ai-auto').checked : true;
 
-      if (!title) {
-        alert('여행 제목을 입력해 주세요.');
-        return;
-      }
+        if (!title) {
+          alert('여행 제목을 입력해 주세요.');
+          return;
+        }
 
-      const countries = countriesStr ? countriesStr.split(',').map(s => s.trim()) : ['자유여행'];
-      let durationDays = 5;
-      if (start && end) {
-        durationDays = Math.max(1, Math.ceil((new Date(end) - new Date(start)) / (1000 * 60 * 60 * 24)) + 1);
-      }
+        const countries = countriesStr ? countriesStr.split(',').map(s => s.trim()).filter(Boolean) : ['자유여행'];
+        let durationDays = 5;
+        if (start && end) {
+          durationDays = Math.max(1, Math.ceil((new Date(end) - new Date(start)) / (1000 * 60 * 60 * 24)) + 1);
+        }
 
-      const concepts = (State.createTripSelectedConcepts && State.createTripSelectedConcepts.length > 0)
-        ? State.createTripSelectedConcepts.slice()
-        : ['자유여행'];
+        const concepts = (State.createTripSelectedConcepts && State.createTripSelectedConcepts.length > 0)
+          ? State.createTripSelectedConcepts.slice()
+          : ['자유여행'];
 
-      let days = [];
-      const tempTrip = { title, countries };
-      const pack = resolveTripPack(tempTrip);
+        let days = [];
+        const tempTrip = { title, countries };
+        const pack = resolveTripPack(tempTrip);
+        const isYN = isYunnanTrip(tempTrip);
+        const isSA = isSouthAmericaTrip(tempTrip);
 
-      if (aiAuto) {
-        if (pack && pack.hasGoldenCourse && typeof pack.getGoldenItinerary === 'function') {
-          days = pack.getGoldenItinerary(durationDays);
+        // 스팟 생성용 주요 여행지명 정규화 (괄호 등 정돈)
+        let primaryDest = countries[0] || '여행지';
+        primaryDest = primaryDest.replace(/[()[\]]/g, ' ').trim();
+        if (primaryDest.includes(' ')) {
+          primaryDest = primaryDest.split(' ')[0];
+        }
+
+        if (aiAuto) {
+          if (pack && pack.hasGoldenCourse && typeof pack.getGoldenItinerary === 'function') {
+            days = pack.getGoldenItinerary(durationDays);
+          } else {
+            days = generateAutoSpotsForTrip(primaryDest || '여행지', durationDays, concepts, wishlist);
+          }
         } else {
-          days = generateAutoSpotsForTrip(countries[0] || '여행지', durationDays, concepts, wishlist);
+          for (let i = 1; i <= durationDays; i++) {
+            days.push({
+              dayNum: i,
+              title: `Day ${i} 여행 일정`,
+              date: `Day ${i}`,
+              city: primaryDest || '도시',
+              spots: []
+            });
+          }
         }
-      } else {
-        for (let i = 1; i <= durationDays; i++) {
-          days.push({
-            dayNum: i,
-            title: `Day ${i} 여행 일정`,
-            date: `Day ${i}`,
-            city: countries[0] || '도시',
-            spots: []
+
+        let tripCities = [primaryDest || '여행지'];
+        if (pack && pack.geo && Array.isArray(pack.geo.destinations) && pack.geo.destinations.length > 0) {
+          tripCities = pack.geo.destinations.map(d => d.nameKo || (d.name ? d.name.split(' ')[0] : d.id));
+        } else {
+          // wishlist 및 countries로부터 방문 도시 추출
+          const rawCities = [];
+          if (wishlist) {
+            wishlist.split(/[,\n]/).map(s => s.trim()).filter(Boolean).forEach(w => {
+              const clean = w.replace(/[()[\]]/g, '').trim();
+              if (clean && !rawCities.includes(clean)) rawCities.push(clean);
+            });
+          }
+          countries.forEach(c => {
+            const parts = c.split(/[()/,]/).map(p => p.trim()).filter(Boolean);
+            parts.forEach(p => {
+              if (p && !rawCities.includes(p)) rawCities.push(p);
+            });
           });
+          if (rawCities.length > 0) {
+            tripCities = rawCities.slice(0, 10);
+          }
         }
-      }
 
-      let tripCities = [countries[0] || '여행지'];
-      if (pack && pack.geo && Array.isArray(pack.geo.destinations) && pack.geo.destinations.length > 0) {
-        tripCities = pack.geo.destinations.map(d => d.nameKo || (d.name ? d.name.split(' ')[0] : d.id));
-      }
-      const tripEmoji = (pack && pack.flag) ? pack.flag : '✈️';
+        // 목적지 맞춤 이모지/국기 감지
+        let tripEmoji = (pack && pack.flag) ? pack.flag : null;
+        if (!tripEmoji) {
+          const combinedStr = (title + ' ' + countriesStr + ' ' + (primaryDest || '')).toLowerCase();
+          if (combinedStr.includes('몽골') || combinedStr.includes('mongol')) tripEmoji = '🇲🇳';
+          else if (combinedStr.includes('일본') || combinedStr.includes('도쿄') || combinedStr.includes('오사카') || combinedStr.includes('후쿠오카')) tripEmoji = '🇯🇵';
+          else if (combinedStr.includes('중국') || combinedStr.includes('운남') || combinedStr.includes('상하이') || combinedStr.includes('베이징')) tripEmoji = '🇨🇳';
+          else if (combinedStr.includes('미국') || combinedStr.includes('하와이') || combinedStr.includes('뉴욕') || combinedStr.includes('la')) tripEmoji = '🇺🇸';
+          else if (combinedStr.includes('프랑스') || combinedStr.includes('파리')) tripEmoji = '🇫🇷';
+          else if (combinedStr.includes('이탈리아') || combinedStr.includes('로마')) tripEmoji = '🇮🇹';
+          else if (combinedStr.includes('스페인') || combinedStr.includes('바르셀로나')) tripEmoji = '🇪🇸';
+          else if (combinedStr.includes('스위스') || combinedStr.includes('인터라켄')) tripEmoji = '🇨🇭';
+          else if (combinedStr.includes('영국') || combinedStr.includes('런던')) tripEmoji = '🇬🇧';
+          else if (combinedStr.includes('독일') || combinedStr.includes('베를린')) tripEmoji = '🇩🇪';
+          else if (combinedStr.includes('베트남') || combinedStr.includes('다낭') || combinedStr.includes('하노이')) tripEmoji = '🇻🇳';
+          else if (combinedStr.includes('태국') || combinedStr.includes('방콕') || combinedStr.includes('치앙마이')) tripEmoji = '🇹🇭';
+          else if (combinedStr.includes('대만') || combinedStr.includes('타이베이')) tripEmoji = '🇹🇼';
+          else if (combinedStr.includes('호주') || combinedStr.includes('시드니')) tripEmoji = '🇦🇺';
+          else if (combinedStr.includes('캐나다')) tripEmoji = '🇨🇦';
+          else if (combinedStr.includes('남미') || combinedStr.includes('페루') || combinedStr.includes('볼리비아') || combinedStr.includes('아르헨티나') || combinedStr.includes('브라질')) tripEmoji = '🌎';
+          else if (combinedStr.includes('유럽')) tripEmoji = '🇪🇺';
+          else tripEmoji = '✈️';
+        }
 
-      const newTrip = {
-        id: 'trip_' + Date.now(),
-        title: title,
-        subtitle: style || concepts.join(' · ') || (pack ? pack.name : '나만의 특별한 여정'),
-        startDate: start,
-        endDate: end,
-        durationDays: durationDays,
-        currency: curr || (pack ? pack.currency : 'KRW'),
-        budget: budget,
-        countries: countries,
-        cities: tripCities,
-        coverEmoji: tripEmoji,
-        concepts: concepts,
-        wishlist: wishlist,
-        isBucketlist: (!start && !end),
-        roomCode: 'TRIP-' + Math.floor(1000 + Math.random() * 9000),
-        days: days,
-        expenses: [],
-        journals: {},
-        checklist: isYN ? [
-          { text: '여권 유효기간 6개월 이상 확인', urgent: true, checked: false },
-          { text: '알리페이 / 위챗페이 트래블로그 카드 사전 등록', urgent: true, checked: false },
-          { text: '옥룡설산 케이블카 사전 예매', urgent: true, checked: false },
-          { text: '중국 고속철 (쿤밍-따리-리장) 예매', urgent: true, checked: false },
-          { text: '중국 데이터 eSIM 또는 유심 구매', urgent: false, checked: false },
-          { text: '상비약 (고산병약, 소화제, 지사제, 타이레놀)', urgent: true, checked: false }
-        ] : [
-          { text: '여권 유효기간 6개월 이상 확인', urgent: true, checked: false },
-          { text: '현지 통화 환전 또는 트래블로그/월렛 카드 발급', urgent: true, checked: false },
-          { text: '여행자 보험 가입', urgent: true, checked: false },
-          { text: '스마트폰 유심 / eSIM 구매', urgent: false, checked: false }
-        ]
-      };
+        let initialChecklist = [];
+        if (isYN) {
+          initialChecklist = [
+            { text: '여권 유효기간 6개월 이상 확인', urgent: true, checked: false },
+            { text: '알리페이 / 위챗페이 트래블로그 카드 사전 등록', urgent: true, checked: false },
+            { text: '옥룡설산 케이블카 사전 예매', urgent: true, checked: false },
+            { text: '중국 고속철 (쿤밍-따리-리장) 예매', urgent: true, checked: false },
+            { text: '중국 데이터 eSIM 또는 유심 구매', urgent: false, checked: false },
+            { text: '상비약 (고산병약, 소화제, 지사제, 타이레놀)', urgent: true, checked: false }
+          ];
+        } else if (isSA) {
+          initialChecklist = [
+            { text: '여권 유효기간 6개월 이상 확인', urgent: true, checked: false },
+            { text: '마추픽추 입장권 & 페루레일 기차표 공식 사전 예매', urgent: true, checked: false },
+            { text: '황열병 예방접종 증명서(옐로우카드) 준비', urgent: true, checked: false },
+            { text: '현지 통화 환전 또는 트래블로그/월렛 카드 발급', urgent: true, checked: false },
+            { text: '고산병 처방약(다이아목스) 및 비상 상비약 준비', urgent: true, checked: false },
+            { text: '해외 여행자 보험 가입', urgent: true, checked: false },
+            { text: '스마트폰 유심 / eSIM 구매', urgent: false, checked: false }
+          ];
+        } else {
+          initialChecklist = [
+            { text: '여권 유효기간 6개월 이상 확인 (최소 6개월)', urgent: true, checked: false },
+            { text: '항공권 E-티켓 및 모바일 탑승권 보관', urgent: true, checked: false },
+            { text: '숙소 예약 바우처 및 주소 오프라인 저장', urgent: true, checked: false },
+            { text: '현지 통화 환전 또는 트래블로그/트래블월렛 카드 발급', urgent: true, checked: false },
+            { text: '해외 여행자 보험 가입', urgent: true, checked: false },
+            { text: '스마트폰 해외 로밍 또는 eSIM/유심 구매', urgent: false, checked: false },
+            { text: '여행용 상비약 (소화제, 진통제, 지사제, 밴드)', urgent: false, checked: false },
+            { text: '멀티 어댑터 및 보조배터리 준비', urgent: false, checked: false }
+          ];
+        }
 
-      State.trips.unshift(newTrip);
-      State.activeTripId = newTrip.id;
-      saveTrips();
-      updateHubFilterDropdowns();
-      closeModal('modal-create-trip', true);
+        const newTrip = {
+          id: 'trip_' + Date.now(),
+          title: title,
+          subtitle: style || concepts.join(' · ') || (pack ? pack.name : '나만의 특별한 여정'),
+          startDate: start,
+          endDate: end,
+          durationDays: durationDays,
+          currency: curr || (pack ? pack.currency : 'KRW'),
+          budget: budget,
+          countries: countries,
+          cities: tripCities,
+          coverEmoji: tripEmoji,
+          concepts: concepts,
+          wishlist: wishlist,
+          isBucketlist: (!start && !end),
+          roomCode: 'TRIP-' + Math.floor(1000 + Math.random() * 9000),
+          days: days,
+          expenses: [],
+          journals: {},
+          checklist: initialChecklist
+        };
 
-      switchView('workspace');
-      if (aiAuto) {
-        showToast('✨ AI 30분 맞춤 일정이 포함된 여행 카드가 생성되었습니다!');
-      } else {
-        openModal('modal-ai-trip');
+        State.trips.unshift(newTrip);
+        State.activeTripId = newTrip.id;
+        saveTrips();
+        updateHubFilterDropdowns();
+        closeModal('modal-create-trip', true);
+
+        switchView('workspace');
+        if (aiAuto) {
+          showToast('✨ AI 30분 맞춤 일정이 포함된 여행 카드가 생성되었습니다!');
+        } else {
+          openModal('modal-ai-trip');
+        }
+      } catch (err) {
+        console.error('Failed to submitCreateTrip:', err);
+        alert('여행 생성 중 오류가 발생했습니다: ' + err.message);
       }
     }
 
