@@ -565,7 +565,7 @@
             <h1 class="font-serif-brand text-base sm:text-xl font-bold tracking-tight text-[#1c1917] dark:text-[#ededed] whitespace-nowrap">
               Sulsul Travel
             </h1>
-            <span id="app-ver-badge" onclick="event.stopPropagation(); openVersionHistoryModal()" class="px-1.5 py-0.5 rounded-md theme-card-subtle hover:border-amber-500/60 hover:text-amber-600 dark:hover:text-amber-300 text-[#a2601b] dark:text-[#d4af37] text-[10px] font-bold font-mono shadow-inner cursor-pointer shrink-0 transition" title="버전 업데이트 기록 보기 (클릭)">v1.2.7</span>
+            <span id="app-ver-badge" onclick="event.stopPropagation(); openVersionHistoryModal()" class="px-1.5 py-0.5 rounded-md theme-card-subtle hover:border-amber-500/60 hover:text-amber-600 dark:hover:text-amber-300 text-[#a2601b] dark:text-[#d4af37] text-[10px] font-bold font-mono shadow-inner cursor-pointer shrink-0 transition" title="버전 업데이트 기록 보기 (클릭)">v1.2.8</span>
           </div>
           <p id="header-trip-name" class="text-[10px] sm:text-[11px] text-[#78716c] dark:text-stone-400 truncate max-w-[120px] sm:max-w-xs font-normal">인생의 모든 여정을 기록하는 다이어리</p>
         </div>
@@ -1461,39 +1461,50 @@
         </div>
 
         <!-- 여행지 도착 및 귀국/종료 시간 (교통/비행기 고려 실전 일정용) -->
-        <div class="grid grid-cols-2 gap-3 p-2.5 bg-[#fcfaf6] border border-[#e8e2d5] rounded-xl">
-          <div>
-            <div class="flex items-center justify-between mb-1">
-              <label class="font-bold text-[#1c1917] flex items-center gap-1 text-xs">
-                <i class="fa-solid fa-plane-arrival text-amber-600"></i>
-                <span>현지 도착 시간</span>
-              </label>
+        <div class="p-2.5 bg-[#fcfaf6] border border-[#e8e2d5] rounded-xl space-y-2">
+          <div class="grid grid-cols-2 gap-3">
+            <div>
+              <div class="flex items-center justify-between mb-1">
+                <label class="font-bold text-[#1c1917] flex items-center gap-1 text-xs">
+                  <i class="fa-solid fa-plane-arrival text-amber-600"></i>
+                  <span>현지 도착 시간</span>
+                </label>
+              </div>
+              <input type="time" id="trip-form-arrival-time" value="14:00" class="w-full px-2.5 py-1.5 bg-white border border-[#e8e2d5] rounded-lg text-xs text-[#1c1917] focus:outline-none focus:border-[#a2601b]">
+              <div class="flex flex-wrap gap-1 mt-1.5">
+                <button type="button" onclick="document.getElementById('trip-form-arrival-time').value='10:00'" class="px-1.5 py-0.5 text-[10px] rounded bg-[#f0ece1] text-[#78716c] hover:text-[#1c1917] hover:bg-amber-100 transition cursor-pointer">오전 10:00</button>
+                <button type="button" onclick="document.getElementById('trip-form-arrival-time').value='14:00'" class="px-1.5 py-0.5 text-[10px] rounded bg-[#f0ece1] text-[#78716c] hover:text-[#1c1917] hover:bg-amber-100 transition cursor-pointer">오후 14:00</button>
+                <button type="button" onclick="document.getElementById('trip-form-arrival-time').value='19:00'" class="px-1.5 py-0.5 text-[10px] rounded bg-[#f0ece1] text-[#78716c] hover:text-[#1c1917] hover:bg-amber-100 transition cursor-pointer">저녁 19:00</button>
+                <button type="button" onclick="document.getElementById('trip-form-arrival-time').value='22:00'" class="px-1.5 py-0.5 text-[10px] rounded bg-[#f0ece1] text-[#78716c] hover:text-[#1c1917] hover:bg-amber-100 transition cursor-pointer">심야 22:00</button>
+              </div>
+              <span class="text-[10px] text-[#78716c] mt-1 block leading-tight">집 출발 · 공항 수속 · 체크인 연계</span>
             </div>
-            <input type="time" id="trip-form-arrival-time" value="14:00" class="w-full px-2.5 py-1.5 bg-white border border-[#e8e2d5] rounded-lg text-xs text-[#1c1917] focus:outline-none focus:border-[#a2601b]">
-            <div class="flex flex-wrap gap-1 mt-1.5">
-              <button type="button" onclick="document.getElementById('trip-form-arrival-time').value='10:00'" class="px-1.5 py-0.5 text-[10px] rounded bg-[#f0ece1] text-[#78716c] hover:text-[#1c1917] hover:bg-amber-100 transition cursor-pointer">오전 10:00</button>
-              <button type="button" onclick="document.getElementById('trip-form-arrival-time').value='14:00'" class="px-1.5 py-0.5 text-[10px] rounded bg-[#f0ece1] text-[#78716c] hover:text-[#1c1917] hover:bg-amber-100 transition cursor-pointer">오후 14:00</button>
-              <button type="button" onclick="document.getElementById('trip-form-arrival-time').value='19:00'" class="px-1.5 py-0.5 text-[10px] rounded bg-[#f0ece1] text-[#78716c] hover:text-[#1c1917] hover:bg-amber-100 transition cursor-pointer">저녁 19:00</button>
-              <button type="button" onclick="document.getElementById('trip-form-arrival-time').value='22:00'" class="px-1.5 py-0.5 text-[10px] rounded bg-[#f0ece1] text-[#78716c] hover:text-[#1c1917] hover:bg-amber-100 transition cursor-pointer">심야 22:00</button>
+
+            <div>
+              <div class="flex items-center justify-between mb-1">
+                <label class="font-bold text-[#1c1917] flex items-center gap-1 text-xs">
+                  <i class="fa-solid fa-plane-departure text-rose-500"></i>
+                  <span>현지 종료/비행 시간</span>
+                </label>
+              </div>
+              <input type="time" id="trip-form-departure-time" value="17:00" class="w-full px-2.5 py-1.5 bg-white border border-[#e8e2d5] rounded-lg text-xs text-[#1c1917] focus:outline-none focus:border-[#a2601b]">
+              <div class="flex flex-wrap gap-1 mt-1.5">
+                <button type="button" onclick="document.getElementById('trip-form-departure-time').value='11:00'" class="px-1.5 py-0.5 text-[10px] rounded bg-[#f0ece1] text-[#78716c] hover:text-[#1c1917] hover:bg-rose-100 transition cursor-pointer">오전 11:00</button>
+                <button type="button" onclick="document.getElementById('trip-form-departure-time').value='15:00'" class="px-1.5 py-0.5 text-[10px] rounded bg-[#f0ece1] text-[#78716c] hover:text-[#1c1917] hover:bg-rose-100 transition cursor-pointer">오후 15:00</button>
+                <button type="button" onclick="document.getElementById('trip-form-departure-time').value='17:00'" class="px-1.5 py-0.5 text-[10px] rounded bg-[#f0ece1] text-[#78716c] hover:text-[#1c1917] hover:bg-rose-100 transition cursor-pointer">오후 17:00</button>
+                <button type="button" onclick="document.getElementById('trip-form-departure-time').value='21:30'" class="px-1.5 py-0.5 text-[10px] rounded bg-[#f0ece1] text-[#78716c] hover:text-[#1c1917] hover:bg-rose-100 transition cursor-pointer">야간 21:30</button>
+              </div>
+              <span class="text-[10px] text-[#78716c] mt-1 block leading-tight">체크아웃 · 짐보관 · 출국 · 귀가 연계</span>
             </div>
-            <span class="text-[10px] text-[#78716c] mt-1 block leading-tight">집 출발 · 공항 수속 · 체크인 자동 연계</span>
           </div>
 
-          <div>
-            <div class="flex items-center justify-between mb-1">
-              <label class="font-bold text-[#1c1917] flex items-center gap-1 text-xs">
-                <i class="fa-solid fa-plane-departure text-rose-500"></i>
-                <span>현지 종료/비행 시간</span>
-              </label>
+          <!-- 실시간 시차 & 비행시간 스마트 안내 뱃지 -->
+          <div id="trip-form-tz-banner" class="px-2.5 py-1.5 rounded-lg bg-amber-500/10 border border-amber-500/30 text-[11px] text-[#1c1917] flex items-center justify-between">
+            <div class="flex items-center gap-1.5 min-w-0">
+              <i class="fa-solid fa-earth-americas text-[#a2601b] shrink-0"></i>
+              <span id="trip-form-tz-text" class="font-bold truncate">단거리/동아시아 (시차 0h · 직항 약 2.5h)</span>
             </div>
-            <input type="time" id="trip-form-departure-time" value="17:00" class="w-full px-2.5 py-1.5 bg-white border border-[#e8e2d5] rounded-lg text-xs text-[#1c1917] focus:outline-none focus:border-[#a2601b]">
-            <div class="flex flex-wrap gap-1 mt-1.5">
-              <button type="button" onclick="document.getElementById('trip-form-departure-time').value='11:00'" class="px-1.5 py-0.5 text-[10px] rounded bg-[#f0ece1] text-[#78716c] hover:text-[#1c1917] hover:bg-rose-100 transition cursor-pointer">오전 11:00</button>
-              <button type="button" onclick="document.getElementById('trip-form-departure-time').value='15:00'" class="px-1.5 py-0.5 text-[10px] rounded bg-[#f0ece1] text-[#78716c] hover:text-[#1c1917] hover:bg-rose-100 transition cursor-pointer">오후 15:00</button>
-              <button type="button" onclick="document.getElementById('trip-form-departure-time').value='17:00'" class="px-1.5 py-0.5 text-[10px] rounded bg-[#f0ece1] text-[#78716c] hover:text-[#1c1917] hover:bg-rose-100 transition cursor-pointer">오후 17:00</button>
-              <button type="button" onclick="document.getElementById('trip-form-departure-time').value='21:30'" class="px-1.5 py-0.5 text-[10px] rounded bg-[#f0ece1] text-[#78716c] hover:text-[#1c1917] hover:bg-rose-100 transition cursor-pointer">야간 21:30</button>
-            </div>
-            <span class="text-[10px] text-[#78716c] mt-1 block leading-tight">체크아웃 · 짐보관 · 출국 · 귀가 연계</span>
+            <span id="trip-form-tz-calc" class="text-[10px] text-[#78716c] shrink-0 ml-1">인천 출발 ➔ 당일 도착</span>
           </div>
         </div>
 
@@ -2493,24 +2504,39 @@
 
       <!-- 버전 목록 스크롤 영역 -->
       <div class="flex-1 overflow-y-auto space-y-3 pr-1 text-xs">
-        <!-- v1.2.7 (Current) -->
+        <!-- v1.2.8 (Current) -->
         <div class="p-4 rounded-2xl bg-amber-500/5 dark:bg-amber-500/10 border-2 border-amber-500/40 space-y-2.5 shadow-sm relative overflow-hidden">
           <div class="flex items-center justify-between gap-2">
             <div class="flex items-center gap-2 min-w-0">
-              <span class="px-2 py-0.5 rounded-lg bg-amber-500 text-black font-black text-xs shadow-sm shrink-0">v1.2.7</span>
-              <span class="text-xs font-black text-[#1c1917] dark:text-white">교통 이용시간 기반 실전 초안 생성 & 실시간 변수 대응 일정 튜닝</span>
+              <span class="px-2 py-0.5 rounded-lg bg-amber-500 text-black font-black text-xs shadow-sm shrink-0">v1.2.8</span>
+              <span class="text-xs font-black text-[#1c1917] dark:text-white">국가별 시차(Time Zone) & 비행시간 연동 스마트 일정 엔진</span>
             </div>
             <span class="px-2 py-0.5 rounded-full text-[10px] font-black bg-emerald-100 text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300 border border-emerald-300 shrink-0">최신 버전</span>
           </div>
           <div class="text-[11px] text-[#44403c] dark:text-stone-300 space-y-1.5 leading-relaxed">
-            <div><b>교통 이용시간 연계 실전 일정 초안 생성</b>: 새 여행 등록 시 현지 도착 및 종료(비행) 시간을 입력받아 Day 1 집 출발 ➔ 공항 수속 ➔ 비행 ➔ 현지 도착 ➔ 숙소 이동 ➔ 체크인 ➔ 디너, Day N 체크아웃 ➔ 짐보관 ➔ 런치 ➔ 공항 이동 ➔ 출국 수속 ➔ 비행 ➔ 귀국 라이프사이클을 30분 단위로 정밀 자동 완성.</div>
-            <div><b>실시간 변수 대응 & 일정 튜닝 엔진 탑재</b>: 항공편 연착, 교통 체증, 우천, 피로도 등 현장 변수 발생 시 즉시 시간표를 오프라인으로 재배치하거나 AI 오케스트레이션으로 스마트 재생성.</div>
-            <div><b>방문 완료 스팟 불변 보호 원칙</b>: 체크 완료된 과거 방문 스팟은 시간표 재배치 시 절대 변경되지 않고 보존되며, 미방문 일정만 유기적으로 순연.</div>
+            <div><b>국가별 시차 & 비행 소요 시간 오프라인 매트릭스</b>: 동아시아(일본/대만/몽골), 동남아(베트남/태국/싱가포르/발리), 유럽 전역(-7~8h, 14h 비행), 미 서부(-16h 날짜변경선), 미 동부(-13h), 하와이, 대양주, 남미 등 12대 권역 시차와 직항/경유 비행시간을 1초 만에 자동 감지.</div>
+            <div><b>출발지(KST) vs 현지 시각 이원화 역산</b>: 현지 도착 시간에 맞춰 한국 집 출발 및 인천공항 이륙 시간을 시차 역산하여 현실적인 도어-투-도어 스케줄 자동 생성.</div>
+            <div><b>귀국일 '+1일(익일 도착)' 날짜 래핑 & 뱃지</b>: 장거리 귀국 비행 시 한국 공항 도착 및 귀가 일정을 익일 도착 뱃지와 함께 현실 날짜로 정확히 표현.</div>
+            <div><b>등록 모달 실시간 안내 뱃지</b>: 여행지 입력 시 현지 시차 및 예상 비행시간이 실시간 인터랙티브 뱃지로 표기.</div>
           </div>
           <div class="text-[10px] text-stone-400 dark:text-stone-500 pt-1 border-t border-amber-500/20 flex items-center justify-between">
             <span>📅 2026-09-07 릴리즈</span>
-            <span class="font-mono">st-shell-v1.2.7</span>
+            <span class="font-mono">st-shell-v1.2.8</span>
           </div>
+        </div>
+
+        <!-- v1.2.7 -->
+        <div class="p-3.5 rounded-xl bg-stone-50 dark:bg-stone-900/50 border border-stone-200 dark:border-stone-800 space-y-2">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-2">
+              <span class="px-1.5 py-0.5 rounded-md bg-stone-200 dark:bg-stone-800 text-stone-800 dark:text-stone-200 font-bold text-[11px] font-mono">v1.2.7</span>
+              <span class="font-bold text-[#1c1917] dark:text-stone-200">교통 이용시간 기반 실전 초안 생성 & 실시간 변수 대응 일정 튜닝</span>
+            </div>
+            <span class="text-[10px] text-stone-400">2026-09-07</span>
+          </div>
+          <p class="text-[11px] text-[#78716c] dark:text-stone-400 leading-relaxed">
+            새 여행 등록 시 도착/종료 시간 입력 지원, 실전 출국/귀국 라이프사이클 30분 단위 생성, 6대 변수 대응 일정 튜닝 및 완료 스팟 불변 보호 원칙 적용.
+          </p>
         </div>
 
         <!-- v1.2.6 -->
@@ -2846,7 +2872,7 @@
     window.showToast = showToast;
 
     // 앱 버전 및 글로벌 네임스페이스 (Sulsul-Travel Invariant Rule R-10, R-11, R-12, R-13, R-14, R-15)
-    const APP_VER = '1.2.7';
+    const APP_VER = '1.2.8';
 
     // ══════════════════════════════════════════
     // [Two-Tone Theme System] 라이트 그레이 & 딥 블랙 테마 엔진
@@ -5661,6 +5687,8 @@
             `<span class="px-1.5 py-0.2 rounded bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 text-[9px] font-bold flex items-center gap-0.5"><i class="fa-solid fa-check text-[8px]"></i>방문완료</span>` : '';
           const draftBadge = spot.isDraft ? 
             `<span class="px-1.5 py-0.2 rounded bg-amber-400/20 text-amber-400 border border-amber-400/30 text-[9px] font-bold">초안</span>` : '';
+          const nextDayBadge = (spot.time && spot.time.includes('+1일')) ? 
+            `<span class="px-1.5 py-0.2 rounded bg-purple-500/20 text-purple-300 border border-purple-500/30 text-[9px] font-bold flex items-center gap-0.5"><i class="fa-solid fa-moon text-[8px]"></i>익일(+1일)</span>` : '';
           
           const gmapQuery = encodeURIComponent(`${spot.title} ${day.city || ''}`);
           const gmapUrl = `https://www.google.com/maps/search/?api=1&query=${gmapQuery}`;
@@ -5682,6 +5710,7 @@
                   <span class="font-bold ${titleClass} text-xs">${spot.title}</span>
                   ${doneBadge}
                   ${draftBadge}
+                  ${nextDayBadge}
                 </div>
                 ${spot.desc ? `<p class="text-[11px] text-slate-400 mt-1 leading-relaxed">${spot.desc}</p>` : ''}
                 ${spot.memo && !spot.desc ? `<p class="text-[11px] text-slate-400 mt-1 leading-relaxed">${spot.memo}</p>` : ''}
@@ -6983,30 +7012,236 @@
 
       State.createTripSelectedConcepts = ['배낭', '자연'];
       renderConceptChips();
+
+      if (titleInput && !titleInput._tzBound) {
+        titleInput.addEventListener('input', updateCreateTripTzBanner);
+        titleInput._tzBound = true;
+      }
+      if (countriesInput && !countriesInput._tzBound) {
+        countriesInput.addEventListener('input', updateCreateTripTzBanner);
+        countriesInput._tzBound = true;
+      }
+
+      updateCreateTripTzBanner();
       openModal('modal-create-trip');
     }
 
-    // 시간 연산 유틸리티
+    // ----------------------------------------------------
+    // [11.1] 국가별 시차(Time Zone Offset) & 비행 소요 시간 스마트 매트릭스
+    // ----------------------------------------------------
+    function detectDestinationTimezone(destStr) {
+      const s = (destStr || '').toLowerCase();
+
+      // 1. 대한민국 국내
+      if (/제주|부산|강릉|속초|경주|여수|전주|서울|인천|대구|광주|남해|통영|국내/.test(s)) {
+        return {
+          region: '국내',
+          tzDiff: 0,
+          flightHours: 1,
+          returnFlightHours: 1,
+          tzLabel: '시차 없음',
+          calcDesc: '국내 이동 ➔ 당일 도착',
+          isCrossDateLine: false
+        };
+      }
+
+      // 2. 일본
+      if (/일본|도쿄|오사카|후쿠오카|삿포로|교토|오키나와|나고야|유후인|japan|tokyo|osaka|fukuoka|sapporo/.test(s)) {
+        return {
+          region: '일본',
+          tzDiff: 0,
+          flightHours: 2.5,
+          returnFlightHours: 2.5,
+          tzLabel: '시차 없음 (UTC+9)',
+          calcDesc: '인천 출발 ➔ 당일 낮 착륙',
+          isCrossDateLine: false
+        };
+      }
+
+      // 3. 중화권 / 몽골 (대만, 홍콩, 마카오, 베이징, 상하이, 칭다오, 윈난, 몽골)
+      if (/대만|타이베이|가오슝|홍콩|마카오|taiwan|taipei|hong kong|몽골|울란바토르|mongolia|중국|베이징|상하이|칭다오|시안|운남|윈난|리장|china|beijing|shanghai/.test(s)) {
+        return {
+          region: '동아시아/중화권',
+          tzDiff: -1,
+          flightHours: 3.5,
+          returnFlightHours: 3.5,
+          tzLabel: '한국보다 1시간 느림 (UTC+8)',
+          calcDesc: '인천 출발 ➔ 당일 착륙',
+          isCrossDateLine: false
+        };
+      }
+
+      // 4. 동남아시아 (베트남, 태국, 싱가포르, 발리, 필리핀, 말레이시아 등)
+      if (/베트남|다낭|나트랑|푸꾸옥|하노이|호치민|태국|방콕|푸켓|치앙마이|vietnam|danang|thailand|bangkok|singapore|싱가포르|발리|인도네시아|bali|필리핀|세부|보라카이|마닐라|말레이시아|쿠알라룸푸르|코타키나발루|philippines|cebu/.test(s)) {
+        return {
+          region: '동남아시아',
+          tzDiff: -2,
+          flightHours: 5,
+          returnFlightHours: 5,
+          tzLabel: '한국보다 1~2시간 느림 (UTC+7)',
+          calcDesc: '인천 출발 ➔ 당일 오후/저녁 착륙',
+          isCrossDateLine: false
+        };
+      }
+
+      // 5. 괌 / 사이판
+      if (/괌|사이판|guam|saipan/.test(s)) {
+        return {
+          region: '대양주(괌/사이판)',
+          tzDiff: 1,
+          flightHours: 4.5,
+          returnFlightHours: 4.5,
+          tzLabel: '한국보다 1시간 빠름 (UTC+10)',
+          calcDesc: '인천 출발 ➔ 당일 착륙',
+          isCrossDateLine: false
+        };
+      }
+
+      // 6. 하와이
+      if (/하와이|호놀룰루|오아후|마우이|hawaii|honolulu/.test(s)) {
+        return {
+          region: '미국 하와이',
+          tzDiff: -19,
+          flightHours: 8.5,
+          returnFlightHours: 10.5,
+          tzLabel: '한국보다 19시간 느림 (UTC-10)',
+          calcDesc: '날짜변경선: 현지 당일 오전 착륙 | 귀국: +1일 익일 도착',
+          isCrossDateLine: true
+        };
+      }
+
+      // 7. 미국/캐나다 서부 (LA, 샌프란시스코, 시애틀, 라스베이거스, 밴쿠버)
+      if (/로스앤젤레스|la\b|lax|샌프란시스코|시애틀|라스베이거스|캘리포니아|포틀랜드|san francisco|los angeles|seattle|las vegas|미국 서부|밴쿠버|vancouver/.test(s)) {
+        return {
+          region: '미국/캐나다 서부',
+          tzDiff: -16,
+          flightHours: 11.5,
+          returnFlightHours: 13,
+          tzLabel: '한국보다 16시간 느림 (UTC-7)',
+          calcDesc: '날짜변경선: 현지 당일 오전 착륙 | 귀국: +1일 익일 도착',
+          isCrossDateLine: true
+        };
+      }
+
+      // 8. 미국/캐나다 동부 (뉴욕, 워싱턴, 보스턴, 시카고, 토론토 등)
+      if (/뉴욕|new york|nyc|워싱턴|보스턴|시카고|마이애미|토론토|몬트리올|미국 동부|미국|캐나다|usa|america/.test(s)) {
+        return {
+          region: '미국/캐나다 동부',
+          tzDiff: -13,
+          flightHours: 14.5,
+          returnFlightHours: 15,
+          tzLabel: '한국보다 13시간 느림 (UTC-4)',
+          calcDesc: '한국 출발 ➔ 현지 당일 착륙 | 귀국: +1일 익일 도착',
+          isCrossDateLine: false
+        };
+      }
+
+      // 9. 유럽 전역 (프랑스, 파리, 스페인, 바르셀로나, 마드리드, 이탈리아, 로마, 영국, 런던, 독일, 스위스, 오스트리아, 체코, 프라하, 포르투갈, 리스본 등)
+      if (/유럽|프랑스|파리|스페인|바르셀로나|마드리드|이탈리아|로마|베네치아|피렌체|영국|런던|스위스|인터라켄|취리히|독일|뮌헨|베를린|오스트리아|비엔나|빈|체코|프라하|헝가리|부다페스트|포르투갈|리스본|포르투|크로아티아|네덜란드|암스테르담|벨기에|europe|france|paris|spain|italy|rome|london|germany|swiss|prague|lisbon/.test(s)) {
+        return {
+          region: '유럽',
+          tzDiff: -7,
+          flightHours: 14,
+          returnFlightHours: 12,
+          tzLabel: '한국보다 7시간 느림 (UTC+2 서머타임)',
+          calcDesc: '한국 오전 출발 ➔ 현지 당일 저녁 도착 | 귀국: +1일 익일 도착',
+          isCrossDateLine: false
+        };
+      }
+
+      // 10. 중동 / 튀르키예 (두바이, 터키, 이스탄불, 카타르)
+      if (/두바이|dubai|아랍에미리트|uae|카타르|도하|튀르키예|터키|이스탄불|turkey|istanbul/.test(s)) {
+        return {
+          region: '중동/튀르키예',
+          tzDiff: -5,
+          flightHours: 10,
+          returnFlightHours: 9,
+          tzLabel: '한국보다 5~6시간 느림 (UTC+3~4)',
+          calcDesc: '한국 출발 ➔ 현지 당일 도착 | 귀국: +1일 익일 도착',
+          isCrossDateLine: false
+        };
+      }
+
+      // 11. 호주 / 뉴질랜드 (시드니, 멜버른, 브리즈번, 오클랜드)
+      if (/호주|오스트레일리아|시드니|멜버른|브리즈번|골드코스트|뉴질랜드|오클랜드|australia|sydney|melbourne|new zealand/.test(s)) {
+        return {
+          region: '대양주(호주/뉴질랜드)',
+          tzDiff: 1,
+          flightHours: 10.5,
+          returnFlightHours: 10.5,
+          tzLabel: '한국보다 1~2시간 빠름 (UTC+10)',
+          calcDesc: '야간 비행 ➔ 현지 아침/낮 착륙 | 귀국: 당일/익일 도착',
+          isCrossDateLine: false
+        };
+      }
+
+      // 12. 남미 (페루, 리마, 볼리비아, 칠레, 아르헨티나, 브라질)
+      if (/남미|페루|리마|쿠스코|볼리비아|우유니|아르헨티나|부에노스아이레스|칠레|산티아고|브라질|리오|peru|lima|argentina|brazil/.test(s)) {
+        return {
+          region: '남아메리카',
+          tzDiff: -14,
+          flightHours: 24,
+          returnFlightHours: 24,
+          tzLabel: '한국보다 12~14시간 느림 (UTC-5)',
+          calcDesc: '환승 20~24h 소요 | 출국·귀국 모두 익일(+1일) 도착',
+          isCrossDateLine: false
+        };
+      }
+
+      // 기본 fallback
+      return {
+        region: '단거리/동아시아',
+        tzDiff: 0,
+        flightHours: 2.5,
+        returnFlightHours: 2.5,
+        tzLabel: '시차 0h (동일 시차권)',
+        calcDesc: '인천 출발 ➔ 당일 도착',
+        isCrossDateLine: false
+      };
+    }
+
+    function updateCreateTripTzBanner() {
+      const textEl = document.getElementById('trip-form-tz-text');
+      const calcEl = document.getElementById('trip-form-tz-calc');
+      if (!textEl || !calcEl) return;
+
+      const title = document.getElementById('trip-form-title')?.value || '';
+      const countries = document.getElementById('trip-form-countries')?.value || '';
+      const destStr = (countries + ' ' + title).trim();
+
+      const tzInfo = detectDestinationTimezone(destStr);
+      textEl.textContent = `${tzInfo.region} (시차: ${tzInfo.tzLabel} · 직항 약 ${tzInfo.flightHours}h)`;
+      calcEl.textContent = tzInfo.calcDesc;
+    }
+
+    // 시간 연산 유틸리티 (익일 +1일 지원)
     function timeToMinutes(timeStr, defaultMinutes = 840) {
-      if (!timeStr || typeof timeStr !== 'string' || !timeStr.includes(':')) return defaultMinutes;
-      const [h, m] = timeStr.split(':').map(Number);
-      return (isNaN(h) ? 0 : h) * 60 + (isNaN(m) ? 0 : m);
+      if (!timeStr || typeof timeStr !== 'string') return defaultMinutes;
+      const isNextDay = timeStr.includes('+1일');
+      const cleanTime = timeStr.replace('+1일', '').trim();
+      if (!cleanTime.includes(':')) return defaultMinutes;
+      const [h, m] = cleanTime.split(':').map(Number);
+      const base = (isNaN(h) ? 0 : h) * 60 + (isNaN(m) ? 0 : m);
+      return isNextDay ? (base + 1440) : base;
     }
 
     function minutesToTime(mins) {
-      let m = Math.round(mins) % (24 * 60);
-      if (m < 0) m += 24 * 60;
+      const isNextDay = mins >= 1440;
+      let m = Math.round(mins) % 1440;
+      if (m < 0) m += 1440;
       const hours = Math.floor(m / 60);
       const minutes = m % 60;
-      return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}`;
+      const formatted = `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}`;
+      return isNextDay ? `+1일 ${formatted}` : formatted;
     }
 
-    function generateAutoSpotsForTrip(destination, durationDays, concepts, wishlist, arrivalTime = '14:00', departureTime = '17:00') {
+    function generateAutoSpotsForTrip(destination, durationDays, concepts, wishlist, arrivalTime = '14:00', departureTime = '17:00', fullDestContext = '') {
       const conceptList = (concepts && concepts.length > 0) ? concepts : ['자유여행', '명소탐방'];
       const conceptStr = conceptList.join(', ');
       const wishlistItems = wishlist ? wishlist.split(/[,\n]/).map(s => s.trim()).filter(Boolean) : [];
       let wishIndex = 0;
 
+      const tzInfo = detectDestinationTimezone(fullDestContext || destination);
       const arrMin = timeToMinutes(arrivalTime, 14 * 60);
       const depMin = timeToMinutes(departureTime, 17 * 60);
 
@@ -7018,81 +7253,101 @@
         const isLastDay = (i === durationDays);
 
         if (isFirstDay && durationDays > 1) {
-          // --- Day 1: 교통 이동 및 현지 도착 실전 라이프사이클 ---
-          // 1) 집 출발 및 공항 이동 (도착 약 4시간 전)
-          const homeDepMin = Math.max(5 * 60, arrMin - 240);
+          // --- Day 1: 시차 & 비행시간 반영 실전 출국 라이프사이클 ---
+          // 1. 현지 도착 시각(arrMin)을 한국 시각(KST)으로 환산: arrKst = arrLocal - (tzDiff * 60)
+          const arrKstTotalMin = arrMin - (tzInfo.tzDiff * 60);
+          // 2. 비행기 이륙 시각 (한국 KST) = 도착 KST - 비행소요시간
+          const flightDepKstTotalMin = arrKstTotalMin - Math.round(tzInfo.flightHours * 60);
+          // 시간을 24시간 내 시계(00:00~23:59)로 표준화
+          const flightDepKstMins = ((flightDepKstTotalMin % 1440) + 1440) % 1440;
+          // 공항 수속 (이륙 3시간 전)
+          const airportCheckinKstMins = ((flightDepKstMins - 180 + 1440) % 1440);
+          // 집 출발 (수속 1~1.5시간 전)
+          const homeDepKstMins = ((airportCheckinKstMins - 60 + 1440) % 1440);
+
+          const flightDepKstStr = minutesToTime(flightDepKstMins);
+          const airportCheckinKstStr = minutesToTime(airportCheckinKstMins);
+          const homeDepKstStr = minutesToTime(homeDepKstMins);
+          const arrLocalStr = minutesToTime(arrMin);
+
+          // 1) 집 출발 및 공항 이동 (한국 시각)
           daySpots.push({
             id: 'spot_' + Date.now() + '_1_0',
-            time: minutesToTime(homeDepMin),
+            time: homeDepKstStr,
             title: `집 출발 ➔ 공항 이동 (공항철도/리무진)`,
-            memo: `[출국 준비] 여권, E-티켓, 해외 결제 카드 지참 및 공항 이동`,
+            memo: `[출국 준비: 한국 KST ${homeDepKstStr}] 여권, E-티켓, 해외 결제 카드 지참 및 공항 이동`,
             cat: 'flight',
             cost: 15000,
             currency: 'KRW',
-            completed: false
+            completed: false,
+            isDateLine: tzInfo.isCrossDateLine
           });
 
-          // 2) 공항 수속 및 보안검색/출국심사
+          // 2) 공항 수속 및 보안검색/출국심사 (한국 시각)
           daySpots.push({
             id: 'spot_' + Date.now() + '_1_1',
-            time: minutesToTime(Math.max(homeDepMin + 60, arrMin - 180)),
-            title: `공항 수속 & 보안검색 및 면세구역 진입`,
-            memo: `[출국 수속] 수하물 위탁, 자동출입국 심사, 사전 환전/eSIM 수령`,
+            time: airportCheckinKstStr,
+            title: `인천공항 수속 & 보안검색 및 면세구역 진입`,
+            memo: `[공항 수속: 한국 KST ${airportCheckinKstStr}] 수하물 위탁, 자동출입국 심사, eSIM/환전 수령`,
             cat: 'flight',
             cost: 0,
             currency: 'KRW',
-            completed: false
+            completed: false,
+            isDateLine: tzInfo.isCrossDateLine
           });
 
-          // 3) 비행기 탑승 및 비행 이동
+          // 3) 비행기 탑승 및 비행 이동 (한국 시각)
           daySpots.push({
             id: 'spot_' + Date.now() + '_1_2',
-            time: minutesToTime(Math.max(homeDepMin + 120, arrMin - 120)),
-            title: `비행기 탑승 & ${destination}행 항공편 이동`,
-            memo: `[비행 이동] 기내 휴식, 입국신고서/세관신고서 작성`,
+            time: flightDepKstStr,
+            title: `비행기 탑승 & ${destination}행 항공편 이륙`,
+            memo: `[비행 이동: 한국 KST ${flightDepKstStr}] 약 ${tzInfo.flightHours}시간 비행 (기내식, 기내 수면). 시차 ${tzInfo.tzDiff}시간 적용`,
             cat: 'flight',
             cost: 0,
             currency: 'KRW',
-            completed: false
+            completed: false,
+            isDateLine: tzInfo.isCrossDateLine
           });
 
           // 4) 현지 공항 착륙 및 입국 심사 (현지 도착 시간)
+          const dateLineNote = tzInfo.isCrossDateLine ? ' (날짜변경선 통과 당일 오전 도착)' : '';
           daySpots.push({
             id: 'spot_' + Date.now() + '_1_3',
-            time: minutesToTime(arrMin),
+            time: arrLocalStr,
             title: `🛬 ${destination} 공항 착륙 & 입국 수속`,
-            memo: `[현지 도착] 입국 심사, 수하물 수취, 현지 eSIM 활성화 및 교통카드 충전`,
+            memo: `[현지 도착: ${tzInfo.tzLabel}${dateLineNote}] 현지 시각 ${arrLocalStr} 착륙. 입국 심사, 수하물 수취, 현지 교통편 탑승`,
             cat: 'flight',
             cost: 10000,
             currency: 'KRW',
-            completed: false
+            completed: false,
+            isDateLine: tzInfo.isCrossDateLine
           });
 
-          // 5) 현지 공항에서 숙소/호텔 이동 (착륙 1시간 후)
+          // 5) 현지 공항에서 숙소/호텔 이동 (착륙 1시간 후, 현지 시각)
           daySpots.push({
             id: 'spot_' + Date.now() + '_1_4',
             time: minutesToTime(arrMin + 60),
             title: `${destination} 공항 ➔ 숙소/호텔 이동`,
-            memo: `[시내 이동] 공항철도/리무진버스/택시 탑승 및 시내 이동`,
+            memo: `[시내 이동: 현지시각] 공항철도/리무진버스/택시 탑승 및 시내 이동`,
             cat: 'tour',
             cost: 20000,
             currency: 'KRW',
             completed: false
           });
 
-          // 6) 호텔 체크인 & 짐 풀기 (착륙 2시간 후)
+          // 6) 호텔 체크인 & 짐 풀기 (착륙 2시간 후, 현지 시각)
           daySpots.push({
             id: 'spot_' + Date.now() + '_1_5',
             time: minutesToTime(arrMin + 120),
             title: `호텔 체크인 & 짐 정리 및 가벼운 휴식`,
-            memo: `[체크인] 예약 바우처 확인, 짐 풀기 및 외출 준비`,
+            memo: `[체크인: 현지시각] 예약 바우처 확인, 짐 풀기 및 외출 준비`,
             cat: 'lodging',
             cost: 0,
             currency: 'KRW',
             completed: false
           });
 
-          // 7) 첫날 저녁 식사 및 나이트 산책
+          // 7) 첫날 저녁 식사 및 나이트 산책 (현지 시각)
           const dinnerMin = Math.max(arrMin + 180, 18 * 60 + 30);
           if (dinnerMin < 22 * 60) {
             let firstDinnerName = `${destination} 첫날 시그니처 로컬 디너`;
@@ -7103,7 +7358,7 @@
               id: 'spot_' + Date.now() + '_1_6',
               time: minutesToTime(dinnerMin),
               title: firstDinnerName,
-              memo: `[첫날 미식: ${conceptStr}] 숙소 근처 검증된 대표 맛집 탐방`,
+              memo: `[첫날 미식: ${conceptStr}] 숙소 근처 검증된 대표 맛집 탐방 (현지 시각)`,
               cat: 'food',
               cost: 40000,
               currency: 'KRW',
@@ -7124,7 +7379,20 @@
             }
           }
         } else if (isLastDay && durationDays > 1) {
-          // --- Day N: 마지막 날 귀국 및 종료 실전 라이프사이클 ---
+          // --- Day N: 시차 & 비행시간 반영 귀국 실전 라이프사이클 ---
+          // 귀국 비행기 이륙 시각 (현지 시각 depMin)
+          // 한국 귀국 착륙 시각 (한국 KST):
+          // flightDepKst = depMin - (tzDiff * 60)
+          // landingKstTotal = flightDepKst + (returnFlightHours * 60)
+          const flightDepKstTotal = depMin - (tzInfo.tzDiff * 60);
+          const landingKstTotal = flightDepKstTotal + Math.round(tzInfo.returnFlightHours * 60);
+          const isNextDayLanding = (landingKstTotal >= 1440);
+
+          const landingKstMins = landingKstTotal % 1440;
+          const homeKstMins = (landingKstTotal + 90) % 1440;
+          const landingTimeStr = isNextDayLanding ? `+1일 ${minutesToTime(landingKstMins)}` : minutesToTime(landingKstMins);
+          const homeTimeStr = isNextDayLanding ? `+1일 ${minutesToTime(homeKstMins)}` : minutesToTime(homeKstMins);
+
           if (depMin >= 14 * 60) {
             // 오후/저녁 비행기: 오전 일정 가능
             daySpots.push({
@@ -7191,7 +7459,7 @@
               id: 'spot_' + Date.now() + '_' + i + '_5',
               time: minutesToTime(depMin),
               title: `🛫 ${destination} 공항 출발 & 귀국 비행기 탑승`,
-              memo: `[귀국 비행] 항공기 탑승, 한국행 출발 (안녕, ${destination}!)`,
+              memo: `[귀국 비행: 현지 시각 ${minutesToTime(depMin)}] 항공기 탑승, 한국행 출발 (약 ${tzInfo.returnFlightHours}시간 비행)`,
               cat: 'flight',
               cost: 0,
               currency: 'KRW',
@@ -7200,9 +7468,9 @@
 
             daySpots.push({
               id: 'spot_' + Date.now() + '_' + i + '_6',
-              time: minutesToTime(depMin + 270),
-              title: `한국 공항 도착, 입국 심사 & 수하물 수령`,
-              memo: `[입국 수속] 자동출입국 심사, 위탁 수하물 수취 및 세관 검사 통과`,
+              time: landingTimeStr,
+              title: isNextDayLanding ? `🛬 한국 인천공항 도착 & 입국 심사 (+1일 익일)` : `한국 공항 도착, 입국 심사 & 수하물 수령`,
+              memo: `[입국 수속] 한국 시각 ${landingTimeStr} 도착 (약 ${tzInfo.returnFlightHours}시간 비행 + 시차 반영). 자동출입국 심사 및 수하물 수취`,
               cat: 'tour',
               cost: 0,
               currency: 'KRW',
@@ -7211,9 +7479,9 @@
 
             daySpots.push({
               id: 'spot_' + Date.now() + '_' + i + '_7',
-              time: minutesToTime(depMin + 360),
-              title: `집 도착! 여행 짐 정리 및 휴식`,
-              memo: `[여정 마무리] 무사 귀가, 짐 정리, 여행 사진 백업 및 편안한 휴식`,
+              time: homeTimeStr,
+              title: isNextDayLanding ? `집 도착! 여행 짐 정리 및 휴식 (+1일 익일)` : `집 도착! 여행 짐 정리 및 휴식`,
+              memo: `[여정 마무리] 한국 시각 ${homeTimeStr} 무사 귀가. 짐 정리, 여행 사진 백업 및 시차 적응 휴식`,
               cat: 'tour',
               cost: 15000,
               currency: 'KRW',
@@ -7248,7 +7516,7 @@
               id: 'spot_' + Date.now() + '_' + i + '_2',
               time: minutesToTime(depMin),
               title: `🛫 귀국 비행기 탑승 & 한국 출발`,
-              memo: `[비행] 탑승 후 기내 휴식`,
+              memo: `[비행: 현지 시각 ${minutesToTime(depMin)}] 탑승 후 기내 휴식 (약 ${tzInfo.returnFlightHours}시간 소요)`,
               cat: 'flight',
               cost: 0,
               currency: 'KRW',
@@ -7257,9 +7525,9 @@
 
             daySpots.push({
               id: 'spot_' + Date.now() + '_' + i + '_3',
-              time: minutesToTime(depMin + 270),
-              title: `한국 공항 도착 및 입국 수속`,
-              memo: `[도착] 수하물 수령 및 귀가 이동`,
+              time: landingTimeStr,
+              title: isNextDayLanding ? `🛬 한국 공항 도착 및 입국 수속 (+1일 익일)` : `한국 공항 도착 및 입국 수속`,
+              memo: `[도착] 한국 시각 ${landingTimeStr} 도착. 수하물 수령 및 세관 검사`,
               cat: 'tour',
               cost: 0,
               currency: 'KRW',
@@ -7268,9 +7536,9 @@
 
             daySpots.push({
               id: 'spot_' + Date.now() + '_' + i + '_4',
-              time: minutesToTime(depMin + 360),
-              title: `집 도착! 편안한 휴식`,
-              memo: `[마무리] 여정 완료 및 꿀잠 휴식`,
+              time: homeTimeStr,
+              title: isNextDayLanding ? `집 도착! 여정 마무리 (+1일 익일)` : `집 도착! 여정 마무리`,
+              memo: `[귀가] 한국 시각 ${homeTimeStr} 무사 귀가 및 휴식`,
               cat: 'tour',
               cost: 15000,
               currency: 'KRW',
@@ -7372,7 +7640,8 @@
           if (pack && pack.hasGoldenCourse && typeof pack.getGoldenItinerary === 'function') {
             days = pack.getGoldenItinerary(durationDays);
           } else {
-            days = generateAutoSpotsForTrip(primaryDest || '여행지', durationDays, concepts, wishlist, arrivalTime, departureTime);
+            const fullDestContext = (countriesStr ? countriesStr + ' ' : '') + (title || primaryDest || '여행지');
+            days = generateAutoSpotsForTrip(primaryDest || '여행지', durationDays, concepts, wishlist, arrivalTime, departureTime, fullDestContext);
           }
         } else {
           for (let i = 1; i <= durationDays; i++) {
@@ -7651,8 +7920,11 @@
           }
         });
 
-        // 시간순 안전 정렬
-        day.spots.sort((a, b) => timeToMinutes(a.time) - timeToMinutes(b.time));
+        // 시간순 안전 정렬 (날짜변경선 비행 일정이 포함된 날은 원래 순서 유지)
+        const hasDateLineFlight = day.spots.some(s => s.isDateLine);
+        if (!hasDateLineFlight) {
+          day.spots.sort((a, b) => timeToMinutes(a.time) - timeToMinutes(b.time));
+        }
       });
 
       return {
@@ -9419,7 +9691,9 @@ JSON 배열만 출력하세요. 각 day는 dayNum, title, city, spots를 포함�
       executeScheduleTuning: executeScheduleTuning,
       rebalanceTripSchedule: rebalanceTripSchedule,
       toggleSpotCompleted: toggleSpotCompleted,
-      generateAutoSpotsForTrip: generateAutoSpotsForTrip
+      generateAutoSpotsForTrip: generateAutoSpotsForTrip,
+      detectDestinationTimezone: detectDestinationTimezone,
+      updateCreateTripTzBanner: updateCreateTripTzBanner
     };
   </script>
 </body>
