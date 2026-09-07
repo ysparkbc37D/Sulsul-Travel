@@ -131,7 +131,12 @@
       color: var(--ink) !important;
       -webkit-tap-highlight-color: transparent;
       user-select: none;
+      word-break: keep-all;
+      overflow-wrap: break-word;
       transition: background-color 0.2s ease, color 0.2s ease;
+    }
+    button, .badge, [role="button"], .tab-title, nav, .subtab-active, .subtab-inactive, .nav-tab-active, .nav-tab-inactive {
+      word-break: keep-all;
     }
     header {
       background-color: var(--header-bg) !important;
@@ -565,7 +570,7 @@
             <h1 class="font-serif-brand text-base sm:text-xl font-bold tracking-tight text-[#1c1917] dark:text-[#ededed] whitespace-nowrap">
               Sulsul Travel
             </h1>
-            <span id="app-ver-badge" onclick="event.stopPropagation(); openVersionHistoryModal()" class="px-1.5 py-0.5 rounded-md theme-card-subtle hover:border-amber-500/60 hover:text-amber-600 dark:hover:text-amber-300 text-[#a2601b] dark:text-[#d4af37] text-[10px] font-bold font-mono shadow-inner cursor-pointer shrink-0 transition" title="버전 업데이트 기록 보기 (클릭)">v1.2.8</span>
+            <span id="app-ver-badge" onclick="event.stopPropagation(); openVersionHistoryModal()" class="px-1.5 py-0.5 rounded-md theme-card-subtle hover:border-amber-500/60 hover:text-amber-600 dark:hover:text-amber-300 text-[#a2601b] dark:text-[#d4af37] text-[10px] font-bold font-mono shadow-inner cursor-pointer shrink-0 transition" title="버전 업데이트 기록 보기 (클릭)">v1.2.9</span>
           </div>
           <p id="header-trip-name" class="text-[10px] sm:text-[11px] text-[#78716c] dark:text-stone-400 truncate max-w-[120px] sm:max-w-xs font-normal">인생의 모든 여정을 기록하는 다이어리</p>
         </div>
@@ -743,25 +748,25 @@
     </div>
 
     <!-- 워크스페이스 메인 5대 탭 네비게이션 -->
-    <nav class="flex items-center gap-1.5 p-1 bg-[#0f1422] rounded-xl border border-[#1e263c] overflow-x-auto no-scrollbar">
-      <button id="nav-tab-plan" onclick="switchTab('plan')" class="flex-1 min-w-[75px] py-2 px-3 rounded-lg text-xs font-bold flex items-center justify-center gap-1.5 transition nav-tab-active shadow-sm">
-        <i class="fa-regular fa-calendar-check text-xs"></i>
+    <nav class="flex items-center gap-1 sm:gap-1.5 p-1 bg-[#0f1422] rounded-xl border border-[#1e263c] overflow-x-auto no-scrollbar">
+      <button id="nav-tab-plan" onclick="switchTab('plan')" class="flex-1 min-w-[70px] sm:min-w-[80px] py-2 px-2.5 sm:px-3 rounded-lg text-xs font-bold flex items-center justify-center gap-1.5 transition nav-tab-active shadow-sm whitespace-nowrap shrink-0 cursor-pointer">
+        <i class="fa-regular fa-calendar-check text-xs shrink-0"></i>
         <span>일정/지도</span>
       </button>
-      <button id="nav-tab-expenses" onclick="switchTab('expenses')" class="flex-1 min-w-[75px] py-2 px-3 rounded-lg text-xs font-bold flex items-center justify-center gap-1.5 transition nav-tab-inactive">
-        <i class="fa-solid fa-receipt text-xs"></i>
+      <button id="nav-tab-expenses" onclick="switchTab('expenses')" class="flex-1 min-w-[65px] sm:min-w-[75px] py-2 px-2.5 sm:px-3 rounded-lg text-xs font-bold flex items-center justify-center gap-1.5 transition nav-tab-inactive whitespace-nowrap shrink-0 cursor-pointer">
+        <i class="fa-solid fa-receipt text-xs shrink-0"></i>
         <span>가계부</span>
       </button>
-      <button id="nav-tab-journal" onclick="switchTab('journal')" class="flex-1 min-w-[75px] py-2 px-3 rounded-lg text-xs font-bold flex items-center justify-center gap-1.5 transition nav-tab-inactive">
-        <i class="fa-solid fa-camera-retro text-xs"></i>
+      <button id="nav-tab-journal" onclick="switchTab('journal')" class="flex-1 min-w-[70px] sm:min-w-[75px] py-2 px-2.5 sm:px-3 rounded-lg text-xs font-bold flex items-center justify-center gap-1.5 transition nav-tab-inactive whitespace-nowrap shrink-0 cursor-pointer">
+        <i class="fa-solid fa-camera-retro text-xs shrink-0"></i>
         <span>포토일기</span>
       </button>
-      <button id="nav-tab-checklist" onclick="switchTab('checklist')" class="flex-1 min-w-[75px] py-2 px-3 rounded-lg text-xs font-bold flex items-center justify-center gap-1.5 transition nav-tab-inactive">
-        <i class="fa-solid fa-list-check text-xs"></i>
+      <button id="nav-tab-checklist" onclick="switchTab('checklist')" class="flex-1 min-w-[65px] sm:min-w-[75px] py-2 px-2.5 sm:px-3 rounded-lg text-xs font-bold flex items-center justify-center gap-1.5 transition nav-tab-inactive whitespace-nowrap shrink-0 cursor-pointer">
+        <i class="fa-solid fa-list-check text-xs shrink-0"></i>
         <span>준비물</span>
       </button>
-      <button id="nav-tab-sync" onclick="switchTab('sync')" class="flex-1 min-w-[75px] py-2 px-3 rounded-lg text-xs font-bold flex items-center justify-center gap-1.5 transition nav-tab-inactive">
-        <i class="fa-solid fa-cloud-arrow-up text-xs"></i>
+      <button id="nav-tab-sync" onclick="switchTab('sync')" class="flex-1 min-w-[70px] sm:min-w-[80px] py-2 px-2.5 sm:px-3 rounded-lg text-xs font-bold flex items-center justify-center gap-1.5 transition nav-tab-inactive whitespace-nowrap shrink-0 cursor-pointer">
+        <i class="fa-solid fa-cloud-arrow-up text-xs shrink-0"></i>
         <span>공유/설정</span>
       </button>
     </nav>
@@ -774,83 +779,83 @@
       <!-- 서브 탭 (타임라인 / 인터랙티브 지도 / 12대 예약가이드 / 8대 도시간략) -->
       <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-1">
         <div id="plan-subtabs-nav" class="w-full sm:w-auto flex items-center p-1 rounded-xl bg-[#0f1422] border border-[#1e263c] gap-1 overflow-x-auto no-scrollbar shrink-0">
-          <button id="btn-subtab-timeline" onclick="switchPlanSubTab('timeline')" class="px-3 py-1.5 rounded-lg text-xs font-bold subtab-active shadow-sm flex items-center gap-1.5 shrink-0 whitespace-nowrap">
+          <button id="btn-subtab-timeline" onclick="switchPlanSubTab('timeline')" class="px-3 py-1.5 rounded-lg text-xs font-bold subtab-active shadow-sm flex items-center gap-1.5 shrink-0 whitespace-nowrap cursor-pointer">
             <i class="fa-solid fa-timeline text-[11px]"></i> 30분 시간표
           </button>
-          <button id="btn-subtab-map" onclick="switchPlanSubTab('map')" class="px-3 py-1.5 rounded-lg text-xs font-bold subtab-inactive flex items-center gap-1.5 shrink-0 whitespace-nowrap">
+          <button id="btn-subtab-map" onclick="switchPlanSubTab('map')" class="px-3 py-1.5 rounded-lg text-xs font-bold subtab-inactive flex items-center gap-1.5 shrink-0 whitespace-nowrap cursor-pointer">
             <i id="icon-subtab-map" class="fa-solid fa-map-location-dot text-[11px]"></i> 인터랙티브 지도
           </button>
-          <button id="btn-subtab-booking" onclick="switchPlanSubTab('booking')" class="px-3 py-1.5 rounded-lg text-xs font-bold subtab-inactive flex items-center gap-1.5 shrink-0 whitespace-nowrap">
+          <button id="btn-subtab-booking" onclick="switchPlanSubTab('booking')" class="px-3 py-1.5 rounded-lg text-xs font-bold subtab-inactive flex items-center gap-1.5 shrink-0 whitespace-nowrap cursor-pointer">
             <i id="icon-subtab-booking" class="fa-solid fa-ticket text-[11px]"></i>
             <span id="label-subtab-booking">12대 필수 예약</span>
           </button>
-          <button id="btn-subtab-cityguide" onclick="switchPlanSubTab('cityguide')" class="px-3 py-1.5 rounded-lg text-xs font-bold subtab-inactive flex items-center gap-1.5 shrink-0 whitespace-nowrap">
+          <button id="btn-subtab-cityguide" onclick="switchPlanSubTab('cityguide')" class="px-3 py-1.5 rounded-lg text-xs font-bold subtab-inactive flex items-center gap-1.5 shrink-0 whitespace-nowrap cursor-pointer">
             <i id="icon-subtab-cityguide" class="fa-solid fa-city text-[11px]"></i>
             <span id="label-subtab-cityguide">8대 도시 가이드</span>
           </button>
         </div>
 
         <div class="flex items-center gap-2 justify-end shrink-0 flex-wrap">
-          <button onclick="openScheduleTuningModal()" class="px-2.5 py-1.5 rounded-lg bg-amber-500/15 hover:bg-amber-500/25 border border-amber-500/30 text-amber-300 text-xs font-bold flex items-center gap-1.5 shadow-sm transition cursor-pointer" title="교통 지연, 기상 등 현장 변수 대응 및 일정 재조정">
+          <button onclick="openScheduleTuningModal()" class="px-2.5 py-1.5 rounded-lg bg-amber-500/15 hover:bg-amber-500/25 border border-amber-500/30 text-amber-300 text-xs font-bold flex items-center gap-1.5 shadow-sm transition cursor-pointer shrink-0 whitespace-nowrap" title="교통 지연, 기상 등 현장 변수 대응 및 일정 재조정">
             <i class="fa-solid fa-bolt text-amber-400 text-[10px]"></i>
-            <span>변수 대응 · 일정 튜닝</span>
+            <span><span class="hidden sm:inline">변수 대응 · </span>일정 튜닝</span>
           </button>
-          <button id="btn-toggle-all-tl" onclick="toggleAllTimelines()" class="px-2.5 py-1.5 rounded-lg bg-[#0f1422] border border-[#1e263c] hover:bg-[#141c2e] text-slate-300 text-xs font-semibold flex items-center gap-1 transition cursor-pointer">
+          <button id="btn-toggle-all-tl" onclick="toggleAllTimelines()" class="px-2.5 py-1.5 rounded-lg bg-[#0f1422] border border-[#1e263c] hover:bg-[#141c2e] text-slate-300 text-xs font-semibold flex items-center gap-1 transition cursor-pointer shrink-0 whitespace-nowrap">
             <i class="fa-solid fa-up-down text-[10px]"></i> 전체 펼치기
           </button>
-          <button onclick="openAddSpotModal()" class="px-3 py-1.5 rounded-lg bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-slate-950 text-xs font-black flex items-center gap-1 shadow-md transition cursor-pointer">
+          <button onclick="openAddSpotModal()" class="px-3 py-1.5 rounded-lg bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-slate-950 text-xs font-black flex items-center gap-1 shadow-md transition cursor-pointer shrink-0 whitespace-nowrap">
             <i class="fa-solid fa-plus text-[10px]"></i> 스팟 추가
           </button>
         </div>
       </div>
 
       <!-- 📍 실시간 & 오프라인 GPS 스팟 레이더 (GPS SPOT RADAR) -->
-      <section id="gps-radar-card" class="rounded-2xl bg-[#0f1422] border border-[#1e263c] p-4 shadow-lg space-y-3">
-        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[#1a2236] pb-3">
+      <section id="gps-radar-card" class="rounded-2xl bg-[#0f1422] border border-[#1e263c] p-3.5 sm:p-4 shadow-lg space-y-3">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 sm:gap-3 border-b border-[#1a2236] pb-3">
           <div class="flex items-center gap-2.5">
             <span class="w-9 h-9 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center text-base shrink-0 animate-pulse">
               <i class="fa-solid fa-satellite-dish"></i>
             </span>
-            <div>
+            <div class="min-w-0">
               <div class="flex items-center gap-2 flex-wrap">
-                <h3 class="text-sm font-black text-white flex items-center gap-1.5">
+                <h3 class="text-xs sm:text-sm font-black text-white flex items-center gap-1.5 whitespace-nowrap">
                   <span>실시간 GPS 스팟 레이더</span>
-                  <span id="gps-status-badge" class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">📡 대기 중</span>
+                  <span id="gps-status-badge" class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 whitespace-nowrap">📡 대기 중</span>
                 </h3>
               </div>
-              <p id="gps-status-desc" class="text-[11px] text-slate-400 mt-0.5">내 현재 위치에서 가장 가까운 여행 스팟을 1초 만에 자동 매칭합니다.</p>
+              <p id="gps-status-desc" class="text-[11px] text-slate-400 mt-0.5 truncate sm:whitespace-normal">내 현재 위치에서 가장 가까운 여행 스팟을 1초 만에 자동 매칭합니다.</p>
             </div>
           </div>
 
-          <div class="w-full sm:w-auto flex items-center gap-2 min-w-0 flex-wrap sm:flex-nowrap sm:justify-end">
+          <div class="w-full sm:w-auto flex items-center gap-2 min-w-0">
             <!-- 거점 모의 GPS 시뮬레이터 (국내/실내 테스트 지원) -->
-            <select id="select-sim-gps" onchange="simulateGpsLocation(this.value)" class="w-full sm:w-auto max-w-full truncate px-2.5 py-1.5 bg-[#080b12] border border-[#23304c] rounded-xl text-xs text-amber-300 font-semibold focus:outline-none focus:border-amber-500">
+            <select id="select-sim-gps" onchange="simulateGpsLocation(this.value)" class="flex-1 sm:w-auto max-w-full truncate px-2.5 py-1.5 bg-[#080b12] border border-[#23304c] rounded-xl text-xs text-amber-300 font-semibold focus:outline-none focus:border-amber-500 cursor-pointer">
               <option value="">🎯 모의 GPS 위치 테스트</option>
             </select>
-            <button onclick="requestCurrentGpsLocation()" class="shrink-0 px-3 py-1.5 bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-slate-950 text-xs font-black rounded-xl flex items-center gap-1.5 shadow transition">
+            <button onclick="requestCurrentGpsLocation()" class="shrink-0 whitespace-nowrap px-3 py-1.5 bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-slate-950 text-xs font-black rounded-xl flex items-center gap-1.5 shadow transition cursor-pointer">
               <i class="fa-solid fa-location-crosshairs text-[11px]"></i> 내 위치 탐색
             </button>
           </div>
         </div>
 
         <!-- 가장 가까운 추천 스팟 디스플레이 -->
-        <div id="gps-nearest-spot-container" class="p-3.5 rounded-xl bg-[#080b12] border border-[#1e263c] flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-          <div class="flex items-start gap-3">
-            <span id="gps-spot-icon" class="w-10 h-10 rounded-xl bg-[#141c2e] border border-[#23304c] flex items-center justify-center text-lg shrink-0">📍</span>
-            <div>
+        <div id="gps-nearest-spot-container" class="p-3 sm:p-3.5 rounded-xl bg-[#080b12] border border-[#1e263c] flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div class="flex items-start gap-2.5 sm:gap-3 min-w-0 flex-1">
+            <span id="gps-spot-icon" class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-[#141c2e] border border-[#23304c] flex items-center justify-center text-lg shrink-0">📍</span>
+            <div class="min-w-0 flex-1">
               <div class="flex items-center gap-2 flex-wrap">
-                <span id="gps-spot-name" class="font-black text-white text-xs sm:text-sm">위치를 탐색하거나 모의 위치를 선택하세요</span>
-                <span id="gps-spot-distance" class="px-2 py-0.5 rounded-md bg-amber-500/20 text-amber-300 border border-amber-500/30 text-[11px] font-black">거리 산출 대기</span>
+                <span id="gps-spot-name" class="font-black text-white text-xs sm:text-sm break-words">위치를 탐색하거나 모의 위치를 선택하세요</span>
+                <span id="gps-spot-distance" class="px-2 py-0.5 rounded-md bg-amber-500/20 text-amber-300 border border-amber-500/30 text-[10px] sm:text-[11px] font-black shrink-0 whitespace-nowrap">거리 산출 대기</span>
               </div>
-              <p id="gps-spot-tip" class="text-[11px] text-slate-400 mt-1">현 위치에서 300m 이내 스팟은 도보 시간, 원거리 스팟은 차량 이동 경로를 안내합니다.</p>
+              <p id="gps-spot-tip" class="text-[11px] text-slate-400 mt-1 leading-relaxed">현 위치에서 300m 이내 스팟은 도보 시간, 원거리 스팟은 차량 이동 경로를 안내합니다.</p>
             </div>
           </div>
 
-          <div id="gps-spot-actions" class="hidden sm:flex items-center gap-2 shrink-0">
-            <button id="btn-gps-add-to-day" onclick="addGpsSpotToActiveDay()" class="px-3 py-1.5 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-slate-950 font-black rounded-lg text-xs flex items-center gap-1 shadow transition">
+          <div id="gps-spot-actions" class="hidden flex items-center gap-2 shrink-0 w-full sm:w-auto justify-end pt-2 sm:pt-0 border-t sm:border-t-0 border-[#1a2236]">
+            <button id="btn-gps-add-to-day" onclick="addGpsSpotToActiveDay()" class="flex-1 sm:flex-none px-3 py-1.5 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-slate-950 font-black rounded-lg text-xs flex items-center justify-center gap-1 shadow transition shrink-0 whitespace-nowrap cursor-pointer">
               <i class="fa-solid fa-plus text-[10px]"></i> 오늘 일정에 추가
             </button>
-            <button id="btn-gps-gmaps" onclick="openGpsSpotInGoogleMaps()" class="px-3 py-1.5 bg-[#141c2e] hover:bg-[#1a263e] border border-[#23304c] text-slate-200 hover:text-white font-bold rounded-lg text-xs flex items-center gap-1 transition">
+            <button id="btn-gps-gmaps" onclick="openGpsSpotInGoogleMaps()" class="flex-1 sm:flex-none px-3 py-1.5 bg-[#141c2e] hover:bg-[#1a263e] border border-[#23304c] text-slate-200 hover:text-white font-bold rounded-lg text-xs flex items-center justify-center gap-1 transition shrink-0 whitespace-nowrap cursor-pointer">
               <i class="fa-solid fa-diamond-turn-right text-[10px] text-emerald-400"></i> 길찾기
             </button>
           </div>
@@ -1876,22 +1881,22 @@
 
         <!-- 보호 옵션 안내 박스 -->
         <div class="p-3 rounded-xl bg-emerald-500/10 border border-emerald-500/25 flex items-start gap-2.5">
-          <i class="fa-solid fa-shield-halved text-emerald-400 mt-0.5 text-xs shrink-0"></i>
-          <div class="text-[11px] text-emerald-200 leading-relaxed">
+          <i class="fa-solid fa-shield-halved text-emerald-600 dark:text-emerald-400 mt-0.5 text-xs shrink-0"></i>
+          <div class="text-[11px] text-emerald-800 dark:text-emerald-200 leading-relaxed">
             <b>불변 원칙 보장</b>: 이미 <b>방문 완료(체크)</b>한 과거 스팟은 시간을 변경하지 않고 안전하게 고정 보존하며, 아직 방문하지 않은 미래 일정만 순차적으로 재배치합니다.
           </div>
         </div>
       </div>
 
-      <div class="flex items-center gap-2.5 pt-2 border-t border-[#1e263c]">
-        <button onclick="closeModal('modal-schedule-tuning')" class="px-4 py-2.5 rounded-xl bg-[#141c2e] hover:bg-[#1a263e] text-slate-400 hover:text-slate-200 font-bold text-xs transition cursor-pointer">취소</button>
-        <button onclick="executeScheduleTuning(false)" class="flex-1 py-2.5 rounded-xl bg-[#1e263c] hover:bg-[#25314d] text-amber-400 hover:text-amber-300 border border-amber-500/30 font-bold text-xs transition flex items-center justify-center gap-1.5 cursor-pointer" title="오프라인에서도 1초 만에 즉시 시간표를 밀거나 당깁니다">
-          <i class="fa-solid fa-clock-rotate-left"></i>
-          <span>즉시 일정 재배치 (오프라인)</span>
+      <div class="flex items-center gap-2 pt-2 border-t border-[#1e263c]">
+        <button onclick="closeModal('modal-schedule-tuning')" class="px-3 sm:px-4 py-2.5 rounded-xl bg-[#141c2e] hover:bg-[#1a263e] text-slate-400 hover:text-slate-200 font-bold text-xs transition cursor-pointer shrink-0 whitespace-nowrap">취소</button>
+        <button onclick="executeScheduleTuning(false)" class="flex-1 py-2.5 rounded-xl bg-[#1e263c] hover:bg-[#25314d] text-amber-400 hover:text-amber-300 border border-amber-500/30 font-bold text-xs transition flex items-center justify-center gap-1.5 cursor-pointer whitespace-nowrap" title="오프라인에서도 1초 만에 즉시 시간표를 밀거나 당깁니다">
+          <i class="fa-solid fa-clock-rotate-left shrink-0"></i>
+          <span><span class="sm:hidden">즉시 재배치</span><span class="hidden sm:inline">즉시 일정 재배치 (오프라인)</span></span>
         </button>
-        <button onclick="executeScheduleTuning(true)" class="flex-1 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-slate-950 font-black text-xs shadow-md transition flex items-center justify-center gap-1.5 cursor-pointer" title="Gemini AI로 코스를 유기적으로 재구성하고 초안을 검토합니다">
-          <i class="fa-solid fa-wand-magic-sparkles"></i>
-          <span>AI 스마트 재생성 (검토)</span>
+        <button onclick="executeScheduleTuning(true)" class="flex-1 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-slate-950 font-black text-xs shadow-md transition flex items-center justify-center gap-1.5 cursor-pointer whitespace-nowrap" title="Gemini AI로 코스를 유기적으로 재구성하고 초안을 검토합니다">
+          <i class="fa-solid fa-wand-magic-sparkles shrink-0"></i>
+          <span><span class="sm:hidden">AI 재생성</span><span class="hidden sm:inline">AI 스마트 재생성 (검토)</span></span>
         </button>
       </div>
     </div>
@@ -2504,25 +2509,39 @@
 
       <!-- 버전 목록 스크롤 영역 -->
       <div class="flex-1 overflow-y-auto space-y-3 pr-1 text-xs">
-        <!-- v1.2.8 (Current) -->
+        <!-- v1.2.9 (Current) -->
         <div class="p-4 rounded-2xl bg-amber-500/5 dark:bg-amber-500/10 border-2 border-amber-500/40 space-y-2.5 shadow-sm relative overflow-hidden">
           <div class="flex items-center justify-between gap-2">
             <div class="flex items-center gap-2 min-w-0">
-              <span class="px-2 py-0.5 rounded-lg bg-amber-500 text-black font-black text-xs shadow-sm shrink-0">v1.2.8</span>
-              <span class="text-xs font-black text-[#1c1917] dark:text-white">국가별 시차(Time Zone) & 비행시간 연동 스마트 일정 엔진</span>
+              <span class="px-2 py-0.5 rounded-lg bg-amber-500 text-black font-black text-xs shadow-sm shrink-0">v1.2.9</span>
+              <span class="text-xs font-black text-[#1c1917] dark:text-white">모바일 반응형 레이아웃 정밀 개선 & 글자 쪼개짐·줄바꿈 전수 방지 및 GPS 레이더 버그 패치</span>
             </div>
             <span class="px-2 py-0.5 rounded-full text-[10px] font-black bg-emerald-100 text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300 border border-emerald-300 shrink-0">최신 버전</span>
           </div>
           <div class="text-[11px] text-[#44403c] dark:text-stone-300 space-y-1.5 leading-relaxed">
-            <div><b>국가별 시차 & 비행 소요 시간 오프라인 매트릭스</b>: 동아시아(일본/대만/몽골), 동남아(베트남/태국/싱가포르/발리), 유럽 전역(-7~8h, 14h 비행), 미 서부(-16h 날짜변경선), 미 동부(-13h), 하와이, 대양주, 남미 등 12대 권역 시차와 직항/경유 비행시간을 1초 만에 자동 감지.</div>
-            <div><b>출발지(KST) vs 현지 시각 이원화 역산</b>: 현지 도착 시간에 맞춰 한국 집 출발 및 인천공항 이륙 시간을 시차 역산하여 현실적인 도어-투-도어 스케줄 자동 생성.</div>
-            <div><b>귀국일 '+1일(익일 도착)' 날짜 래핑 & 뱃지</b>: 장거리 귀국 비행 시 한국 공항 도착 및 귀가 일정을 익일 도착 뱃지와 함께 현실 날짜로 정확히 표현.</div>
-            <div><b>등록 모달 실시간 안내 뱃지</b>: 여행지 입력 시 현지 시차 및 예상 비행시간이 실시간 인터랙티브 뱃지로 표기.</div>
+            <div><b>글로벌 CJK 타이포그래피 안전 규격(word-break: keep-all)</b>: 모바일 뷰포트에서 한글 단어 중간 분절(예: '포토일기' ➔ '포토일\n기', '시간표' ➔ '30\n분 시\n간 표') 왜곡을 앱 전체 수준에서 원천 차단.</div>
+            <div><b>메인 5대 탭 & 서브탭 반응형 보존</b>: 탭 네비게이션 및 서브탭 전환 시 텍스트 줄바꿈 방지(whitespace-nowrap & shrink-0)를 일괄 보장하고 매끄러운 가로 스크롤 지원.</div>
+            <div><b>GPS 스팟 레이더 undefined 렌더링 버그 근본 패치</b>: 여행 스팟 목록에서 국기/아이콘 nullish fallback 안전 처리로 리터럴 'undefined' 노출 완치 및 모바일 1줄 컨트롤 정렬.</div>
+            <div><b>일정 튜닝 모달 & 액션 바 모바일 최적화</b>: 모바일 폭에서 액션 버튼 텍스트를 최적화하여 좁은 화면에서도 찌그러짐 없는 쾌적한 핏 제공.</div>
           </div>
           <div class="text-[10px] text-stone-400 dark:text-stone-500 pt-1 border-t border-amber-500/20 flex items-center justify-between">
             <span>📅 2026-09-07 릴리즈</span>
-            <span class="font-mono">st-shell-v1.2.8</span>
+            <span class="font-mono">st-shell-v1.2.9</span>
           </div>
+        </div>
+
+        <!-- v1.2.8 -->
+        <div class="p-3.5 rounded-xl bg-stone-50 dark:bg-stone-900/50 border border-stone-200 dark:border-stone-800 space-y-2">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-2">
+              <span class="px-1.5 py-0.5 rounded-md bg-stone-200 dark:bg-stone-800 text-stone-800 dark:text-stone-200 font-bold text-[11px] font-mono">v1.2.8</span>
+              <span class="font-bold text-[#1c1917] dark:text-stone-200">국가별 시차(Time Zone) & 비행시간 연동 스마트 일정 엔진</span>
+            </div>
+            <span class="text-[10px] text-stone-400">2026-09-07</span>
+          </div>
+          <p class="text-[11px] text-[#78716c] dark:text-stone-400 leading-relaxed">
+            전 세계 12대 권역 시차 및 비행시간 오프라인 매트릭스, 출발지 vs 현지 시각 이원화 역산, 귀국일 익일 도착(+1) 뱃지 표기, 등록 모달 실시간 시차 안내 탑재.
+          </p>
         </div>
 
         <!-- v1.2.7 -->
@@ -2872,7 +2891,7 @@
     window.showToast = showToast;
 
     // 앱 버전 및 글로벌 네임스페이스 (Sulsul-Travel Invariant Rule R-10, R-11, R-12, R-13, R-14, R-15)
-    const APP_VER = '1.2.8';
+    const APP_VER = '1.2.9';
 
     // ══════════════════════════════════════════
     // [Two-Tone Theme System] 라이트 그레이 & 딥 블랙 테마 엔진
@@ -4736,9 +4755,9 @@
         const btn = document.getElementById(`tab-filter-${s}`);
         if (!btn) return;
         if (s === status) {
-          btn.className = 'py-1.5 rounded-lg font-bold transition text-center hub-tab-active shadow-sm cursor-pointer truncate';
+          btn.className = 'py-1.5 rounded-lg font-bold transition text-center hub-tab-active shadow-sm cursor-pointer truncate whitespace-nowrap';
         } else {
-          btn.className = 'py-1.5 rounded-lg font-bold transition text-center hub-tab-inactive cursor-pointer truncate';
+          btn.className = 'py-1.5 rounded-lg font-bold transition text-center hub-tab-inactive cursor-pointer truncate whitespace-nowrap';
         }
       });
       renderTripCards();
@@ -5546,10 +5565,10 @@
         const btn = document.getElementById(`nav-tab-${t}`);
         const view = document.getElementById(`tab-content-${t}`);
         if (t === tabId) {
-          btn.className = "flex-1 min-w-[75px] py-2 px-3 rounded-lg text-xs font-bold flex items-center justify-center gap-1.5 transition nav-tab-active shadow-sm";
+          btn.className = "flex-1 min-w-[70px] sm:min-w-[80px] py-2 px-2.5 sm:px-3 rounded-lg text-xs font-bold flex items-center justify-center gap-1.5 transition nav-tab-active shadow-sm whitespace-nowrap shrink-0 cursor-pointer";
           view.classList.remove('hidden');
         } else {
-          btn.className = "flex-1 min-w-[75px] py-2 px-3 rounded-lg text-xs font-bold flex items-center justify-center gap-1.5 transition nav-tab-inactive";
+          btn.className = "flex-1 min-w-[65px] sm:min-w-[75px] py-2 px-2.5 sm:px-3 rounded-lg text-xs font-bold flex items-center justify-center gap-1.5 transition nav-tab-inactive whitespace-nowrap shrink-0 cursor-pointer";
           view.classList.add('hidden');
         }
       });
@@ -5563,10 +5582,10 @@
         const btn = document.getElementById(`btn-subtab-${st}`);
         const view = document.getElementById(`subtab-view-${st}`);
         if (st === subTabId) {
-          btn.className = "px-3 py-1.5 rounded-lg text-xs font-bold subtab-active shadow-sm flex items-center gap-1.5";
+          btn.className = "px-3 py-1.5 rounded-lg text-xs font-bold subtab-active shadow-sm flex items-center gap-1.5 shrink-0 whitespace-nowrap cursor-pointer";
           view.classList.remove('hidden');
         } else {
-          btn.className = "px-3 py-1.5 rounded-lg text-xs font-bold subtab-inactive flex items-center gap-1.5";
+          btn.className = "px-3 py-1.5 rounded-lg text-xs font-bold subtab-inactive flex items-center gap-1.5 shrink-0 whitespace-nowrap cursor-pointer";
           view.classList.add('hidden');
         }
       });
@@ -9107,8 +9126,8 @@ JSON 배열만 출력하세요. 각 day는 dayNum, title, city, spots를 포함�
       const spotActions = document.getElementById('gps-spot-actions');
 
       if (nearest && spotName) {
-        spotIcon.innerText = nearest.flag || '📍';
-        spotName.innerText = `${nearest.name} (${nearest.city})`;
+        spotIcon.innerText = nearest.icon || nearest.flag || '📍';
+        spotName.innerText = `${nearest.name}${nearest.city ? ` (${nearest.city})` : ''}`;
         
         let distText = '';
         if (nearest.distanceM < 1000) {
@@ -9128,10 +9147,11 @@ JSON 배열만 출력하세요. 각 day는 dayNum, title, city, spots를 포함�
       if (pillsContainer && State.gps.nearbySpots) {
         pillsContainer.innerHTML = State.gps.nearbySpots.map((s, idx) => {
           const dStr = s.distanceM < 1000 ? `${s.distanceM}m` : `${s.distanceKm.toFixed(1)}km`;
+          const spotIcon = s.icon || s.flag || '📍';
           return `
-            <div class="px-2.5 py-1 rounded-lg bg-[#141c2e] border border-[#23304c] text-slate-300 flex items-center gap-1.5 shrink-0">
-              <span class="text-amber-400 font-bold">${idx + 2}위</span>
-              <span>${s.flag} ${s.name}</span>
+            <div onclick="updateGpsRadarUI(${s.lat}, ${s.lng}, '🎯 모의 GPS (${s.name})', 'sim')" class="px-2.5 py-1.5 rounded-lg bg-[#141c2e] hover:bg-[#1a263e] border border-[#23304c] hover:border-amber-500/40 text-slate-300 flex items-center gap-1.5 shrink-0 whitespace-nowrap text-xs cursor-pointer transition" title="이 스팟 위치로 GPS 시뮬레이션 전환">
+              <span class="text-amber-400 font-bold text-[11px]">${idx + 2}위</span>
+              <span>${spotIcon} ${s.name}</span>
               <span class="text-[10px] text-emerald-400 font-semibold font-mono">(${dStr})</span>
             </div>
           `;

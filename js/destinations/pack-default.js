@@ -29,6 +29,7 @@
                 lng: s.lng || 126.9780,
                 cat: s.cat || 'tour',
                 icon: s.typeIcon || '📍',
+                flag: s.typeIcon || (trip && trip.coverEmoji) || '📍',
                 desc: s.desc || '',
                 tip: s.tip || ''
               });
