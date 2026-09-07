@@ -1,4 +1,4 @@
-{
+﻿{
   "name": "술술트래블 - AI 여행 어시스턴트 & 가계부 다이어리",
   "short_name": "술술트래블",
   "description": "AI 여행 일정 자동 셋업, 30분 단위 타임라인, 다통화 스마트 가계부, 데일리 감성 여행기, 100% 오프라인 PWA",
@@ -10,7 +10,7 @@
   "theme_color": "#0b0f19",
   "lang": "ko-KR",
   "categories": ["travel", "utilities", "productivity"],
-  "id": "sulsul-travel-pwa-v126",
+  "id": "sulsul-travel-pwa-v127",
   "icons": [
     {
       "src": "icons/icon-192-v115.png",
