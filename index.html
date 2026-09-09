@@ -14,7 +14,7 @@
   </script>
 
   <!-- PWA Meta & Icons -->
-  <link rel="manifest" href="manifest.webmanifest?v=1.2.0">
+  <link rel="manifest" href="manifest.webmanifest?v=1.3.0">
   <meta name="theme-color" content="#f5f5f7">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
@@ -570,7 +570,7 @@
             <h1 class="font-serif-brand text-base sm:text-xl font-bold tracking-tight text-[#1c1917] dark:text-[#ededed] whitespace-nowrap">
               Sulsul Travel
             </h1>
-            <span id="app-ver-badge" onclick="event.stopPropagation(); openVersionHistoryModal()" class="px-1.5 py-0.5 rounded-md theme-card-subtle hover:border-amber-500/60 hover:text-amber-600 dark:hover:text-amber-300 text-[#a2601b] dark:text-[#d4af37] text-[10px] font-bold font-mono shadow-inner cursor-pointer shrink-0 transition" title="버전 업데이트 기록 보기 (클릭)">v1.2.9</span>
+            <span id="app-ver-badge" onclick="event.stopPropagation(); openVersionHistoryModal()" class="px-1.5 py-0.5 rounded-md theme-card-subtle hover:border-amber-500/60 hover:text-amber-600 dark:hover:text-amber-300 text-[#a2601b] dark:text-[#d4af37] text-[10px] font-bold font-mono shadow-inner cursor-pointer shrink-0 transition" title="버전 업데이트 기록 보기 (클릭)">v1.3.0</span>
           </div>
           <p id="header-trip-name" class="text-[10px] sm:text-[11px] text-[#78716c] dark:text-stone-400 truncate max-w-[120px] sm:max-w-xs font-normal">인생의 모든 여정을 기록하는 다이어리</p>
         </div>
@@ -589,7 +589,7 @@
         </button>
 
         <!-- 3. 설정 버튼 (🎛️) -->
-        <button onclick="openSettingsModal()" class="w-8 h-8 sm:w-9 sm:h-9 rounded-xl theme-card-subtle flex items-center justify-center transition shadow-sm cursor-pointer" title="앱 설정 & 클라우드 동기화">
+        <button onclick="openSettingsModal()" class="w-8 h-8 sm:w-9 sm:h-9 rounded-xl theme-card-subtle flex items-center justify-center transition shadow-sm cursor-pointer" title="앱 설정 & 백업">
           <span class="text-sm">🎛️</span>
         </button>
 
@@ -747,34 +747,36 @@
       </div>
     </div>
 
-    <!-- 워크스페이스 메인 5대 탭 네비게이션 -->
+    <!-- 여행 단계 중심 4대 탭 네비게이션 -->
     <nav class="flex items-center gap-1 sm:gap-1.5 p-1 bg-[#0f1422] rounded-xl border border-[#1e263c] overflow-x-auto no-scrollbar">
       <button id="nav-tab-plan" onclick="switchTab('plan')" class="flex-1 min-w-[70px] sm:min-w-[80px] py-2 px-2.5 sm:px-3 rounded-lg text-xs font-bold flex items-center justify-center gap-1.5 transition nav-tab-active shadow-sm whitespace-nowrap shrink-0 cursor-pointer">
-        <i class="fa-regular fa-calendar-check text-xs shrink-0"></i>
-        <span>일정/지도</span>
+        <i class="fa-solid fa-layer-group text-xs shrink-0"></i>
+        <span>큰 계획</span>
       </button>
-      <button id="nav-tab-expenses" onclick="switchTab('expenses')" class="flex-1 min-w-[65px] sm:min-w-[75px] py-2 px-2.5 sm:px-3 rounded-lg text-xs font-bold flex items-center justify-center gap-1.5 transition nav-tab-inactive whitespace-nowrap shrink-0 cursor-pointer">
-        <i class="fa-solid fa-receipt text-xs shrink-0"></i>
-        <span>가계부</span>
+      <button id="nav-tab-today" onclick="switchTab('today')" class="flex-1 min-w-[65px] sm:min-w-[75px] py-2 px-2.5 sm:px-3 rounded-lg text-xs font-bold flex items-center justify-center gap-1.5 transition nav-tab-inactive whitespace-nowrap shrink-0 cursor-pointer">
+        <i class="fa-solid fa-location-arrow text-xs shrink-0"></i>
+        <span>오늘</span>
       </button>
       <button id="nav-tab-journal" onclick="switchTab('journal')" class="flex-1 min-w-[70px] sm:min-w-[75px] py-2 px-2.5 sm:px-3 rounded-lg text-xs font-bold flex items-center justify-center gap-1.5 transition nav-tab-inactive whitespace-nowrap shrink-0 cursor-pointer">
-        <i class="fa-solid fa-camera-retro text-xs shrink-0"></i>
-        <span>포토일기</span>
+        <i class="fa-solid fa-book-open text-xs shrink-0"></i>
+        <span>기록</span>
       </button>
       <button id="nav-tab-checklist" onclick="switchTab('checklist')" class="flex-1 min-w-[65px] sm:min-w-[75px] py-2 px-2.5 sm:px-3 rounded-lg text-xs font-bold flex items-center justify-center gap-1.5 transition nav-tab-inactive whitespace-nowrap shrink-0 cursor-pointer">
         <i class="fa-solid fa-list-check text-xs shrink-0"></i>
-        <span>준비물</span>
-      </button>
-      <button id="nav-tab-sync" onclick="switchTab('sync')" class="flex-1 min-w-[70px] sm:min-w-[80px] py-2 px-2.5 sm:px-3 rounded-lg text-xs font-bold flex items-center justify-center gap-1.5 transition nav-tab-inactive whitespace-nowrap shrink-0 cursor-pointer">
-        <i class="fa-solid fa-cloud-arrow-up text-xs shrink-0"></i>
-        <span>공유/설정</span>
+        <span>준비</span>
       </button>
     </nav>
+
+    <!-- TAB: 현장용 오늘 화면 -->
+    <div id="tab-content-today" class="tab-view hidden space-y-4">
+      <div id="today-overview-container" class="space-y-4"></div>
+    </div>
 
     <!-- ---------------------------------------- -->
     <!-- TAB 1: 일정 & 인터랙티브 지도 (TAB-PLAN) -->
     <!-- ---------------------------------------- -->
     <div id="tab-content-plan" class="tab-view space-y-4">
+      <div id="big-plan-container" class="space-y-3"></div>
       
       <!-- 서브 탭 (타임라인 / 인터랙티브 지도 / 12대 예약가이드 / 8대 도시간략) -->
       <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-1">
@@ -810,7 +812,7 @@
       </div>
 
       <!-- 📍 실시간 & 오프라인 GPS 스팟 레이더 (GPS SPOT RADAR) -->
-      <section id="gps-radar-card" class="rounded-2xl bg-[#0f1422] border border-[#1e263c] p-3.5 sm:p-4 shadow-lg space-y-3">
+      <section id="gps-radar-card" class="hidden rounded-2xl bg-[#0f1422] border border-[#1e263c] p-3.5 sm:p-4 shadow-lg space-y-3">
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 sm:gap-3 border-b border-[#1a2236] pb-3">
           <div class="flex items-center gap-2.5">
             <span class="w-9 h-9 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center text-base shrink-0 animate-pulse">
@@ -1074,10 +1076,11 @@
           <div>
             <h3 class="text-base font-black text-white flex items-center gap-2">
               <i class="fa-solid fa-camera text-amber-400"></i>
-              <span>3:4 포토 다이어리 & 감성 여행 작가</span>
+              <span>여행 기록 & 에세이</span>
             </h3>
-            <p class="text-xs text-slate-400 mt-0.5">촬영한 사진은 3:4 규격으로 자동 압축되어 로컬 용량을 안전하게 보호합니다.</p>
+            <p class="text-xs text-slate-400 mt-0.5">확인한 경험과 사진, 메모를 한 편의 여행 이야기로 남깁니다.</p>
           </div>
+          <button id="nav-tab-expenses" onclick="switchTab('expenses')" class="px-3 py-1.5 rounded-lg bg-[#141c2e] border border-[#23304c] text-emerald-400 text-xs font-bold shrink-0">가계부 열기</button>
         </div>
 
         <!-- 일자 빠른 스크롤 선택 바 -->
@@ -1102,7 +1105,7 @@
             <i class="fa-solid fa-clipboard-check text-amber-400"></i>
             <span>남미 여행 필수 준비물 체크리스트</span>
           </h3>
-          <span id="checklist-progress-badge" class="px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 text-xs font-black">0% 준비됨</span>
+          <div class="flex items-center gap-2"><span id="checklist-progress-badge" class="px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 text-xs font-black">0% 준비됨</span><button id="nav-tab-sync" onclick="switchTab('sync')" class="px-2.5 py-1 rounded-lg bg-indigo-500/15 border border-indigo-500/30 text-indigo-300 text-[11px] font-bold">동행·백업</button></div>
         </div>
         <p class="text-xs text-slate-400">고산병 약(다이아목스), 비자, 어댑터 등 현지 생존에 직결되는 준비물을 체크하세요.</p>
       </div>
@@ -1125,8 +1128,8 @@
               <i class="fa-solid fa-users-viewfinder"></i>
             </span>
             <div>
-              <h3 class="text-base font-black text-white">동행자 실시간 클라우드 DB 연동</h3>
-              <p class="text-xs text-slate-400 mt-0.5">혼자 쓰는 여행이 아닙니다! 룸코드 하나로 여러 동행자와 일정·가계부를 함께 작성하세요.</p>
+              <h3 class="text-base font-black text-white">동행자 공유 링크 & 백업</h3>
+              <p class="text-xs text-slate-400 mt-0.5">공유 링크로 여행 사본을 전달하고, 변경한 기록은 각 기기에 안전하게 저장하세요.</p>
             </div>
           </div>
           <button onclick="openShareModal()" class="px-3 py-1.5 bg-indigo-500 hover:bg-indigo-600 text-white font-bold rounded-lg text-xs shadow-md transition shrink-0">
@@ -1141,7 +1144,7 @@
           </div>
           <div class="flex items-center gap-2">
             <button onclick="syncCurrentTripToCloud()" class="px-3 py-1.5 bg-[#141c2e] hover:bg-[#1a263e] border border-[#23304c] text-slate-200 hover:text-white rounded-lg text-xs font-bold transition flex items-center gap-1">
-              <i class="fa-solid fa-cloud-arrow-up text-[11px] text-emerald-400"></i> 클라우드 동기화
+              <i class="fa-solid fa-hard-drive text-[11px] text-emerald-400"></i> 이 기기에 저장
             </button>
             <button onclick="copyTripShareLink()" class="px-3 py-1.5 bg-gradient-to-r from-amber-500 to-amber-600 text-slate-950 font-black rounded-lg text-xs shadow transition flex items-center gap-1">
               <i class="fa-solid fa-share-nodes text-[11px]"></i> 초대 링크 복사
@@ -1181,7 +1184,7 @@
             <span>무료 키 발급 (Google AI Studio)</span>
           </a>
         </div>
-        <p class="text-xs text-slate-400">개인 API 키를 등록하면 AI 30분 일정 생성 및 포토 에세이 윤문 기능을 무제한으로 사용하실 수 있습니다 (신용카드 등록 없이 100% 평생 무료).</p>
+        <p class="text-xs text-slate-400">개인 API 키를 등록하면 AI 일정 생성과 포토 에세이 윤문을 사용할 수 있습니다. 이용 가능 모델과 한도는 Google AI Studio의 현재 정책을 따릅니다.</p>
 
         <div class="flex items-center gap-2">
           <input type="password" id="cfg-gemini-key" placeholder="AI Studio에서 발급받은 Gemini API 키 입력" class="flex-1 px-3 py-2 bg-[#080b12] border border-[#1e263c] rounded-xl text-xs text-white placeholder-slate-500 focus:outline-none focus:border-amber-500">
@@ -1227,7 +1230,7 @@
           <span class="w-8 h-8 rounded-lg bg-amber-500/20 text-[#a2601b] dark:text-[#d4af37] border border-amber-500/30 flex items-center justify-center text-sm font-black shadow-sm">📲</span>
           <div>
             <h3 class="text-base font-black" style="color: var(--ink);">홈 화면에 앱(PWA) 바로 설치</h3>
-            <p class="text-[11px]" style="color: var(--ink2);">단독 앱 실행 & 영구 보관 저장소 보호</p>
+            <p class="text-[11px]" style="color: var(--ink2);">단독 앱 실행 & 오프라인 접근 지원</p>
           </div>
         </div>
         <button onclick="closeModal('modal-install-guide')" class="text-base p-1 hover:opacity-75 transition cursor-pointer" style="color: var(--ink2);" title="닫기">✕</button>
@@ -1238,7 +1241,7 @@
         <div class="text-[10px] font-black tracking-widest text-[#a2601b] dark:text-[#d4af37]">🌟 WELCOME TO SULSUL TRAVEL</div>
         <div class="text-sm font-black theme-banner-title">술술트래블 200% 활용을 위한 <span class="text-[#a2601b] dark:text-[#d4af37]">필수 안심 세팅</span></div>
         <div class="text-[11px] theme-banner-sub leading-relaxed mt-1">
-          일반 웹사이트는 7일간 방치 시 캐시가 삭제될 수 있습니다. <b>홈 화면에 앱(PWA)으로 설치하면 운영체제가 데이터를 영구 보호</b>하여 비행기 모드에서도 안전하게 보관됩니다.
+          홈 화면에 앱(PWA)으로 설치하면 앱처럼 빠르게 열고 오프라인에서도 저장된 여행을 확인하기 쉽습니다. 중요한 기록은 정기적으로 JSON 파일로 백업해 주세요.
         </div>
       </div>
 
@@ -1350,7 +1353,7 @@
             <i class="fa-solid fa-users"></i>
           </span>
           <div>
-            <h3 class="text-base font-black text-white">동행자 초대 & 실시간 클라우드 DB</h3>
+            <h3 class="text-base font-black text-white">동행자 초대 링크</h3>
             <p class="text-[11px] text-slate-400">함께 여행하는 동행자와 같은 일정을 보고 수정할 수 있습니다.</p>
           </div>
         </div>
@@ -1361,31 +1364,24 @@
       <div class="p-4 bg-[#080b12] rounded-xl border border-[#1e263c] space-y-2 text-center">
         <div class="text-xs text-slate-400">이 여행의 전용 룸코드 (Room Code)</div>
         <div id="modal-share-code-display" class="text-2xl sm:text-3xl font-black text-amber-400 font-mono tracking-wider">SA-2026</div>
-        <div class="text-[11px] text-slate-500">동행자에게 이 코드를 알려주거나 아래 초대 링크를 보내세요.</div>
+        <div class="text-[11px] text-slate-500">코드는 이 기기 안에서 여행을 구분합니다. 동행자에게는 아래 여행 사본 링크를 보내세요.</div>
       </div>
 
       <!-- 원클릭 복사 액션 -->
       <div class="space-y-2">
         <button onclick="copyTripShareLink()" class="w-full py-2.5 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-slate-950 font-black rounded-xl text-xs flex items-center justify-center gap-2 shadow-md">
           <i class="fa-solid fa-link text-xs"></i>
-          <span>카카오톡 / 동행자 초대 링크 복사</span>
+          <span>동행자에게 여행 사본 링크 복사</span>
         </button>
 
         <button onclick="syncCurrentTripToCloud()" class="w-full py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-black rounded-xl text-xs flex items-center justify-center gap-2 shadow-md">
-          <i class="fa-solid fa-cloud-arrow-up text-xs"></i>
-          <span>지금 클라우드에 최신 데이터 동기화</span>
+          <i class="fa-solid fa-hard-drive text-xs"></i>
+          <span>지금 이 기기에 저장</span>
         </button>
       </div>
 
-      <!-- 다른 동행자의 룸코드로 참가하기 -->
-      <div class="pt-3 border-t border-[#1e263c] space-y-2">
-        <div class="text-xs font-bold text-slate-300">다른 동행자의 여행에 참여하시겠습니까?</div>
-        <div class="flex items-center gap-2">
-          <input type="text" id="input-join-room-code" placeholder="예: SA-2026" class="flex-1 px-3 py-2 bg-[#080b12] border border-[#1e263c] rounded-xl text-xs text-white uppercase font-mono placeholder-slate-600 focus:outline-none focus:border-indigo-500">
-          <button onclick="joinTripByRoomCode()" class="px-4 py-2 bg-[#141c2e] hover:bg-[#1a263e] border border-[#23304c] text-indigo-300 hover:text-white font-bold rounded-xl text-xs">
-            참여하기
-          </button>
-        </div>
+      <div class="pt-3 border-t border-[#1e263c]">
+        <p class="text-[11px] leading-relaxed text-slate-400"><i class="fa-solid fa-circle-info text-indigo-400 mr-1"></i>현재 링크는 여행 사본을 전달합니다. 같은 원본을 여러 기기에서 실시간 공동편집하는 기능은 서버·로그인·권한 모델을 추가한 뒤 제공됩니다.</p>
       </div>
     </div>
   </div>
@@ -1587,11 +1583,12 @@
     <div class="sheet-box p-6 sm:p-7 space-y-4">
       <div class="flex items-center justify-between border-b border-[#1e263c] pb-3">
         <h3 class="text-base font-black text-white flex items-center gap-2">
-          <i class="fa-solid fa-location-dot text-amber-400"></i>
-          <span>새 30분 단위 스팟 추가</span>
+          <i id="spot-form-icon" class="fa-solid fa-location-dot text-amber-400"></i>
+          <span id="spot-form-modal-title">새 30분 단위 스팟 추가</span>
         </h3>
         <button onclick="closeModal('modal-spot')" class="text-slate-400 hover:text-white text-base">✕</button>
       </div>
+      <input type="hidden" id="spot-form-edit-idx" value="">
 
       <div class="space-y-3 text-xs">
         <div>
@@ -1623,6 +1620,10 @@
           <textarea id="spot-form-memo" rows="2" placeholder="오픈 15분 전 대기 필수, 창가 자리 요청" class="w-full px-3 py-2 bg-[#080b12] border border-[#1e263c] rounded-xl text-white focus:outline-none focus:border-amber-500"></textarea>
         </div>
         <div>
+          <label class="font-bold text-slate-300 block mb-1">💡 팁 (선택)</label>
+          <input type="text" id="spot-form-tip" placeholder="예: 현지인 추천 숨은 맛집" class="w-full px-3 py-2 bg-[#080b12] border border-[#1e263c] rounded-xl text-white focus:outline-none focus:border-amber-500">
+        </div>
+        <div>
           <label class="font-bold text-slate-300 block mb-1">예상 비용 (선택)</label>
           <input type="text" id="spot-form-cost" placeholder="예: 약 120 PEN" class="w-full px-3 py-2 bg-[#080b12] border border-[#1e263c] rounded-xl text-white focus:outline-none focus:border-amber-500">
         </div>
@@ -1630,7 +1631,7 @@
 
       <div class="flex items-center gap-3 pt-2">
         <button onclick="closeModal('modal-spot')" class="flex-1 py-2.5 rounded-xl bg-[#141c2e] text-slate-300 font-bold text-xs">취소</button>
-        <button onclick="submitAddSpot()" class="flex-1 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 text-slate-950 font-black text-xs shadow-md">스팟 저장</button>
+        <button id="spot-form-submit-btn" onclick="submitSpot()" class="flex-1 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 text-slate-950 font-black text-xs shadow-md">스팟 저장</button>
       </div>
     </div>
   </div>
@@ -1902,6 +1903,29 @@
     </div>
   </div>
 
+  <!-- RePlan 변경 전후 검토 모달 -->
+  <div id="modal-replan-review" class="sheet-container sheet-closed">
+    <div class="sheet-scrim" onclick="rejectPendingReplan()"></div>
+    <div class="sheet-box p-6 sm:p-7 space-y-4 max-w-2xl">
+      <div class="flex items-start justify-between gap-3 border-b border-[#1e263c] pb-3">
+        <div>
+          <p class="text-[10px] tracking-[0.2em] font-black text-amber-400">REPLAN · REVIEW</p>
+          <h3 class="text-base sm:text-lg font-black text-white mt-1">바뀌는 일정만 확인하세요</h3>
+          <p id="replan-review-summary" class="text-[11px] text-slate-400 mt-1"></p>
+        </div>
+        <button onclick="rejectPendingReplan()" class="w-8 h-8 rounded-lg bg-[#141c2e] text-slate-400" title="닫기">✕</button>
+      </div>
+      <div id="replan-review-changes" class="space-y-2 max-h-[46vh] overflow-y-auto"></div>
+      <div class="p-3 rounded-xl bg-emerald-500/10 border border-emerald-500/25 text-[11px] text-emerald-200">
+        완료한 경험과 고정 일정은 그대로 유지됩니다. 승인 시점에 다른 수정이 있으면 적용을 중단합니다.
+      </div>
+      <div class="flex items-center gap-3">
+        <button onclick="rejectPendingReplan()" class="flex-1 min-h-11 rounded-xl bg-[#141c2e] text-slate-300 font-bold text-xs">기존 계획 유지</button>
+        <button id="btn-apply-replan" onclick="applyPendingReplan()" class="flex-1 min-h-11 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 text-slate-950 font-black text-xs">변경안 적용</button>
+      </div>
+    </div>
+  </div>
+
   <!-- AI 여행 비서 챗봇 모달 -->
   <div id="modal-ai-chat" class="sheet-container sheet-closed">
     <div class="sheet-scrim" onclick="closeModal('modal-ai-chat')"></div>
@@ -2121,7 +2145,7 @@
           <div class="p-3 pt-1 border-t border-[#e8e2d5] space-y-2 text-[11px] text-[#78716c] leading-relaxed">
             <div class="flex items-start gap-2">
               <span class="w-4 h-4 rounded-full bg-amber-500/20 text-[#a2601b] font-bold flex items-center justify-center shrink-0 text-[10px] mt-0.5">1</span>
-              <div><b>구글 로그인</b>: 위 [무료 API 키 발급받기] 링크를 클릭하고 본인의 Google 계정으로 로그인합니다 (신용카드 등록 없이 100% 평생 무료).</div>
+              <div><b>구글 로그인</b>: 위 [API 키 발급받기] 링크를 클릭하고 본인의 Google 계정으로 로그인합니다. 사용 전 Google AI Studio의 현재 요금과 한도를 확인하세요.</div>
             </div>
             <div class="flex items-start gap-2">
               <span class="w-4 h-4 rounded-full bg-amber-500/20 text-[#a2601b] font-bold flex items-center justify-center shrink-0 text-[10px] mt-0.5">2</span>
@@ -2314,7 +2338,7 @@
                 <div class="text-[11px] text-[#78716c] dark:text-stone-400 mt-0.5">기록된 모든 여정의 누적 발자취입니다.</div>
               </div>
               <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-500/10 text-[#a2601b] dark:text-amber-300 border border-amber-500/20">
-                100% 로컬 영구 보관
+                현재 기기 저장
               </span>
             </div>
 
@@ -2509,14 +2533,21 @@
 
       <!-- 버전 목록 스크롤 영역 -->
       <div class="flex-1 overflow-y-auto space-y-3 pr-1 text-xs">
-        <!-- v1.2.9 (Current) -->
+        <!-- v1.3.0 (Current) -->
+        <div class="p-4 rounded-2xl bg-amber-500/5 dark:bg-amber-500/10 border-2 border-amber-500/40 space-y-2.5 shadow-sm relative overflow-hidden">
+          <div class="flex items-center justify-between gap-2"><div class="flex items-center gap-2 min-w-0"><span class="px-2 py-0.5 rounded-lg bg-amber-500 text-black font-black text-xs shadow-sm shrink-0">v1.3.0</span><span class="text-xs font-black text-[#1c1917] dark:text-white">큰 계획·오늘·기록·준비 UI와 승인형 RePlan</span></div><span class="px-2 py-0.5 rounded-full text-[10px] font-black bg-emerald-100 text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300 border border-emerald-300 shrink-0">최신 버전</span></div>
+          <div class="text-[11px] text-[#44403c] dark:text-stone-300 space-y-1.5 leading-relaxed"><div><b>여행 단계 중심 4개 메뉴</b>: 거점 중심 큰 계획에서 현장용 오늘, 확인 기록, 출발 준비까지 한 흐름으로 연결.</div><div><b>안전한 RePlan</b>: 완료·고정 일정 보호, 변경 전후 비교, 명시적 승인, 버전 충돌 차단.</div><div><b>세부 일정 편집</b>: 스팟 수정·시간 정렬·고정 토글과 오늘 화면의 방문 확인·건너뜀 기록 제공.</div></div>
+          <div class="text-[10px] text-stone-400 dark:text-stone-500 pt-1 border-t border-amber-500/20 flex items-center justify-between"><span>📅 2026-09-10 릴리즈</span><span class="font-mono">st-shell-v1.3.0</span></div>
+        </div>
+
+        <!-- v1.2.9 -->
         <div class="p-4 rounded-2xl bg-amber-500/5 dark:bg-amber-500/10 border-2 border-amber-500/40 space-y-2.5 shadow-sm relative overflow-hidden">
           <div class="flex items-center justify-between gap-2">
             <div class="flex items-center gap-2 min-w-0">
               <span class="px-2 py-0.5 rounded-lg bg-amber-500 text-black font-black text-xs shadow-sm shrink-0">v1.2.9</span>
               <span class="text-xs font-black text-[#1c1917] dark:text-white">모바일 반응형 레이아웃 정밀 개선 & 글자 쪼개짐·줄바꿈 전수 방지 및 GPS 레이더 버그 패치</span>
             </div>
-            <span class="px-2 py-0.5 rounded-full text-[10px] font-black bg-emerald-100 text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300 border border-emerald-300 shrink-0">최신 버전</span>
+            <span class="text-[10px] text-stone-400 shrink-0">2026-09-07</span>
           </div>
           <div class="text-[11px] text-[#44403c] dark:text-stone-300 space-y-1.5 leading-relaxed">
             <div><b>글로벌 CJK 타이포그래피 안전 규격(word-break: keep-all)</b>: 모바일 뷰포트에서 한글 단어 중간 분절(예: '포토일기' ➔ '포토일\n기', '시간표' ➔ '30\n분 시\n간 표') 왜곡을 앱 전체 수준에서 원천 차단.</div>
@@ -2891,7 +2922,7 @@
     window.showToast = showToast;
 
     // 앱 버전 및 글로벌 네임스페이스 (Sulsul-Travel Invariant Rule R-10, R-11, R-12, R-13, R-14, R-15)
-    const APP_VER = '1.2.9';
+    const APP_VER = '1.3.0';
 
     // ══════════════════════════════════════════
     // [Two-Tone Theme System] 라이트 그레이 & 딥 블랙 테마 엔진
@@ -2980,7 +3011,7 @@
     // 전역 상태 스토어 (Multi-Trip State)
     const State = {
       currentView: 'hub', // 'hub' | 'workspace'
-      activeTab: 'plan',  // 'plan' | 'expenses' | 'journal' | 'checklist' | 'sync'
+      activeTab: 'plan',  // core: plan/today/journal/checklist; secondary: expenses/sync
       planSubTab: 'timeline', // 'timeline' | 'map' | 'booking' | 'cityguide'
       
       trips: [],          // 모든 여행 컬렉션
@@ -3019,11 +3050,14 @@
       deferredPrompt: null,
       activeAiJobId: null,
       aiDraftKind: null,
-      storageRecovery: null
+      storageRecovery: null,
+      pendingReplan: null,
+      activeTodayDayIndex: 0
     };
 
     const TripRepository = new window.SulsulTravel.LegacyTripRepository(localStorage);
     let aiOrchestratorPromise = null;
+    let replanDomainPromise = null;
 
     // ==========================================
     // 앱 초기화 및 시드 로드
@@ -3292,7 +3326,17 @@
         if (btnCreateTrip) btnCreateTrip.classList.add('hidden');
         if (btnShare) btnShare.classList.add('hidden');
         const headerTripName = document.getElementById('header-trip-name');
-        if (headerTripName) headerTripName.innerText = '여행 다이어리 기록 중 ✈️';
+        if (headerTripName) {
+          const trip = getActiveTrip();
+          const today = new Date().toISOString().slice(0, 10);
+          const start = trip?.startDate || '';
+          const end = trip?.endDate || '';
+          headerTripName.innerText = start && today < start
+            ? '함께 만드는 큰 계획 ✈️'
+            : end && today > end
+              ? '여행 기록을 이어 쓰는 중 📖'
+              : '오늘의 여행을 함께 조정 중 🧭';
+        }
         renderActiveTripWorkspace();
       }
       window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -5421,6 +5465,129 @@
     }
 
     // ==========================================
+    // 큰 계획: 연속된 날짜를 거점 단위 카드로 요약
+    // ==========================================
+    function inferPlanBlockPlace(day) {
+      const knownPlaces = [
+        [/귀국|일상 복귀|한국 공항 도착|인천공항.*도착/, '귀로'],
+        [/리우|리오|rio|코파카바나|이파네마|코르코바두|슈가로프/, '리우데자네이루'],
+        [/이과수|iguazu|악마의 목구멍/, '이과수'],
+        [/부에노스|buenos|레콜레타|팔레르모|카미니토/, '부에노스아이레스'],
+        [/쿠스코|마추픽추|machu|cusco|성스러운 계곡|아구아스 칼리엔테스/, '쿠스코·마추픽추'],
+        [/파라카스|와카치나|huacachina|paracas|이카\b/, '파라카스·와카치나'],
+        [/리마|lima/, '리마'],
+        [/로스앤젤레스|los angeles|\bla\b|산타모니카|할리우드/, '로스앤젤레스'],
+        [/샹그릴라|shangri|송찬림사|보달랍궁/, '샹그릴라'],
+        [/호도협|tiger leaping/, '호도협'],
+        [/리장|여강|옥룡설산|수허고진|lijiang/, '리장·옥룡설산'],
+        [/따리|대리|얼하이|dali|erhai/, '따리·얼하이'],
+        [/쿤밍|곤명|석림|kunming|stone forest/, '쿤밍·석림'],
+        [/타이베이|taipei|지우펀|스펀/, '타이베이·근교'],
+        [/가오슝|kaohsiung/, '가오슝'],
+        [/타이중|taichung/, '타이중'],
+        [/세부|cebu|막탄/, '세부·막탄'],
+        [/보홀|bohol/, '보홀']
+      ];
+      const sources = [day.loc, day.cityName, day.city, day.route, day.title]
+        .filter(Boolean)
+        .map(value => String(value).toLowerCase());
+      for (const source of sources) {
+        const matched = knownPlaces.find(([pattern]) => pattern.test(source));
+        if (matched) return matched[1];
+      }
+
+      const explicit = String(day.city || day.cityName || day.loc || day.route || '')
+        .split(/[→➔]/).pop()
+        .split('·').pop()
+        .replace(/\([^)]*\)/g, '')
+        .trim();
+      return explicit || '여정 전반';
+    }
+
+    function buildPlanBlocks(trip) {
+      const blocks = [];
+      (trip.days || []).forEach((day, dayIndex) => {
+        const place = inferPlanBlockPlace(day);
+        const last = blocks[blocks.length - 1];
+        if (last && last.place === place) {
+          last.days.push({ day, dayIndex });
+        } else {
+          blocks.push({ place, days: [{ day, dayIndex }] });
+        }
+      });
+      return blocks;
+    }
+
+    function renderBigPlanTab() {
+      const trip = getActiveTrip();
+      const container = document.getElementById('big-plan-container');
+      if (!trip || !container) return;
+      const blocks = buildPlanBlocks(trip);
+      const fixedCount = (trip.days || []).reduce((sum, day) => sum + (day.spots || []).filter(spot => spot.fixed).length, 0);
+      container.innerHTML = `
+        <section class="p-4 sm:p-5 rounded-2xl bg-gradient-to-br from-[#13231d] to-[#24382f] border border-emerald-500/25 shadow-lg">
+          <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-3">
+            <div><p class="text-[10px] tracking-[0.22em] font-black text-emerald-300">OUR BIG PLAN</p><h3 class="text-xl sm:text-2xl font-black mt-1" style="color:#fff">큰 그림부터, 함께</h3><p class="text-xs mt-1" style="color:rgba(209,250,229,.78)">거점과 숙박, 꼭 하고 싶은 경험을 먼저 보고 세부 시간은 안에서 조정합니다.</p></div>
+            <div class="flex gap-2"><span class="px-2.5 py-1 rounded-lg bg-white/10 text-[11px] text-white font-bold">${blocks.length}개 거점</span><span class="px-2.5 py-1 rounded-lg bg-amber-400/15 text-[11px] text-amber-300 font-bold">고정 ${fixedCount}개</span></div>
+          </div>
+        </section>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-3">${blocks.map((block, index) => {
+          const first = block.days[0], last = block.days[block.days.length - 1];
+          const spots = block.days.flatMap(item => item.day.spots || []);
+          const highlights = spots.filter(spot => !spot.completed).slice(0, 3).map(spot => escapeHtml(spot.title)).join(' · ') || '세부 경험을 추가해 보세요';
+          const protectedCount = spots.filter(spot => spot.completed || spot.fixed).length;
+          return `<article class="p-4 rounded-2xl bg-[#0f1422] border border-[#273126] shadow-sm">
+            <div class="flex items-start gap-3"><span class="w-9 h-9 rounded-xl bg-[#16231d] border border-[#2e3b31] text-emerald-300 flex items-center justify-center text-xs font-black shrink-0">${String(index + 1).padStart(2, '0')}</span><div class="min-w-0 flex-1"><div class="flex items-start justify-between gap-2"><div><h4 class="text-sm sm:text-base font-black text-white">${escapeHtml(block.place)}</h4><p class="text-[11px] text-slate-400 mt-0.5">${escapeHtml(first.day.date || `Day ${first.dayIndex + 1}`)}${last.dayIndex !== first.dayIndex ? ` ~ ${escapeHtml(last.day.date || `Day ${last.dayIndex + 1}`)}` : ''} · ${block.days.length}일</p></div><span class="text-[10px] text-slate-400 whitespace-nowrap">보호 ${protectedCount}</span></div><p class="text-xs text-slate-300 mt-3 leading-relaxed">${highlights}</p><div class="flex gap-2 mt-3"><button onclick="openPlanBlock(${first.dayIndex})" class="px-3 py-1.5 rounded-lg bg-emerald-500/15 border border-emerald-500/30 text-emerald-300 text-[11px] font-bold">세부 일정 보기</button>${index < blocks.length - 1 ? '<span class="text-[10px] text-slate-500 self-center">다음 거점 이동 확인 →</span>' : ''}</div></div></div>
+          </article>`;
+        }).join('')}</div>`;
+    }
+
+    function openPlanBlock(dayIndex) {
+      State.allTimelinesExpanded = true;
+      switchPlanSubTab('timeline');
+      setTimeout(() => document.getElementById(`day-body-${dayIndex}`)?.scrollIntoView({ behavior: 'smooth', block: 'center' }), 0);
+    }
+
+    function resolveTodayDayIndex(trip) {
+      const today = new Date().toISOString().slice(0, 10);
+      const exact = (trip.days || []).findIndex(day => String(day.date || '').replaceAll('.', '-').startsWith(today));
+      if (exact >= 0) return exact;
+      const unfinished = (trip.days || []).findIndex(day => (day.spots || []).some(spot => !spot.completed && !spot.skipped));
+      return unfinished >= 0 ? unfinished : Math.max(0, Math.min(State.activeTodayDayIndex, (trip.days || []).length - 1));
+    }
+
+    function renderTodayTab() {
+      const trip = getActiveTrip();
+      const container = document.getElementById('today-overview-container');
+      if (!trip || !container) return;
+      if (!trip.days?.length) { container.innerHTML = '<div class="p-8 text-center rounded-2xl bg-[#0f1422] text-slate-400">큰 계획에서 여행 일정을 먼저 만들어 주세요.</div>'; return; }
+      const dayIndex = resolveTodayDayIndex(trip);
+      State.activeTodayDayIndex = dayIndex;
+      const day = trip.days[dayIndex];
+      const pending = (day.spots || []).filter(spot => !spot.completed && !spot.skipped);
+      const next = pending[0];
+      const completed = (day.spots || []).filter(spot => spot.completed).length;
+      container.innerHTML = `
+        <section class="p-4 sm:p-5 rounded-2xl bg-gradient-to-br from-emerald-950 to-[#173c30] border border-emerald-500/25 shadow-lg">
+          <div class="flex items-start justify-between gap-3"><div><p class="text-[10px] tracking-[0.2em] font-black text-emerald-300">HERE & NOW · DAY ${day.dayNum || dayIndex + 1}</p><h3 class="text-lg sm:text-xl font-black mt-1" style="color:#fff">${next ? escapeHtml(next.title) : '오늘의 여행을 마무리했어요'}</h3><p class="text-xs mt-1" style="color:rgba(209,250,229,.78)">${escapeHtml(day.date || '')} · ${escapeHtml(day.city || day.route || day.loc || day.title || '')}</p></div><span class="px-2.5 py-1 rounded-lg bg-white/10 text-[11px] font-bold whitespace-nowrap" style="color:#fff">완료 ${completed}/${(day.spots || []).length}</span></div>
+          ${next ? `<div class="flex flex-wrap gap-2 mt-4"><span class="px-2.5 py-1 rounded-lg bg-white/10 text-emerald-100 text-xs font-bold">${escapeHtml(next.time || '시간 미정')}</span>${next.fixed ? '<span class="px-2.5 py-1 rounded-lg bg-indigo-400/20 text-indigo-200 text-xs font-bold">고정 일정</span>' : '<span class="px-2.5 py-1 rounded-lg bg-amber-400/15 text-amber-200 text-xs font-bold">조정 가능</span>'}</div>` : ''}
+          <div class="grid grid-cols-2 sm:flex gap-2 mt-4"><button onclick="openScheduleTuningModal(${dayIndex})" class="min-h-11 px-3 rounded-xl bg-amber-400 text-slate-950 text-xs font-black">↻ RePlan</button><button onclick="switchTab('journal'); selectJournalDay(${dayIndex})" class="min-h-11 px-3 rounded-xl bg-white/10 border border-white/15 text-white text-xs font-bold">순간 기록</button></div>
+        </section>
+        <section class="p-4 rounded-2xl bg-[#0f1422] border border-[#1e263c]"><div class="flex items-center justify-between mb-3"><h3 class="text-sm font-black text-white">오늘의 흐름</h3><button onclick="navigateToInteractiveMap()" class="text-[11px] text-sky-400 font-bold">지도 보기</button></div><div class="space-y-2">${(day.spots || []).map((spot, spotIndex) => `<div class="p-3 rounded-xl border ${spot.completed ? 'border-emerald-500/25 bg-emerald-950/10' : spot.fixed ? 'border-indigo-500/25 bg-indigo-950/10' : 'border-[#1a2236] bg-[#080b12]'} flex items-start gap-3"><span class="font-mono text-[11px] text-slate-400 mt-0.5">${escapeHtml(spot.time || '--:--')}</span><div class="min-w-0 flex-1"><div class="flex items-center gap-1.5 flex-wrap"><strong class="text-xs ${spot.completed ? 'text-slate-400 line-through' : 'text-slate-200'}">${escapeHtml(spot.title)}</strong>${spot.completed ? '<span class="text-[9px] text-emerald-400">방문 확인</span>' : spot.skipped ? '<span class="text-[9px] text-slate-500">건너뜀</span>' : spot.fixed ? '<span class="text-[9px] text-indigo-300">고정</span>' : ''}</div><p class="text-[10px] text-slate-500 mt-0.5">${escapeHtml(spot.desc || spot.memo || '')}</p></div>${!spot.completed && !spot.skipped ? `<div class="flex gap-1"><button onclick="completeTodaySpot(${dayIndex},${spotIndex},event)" class="w-8 h-8 rounded-lg bg-emerald-500/15 text-emerald-300" title="다녀왔어요">✓</button><button onclick="skipTodaySpot(${dayIndex},${spotIndex},event)" class="w-8 h-8 rounded-lg bg-slate-700/40 text-slate-400" title="건너뛰기">–</button></div>` : ''}</div>`).join('')}</div></section>`;
+    }
+
+    function completeTodaySpot(dayIndex, spotIndex, event) { toggleSpotCompleted(dayIndex, spotIndex, event); renderTodayTab(); }
+    function skipTodaySpot(dayIndex, spotIndex, event) {
+      event?.stopPropagation();
+      const trip = getActiveTrip(), spot = trip?.days?.[dayIndex]?.spots?.[spotIndex];
+      if (!spot || spot.completed) return;
+      spot.skipped = true;
+      saveTrips();
+      renderTimelineTab();
+      renderTodayTab();
+      showToast(`⏭️ [${escapeHtml(spot.title)}] 건너뜀으로 기록했습니다. 방문 기록에는 포함되지 않습니다.`);
+    }
+
     // 워크스페이스 렌더링
     // ==========================================
     function renderActiveTripWorkspace() {
@@ -5539,6 +5706,8 @@
       }
 
       // 탭별 렌더러 호출
+      renderBigPlanTab();
+      renderTodayTab();
       renderTimelineTab();
       renderExpensesTab();
       renderJournalTab();
@@ -5560,18 +5729,19 @@
     // ==========================================
     function switchTab(tabId) {
       State.activeTab = tabId;
-      const tabs = ['plan', 'expenses', 'journal', 'checklist', 'sync'];
+      const tabs = ['plan', 'today', 'journal', 'checklist', 'expenses', 'sync'];
       tabs.forEach(t => {
         const btn = document.getElementById(`nav-tab-${t}`);
         const view = document.getElementById(`tab-content-${t}`);
         if (t === tabId) {
-          btn.className = "flex-1 min-w-[70px] sm:min-w-[80px] py-2 px-2.5 sm:px-3 rounded-lg text-xs font-bold flex items-center justify-center gap-1.5 transition nav-tab-active shadow-sm whitespace-nowrap shrink-0 cursor-pointer";
+          if (btn && btn.closest('nav')) btn.className = "flex-1 min-w-[70px] sm:min-w-[80px] py-2 px-2.5 sm:px-3 rounded-lg text-xs font-bold flex items-center justify-center gap-1.5 transition nav-tab-active shadow-sm whitespace-nowrap shrink-0 cursor-pointer";
           view.classList.remove('hidden');
         } else {
-          btn.className = "flex-1 min-w-[65px] sm:min-w-[75px] py-2 px-2.5 sm:px-3 rounded-lg text-xs font-bold flex items-center justify-center gap-1.5 transition nav-tab-inactive whitespace-nowrap shrink-0 cursor-pointer";
+          if (btn && btn.closest('nav')) btn.className = "flex-1 min-w-[65px] sm:min-w-[75px] py-2 px-2.5 sm:px-3 rounded-lg text-xs font-bold flex items-center justify-center gap-1.5 transition nav-tab-inactive whitespace-nowrap shrink-0 cursor-pointer";
           view.classList.add('hidden');
         }
       });
+      if (tabId === 'today') renderTodayTab();
       window.scrollTo({ top: 120, behavior: 'smooth' });
     }
 
@@ -5702,8 +5872,11 @@
         let spotsHtml = '';
         (day.spots || []).forEach((spot, spotIdx) => {
           const isDone = Boolean(spot.completed);
+          const isFixed = Boolean(spot.fixed);
           const doneBadge = isDone ? 
             `<span class="px-1.5 py-0.2 rounded bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 text-[9px] font-bold flex items-center gap-0.5"><i class="fa-solid fa-check text-[8px]"></i>방문완료</span>` : '';
+          const fixedBadge = isFixed ?
+            `<span class="px-1.5 py-0.2 rounded bg-indigo-500/20 text-indigo-400 border border-indigo-500/30 text-[9px] font-bold flex items-center gap-0.5"><i class="fa-solid fa-thumbtack text-[8px]"></i>고정</span>` : '';
           const draftBadge = spot.isDraft ? 
             `<span class="px-1.5 py-0.2 rounded bg-amber-400/20 text-amber-400 border border-amber-400/30 text-[9px] font-bold">초안</span>` : '';
           const nextDayBadge = (spot.time && spot.time.includes('+1일')) ? 
@@ -5716,9 +5889,13 @@
             'bg-emerald-500/20 border-emerald-500/50 text-emerald-400' :
             'bg-[#141c2e] border-[#23304c] text-slate-500 hover:text-slate-300';
           const titleClass = isDone ? 'line-through text-slate-400' : 'text-slate-200';
+          const fixBtnClass = isFixed ?
+            'bg-indigo-500/20 border-indigo-500/50 text-indigo-400' :
+            'bg-[#141c2e] border-[#23304c] text-slate-500 hover:text-slate-300';
+          const cardBorder = isDone ? 'border-emerald-500/25 bg-emerald-950/5' : (isFixed ? 'border-indigo-500/25 bg-indigo-950/5' : 'border-[#1a2236]');
 
           spotsHtml += `
-            <div class="group flex items-start gap-2.5 sm:gap-3 p-3 bg-[#080b12] rounded-xl border ${isDone ? 'border-emerald-500/25 bg-emerald-950/5' : 'border-[#1a2236]'} hover:border-[#2a3652] transition">
+            <div class="group flex items-start gap-2.5 sm:gap-3 p-3 bg-[#080b12] rounded-xl border ${cardBorder} hover:border-[#2a3652] transition">
               <button onclick="toggleSpotCompleted(${dayIdx}, ${spotIdx}, event)" class="w-6 h-6 rounded-lg border ${checkBtnClass} flex items-center justify-center text-xs shrink-0 mt-0.5 transition cursor-pointer" title="${isDone ? '방문 완료 취소' : '방문 완료 체크'}">
                 <i class="fa-solid fa-check text-[10px]"></i>
               </button>
@@ -5728,6 +5905,7 @@
                   <span class="font-mono text-xs text-amber-400 font-bold">${spot.time}</span>
                   <span class="font-bold ${titleClass} text-xs">${spot.title}</span>
                   ${doneBadge}
+                  ${fixedBadge}
                   ${draftBadge}
                   ${nextDayBadge}
                 </div>
@@ -5737,6 +5915,14 @@
               </div>
               <div class="shrink-0 flex items-center gap-1">
                 ${spot.cost ? `<span class="text-[10px] text-emerald-400 font-semibold hidden sm:inline mr-1">${typeof spot.cost === 'number' ? spot.cost.toLocaleString() + '원' : spot.cost}</span>` : ''}
+                <!-- 📌 고정 토글 버튼 -->
+                <button onclick="toggleSpotFixed(${dayIdx}, ${spotIdx}, event)" class="w-7 h-7 rounded-lg border ${fixBtnClass} flex items-center justify-center text-[10px] transition cursor-pointer" title="${isFixed ? '고정 해제' : '일정 고정 (재배치 보호)'}">
+                  <i class="fa-solid fa-thumbtack"></i>
+                </button>
+                <!-- ✏️ 편집 버튼 -->
+                <button onclick="openEditSpotModal(${dayIdx}, ${spotIdx}, event)" class="w-7 h-7 rounded-lg bg-[#141c2e] hover:bg-amber-500/20 border border-[#23304c] hover:border-amber-500/30 text-slate-400 hover:text-amber-400 flex items-center justify-center text-[10px] transition cursor-pointer" title="스팟 편집">
+                  <i class="fa-solid fa-pen-to-square"></i>
+                </button>
                 <!-- 구글 지도 바로가기 버튼 -->
                 <a href="${gmapUrl}" target="_blank" rel="noopener noreferrer" class="w-7 h-7 rounded-lg bg-[#141c2e] hover:bg-[#1a263e] border border-[#23304c] text-sky-400 flex items-center justify-center text-[10px] transition" title="구글 지도에서 위치 보기">
                   <i class="fa-solid fa-map-pin"></i>
@@ -6710,7 +6896,7 @@
               <div class="min-w-0">
                 <div class="flex items-center gap-1.5 text-[11px] font-bold text-amber-400">
                   <span>💡 시작 가이드</span>
-                  <span class="text-slate-400 font-normal hidden sm:inline">| 영구 보호 저장소</span>
+                  <span class="text-slate-400 font-normal hidden sm:inline">| 오프라인에서도 빠르게 열기</span>
                 </div>
                 <div class="text-xs sm:text-sm font-extrabold text-white truncate">
                   터치 한 번으로 홈 화면에 앱 설치하기
@@ -6947,37 +7133,13 @@
     function syncCurrentTripToCloud() {
       const trip = getActiveTrip();
       if (!trip) return;
-      alert(`[☁️ 클라우드 동기화 완료]\n룸코드 [${trip.roomCode}]의 최신 일정과 가계부 데이터가 동행자 공유 DB에 성공적으로 동기화되었습니다!`);
+      saveTrips();
+      alert(`[💾 이 기기에 저장 완료]\n[${trip.title}]의 최신 일정과 기록을 현재 브라우저 저장소에 보관했습니다. 다른 기기와 실시간으로 합쳐지지는 않으므로 공유 링크 또는 JSON 백업을 함께 사용하세요.`);
       renderActiveTripWorkspace();
     }
 
     function joinTripByRoomCode() {
-      const code = document.getElementById('input-join-room-code').value.trim().toUpperCase();
-      if (!code) {
-        alert('룸코드를 입력하세요.');
-        return;
-      }
-
-      let existing = State.trips.find(t => t.roomCode === code);
-      if (existing) {
-        State.activeTripId = existing.id;
-        closeModal('modal-share-room');
-        switchView('workspace');
-        alert(`동행 룸 [${code}]에 성공적으로 연결되었습니다!`);
-        return;
-      }
-
-      const newTrip = JSON.parse(JSON.stringify(State.trips[0]));
-      newTrip.id = 'trip_shared_' + Date.now();
-      newTrip.title = `[동행 공유] ${newTrip.title}`;
-      newTrip.roomCode = code;
-      State.trips.unshift(newTrip);
-      State.activeTripId = newTrip.id;
-      saveTrips();
-
-      closeModal('modal-share-room');
-      switchView('workspace');
-      alert(`새로운 동행 룸 [${code}]에 성공적으로 참여하였습니다!`);
+      alert('룸코드만으로 다른 기기의 여행에 접속할 수는 없습니다. 동행자가 보낸 여행 사본 링크를 열어 주세요.');
     }
 
     function checkUrlParamsForSharedRoom() {
@@ -6990,15 +7152,8 @@
           State.activeTripId = existing.id;
           switchView('workspace');
         } else {
-          const newTrip = JSON.parse(JSON.stringify(State.trips[0]));
-          newTrip.id = 'trip_shared_' + Date.now();
-          newTrip.title = `[초대] ${newTrip.title}`;
-          newTrip.roomCode = code;
-          State.trips.unshift(newTrip);
-          State.activeTripId = newTrip.id;
-          saveTrips();
-          switchView('workspace');
-          alert(`동행자 초대 룸 [${code}]에 자동으로 접속되었습니다!`);
+          history.replaceState(null, '', window.location.pathname + window.location.hash);
+          showToast(`룸코드 ${code}만으로는 다른 기기의 여행을 불러올 수 없습니다. 여행 사본 링크를 요청해 주세요.`, 5000);
         }
       }
     }
@@ -7802,12 +7957,30 @@
       daySelect.innerHTML = (trip.days || []).map((d, idx) => `
         <option value="${idx}">Day ${d.dayNum || (idx+1)}: ${d.title}</option>
       `).join('');
+
+      const editIdxInput = document.getElementById('spot-form-edit-idx');
+      if (editIdxInput) editIdxInput.value = '';
+
+      const modalTitle = document.getElementById('spot-form-modal-title');
+      if (modalTitle) modalTitle.innerText = '새 30분 단위 스팟 추가';
+      const formIcon = document.getElementById('spot-form-icon');
+      if (formIcon) formIcon.className = 'fa-solid fa-location-dot text-amber-400';
+      const submitBtn = document.getElementById('spot-form-submit-btn');
+      if (submitBtn) submitBtn.innerText = '스팟 저장';
+
+      const timeInput = document.getElementById('spot-form-time');
+      if (timeInput) timeInput.value = '09:00';
+      const catSelect = document.getElementById('spot-form-cat');
+      if (catSelect) catSelect.value = 'tour';
       const titleInput = document.getElementById('spot-form-title');
       if (titleInput) titleInput.value = '';
       const memoInput = document.getElementById('spot-form-memo');
       if (memoInput) memoInput.value = '';
+      const tipInput = document.getElementById('spot-form-tip');
+      if (tipInput) tipInput.value = '';
       const costInput = document.getElementById('spot-form-cost');
       if (costInput) costInput.value = '';
+
       openModal('modal-spot');
     }
 
@@ -7816,13 +7989,67 @@
       document.getElementById('spot-form-day').value = dayIdx;
     }
 
-    function submitAddSpot() {
+    function openEditSpotModal(dayIdx, spotIdx, evt) {
+      if (evt && typeof evt.stopPropagation === 'function') evt.stopPropagation();
+      const trip = getActiveTrip();
+      if (!trip || !trip.days || !trip.days[dayIdx] || !trip.days[dayIdx].spots || !trip.days[dayIdx].spots[spotIdx]) return;
+      const spot = trip.days[dayIdx].spots[spotIdx];
+
+      const daySelect = document.getElementById('spot-form-day');
+      daySelect.innerHTML = (trip.days || []).map((d, idx) => `
+        <option value="${idx}">Day ${d.dayNum || (idx+1)}: ${d.title}</option>
+      `).join('');
+      daySelect.value = String(dayIdx);
+
+      const editIdxInput = document.getElementById('spot-form-edit-idx');
+      if (editIdxInput) editIdxInput.value = `${dayIdx}:${spotIdx}`;
+
+      const modalTitle = document.getElementById('spot-form-modal-title');
+      if (modalTitle) modalTitle.innerText = '30분 단위 스팟 수정';
+      const formIcon = document.getElementById('spot-form-icon');
+      if (formIcon) formIcon.className = 'fa-solid fa-pen-to-square text-amber-400';
+      const submitBtn = document.getElementById('spot-form-submit-btn');
+      if (submitBtn) submitBtn.innerText = '수정 내용 저장';
+
+      const timeInput = document.getElementById('spot-form-time');
+      if (timeInput) {
+        // "+1일 09:00" 형태는 기본 시간 필드(HH:mm) 호환을 위해 정제
+        const cleanTime = (spot.time || '09:00').replace('+1일', '').trim();
+        timeInput.value = cleanTime.substring(0, 5);
+      }
+      const catSelect = document.getElementById('spot-form-cat');
+      if (catSelect) catSelect.value = spot.cat || 'tour';
+      const titleInput = document.getElementById('spot-form-title');
+      if (titleInput) titleInput.value = spot.title || '';
+      const memoInput = document.getElementById('spot-form-memo');
+      if (memoInput) memoInput.value = spot.desc || spot.memo || '';
+      const tipInput = document.getElementById('spot-form-tip');
+      if (tipInput) tipInput.value = spot.tip || '';
+      const costInput = document.getElementById('spot-form-cost');
+      if (costInput) costInput.value = spot.cost ? String(spot.cost) : '';
+
+      openModal('modal-spot');
+    }
+
+    function sortDaySpotsByTime(dayIdx) {
+      const trip = getActiveTrip();
+      if (!trip || !trip.days || !trip.days[dayIdx] || !Array.isArray(trip.days[dayIdx].spots)) return;
+      const day = trip.days[dayIdx];
+      const hasDateLineFlight = day.spots.some(s => s.isDateLine);
+      if (!hasDateLineFlight) {
+        day.spots.sort((a, b) => timeToMinutes(a.time) - timeToMinutes(b.time));
+      }
+    }
+
+    function submitSpot() {
       const dayIdx = parseInt(document.getElementById('spot-form-day').value);
       const time = document.getElementById('spot-form-time').value;
       const cat = document.getElementById('spot-form-cat').value;
       const title = document.getElementById('spot-form-title').value.trim();
       const memo = document.getElementById('spot-form-memo').value.trim();
+      const tip = (document.getElementById('spot-form-tip')?.value || '').trim();
       const cost = document.getElementById('spot-form-cost').value.trim();
+      const editIdxVal = document.getElementById('spot-form-edit-idx')?.value || '';
 
       if (!title) {
         alert('스팟 활동명을 입력하세요.');
@@ -7832,22 +8059,76 @@
       const trip = getActiveTrip();
       if (!trip.days[dayIdx].spots) trip.days[dayIdx].spots = [];
 
+      if (editIdxVal.includes(':')) {
+        // [수정 모드]
+        const [origDayIdxStr, origSpotIdxStr] = editIdxVal.split(':');
+        const origDayIdx = parseInt(origDayIdxStr);
+        const origSpotIdx = parseInt(origSpotIdxStr);
+
+        if (trip.days[origDayIdx] && trip.days[origDayIdx].spots && trip.days[origDayIdx].spots[origSpotIdx]) {
+          const spot = trip.days[origDayIdx].spots[origSpotIdx];
+          spot.time = time;
+          spot.cat = cat;
+          spot.typeIcon = getCategoryIcon(cat);
+          spot.title = title;
+          spot.desc = memo;
+          spot.tip = tip;
+          spot.cost = cost;
+
+          if (origDayIdx !== dayIdx) {
+            // 다른 날짜로 이동된 경우
+            trip.days[origDayIdx].spots.splice(origSpotIdx, 1);
+            trip.days[dayIdx].spots.push(spot);
+            sortDaySpotsByTime(origDayIdx);
+          }
+          sortDaySpotsByTime(dayIdx);
+          saveTrips();
+          closeModal('modal-spot', true);
+          renderTimelineTab();
+          showToast(`✏️ [${title}] 일정이 수정 및 시간순 재배치되었습니다.`);
+          return;
+        }
+      }
+
+      // [추가 모드]
       trip.days[dayIdx].spots.push({
         time: time,
         cat: cat,
         typeIcon: getCategoryIcon(cat),
         title: title,
         desc: memo,
-        tip: '',
-        cost: cost
+        tip: tip,
+        cost: cost,
+        fixed: false,
+        completed: false
       });
 
-      // 시간순 정렬
-      trip.days[dayIdx].spots.sort((a, b) => a.time.localeCompare(b.time));
+      // 시간순 자동 정렬
+      sortDaySpotsByTime(dayIdx);
 
       saveTrips();
       closeModal('modal-spot', true);
       renderTimelineTab();
+      showToast(`➕ [${title}] 새 일정이 추가되었습니다.`);
+    }
+
+    // 하위 호환성 유지
+    function submitAddSpot() {
+      return submitSpot();
+    }
+
+    // 📌 스팟 일정 픽스(고정) 상태 토글 (재배치/튜닝 시 시간 불변 보호)
+    function toggleSpotFixed(dayIdx, spotIdx, evt) {
+      if (evt && typeof evt.stopPropagation === 'function') evt.stopPropagation();
+      const trip = getActiveTrip();
+      if (!trip || !trip.days || !trip.days[dayIdx] || !trip.days[dayIdx].spots || !trip.days[dayIdx].spots[spotIdx]) return;
+      const spot = trip.days[dayIdx].spots[spotIdx];
+      spot.fixed = !spot.fixed;
+      saveTrips();
+      renderTimelineTab();
+      renderBigPlanTab();
+      renderTodayTab();
+      showToast(spot.fixed ? `📌 [${spot.title}] 일정이 고정되었습니다. (재배치 시 보호)` : `[${spot.title}] 일정 고정이 해제되었습니다.`);
     }
 
     // 스팟 방문 완료 상태 토글 (불변 보호 마킹)
@@ -7859,6 +8140,8 @@
       spot.completed = !spot.completed;
       saveTrips();
       renderTimelineTab();
+      renderBigPlanTab();
+      renderTodayTab();
       showToast(spot.completed ? `✔️ [${spot.title}] 방문 완료 처리되었습니다. (시간 재배치 보호)` : `[${spot.title}] 방문 대기 상태로 변경되었습니다.`);
     }
 
@@ -7953,7 +8236,7 @@
       };
     }
 
-    async function executeScheduleTuning(useAi) {
+    async function executeScheduleTuningLegacy(useAi) {
       const trip = getActiveTrip();
       if (!trip || !trip.days || trip.days.length === 0) return;
 
@@ -8024,6 +8307,110 @@
         renderTimelineTab();
         showToast(`⚡ ${targetDayText} 스팟 ${heuristic.modifiedSpotsCount}개의 일정이 ${offsetMinutes > 0 ? '+' : ''}${offsetMinutes}분 성공적으로 재배치되었습니다. (완료 스팟 ${heuristic.preservedCompletedCount}개 보존)`);
       }
+    }
+
+    function getReplanDomain() {
+      if (!replanDomainPromise) replanDomainPromise = import('./js/domain/replan.mjs');
+      return replanDomainPromise;
+    }
+
+    async function showHeuristicReplanReview(trip, targetDayVal, offsetMinutes, reason) {
+      const domain = await getReplanDomain();
+      const proposal = domain.createReplanProposal({
+        days: trip.days,
+        targetDay: targetDayVal,
+        offsetMinutes,
+        reason
+      });
+      State.pendingReplan = {
+        id: `replan:${trip.id}:${trip.revision || 0}:${Date.now()}`,
+        tripId: trip.id,
+        baseRevision: trip.revision || 0,
+        reason,
+        proposedDays: proposal.proposedDays,
+        changes: proposal.changes
+      };
+      document.getElementById('replan-review-summary').textContent = `${reason} · 변경 ${proposal.changes.length}개 · 완료 ${proposal.preservedCompletedCount}개 / 고정 ${proposal.preservedFixedCount}개 보호`;
+      const changes = document.getElementById('replan-review-changes');
+      changes.innerHTML = proposal.changes.length ? proposal.changes.map(change => `
+        <div class="grid grid-cols-[1fr_auto_1fr] items-center gap-2 p-3 rounded-xl bg-[#080b12] border border-[#1a2236] text-xs">
+          <div><strong class="text-slate-200">${escapeHtml(change.title)}</strong><p class="text-slate-500 mt-0.5">Day ${change.dayIndex + 1}</p></div><span class="text-slate-500">→</span><strong class="text-amber-300 text-right">${escapeHtml(change.before)} → ${escapeHtml(change.after)}</strong>
+        </div>`).join('') : '<div class="p-4 rounded-xl bg-[#080b12] text-slate-400 text-xs">바꿀 수 있는 미완료 일정이 없습니다. 완료·고정 일정은 유지됩니다.</div>';
+      document.getElementById('btn-apply-replan').disabled = proposal.changes.length === 0;
+      closeModal('modal-schedule-tuning', true);
+      openModal('modal-replan-review');
+    }
+
+    async function executeScheduleTuning(useAi) {
+      const trip = getActiveTrip();
+      if (!trip?.days?.length) return;
+      const targetDayVal = document.getElementById('tuning-target-day')?.value || 'all';
+      const offsetMinutes = parseInt(document.getElementById('tuning-offset-minutes')?.value) || 0;
+      const reason = document.getElementById('tuning-reason-input')?.value.trim() || '현장 일정 변화';
+      if (!useAi) return showHeuristicReplanReview(trip, targetDayVal, offsetMinutes, reason);
+
+      closeModal('modal-schedule-tuning', true);
+      showToast('🤖 AI가 현재 계획과 보호 조건을 함께 검토하고 있습니다...', 3000);
+      const snapshotDays = JSON.parse(JSON.stringify(trip.days));
+      const prompt = `당신은 여행 RePlan 도우미입니다. 아래 현재 일정 JSON을 바탕으로 변경된 전체 days JSON 배열만 반환하세요.
+상황: ${reason}
+대상: ${targetDayVal === 'all' ? '전체 일정' : `Day ${Number(targetDayVal) + 1}`}
+기준 이동: ${offsetMinutes >= 0 ? '+' : ''}${offsetMinutes}분
+규칙: completed 또는 fixed가 true인 일정은 제목, 시간, 상태를 바꾸거나 삭제하지 마세요. 나머지는 실제 이동 가능성을 보수적으로 고려해 조정하고, 확인할 정보는 desc에 명시하세요. 원래 dayNum과 각 spot의 주요 필드를 유지하세요.
+현재 일정 JSON:
+${JSON.stringify(snapshotDays)}`;
+      try {
+        const result = await startAiDraftJob({
+          id: `replan-ai:${trip.id}:${trip.revision || 0}:${Date.now()}`,
+          tripId: trip.id,
+          targetId: 'replan',
+          kind: 'replan',
+          baseRevision: trip.revision || 0,
+          input: { prompt, snapshotDays, reason, targetDayVal, offsetMinutes }
+        });
+        if (!result || ['waiting_network', 'failed'].includes(result.state)) {
+          showToast('AI 초안을 만들지 못해 안전한 시간 조정안을 보여드립니다.', 3500);
+          await showHeuristicReplanReview(trip, targetDayVal, offsetMinutes, reason);
+        }
+      } catch (error) {
+        console.warn('[RePlan] AI proposal unavailable:', error?.message);
+        await showHeuristicReplanReview(trip, targetDayVal, offsetMinutes, reason);
+      }
+    }
+
+    async function applyPendingReplan() {
+      const pending = State.pendingReplan;
+      if (!pending) return;
+      const domain = await getReplanDomain();
+      const current = State.trips.find(item => item.id === pending.tripId);
+      if (!current || current.revision !== pending.baseRevision || !domain.protectedSpotsMatch(current.days, pending.proposedDays)) {
+        closeModal('modal-replan-review', true);
+        State.pendingReplan = null;
+        showToast('⚠️ 검토 중 계획이 바뀌어 적용하지 않았습니다. 현재 일정에서 다시 만들어 주세요.', 4500);
+        return;
+      }
+      const result = TripRepository.applyDraft(State.trips, {
+        tripId: pending.tripId,
+        baseRevision: pending.baseRevision,
+        jobId: pending.id,
+        mutate: draftTrip => { draftTrip.days = JSON.parse(JSON.stringify(pending.proposedDays)); }
+      });
+      if (result.status !== 'applied') {
+        showToast('⚠️ 변경안을 저장하지 못했습니다. 원래 계획은 유지됩니다.', 4500);
+        return;
+      }
+      State.trips = result.trips;
+      State.pendingReplan = null;
+      closeModal('modal-replan-review', true);
+      renderActiveTripWorkspace();
+      switchTab('today');
+      showToast('✅ RePlan을 적용했습니다. 완료 기록과 고정 일정은 유지됩니다.');
+    }
+
+    function rejectPendingReplan() {
+      State.pendingReplan = null;
+      closeModal('modal-replan-review', true);
+      showToast('기존 계획을 유지합니다.');
     }
 
     function openAddExpenseModal() {
@@ -8181,7 +8568,7 @@
     }
 
     async function generateAiDraftPayload(job, { signal }) {
-      if (job.kind === 'itinerary') {
+      if (job.kind === 'itinerary' || job.kind === 'replan') {
         const raw = await callGeminiApiWithFallback(job.input.prompt, { signal });
         return { days: parseJsonBlock(raw, '[', ']'), source: 'gemini' };
       }
@@ -8208,10 +8595,10 @@
           ['food', 'flight', 'lodging', 'tour', 'shopping', 'etc'].includes(receipt.category) &&
           (!receipt.date || /^\d{4}-\d{2}-\d{2}$/.test(receipt.date));
       }
-      if (job.kind === 'itinerary') {
+      if (job.kind === 'itinerary' || job.kind === 'replan') {
         if (!Array.isArray(payload?.days) || payload.days.length < 1 || payload.days.length > 60) return false;
         const dayNumbers = new Set();
-        return payload.days.every(day => {
+        const validShape = payload.days.every(day => {
           const dayNum = Number(day.dayNum);
           if (!Number.isInteger(dayNum) || dayNum < 1 || dayNum > 365 || dayNumbers.has(dayNum) ||
               !Array.isArray(day.spots) || day.spots.length > 48) return false;
@@ -8222,6 +8609,19 @@
               timeMatch && Number(timeMatch[1]) < 24 && Number(timeMatch[2]) < 60;
           });
         });
+        if (!validShape) return false;
+        if (job.kind === 'replan') {
+          const protectedMatch = job.input.snapshotDays.every((day, dayIndex) => {
+            const proposed = payload.days[dayIndex];
+            if (!proposed?.spots) return false;
+            return (day.spots || []).filter(spot => spot.completed || spot.fixed).every(spot =>
+              proposed.spots.some(candidate => candidate.title === spot.title && candidate.time === spot.time &&
+                Boolean(candidate.completed) === Boolean(spot.completed) && Boolean(candidate.fixed) === Boolean(spot.fixed))
+            );
+          });
+          return protectedMatch;
+        }
+        return true;
       }
       return false;
     }
@@ -8290,6 +8690,7 @@
         jobId: job.id,
         mutate: (trip) => {
           if (job.kind === 'itinerary') mergeItineraryProposal(trip, job.draft.days);
+          if (job.kind === 'replan') trip.days = JSON.parse(JSON.stringify(job.draft.days));
           if (job.kind === 'journal') {
             if (!trip.journals) trip.journals = {};
             const current = trip.journals[job.input.dayIndex] || { text: '', photos: [] };
@@ -8321,12 +8722,12 @@
       const proposal = document.getElementById('ai-draft-review-proposal');
       const status = document.getElementById('ai-draft-review-status');
       State.aiDraftKind = job.kind;
-      title.textContent = job.kind === 'itinerary' ? 'AI 일정 제안 검토' : job.kind === 'journal' ? 'AI 여행기 초안 검토' : '영수증 판독 결과 검토';
+      title.textContent = job.kind === 'replan' ? 'AI RePlan 제안 검토' : job.kind === 'itinerary' ? 'AI 일정 제안 검토' : job.kind === 'journal' ? 'AI 여행기 초안 검토' : '영수증 판독 결과 검토';
       subtitle.textContent = `${trip?.title || '여행'} · 승인 전에는 원본이 바뀌지 않습니다.`;
-      if (job.kind === 'itinerary') {
+      if (job.kind === 'itinerary' || job.kind === 'replan') {
         original.textContent = describeItinerary(trip?.days || []);
         proposal.textContent = describeItinerary(job.draft.days);
-        status.textContent = '기존 일정은 유지하고, 같은 시간·제목이 아닌 제안만 추가합니다.';
+        status.textContent = job.kind === 'replan' ? '완료·고정 일정 보존을 검증했습니다. 승인 시점에 계획 버전이 달라지면 적용하지 않습니다.' : '기존 일정은 유지하고, 같은 시간·제목이 아닌 제안만 추가합니다.';
       } else if (job.kind === 'journal') {
         original.textContent = job.input.sourceText;
         proposal.textContent = job.draft.text;
@@ -8377,7 +8778,7 @@
         closeModal('modal-ai-draft-review', true);
         if (result.kind === 'receipt') openModal('modal-expense');
         else renderActiveTripWorkspace();
-        showToast(result.kind === 'itinerary' ? '✅ 기존 일정을 보존하고 AI 제안을 추가했습니다.' :
+        showToast(result.kind === 'replan' ? '✅ AI RePlan을 적용했습니다. 완료·고정 일정은 유지됩니다.' : result.kind === 'itinerary' ? '✅ 기존 일정을 보존하고 AI 제안을 추가했습니다.' :
           result.kind === 'journal' ? '✅ 원문을 보존하고 여행기 초안을 적용했습니다.' : '✅ 판독값을 입력 폼에 적용했습니다.');
       } else if (result.state === 'conflict') {
         document.getElementById('ai-draft-review-status').textContent = '초안 생성 후 원본이 변경되었습니다. 현재 내용을 보호하기 위해 적용을 중단했습니다. 새로 생성해 주세요.';

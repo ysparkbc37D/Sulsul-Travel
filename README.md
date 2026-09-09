@@ -1,6 +1,6 @@
 # ✈️ 술술트래블 (Sulsul-Travel) - AI 여행 어시스턴트 & 데일리 다이어리
 
-> **v1.2.4 확장 개발 (2026-09-07)**: [아키텍처](docs/architecture-vnext.md) · [AI 오케스트레이션](docs/orchestration.md) · [UI/UX 명세](docs/ux-blueprint.md) · [개발 모델/백로그](docs/development-model.md). 일정·여행기·영수증 AI는 초안 검토 후 적용하도록 앱에 연결되었습니다. 계약 테스트: `node --test tests/*.test.mjs`. ‘오늘/빠른 기록’ 중심의 새 정보 구조와 IndexedDB 이전은 후속입니다. 아래 초기 소개의 완전 오프라인·고정 모델·환율 정확성 표현은 보증이 아니며 최신 설계의 기능 경계를 참고하세요.
+> **v1.3.0 업데이트 (2026-09-10)**: 여행 안의 기본 흐름을 **큰 계획 / 오늘 / 기록 / 준비**로 재구성했습니다. 현장 RePlan은 완료·고정 일정을 보호하고 변경 전후를 검토한 뒤 적용합니다. [제품 재설계](docs/design-2026-09/README.md) · [구현 기록](docs/design-2026-09/implementation-v1.3.0.md) · [AI 오케스트레이션](docs/orchestration.md). 계약 테스트: `node --test tests/*.test.mjs`.
 
 [![PWA Ready](https://img.shields.io/badge/PWA-Ready-22c55e.svg?style=flat-square&logo=pwa)](https://github.com/ysparkbc37D/Sulsul-Travel)
 [![Zero Backend](https://img.shields.io/badge/Zero--Backend-100%25%20Offline--First-3b82f6.svg?style=flat-square)](https://github.com/ysparkbc37D/Sulsul-Travel)
@@ -9,19 +9,20 @@
 [![License](https://img.shields.io/badge/License-MIT-blue.svg?style=flat-square)](LICENSE)
 
 > **"술술 읽히고, 술술 계획하고, 술술 기록하는 스마트 여행 메이트"**  
-> **술술트래블**은 **술술다이어리(Sulsul-Diary)**의 엔터프라이즈 오케스트레이션 아키텍처를 차용한 **100% Zero-Backend, Offline-First PWA 여행 어시스턴트 & 다이어리 앱**입니다.
+> **술술트래블**은 정적 배포와 기기 저장을 기본으로 하는 PWA 여행 어시스턴트 & 다이어리 앱입니다. 핵심 기록은 오프라인에서 열 수 있고, Gemini AI와 GitHub Gist 백업은 네트워크와 사용자의 별도 설정이 필요합니다.
 
 ---
 
 ## 🌟 핵심 특징 (Key Highlights)
 
-### 1. 🌐 Zero-Backend & 100% Offline-First (GitHub Pages 무료 호스팅)
-- 별도의 DB 서버나 백엔드 인프라 비용 없이 **GitHub Pages 100% 무료 정적 웹 호스팅**으로 즉시 배포 및 구동됩니다.
-- **Service Worker (`sw.js`)** 기반의 로컬 캐싱과 브라우저 **LocalStorage / IndexedDB**를 결합하여 **비행기 모드, 안데스 고산 지대, 우유니 사막 등 통신 음영 지역에서도 100% 모든 기능이 완벽하게 오프라인 작동**합니다.
+### 1. 🌐 정적 배포 & 오프라인 핵심 기록
+- 별도의 앱 서버 없이 GitHub Pages에 정적 PWA로 배포할 수 있습니다.
+- **Service Worker (`sw.js`)** 캐시와 브라우저 **LocalStorage / IndexedDB**를 사용해 저장된 계획과 기록을 오프라인에서 확인·편집할 수 있습니다. AI 생성, 외부 지도와 Gist 백업은 네트워크가 필요합니다.
 
 ### 2. 🤖 Gemini Multi-Model Fallback Loop & Smart Draft
 - **AI 추천 엔진**: 사용자가 가고 싶은 목적지, 여행 기간, 테마를 입력하면 Gemini AI가 30분 단위 정밀 일정, 최적 동선, 교통편, 추천 맛집 및 예상 예산을 자동 편성합니다.
-- **Multi-Model Fallback**: 할당량 초과나 일시적 장애를 방지하기 위해 `gemini-2.5-flash` ➔ `gemini-2.0-flash` ➔ `gemini-1.5-flash`로 자동 폴백(Fallback)되어 안정적인 응답을 보장합니다.
+- **Multi-Model Fallback**: 모델 가용성에 따라 `gemini-2.5-flash` ➔ `gemini-2.0-flash` ➔ `gemini-1.5-flash` 순서로 재시도합니다.
+- **승인형 RePlan**: 지연·날씨·피로 이벤트를 반영한 변경안을 먼저 비교하며, 완료·고정 일정과 최신 revision을 재검증한 뒤 사용자가 적용합니다.
 - **Smart Draft (`[초안]` 배지 시스템)**: AI가 제안한 모든 일정과 항목은 `[초안]` 뱃지가 부여되며, 사용자가 탭 한 번으로 자유롭게 수정, 추가, 삭제 및 확정할 수 있습니다.
 
 ### 3. 📊 상단 실시간 종합 통계 대시보드 (Top Analytics Dashboard)
@@ -56,7 +57,7 @@
 │  [ 총 지출: ₩ 3,420,000 / ₩ 6,000,000 (57% 소진) ]     │
 │  [ 여정 진행: Day 7 / 22일 (32%) | 방문: 3개국 6개도시 ] │
 ├────────────────────────────────────────────────────────┤
-│ 📑 탭 네비게이션: [ 일정 플래너 ] [ 가계부 ] [ 여행기록 ] [ 체크리스트 ] │
+│ 📑 여행 흐름: [ 큰 계획 ] [ 오늘 ] [ 기록 ] [ 준비 ]               │
 ├────────────────────────────────────────────────────────┤
 │ 🗓️ Day 5: 쿠스코 ➔ 마추픽추                             │
 │   • 06:00 🚆 페루레일 오얀타이탐보 출발                │
@@ -104,10 +105,10 @@
 Sulsul-Travel/
 ├── .gitignore                     # Git 제외 설정
 ├── .nojekyll                      # GitHub Pages 정적 에셋 무시 방지 플래그
-├── index.html                     # 술술트래블 단일 파일 SPA 완성형 코어 (v1.0.0)
+├── index.html                     # 술술트래블 단일 파일 SPA 코어 (v1.3.0)
 ├── kb-travel.js                   # 여행 도메인 지식 베이스 (환율, 22일 남미 시드 데이터)
 ├── manifest.webmanifest           # PWA 웹 매니페스트
-├── sw.js                          # 오프라인 캐싱 Service Worker (st-shell-v1.0.0)
+├── sw.js                          # 오프라인 캐싱 Service Worker (st-shell-v1.3.0)
 ├── south_america_illustrated_map.jpg # 남미 일러스트 루트 지도 에셋
 ├── CHANGELOG.md                   # 술술체인지스 (버전 관리 및 릴리즈 이력)
 ├── 술술트래블신록.md              # 공식 기술 실록 & 린터(Linter) 10대 불변 법칙
@@ -115,7 +116,9 @@ Sulsul-Travel/
 ├── tools-verify.ps1               # 사전 배포 자동 게이트키퍼 검증기
 ├── tools-serve.ps1                # 무의존성 PowerShell 로컬 개발 서버
 ├── docs/                          # 상세 아키텍처 및 기술 문서
-│   └── architecture.md            # 오케스트레이션 모델 및 아키텍처 설계서
+│   ├── architecture.md            # 기존 오케스트레이션 모델
+│   └── design-2026-09/            # 제품 재설계, 구현·검증 기록
+├── js/domain/replan.mjs           # 완료·고정 보호 RePlan 도메인
 ├── icons/                         # PWA 고해상도 앱 아이콘
 │   ├── apple-touch-icon.png       # iOS 홈 화면 아이콘 (180x180)
 │   ├── icon-192.png               # Android 표준 아이콘 (192x192)
@@ -132,8 +135,8 @@ Sulsul-Travel/
 1. [Google AI Studio](https://aistudio.google.com/app/apikey)에서 무료 Gemini API 키를 발급받습니다.
 2. 앱 우측 상단의 ⚙️ **API 설정** 아이콘을 클릭합니다.
 3. 발급받은 API 키를 입력하고 **저장**합니다.
-   - 키는 사용자의 로컬 브라우저(`localStorage`)에만 안전하게 저장되며 외부 서버로 절대 전송되지 않습니다.
-   - API 키가 없어도 내장된 22일 남미 시드 일정, 수동 가계부, 오프라인 다이어리, 환율 계산기 등 모든 기본 기능은 100% 무료로 정상 작동합니다.
+   - 키는 브라우저 `localStorage`에 저장되고, AI 요청 시 여행 프롬프트와 함께 Google Gemini API로 직접 전송됩니다.
+   - API 키가 없어도 내장 일정, 수동 계획·가계부·다이어리와 로컬 RePlan을 사용할 수 있습니다.
 
 ---
 

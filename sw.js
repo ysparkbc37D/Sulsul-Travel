@@ -1,6 +1,7 @@
 // Sulsul-Travel Service Worker
-const V = 'st-shell-v1.2.9';
+const V = 'st-shell-v1.3.0';
 const CACHE_NAME = V;
+const CACHE_PREFIX = 'st-shell-';
 
 const PRECACHE_ASSETS = [
   './',
@@ -13,6 +14,7 @@ const PRECACHE_ASSETS = [
   './js/destinations/pack-yunnan.js',
   './js/infrastructure/storage/legacy-trip-repository.js',
   './js/application/orchestration.mjs',
+  './js/domain/replan.mjs',
   './south_america_illustrated_map.jpg',
   './icons/icon-192.png',
   './icons/icon-512.png',
@@ -43,7 +45,7 @@ self.addEventListener('activate', (event) => {
     caches.keys().then((cacheNames) => {
       return Promise.all(
         cacheNames.map((name) => {
-          if (name !== CACHE_NAME) {
+          if (name.startsWith(CACHE_PREFIX) && name !== CACHE_NAME) {
             return caches.delete(name);
           }
         })
