@@ -14,7 +14,7 @@
   </script>
 
   <!-- PWA Meta & Icons -->
-  <link rel="manifest" href="manifest.webmanifest?v=1.3.1">
+  <link rel="manifest" href="manifest.webmanifest?v=1.3.2">
   <meta name="theme-color" content="#f5f5f7">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
@@ -643,7 +643,7 @@
             <h1 class="font-serif-brand text-base sm:text-xl font-bold tracking-tight text-[#1c1917] dark:text-[#ededed] whitespace-nowrap">
               Sulsul Travel
             </h1>
-            <span id="app-ver-badge" onclick="event.stopPropagation(); openVersionHistoryModal()" class="px-1.5 py-0.5 rounded-md theme-card-subtle hover:border-amber-500/60 hover:text-amber-600 dark:hover:text-amber-300 text-[#a2601b] dark:text-[#d4af37] text-[10px] font-bold font-mono shadow-inner cursor-pointer shrink-0 transition" title="버전 업데이트 기록 보기 (클릭)">v1.3.1</span>
+            <span id="app-ver-badge" onclick="event.stopPropagation(); openVersionHistoryModal()" class="px-1.5 py-0.5 rounded-md theme-card-subtle hover:border-amber-500/60 hover:text-amber-600 dark:hover:text-amber-300 text-[#a2601b] dark:text-[#d4af37] text-[10px] font-bold font-mono shadow-inner cursor-pointer shrink-0 transition" title="버전 업데이트 기록 보기 (클릭)">v1.3.2</span>
           </div>
           <p id="header-trip-name" class="text-[10px] sm:text-[11px] text-[#78716c] dark:text-stone-400 truncate max-w-[120px] sm:max-w-xs font-normal">인생의 모든 여정을 기록하는 다이어리</p>
         </div>
@@ -2423,7 +2423,7 @@
             <i class="fa-solid fa-clock-rotate-left text-[#a2601b] dark:text-[#d4af37]"></i>
             <span>술술트래블 엔진 버전 & 릴리즈 히스토리</span>
           </span>
-          <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-500/10 text-[#a2601b] dark:text-[#d4af37] border border-amber-500/30">v1.3.1</span>
+          <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-500/10 text-[#a2601b] dark:text-[#d4af37] border border-amber-500/30">v1.3.2</span>
         </div>
         <p class="text-[11px] text-[#78716c] dark:text-stone-400 leading-relaxed">
           술술 오도미터 순차 올림 원칙에 따른 전체 버전별 기능 추가, UI/UX 개선, 버그 해결 이력을 확인합니다.
@@ -2677,9 +2677,16 @@
 
       <!-- 버전 목록 스크롤 영역 -->
       <div class="flex-1 overflow-y-auto space-y-3 pr-1 text-xs">
-        <!-- v1.3.1 (Current) -->
+        <!-- v1.3.2 (Current) -->
         <div class="p-4 rounded-2xl bg-emerald-500/5 dark:bg-emerald-500/10 border-2 border-emerald-500/40 space-y-2.5 shadow-sm relative overflow-hidden">
-          <div class="flex items-center justify-between gap-2"><div class="flex items-center gap-2 min-w-0"><span class="px-2 py-0.5 rounded-lg bg-emerald-500 text-black font-black text-xs shadow-sm shrink-0">v1.3.1</span><span class="text-xs font-black text-[#1c1917] dark:text-white">큰 계획 구간 편집과 범위 RePlan</span></div><span class="px-2 py-0.5 rounded-full text-[10px] font-black bg-emerald-100 text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300 border border-emerald-300 shrink-0">최신 버전</span></div>
+          <div class="flex items-center justify-between gap-2"><div class="flex items-center gap-2 min-w-0"><span class="px-2 py-0.5 rounded-lg bg-emerald-500 text-black font-black text-xs shadow-sm shrink-0">v1.3.2</span><span class="text-xs font-black text-[#1c1917] dark:text-white">Gemini 연결 안정화</span></div><span class="px-2 py-0.5 rounded-full text-[10px] font-black bg-emerald-100 text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300 border border-emerald-300 shrink-0">최신 버전</span></div>
+          <div class="text-[11px] text-[#44403c] dark:text-stone-300 space-y-1.5 leading-relaxed"><div><b>최신 모델 체계</b>: 종료된 Gemini 2.0·1.5 대신 안정 채널인 Gemini 2.5 Flash, Flash-Lite, Pro를 사용.</div><div><b>연결 테스트 수정</b>: 설정의 API 키 테스트가 실제 AI 폴백 목록과 같은 모델을 호출하도록 동기화.</div><div><b>키 전송 보안</b>: API 키를 URL에 붙이지 않고 공식 헤더(<code>x-goog-api-key</code>)로 전송.</div></div>
+          <div class="text-[10px] text-stone-400 dark:text-stone-500 pt-1 border-t border-emerald-500/20 flex items-center justify-between"><span>📅 2026-09-10 릴리즈</span><span class="font-mono">st-shell-v1.3.2</span></div>
+        </div>
+
+        <!-- v1.3.1 -->
+        <div class="p-4 rounded-2xl bg-emerald-500/5 dark:bg-emerald-500/10 border-2 border-emerald-500/40 space-y-2.5 shadow-sm relative overflow-hidden">
+          <div class="flex items-center justify-between gap-2"><div class="flex items-center gap-2 min-w-0"><span class="px-2 py-0.5 rounded-lg bg-emerald-500 text-black font-black text-xs shadow-sm shrink-0">v1.3.1</span><span class="text-xs font-black text-[#1c1917] dark:text-white">큰 계획 구간 편집과 범위 RePlan</span></div></div>
           <div class="text-[11px] text-[#44403c] dark:text-stone-300 space-y-1.5 leading-relaxed"><div><b>모바일 구간 상세</b>: 큰 계획 카드를 누르면 고정 헤더·하단 액션을 갖춘 별도 상세 화면에서 날짜별 일정을 조정.</div><div><b>큰 계획 편집</b>: 카드 제목, 거점, 기간, 숙소, 우선 경험, 위험·예약 메모와 확정 상태를 저장.</div><div><b>구간 RePlan</b>: 선택한 카드 범위 안만 재생성하며 완료·고정 일정과 범위 밖 일정을 함께 보호.</div><div><b>모바일 복귀</b>: 브라우저·휴대폰 뒤로가기로 모달과 상세 화면을 단계적으로 닫고 목록 스크롤 위치를 복원.</div></div>
           <div class="text-[10px] text-stone-400 dark:text-stone-500 pt-1 border-t border-emerald-500/20 flex items-center justify-between"><span>📅 2026-09-10 릴리즈</span><span class="font-mono">st-shell-v1.3.1</span></div>
         </div>
@@ -3010,7 +3017,7 @@
 
       <!-- 모달 푸터 -->
       <div class="pt-3 border-t border-[#e8e2d5] dark:border-stone-800 flex items-center justify-between shrink-0">
-        <span class="text-[11px] text-stone-400 dark:text-stone-500 font-mono">Sulsul Travel Engine v1.3.1</span>
+        <span class="text-[11px] text-stone-400 dark:text-stone-500 font-mono">Sulsul Travel Engine v1.3.2</span>
         <button onclick="closeModal('modal-version-history')" class="px-4 py-2 rounded-xl bg-[#faf8f5] dark:bg-stone-800 hover:bg-[#f0ece1] dark:hover:bg-stone-700 border border-[#e8e2d5] dark:border-stone-700 text-[#1c1917] dark:text-[#ededed] text-xs font-bold transition cursor-pointer shadow-sm">
           닫기
         </button>
@@ -3073,7 +3080,7 @@
     window.showToast = showToast;
 
     // 앱 버전 및 글로벌 네임스페이스 (Sulsul-Travel Invariant Rule R-10, R-11, R-12, R-13, R-14, R-15)
-    const APP_VER = '1.3.1';
+    const APP_VER = '1.3.2';
 
     // ══════════════════════════════════════════
     // [Two-Tone Theme System] 라이트 그레이 & 딥 블랙 테마 엔진
@@ -4867,10 +4874,10 @@
       }
 
       try {
-        const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${encodeURIComponent(candidateKey)}`;
+        const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${AI_MODELS[0]}:generateContent`;
         const res = await fetch(endpoint, {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers: { 'Content-Type': 'application/json', 'x-goog-api-key': candidateKey },
           body: JSON.stringify({
             contents: [{ parts: [{ text: "ping" }] }]
           })
@@ -8839,7 +8846,8 @@ ${JSON.stringify(snapshotDays)}`;
     // ==========================================
     // [12] AI Multi-Model Fallback Engine (R-5)
     // ==========================================
-    const AI_MODELS = ['gemini-2.0-flash', 'gemini-1.5-flash', 'gemini-2.5-flash'];
+    // Google 공식 모델 수명주기 반영: 2.0/1.5 계열 종료 후 안정 2.5 계열을 우선 사용합니다.
+    const AI_MODELS = ['gemini-2.5-flash', 'gemini-2.5-flash-lite', 'gemini-2.5-pro'];
 
     async function callGeminiApiWithFallback(prompt, options = {}) {
       const rawKey = State.geminiKey || localStorage.getItem('st_gemini_key');
@@ -8866,10 +8874,10 @@ ${JSON.stringify(snapshotDays)}`;
           options.signal?.addEventListener('abort', upstreamAbort, { once: true });
           // Sulsul-Diary 실록 4.3.9 교훈: 구글 AI 큐 지연 시 무한 대기 방지 12초 타임아웃
           timeoutId = setTimeout(() => controller.abort(), 12000);
-          const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${encodeURIComponent(key)}`;
+          const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent`;
           const res = await fetch(url, {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers: { 'Content-Type': 'application/json', 'x-goog-api-key': key },
             body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] }),
             signal: controller.signal
           });
@@ -10060,7 +10068,7 @@ JSON 배열만 출력하세요. 각 day는 dayNum, title, city, spots를 포함�
           options.signal?.addEventListener('abort', upstreamAbort, { once: true });
           // Sulsul-Diary 실록 4.3.9 교훈: 멀티모달 비전 OCR 12초 타임아웃
           timeoutId = setTimeout(() => controller.abort(), 12000);
-          const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${encodeURIComponent(key)}`;
+          const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent`;
           const payload = {
             contents: [
               {
@@ -10079,7 +10087,7 @@ JSON 배열만 출력하세요. 각 day는 dayNum, title, city, spots를 포함�
 
           const res = await fetch(url, {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers: { 'Content-Type': 'application/json', 'x-goog-api-key': key },
             body: JSON.stringify(payload),
             signal: controller.signal
           });
