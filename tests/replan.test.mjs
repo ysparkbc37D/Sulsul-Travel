@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { createReplanProposal, protectedSpotsMatch, shiftTimeLabel, timeToMinutes } from '../js/domain/replan.mjs';
+import { createReplanProposal, outsideScopeMatches, protectedSpotsMatch, resolveTargetDayIndexes, shiftTimeLabel, timeToMinutes } from '../js/domain/replan.mjs';
 
 const days = [{ dayNum: 1, spots: [
   { time: '09:00', title: '완료', completed: true },
@@ -29,6 +29,22 @@ test('day-scoped proposal leaves other days untouched', () => {
   const proposal = createReplanProposal({ days: twoDays, targetDay: 1, offsetMinutes: 30 });
   assert.equal(proposal.proposedDays[0].spots[1].time, '11:00');
   assert.equal(proposal.proposedDays[1].spots[0].time, '10:30');
+});
+
+test('range-scoped proposal changes only the selected big-plan days', () => {
+  const threeDays = [
+    { dayNum: 1, spots: [{ time: '09:00', title: '첫째 날' }] },
+    { dayNum: 2, spots: [{ time: '10:00', title: '둘째 날' }] },
+    { dayNum: 3, spots: [{ time: '11:00', title: '셋째 날' }] }
+  ];
+  const proposal = createReplanProposal({ days: threeDays, targetDay: 'range:1:2', offsetMinutes: 30 });
+  assert.deepEqual(resolveTargetDayIndexes(threeDays, 'range:1:2'), [1, 2]);
+  assert.equal(proposal.proposedDays[0].spots[0].time, '09:00');
+  assert.equal(proposal.proposedDays[1].spots[0].time, '10:30');
+  assert.equal(proposal.proposedDays[2].spots[0].time, '11:30');
+  assert.equal(outsideScopeMatches(threeDays, proposal.proposedDays, 'range:1:2'), true);
+  proposal.proposedDays[0].spots[0].time = '09:30';
+  assert.equal(outsideScopeMatches(threeDays, proposal.proposedDays, 'range:1:2'), false);
 });
 
 test('production time ranges shift both ends and single clocks show the next day', () => {

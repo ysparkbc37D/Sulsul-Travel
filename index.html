@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>술술트래블 (Sulsul-Travel) - 인생 여행 다이어리 & AI 어시스턴트</title>
 
   <!-- 2-Tone Theme FOUC Prevention Script -->
@@ -14,7 +14,7 @@
   </script>
 
   <!-- PWA Meta & Icons -->
-  <link rel="manifest" href="manifest.webmanifest?v=1.3.0">
+  <link rel="manifest" href="manifest.webmanifest?v=1.3.1">
   <meta name="theme-color" content="#f5f5f7">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
@@ -93,6 +93,10 @@
       --input-bg: #ffffff;
       --input-border: #d6d6d6;
       --serif: 'Cormorant Garamond', 'Playfair Display', 'Noto Serif KR', Georgia, serif;
+      --safe-top: env(safe-area-inset-top, 0px);
+      --safe-right: env(safe-area-inset-right, 0px);
+      --safe-bottom: env(safe-area-inset-bottom, 0px);
+      --safe-left: env(safe-area-inset-left, 0px);
     }
 
     :root[data-theme="dark"] {
@@ -191,7 +195,7 @@
       position: relative;
       width: 100%;
       max-width: 680px;
-      max-height: 92vh;
+      max-height: calc(100dvh - var(--safe-top));
       background: var(--surface) !important;
       color: var(--ink) !important;
       border-top-left-radius: 1.5rem;
@@ -203,6 +207,75 @@
       flex-direction: column;
       transform: translateY(0);
       transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .sheet-scroll-layout {
+      overflow: hidden;
+      padding: 0 !important;
+    }
+    .sheet-sticky-header,
+    .sheet-sticky-actions {
+      position: relative;
+      z-index: 2;
+      background: var(--surface);
+      flex: 0 0 auto;
+    }
+    .sheet-sticky-header {
+      padding: 1.25rem 1.25rem 0.875rem;
+      border-bottom: 1px solid var(--line);
+    }
+    .sheet-scroll-body {
+      min-height: 0;
+      overflow-y: auto;
+      overscroll-behavior: contain;
+      padding: 1rem 1.25rem;
+    }
+    .sheet-sticky-actions {
+      padding: 0.875rem 1.25rem max(0.875rem, var(--safe-bottom));
+      border-top: 1px solid var(--line);
+      box-shadow: 0 -8px 24px rgba(0, 0, 0, 0.08);
+    }
+    .plan-detail-page {
+      height: 100vh;
+      height: 100dvh;
+      background: var(--bg);
+      color: var(--ink);
+      overscroll-behavior: contain;
+    }
+    .plan-detail-header {
+      padding-top: max(0.75rem, var(--safe-top));
+      padding-left: max(1rem, var(--safe-left));
+      padding-right: max(1rem, var(--safe-right));
+      background: var(--header-bg);
+      border-bottom: 1px solid var(--header-border);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+    }
+    .plan-detail-scroll {
+      overscroll-behavior: contain;
+      scrollbar-gutter: stable;
+    }
+    .plan-detail-actions {
+      padding-left: max(1rem, var(--safe-left));
+      padding-right: max(1rem, var(--safe-right));
+      padding-bottom: max(0.75rem, var(--safe-bottom));
+      background: color-mix(in srgb, var(--surface) 94%, transparent);
+      border-top: 1px solid var(--line);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+    }
+    .tap-target { min-width: 44px; min-height: 44px; }
+    #modal-settings .sheet-box {
+      max-height: calc(100dvh - var(--safe-top));
+      padding-bottom: max(1.25rem, var(--safe-bottom));
+      overscroll-behavior: contain;
+    }
+    #modal-settings .sheet-box > div:first-child {
+      position: sticky;
+      top: -1.25rem;
+      z-index: 5;
+      margin-top: -1.25rem;
+      padding-top: 1.25rem;
+      background: var(--surface);
     }
     @media (min-width: 640px) {
       .sheet-container {
@@ -570,7 +643,7 @@
             <h1 class="font-serif-brand text-base sm:text-xl font-bold tracking-tight text-[#1c1917] dark:text-[#ededed] whitespace-nowrap">
               Sulsul Travel
             </h1>
-            <span id="app-ver-badge" onclick="event.stopPropagation(); openVersionHistoryModal()" class="px-1.5 py-0.5 rounded-md theme-card-subtle hover:border-amber-500/60 hover:text-amber-600 dark:hover:text-amber-300 text-[#a2601b] dark:text-[#d4af37] text-[10px] font-bold font-mono shadow-inner cursor-pointer shrink-0 transition" title="버전 업데이트 기록 보기 (클릭)">v1.3.0</span>
+            <span id="app-ver-badge" onclick="event.stopPropagation(); openVersionHistoryModal()" class="px-1.5 py-0.5 rounded-md theme-card-subtle hover:border-amber-500/60 hover:text-amber-600 dark:hover:text-amber-300 text-[#a2601b] dark:text-[#d4af37] text-[10px] font-bold font-mono shadow-inner cursor-pointer shrink-0 transition" title="버전 업데이트 기록 보기 (클릭)">v1.3.1</span>
           </div>
           <p id="header-trip-name" class="text-[10px] sm:text-[11px] text-[#78716c] dark:text-stone-400 truncate max-w-[120px] sm:max-w-xs font-normal">인생의 모든 여정을 기록하는 다이어리</p>
         </div>
@@ -1195,6 +1268,41 @@
 
   </main>
 
+  <!-- 큰 계획 구간 상세: 모바일에서 목록과 편집 맥락을 유지하는 독립 화면 -->
+  <section id="plan-block-detail-page" class="plan-detail-page fixed inset-0 z-40 hidden flex-col" aria-hidden="true">
+    <header class="plan-detail-header shrink-0 px-4 pb-3">
+      <div class="max-w-3xl mx-auto flex items-center gap-3">
+        <button id="btn-closePlanBlock" onclick="closePlanBlockDetail()" class="tap-target rounded-xl theme-card-subtle flex items-center justify-center shrink-0" aria-label="큰 계획 목록으로 돌아가기">
+          <i class="fa-solid fa-arrow-left"></i>
+        </button>
+        <div class="min-w-0 flex-1">
+          <p class="text-[10px] tracking-[0.18em] font-black text-emerald-600 dark:text-emerald-300">BIG PLAN · DETAIL</p>
+          <h2 id="plan-block-detail-title" class="text-base font-black truncate">구간 상세 계획</h2>
+          <p id="plan-block-detail-meta" class="text-[11px] mt-0.5 truncate" style="color:var(--ink3)"></p>
+        </div>
+        <button onclick="openActivePlanBlockEdit()" class="tap-target px-3 rounded-xl theme-card-subtle flex items-center justify-center gap-1.5 text-xs font-black shrink-0" title="큰 계획 구간 편집">
+          <i class="fa-solid fa-pen"></i><span class="hidden sm:inline">편집</span>
+        </button>
+        <button onclick="openSettingsModal()" class="tap-target rounded-xl theme-card-subtle flex items-center justify-center shrink-0" aria-label="앱 설정과 백업" title="앱 설정과 백업">
+          <i class="fa-solid fa-sliders"></i>
+        </button>
+      </div>
+    </header>
+    <div id="plan-block-detail-scroll" class="plan-detail-scroll flex-1 min-h-0 overflow-y-auto px-4 py-4">
+      <div id="plan-block-detail-container" class="max-w-3xl mx-auto space-y-4"></div>
+    </div>
+    <footer class="plan-detail-actions shrink-0 pt-3">
+      <div class="max-w-3xl mx-auto grid grid-cols-2 gap-2">
+        <button onclick="openActivePlanBlockReplan()" class="min-h-12 rounded-xl btn-gold text-xs font-black flex items-center justify-center gap-2">
+          <i class="fa-solid fa-wand-magic-sparkles"></i><span>이 구간 RePlan</span>
+        </button>
+        <button onclick="openActivePlanBlockAddSpot()" class="min-h-12 rounded-xl theme-card-subtle text-xs font-black flex items-center justify-center gap-2">
+          <i class="fa-solid fa-plus"></i><span>세부 일정 추가</span>
+        </button>
+      </div>
+    </footer>
+  </section>
+
   <!-- ========================================== -->
   <!-- 4. 안전 확인 모달 시스템 (SAFE CONFIRMATION MODAL) -->
   <!-- ========================================== -->
@@ -1783,11 +1891,45 @@
     </div>
   </div>
 
-  <!-- 실시간 변수 대응 & 일정 튜닝 모달 (v1.2.7) -->
+  <!-- 큰 계획 구간 편집 모달 -->
+  <div id="modal-plan-block-edit" class="sheet-container sheet-closed" role="dialog" aria-modal="true" aria-labelledby="plan-block-edit-heading">
+    <div class="sheet-scrim" onclick="closeModal('modal-plan-block-edit')"></div>
+    <div class="sheet-box sheet-scroll-layout max-w-xl">
+      <div class="sheet-sticky-header flex items-start justify-between gap-3">
+        <div>
+          <p class="text-[10px] tracking-[0.18em] font-black text-emerald-600 dark:text-emerald-300">BIG PLAN · EDIT</p>
+          <h3 id="plan-block-edit-heading" class="text-base font-black mt-1">큰 계획 구간 편집</h3>
+          <p class="text-[11px] mt-1" style="color:var(--ink3)">거점, 기간, 숙소와 우선순위를 먼저 정리하세요.</p>
+        </div>
+        <button onclick="closeModal('modal-plan-block-edit')" class="w-11 h-11 rounded-xl theme-card-subtle flex items-center justify-center shrink-0" aria-label="편집 창 닫기">✕</button>
+      </div>
+      <div class="sheet-scroll-body space-y-4 text-xs">
+        <input type="hidden" id="plan-block-edit-id">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <label class="space-y-1.5"><span class="font-bold">카드 제목</span><input id="plan-block-edit-title" type="text" maxlength="80" placeholder="예: 타이베이 도착과 도심 적응" class="w-full px-3 py-2.5 rounded-xl theme-card-subtle focus:outline-none focus:border-emerald-500"></label>
+          <label class="space-y-1.5"><span class="font-bold">거점</span><input id="plan-block-edit-place" type="text" maxlength="60" placeholder="예: 타이베이" class="w-full px-3 py-2.5 rounded-xl theme-card-subtle focus:outline-none focus:border-emerald-500"></label>
+        </div>
+        <div class="grid grid-cols-2 gap-3">
+          <label class="space-y-1.5"><span class="font-bold">시작일</span><input id="plan-block-edit-start-date" type="text" maxlength="40" placeholder="2026-04-10" class="w-full px-3 py-2.5 rounded-xl theme-card-subtle focus:outline-none focus:border-emerald-500"></label>
+          <label class="space-y-1.5"><span class="font-bold">종료일</span><input id="plan-block-edit-end-date" type="text" maxlength="40" placeholder="2026-04-12" class="w-full px-3 py-2.5 rounded-xl theme-card-subtle focus:outline-none focus:border-emerald-500"></label>
+        </div>
+        <label class="space-y-1.5 block"><span class="font-bold">숙소 / 체류 기준</span><input id="plan-block-edit-lodging" type="text" maxlength="140" placeholder="예: 타이베이 메인역 도보 10분 이내" class="w-full px-3 py-2.5 rounded-xl theme-card-subtle focus:outline-none focus:border-emerald-500"></label>
+        <label class="space-y-1.5 block"><span class="font-bold">꼭 하고 싶은 경험</span><textarea id="plan-block-edit-priorities" rows="3" maxlength="500" placeholder="한 줄에 하나씩 입력" class="w-full px-3 py-2.5 rounded-xl theme-card-subtle focus:outline-none focus:border-emerald-500 resize-y"></textarea></label>
+        <label class="space-y-1.5 block"><span class="font-bold">메모 / 위험·예약 확인</span><textarea id="plan-block-edit-notes" rows="3" maxlength="600" placeholder="티켓, 이동, 날씨, 동행 합의 사항" class="w-full px-3 py-2.5 rounded-xl theme-card-subtle focus:outline-none focus:border-emerald-500 resize-y"></textarea></label>
+        <label class="space-y-1.5 block"><span class="font-bold">확정 상태</span><select id="plan-block-edit-status" class="w-full px-3 py-2.5 rounded-xl theme-card-subtle focus:outline-none focus:border-emerald-500"><option value="draft">초안</option><option value="review">함께 검토 중</option><option value="confirmed">확정</option><option value="completed">여행 완료</option></select></label>
+      </div>
+      <div class="sheet-sticky-actions grid grid-cols-[auto_1fr] gap-2">
+        <button onclick="closeModal('modal-plan-block-edit')" class="min-h-12 px-4 rounded-xl theme-card-subtle text-xs font-bold">취소</button>
+        <button onclick="submitPlanBlockEdit()" class="min-h-12 rounded-xl btn-gold text-xs font-black">큰 계획 저장</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 실시간 변수 대응 & 일정 튜닝 모달 (v1.3.1) -->
   <div id="modal-schedule-tuning" class="sheet-container sheet-closed">
     <div class="sheet-scrim" onclick="closeModal('modal-schedule-tuning')"></div>
-    <div class="sheet-box p-6 sm:p-7 space-y-4 max-w-xl">
-      <div class="flex items-center justify-between border-b border-[#1e263c] pb-3">
+    <div class="sheet-box sheet-scroll-layout max-w-xl">
+      <div class="sheet-sticky-header flex items-center justify-between gap-3">
         <div class="flex items-center gap-2.5">
           <span class="w-8 h-8 rounded-xl bg-amber-500/20 text-amber-400 border border-amber-500/30 flex items-center justify-center text-base shadow-inner">
             <i class="fa-solid fa-bolt"></i>
@@ -1800,7 +1942,7 @@
         <button onclick="closeModal('modal-schedule-tuning')" class="w-8 h-8 rounded-lg bg-[#141c2e] hover:bg-[#1a263e] text-slate-400 hover:text-white flex items-center justify-center text-sm transition cursor-pointer">✕</button>
       </div>
 
-      <div class="space-y-3.5 text-xs">
+      <div class="sheet-scroll-body space-y-3.5 text-xs">
         <!-- 대상 Day 선택 -->
         <div>
           <label class="font-bold text-slate-200 block mb-1">적용 대상 일차</label>
@@ -1889,7 +2031,7 @@
         </div>
       </div>
 
-      <div class="flex items-center gap-2 pt-2 border-t border-[#1e263c]">
+      <div class="sheet-sticky-actions flex items-center gap-2">
         <button onclick="closeModal('modal-schedule-tuning')" class="px-3 sm:px-4 py-2.5 rounded-xl bg-[#141c2e] hover:bg-[#1a263e] text-slate-400 hover:text-slate-200 font-bold text-xs transition cursor-pointer shrink-0 whitespace-nowrap">취소</button>
         <button onclick="executeScheduleTuning(false)" class="flex-1 py-2.5 rounded-xl bg-[#1e263c] hover:bg-[#25314d] text-amber-400 hover:text-amber-300 border border-amber-500/30 font-bold text-xs transition flex items-center justify-center gap-1.5 cursor-pointer whitespace-nowrap" title="오프라인에서도 1초 만에 즉시 시간표를 밀거나 당깁니다">
           <i class="fa-solid fa-clock-rotate-left shrink-0"></i>
@@ -1906,8 +2048,8 @@
   <!-- RePlan 변경 전후 검토 모달 -->
   <div id="modal-replan-review" class="sheet-container sheet-closed">
     <div class="sheet-scrim" onclick="rejectPendingReplan()"></div>
-    <div class="sheet-box p-6 sm:p-7 space-y-4 max-w-2xl">
-      <div class="flex items-start justify-between gap-3 border-b border-[#1e263c] pb-3">
+    <div class="sheet-box sheet-scroll-layout max-w-2xl">
+      <div class="sheet-sticky-header flex items-start justify-between gap-3">
         <div>
           <p class="text-[10px] tracking-[0.2em] font-black text-amber-400">REPLAN · REVIEW</p>
           <h3 class="text-base sm:text-lg font-black text-white mt-1">바뀌는 일정만 확인하세요</h3>
@@ -1915,11 +2057,13 @@
         </div>
         <button onclick="rejectPendingReplan()" class="w-8 h-8 rounded-lg bg-[#141c2e] text-slate-400" title="닫기">✕</button>
       </div>
-      <div id="replan-review-changes" class="space-y-2 max-h-[46vh] overflow-y-auto"></div>
-      <div class="p-3 rounded-xl bg-emerald-500/10 border border-emerald-500/25 text-[11px] text-emerald-200">
-        완료한 경험과 고정 일정은 그대로 유지됩니다. 승인 시점에 다른 수정이 있으면 적용을 중단합니다.
+      <div class="sheet-scroll-body space-y-3">
+        <div id="replan-review-changes" class="space-y-2"></div>
+        <div class="p-3 rounded-xl bg-emerald-500/10 border border-emerald-500/25 text-[11px] text-emerald-200">
+          완료한 경험과 고정 일정, 선택한 범위 밖 일정은 그대로 유지됩니다. 승인 시점에 다른 수정이 있으면 적용을 중단합니다.
+        </div>
       </div>
-      <div class="flex items-center gap-3">
+      <div class="sheet-sticky-actions flex items-center gap-3">
         <button onclick="rejectPendingReplan()" class="flex-1 min-h-11 rounded-xl bg-[#141c2e] text-slate-300 font-bold text-xs">기존 계획 유지</button>
         <button id="btn-apply-replan" onclick="applyPendingReplan()" class="flex-1 min-h-11 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 text-slate-950 font-black text-xs">변경안 적용</button>
       </div>
@@ -2279,7 +2423,7 @@
             <i class="fa-solid fa-clock-rotate-left text-[#a2601b] dark:text-[#d4af37]"></i>
             <span>술술트래블 엔진 버전 & 릴리즈 히스토리</span>
           </span>
-          <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-500/10 text-[#a2601b] dark:text-[#d4af37] border border-amber-500/30">v1.2.4</span>
+          <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-500/10 text-[#a2601b] dark:text-[#d4af37] border border-amber-500/30">v1.3.1</span>
         </div>
         <p class="text-[11px] text-[#78716c] dark:text-stone-400 leading-relaxed">
           술술 오도미터 순차 올림 원칙에 따른 전체 버전별 기능 추가, UI/UX 개선, 버그 해결 이력을 확인합니다.
@@ -2533,9 +2677,16 @@
 
       <!-- 버전 목록 스크롤 영역 -->
       <div class="flex-1 overflow-y-auto space-y-3 pr-1 text-xs">
-        <!-- v1.3.0 (Current) -->
+        <!-- v1.3.1 (Current) -->
+        <div class="p-4 rounded-2xl bg-emerald-500/5 dark:bg-emerald-500/10 border-2 border-emerald-500/40 space-y-2.5 shadow-sm relative overflow-hidden">
+          <div class="flex items-center justify-between gap-2"><div class="flex items-center gap-2 min-w-0"><span class="px-2 py-0.5 rounded-lg bg-emerald-500 text-black font-black text-xs shadow-sm shrink-0">v1.3.1</span><span class="text-xs font-black text-[#1c1917] dark:text-white">큰 계획 구간 편집과 범위 RePlan</span></div><span class="px-2 py-0.5 rounded-full text-[10px] font-black bg-emerald-100 text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300 border border-emerald-300 shrink-0">최신 버전</span></div>
+          <div class="text-[11px] text-[#44403c] dark:text-stone-300 space-y-1.5 leading-relaxed"><div><b>모바일 구간 상세</b>: 큰 계획 카드를 누르면 고정 헤더·하단 액션을 갖춘 별도 상세 화면에서 날짜별 일정을 조정.</div><div><b>큰 계획 편집</b>: 카드 제목, 거점, 기간, 숙소, 우선 경험, 위험·예약 메모와 확정 상태를 저장.</div><div><b>구간 RePlan</b>: 선택한 카드 범위 안만 재생성하며 완료·고정 일정과 범위 밖 일정을 함께 보호.</div><div><b>모바일 복귀</b>: 브라우저·휴대폰 뒤로가기로 모달과 상세 화면을 단계적으로 닫고 목록 스크롤 위치를 복원.</div></div>
+          <div class="text-[10px] text-stone-400 dark:text-stone-500 pt-1 border-t border-emerald-500/20 flex items-center justify-between"><span>📅 2026-09-10 릴리즈</span><span class="font-mono">st-shell-v1.3.1</span></div>
+        </div>
+
+        <!-- v1.3.0 -->
         <div class="p-4 rounded-2xl bg-amber-500/5 dark:bg-amber-500/10 border-2 border-amber-500/40 space-y-2.5 shadow-sm relative overflow-hidden">
-          <div class="flex items-center justify-between gap-2"><div class="flex items-center gap-2 min-w-0"><span class="px-2 py-0.5 rounded-lg bg-amber-500 text-black font-black text-xs shadow-sm shrink-0">v1.3.0</span><span class="text-xs font-black text-[#1c1917] dark:text-white">큰 계획·오늘·기록·준비 UI와 승인형 RePlan</span></div><span class="px-2 py-0.5 rounded-full text-[10px] font-black bg-emerald-100 text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300 border border-emerald-300 shrink-0">최신 버전</span></div>
+          <div class="flex items-center justify-between gap-2"><div class="flex items-center gap-2 min-w-0"><span class="px-2 py-0.5 rounded-lg bg-amber-500 text-black font-black text-xs shadow-sm shrink-0">v1.3.0</span><span class="text-xs font-black text-[#1c1917] dark:text-white">큰 계획·오늘·기록·준비 UI와 승인형 RePlan</span></div></div>
           <div class="text-[11px] text-[#44403c] dark:text-stone-300 space-y-1.5 leading-relaxed"><div><b>여행 단계 중심 4개 메뉴</b>: 거점 중심 큰 계획에서 현장용 오늘, 확인 기록, 출발 준비까지 한 흐름으로 연결.</div><div><b>안전한 RePlan</b>: 완료·고정 일정 보호, 변경 전후 비교, 명시적 승인, 버전 충돌 차단.</div><div><b>세부 일정 편집</b>: 스팟 수정·시간 정렬·고정 토글과 오늘 화면의 방문 확인·건너뜀 기록 제공.</div></div>
           <div class="text-[10px] text-stone-400 dark:text-stone-500 pt-1 border-t border-amber-500/20 flex items-center justify-between"><span>📅 2026-09-10 릴리즈</span><span class="font-mono">st-shell-v1.3.0</span></div>
         </div>
@@ -2859,7 +3010,7 @@
 
       <!-- 모달 푸터 -->
       <div class="pt-3 border-t border-[#e8e2d5] dark:border-stone-800 flex items-center justify-between shrink-0">
-        <span class="text-[11px] text-stone-400 dark:text-stone-500 font-mono">Sulsul Travel Engine v1.2.4</span>
+        <span class="text-[11px] text-stone-400 dark:text-stone-500 font-mono">Sulsul Travel Engine v1.3.1</span>
         <button onclick="closeModal('modal-version-history')" class="px-4 py-2 rounded-xl bg-[#faf8f5] dark:bg-stone-800 hover:bg-[#f0ece1] dark:hover:bg-stone-700 border border-[#e8e2d5] dark:border-stone-700 text-[#1c1917] dark:text-[#ededed] text-xs font-bold transition cursor-pointer shadow-sm">
           닫기
         </button>
@@ -2922,7 +3073,7 @@
     window.showToast = showToast;
 
     // 앱 버전 및 글로벌 네임스페이스 (Sulsul-Travel Invariant Rule R-10, R-11, R-12, R-13, R-14, R-15)
-    const APP_VER = '1.3.0';
+    const APP_VER = '1.3.1';
 
     // ══════════════════════════════════════════
     // [Two-Tone Theme System] 라이트 그레이 & 딥 블랙 테마 엔진
@@ -3052,7 +3203,11 @@
       aiDraftKind: null,
       storageRecovery: null,
       pendingReplan: null,
-      activeTodayDayIndex: 0
+      activeTodayDayIndex: 0,
+      activePlanBlockId: null,
+      planBlockReturnY: 0,
+      replanReturnBlockId: null,
+      handlingPopState: false
     };
 
     const TripRepository = new window.SulsulTravel.LegacyTripRepository(localStorage);
@@ -5504,48 +5659,240 @@
       return explicit || '여정 전반';
     }
 
+    function ensurePlanBlockStructure(trip) {
+      if (!trip?.days?.length) return false;
+      let changed = false;
+      if (!trip.planBlockMeta || typeof trip.planBlockMeta !== 'object') {
+        trip.planBlockMeta = {};
+        changed = true;
+      }
+      let previousPlace = '';
+      let previousId = '';
+      trip.days.forEach((day, dayIndex) => {
+        const place = inferPlanBlockPlace(day);
+        if (!day.planBlockId) {
+          day.planBlockId = previousId && previousPlace === place
+            ? previousId
+            : `pb_${String(trip.id || 'trip').replace(/[^a-zA-Z0-9_-]/g, '').slice(0, 30)}_${dayIndex}_${Date.now().toString(36)}`;
+          changed = true;
+        }
+        previousPlace = place;
+        previousId = day.planBlockId;
+      });
+      return changed;
+    }
+
     function buildPlanBlocks(trip) {
+      ensurePlanBlockStructure(trip);
       const blocks = [];
       (trip.days || []).forEach((day, dayIndex) => {
-        const place = inferPlanBlockPlace(day);
+        const id = day.planBlockId;
         const last = blocks[blocks.length - 1];
-        if (last && last.place === place) {
+        if (last && last.id === id) {
           last.days.push({ day, dayIndex });
-        } else {
-          blocks.push({ place, days: [{ day, dayIndex }] });
+          return;
         }
+        const meta = trip.planBlockMeta?.[id] || {};
+        blocks.push({
+          id,
+          place: meta.place || inferPlanBlockPlace(day),
+          title: meta.title || '',
+          lodging: meta.lodging || '',
+          priorities: Array.isArray(meta.priorities) ? meta.priorities : [],
+          notes: meta.notes || '',
+          status: meta.status || 'draft',
+          days: [{ day, dayIndex }]
+        });
       });
       return blocks;
+    }
+
+    function planBlockStatusLabel(status) {
+      return ({ draft: '초안', review: '함께 검토 중', confirmed: '확정', completed: '여행 완료' })[status] || '초안';
+    }
+
+    function planBlockStatusClass(status) {
+      if (status === 'completed') return 'bg-emerald-500/15 text-emerald-300 border-emerald-500/30';
+      if (status === 'confirmed') return 'bg-sky-500/15 text-sky-300 border-sky-500/30';
+      if (status === 'review') return 'bg-amber-500/15 text-amber-300 border-amber-500/30';
+      return 'bg-white/10 text-white badge-solid border-white/20';
     }
 
     function renderBigPlanTab() {
       const trip = getActiveTrip();
       const container = document.getElementById('big-plan-container');
       if (!trip || !container) return;
+      const migrated = ensurePlanBlockStructure(trip);
+      if (migrated) saveTrips({ bump: false });
       const blocks = buildPlanBlocks(trip);
       const fixedCount = (trip.days || []).reduce((sum, day) => sum + (day.spots || []).filter(spot => spot.fixed).length, 0);
+      const confirmedCount = blocks.filter(block => ['confirmed', 'completed'].includes(block.status)).length;
       container.innerHTML = `
         <section class="p-4 sm:p-5 rounded-2xl bg-gradient-to-br from-[#13231d] to-[#24382f] border border-emerald-500/25 shadow-lg">
           <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-3">
-            <div><p class="text-[10px] tracking-[0.22em] font-black text-emerald-300">OUR BIG PLAN</p><h3 class="text-xl sm:text-2xl font-black mt-1" style="color:#fff">큰 그림부터, 함께</h3><p class="text-xs mt-1" style="color:rgba(209,250,229,.78)">거점과 숙박, 꼭 하고 싶은 경험을 먼저 보고 세부 시간은 안에서 조정합니다.</p></div>
-            <div class="flex gap-2"><span class="px-2.5 py-1 rounded-lg bg-white/10 text-[11px] text-white font-bold">${blocks.length}개 거점</span><span class="px-2.5 py-1 rounded-lg bg-amber-400/15 text-[11px] text-amber-300 font-bold">고정 ${fixedCount}개</span></div>
+            <div><p class="text-[10px] tracking-[0.22em] font-black text-emerald-300">OUR BIG PLAN</p><h3 class="text-xl sm:text-2xl font-black mt-1" style="color:#fff">큰 그림부터, 함께</h3><p class="text-xs mt-1" style="color:rgba(209,250,229,.78)">카드를 눌러 구간을 편집하고, 바뀐 구간만 RePlan할 수 있습니다.</p></div>
+            <div class="flex gap-2"><span class="px-2.5 py-1 rounded-lg bg-white/10 text-[11px] text-white font-bold">${blocks.length}개 거점</span><span class="px-2.5 py-1 rounded-lg bg-emerald-400/15 text-[11px] text-emerald-200 font-bold">확정 ${confirmedCount}개</span><span class="px-2.5 py-1 rounded-lg bg-amber-400/15 text-[11px] text-amber-300 font-bold">고정 ${fixedCount}개</span></div>
           </div>
         </section>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-3">${blocks.map((block, index) => {
           const first = block.days[0], last = block.days[block.days.length - 1];
           const spots = block.days.flatMap(item => item.day.spots || []);
-          const highlights = spots.filter(spot => !spot.completed).slice(0, 3).map(spot => escapeHtml(spot.title)).join(' · ') || '세부 경험을 추가해 보세요';
+          const highlights = (block.priorities.length ? block.priorities : spots.filter(spot => !spot.completed).slice(0, 3).map(spot => spot.title)).map(escapeHtml).join(' · ') || '세부 경험을 추가해 보세요';
           const protectedCount = spots.filter(spot => spot.completed || spot.fixed).length;
-          return `<article class="p-4 rounded-2xl bg-[#0f1422] border border-[#273126] shadow-sm">
-            <div class="flex items-start gap-3"><span class="w-9 h-9 rounded-xl bg-[#16231d] border border-[#2e3b31] text-emerald-300 flex items-center justify-center text-xs font-black shrink-0">${String(index + 1).padStart(2, '0')}</span><div class="min-w-0 flex-1"><div class="flex items-start justify-between gap-2"><div><h4 class="text-sm sm:text-base font-black text-white">${escapeHtml(block.place)}</h4><p class="text-[11px] text-slate-400 mt-0.5">${escapeHtml(first.day.date || `Day ${first.dayIndex + 1}`)}${last.dayIndex !== first.dayIndex ? ` ~ ${escapeHtml(last.day.date || `Day ${last.dayIndex + 1}`)}` : ''} · ${block.days.length}일</p></div><span class="text-[10px] text-slate-400 whitespace-nowrap">보호 ${protectedCount}</span></div><p class="text-xs text-slate-300 mt-3 leading-relaxed">${highlights}</p><div class="flex gap-2 mt-3"><button onclick="openPlanBlock(${first.dayIndex})" class="px-3 py-1.5 rounded-lg bg-emerald-500/15 border border-emerald-500/30 text-emerald-300 text-[11px] font-bold">세부 일정 보기</button>${index < blocks.length - 1 ? '<span class="text-[10px] text-slate-500 self-center">다음 거점 이동 확인 →</span>' : ''}</div></div></div>
+          const completedCount = spots.filter(spot => spot.completed).length;
+          return `<article role="button" tabindex="0" aria-label="${escapeHtml(block.title || block.place)} 세부 계획 열기" onclick="openPlanBlock(${index})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openPlanBlock(${index})}" class="p-4 rounded-2xl bg-[#0f1422] border border-[#273126] hover:border-emerald-500/50 shadow-sm cursor-pointer transition focus:outline-none focus:ring-2 focus:ring-emerald-500/50">
+            <div class="flex items-start gap-3"><span class="w-10 h-10 rounded-xl bg-[#16231d] border border-[#2e3b31] text-emerald-300 flex items-center justify-center text-xs font-black shrink-0">${String(index + 1).padStart(2, '0')}</span><div class="min-w-0 flex-1"><div class="flex items-start justify-between gap-2"><div class="min-w-0"><div class="flex items-center gap-1.5 flex-wrap"><h4 class="text-sm sm:text-base font-black text-white">${escapeHtml(block.title || block.place)}</h4><span class="px-2 py-0.5 rounded-full border text-[9px] font-bold ${planBlockStatusClass(block.status)}">${planBlockStatusLabel(block.status)}</span></div>${block.title ? `<p class="text-[10px] text-emerald-300 mt-0.5">${escapeHtml(block.place)}</p>` : ''}<p class="text-[11px] text-slate-400 mt-1">${escapeHtml(first.day.date || `Day ${first.dayIndex + 1}`)}${last.dayIndex !== first.dayIndex ? ` ~ ${escapeHtml(last.day.date || `Day ${last.dayIndex + 1}`)}` : ''} · ${block.days.length}일</p></div><span class="text-[10px] text-slate-400 whitespace-nowrap">완료 ${completedCount}/${spots.length}</span></div><p class="text-xs text-slate-300 mt-3 leading-relaxed line-clamp-2">${highlights}</p>${block.lodging ? `<p class="text-[10px] text-slate-400 mt-2"><i class="fa-solid fa-bed mr-1 text-amber-300"></i>${escapeHtml(block.lodging)}</p>` : ''}<div class="grid grid-cols-[1fr_auto] gap-2 mt-3"><button onclick="event.stopPropagation(); openPlanBlock(${index})" class="min-h-11 px-3 rounded-xl bg-emerald-500/15 border border-emerald-500/30 text-emerald-300 text-[11px] font-bold">세부 계획 열기</button><button onclick="event.stopPropagation(); openPlanBlockEditByIndex(${index})" class="w-11 h-11 rounded-xl bg-white/5 border border-white/10 text-slate-300" title="큰 계획 편집"><i class="fa-solid fa-pen"></i></button></div><p class="text-[9px] text-slate-500 mt-2">보호 일정 ${protectedCount}개 · 구간 RePlan 시 이 카드 안에서만 변경</p></div></div>
           </article>`;
         }).join('')}</div>`;
     }
 
-    function openPlanBlock(dayIndex) {
-      State.allTimelinesExpanded = true;
-      switchPlanSubTab('timeline');
-      setTimeout(() => document.getElementById(`day-body-${dayIndex}`)?.scrollIntoView({ behavior: 'smooth', block: 'center' }), 0);
+    function getActivePlanBlock() {
+      const trip = getActiveTrip();
+      if (!trip || !State.activePlanBlockId) return null;
+      return buildPlanBlocks(trip).find(block => block.id === State.activePlanBlockId) || null;
+    }
+
+    function renderPlanBlockDetail() {
+      const block = getActivePlanBlock();
+      const container = document.getElementById('plan-block-detail-container');
+      if (!block || !container) return;
+      const first = block.days[0], last = block.days[block.days.length - 1];
+      const spots = block.days.flatMap(item => item.day.spots || []);
+      document.getElementById('plan-block-detail-title').textContent = block.title || block.place;
+      document.getElementById('plan-block-detail-meta').textContent = `${first.day.date || `Day ${first.dayIndex + 1}`} ${last.dayIndex !== first.dayIndex ? `~ ${last.day.date || `Day ${last.dayIndex + 1}`}` : ''} · ${block.days.length}일 · ${planBlockStatusLabel(block.status)}`;
+      const renderSpot = (spot, dayIndex, spotIndex) => `<div class="p-3 rounded-xl border ${spot.completed ? 'border-emerald-500/25 bg-emerald-950/10' : spot.fixed ? 'border-indigo-500/25 bg-indigo-950/10' : 'border-[#1a2236] bg-[#080b12]'} flex items-start gap-3"><span class="font-mono text-[11px] text-slate-400 mt-1">${escapeHtml(spot.time || '--:--')}</span><div class="min-w-0 flex-1"><div class="flex items-center gap-1.5 flex-wrap"><strong class="text-xs ${spot.completed ? 'text-slate-400 line-through' : 'text-slate-200'}">${escapeHtml(spot.title || '일정')}</strong>${spot.completed ? '<span class="text-[9px] text-emerald-400">완료</span>' : spot.fixed ? '<span class="text-[9px] text-indigo-300">고정</span>' : ''}</div><p class="text-[10px] text-slate-500 mt-1 leading-relaxed">${escapeHtml(spot.desc || spot.memo || '')}</p></div><div class="flex gap-1 shrink-0"><button onclick="toggleSpotCompleted(${dayIndex},${spotIndex},event)" class="w-11 h-11 rounded-xl ${spot.completed ? 'bg-emerald-500 text-slate-950' : 'bg-emerald-500/15 text-emerald-300'}" title="${spot.completed ? '완료 취소' : '방문 완료'}">✓</button><button onclick="openEditSpotModal(${dayIndex},${spotIndex},event)" class="w-11 h-11 rounded-xl bg-white/5 text-slate-300" title="일정 편집"><i class="fa-solid fa-pen"></i></button></div></div>`;
+      container.innerHTML = `
+        <section class="p-4 rounded-2xl bg-gradient-to-br from-[#13231d] to-[#24382f] border border-emerald-500/25 text-white keep-white shadow-lg space-y-3">
+          <div class="flex items-start justify-between gap-3"><div><p class="text-[10px] tracking-[0.18em] font-black text-emerald-300">${escapeHtml(block.place)}</p><h3 class="text-lg font-black mt-1">${escapeHtml(block.title || '구간 계획')}</h3></div><span class="px-2.5 py-1 rounded-full border text-[10px] font-bold ${planBlockStatusClass(block.status)}">${planBlockStatusLabel(block.status)}</span></div>
+          <div class="grid grid-cols-2 gap-2 text-[11px]"><div class="p-3 rounded-xl bg-white/10"><span class="text-emerald-100/70">기간</span><strong class="block mt-1">${escapeHtml(first.day.date || `Day ${first.dayIndex + 1}`)}${last.dayIndex !== first.dayIndex ? ` ~ ${escapeHtml(last.day.date || `Day ${last.dayIndex + 1}`)}` : ''}</strong></div><div class="p-3 rounded-xl bg-white/10"><span class="text-emerald-100/70">진행</span><strong class="block mt-1">완료 ${spots.filter(spot => spot.completed).length} / ${spots.length}</strong></div></div>
+          ${block.lodging ? `<p class="text-xs text-emerald-50"><i class="fa-solid fa-bed mr-2 text-amber-300"></i>${escapeHtml(block.lodging)}</p>` : ''}
+          ${block.priorities.length ? `<div class="flex flex-wrap gap-1.5">${block.priorities.map(item => `<span class="px-2.5 py-1 rounded-lg bg-white/10 text-[10px] text-emerald-50">${escapeHtml(item)}</span>`).join('')}</div>` : ''}
+          ${block.notes ? `<p class="p-3 rounded-xl bg-amber-400/10 border border-amber-300/20 text-[11px] text-amber-50 leading-relaxed"><i class="fa-solid fa-circle-exclamation mr-1.5 text-amber-300"></i>${escapeHtml(block.notes)}</p>` : ''}
+        </section>
+        <div class="space-y-3">${block.days.map(({ day, dayIndex }) => {
+          const pending = (day.spots || []).map((spot, spotIndex) => ({ spot, spotIndex })).filter(item => !item.spot.completed);
+          const completed = (day.spots || []).map((spot, spotIndex) => ({ spot, spotIndex })).filter(item => item.spot.completed);
+          return `<section class="p-4 rounded-2xl bg-[#0f1422] border border-[#1e263c] shadow-sm"><div class="flex items-start justify-between gap-2 mb-3"><div><p class="text-[10px] font-black text-emerald-300">DAY ${day.dayNum || dayIndex + 1} · ${escapeHtml(day.date || '')}</p><h4 class="text-sm font-black text-white mt-1">${escapeHtml(day.title || day.city || block.place)}</h4></div><button onclick="openScheduleTuningModal(${dayIndex})" class="min-h-11 px-3 rounded-xl bg-amber-500/15 border border-amber-500/30 text-amber-300 text-[11px] font-bold">이 날 RePlan</button></div><div class="space-y-2">${pending.length ? pending.map(item => renderSpot(item.spot, dayIndex, item.spotIndex)).join('') : '<p class="p-3 rounded-xl bg-emerald-500/10 text-emerald-300 text-xs">이 날의 예정 일정을 모두 완료했습니다.</p>'}</div>${completed.length ? `<details class="mt-3 group"><summary class="min-h-11 flex items-center justify-between px-3 rounded-xl bg-white/5 text-[11px] text-slate-300 font-bold cursor-pointer"><span>완료된 일정 ${completed.length}개 보기</span><i class="fa-solid fa-chevron-down group-open:rotate-180 transition"></i></summary><div class="space-y-2 mt-2">${completed.map(item => renderSpot(item.spot, dayIndex, item.spotIndex)).join('')}</div></details>` : ''}<div class="grid grid-cols-2 gap-2 mt-3"><button onclick="openAddSpotToDay(${dayIndex})" class="min-h-11 rounded-xl bg-white/5 border border-white/10 text-slate-300 text-[11px] font-bold">+ 일정 추가</button><button onclick="openJournalFromPlanBlock(${dayIndex})" class="min-h-11 rounded-xl bg-white/5 border border-white/10 text-slate-300 text-[11px] font-bold">여행 기록 쓰기</button></div></section>`;
+        }).join('')}</div>`;
+    }
+
+    function showPlanBlockDetail(blockId, { pushHistory = true } = {}) {
+      const trip = getActiveTrip();
+      const block = buildPlanBlocks(trip).find(item => item.id === blockId);
+      if (!block) return;
+      State.activePlanBlockId = block.id;
+      const page = document.getElementById('plan-block-detail-page');
+      page.classList.remove('hidden');
+      page.classList.add('flex');
+      page.setAttribute('aria-hidden', 'false');
+      document.body.style.overflow = 'hidden';
+      renderPlanBlockDetail();
+      document.getElementById('plan-block-detail-container')?.focus?.();
+      if (pushHistory && history.state?.stRoute !== 'plan-block') {
+        history.pushState({ ...(history.state || {}), stRoute: 'plan-block', tripId: trip.id, blockId: block.id }, '');
+      }
+    }
+
+    function openPlanBlock(blockIndex) {
+      const trip = getActiveTrip();
+      const block = buildPlanBlocks(trip)[blockIndex];
+      if (!block) return;
+      State.planBlockReturnY = window.scrollY;
+      showPlanBlockDetail(block.id);
+    }
+
+    function hidePlanBlockDetail({ restoreScroll = true } = {}) {
+      const page = document.getElementById('plan-block-detail-page');
+      page.classList.add('hidden');
+      page.classList.remove('flex');
+      page.setAttribute('aria-hidden', 'true');
+      State.activePlanBlockId = null;
+      if (!document.querySelector('.sheet-container:not(.sheet-closed)')) document.body.style.overflow = '';
+      if (restoreScroll) requestAnimationFrame(() => window.scrollTo({ top: State.planBlockReturnY || 0, behavior: 'auto' }));
+    }
+
+    function closePlanBlockDetail() {
+      if (history.state?.stRoute === 'plan-block') history.back();
+      else hidePlanBlockDetail();
+    }
+
+    function openPlanBlockEditByIndex(blockIndex) {
+      const block = buildPlanBlocks(getActiveTrip())[blockIndex];
+      if (!block) return;
+      State.planBlockReturnY = window.scrollY;
+      showPlanBlockDetail(block.id);
+      openPlanBlockEdit(block);
+    }
+
+    function openActivePlanBlock() { const block = getActivePlanBlock(); if (block) showPlanBlockDetail(block.id, { pushHistory: false }); }
+    function openActivePlanBlockEdit() { const block = getActivePlanBlock(); if (block) openPlanBlockEdit(block); }
+
+    function openPlanBlockEdit(block) {
+      const first = block.days[0], last = block.days[block.days.length - 1];
+      document.getElementById('plan-block-edit-id').value = block.id;
+      document.getElementById('plan-block-edit-title').value = block.title || '';
+      document.getElementById('plan-block-edit-place').value = block.place || '';
+      document.getElementById('plan-block-edit-start-date').value = first.day.date || '';
+      const endDateInput = document.getElementById('plan-block-edit-end-date');
+      endDateInput.value = last.day.date || '';
+      endDateInput.disabled = block.days.length === 1;
+      endDateInput.title = block.days.length === 1 ? '하루 구간은 시작일과 종료일이 같습니다.' : '';
+      document.getElementById('plan-block-edit-lodging').value = block.lodging || '';
+      document.getElementById('plan-block-edit-priorities').value = block.priorities.join('\n');
+      document.getElementById('plan-block-edit-notes').value = block.notes || '';
+      document.getElementById('plan-block-edit-status').value = block.status || 'draft';
+      document.getElementById('modal-plan-block-edit').dataset.snapshot = planBlockEditFormSnapshot();
+      openModal('modal-plan-block-edit');
+    }
+
+    function planBlockEditFormSnapshot() {
+      return JSON.stringify(['title', 'place', 'start-date', 'end-date', 'lodging', 'priorities', 'notes', 'status'].map(key => document.getElementById(`plan-block-edit-${key}`)?.value || ''));
+    }
+
+    function submitPlanBlockEdit() {
+      const trip = getActiveTrip();
+      const id = document.getElementById('plan-block-edit-id')?.value;
+      const block = buildPlanBlocks(trip).find(item => item.id === id);
+      if (!trip || !block) return;
+      const place = document.getElementById('plan-block-edit-place').value.trim();
+      if (!place) { showToast('거점을 입력해 주세요.'); return; }
+      trip.planBlockMeta[id] = {
+        ...(trip.planBlockMeta[id] || {}),
+        title: document.getElementById('plan-block-edit-title').value.trim().slice(0, 80),
+        place: place.slice(0, 60),
+        lodging: document.getElementById('plan-block-edit-lodging').value.trim().slice(0, 140),
+        priorities: document.getElementById('plan-block-edit-priorities').value.split(/\r?\n/).map(item => item.trim()).filter(Boolean).slice(0, 12),
+        notes: document.getElementById('plan-block-edit-notes').value.trim().slice(0, 600),
+        status: document.getElementById('plan-block-edit-status').value
+      };
+      const startDate = document.getElementById('plan-block-edit-start-date').value.trim().slice(0, 40);
+      const endDate = document.getElementById('plan-block-edit-end-date').value.trim().slice(0, 40);
+      block.days[0].day.date = startDate || endDate;
+      if (block.days.length > 1) block.days[block.days.length - 1].day.date = endDate || startDate;
+      saveTrips();
+      closeModal('modal-plan-block-edit', true);
+      renderBigPlanTab();
+      if (!document.getElementById('plan-block-detail-page').classList.contains('hidden')) renderPlanBlockDetail();
+      showToast('✅ 큰 계획 구간을 저장했습니다. 이 구간만 RePlan할 수 있습니다.');
+    }
+
+    function openActivePlanBlockReplan() {
+      const block = getActivePlanBlock();
+      if (!block) return;
+      const first = block.days[0].dayIndex, last = block.days[block.days.length - 1].dayIndex;
+      State.replanReturnBlockId = block.id;
+      openScheduleTuningModal(first, last);
+    }
+
+    function openActivePlanBlockAddSpot() {
+      const block = getActivePlanBlock();
+      if (block) openAddSpotToDay(block.days[0].dayIndex);
+    }
+
+    function openJournalFromPlanBlock(dayIndex) {
+      hidePlanBlockDetail({ restoreScroll: false });
+      switchTab('journal');
+      selectJournalDay(dayIndex);
     }
 
     function resolveTodayDayIndex(trip) {
@@ -5722,6 +6069,8 @@
       } else if (State.planSubTab === 'map') {
         initOrUpdateLeafletMap();
       }
+      const detailPage = document.getElementById('plan-block-detail-page');
+      if (State.activePlanBlockId && detailPage && !detailPage.classList.contains('hidden')) renderPlanBlockDetail();
     }
 
     // ==========================================
@@ -8085,6 +8434,7 @@
           saveTrips();
           closeModal('modal-spot', true);
           renderTimelineTab();
+          if (State.activePlanBlockId) renderPlanBlockDetail();
           showToast(`✏️ [${title}] 일정이 수정 및 시간순 재배치되었습니다.`);
           return;
         }
@@ -8109,6 +8459,7 @@
       saveTrips();
       closeModal('modal-spot', true);
       renderTimelineTab();
+      if (State.activePlanBlockId) renderPlanBlockDetail();
       showToast(`➕ [${title}] 새 일정이 추가되었습니다.`);
     }
 
@@ -8128,6 +8479,7 @@
       renderTimelineTab();
       renderBigPlanTab();
       renderTodayTab();
+      if (State.activePlanBlockId) renderPlanBlockDetail();
       showToast(spot.fixed ? `📌 [${spot.title}] 일정이 고정되었습니다. (재배치 시 보호)` : `[${spot.title}] 일정 고정이 해제되었습니다.`);
     }
 
@@ -8142,13 +8494,25 @@
       renderTimelineTab();
       renderBigPlanTab();
       renderTodayTab();
+      if (State.activePlanBlockId) renderPlanBlockDetail();
       showToast(spot.completed ? `✔️ [${spot.title}] 방문 완료 처리되었습니다. (시간 재배치 보호)` : `[${spot.title}] 방문 대기 상태로 변경되었습니다.`);
     }
 
     // ==========================================
     // [11.1] 실시간 변수 대응 및 일정 튜닝 엔진 (v1.2.7)
     // ==========================================
-    function openScheduleTuningModal(dayIdx = null) {
+    function describeReplanScope(targetDayVal, trip = getActiveTrip()) {
+      if (targetDayVal === 'all') return '전체 일정';
+      const range = /^range:(\d+):(\d+)$/.exec(String(targetDayVal));
+      if (range) {
+        const start = Number(range[1]), end = Number(range[2]);
+        const block = buildPlanBlocks(trip).find(item => item.days[0].dayIndex === start && item.days[item.days.length - 1].dayIndex === end);
+        return block ? `${block.title || block.place} 구간 (Day ${start + 1}~${end + 1})` : `Day ${start + 1}~${end + 1}`;
+      }
+      return `Day ${Number(targetDayVal) + 1}`;
+    }
+
+    function openScheduleTuningModal(dayIdx = null, rangeEndIdx = null) {
       const trip = getActiveTrip();
       if (!trip || !trip.days || trip.days.length === 0) {
         showToast('일정이 포함된 여행을 먼저 선택해 주세요.');
@@ -8157,11 +8521,16 @@
       const select = document.getElementById('tuning-target-day');
       if (select) {
         let opts = `<option value="all">전체 일정 (Day 1 ~ Day ${trip.days.length})</option>`;
+        if (dayIdx !== null && rangeEndIdx !== null && dayIdx >= 0 && rangeEndIdx >= dayIdx && rangeEndIdx < trip.days.length) {
+          opts = `<option value="range:${dayIdx}:${rangeEndIdx}">${escapeHtml(describeReplanScope(`range:${dayIdx}:${rangeEndIdx}`, trip))}만</option>` + opts;
+        }
         trip.days.forEach((d, idx) => {
           opts += `<option value="${idx}">Day ${d.dayNum || (idx + 1)}: ${d.title}</option>`;
         });
         select.innerHTML = opts;
-        if (dayIdx !== null && dayIdx !== undefined && dayIdx >= 0 && dayIdx < trip.days.length) {
+        if (dayIdx !== null && rangeEndIdx !== null && rangeEndIdx >= dayIdx) {
+          select.value = `range:${dayIdx}:${rangeEndIdx}`;
+        } else if (dayIdx !== null && dayIdx !== undefined && dayIdx >= 0 && dayIdx < trip.days.length) {
           select.value = String(dayIdx);
         } else {
           select.value = 'all';
@@ -8327,10 +8696,11 @@
         tripId: trip.id,
         baseRevision: trip.revision || 0,
         reason,
+        targetDayVal,
         proposedDays: proposal.proposedDays,
         changes: proposal.changes
       };
-      document.getElementById('replan-review-summary').textContent = `${reason} · 변경 ${proposal.changes.length}개 · 완료 ${proposal.preservedCompletedCount}개 / 고정 ${proposal.preservedFixedCount}개 보호`;
+      document.getElementById('replan-review-summary').textContent = `${describeReplanScope(targetDayVal, trip)} · ${reason} · 변경 ${proposal.changes.length}개 · 완료 ${proposal.preservedCompletedCount}개 / 고정 ${proposal.preservedFixedCount}개 보호`;
       const changes = document.getElementById('replan-review-changes');
       changes.innerHTML = proposal.changes.length ? proposal.changes.map(change => `
         <div class="grid grid-cols-[1fr_auto_1fr] items-center gap-2 p-3 rounded-xl bg-[#080b12] border border-[#1a2236] text-xs">
@@ -8354,9 +8724,9 @@
       const snapshotDays = JSON.parse(JSON.stringify(trip.days));
       const prompt = `당신은 여행 RePlan 도우미입니다. 아래 현재 일정 JSON을 바탕으로 변경된 전체 days JSON 배열만 반환하세요.
 상황: ${reason}
-대상: ${targetDayVal === 'all' ? '전체 일정' : `Day ${Number(targetDayVal) + 1}`}
+대상: ${describeReplanScope(targetDayVal, trip)}
 기준 이동: ${offsetMinutes >= 0 ? '+' : ''}${offsetMinutes}분
-규칙: completed 또는 fixed가 true인 일정은 제목, 시간, 상태를 바꾸거나 삭제하지 마세요. 나머지는 실제 이동 가능성을 보수적으로 고려해 조정하고, 확인할 정보는 desc에 명시하세요. 원래 dayNum과 각 spot의 주요 필드를 유지하세요.
+규칙: completed 또는 fixed가 true인 일정은 제목, 시간, 상태를 바꾸거나 삭제하지 마세요. 지정한 대상 범위 밖의 day는 어떤 필드도 바꾸지 마세요. 대상 안의 나머지 일정만 실제 이동 가능성을 보수적으로 고려해 조정하고, 확인할 정보는 desc에 명시하세요. 원래 dayNum과 각 spot의 주요 필드를 유지하세요.
 현재 일정 JSON:
 ${JSON.stringify(snapshotDays)}`;
       try {
@@ -8383,7 +8753,7 @@ ${JSON.stringify(snapshotDays)}`;
       if (!pending) return;
       const domain = await getReplanDomain();
       const current = State.trips.find(item => item.id === pending.tripId);
-      if (!current || current.revision !== pending.baseRevision || !domain.protectedSpotsMatch(current.days, pending.proposedDays)) {
+      if (!current || current.revision !== pending.baseRevision || !domain.protectedSpotsMatch(current.days, pending.proposedDays) || !domain.outsideScopeMatches(current.days, pending.proposedDays, pending.targetDayVal || 'all')) {
         closeModal('modal-replan-review', true);
         State.pendingReplan = null;
         showToast('⚠️ 검토 중 계획이 바뀌어 적용하지 않았습니다. 현재 일정에서 다시 만들어 주세요.', 4500);
@@ -8403,12 +8773,19 @@ ${JSON.stringify(snapshotDays)}`;
       State.pendingReplan = null;
       closeModal('modal-replan-review', true);
       renderActiveTripWorkspace();
-      switchTab('today');
+      if (State.replanReturnBlockId) {
+        State.activePlanBlockId = State.replanReturnBlockId;
+        State.replanReturnBlockId = null;
+        renderPlanBlockDetail();
+      } else {
+        switchTab('today');
+      }
       showToast('✅ RePlan을 적용했습니다. 완료 기록과 고정 일정은 유지됩니다.');
     }
 
     function rejectPendingReplan() {
       State.pendingReplan = null;
+      State.replanReturnBlockId = null;
       closeModal('modal-replan-review', true);
       showToast('기존 계획을 유지합니다.');
     }
@@ -8604,13 +8981,23 @@ ${JSON.stringify(snapshotDays)}`;
               !Array.isArray(day.spots) || day.spots.length > 48) return false;
           dayNumbers.add(dayNum);
           return day.spots.every(spot => {
-            const timeMatch = /^(\d{2}):(\d{2})$/.exec(spot.time || '');
+            const timeMatches = [...String(spot.time || '').matchAll(/(\d{2}):(\d{2})/g)];
             return typeof spot.title === 'string' && spot.title.trim() && spot.title.length <= 200 &&
-              timeMatch && Number(timeMatch[1]) < 24 && Number(timeMatch[2]) < 60;
+              timeMatches.length > 0 && timeMatches.every(match => Number(match[1]) < 24 && Number(match[2]) < 60);
           });
         });
         if (!validShape) return false;
         if (job.kind === 'replan') {
+          if (payload.days.length !== job.input.snapshotDays.length) return false;
+          const target = job.input.targetDayVal || 'all';
+          const range = /^range:(\d+):(\d+)$/.exec(String(target));
+          const allowed = target === 'all'
+            ? new Set(job.input.snapshotDays.map((_, index) => index))
+            : range
+              ? new Set(Array.from({ length: Number(range[2]) - Number(range[1]) + 1 }, (_, offset) => Number(range[1]) + offset))
+              : new Set([Number(target)]);
+          const outsideScopeMatch = job.input.snapshotDays.every((day, dayIndex) => allowed.has(dayIndex) || JSON.stringify(day) === JSON.stringify(payload.days[dayIndex]));
+          if (!outsideScopeMatch) return false;
           const protectedMatch = job.input.snapshotDays.every((day, dayIndex) => {
             const proposed = payload.days[dayIndex];
             if (!proposed?.spots) return false;
@@ -8690,7 +9077,13 @@ ${JSON.stringify(snapshotDays)}`;
         jobId: job.id,
         mutate: (trip) => {
           if (job.kind === 'itinerary') mergeItineraryProposal(trip, job.draft.days);
-          if (job.kind === 'replan') trip.days = JSON.parse(JSON.stringify(job.draft.days));
+          if (job.kind === 'replan') {
+            const currentDays = trip.days || [];
+            trip.days = JSON.parse(JSON.stringify(job.draft.days)).map((day, dayIndex) => ({
+              ...day,
+              planBlockId: currentDays[dayIndex]?.planBlockId || day.planBlockId
+            }));
+          }
           if (job.kind === 'journal') {
             if (!trip.journals) trip.journals = {};
             const current = trip.journals[job.input.dayIndex] || { text: '', photos: [] };
@@ -8777,7 +9170,14 @@ ${JSON.stringify(snapshotDays)}`;
         State.activeAiJobId = null;
         closeModal('modal-ai-draft-review', true);
         if (result.kind === 'receipt') openModal('modal-expense');
-        else renderActiveTripWorkspace();
+        else {
+          renderActiveTripWorkspace();
+          if (result.kind === 'replan' && State.replanReturnBlockId) {
+            State.activePlanBlockId = State.replanReturnBlockId;
+            State.replanReturnBlockId = null;
+            renderPlanBlockDetail();
+          }
+        }
         showToast(result.kind === 'replan' ? '✅ AI RePlan을 적용했습니다. 완료·고정 일정은 유지됩니다.' : result.kind === 'itinerary' ? '✅ 기존 일정을 보존하고 AI 제안을 추가했습니다.' :
           result.kind === 'journal' ? '✅ 원문을 보존하고 여행기 초안을 적용했습니다.' : '✅ 판독값을 입력 폼에 적용했습니다.');
       } else if (result.state === 'conflict') {
@@ -8797,6 +9197,7 @@ ${JSON.stringify(snapshotDays)}`;
         flow.reject(State.activeAiJobId);
         flow.forget(State.activeAiJobId);
       }
+      State.replanReturnBlockId = null;
       State.activeAiJobId = null;
       closeModal('modal-ai-draft-review', true);
       showToast('AI 초안을 버렸습니다. 원본은 변경되지 않았습니다.');
@@ -9290,6 +9691,10 @@ JSON 배열만 출력하세요. 각 day는 dayNum, title, city, spots를 포함�
         return (title && title.value.trim().length > 0) ||
                (amount && amount.value.trim().length > 0);
       }
+      if (modalId === 'modal-plan-block-edit') {
+        const modal = document.getElementById(modalId);
+        return Boolean(modal?.dataset.snapshot && modal.dataset.snapshot !== planBlockEditFormSnapshot());
+      }
       return false;
     }
 
@@ -9333,6 +9738,29 @@ JSON 배열만 출력하세요. 각 day는 dayNum, title, city, spots를 포함�
     function safeCloseModal(modalId, force = false) {
       closeModal(modalId, force);
     }
+
+    window.addEventListener('popstate', async event => {
+      const detailPage = document.getElementById('plan-block-detail-page');
+      const detailOpen = detailPage && !detailPage.classList.contains('hidden');
+      const openSheet = [...document.querySelectorAll('.sheet-container:not(.sheet-closed)')].pop();
+      if (detailOpen && openSheet) {
+        State.handlingPopState = true;
+        if (openSheet.id === 'modal-replan-review') rejectPendingReplan();
+        else if (openSheet.id === 'modal-ai-draft-review') await rejectActiveAiDraft();
+        else closeModal(openSheet.id);
+        State.handlingPopState = false;
+        const trip = getActiveTrip();
+        if (trip && State.activePlanBlockId) {
+          history.pushState({ ...(event.state || {}), stRoute: 'plan-block', tripId: trip.id, blockId: State.activePlanBlockId }, '');
+        }
+        return;
+      }
+      if (event.state?.stRoute === 'plan-block' && event.state.blockId) {
+        showPlanBlockDetail(event.state.blockId, { pushHistory: false });
+        return;
+      }
+      if (detailOpen) hidePlanBlockDetail();
+    });
 
     // ==========================================
     // [15] 실시간 & 오프라인 GPS 스팟 레이더 (R-13)

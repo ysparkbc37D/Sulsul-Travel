@@ -4,6 +4,8 @@
 
 ## 1. 구현 순서
 
+**2026-09-10 v1.3.1 반영:** [큰 계획 편집·모바일 탐색 개선 계획](mobile-plan-editing-review.md)의 P0-1~3에 따라 구간 편집, 구간 범위 재생성, 모바일 뒤로가기·스크롤 복원·안전 영역을 구현했다. 서버 공동편집과 스팟 단위 영속 ID 패치는 아래 D 단계에서 확장한다.
+
 | 단계 | 작업 | 핵심 파일/경계 | 완료 기준 |
 | --- | --- | --- | --- |
 | A: 변경 안전성 | 튜닝 fallback 직접 교체 제거; item ID 기반 RePlan Patch; 원본·예약·완료 보호 | `executeScheduleTuning`, `js/domain/replan.mjs`, repository | **v1.3.0 1차 완료**: 로컬·AI 모두 비교 승인, revision 검사, 완료·고정 보호. 동시 서버 revision은 D에서 확장 |

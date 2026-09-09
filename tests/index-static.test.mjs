@@ -27,12 +27,17 @@ test('AI review wiring and offline cache entries are present', () => {
 
 test('travel-stage navigation and reviewed RePlan are wired', () => {
   for (const id of ['nav-tab-plan', 'nav-tab-today', 'nav-tab-journal', 'nav-tab-checklist',
-    'big-plan-container', 'today-overview-container', 'modal-replan-review']) {
+    'big-plan-container', 'plan-block-detail-page', 'plan-block-detail-container',
+    'modal-plan-block-edit', 'today-overview-container', 'modal-replan-review']) {
     assert.match(html, new RegExp(`id=["']${id}["']`));
   }
   assert.match(html, /function applyPendingReplan\(/);
   assert.match(html, /protectedSpotsMatch/);
   assert.match(html, /function inferPlanBlockPlace\(day\)/);
+  assert.match(html, /function submitPlanBlockEdit\(\)/);
+  assert.match(html, /function openActivePlanBlockReplan\(\)/);
+  assert.match(html, /range:\$\{dayIdx\}:\$\{rangeEndIdx\}/);
+  assert.match(html, /window\.addEventListener\('popstate'/);
   assert.match(html, /day\.loc, day\.cityName, day\.city, day\.route, day\.title/);
   assert.match(sw, /const CACHE_PREFIX = 'st-shell-'/);
 });
@@ -47,7 +52,7 @@ test('release version is synchronized', () => {
   const app = html.match(/const APP_VER\s*=\s*'([^']+)'/)?.[1];
   const worker = sw.match(/const V\s*=\s*'st-shell-v([^']+)'/)?.[1];
   const release = changelog.match(/## \[v([^\]]+)\]/)?.[1];
-  assert.equal(app, '1.3.0');
+  assert.equal(app, '1.3.1');
   assert.equal(worker, app);
   assert.equal(release, app);
 });

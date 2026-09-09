@@ -33,10 +33,24 @@ export function shiftTimeLabel(value, offsetMinutes) {
   });
 }
 
+export function resolveTargetDayIndexes(days, targetDay = 'all') {
+  if (!Array.isArray(days)) return [];
+  if (targetDay === 'all') return days.map((_, index) => index);
+  const range = /^range:(\d+):(\d+)$/.exec(String(targetDay));
+  if (range) {
+    const start = Math.max(0, Number(range[1]));
+    const end = Math.min(days.length - 1, Number(range[2]));
+    if (start > end) return [];
+    return Array.from({ length: end - start + 1 }, (_, offset) => start + offset);
+  }
+  const index = Number(targetDay);
+  return Number.isInteger(index) && index >= 0 && index < days.length ? [index] : [];
+}
+
 export function createReplanProposal({ days, targetDay = 'all', offsetMinutes = 0, reason = '' }) {
   if (!Array.isArray(days)) throw new TypeError('DAYS_REQUIRED');
   const proposedDays = clone(days);
-  const selected = targetDay === 'all' ? proposedDays.map((_, index) => index) : [Number(targetDay)];
+  const selected = resolveTargetDayIndexes(proposedDays, targetDay);
   const changes = [];
   let preservedCompletedCount = 0;
   let preservedFixedCount = 0;
@@ -67,6 +81,13 @@ export function createReplanProposal({ days, targetDay = 'all', offsetMinutes = 
   });
 
   return { proposedDays, changes, preservedCompletedCount, preservedFixedCount };
+}
+
+export function outsideScopeMatches(beforeDays, afterDays, targetDay = 'all') {
+  if (!Array.isArray(beforeDays) || !Array.isArray(afterDays) || beforeDays.length !== afterDays.length) return false;
+  const selected = new Set(resolveTargetDayIndexes(beforeDays, targetDay));
+  if (!selected.size) return false;
+  return beforeDays.every((day, dayIndex) => selected.has(dayIndex) || JSON.stringify(day) === JSON.stringify(afterDays[dayIndex]));
 }
 
 export function protectedSpotsMatch(beforeDays, afterDays) {
