@@ -14,7 +14,7 @@
   </script>
 
   <!-- PWA Meta & Icons -->
-  <link rel="manifest" href="manifest.webmanifest?v=1.3.9">
+  <link rel="manifest" href="manifest.webmanifest?v=1.4.0">
   <meta name="theme-color" content="#f5f5f7">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
@@ -28,8 +28,8 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700;800&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
 
-  <!-- Tailwind CSS & FontAwesome -->
-  <link rel="stylesheet" href="css/utilities.css?v=1.3.9">
+  <!-- Local Utilities Bundle (CDN fallback & tailwind utilities) -->
+  <link rel="stylesheet" href="css/utilities.css?v=1.4.0">
   <link rel="stylesheet" href="vendor/fontawesome/css/all.min.css">
 
   <!-- Leaflet Map CSS & JS -->
@@ -600,8 +600,8 @@
     }
   </style>
 
-  <link rel="stylesheet" href="css/companion.css?v=1.3.9">
-  <script src="js/presentation/companion-ui.js?v=1.3.9"></script>
+  <link rel="stylesheet" href="css/companion.css?v=1.4.0">
+  <script src="js/presentation/companion-ui.js?v=1.4.0"></script>
 
   <!-- Knowledge Base Seed & Destination Knowledge Packs (DKP) -->
   <script src="kb-travel.js"></script>
@@ -627,7 +627,11 @@
             <h1 class="font-serif-brand text-base sm:text-xl font-bold tracking-tight text-[#1c1917] dark:text-[#ededed] whitespace-nowrap">
               Sulsul Travel
             </h1>
-            <span id="app-ver-badge" onclick="event.stopPropagation(); openVersionHistoryModal()" class="px-1.5 py-0.5 rounded-md theme-card-subtle hover:border-amber-500/60 hover:text-amber-600 dark:hover:text-amber-300 text-[#a2601b] dark:text-[#d4af37] text-[10px] font-bold font-mono shadow-inner cursor-pointer shrink-0 transition" title="버전 업데이트 기록 보기 (클릭)">v1.3.9</span>
+            <span id="app-ver-badge" onclick="event.stopPropagation(); openVersionHistoryModal()" class="px-1.5 py-0.5 rounded-md theme-card-subtle hover:border-amber-500/60 hover:text-amber-600 dark:hover:text-amber-300 text-[#a2601b] dark:text-[#d4af37] text-[10px] font-bold font-mono shadow-inner cursor-pointer shrink-0 transition" title="버전 업데이트 기록 보기 (클릭)">v1.4.0</span>
+            <button id="ai-status-indicator" onclick="event.stopPropagation(); openSettingsModal('ai')" class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-md text-[10px] font-bold cursor-pointer transition select-none shadow-sm shrink-0 border border-emerald-300 bg-emerald-50 text-emerald-700 dark:bg-emerald-950/50 dark:text-emerald-300 dark:border-emerald-800 hover:bg-emerald-100" title="Gemini AI 연결 상태 (클릭 시 AI 설정 이동)">
+              <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+              <span id="ai-status-text" class="hidden xs:inline sm:inline">AI 정상</span>
+            </button>
           </div>
           <p id="header-trip-name" class="text-[10px] sm:text-[11px] text-[#78716c] dark:text-stone-400 truncate max-w-[120px] sm:max-w-xs font-normal">인생의 모든 여정을 기록하는 다이어리</p>
         </div>
@@ -761,6 +765,11 @@
             <option value="budget-asc">예산 낮은순</option>
           </select>
         </div>
+      </div>
+
+      <!-- 4. 활성 필터 요약 칩 컨테이너 (조건 선택 시 즉시 노출, 원클릭 개별/전체 해제) -->
+      <div id="hub-active-chips" class="hidden flex items-center gap-1.5 flex-wrap pt-2 border-t border-[#f0ece1] dark:border-stone-800/80 text-xs">
+        <!-- renderHubActiveChips()에 의해 동적 렌더링 -->
       </div>
 
     </div>
@@ -1623,11 +1632,29 @@
             <select id="trip-form-curr" class="w-full px-3 py-2 bg-[#faf8f5] border border-[#e8e2d5] rounded-xl text-[#1c1917] focus:outline-none focus:border-[#a2601b] cursor-pointer">
               <option value="KRW">KRW (대한민국 원)</option>
               <option value="USD">USD (미국 달러)</option>
-              <option value="EUR">EUR (유로)</option>
+              <option value="EUR">EUR (유럽연합 유로)</option>
               <option value="JPY">JPY (일본 엔)</option>
+              <option value="GBP">GBP (영국 파운드)</option>
+              <option value="CHF">CHF (스위스 프랑)</option>
+              <option value="CNY">CNY (중국 위안)</option>
+              <option value="TWD">TWD (대만 신 타이완 달러)</option>
+              <option value="HKD">HKD (홍콩 달러)</option>
+              <option value="SGD">SGD (싱가포르 달러)</option>
+              <option value="THB">THB (태국 바트)</option>
+              <option value="VND">VND (베트남 동)</option>
+              <option value="PHP">PHP (필리핀 페소)</option>
+              <option value="CAD">CAD (캐나다 달러)</option>
+              <option value="AUD">AUD (호주 달러)</option>
+              <option value="NZD">NZD (뉴질랜드 달러)</option>
               <option value="PEN">PEN (페루 솔)</option>
-              <option value="ARS">ARS (아르헨 페소)</option>
+              <option value="ARS">ARS (아르헨티나 페소)</option>
               <option value="BRL">BRL (브라질 헤알)</option>
+              <option value="CLP">CLP (칠레 페소)</option>
+              <option value="COP">COP (콜롬비아 페소)</option>
+              <option value="TRY">TRY (튀르키예 리라)</option>
+              <option value="CZK">CZK (체코 코루나)</option>
+              <option value="HUF">HUF (헝가리 포린트)</option>
+              <option value="PLN">PLN (폴란드 즈워티)</option>
             </select>
           </div>
           <div>
@@ -1637,8 +1664,22 @@
         </div>
 
         <div>
-          <label class="font-bold text-[#1c1917] block mb-1">방문 국가 / 지역 (쉼표 구분)</label>
-          <input type="text" id="trip-form-countries" placeholder="예: 스페인, 포르투갈 (바르셀로나, 리스본)" class="w-full px-3 py-2 bg-[#faf8f5] border border-[#e8e2d5] rounded-xl text-[#1c1917] focus:outline-none focus:border-[#a2601b]">
+          <div class="flex items-center justify-between mb-1">
+            <label class="font-bold text-[#1c1917]">방문 국가 / 지역 (쉼표 구분)</label>
+            <span class="text-[10px] text-[#a2601b] font-medium"><i class="fa-solid fa-wand-magic-sparkles text-[9px]"></i> 통화 자동 연동</span>
+          </div>
+          <input type="text" id="trip-form-countries" oninput="handleTripFormCountryInput()" placeholder="예: 스페인, 포르투갈 (바르셀로나, 리스본)" class="w-full px-3 py-2 bg-[#faf8f5] border border-[#e8e2d5] rounded-xl text-[#1c1917] focus:outline-none focus:border-[#a2601b]">
+          <!-- 여행지 빠른 선택 칩 (참조 이미지 매핑) -->
+          <div class="flex items-center gap-1.5 flex-wrap mt-1.5">
+            <span class="text-[10px] text-[#78716c] shrink-0 font-medium">인기 여행지:</span>
+            <button type="button" onclick="selectQuickFormCountry('일본', '도쿄, 교토, 오사카', 'JPY')" class="px-1.5 py-0.5 rounded-md text-[10px] bg-[#f0ece1] hover:bg-amber-100 text-[#1c1917] transition cursor-pointer">🇯🇵 일본 JPY</button>
+            <button type="button" onclick="selectQuickFormCountry('프랑스', '파리, 니스', 'EUR')" class="px-1.5 py-0.5 rounded-md text-[10px] bg-[#f0ece1] hover:bg-amber-100 text-[#1c1917] transition cursor-pointer">🇫🇷 프랑스 EUR</button>
+            <button type="button" onclick="selectQuickFormCountry('스페인', '바르셀로나, 마드리드, 세비야', 'EUR')" class="px-1.5 py-0.5 rounded-md text-[10px] bg-[#f0ece1] hover:bg-amber-100 text-[#1c1917] transition cursor-pointer">🇪🇸 스페인 EUR</button>
+            <button type="button" onclick="selectQuickFormCountry('스위스', '인터라켄, 취리히', 'CHF')" class="px-1.5 py-0.5 rounded-md text-[10px] bg-[#f0ece1] hover:bg-amber-100 text-[#1c1917] transition cursor-pointer">🇨🇭 스위스 CHF</button>
+            <button type="button" onclick="selectQuickFormCountry('태국', '방콕, 치앙마이', 'THB')" class="px-1.5 py-0.5 rounded-md text-[10px] bg-[#f0ece1] hover:bg-amber-100 text-[#1c1917] transition cursor-pointer">🇹🇭 태국 THB</button>
+            <button type="button" onclick="selectQuickFormCountry('페루', '리마, 쿠스코, 마추픽추', 'PEN')" class="px-1.5 py-0.5 rounded-md text-[10px] bg-[#f0ece1] hover:bg-amber-100 text-[#1c1917] transition cursor-pointer">🇵🇪 페루 PEN</button>
+            <button type="button" onclick="selectQuickFormCountry('미국', '뉴욕, 로스앤젤레스', 'USD')" class="px-1.5 py-0.5 rounded-md text-[10px] bg-[#f0ece1] hover:bg-amber-100 text-[#1c1917] transition cursor-pointer">🇺🇸 미국 USD</button>
+          </div>
         </div>
 
         <div>
@@ -2656,11 +2697,18 @@
 
       <!-- 버전 목록 스크롤 영역 -->
       <div class="flex-1 overflow-y-auto space-y-3 pr-1 text-xs">
-        <!-- v1.3.9 (Current) -->
+        <!-- v1.4.0 (Current) -->
         <div class="p-4 rounded-2xl border-2 border-emerald-500/40 space-y-2.5">
-          <div class="flex items-center justify-between gap-2"><strong>v1.3.9 · 허브 4대 필터 & 설정창 UI/UX 정돈</strong><span class="companion-status">최신 버전</span></div>
+          <div class="flex items-center justify-between gap-2"><strong>v1.4.0 · 활성 필터 칩 · AI 신호등 · 국가 국기·통화 비주얼 강화</strong><span class="companion-status">최신 버전</span></div>
+          <p class="text-xs leading-relaxed">허브 4대 필터에 실시간 활성 태그 칩 및 개별·전체 해제 기능 도입, 상단 헤더 및 AI 설정에 Gemini 연결 상태 신호등(🟢/🟡/🔴) 뱃지 탑재, 전 세계 50+ 국가 국기 및 통화(ISO 4217) 마스터 DB 구축으로 여행 카드 비주얼을 대폭 강화했습니다.</p>
+          <p class="text-[10px]">2026-09-11 · st-shell-v1.4.0</p>
+        </div>
+
+        <!-- v1.3.9 -->
+        <div class="p-4 rounded-2xl bg-emerald-500/5 dark:bg-emerald-500/10 border-2 border-emerald-500/40 space-y-2.5 shadow-sm relative overflow-hidden">
+          <div class="flex items-center justify-between gap-2"><div class="flex items-center gap-2 min-w-0"><span class="px-2 py-0.5 rounded-lg bg-emerald-500 text-black font-black text-xs shadow-sm shrink-0">v1.3.9</span><span class="text-xs font-black text-[#1c1917] dark:text-white">허브 4대 필터 & 설정창 UI/UX 정돈</span></div></div>
           <p class="text-xs leading-relaxed">허브에 국가·도시·컨셉·필터 4대 분류 체계와 2x2 모바일 그리드를 적용했습니다. 설정 모달에 3대 카테고리 탭(화면·테마, AI·동기화, 데이터·관리)을 도입하고 스크롤 흔들림(Jitter)을 완벽히 해소했습니다.</p>
-          <p class="text-[10px]">2026-09-11 · st-shell-v1.3.9</p>
+          <div class="text-[10px] text-stone-400 dark:text-stone-500 pt-1 border-t border-emerald-500/20 flex items-center justify-between"><span>📅 2026-09-11 릴리즈</span><span class="font-mono">st-shell-v1.3.9</span></div>
         </div>
 
         <!-- v1.3.8 -->
@@ -3094,7 +3142,7 @@
     window.showToast = showToast;
 
     // 앱 버전 및 글로벌 네임스페이스 (Sulsul-Travel Invariant Rule R-10, R-11, R-12, R-13, R-14, R-15)
-    const APP_VER = '1.3.9';
+    const APP_VER = '1.4.0';
 
     // ══════════════════════════════════════════
     // [Two-Tone Theme System] 라이트 그레이 & 딥 블랙 테마 엔진
@@ -3181,6 +3229,120 @@
       { id: '힐링', label: '🧘 힐링/휴양' }
     ];
 
+    // 전 세계 주요 여행지 국가·국기·통화 마스터 데이터베이스 (ISO 4217 기반)
+    const COUNTRY_DATABASE = [
+      // 1. 아시아
+      { name: '대한민국', code: 'KR', flag: '🇰🇷', currency: 'KRW', currName: '원', symbol: '₩', aliases: ['한국', '남한', '코리아'] },
+      { name: '일본', code: 'JP', flag: '🇯🇵', currency: 'JPY', currName: '엔', symbol: '¥', aliases: ['도쿄', '오사카', '후쿠오카', '교토', '삿포로'] },
+      { name: '중국', code: 'CN', flag: '🇨🇳', currency: 'CNY', currName: '위안', symbol: '¥', aliases: ['운남', '베이징', '상하이', '쿤밍'] },
+      { name: '대만', code: 'TW', flag: '🇹🇼', currency: 'TWD', currName: '신 타이완 달러', symbol: 'NT$', aliases: ['타이완', '타이베이'] },
+      { name: '타이완', code: 'TW', flag: '🇹🇼', currency: 'TWD', currName: '신 타이완 달러', symbol: 'NT$', aliases: ['대만'] },
+      { name: '홍콩', code: 'HK', flag: '🇭🇰', currency: 'HKD', currName: '홍콩 달러', symbol: 'HK$' },
+      { name: '태국', code: 'TH', flag: '🇹🇭', currency: 'THB', currName: '바트', symbol: '฿', aliases: ['방콕', '치앙마이', '푸켓'] },
+      { name: '베트남', code: 'VN', flag: '🇻🇳', currency: 'VND', currName: '동', symbol: '₫', aliases: ['다낭', '하노이', '호치민', '나트랑'] },
+      { name: '필리핀', code: 'PH', flag: '🇵🇭', currency: 'PHP', currName: '페소', symbol: '₱', aliases: ['세부', '보라카이', '마닐라'] },
+      { name: '싱가포르', code: 'SG', flag: '🇸🇬', currency: 'SGD', currName: '싱가포르 달러', symbol: 'S$' },
+      { name: '말레이시아', code: 'MY', flag: '🇲🇾', currency: 'MYR', currName: '링깃', symbol: 'RM', aliases: ['쿠알라룸푸르', '코타키나발루'] },
+      { name: '인도네시아', code: 'ID', flag: '🇮🇩', currency: 'IDR', currName: '루피아', symbol: 'Rp', aliases: ['발리', '자카르타'] },
+      { name: '캄보디아', code: 'KH', flag: '🇰🇭', currency: 'KHR', currName: '리엘', symbol: '៛', aliases: ['앙코르와트', '씨엠립'] },
+      { name: '카자흐스탄', code: 'KZ', flag: '🇰🇿', currency: 'KZT', currName: '텡게', symbol: '₸' },
+      { name: '키르기스스탄', code: 'KG', flag: '🇰🇬', currency: 'KGS', currName: '솜', symbol: 'с' },
+      { name: '타지키스탄', code: 'TJ', flag: '🇹🇯', currency: 'TJS', currName: '소모니', symbol: 'SM' },
+      { name: '투르크메니스탄', code: 'TM', flag: '🇹🇲', currency: 'TMT', currName: '마나트', symbol: 'm' },
+      { name: '파키스탄', code: 'PK', flag: '🇵🇰', currency: 'PKR', currName: '루피', symbol: '₨' },
+      { name: '몽골', code: 'MN', flag: '🇲🇳', currency: 'MNT', currName: '투그릭', symbol: '₮' },
+
+      // 2. 유럽
+      { name: '프랑스', code: 'FR', flag: '🇫🇷', currency: 'EUR', currName: '유로', symbol: '€', aliases: ['파리', '니스', '리옹'] },
+      { name: '스페인', code: 'ES', flag: '🇪🇸', currency: 'EUR', currName: '유로', symbol: '€', aliases: ['바르셀로나', '마드리드', '세비야', '그라나다'] },
+      { name: '이탈리아', code: 'IT', flag: '🇮🇹', currency: 'EUR', currName: '유로', symbol: '€', aliases: ['로마', '밀라노', '피렌체', '베네치아'] },
+      { name: '스위스', code: 'CH', flag: '🇨🇭', currency: 'CHF', currName: '프랑', symbol: 'CHF', aliases: ['인터라켄', '취리히', '제네바'] },
+      { name: '포르투갈', code: 'PT', flag: '🇵🇹', currency: 'EUR', currName: '유로', symbol: '€', aliases: ['리스본', '포르투'] },
+      { name: '영국', code: 'GB', flag: '🇬🇧', currency: 'GBP', currName: '파운드', symbol: '£', aliases: ['런던', '에든버러', '잉글랜드'] },
+      { name: '독일', code: 'DE', flag: '🇩🇪', currency: 'EUR', currName: '유로', symbol: '€', aliases: ['베를린', '뮌헨', '프랑크푸르트'] },
+      { name: '오스트리아', code: 'AT', flag: '🇦🇹', currency: 'EUR', currName: '유로', symbol: '€', aliases: ['비엔나', '잘츠부르크'] },
+      { name: '체코', code: 'CZ', flag: '🇨🇿', currency: 'CZK', currName: '코루나', symbol: 'Kč', aliases: ['프라하'] },
+      { name: '헝가리', code: 'HU', flag: '🇭🇺', currency: 'HUF', currName: '포린트', symbol: 'Ft', aliases: ['부다페스트'] },
+      { name: '크로아티아', code: 'HR', flag: '🇭🇷', currency: 'EUR', currName: '유로', symbol: '€', aliases: ['두브로브니크', '자그레브'] },
+      { name: '폴란드', code: 'PL', flag: '🇵🇱', currency: 'PLN', currName: '즈워티', symbol: 'zł', aliases: ['바르샤바', '크라쿠프'] },
+      { name: '핀란드', code: 'FI', flag: '🇫🇮', currency: 'EUR', currName: '유로', symbol: '€', aliases: ['헬싱키'] },
+      { name: '키프로스', code: 'CY', flag: '🇨🇾', currency: 'EUR', currName: '유로', symbol: '€' },
+      { name: '그리스', code: 'GR', flag: '🇬🇷', currency: 'EUR', currName: '유로', symbol: '€', aliases: ['아테네', '산토리니'] },
+      { name: '네덜란드', code: 'NL', flag: '🇳🇱', currency: 'EUR', currName: '유로', symbol: '€', aliases: ['암스테르담'] },
+      { name: '벨기에', code: 'BE', flag: '🇧🇪', currency: 'EUR', currName: '유로', symbol: '€', aliases: ['브뤼셀'] },
+      { name: '노르웨이', code: 'NO', flag: '🇳🇴', currency: 'NOK', currName: '크로네', symbol: 'kr' },
+      { name: '스웨덴', code: 'SE', flag: '🇸🇪', currency: 'SEK', currName: '크로나', symbol: 'kr' },
+      { name: '덴마크', code: 'DK', flag: '🇩🇰', currency: 'DKK', currName: '크로네', symbol: 'kr' },
+      { name: '아이슬란드', code: 'IS', flag: '🇮🇸', currency: 'ISK', currName: '크로나', symbol: 'kr' },
+      { name: '튀르키예', code: 'TR', flag: '🇹🇷', currency: 'TRY', currName: '리라', symbol: '₺', aliases: ['터키', '이스탄불', '카파도키아'] },
+      { name: '터키', code: 'TR', flag: '🇹🇷', currency: 'TRY', currName: '리라', symbol: '₺', aliases: ['튀르키예'] },
+
+      // 3. 미주 (북미·중남미)
+      { name: '미국', code: 'US', flag: '🇺🇸', currency: 'USD', currName: '달러', symbol: '$', aliases: ['뉴욕', 'LA', '하와이', '샌프란시스코'] },
+      { name: '캐나다', code: 'CA', flag: '🇨🇦', currency: 'CAD', currName: '캐나다 달러', symbol: 'C$', aliases: ['밴쿠버', '토론토'] },
+      { name: '페루', code: 'PE', flag: '🇵🇪', currency: 'PEN', currName: '솔', symbol: 'S/.', aliases: ['리마', '쿠스코', '마추픽추'] },
+      { name: '아르헨티나', code: 'AR', flag: '🇦🇷', currency: 'ARS', currName: '페소', symbol: '$', aliases: ['부에노스아이레스', '이과수'] },
+      { name: '브라질', code: 'BR', flag: '🇧🇷', currency: 'BRL', currName: '헤알', symbol: 'R$', aliases: ['리우데자네이루', '상파울루'] },
+      { name: '칠레', code: 'CL', flag: '🇨🇱', currency: 'CLP', currName: '페소', symbol: '$', aliases: ['산티아고'] },
+      { name: '콜롬비아', code: 'CO', flag: '🇨🇴', currency: 'COP', currName: '페소', symbol: '$', aliases: ['보고타', '메데인'] },
+      { name: '멕시코', code: 'MX', flag: '🇲🇽', currency: 'MXN', currName: '페소', symbol: '$', aliases: ['칸쿤', '멕시코시티'] },
+      { name: '쿠바', code: 'CU', flag: '🇨🇺', currency: 'CUP', currName: '페소', symbol: '₱', aliases: ['아바나'] },
+      { name: '파나마', code: 'PA', flag: '🇵🇦', currency: 'PAB', currName: '발보아', symbol: 'B/.' },
+      { name: '파라과이', code: 'PY', flag: '🇵🇾', currency: 'PYG', currName: '과라니', symbol: '₲' },
+      { name: '코스타리카', code: 'CR', flag: '🇨🇷', currency: 'CRC', currName: '콜론', symbol: '₡' },
+      { name: '푸에르토리코', code: 'PR', flag: '🇵🇷', currency: 'USD', currName: '달러', symbol: '$' },
+      { name: '케이맨제도', code: 'KY', flag: '🇰🇾', currency: 'KYD', currName: '달러', symbol: '$' },
+
+      // 4. 오세아니아
+      { name: '호주', code: 'AU', flag: '🇦🇺', currency: 'AUD', currName: '호주 달러', symbol: 'A$', aliases: ['시드니', '멜버른'] },
+      { name: '뉴질랜드', code: 'NZ', flag: '🇳🇿', currency: 'NZD', currName: '뉴질랜드 달러', symbol: 'NZ$', aliases: ['오클랜드', '퀸스타운'] },
+      { name: '피지', code: 'FJ', flag: '🇫🇯', currency: 'FJD', currName: '피지 달러', symbol: 'FJ$' },
+      { name: '팔라우', code: 'PW', flag: '🇵🇼', currency: 'USD', currName: '달러', symbol: '$' },
+      { name: '괌', code: 'GU', flag: '🇬🇺', currency: 'USD', currName: '달러', symbol: '$' },
+      { name: '사이판', code: 'MP', flag: '🇲🇵', currency: 'USD', currName: '달러', symbol: '$' },
+
+      // 5. 중동·아프리카
+      { name: '아랍에미리트', code: 'AE', flag: '🇦🇪', currency: 'AED', currName: '디르함', symbol: 'AED', aliases: ['두바이', '아부다비'] },
+      { name: '카타르', code: 'QA', flag: '🇶🇦', currency: 'QAR', currName: '리얄', symbol: 'QR', aliases: ['도하'] },
+      { name: '쿠웨이트', code: 'KW', flag: '🇰🇼', currency: 'KWD', currName: '디나르', symbol: 'KD' },
+      { name: '이집트', code: 'EG', flag: '🇪🇬', currency: 'EGP', currName: '이집트 파운드', symbol: 'E£', aliases: ['카이로'] },
+      { name: '모로코', code: 'MA', flag: '🇲🇦', currency: 'MAD', currName: '디르함', symbol: 'DH' },
+      { name: '튀니지', code: 'TN', flag: '🇹🇳', currency: 'TND', currName: '디나르', symbol: 'DT' },
+      { name: '남아프리카공화국', code: 'ZA', flag: '🇿🇦', currency: 'ZAR', currName: '랜드', symbol: 'R', aliases: ['케이프타운'] },
+      { name: '케냐', code: 'KE', flag: '🇰🇪', currency: 'KES', currName: '실링', symbol: 'KSh', aliases: ['나이로비'] },
+      { name: '탄자니아', code: 'TZ', flag: '🇹🇿', currency: 'TZS', currName: '실링', symbol: 'TSh', aliases: ['킬리만자로', '잔지바르'] }
+    ];
+
+    function resolveCountryInfo(query) {
+      if (!query || typeof query !== 'string') return null;
+      const q = query.trim().toLowerCase();
+      if (!q) return null;
+
+      let found = COUNTRY_DATABASE.find(c => c.name.toLowerCase() === q);
+      if (found) return found;
+
+      found = COUNTRY_DATABASE.find(c => (c.aliases || []).some(a => a.toLowerCase() === q));
+      if (found) return found;
+
+      found = COUNTRY_DATABASE.find(c => c.currency.toLowerCase() === q || c.code.toLowerCase() === q);
+      if (found) return found;
+
+      found = COUNTRY_DATABASE.find(c => q.includes(c.name.toLowerCase()) || c.name.toLowerCase().includes(q));
+      if (found) return found;
+
+      return null;
+    }
+
+    function getCountryFlag(query) {
+      const info = resolveCountryInfo(query);
+      return info ? info.flag : '🌎';
+    }
+
+    function getCountryCurrency(query) {
+      const info = resolveCountryInfo(query);
+      return info ? info.currency : 'KRW';
+    }
+
     // 전역 상태 스토어 (Multi-Trip State)
     const State = {
       currentView: 'hub', // 'hub' | 'workspace'
@@ -3194,6 +3356,7 @@
       isMepEnabled: true,
       allTimelinesExpanded: false,
       geminiKey: cleanApiKey(localStorage.getItem('st_gemini_key') || ''),
+      aiFallbackActive: false, // 3-Tier Fallback 감지 플래그
       
       // Sulsul-Diary Hub Filters & View Mode (v1.0.7)
       hubViewMode: localStorage.getItem('st_hub_view_mode') || 'grid', // 'grid' | 'list'
@@ -4733,7 +4896,7 @@
       if (contentEl) contentEl.scrollTop = 0;
     }
 
-    function openSettingsModal() {
+    function openSettingsModal(defaultTab = 'theme') {
       if (typeof updateGeminiKeyUi === 'function') {
         updateGeminiKeyUi();
       } else {
@@ -4748,13 +4911,45 @@
       if (typeof updatePwaUiState === 'function') {
         updatePwaUiState();
       }
-      switchSettingsTab('theme');
+      switchSettingsTab(defaultTab || 'theme');
       openModal('modal-settings');
+    }
+
+    function updateAiStatusIndicator() {
+      const el = document.getElementById('ai-status-indicator');
+      if (!el) return;
+
+      const rawKey = State.geminiKey || localStorage.getItem('st_gemini_key') || '';
+      const key = cleanApiKey(rawKey);
+
+      if (!key) {
+        el.className = 'inline-flex items-center gap-1 px-1.5 py-0.5 rounded-md text-[10px] font-bold cursor-pointer transition select-none shadow-sm shrink-0 border border-rose-300 bg-rose-50 text-rose-700 dark:bg-rose-950/50 dark:text-rose-300 dark:border-rose-800 hover:bg-rose-100';
+        el.title = 'Gemini API 키 미등록 (클릭 시 AI 설정 이동)';
+        el.innerHTML = `
+          <span class="w-1.5 h-1.5 rounded-full bg-rose-500 animate-pulse"></span>
+          <span id="ai-status-text" class="hidden xs:inline sm:inline">AI 키 필요</span>
+        `;
+      } else if (State.aiFallbackActive) {
+        el.className = 'inline-flex items-center gap-1 px-1.5 py-0.5 rounded-md text-[10px] font-bold cursor-pointer transition select-none shadow-sm shrink-0 border border-amber-300 bg-amber-50 text-amber-700 dark:bg-amber-950/50 dark:text-amber-300 dark:border-amber-800 hover:bg-amber-100';
+        el.title = 'Gemini Fallback 백업 모델 작동 중 (클릭 시 AI 설정 이동)';
+        el.innerHTML = `
+          <span class="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse"></span>
+          <span id="ai-status-text" class="hidden xs:inline sm:inline">Fallback</span>
+        `;
+      } else {
+        el.className = 'inline-flex items-center gap-1 px-1.5 py-0.5 rounded-md text-[10px] font-bold cursor-pointer transition select-none shadow-sm shrink-0 border border-emerald-300 bg-emerald-50 text-emerald-700 dark:bg-emerald-950/50 dark:text-emerald-300 dark:border-emerald-800 hover:bg-emerald-100';
+        el.title = 'Gemini AI 3-Tier 엔진 준비 완료 (클릭 시 AI 설정 이동)';
+        el.innerHTML = `
+          <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+          <span id="ai-status-text" class="hidden xs:inline sm:inline">AI 정상</span>
+        `;
+      }
     }
 
     let isGeminiKeyEditMode = false;
 
     function updateGeminiKeyUi() {
+      updateAiStatusIndicator();
       const currentKey = State.geminiKey || '';
       const input = document.getElementById('modal-cfg-gemini-key');
       const tabKey = document.getElementById('cfg-gemini-key');
@@ -5143,10 +5338,13 @@
         }
       });
 
-      // 1. 국가 드롭다운 갱신
+      // 1. 국가 드롭다운 갱신 (국기 + 국가명 + 통화 코드)
       let cHtml = '<option value="all">전체 국가</option>';
       Array.from(countriesSet).sort().forEach(c => {
-        cHtml += `<option value="${escapeHtml(c)}">${escapeHtml(c)}</option>`;
+        const cInfo = resolveCountryInfo(c);
+        const flag = cInfo ? cInfo.flag : '🌎';
+        const curr = cInfo ? ` (${cInfo.currency})` : '';
+        cHtml += `<option value="${escapeHtml(c)}">${flag} ${escapeHtml(c)}${curr}</option>`;
       });
       countrySelect.innerHTML = cHtml;
       if (State.hubFilters.country) {
@@ -5166,6 +5364,169 @@
           State.hubFilters.city = 'all';
           citySelect.value = 'all';
         }
+      }
+    }
+
+    function renderHubActiveChips() {
+      const container = document.getElementById('hub-active-chips');
+      if (!container) return;
+
+      const chips = [];
+      const f = State.hubFilters;
+
+      // 1. 상태 필터
+      if (f.status && f.status !== 'all') {
+        const statusMap = {
+          ongoing: { label: '진행중', icon: 'fa-solid fa-play text-emerald-600' },
+          planned: { label: '예정', icon: 'fa-solid fa-calendar text-blue-600' },
+          completed: { label: '완료', icon: 'fa-solid fa-check text-stone-500' },
+          bucketlist: { label: '버킷리스트', icon: 'fa-solid fa-star text-amber-500' }
+        };
+        const sInfo = statusMap[f.status] || { label: f.status, icon: 'fa-solid fa-filter' };
+        chips.push({
+          key: 'status',
+          label: `<i class="${sInfo.icon} text-[10px]"></i> ${sInfo.label}`,
+          reset: () => setHubStatusFilter('all')
+        });
+      }
+
+      // 2. 검색어
+      if (f.search) {
+        chips.push({
+          key: 'search',
+          label: `<i class="fa-solid fa-magnifying-glass text-[10px] text-stone-400"></i> "${escapeHtml(f.search)}"`,
+          reset: () => {
+            f.search = '';
+            const el = document.getElementById('hub-search-input');
+            if (el) el.value = '';
+            handleHubFilterChange();
+          }
+        });
+      }
+
+      // 3. 국가 필터
+      if (f.country && f.country !== 'all') {
+        const cInfo = resolveCountryInfo(f.country);
+        const flag = cInfo ? cInfo.flag : '🌎';
+        chips.push({
+          key: 'country',
+          label: `${flag} ${escapeHtml(f.country)}`,
+          reset: () => {
+            f.country = 'all';
+            f.city = 'all';
+            const cEl = document.getElementById('hub-filter-country');
+            if (cEl) cEl.value = 'all';
+            updateHubFilterDropdowns();
+            handleHubFilterChange();
+          }
+        });
+      }
+
+      // 4. 도시 필터
+      if (f.city && f.city !== 'all') {
+        chips.push({
+          key: 'city',
+          label: `<i class="fa-solid fa-city text-[10px] text-blue-500"></i> ${escapeHtml(f.city)}`,
+          reset: () => {
+            f.city = 'all';
+            const ctEl = document.getElementById('hub-filter-city');
+            if (ctEl) ctEl.value = 'all';
+            handleHubFilterChange();
+          }
+        });
+      }
+
+      // 5. 컨셉 필터
+      if (f.concept && f.concept !== 'all') {
+        chips.push({
+          key: 'concept',
+          label: `<i class="fa-solid fa-tag text-[10px] text-amber-500"></i> #${escapeHtml(f.concept)}`,
+          reset: () => {
+            f.concept = 'all';
+            const cpEl = document.getElementById('hub-filter-concept');
+            if (cpEl) cpEl.value = 'all';
+            handleHubFilterChange();
+          }
+        });
+      }
+
+      // 6. 정렬 필터 (기본값 'latest'가 아닐 때)
+      if (f.sort && f.sort !== 'latest') {
+        const sortLabels = {
+          'date-asc': '출발일 빠른순',
+          'budget-desc': '예산 높은순',
+          'budget-asc': '예산 낮은순'
+        };
+        chips.push({
+          key: 'sort',
+          label: `<i class="fa-solid fa-arrow-down-short-wide text-[10px] text-stone-500"></i> ${sortLabels[f.sort] || f.sort}`,
+          reset: () => {
+            f.sort = 'latest';
+            const sEl = document.getElementById('hub-filter-sort');
+            if (sEl) sEl.value = 'latest';
+            handleHubFilterChange();
+          }
+        });
+      }
+
+      if (chips.length === 0) {
+        container.classList.add('hidden');
+        container.innerHTML = '';
+        return;
+      }
+
+      container.classList.remove('hidden');
+      let html = '<span class="text-[11px] font-bold text-[#78716c] dark:text-stone-400 shrink-0 mr-1"><i class="fa-solid fa-sliders text-[10px]"></i> 적용 필터:</span>';
+
+      chips.forEach((chip) => {
+        html += `
+          <span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-lg bg-[#fdf6ec] dark:bg-amber-950/40 text-[#a2601b] dark:text-[#d4af37] border border-[#f5dfb8] dark:border-amber-900/60 font-medium text-xs shadow-xs transition">
+            <span>${chip.label}</span>
+            <button type="button" onclick="removeHubFilter('${chip.key}')" class="w-3.5 h-3.5 rounded-full hover:bg-amber-200 dark:hover:bg-amber-900/80 flex items-center justify-center text-[10px] text-[#a2601b] dark:text-[#d4af37] font-bold cursor-pointer transition" title="필터 해제">✕</button>
+          </span>
+        `;
+      });
+
+      html += `
+        <button type="button" onclick="resetHubFilters()" class="text-[11px] font-bold text-rose-600 dark:text-rose-400 hover:text-rose-700 hover:underline flex items-center gap-1 ml-auto shrink-0 cursor-pointer px-1.5 py-0.5" title="모든 필터 초기화">
+          <i class="fa-solid fa-rotate-left text-[10px]"></i>
+          <span>전체 초기화</span>
+        </button>
+      `;
+
+      container.innerHTML = html;
+    }
+
+    function removeHubFilter(key) {
+      if (key === 'status') {
+        setHubStatusFilter('all');
+      } else if (key === 'search') {
+        State.hubFilters.search = '';
+        const el = document.getElementById('hub-search-input');
+        if (el) el.value = '';
+        handleHubFilterChange();
+      } else if (key === 'country') {
+        State.hubFilters.country = 'all';
+        State.hubFilters.city = 'all';
+        const cEl = document.getElementById('hub-filter-country');
+        if (cEl) cEl.value = 'all';
+        updateHubFilterDropdowns();
+        handleHubFilterChange();
+      } else if (key === 'city') {
+        State.hubFilters.city = 'all';
+        const ctEl = document.getElementById('hub-filter-city');
+        if (ctEl) ctEl.value = 'all';
+        handleHubFilterChange();
+      } else if (key === 'concept') {
+        State.hubFilters.concept = 'all';
+        const cpEl = document.getElementById('hub-filter-concept');
+        if (cpEl) cpEl.value = 'all';
+        handleHubFilterChange();
+      } else if (key === 'sort') {
+        State.hubFilters.sort = 'latest';
+        const sEl = document.getElementById('hub-filter-sort');
+        if (sEl) sEl.value = 'latest';
+        handleHubFilterChange();
       }
     }
 
@@ -5411,6 +5772,8 @@
       const grid = document.getElementById('trip-cards-grid');
       if (!grid) return;
 
+      renderHubActiveChips();
+
       if (State.hubViewMode === 'list') {
         grid.className = 'space-y-3.5 max-w-5xl mx-auto';
       } else {
@@ -5585,8 +5948,22 @@
           `<span class="px-2 py-0.5 rounded-full bg-[#fdf6ec] text-[#a2601b] border border-[#f5dfb8] text-[10px] font-bold">✨ 공식 가이드 예제</span>` : '';
 
         const conceptChips = (trip.concepts || []).slice(0, 3).map(c => `
-          <span class="px-1.5 py-0.5 rounded bg-stone-100 text-stone-700 text-[10px] font-medium border border-stone-200">#${escapeHtml(c)}</span>
+          <span class="px-1.5 py-0.5 rounded bg-stone-100 dark:bg-stone-800 text-stone-700 dark:text-stone-300 text-[10px] font-medium border border-stone-200 dark:border-stone-700">#${escapeHtml(c)}</span>
         `).join('');
+
+        const tripCountries = trip.countries || [];
+        const countryBadges = tripCountries.map(c => {
+          const info = resolveCountryInfo(c);
+          const flag = info ? info.flag : '🌎';
+          return `<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-lg bg-[#faf8f5] dark:bg-stone-800 text-[#1c1917] dark:text-stone-200 border border-[#e8e2d5] dark:border-stone-700 text-[11px] font-bold"><span class="text-xs">${flag}</span><span>${escapeHtml(c)}</span></span>`;
+        }).join(' ');
+
+        const tripCurrCode = trip.currency || (tripCountries.length > 0 && resolveCountryInfo(tripCountries[0])?.currency) || 'KRW';
+        const currBadge = `<span class="px-1.5 py-0.5 rounded text-[10px] font-mono font-bold bg-amber-500/15 text-[#a2601b] dark:text-[#d4af37] border border-amber-500/30">${escapeHtml(tripCurrCode)}</span>`;
+
+        const cityBadges = (trip.cities || []).slice(0, 3).map(ct => `
+          <span class="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded-md bg-stone-100 dark:bg-stone-800 text-stone-700 dark:text-stone-300 text-[10px] font-medium border border-stone-200 dark:border-stone-700"><i class="fa-solid fa-location-dot text-[9px] text-[#a2601b]"></i>${escapeHtml(ct)}</span>
+        `).join(' ');
 
         const isTripYn = trip.id && trip.id.includes('yunnan');
         const tripMapIcon = isTripYn ? 'fa-solid fa-earth-asia text-emerald-600' : 'fa-solid fa-earth-americas text-amber-600';
@@ -5614,10 +5991,12 @@
                     ${sampleBadge}
                     ${renderDDayBadge(trip, now)}
                   </div>
-                  <div class="flex items-center gap-2 mt-1 text-xs text-[#78716c] flex-wrap">
-                    <span>${trip.startDate || '일정 미정'} ~ ${trip.endDate || ''} (${trip.durationDays || 22}일)</span>
+                  <div class="flex items-center gap-1.5 mt-1.5 text-xs text-[#78716c] flex-wrap">
+                    <span class="font-medium">${trip.startDate || '일정 미정'} ~ ${trip.endDate || ''} (${trip.durationDays || 22}일)</span>
                     <span class="text-stone-300">•</span>
-                    <span>${(trip.countries || []).join(', ') || '전세계'}</span>
+                    ${countryBadges || `<span>${(trip.countries || []).join(', ') || '전세계'}</span>`}
+                    ${currBadge}
+                    ${cityBadges}
                     ${conceptChips}
                   </div>
                 </div>
@@ -5673,7 +6052,11 @@
                     <span class="text-stone-700 dark:text-stone-300 font-medium whitespace-nowrap">${escapeHtml(routePreviewStr)}</span>
                   </div>
 
+                  <!-- 국가/통화/도시/컨셉 뱃지 클러스터 -->
                   <div class="flex items-center gap-1.5 flex-wrap">
+                    ${countryBadges}
+                    ${currBadge}
+                    ${cityBadges}
                     ${conceptChips}
                   </div>
 
@@ -5723,7 +6106,11 @@
                     </div>
                   </div>
 
-                  <div class="mt-2 flex items-center gap-1.5 flex-wrap">
+                  <!-- 국가/통화/도시/컨셉 뱃지 클러스터 -->
+                  <div class="mt-2.5 flex items-center gap-1.5 flex-wrap">
+                    ${countryBadges}
+                    ${currBadge}
+                    ${cityBadges}
                     ${conceptChips}
                   </div>
 
@@ -7698,6 +8085,40 @@
       openModal('modal-create-trip');
     }
 
+    function handleTripFormCountryInput() {
+      const input = document.getElementById('trip-form-countries');
+      const currSelect = document.getElementById('trip-form-curr');
+      if (!input || !currSelect) return;
+      const val = input.value.trim();
+      if (!val) return;
+
+      const firstCountry = val.split(/[,/·\s]+/)[0];
+      const info = resolveCountryInfo(firstCountry);
+      if (info && info.currency) {
+        for (let i = 0; i < currSelect.options.length; i++) {
+          if (currSelect.options[i].value === info.currency) {
+            currSelect.value = info.currency;
+            break;
+          }
+        }
+      }
+    }
+
+    function selectQuickFormCountry(countryName, suggestedCities, currencyCode) {
+      const cInput = document.getElementById('trip-form-countries');
+      const ctInput = document.getElementById('trip-form-cities');
+      const currSelect = document.getElementById('trip-form-curr');
+      const titleInput = document.getElementById('trip-form-title');
+
+      if (cInput) cInput.value = countryName;
+      if (ctInput && suggestedCities) ctInput.value = suggestedCities;
+      if (currSelect && currencyCode) currSelect.value = currencyCode;
+      if (titleInput && (!titleInput.value || titleInput.value.includes('여행'))) {
+        titleInput.value = `2026 ${countryName} ${suggestedCities.split(',')[0]} 힐링 여행`;
+      }
+      updateCreateTripTzBanner();
+    }
+
     // ----------------------------------------------------
     // [11.1] 국가별 시차(Time Zone Offset) & 비행 소요 시간 스마트 매트릭스
     // ----------------------------------------------------
@@ -9151,6 +9572,8 @@ ${JSON.stringify(snapshotDays)}`;
           if (res.ok) {
             const data = await res.json();
             if (data.candidates && data.candidates[0] && data.candidates[0].content && data.candidates[0].content.parts && data.candidates[0].content.parts[0].text) {
+              State.aiFallbackActive = (model !== AI_MODELS[0]);
+              updateAiStatusIndicator();
               return data.candidates[0].content.parts[0].text;
             }
           } else {
@@ -10887,7 +11310,13 @@ JSON 배열만 출력하세요. 각 day는 dayNum, title, city, date, spots를 �
       submitSpot: submitSpot,
       generateAutoSpotsForTrip: generateAutoSpotsForTrip,
       detectDestinationTimezone: detectDestinationTimezone,
-      updateCreateTripTzBanner: updateCreateTripTzBanner
+      updateCreateTripTzBanner: updateCreateTripTzBanner,
+      removeHubFilter: removeHubFilter,
+      updateAiStatusIndicator: updateAiStatusIndicator,
+      selectQuickFormCountry: selectQuickFormCountry,
+      resolveCountryInfo: resolveCountryInfo,
+      getCountryFlag: getCountryFlag,
+      getCountryCurrency: getCountryCurrency
     };
   </script>
 </body>
