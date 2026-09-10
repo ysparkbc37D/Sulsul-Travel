@@ -5,6 +5,7 @@ import { readFileSync } from 'node:fs';
 const html = readFileSync(new URL('../index.html', import.meta.url), 'utf8');
 const sw = readFileSync(new URL('../sw.js', import.meta.url), 'utf8');
 const changelog = readFileSync(new URL('../CHANGELOG.md', import.meta.url), 'utf8');
+const chronicle = readFileSync(new URL('../술술트래블신록.md', import.meta.url), 'utf8');
 
 test('all classic inline scripts parse', () => {
   const scripts = [...html.matchAll(/<script(?![^>]*\bsrc=)(?![^>]*\btype=["']module["'])[^>]*>([\s\S]*?)<\/script>/gi)];
@@ -87,7 +88,9 @@ test('release version is synchronized', () => {
   const app = html.match(/const APP_VER\s*=\s*'([^']+)'/)?.[1];
   const worker = sw.match(/const V\s*=\s*'st-shell-v([^']+)'/)?.[1];
   const release = changelog.match(/## \[v([^\]]+)\]/)?.[1];
+  const chronicleRelease = chronicle.match(/^### \[실록 \d+호\].*\(v([^\)]+)\)$/m)?.[1];
   assert.equal(app, '1.3.6');
   assert.equal(worker, app);
   assert.equal(release, app);
+  assert.equal(chronicleRelease, app);
 });

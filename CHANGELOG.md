@@ -16,6 +16,8 @@
    - **순차 흐름 예시**: `v1.0.0` $\rightarrow$ `v1.0.1` $\rightarrow$ `v1.0.2` $\rightarrow$ ... $\rightarrow$ `v1.0.9` $\rightarrow$ `v1.1.0` $\rightarrow$ `v1.1.1`
 3. **서비스 워커 캐시 갱신**:
    - 버전이 올라갈 때마다 `sw.js`의 `const V = 'st-shell-vX.Y.Z'`를 동일하게 갱신하여 클라이언트의 캐시 무효화를 보장합니다.
+4. **버전 4중 동기화**:
+   - `index.html`, `sw.js`, `CHANGELOG.md`, `술술트래블신록.md`의 최신 버전을 동일하게 유지하며 `tools-verify.ps1`로 검사합니다.
 
 ---
 

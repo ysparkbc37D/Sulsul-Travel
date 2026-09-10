@@ -94,12 +94,15 @@ $swVer = if ($mSw.Success) { $mSw.Groups[1].Value } else { "UNKNOWN" }
 $mCl = [regex]::Match($clContent, "##\s*\[v([0-9\.]+)\]")
 $clVer = if ($mCl.Success) { $mCl.Groups[1].Value } else { "UNKNOWN" }
 
-$verMatch = ($appVer -eq $swVer) -and ($appVer -eq $clVer) -and ($appVer -eq $badgeVer) -and ($appVer -ne "UNKNOWN")
-$details = "App: v$appVer | Badge: v$badgeVer | SW: v$swVer | Changelog: v$clVer"
+$mSillok = [regex]::Match($sillokContent, "(?m)^###\s*\[실록\s*\d+호\].*\(v([0-9\.]+)\)\s*$")
+$sillokVer = if ($mSillok.Success) { $mSillok.Groups[1].Value } else { "UNKNOWN" }
+
+$verMatch = ($appVer -eq $swVer) -and ($appVer -eq $clVer) -and ($appVer -eq $badgeVer) -and ($appVer -eq $sillokVer) -and ($appVer -ne "UNKNOWN")
+$details = "App: v$appVer | Badge: v$badgeVer | SW: v$swVer | Changelog: v$clVer | Chronicle: v$sillokVer"
 Report-Gate "Version Synchronization (v$appVer)" $verMatch $details
 
 # ---------------------------------------------------------------
-# [Gate 3/4] Invariant Laws (R-1 ~ R-10) Validation
+# [Gate 3/4] Selected Invariant Laws Validation
 # ---------------------------------------------------------------
 Write-Host ""
 Write-Host "[3/4] Invariant Laws (DOM IDs, Fallback AI & Canvas Normalization)..." -ForegroundColor Yellow
