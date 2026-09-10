@@ -36,7 +36,7 @@ test('travel-stage navigation and reviewed RePlan are wired', () => {
   assert.match(html, /function applyPendingReplan\(/);
   assert.match(html, /protectedSpotsMatch/);
   assert.match(html, /function inferPlanBlockPlace\(day\)/);
-  assert.match(html, /function submitPlanBlockEdit\(\)/);
+  assert.match(html, /function submitPlanBlockEdit\(\{ regenerate = false \} = \{\}\)/);
   assert.match(html, /function openActivePlanBlockReplan\(\)/);
   assert.match(html, /range:\$\{dayIdx\}:\$\{rangeEndIdx\}/);
   assert.match(html, /window\.addEventListener\('popstate'/);
@@ -50,6 +50,17 @@ test('new trip creation passes major cities into the AI itinerary flow', () => {
   assert.match(html, /void generateAiItinerary\(\)/);
   assert.match(html, /우선 방문할 주요 도시\/거점/);
   assert.match(html, /requestedCities\.join\(', '\)/);
+});
+
+test('big plan edits can trigger scoped AI regeneration without a free-travel fallback', () => {
+  assert.match(html, /id=["']btn-save-plan-block-ai["']/);
+  assert.match(html, /submitPlanBlockEdit\(\{ regenerate: true \}\)/);
+  assert.match(html, /function startPlanBlockAiRegeneration\(blockId, reason\)/);
+  assert.match(html, /function buildAiReplanPrompt\(/);
+  assert.match(html, /사용자가 편집하고 저장한 큰 계획/);
+  assert.match(html, /regeneratePlanBlockByIndex\(\$\{index\}\)/);
+  assert.doesNotMatch(html, /countriesStr \? splitTravelList\(countriesStr\) : \['자유여행'\]/);
+  assert.doesNotMatch(html, /State\.createTripSelectedConcepts\.slice\(\)\s*:\s*\['자유여행'\]/);
 });
 
 test('legacy destructive AI paths and mock OCR are absent', () => {
@@ -76,7 +87,7 @@ test('release version is synchronized', () => {
   const app = html.match(/const APP_VER\s*=\s*'([^']+)'/)?.[1];
   const worker = sw.match(/const V\s*=\s*'st-shell-v([^']+)'/)?.[1];
   const release = changelog.match(/## \[v([^\]]+)\]/)?.[1];
-  assert.equal(app, '1.3.5');
+  assert.equal(app, '1.3.6');
   assert.equal(worker, app);
   assert.equal(release, app);
 });
