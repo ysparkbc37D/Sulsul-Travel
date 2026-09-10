@@ -14,7 +14,7 @@
   </script>
 
   <!-- PWA Meta & Icons -->
-  <link rel="manifest" href="manifest.webmanifest?v=1.4.0">
+  <link rel="manifest" href="manifest.webmanifest?v=1.4.3">
   <meta name="theme-color" content="#f5f5f7">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
@@ -29,7 +29,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700;800&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
 
   <!-- Local Utilities Bundle (CDN fallback & tailwind utilities) -->
-  <link rel="stylesheet" href="css/utilities.css?v=1.4.0">
+  <link rel="stylesheet" href="css/utilities.css?v=1.4.3">
   <link rel="stylesheet" href="vendor/fontawesome/css/all.min.css">
 
   <!-- Leaflet Map CSS & JS -->
@@ -624,8 +624,8 @@
     }
   </style>
 
-  <link rel="stylesheet" href="css/companion.css?v=1.4.2">
-  <script src="js/presentation/companion-ui.js?v=1.4.2"></script>
+  <link rel="stylesheet" href="css/companion.css?v=1.4.3">
+  <script src="js/presentation/companion-ui.js?v=1.4.3"></script>
 
   <!-- Knowledge Base Seed & Destination Knowledge Packs (DKP) -->
   <script src="kb-travel.js"></script>
@@ -651,7 +651,7 @@
             <h1 class="font-serif-brand text-base sm:text-xl font-bold tracking-tight text-[#1c1917] dark:text-[#ededed] whitespace-nowrap">
               Sulsul Travel
             </h1>
-            <span id="app-ver-badge" onclick="event.stopPropagation(); openVersionHistoryModal()" class="px-1.5 py-0.5 rounded-md theme-card-subtle hover:border-amber-500/60 hover:text-amber-600 dark:hover:text-amber-300 text-[#a2601b] dark:text-[#d4af37] text-[10px] font-bold font-mono shadow-inner cursor-pointer shrink-0 transition" title="버전 업데이트 기록 보기 (클릭)">v1.4.2</span>
+            <span id="app-ver-badge" onclick="event.stopPropagation(); openVersionHistoryModal()" class="px-1.5 py-0.5 rounded-md theme-card-subtle hover:border-amber-500/60 hover:text-amber-600 dark:hover:text-amber-300 text-[#a2601b] dark:text-[#d4af37] text-[10px] font-bold font-mono shadow-inner cursor-pointer shrink-0 transition" title="버전 업데이트 기록 보기 (클릭)">v1.4.3</span>
           </div>
           <p id="header-trip-name" class="text-[10px] sm:text-[11px] text-[#78716c] dark:text-stone-400 truncate max-w-[120px] sm:max-w-xs font-normal">인생의 모든 여정을 기록하는 다이어리</p>
         </div>
@@ -2770,11 +2770,32 @@
 
       <!-- 버전 목록 스크롤 영역 -->
       <div class="flex-1 overflow-y-auto space-y-3 pr-1 text-xs">
-        <!-- v1.4.0 (Current) -->
-        <div class="p-4 rounded-2xl border-2 border-emerald-500/40 space-y-2.5">
-          <div class="flex items-center justify-between gap-2"><strong>v1.4.0 · 활성 필터 칩 · AI 신호등 · 국가 국기·통화 비주얼 강화</strong><span class="companion-status">최신 버전</span></div>
+        <!-- v1.4.3 (Current) -->
+        <div class="p-4 rounded-2xl border-2 border-emerald-500/40 space-y-2.5 bg-emerald-500/5 dark:bg-emerald-500/10">
+          <div class="flex items-center justify-between gap-2"><div class="flex items-center gap-2 min-w-0"><span class="px-2 py-0.5 rounded-lg bg-emerald-500 text-black font-black text-xs shadow-sm shrink-0">v1.4.3</span><span class="text-xs font-black text-[#1c1917] dark:text-white">모바일 헤더 버전 뱃지 상시 복원 & 히스토리 최신화</span></div><span class="companion-status shrink-0">최신 버전</span></div>
+          <p class="text-xs leading-relaxed">모바일 화면에서 'Sulsul Travel' 로고 옆 버전 뱃지(<code>#app-ver-badge</code>)가 숨겨지던 결함을 완전히 해결하여 상시 표시되도록 복원했습니다. 버전 릴리즈 히스토리 뷰어를 v1.4.1 ~ v1.4.3 최신 상태로 완전 동기화했습니다.</p>
+          <div class="text-[10px] text-stone-400 dark:text-stone-500 pt-1 border-t border-emerald-500/20 flex items-center justify-between"><span>📅 2026-09-11 릴리즈</span><span class="font-mono">st-shell-v1.4.3</span></div>
+        </div>
+
+        <!-- v1.4.2 -->
+        <div class="p-4 rounded-2xl bg-emerald-500/5 dark:bg-emerald-500/10 border-2 border-emerald-500/40 space-y-2.5 shadow-sm relative overflow-hidden">
+          <div class="flex items-center justify-between gap-2"><div class="flex items-center gap-2 min-w-0"><span class="px-2 py-0.5 rounded-lg bg-emerald-500 text-black font-black text-xs shadow-sm shrink-0">v1.4.2</span><span class="text-xs font-black text-[#1c1917] dark:text-white">헤더 정돈 · 모달 흔들림 원천 박멸 · 여행 추가창 클린화</span></div></div>
+          <p class="text-xs leading-relaxed">모바일 헤더에서 깨진 빈 초록 사각형과 중복 요술봉 아이콘을 제거하고 브랜드와 2대 핵심 버튼만 남겨 슬림화했습니다. 설정 모달에 완전 높이 락(86dvh)을 적용하여 탭 전환 및 스크롤 시 화면 출렁임(Jitter)과 좌측 텍스트 잘림을 100% 원천 박멸했습니다. 새 여행 생성창에서 스페인 자동 선택을 제거하고 방문 순서 번호 부여 시스템을 탑재했습니다.</p>
+          <div class="text-[10px] text-stone-400 dark:text-stone-500 pt-1 border-t border-emerald-500/20 flex items-center justify-between"><span>📅 2026-09-11 릴리즈</span><span class="font-mono">st-shell-v1.4.2</span></div>
+        </div>
+
+        <!-- v1.4.1 -->
+        <div class="p-4 rounded-2xl bg-emerald-500/5 dark:bg-emerald-500/10 border-2 border-emerald-500/40 space-y-2.5 shadow-sm relative overflow-hidden">
+          <div class="flex items-center justify-between gap-2"><div class="flex items-center gap-2 min-w-0"><span class="px-2 py-0.5 rounded-lg bg-emerald-500 text-black font-black text-xs shadow-sm shrink-0">v1.4.1</span><span class="text-xs font-black text-[#1c1917] dark:text-white">전 세계 80+ 국가·400+ 도시 스마트 필터 & 순번 선택기</span></div></div>
+          <p class="text-xs leading-relaxed">대륙별 탭과 초성·영문 실시간 검색을 갖춘 전 세계 목적지 DB를 구축했습니다. 국가 선택 시 주요 도시 멀티 칩 보드가 생성되어 터치 순서대로 ①, ②, ③ 순번 뱃지가 매겨지며, 소도시 직접 추가(+ 도시 추가) 및 다국가 여행 경로 체계화를 지원합니다.</p>
+          <div class="text-[10px] text-stone-400 dark:text-stone-500 pt-1 border-t border-emerald-500/20 flex items-center justify-between"><span>📅 2026-09-11 릴리즈</span><span class="font-mono">st-shell-v1.4.1</span></div>
+        </div>
+
+        <!-- v1.4.0 -->
+        <div class="p-4 rounded-2xl bg-emerald-500/5 dark:bg-emerald-500/10 border-2 border-emerald-500/40 space-y-2.5 shadow-sm relative overflow-hidden">
+          <div class="flex items-center justify-between gap-2"><div class="flex items-center gap-2 min-w-0"><span class="px-2 py-0.5 rounded-lg bg-emerald-500 text-black font-black text-xs shadow-sm shrink-0">v1.4.0</span><span class="text-xs font-black text-[#1c1917] dark:text-white">활성 필터 칩 · AI 신호등 · 국가 국기·통화 비주얼</span></div></div>
           <p class="text-xs leading-relaxed">허브 4대 필터에 실시간 활성 태그 칩 및 개별·전체 해제 기능 도입, 상단 헤더 및 AI 설정에 Gemini 연결 상태 신호등(🟢/🟡/🔴) 뱃지 탑재, 전 세계 50+ 국가 국기 및 통화(ISO 4217) 마스터 DB 구축으로 여행 카드 비주얼을 대폭 강화했습니다.</p>
-          <p class="text-[10px]">2026-09-11 · st-shell-v1.4.0</p>
+          <div class="text-[10px] text-stone-400 dark:text-stone-500 pt-1 border-t border-emerald-500/20 flex items-center justify-between"><span>📅 2026-09-11 릴리즈</span><span class="font-mono">st-shell-v1.4.0</span></div>
         </div>
 
         <!-- v1.3.9 -->
@@ -3152,7 +3173,7 @@
 
       <!-- 모달 푸터 -->
       <div class="pt-3 border-t border-[#e8e2d5] dark:border-stone-800 flex items-center justify-between shrink-0">
-        <span class="text-[11px] text-stone-400 dark:text-stone-500 font-mono">Sulsul Travel Engine v1.3.9</span>
+        <span class="text-[11px] text-stone-400 dark:text-stone-500 font-mono">Sulsul Travel Engine v1.4.3</span>
         <button onclick="closeModal('modal-version-history')" class="px-4 py-2 rounded-xl bg-[#faf8f5] dark:bg-stone-800 hover:bg-[#f0ece1] dark:hover:bg-stone-700 border border-[#e8e2d5] dark:border-stone-700 text-[#1c1917] dark:text-[#ededed] text-xs font-bold transition cursor-pointer shadow-sm">
           닫기
         </button>
@@ -3215,7 +3236,7 @@
     window.showToast = showToast;
 
     // 앱 버전 및 글로벌 네임스페이스 (Sulsul-Travel Invariant Rule R-10, R-11, R-12, R-13, R-14, R-15)
-    const APP_VER = '1.4.2';
+    const APP_VER = '1.4.3';
 
     // ══════════════════════════════════════════
     // [Two-Tone Theme System] 라이트 그레이 & 딥 블랙 테마 엔진
