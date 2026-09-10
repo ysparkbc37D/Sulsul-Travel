@@ -1,5 +1,5 @@
 // Sulsul-Travel Service Worker
-const V = 'st-shell-v1.3.4';
+const V = 'st-shell-v1.3.5';
 const CACHE_NAME = V;
 const CACHE_PREFIX = 'st-shell-';
 

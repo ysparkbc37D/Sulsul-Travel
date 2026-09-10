@@ -14,7 +14,7 @@
   </script>
 
   <!-- PWA Meta & Icons -->
-  <link rel="manifest" href="manifest.webmanifest?v=1.3.4">
+  <link rel="manifest" href="manifest.webmanifest?v=1.3.5">
   <meta name="theme-color" content="#f5f5f7">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
@@ -644,7 +644,7 @@
             <h1 class="font-serif-brand text-base sm:text-xl font-bold tracking-tight text-[#1c1917] dark:text-[#ededed] whitespace-nowrap">
               Sulsul Travel
             </h1>
-            <span id="app-ver-badge" onclick="event.stopPropagation(); openVersionHistoryModal()" class="px-1.5 py-0.5 rounded-md theme-card-subtle hover:border-amber-500/60 hover:text-amber-600 dark:hover:text-amber-300 text-[#a2601b] dark:text-[#d4af37] text-[10px] font-bold font-mono shadow-inner cursor-pointer shrink-0 transition" title="버전 업데이트 기록 보기 (클릭)">v1.3.4</span>
+            <span id="app-ver-badge" onclick="event.stopPropagation(); openVersionHistoryModal()" class="px-1.5 py-0.5 rounded-md theme-card-subtle hover:border-amber-500/60 hover:text-amber-600 dark:hover:text-amber-300 text-[#a2601b] dark:text-[#d4af37] text-[10px] font-bold font-mono shadow-inner cursor-pointer shrink-0 transition" title="버전 업데이트 기록 보기 (클릭)">v1.3.5</span>
           </div>
           <p id="header-trip-name" class="text-[10px] sm:text-[11px] text-[#78716c] dark:text-stone-400 truncate max-w-[120px] sm:max-w-xs font-normal">인생의 모든 여정을 기록하는 다이어리</p>
         </div>
@@ -1642,6 +1642,12 @@
           <input type="text" id="trip-form-countries" placeholder="예: 스페인, 포르투갈 (바르셀로나, 리스본)" class="w-full px-3 py-2 bg-[#faf8f5] border border-[#e8e2d5] rounded-xl text-[#1c1917] focus:outline-none focus:border-[#a2601b]">
         </div>
 
+        <div>
+          <label class="font-bold text-[#1c1917] block mb-1">주요 도시 / 거점 (쉼표 구분)</label>
+          <input type="text" id="trip-form-cities" placeholder="예: 마드리드, 톨레도, 그라나다, 세비야, 바르셀로나" class="w-full px-3 py-2 bg-[#faf8f5] border border-[#e8e2d5] rounded-xl text-[#1c1917] focus:outline-none focus:border-[#a2601b]">
+          <p class="text-[10px] text-[#78716c] mt-1">입력한 도시는 AI 일정의 거점과 이동 순서에 우선 반영됩니다.</p>
+        </div>
+
         <!-- 여행 컨셉 멀티 칩 선택 -->
         <div>
           <label class="font-bold text-[#1c1917] block mb-1.5">여행 컨셉 및 테마 (복수 선택 가능)</label>
@@ -2424,7 +2430,7 @@
             <i class="fa-solid fa-clock-rotate-left text-[#a2601b] dark:text-[#d4af37]"></i>
             <span>술술트래블 엔진 버전 & 릴리즈 히스토리</span>
           </span>
-          <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-500/10 text-[#a2601b] dark:text-[#d4af37] border border-amber-500/30">v1.3.4</span>
+          <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-500/10 text-[#a2601b] dark:text-[#d4af37] border border-amber-500/30">v1.3.5</span>
         </div>
         <p class="text-[11px] text-[#78716c] dark:text-stone-400 leading-relaxed">
           술술 오도미터 순차 올림 원칙에 따른 전체 버전별 기능 추가, UI/UX 개선, 버그 해결 이력을 확인합니다.
@@ -2678,9 +2684,16 @@
 
       <!-- 버전 목록 스크롤 영역 -->
       <div class="flex-1 overflow-y-auto space-y-3 pr-1 text-xs">
-        <!-- v1.3.4 (Current) -->
+        <!-- v1.3.5 (Current) -->
         <div class="p-4 rounded-2xl bg-emerald-500/5 dark:bg-emerald-500/10 border-2 border-emerald-500/40 space-y-2.5 shadow-sm relative overflow-hidden">
-          <div class="flex items-center justify-between gap-2"><div class="flex items-center gap-2 min-w-0"><span class="px-2 py-0.5 rounded-lg bg-emerald-500 text-black font-black text-xs shadow-sm shrink-0">v1.3.4</span><span class="text-xs font-black text-[#1c1917] dark:text-white">AI 여행기 저장 안정화</span></div><span class="px-2 py-0.5 rounded-full text-[10px] font-black bg-emerald-100 text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300 border border-emerald-300 shrink-0">최신 버전</span></div>
+          <div class="flex items-center justify-between gap-2"><div class="flex items-center gap-2 min-w-0"><span class="px-2 py-0.5 rounded-lg bg-emerald-500 text-black font-black text-xs shadow-sm shrink-0">v1.3.5</span><span class="text-xs font-black text-[#1c1917] dark:text-white">주요 도시 기반 AI 여행 생성</span></div><span class="px-2 py-0.5 rounded-full text-[10px] font-black bg-emerald-100 text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300 border border-emerald-300 shrink-0">최신 버전</span></div>
+          <div class="text-[11px] text-[#44403c] dark:text-stone-300 space-y-1.5 leading-relaxed"><div><b>AI 자동 설계 실제 호출</b>: 새 여행 생성 시 Gemini 초안 생성 → 검토 → 승인 흐름을 실행.</div><div><b>주요 도시 입력</b>: 국가·지역과 분리된 도시/거점 입력을 AI 프롬프트와 초기 계획에 전달.</div><div><b>목록 파싱 개선</b>: 괄호 안 도시와 쉼표 목록을 안전하게 분리해 기본 자유여행 값으로 잘못 떨어지는 경로를 줄임.</div></div>
+          <div class="text-[10px] text-stone-400 dark:text-stone-500 pt-1 border-t border-emerald-500/20 flex items-center justify-between"><span>📅 2026-09-10 릴리즈</span><span class="font-mono">st-shell-v1.3.5</span></div>
+        </div>
+
+        <!-- v1.3.4 -->
+        <div class="p-4 rounded-2xl bg-emerald-500/5 dark:bg-emerald-500/10 border-2 border-emerald-500/40 space-y-2.5 shadow-sm relative overflow-hidden">
+          <div class="flex items-center justify-between gap-2"><div class="flex items-center gap-2 min-w-0"><span class="px-2 py-0.5 rounded-lg bg-emerald-500 text-black font-black text-xs shadow-sm shrink-0">v1.3.4</span><span class="text-xs font-black text-[#1c1917] dark:text-white">AI 여행기 저장 안정화</span></div></div>
           <div class="text-[11px] text-[#44403c] dark:text-stone-300 space-y-1.5 leading-relaxed"><div><b>저장 공간 초과 대응</b>: 사진이 많은 모바일 여행에서도 승인한 AI 여행기 문장을 IndexedDB 보조 저장소에 보관.</div><div><b>자동 복구</b>: 앱 재실행 시 보조 저장된 여행기를 원래 여행 카드에 다시 병합.</div><div><b>기존 데이터 보호</b>: localStorage 저장 실패 시 원본 여행 데이터는 건드리지 않고 승인 초안만 별도 보관.</div></div>
           <div class="text-[10px] text-stone-400 dark:text-stone-500 pt-1 border-t border-emerald-500/20 flex items-center justify-between"><span>📅 2026-09-10 릴리즈</span><span class="font-mono">st-shell-v1.3.4</span></div>
         </div>
@@ -3018,7 +3031,7 @@
 
       <!-- 모달 푸터 -->
       <div class="pt-3 border-t border-[#e8e2d5] dark:border-stone-800 flex items-center justify-between shrink-0">
-        <span class="text-[11px] text-stone-400 dark:text-stone-500 font-mono">Sulsul Travel Engine v1.3.4</span>
+        <span class="text-[11px] text-stone-400 dark:text-stone-500 font-mono">Sulsul Travel Engine v1.3.5</span>
         <button onclick="closeModal('modal-version-history')" class="px-4 py-2 rounded-xl bg-[#faf8f5] dark:bg-stone-800 hover:bg-[#f0ece1] dark:hover:bg-stone-700 border border-[#e8e2d5] dark:border-stone-700 text-[#1c1917] dark:text-[#ededed] text-xs font-bold transition cursor-pointer shadow-sm">
           닫기
         </button>
@@ -3081,7 +3094,7 @@
     window.showToast = showToast;
 
     // 앱 버전 및 글로벌 네임스페이스 (Sulsul-Travel Invariant Rule R-10, R-11, R-12, R-13, R-14, R-15)
-    const APP_VER = '1.3.4';
+    const APP_VER = '1.3.5';
 
     // ══════════════════════════════════════════
     // [Two-Tone Theme System] 라이트 그레이 & 딥 블랙 테마 엔진
@@ -7564,6 +7577,8 @@
       if (titleInput) titleInput.value = '';
       const countriesInput = document.getElementById('trip-form-countries');
       if (countriesInput) countriesInput.value = '';
+      const citiesInput = document.getElementById('trip-form-cities');
+      if (citiesInput) citiesInput.value = '';
       const styleInput = document.getElementById('trip-form-style');
       if (styleInput) styleInput.value = '';
       const budgetInput = document.getElementById('trip-form-budget');
@@ -8165,6 +8180,24 @@
       return days;
     }
 
+    function splitTravelList(value) {
+      const result = [];
+      let current = '';
+      let depth = 0;
+      for (const char of String(value || '')) {
+        if (char === '(' || char === '[') depth += 1;
+        if (char === ')' || char === ']') depth = Math.max(0, depth - 1);
+        if (char === ',' && depth === 0) {
+          if (current.trim()) result.push(current.trim());
+          current = '';
+        } else {
+          current += char;
+        }
+      }
+      if (current.trim()) result.push(current.trim());
+      return result;
+    }
+
     function submitCreateTrip() {
       try {
         const title = document.getElementById('trip-form-title').value.trim();
@@ -8173,6 +8206,7 @@
         const curr = document.getElementById('trip-form-curr').value;
         const budget = parseInt(document.getElementById('trip-form-budget').value) || 3000000;
         const countriesStr = document.getElementById('trip-form-countries').value.trim();
+        const citiesStr = document.getElementById('trip-form-cities')?.value.trim() || '';
         const style = document.getElementById('trip-form-style').value.trim();
         const arrivalTime = document.getElementById('trip-form-arrival-time') ? document.getElementById('trip-form-arrival-time').value.trim() : '14:00';
         const departureTime = document.getElementById('trip-form-departure-time') ? document.getElementById('trip-form-departure-time').value.trim() : '17:00';
@@ -8184,7 +8218,8 @@
           return;
         }
 
-        const countries = countriesStr ? countriesStr.split(',').map(s => s.trim()).filter(Boolean) : ['자유여행'];
+        const countries = countriesStr ? splitTravelList(countriesStr) : ['자유여행'];
+        const explicitCities = splitTravelList(citiesStr);
         let durationDays = 5;
         if (start && end) {
           durationDays = Math.max(1, Math.ceil((new Date(end) - new Date(start)) / (1000 * 60 * 60 * 24)) + 1);
@@ -8195,23 +8230,39 @@
           : ['자유여행'];
 
         let days = [];
-        const tempTrip = { title, countries };
+        let shouldGenerateAi = false;
+        const hasGeminiKey = Boolean(cleanApiKey(State.geminiKey || localStorage.getItem('st_gemini_key')));
+        const tempTrip = { title, countries, cities: explicitCities };
         const pack = resolveTripPack(tempTrip);
         const isYN = isYunnanTrip(tempTrip);
         const isSA = isSouthAmericaTrip(tempTrip);
 
         // 스팟 생성용 주요 여행지명 정규화 (괄호 등 정돈)
-        let primaryDest = countries[0] || '여행지';
+        const inferredCities = countries.flatMap(item => {
+          const match = item.match(/\(([^)]+)\)/);
+          return match ? match[1].split(/[,/]/).map(s => s.trim()).filter(Boolean) : [];
+        });
+        const requestedCities = [...explicitCities, ...inferredCities].filter((city, index, list) => city && list.indexOf(city) === index);
+        let primaryDest = requestedCities[0] || countries[0] || '여행지';
         primaryDest = primaryDest.replace(/[()[\]]/g, ' ').trim();
-        if (primaryDest.includes(' ')) {
-          primaryDest = primaryDest.split(' ')[0];
-        }
+        if (primaryDest.includes(' ')) primaryDest = primaryDest.split(/\s+/)[0];
 
-        if (aiAuto) {
+        if (aiAuto && hasGeminiKey) {
+          shouldGenerateAi = true;
+          const dayDate = (offset) => {
+            if (!start) return `Day ${offset + 1}`;
+            const date = new Date(`${start}T00:00:00`);
+            date.setDate(date.getDate() + offset);
+            return date.toISOString().slice(0, 10);
+          };
+          for (let i = 1; i <= durationDays; i++) {
+            days.push({ dayNum: i, title: `Day ${i} ${primaryDest || '여행'} 계획`, date: dayDate(i - 1), city: requestedCities[i - 1] || primaryDest || '도시', spots: [] });
+          }
+        } else if (aiAuto) {
           if (pack && pack.hasGoldenCourse && typeof pack.getGoldenItinerary === 'function') {
             days = pack.getGoldenItinerary(durationDays);
           } else {
-            const fullDestContext = (countriesStr ? countriesStr + ' ' : '') + (title || primaryDest || '여행지');
+            const fullDestContext = (countriesStr ? countriesStr + ' ' : '') + (citiesStr ? citiesStr + ' ' : '') + (title || primaryDest || '여행지');
             days = generateAutoSpotsForTrip(primaryDest || '여행지', durationDays, concepts, wishlist, arrivalTime, departureTime, fullDestContext);
           }
         } else {
@@ -8231,7 +8282,7 @@
           tripCities = pack.geo.destinations.map(d => d.nameKo || (d.name ? d.name.split(' ')[0] : d.id));
         } else {
           // wishlist 및 countries로부터 방문 도시 추출
-          const rawCities = [];
+          const rawCities = [...requestedCities];
           if (wishlist) {
             wishlist.split(/[,\n]/).map(s => s.trim()).filter(Boolean).forEach(w => {
               const clean = w.replace(/[()[\]]/g, '').trim();
@@ -8239,7 +8290,7 @@
             });
           }
           countries.forEach(c => {
-            const parts = c.split(/[()/,]/).map(p => p.trim()).filter(Boolean);
+            const parts = c.replace(/[()[\]]/g, ',').split(',').map(p => p.trim()).filter(Boolean);
             parts.forEach(p => {
               if (p && !rawCities.includes(p)) rawCities.push(p);
             });
@@ -8337,8 +8388,14 @@
         closeModal('modal-create-trip', true);
 
         switchView('workspace');
-        if (aiAuto) {
-          showToast('✨ AI 30분 맞춤 일정이 포함된 여행 카드가 생성되었습니다!');
+        if (shouldGenerateAi) {
+          const aiPromptInput = document.getElementById('ai-trip-prompt');
+          if (aiPromptInput) aiPromptInput.value = [style, wishlist, requestedCities.length ? `주요 도시: ${requestedCities.join(', ')}` : ''].filter(Boolean).join(' · ');
+          openModal('modal-ai-trip');
+          showToast('🤖 입력한 도시와 기간을 바탕으로 AI 일정 초안을 만드는 중입니다.', 3500);
+          void generateAiItinerary();
+        } else if (aiAuto) {
+          showToast('⚠️ Gemini API 키가 없어 기본 일정으로 생성했습니다. 키를 등록하면 AI 일정으로 다시 설계할 수 있습니다.', 5000);
         } else {
           openModal('modal-ai-trip');
         }
@@ -9291,8 +9348,10 @@ ${JSON.stringify(snapshotDays)}`;
       loader.classList.remove('hidden');
       const arrivalNote = trip.arrivalTime ? `\n첫날 현지 도착 예정 시간: ${trip.arrivalTime} (집 출발, 공항 이동/수속, 항공 이동, 호텔 체크인 고려)` : '';
       const departureNote = trip.departureTime ? `\n마지막날 현지 종료/비행 예정 시간: ${trip.departureTime} (체크아웃, 공항 이동, 출국 수속, 귀국 비행기 고려)` : '';
+      const cityNote = Array.isArray(trip.cities) && trip.cities.length ? `\n우선 방문할 주요 도시/거점(입력 순서 존중): ${trip.cities.join(', ')}` : '';
       const prompt = `당신은 여행 일정 편집자입니다. 확정 사실을 지어내지 말고 추천 후보만 만드세요.
 여행지: ${(trip.countries || []).join(', ')}
+${cityNote}
 기간: ${trip.durationDays || 5}일
 테마: ${userPrompt || trip.style || trip.subtitle || '랜드마크 & 미식'}${arrivalNote}${departureNote}
 JSON 배열만 출력하세요. 각 day는 dayNum, title, city, spots를 포함하고 각 spot은 time(HH:MM), cat, title, desc, tip, cost를 포함해야 합니다.`;

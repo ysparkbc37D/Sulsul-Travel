@@ -44,6 +44,14 @@ test('travel-stage navigation and reviewed RePlan are wired', () => {
   assert.match(sw, /const CACHE_PREFIX = 'st-shell-'/);
 });
 
+test('new trip creation passes major cities into the AI itinerary flow', () => {
+  assert.match(html, /id=["']trip-form-cities["']/);
+  assert.match(html, /let shouldGenerateAi =/);
+  assert.match(html, /void generateAiItinerary\(\)/);
+  assert.match(html, /우선 방문할 주요 도시\/거점/);
+  assert.match(html, /requestedCities\.join\(', '\)/);
+});
+
 test('legacy destructive AI paths and mock OCR are absent', () => {
   assert.doesNotMatch(html, /trip\.days\s*=\s*parsedDays/);
   assert.doesNotMatch(html, /mockReceiptOcr/);
@@ -68,7 +76,7 @@ test('release version is synchronized', () => {
   const app = html.match(/const APP_VER\s*=\s*'([^']+)'/)?.[1];
   const worker = sw.match(/const V\s*=\s*'st-shell-v([^']+)'/)?.[1];
   const release = changelog.match(/## \[v([^\]]+)\]/)?.[1];
-  assert.equal(app, '1.3.4');
+  assert.equal(app, '1.3.5');
   assert.equal(worker, app);
   assert.equal(release, app);
 });
