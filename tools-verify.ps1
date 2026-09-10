@@ -122,12 +122,12 @@ foreach ($id in $mandatoryIds) {
 }
 Report-Gate "Mandatory DOM IDs Intact (R-10)" ($missingIds.Count -eq 0) "Checked: $($mandatoryIds.Count) IDs $(if($missingIds){'| Missing: ' + ($missingIds -join ', ')})"
 
-# R-5: Gemini Multi-Model Fallback Chain
-$hasGemini25Flash = $indexContent -match "gemini-2.5-flash"
-$hasGemini25Lite = $indexContent -match "gemini-2.5-flash-lite"
-$hasGemini25Pro = $indexContent -match "gemini-2.5-pro"
-$has3TierFallback = $hasGemini25Flash -and $hasGemini25Lite -and $hasGemini25Pro
-Report-Gate "Gemini 2.5 3-Tier Multi-Model Fallback Chain (R-5)" $has3TierFallback "2.5-flash: $hasGemini25Flash | 2.5-flash-lite: $hasGemini25Lite | 2.5-pro: $hasGemini25Pro"
+# R-5: Gemini Free-Tier Multi-Model Fallback Chain
+$hasGemini31Lite = $indexContent -match "gemini-3.1-flash-lite"
+$hasGemini35Lite = $indexContent -match "gemini-3.5-flash-lite"
+$hasGemini35Flash = $indexContent -match "gemini-3.5-flash"
+$has3TierFallback = $hasGemini31Lite -and $hasGemini35Lite -and $hasGemini35Flash
+Report-Gate "Gemini Free-Tier 3-Tier Multi-Model Fallback Chain (R-5)" $has3TierFallback "3.1-flash-lite: $hasGemini31Lite | 3.5-flash-lite: $hasGemini35Lite | 3.5-flash: $hasGemini35Flash"
 
 # R-4: 3:4 Canvas Photo Normalization
 $hasCanvasCrop = ($indexContent -match "canvas\.width\s*=\s*336") -and ($indexContent -match "canvas\.height\s*=\s*448")

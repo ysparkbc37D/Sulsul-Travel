@@ -24,6 +24,12 @@
 - [ ] 항공권/호텔 예약 바우처 PDF 자동 파싱 일정 등록
 - [ ] 여행 동행자 실시간 음성 메모 AI 다이어리 자동 변환
 
+## [v1.3.3] - 2026-09-10
+### 🔧 신규 사용자 무료 Gemini 연결
+1. **무료 티어 우선 모델**: 신규 프로젝트 접근이 제한된 `gemini-2.5-pro` 대신 무료 티어가 명시된 `gemini-3.1-flash-lite`를 1순위로 사용.
+2. **안정 폴백**: `gemini-3.5-flash-lite` → `gemini-3.5-flash` 순서로 재시도해 모델별 접근 제한과 일시 오류에 대응.
+3. **상태 문구 정정**: AI 비서의 오래된 `Gemini 2.0 Flash 연동됨` 표시를 `Gemini 3.1 Flash-Lite 연동됨`으로 갱신.
+
 ## [v1.3.2] - 2026-09-10
 ### 🔧 Gemini 연결 안정화
 1. **최신 모델 폴백**: 종료된 `gemini-2.0-flash`·`gemini-1.5-flash` 대신 `gemini-2.5-flash` → `gemini-2.5-flash-lite` → `gemini-2.5-pro` 순서로 호출.

@@ -49,7 +49,7 @@ test('legacy destructive AI paths and mock OCR are absent', () => {
 });
 
 test('Gemini uses current models and header based API key transport', () => {
-  assert.match(html, /const AI_MODELS = \['gemini-2\.5-flash', 'gemini-2\.5-flash-lite', 'gemini-2\.5-pro'\]/);
+  assert.match(html, /const AI_MODELS = \['gemini-3\.1-flash-lite', 'gemini-3\.5-flash-lite', 'gemini-3\.5-flash'\]/);
   assert.match(html, /models\/\$\{AI_MODELS\[0\]\}:generateContent/);
   assert.match(html, /'x-goog-api-key': candidateKey/);
   assert.match(html, /'x-goog-api-key': key/);
@@ -60,7 +60,7 @@ test('release version is synchronized', () => {
   const app = html.match(/const APP_VER\s*=\s*'([^']+)'/)?.[1];
   const worker = sw.match(/const V\s*=\s*'st-shell-v([^']+)'/)?.[1];
   const release = changelog.match(/## \[v([^\]]+)\]/)?.[1];
-  assert.equal(app, '1.3.2');
+  assert.equal(app, '1.3.3');
   assert.equal(worker, app);
   assert.equal(release, app);
 });
