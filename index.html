@@ -14,7 +14,7 @@
   </script>
 
   <!-- PWA Meta & Icons -->
-  <link rel="manifest" href="manifest.webmanifest?v=1.3.8">
+  <link rel="manifest" href="manifest.webmanifest?v=1.3.9">
   <meta name="theme-color" content="#f5f5f7">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
@@ -29,7 +29,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700;800&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
 
   <!-- Tailwind CSS & FontAwesome -->
-  <link rel="stylesheet" href="css/utilities.css?v=1.3.8">
+  <link rel="stylesheet" href="css/utilities.css?v=1.3.9">
   <link rel="stylesheet" href="vendor/fontawesome/css/all.min.css">
 
   <!-- Leaflet Map CSS & JS -->
@@ -244,17 +244,18 @@
     }
     .tap-target { min-width: 44px; min-height: 44px; }
     #modal-settings .sheet-box {
-      max-height: calc(100dvh - var(--safe-top));
-      padding-bottom: max(1.25rem, var(--safe-bottom));
+      display: flex;
+      flex-direction: column;
+      max-height: min(88vh, calc(100dvh - var(--safe-top) - 1.5rem));
       overscroll-behavior: contain;
+      padding: 1.25rem;
     }
-    #modal-settings .sheet-box > div:first-child {
-      position: sticky;
-      top: -1.25rem;
-      z-index: 5;
-      margin-top: -1.25rem;
-      padding-top: 1.25rem;
-      background: var(--surface);
+    #modal-settings-content {
+      flex: 1;
+      overflow-y: auto;
+      overscroll-behavior: contain;
+      -webkit-overflow-scrolling: touch;
+      padding-right: 2px;
     }
     @media (min-width: 640px) {
       .sheet-container {
@@ -599,8 +600,8 @@
     }
   </style>
 
-  <link rel="stylesheet" href="css/companion.css?v=1.3.8">
-  <script src="js/presentation/companion-ui.js?v=1.3.8"></script>
+  <link rel="stylesheet" href="css/companion.css?v=1.3.9">
+  <script src="js/presentation/companion-ui.js?v=1.3.9"></script>
 
   <!-- Knowledge Base Seed & Destination Knowledge Packs (DKP) -->
   <script src="kb-travel.js"></script>
@@ -626,7 +627,7 @@
             <h1 class="font-serif-brand text-base sm:text-xl font-bold tracking-tight text-[#1c1917] dark:text-[#ededed] whitespace-nowrap">
               Sulsul Travel
             </h1>
-            <span id="app-ver-badge" onclick="event.stopPropagation(); openVersionHistoryModal()" class="px-1.5 py-0.5 rounded-md theme-card-subtle hover:border-amber-500/60 hover:text-amber-600 dark:hover:text-amber-300 text-[#a2601b] dark:text-[#d4af37] text-[10px] font-bold font-mono shadow-inner cursor-pointer shrink-0 transition" title="버전 업데이트 기록 보기 (클릭)">v1.3.8</span>
+            <span id="app-ver-badge" onclick="event.stopPropagation(); openVersionHistoryModal()" class="px-1.5 py-0.5 rounded-md theme-card-subtle hover:border-amber-500/60 hover:text-amber-600 dark:hover:text-amber-300 text-[#a2601b] dark:text-[#d4af37] text-[10px] font-bold font-mono shadow-inner cursor-pointer shrink-0 transition" title="버전 업데이트 기록 보기 (클릭)">v1.3.9</span>
           </div>
           <p id="header-trip-name" class="text-[10px] sm:text-[11px] text-[#78716c] dark:text-stone-400 truncate max-w-[120px] sm:max-w-xs font-normal">인생의 모든 여정을 기록하는 다이어리</p>
         </div>
@@ -720,33 +721,46 @@
         </button>
       </div>
 
-      <!-- 3. 드롭다운 3대 정밀 필터 (모바일 3컬럼 완벽 1줄 배치, 1픽셀도 잘림 없음) -->
-      <div class="grid grid-cols-3 gap-1.5 sm:gap-2">
-        <!-- 국가 필터 -->
-        <select id="hub-filter-country" onchange="handleHubFilterChange()" class="w-full px-2 py-1.5 bg-[#faf8f5] dark:bg-[#0f1117] border border-[#e8e2d5] dark:border-stone-700 rounded-xl text-[11px] sm:text-xs font-bold text-[#44403c] dark:text-stone-200 focus:outline-none focus:border-[#a2601b] cursor-pointer truncate shadow-sm">
-          <option value="all">전체 국가</option>
-        </select>
+      <!-- 3. 드롭다운 4대 정밀 필터 (국가, 도시, 컨셉, 필터 - 모바일 2x2, 데스크톱 4열 최적화) -->
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-1.5 sm:gap-2">
+        <!-- 1. 국가 필터 -->
+        <div class="relative">
+          <select id="hub-filter-country" onchange="handleHubCountryChange()" class="w-full px-2.5 py-2 bg-[#faf8f5] dark:bg-[#0f1117] border border-[#e8e2d5] dark:border-stone-700 rounded-xl text-xs font-bold text-[#44403c] dark:text-stone-200 focus:outline-none focus:border-[#a2601b] cursor-pointer truncate shadow-sm">
+            <option value="all">전체 국가</option>
+          </select>
+        </div>
 
-        <!-- 컨셉 필터 -->
-        <select id="hub-filter-concept" onchange="handleHubFilterChange()" class="w-full px-2 py-1.5 bg-[#faf8f5] dark:bg-[#0f1117] border border-[#e8e2d5] dark:border-stone-700 rounded-xl text-[11px] sm:text-xs font-bold text-[#44403c] dark:text-stone-200 focus:outline-none focus:border-[#a2601b] cursor-pointer truncate shadow-sm">
-          <option value="all">전체 컨셉</option>
-          <option value="배낭">🎒 배낭여행</option>
-          <option value="럭셔리">👑 럭셔리</option>
-          <option value="가족">👨‍👩‍👧 가족여행</option>
-          <option value="맛집">🍽️ 맛집/미식</option>
-          <option value="가성비">💰 가성비</option>
-          <option value="자연">🏞️ 대자연</option>
-          <option value="문화">🏛️ 역사/문화</option>
-          <option value="힐링">🧘 힐링</option>
-        </select>
+        <!-- 2. 도시 필터 -->
+        <div class="relative">
+          <select id="hub-filter-city" onchange="handleHubFilterChange()" class="w-full px-2.5 py-2 bg-[#faf8f5] dark:bg-[#0f1117] border border-[#e8e2d5] dark:border-stone-700 rounded-xl text-xs font-bold text-[#44403c] dark:text-stone-200 focus:outline-none focus:border-[#a2601b] cursor-pointer truncate shadow-sm">
+            <option value="all">전체 도시</option>
+          </select>
+        </div>
 
-        <!-- 정렬 필터 -->
-        <select id="hub-filter-sort" onchange="handleHubFilterChange()" class="w-full px-2 py-1.5 bg-[#faf8f5] dark:bg-[#0f1117] border border-[#e8e2d5] dark:border-stone-700 rounded-xl text-[11px] sm:text-xs font-bold text-[#44403c] dark:text-stone-200 focus:outline-none focus:border-[#a2601b] cursor-pointer truncate shadow-sm">
-          <option value="latest">최신 등록순</option>
-          <option value="date-asc">출발일 빠른순</option>
-          <option value="budget-desc">예산 높은순</option>
-          <option value="budget-asc">예산 낮은순</option>
-        </select>
+        <!-- 3. 컨셉 필터 -->
+        <div class="relative">
+          <select id="hub-filter-concept" onchange="handleHubFilterChange()" class="w-full px-2.5 py-2 bg-[#faf8f5] dark:bg-[#0f1117] border border-[#e8e2d5] dark:border-stone-700 rounded-xl text-xs font-bold text-[#44403c] dark:text-stone-200 focus:outline-none focus:border-[#a2601b] cursor-pointer truncate shadow-sm">
+            <option value="all">전체 컨셉</option>
+            <option value="배낭">🎒 배낭여행</option>
+            <option value="럭셔리">👑 럭셔리</option>
+            <option value="가족">👨‍👩‍👧 가족여행</option>
+            <option value="맛집">🍽️ 맛집/미식</option>
+            <option value="가성비">💰 가성비</option>
+            <option value="자연">🏞️ 대자연</option>
+            <option value="문화">🏛️ 역사/문화</option>
+            <option value="힐링">🧘 힐링</option>
+          </select>
+        </div>
+
+        <!-- 4. 정렬/세부 필터 -->
+        <div class="relative">
+          <select id="hub-filter-sort" onchange="handleHubFilterChange()" class="w-full px-2.5 py-2 bg-[#faf8f5] dark:bg-[#0f1117] border border-[#e8e2d5] dark:border-stone-700 rounded-xl text-xs font-bold text-[#44403c] dark:text-stone-200 focus:outline-none focus:border-[#a2601b] cursor-pointer truncate shadow-sm">
+            <option value="latest">최신 등록순</option>
+            <option value="date-asc">출발일 빠른순</option>
+            <option value="budget-desc">예산 높은순</option>
+            <option value="budget-asc">예산 낮은순</option>
+          </select>
+        </div>
       </div>
 
     </div>
@@ -2110,325 +2124,295 @@
   <!-- ========================================== -->
   <div id="modal-settings" class="sheet-container sheet-closed">
     <div class="sheet-scrim" onclick="closeModal('modal-settings')"></div>
-    <div class="sheet-box max-w-xl p-5 sm:p-7 space-y-5 max-h-[90vh] overflow-y-auto">
-      <!-- 헤더 -->
-      <div class="flex items-center justify-between border-b border-[#e8e2d5] pb-3 shrink-0">
+    <div class="sheet-box max-w-xl p-4 sm:p-6 space-y-3.5">
+      <!-- 헤더 (고정) -->
+      <div class="flex items-center justify-between border-b border-[#e8e2d5] dark:border-stone-800 pb-3 shrink-0">
         <div class="flex items-center gap-2.5">
-          <span class="w-8 h-8 rounded-xl bg-[#fdf6ec] text-[#a2601b] border border-[#f5dfb8] flex items-center justify-center text-sm shadow-inner">
+          <span class="w-8 h-8 rounded-xl bg-[#fdf6ec] dark:bg-amber-950/40 text-[#a2601b] dark:text-[#d4af37] border border-[#f5dfb8] dark:border-amber-800/60 flex items-center justify-center text-sm shadow-inner">
             <i class="fa-solid fa-sliders"></i>
           </span>
           <div>
-            <h3 class="text-base font-black text-[#1c1917]">술술트래블 환경설정 & 아카이브</h3>
-            <p class="text-[11px] text-[#78716c]">데이터 보관, 남미 가이드 관리, Gemini API 키 및 클라우드 공유</p>
+            <h3 class="text-base font-black text-[#1c1917] dark:text-stone-100">환경설정 & 아카이브</h3>
+            <p class="text-[11px] text-[#78716c] dark:text-stone-400">화면 테마, Gemini AI, 클라우드 동기화 및 데이터 관리</p>
           </div>
         </div>
-        <button onclick="closeModal('modal-settings')" class="w-7 h-7 rounded-lg bg-[#faf8f5] hover:bg-[#f0ece1] text-[#78716c] hover:text-[#1c1917] flex items-center justify-center text-sm transition cursor-pointer">✕</button>
+        <button onclick="closeModal('modal-settings')" class="w-7 h-7 rounded-lg bg-[#faf8f5] dark:bg-stone-800 hover:bg-[#f0ece1] dark:hover:bg-stone-700 text-[#78716c] dark:text-stone-300 flex items-center justify-center text-sm transition cursor-pointer">✕</button>
       </div>
 
-      <!-- 0. 컬러 테마 설정 (Sulsul-Diary 정통 라이트 그레이 & 딥 블랙) -->
-      <div class="p-4 rounded-xl theme-card space-y-2.5 shadow-sm">
-        <div class="flex items-center justify-between">
-          <span class="text-xs font-black flex items-center gap-1.5" style="color: var(--ink);">
-            <i class="fa-solid fa-circle-half-stroke text-[#a2601b] dark:text-[#d4af37]"></i>
-            <span>컬러 테마 설정 (Two-Tone Theme)</span>
-          </span>
-          <span id="settings-current-theme-badge" class="text-[10px] font-black px-2.5 py-0.5 rounded-full bg-amber-100 dark:bg-amber-950/50 text-amber-950 dark:text-amber-300 border border-amber-300 dark:border-amber-700">라이트 그레이</span>
-        </div>
-        <p class="text-[11px] leading-relaxed" style="color: var(--ink2);">
-          주간 시인성이 뛰어난 애플 포그 <b>라이트 그레이</b>와 야간 눈부심을 줄인 <b>딥 블랙(Deep Onyx)</b> 럭셔리 모드를 자유롭게 전환할 수 있습니다.
-        </p>
-        <div class="grid grid-cols-2 gap-2 pt-1">
-          <button id="btn-theme-light" onclick="setTheme('light')" class="py-2.5 px-3 rounded-xl border font-black text-xs flex items-center justify-center gap-2 transition cursor-pointer">
-            <span class="text-sm">☀️</span>
-            <span id="btn-theme-light-txt">라이트 그레이</span>
-          </button>
-          <button id="btn-theme-dark" onclick="setTheme('dark')" class="py-2.5 px-3 rounded-xl border font-black text-xs flex items-center justify-center gap-2 transition cursor-pointer">
-            <span class="text-sm">🌙</span>
-            <span id="btn-theme-dark-txt">딥 블랙</span>
-          </button>
-        </div>
-      </div>
-
-      <!-- 1. 남미 22일 예제 가이드 삭제 및 복원 관리 -->
-      <div class="p-4 rounded-xl bg-white dark:bg-[#16181d] border border-[#e8e2d5] dark:border-stone-800 space-y-2.5 shadow-sm">
-        <div class="flex items-center justify-between">
-          <span class="text-xs font-black text-[#1c1917] dark:text-[#ededed] flex items-center gap-1.5">
-            <i class="fa-solid fa-map-location-dot text-[#a2601b]"></i>
-            <span>남미 4개국 22일 가이드 예제 관리</span>
-          </span>
-          <span class="text-[10px] font-black px-2.5 py-0.5 rounded-full bg-amber-100 dark:bg-amber-950/50 text-amber-950 dark:text-amber-300 border border-amber-300 dark:border-amber-700">공식 가이드</span>
-        </div>
-        <p class="text-[11px] text-[#78716c] dark:text-stone-400 leading-relaxed">
-          초기 제공되는 [2026 남미 4개국 3주 최적화 황금 여정] 22일 가이드 예제를 삭제하여 나만의 여행만 심플하게 관리하거나, 언제든 원본 가이드로 즉시 복원할 수 있습니다.
-        </p>
-        <div class="flex items-center gap-2 pt-1">
-          <button onclick="deleteSouthAmericaSample()" class="flex-1 py-2.5 px-3 rounded-xl bg-rose-100 hover:bg-rose-200 dark:bg-rose-950/40 border border-rose-300 dark:border-rose-800 text-rose-900 dark:text-rose-200 font-black text-xs flex items-center justify-center gap-1.5 transition cursor-pointer shadow-sm">
-            <i class="fa-regular fa-trash-can text-xs"></i>
-            <span>남미 22일 예제 삭제</span>
-          </button>
-          <button onclick="restoreSouthAmericaSample()" class="flex-1 py-2.5 px-3 rounded-xl bg-amber-100 hover:bg-amber-200 dark:bg-amber-950/40 border border-amber-300 dark:border-amber-700 text-amber-950 dark:text-amber-200 font-black text-xs flex items-center justify-center gap-1.5 transition cursor-pointer shadow-sm">
-            <i class="fa-solid fa-wand-magic-sparkles text-xs"></i>
-            <span>예제 다시 불러오기</span>
-          </button>
-        </div>
-      </div>
-
-      <!-- 2. 공유 클라우드 DB & 동행자 공유 (Zero-Backend 아키텍처) -->
-      <div class="p-4 rounded-xl bg-[#faf8f5] dark:bg-[#121316] border border-[#e8e2d5] dark:border-stone-800 space-y-3">
-        <div class="flex items-center justify-between">
-          <span class="text-xs font-black text-[#1c1917] dark:text-[#ededed] flex items-center gap-1.5">
-            <i class="fa-solid fa-share-nodes text-indigo-600 dark:text-indigo-400"></i>
-            <span>동행자 1클릭 URL 일정 공유 (서버 불필요)</span>
-          </span>
-          <span class="text-[10px] font-black px-2.5 py-0.5 rounded-full bg-emerald-100 dark:bg-emerald-950/50 text-emerald-900 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-700">100% 서버리스</span>
-        </div>
-        <div class="text-[11px] text-[#374151] dark:text-stone-300 leading-relaxed space-y-1.5 bg-white dark:bg-[#16181d] p-3.5 rounded-xl border border-[#d1d5db] dark:border-stone-700 shadow-sm">
-          <p class="font-black text-[#111827] dark:text-white flex items-center gap-1.5">
-            <i class="fa-solid fa-circle-check text-emerald-600 dark:text-emerald-400 text-xs"></i>
-            친구·가족과 손쉽게 여행 일정을 공유하는 방법
-          </p>
-          <p>
-            별도 회원가입이나 로그인 없이, 아래 버튼을 눌러 생성되는 <b>URL 압축 링크</b>를 카카오톡이나 메시지로 전달하세요. 동행자가 링크를 누르면 상대방 스마트폰에 동일한 여행 카드가 즉시 복제됩니다!
-          </p>
-        </div>
-        <button onclick="exportActiveTripShareLink()" class="w-full py-2.5 rounded-xl btn-gold text-xs font-black flex items-center justify-center gap-2 shadow-sm transition cursor-pointer">
-          <i class="fa-solid fa-share-nodes text-xs"></i>
-          <span>현재 여행 원클릭 공유 링크 복사 (URL 압축 패킹)</span>
+      <!-- 3대 카테고리 탭 바 (고정) -->
+      <div class="grid grid-cols-3 gap-1 p-1 rounded-xl bg-[#f5f4ef] dark:bg-stone-900 border border-[#e8e2d5]/60 dark:border-stone-800 text-[11px] font-bold select-none shrink-0">
+        <button onclick="switchSettingsTab('theme')" id="tab-settings-theme" class="py-1.5 rounded-lg transition text-center hub-tab-active shadow-sm cursor-pointer truncate">
+          🎨 화면·테마
+        </button>
+        <button onclick="switchSettingsTab('ai')" id="tab-settings-ai" class="py-1.5 rounded-lg transition text-center hub-tab-inactive cursor-pointer truncate">
+          🤖 AI·동기화
+        </button>
+        <button onclick="switchSettingsTab('data')" id="tab-settings-data" class="py-1.5 rounded-lg transition text-center hub-tab-inactive cursor-pointer truncate">
+          💾 데이터·관리
         </button>
       </div>
 
-      <!-- 2.5 세계 및 남미 비행 궤적 지도 열람 -->
-      <div class="p-4 rounded-xl bg-white border border-[#e8e2d5] space-y-2.5 shadow-sm">
-        <div class="flex items-center justify-between">
-          <span class="text-xs font-black text-[#1c1917] flex items-center gap-1.5">
-            <i class="fa-solid fa-earth-americas text-[#a2601b]"></i>
-            <span>세계 지도 & 비행 궤적 인터랙티브 맵</span>
-          </span>
-          <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-[#fdf6ec] text-[#a2601b] border border-[#f5dfb8]">글로벌 맵</span>
-        </div>
-        <p class="text-[11px] text-[#78716c] leading-relaxed">
-          인천 출발부터 페루, 볼리비아, 칠레, 아르헨티나 및 귀국까지의 대륙 간 비행 궤적과 핵심 경유지를 대형 지도로 시각화합니다.
-        </p>
-        <button onclick="closeModal('modal-settings'); openRouteMapModal();" class="w-full py-2.5 rounded-xl bg-[#faf8f5] hover:bg-[#f0ece1] border border-[#e8e2d5] text-[#1c1917] text-xs font-bold transition flex items-center justify-center gap-2 cursor-pointer shadow-sm">
-          <i class="fa-solid fa-plane-departure text-[#a2601b]"></i>
-          <span>세계 지도 및 비행 궤적 열기</span>
-        </button>
-      </div>
+      <!-- 스크롤 컨텐츠 영역 (독립 스크롤) -->
+      <div id="modal-settings-content" class="space-y-3.5 pr-0.5">
 
-      <!-- 3. GitHub Gist 클라우드 동기화 (PC ↔ 스마트폰 양방향 동기화) -->
-      <div class="p-4 rounded-xl bg-white border border-[#e8e2d5] space-y-3 shadow-sm">
-        <div class="flex items-center justify-between">
-          <span class="text-xs font-black text-[#1c1917] flex items-center gap-1.5">
-            <i class="fa-brands fa-github text-[#1c1917]"></i>
-            <span>GitHub Gist 클라우드 동기화 (PC ↔ 스마트폰)</span>
-          </span>
-          <span id="gist-sync-status-badge" class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-slate-100 text-slate-700 border border-slate-200">연결 대기</span>
-        </div>
-        <p class="text-[11px] text-[#78716c] leading-relaxed">
-          별도 유료 DB 서버 없이, 본인의 GitHub Personal Access Token(PAT)과 Secret Gist를 통해 PC와 모바일 간에 데이터를 안전하게 무제한 백업/복원합니다.
-        </p>
-        <div class="space-y-2 text-xs">
-          <div>
-            <label class="block text-[11px] font-bold text-[#44403c] mb-1">GitHub Personal Access Token (PAT)</label>
-            <input type="password" id="cfg-github-pat" placeholder="ghp_... (gist 권한 필요)" class="w-full px-3 py-2 bg-[#faf8f5] border border-[#e8e2d5] rounded-xl text-xs text-[#1c1917] focus:outline-none focus:border-[#a2601b]">
-          </div>
-          <div>
-            <label class="block text-[11px] font-bold text-[#44403c] mb-1">Gist ID (첫 백업 시 자동 발급)</label>
-            <div class="flex items-center gap-2">
-              <input type="text" id="cfg-github-gist" placeholder="비워두면 첫 백업 시 자동 생성" class="flex-1 px-3 py-2 bg-[#faf8f5] border border-[#e8e2d5] rounded-xl text-xs text-[#1c1917] focus:outline-none focus:border-[#a2601b]">
-              <button onclick="saveGithubSyncConfig(true)" class="px-3 py-2 rounded-xl bg-[#faf8f5] hover:bg-[#f0ece1] border border-[#e8e2d5] text-[#1c1917] text-xs font-bold transition shrink-0 cursor-pointer">저장</button>
+        <!-- ================= [패널 1: 화면·테마] ================= -->
+        <div id="panel-settings-theme" class="space-y-3.5">
+          <!-- 컬러 테마 설정 -->
+          <div class="p-4 rounded-xl theme-card space-y-2.5 shadow-sm">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-black flex items-center gap-1.5" style="color: var(--ink);">
+                <i class="fa-solid fa-circle-half-stroke text-[#a2601b] dark:text-[#d4af37]"></i>
+                <span>컬러 테마 모드</span>
+              </span>
+              <span id="settings-current-theme-badge" class="text-[10px] font-black px-2.5 py-0.5 rounded-full bg-amber-100 dark:bg-amber-950/50 text-amber-950 dark:text-amber-300 border border-amber-300 dark:border-amber-700">라이트 그레이</span>
             </div>
-          </div>
-        </div>
-        <div class="grid grid-cols-2 gap-2 pt-1">
-          <button id="btn-gist-push" onclick="syncToGist()" class="py-2.5 px-3 rounded-xl btn-gold text-xs font-black flex items-center justify-center gap-1.5 shadow-sm transition cursor-pointer">
-            <i class="fa-solid fa-cloud-arrow-up"></i>
-            <span>클라우드 백업 (Push)</span>
-          </button>
-          <button id="btn-gist-pull" onclick="syncFromGist()" class="py-2.5 px-3 rounded-xl bg-[#faf8f5] hover:bg-[#f0ece1] border border-[#e8e2d5] text-[#1c1917] text-xs font-bold flex items-center justify-center gap-1.5 transition cursor-pointer">
-            <i class="fa-solid fa-cloud-arrow-down text-emerald-600"></i>
-            <span>클라우드 복원 (Pull)</span>
-          </button>
-        </div>
-        <p id="gist-last-sync-time" class="text-[10px] text-stone-400 text-center">마지막 동기화: 동기화 기록 없음</p>
-      </div>
-
-      <!-- 4. Google Gemini API 개인 키 설정 & 무료 발급 가이드 -->
-      <div class="p-4 rounded-xl bg-white border border-[#e8e2d5] space-y-3 shadow-sm">
-        <div class="flex items-center justify-between">
-          <span class="text-xs font-black text-[#1c1917] flex items-center gap-1.5">
-            <i class="fa-solid fa-key text-amber-600"></i>
-            <span>Google Gemini AI 개인 키 설정 & 발급 가이드</span>
-          </span>
-          <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-50 text-amber-700 border border-amber-200">100% 무료 발급</span>
-        </div>
-        <p class="text-[11px] text-[#78716c] leading-relaxed">
-          Google AI Studio에서 개인 API 키를 등록하시면 AI 30분 단위 일정 자동 기획 및 포토 다이어리 감성 윤문 기능을 무제한으로 사용하실 수 있습니다.
-        </p>
-
-        <!-- 원클릭 발급 바로가기 버튼 -->
-        <a href="https://aistudio.google.com/app/apikey" target="_blank" rel="noopener noreferrer" class="w-full py-2.5 px-3 rounded-xl bg-gradient-to-r from-amber-500/10 via-amber-500/15 to-amber-600/10 hover:from-amber-500/20 hover:to-amber-600/20 border border-amber-500/30 text-[#a2601b] dark:text-[#d4af37] text-xs font-bold flex items-center justify-center gap-2 transition cursor-pointer shadow-sm">
-          <i class="fa-solid fa-arrow-up-right-from-square text-[11px]"></i>
-          <span>Google AI Studio에서 무료 API 키 발급받기 (새 창)</span>
-        </a>
-
-        <!-- 초간단 4단계 발급 가이드 아코디언 -->
-        <details class="group bg-[#faf8f5] border border-[#e8e2d5] rounded-xl text-xs overflow-hidden" open>
-          <summary class="p-2.5 font-bold text-[#44403c] cursor-pointer flex items-center justify-between select-none hover:text-[#a2601b] transition">
-            <span class="flex items-center gap-1.5">
-              <i class="fa-solid fa-circle-info text-amber-600"></i>
-              <span>1분 만에 끝나는 무료 API 키 발급 4단계</span>
-            </span>
-            <i class="fa-solid fa-chevron-down text-[10px] text-stone-400 group-open:rotate-180 transition-transform"></i>
-          </summary>
-          <div class="p-3 pt-1 border-t border-[#e8e2d5] space-y-2 text-[11px] text-[#78716c] leading-relaxed">
-            <div class="flex items-start gap-2">
-              <span class="w-4 h-4 rounded-full bg-amber-500/20 text-[#a2601b] font-bold flex items-center justify-center shrink-0 text-[10px] mt-0.5">1</span>
-              <div><b>구글 로그인</b>: 위 [API 키 발급받기] 링크를 클릭하고 본인의 Google 계정으로 로그인합니다. 사용 전 Google AI Studio의 현재 요금과 한도를 확인하세요.</div>
-            </div>
-            <div class="flex items-start gap-2">
-              <span class="w-4 h-4 rounded-full bg-amber-500/20 text-[#a2601b] font-bold flex items-center justify-center shrink-0 text-[10px] mt-0.5">2</span>
-              <div><b>키 생성</b>: 화면 중앙 또는 좌측 상단의 파란색 <b>[Create API key]</b> 버튼을 누릅니다.</div>
-            </div>
-            <div class="flex items-start gap-2">
-              <span class="w-4 h-4 rounded-full bg-amber-500/20 text-[#a2601b] font-bold flex items-center justify-center shrink-0 text-[10px] mt-0.5">3</span>
-              <div><b>키 복사</b>: 팝업창에 생성된 <code>AIzaSy...</code> 형태의 영문/숫자 키를 복사합니다.</div>
-            </div>
-            <div class="flex items-start gap-2">
-              <span class="w-4 h-4 rounded-full bg-amber-500/20 text-[#a2601b] font-bold flex items-center justify-center shrink-0 text-[10px] mt-0.5">4</span>
-              <div><b>술술트래블 등록</b>: 아래 입력창에 붙여넣고 <b>[저장]</b> 버튼을 누르면 즉시 연동 완료!</div>
-            </div>
-            <div class="p-2 rounded-lg bg-emerald-50 border border-emerald-200 text-emerald-800 text-[10px] flex items-center gap-1.5 mt-1">
-              <i class="fa-solid fa-shield-halved text-xs shrink-0"></i>
-              <span>입력하신 API 키는 외부 서버로 전송되지 않고 오직 본인의 기기 브라우저에만 암호화 보관됩니다.</span>
-            </div>
-          </div>
-        </details>
-
-        <!-- 입력 폼 & 실시간 연동 상태 -->
-        <div class="space-y-2.5 pt-2 border-t border-[#e8e2d5] dark:border-stone-800">
-          <div class="flex items-center justify-between">
-            <label class="block text-[11px] font-bold text-[#44403c] dark:text-stone-300">발급받은 Gemini API 키</label>
-            <span id="gemini-key-status-badge" class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-stone-100 dark:bg-stone-800 text-stone-600 dark:text-stone-300 border border-stone-200 dark:border-stone-700 flex items-center gap-1">
-              <i class="fa-solid fa-circle-exclamation text-amber-500"></i> 미등록 (오프라인 모드)
-            </span>
-          </div>
-
-          <!-- 키 입력 / 잠금 필드 -->
-          <div class="flex items-center gap-2">
-            <div class="relative flex-1">
-              <input type="password" id="modal-cfg-gemini-key" placeholder="AIzaSy... 형태의 키를 붙여넣으세요" class="w-full pl-3 pr-9 py-2 bg-[#faf8f5] dark:bg-[#16181d] border border-[#e8e2d5] dark:border-stone-700 rounded-xl text-xs text-[#1c1917] dark:text-[#ededed] focus:outline-none focus:border-[#a2601b] font-mono transition">
-              <button type="button" onclick="toggleGeminiKeyVisibility()" id="btn-toggle-gemini-key" title="키 표시/숨김" class="absolute right-2.5 top-1/2 -translate-y-1/2 text-stone-400 hover:text-stone-700 dark:hover:text-stone-200 text-xs p-1 cursor-pointer">
-                <i id="icon-gemini-key-eye" class="fa-solid fa-eye"></i>
+            <p class="text-[11px] leading-relaxed" style="color: var(--ink2);">
+              주간 시인성이 뛰어난 애플 포그 <b>라이트 그레이</b>와 야간 눈부심을 줄인 <b>딥 블랙(Deep Onyx)</b> 모드를 자유롭게 전환할 수 있습니다.
+            </p>
+            <div class="grid grid-cols-2 gap-2 pt-1">
+              <button id="btn-theme-light" onclick="setTheme('light')" class="py-2.5 px-3 rounded-xl border font-black text-xs flex items-center justify-center gap-2 transition cursor-pointer">
+                <span class="text-sm">☀️</span>
+                <span id="btn-theme-light-txt">라이트 그레이</span>
               </button>
-              <div id="icon-gemini-key-locked" class="hidden absolute right-3 top-1/2 -translate-y-1/2 text-emerald-600 dark:text-emerald-400 text-xs" title="보안 잠금 보관 중">
-                <i class="fa-solid fa-lock"></i>
+              <button id="btn-theme-dark" onclick="setTheme('dark')" class="py-2.5 px-3 rounded-xl border font-black text-xs flex items-center justify-center gap-2 transition cursor-pointer">
+                <span class="text-sm">🌙</span>
+                <span id="btn-theme-dark-txt">딥 블랙</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- PWA 단독 앱 설치 및 구동 상태 -->
+          <div class="p-4 rounded-xl bg-white dark:bg-[#16181d] border border-[#e8e2d5] dark:border-stone-800 space-y-2.5 shadow-sm">
+            <div class="flex items-center justify-between gap-3">
+              <div>
+                <div class="text-xs font-black text-[#1c1917] dark:text-[#ededed] flex items-center gap-1.5">
+                  <i class="fa-solid fa-mobile-screen-button text-[#a2601b]"></i>
+                  <span>홈 화면에 앱(PWA) 설치 & 구동</span>
+                </div>
+                <div class="text-[11px] text-[#78716c] dark:text-stone-400 mt-0.5">인터넷 없는 비행기 안에서도 100% 동작합니다.</div>
+                <div class="mt-1.5">
+                  <span id="settings-pwa-status" class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-slate-100 dark:bg-stone-800 text-slate-600 dark:text-stone-300 border border-slate-200 dark:border-stone-700">웹 브라우저로 실행 중</span>
+                </div>
+              </div>
+              <button id="btn-settings-install" onclick="handleInstallButtonClick()" class="px-3.5 py-1.5 rounded-xl btn-gold text-xs font-bold transition shrink-0 cursor-pointer shadow-sm">
+                앱 설치
+              </button>
+            </div>
+            <!-- PWA 아이콘 안내 아코디언 -->
+            <details class="group bg-[#faf8f5] dark:bg-[#121316] border border-[#e8e2d5] dark:border-stone-800 rounded-xl text-xs overflow-hidden">
+              <summary class="p-2.5 font-bold text-[#44403c] dark:text-stone-300 cursor-pointer flex items-center justify-between select-none">
+                <span class="flex items-center gap-1.5 text-[11px]">
+                  <span>📢</span>
+                  <span>홈 화면 아이콘이 변경되지 않을 때 (10초 해결)</span>
+                </span>
+                <i class="fa-solid fa-chevron-down text-[10px] text-stone-400 group-open:rotate-180 transition-transform"></i>
+              </summary>
+              <div class="p-3 pt-1 border-t border-[#e8e2d5] dark:border-stone-800 space-y-1.5 text-[11px] text-[#78716c] dark:text-stone-400 leading-relaxed">
+                <p>홈 화면의 기존 앱을 삭제 후 브라우저 메뉴(⋮)에서 <b>[앱 설치]</b> 또는 <b>[홈 화면에 추가]</b>를 진행하시면 새 황금 곰돌이 아이콘으로 즉시 재설치됩니다.</p>
+              </div>
+            </details>
+          </div>
+        </div>
+
+        <!-- ================= [패널 2: AI·동기화] ================= -->
+        <div id="panel-settings-ai" class="hidden space-y-3.5">
+          <!-- Google Gemini AI 개인 키 설정 -->
+          <div class="p-4 rounded-xl bg-white dark:bg-[#16181d] border border-[#e8e2d5] dark:border-stone-800 space-y-3 shadow-sm">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-black text-[#1c1917] dark:text-stone-200 flex items-center gap-1.5">
+                <i class="fa-solid fa-key text-amber-600"></i>
+                <span>Google Gemini AI 개인 키</span>
+              </span>
+              <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-50 dark:bg-amber-950/40 text-amber-700 dark:text-amber-300 border border-amber-200 dark:border-amber-800">100% 무료 발급</span>
+            </div>
+            <p class="text-[11px] text-[#78716c] dark:text-stone-400 leading-relaxed">
+              개인 API 키를 등록하면 AI 30분 단위 일정 기획, 영수증 스캔 및 감성 다이어리 윤문 기능을 무제한 사용하실 수 있습니다.
+            </p>
+
+            <a href="https://aistudio.google.com/app/apikey" target="_blank" rel="noopener noreferrer" class="w-full py-2 px-3 rounded-xl bg-gradient-to-r from-amber-500/10 via-amber-500/15 to-amber-600/10 hover:from-amber-500/20 hover:to-amber-600/20 border border-amber-500/30 text-[#a2601b] dark:text-[#d4af37] text-xs font-bold flex items-center justify-center gap-2 transition cursor-pointer shadow-sm">
+              <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i>
+              <span>Google AI Studio에서 무료 키 발급 (새 창)</span>
+            </a>
+
+            <!-- 1분 발급 아코디언 -->
+            <details class="group bg-[#faf8f5] dark:bg-[#121316] border border-[#e8e2d5] dark:border-stone-800 rounded-xl text-xs overflow-hidden">
+              <summary class="p-2.5 font-bold text-[#44403c] dark:text-stone-300 cursor-pointer flex items-center justify-between select-none">
+                <span class="flex items-center gap-1.5 text-[11px]">
+                  <i class="fa-solid fa-circle-info text-amber-600"></i>
+                  <span>무료 API 키 발급 4단계 안내</span>
+                </span>
+                <i class="fa-solid fa-chevron-down text-[10px] text-stone-400 group-open:rotate-180 transition-transform"></i>
+              </summary>
+              <div class="p-3 pt-1 border-t border-[#e8e2d5] dark:border-stone-800 space-y-1.5 text-[11px] text-[#78716c] dark:text-stone-400 leading-relaxed">
+                <div class="space-y-1">
+                  <div>1. <b>구글 로그인</b>: 위 링크에서 구글 계정으로 로그인합니다.</div>
+                  <div>2. <b>키 생성</b>: 파란색 <b>[Create API key]</b> 버튼을 누릅니다.</div>
+                  <div>3. <b>키 복사</b>: <code>AIzaSy...</code> 형태의 키를 복사합니다.</div>
+                  <div>4. <b>등록</b>: 아래 입력창에 붙여넣고 <b>[저장]</b>을 누르면 완료!</div>
+                </div>
+                <div class="p-2 rounded-lg bg-emerald-50 dark:bg-emerald-950/30 border border-emerald-200 dark:border-emerald-800 text-emerald-800 dark:text-emerald-300 text-[10px] flex items-center gap-1.5 mt-1">
+                  <i class="fa-solid fa-shield-halved text-xs shrink-0"></i>
+                  <span>API 키는 외부 서버로 전송되지 않고 본인의 기기에만 보관됩니다.</span>
+                </div>
+              </div>
+            </details>
+
+            <!-- 키 입력 & 액션 -->
+            <div class="space-y-2 pt-1 border-t border-[#e8e2d5] dark:border-stone-800">
+              <div class="flex items-center justify-between">
+                <label class="block text-[11px] font-bold text-[#44403c] dark:text-stone-300">발급받은 Gemini API 키</label>
+                <span id="gemini-key-status-badge" class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-stone-100 dark:bg-stone-800 text-stone-600 dark:text-stone-300 border border-stone-200 dark:border-stone-700 flex items-center gap-1">
+                  <i class="fa-solid fa-circle-exclamation text-amber-500"></i> 미등록 (오프라인)
+                </span>
+              </div>
+              <div class="flex items-center gap-2">
+                <div class="relative flex-1">
+                  <input type="password" id="modal-cfg-gemini-key" placeholder="AIzaSy... 형태의 키를 붙여넣으세요" class="w-full pl-3 pr-9 py-2 bg-[#faf8f5] dark:bg-[#16181d] border border-[#e8e2d5] dark:border-stone-700 rounded-xl text-xs text-[#1c1917] dark:text-[#ededed] focus:outline-none focus:border-[#a2601b] font-mono transition">
+                  <button type="button" onclick="toggleGeminiKeyVisibility()" id="btn-toggle-gemini-key" title="키 표시/숨김" class="absolute right-2.5 top-1/2 -translate-y-1/2 text-stone-400 hover:text-stone-700 dark:hover:text-stone-200 text-xs p-1 cursor-pointer">
+                    <i id="icon-gemini-key-eye" class="fa-solid fa-eye"></i>
+                  </button>
+                  <div id="icon-gemini-key-locked" class="hidden absolute right-3 top-1/2 -translate-y-1/2 text-emerald-600 dark:text-emerald-400 text-xs" title="보안 잠금 보관 중">
+                    <i class="fa-solid fa-lock"></i>
+                  </div>
+                </div>
+                <button id="btn-save-gemini-key" onclick="handleGeminiKeyMainAction()" class="btn-gold px-3.5 py-2 rounded-xl text-xs font-bold shrink-0 cursor-pointer shadow-sm transition-all flex items-center gap-1">
+                  <span id="btn-save-gemini-key-txt">저장</span>
+                </button>
+                <button id="btn-cancel-gemini-key" onclick="cancelGeminiKeyEdit()" class="hidden px-2.5 py-2 rounded-xl bg-stone-100 dark:bg-stone-800 hover:bg-stone-200 text-stone-700 dark:text-stone-300 text-xs font-bold shrink-0 border border-stone-200 dark:border-stone-700 cursor-pointer transition">
+                  취소
+                </button>
+                <button id="btn-delete-gemini-key" onclick="deleteGeminiKey()" title="등록된 API 키 삭제" class="hidden px-2.5 py-2 rounded-xl bg-rose-50 dark:bg-rose-950/40 hover:bg-rose-100 text-rose-700 dark:text-rose-300 text-xs font-bold shrink-0 border border-rose-200 dark:border-rose-800 cursor-pointer transition">
+                  <i class="fa-solid fa-trash-can"></i>
+                </button>
+              </div>
+              <div class="flex items-center justify-between pt-0.5">
+                <div class="text-[11px] text-[#78716c] dark:text-stone-400 flex items-center gap-1.5 min-w-0">
+                  <span class="shrink-0">상태:</span>
+                  <span id="gemini-key-preview-text" class="font-semibold text-emerald-700 dark:text-emerald-400 truncate text-[11px]">미등록</span>
+                </div>
+                <button type="button" id="btn-test-gemini-key" onclick="testGeminiApiKey()" class="px-3 py-1 rounded-lg bg-amber-500/10 hover:bg-amber-500/20 text-[#a2601b] dark:text-[#d4af37] text-[11px] font-bold border border-amber-500/30 transition flex items-center gap-1 cursor-pointer shrink-0">
+                  <i class="fa-solid fa-bolt-lightning text-[10px]"></i>
+                  <span>연결 테스트</span>
+                </button>
               </div>
             </div>
-            <!-- 저장 / 변경 액션 버튼 -->
-            <button id="btn-save-gemini-key" onclick="handleGeminiKeyMainAction()" class="btn-gold px-3.5 py-2 rounded-xl text-xs font-bold shrink-0 cursor-pointer shadow-sm transition-all flex items-center gap-1">
-              <span id="btn-save-gemini-key-txt">저장</span>
-            </button>
-            <button id="btn-cancel-gemini-key" onclick="cancelGeminiKeyEdit()" class="hidden px-2.5 py-2 rounded-xl bg-stone-100 dark:bg-stone-800 hover:bg-stone-200 text-stone-700 dark:text-stone-300 text-xs font-bold shrink-0 border border-stone-200 dark:border-stone-700 cursor-pointer transition">
-              취소
-            </button>
-            <button id="btn-delete-gemini-key" onclick="deleteGeminiKey()" title="등록된 API 키 삭제" class="hidden px-2.5 py-2 rounded-xl bg-rose-50 dark:bg-rose-950/40 hover:bg-rose-100 text-rose-700 dark:text-rose-300 text-xs font-bold shrink-0 border border-rose-200 dark:border-rose-800 cursor-pointer transition">
-              <i class="fa-solid fa-trash-can"></i>
-            </button>
           </div>
 
-          <div class="flex items-center justify-between pt-0.5">
-            <div class="text-[11px] text-[#78716c] dark:text-stone-400 flex items-center gap-1.5 min-w-0">
-              <span class="shrink-0">상태:</span>
-              <span id="gemini-key-preview-text" class="font-semibold text-emerald-700 dark:text-emerald-400 truncate text-[11px]">미등록</span>
+          <!-- GitHub Gist 클라우드 동기화 -->
+          <div class="p-4 rounded-xl bg-white dark:bg-[#16181d] border border-[#e8e2d5] dark:border-stone-800 space-y-2.5 shadow-sm">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-black text-[#1c1917] dark:text-stone-200 flex items-center gap-1.5">
+                <i class="fa-brands fa-github text-[#1c1917] dark:text-stone-200"></i>
+                <span>GitHub Gist 동기화 (PC ↔ 스마트폰)</span>
+              </span>
+              <span id="gist-sync-status-badge" class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-slate-100 dark:bg-stone-800 text-slate-700 dark:text-stone-300 border border-slate-200 dark:border-stone-700">연결 대기</span>
             </div>
-            <button type="button" id="btn-test-gemini-key" onclick="testGeminiApiKey()" class="px-3 py-1 rounded-lg bg-amber-500/10 hover:bg-amber-500/20 text-[#a2601b] dark:text-[#d4af37] text-[11px] font-bold border border-amber-500/30 transition flex items-center gap-1 cursor-pointer shrink-0">
-              <i class="fa-solid fa-bolt-lightning text-[10px]"></i>
-              <span>연결 테스트</span>
-            </button>
+            <div class="space-y-2 text-xs">
+              <div>
+                <label class="block text-[11px] font-bold text-[#44403c] dark:text-stone-300 mb-1">GitHub Personal Access Token (PAT)</label>
+                <input type="password" id="cfg-github-pat" placeholder="ghp_... (gist 권한)" class="w-full px-3 py-2 bg-[#faf8f5] dark:bg-[#16181d] border border-[#e8e2d5] dark:border-stone-700 rounded-xl text-xs text-[#1c1917] dark:text-[#ededed] focus:outline-none focus:border-[#a2601b]">
+              </div>
+              <div>
+                <label class="block text-[11px] font-bold text-[#44403c] dark:text-stone-300 mb-1">Gist ID (첫 백업 시 자동 발급)</label>
+                <div class="flex items-center gap-2">
+                  <input type="text" id="cfg-github-gist" placeholder="비워두면 첫 백업 시 자동 생성" class="flex-1 px-3 py-2 bg-[#faf8f5] dark:bg-[#16181d] border border-[#e8e2d5] dark:border-stone-700 rounded-xl text-xs text-[#1c1917] dark:text-[#ededed] focus:outline-none focus:border-[#a2601b]">
+                  <button onclick="saveGithubSyncConfig(true)" class="px-3 py-2 rounded-xl bg-[#faf8f5] dark:bg-stone-800 hover:bg-[#f0ece1] dark:hover:bg-stone-700 border border-[#e8e2d5] dark:border-stone-700 text-[#1c1917] dark:text-stone-200 text-xs font-bold transition shrink-0 cursor-pointer">저장</button>
+                </div>
+              </div>
+            </div>
+            <div class="grid grid-cols-2 gap-2 pt-1">
+              <button id="btn-gist-push" onclick="syncToGist()" class="py-2 px-3 rounded-xl btn-gold text-xs font-black flex items-center justify-center gap-1.5 shadow-sm transition cursor-pointer">
+                <i class="fa-solid fa-cloud-arrow-up"></i>
+                <span>클라우드 백업</span>
+              </button>
+              <button id="btn-gist-pull" onclick="syncFromGist()" class="py-2 px-3 rounded-xl bg-[#faf8f5] dark:bg-stone-800 hover:bg-[#f0ece1] dark:hover:bg-stone-700 border border-[#e8e2d5] dark:border-stone-700 text-[#1c1917] dark:text-stone-200 text-xs font-bold flex items-center justify-center gap-1.5 transition cursor-pointer">
+                <i class="fa-solid fa-cloud-arrow-down text-emerald-600 dark:text-emerald-400"></i>
+                <span>클라우드 복원</span>
+              </button>
+            </div>
+            <p id="gist-last-sync-time" class="text-[10px] text-stone-400 text-center">마지막 동기화: 기록 없음</p>
           </div>
         </div>
-      </div>
 
-      <!-- 5. PWA 단독 앱 설치 및 오프라인 모드 상태 -->
-      <div class="p-4 rounded-xl bg-white dark:bg-[#16181d] border border-[#e8e2d5] dark:border-stone-800 space-y-3 shadow-sm">
-        <div class="flex items-center justify-between gap-3">
-          <div>
-            <div class="text-xs font-black text-[#1c1917] dark:text-[#ededed] flex items-center gap-1.5">
-              <i class="fa-solid fa-mobile-screen-button text-[#a2601b]"></i>
-              <span>홈 화면에 앱(PWA) 설치 & 구동 상태</span>
+        <!-- ================= [패널 3: 데이터·관리] ================= -->
+        <div id="panel-settings-data" class="hidden space-y-3.5">
+          <!-- 동행자 1클릭 URL 일정 공유 -->
+          <div class="p-4 rounded-xl bg-[#faf8f5] dark:bg-[#121316] border border-[#e8e2d5] dark:border-stone-800 space-y-2.5">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-black text-[#1c1917] dark:text-[#ededed] flex items-center gap-1.5">
+                <i class="fa-solid fa-share-nodes text-indigo-600 dark:text-indigo-400"></i>
+                <span>동행자 1클릭 일정 공유</span>
+              </span>
+              <span class="text-[10px] font-black px-2 py-0.5 rounded-full bg-emerald-100 dark:bg-emerald-950/50 text-emerald-900 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-700">서버 불필요</span>
             </div>
-            <div class="text-[11px] text-[#78716c] dark:text-stone-400 mt-0.5">인터넷 없는 비행기 안에서도 100% 작동합니다.</div>
-            <div class="mt-1.5">
-              <span id="settings-pwa-status" class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-slate-100 dark:bg-stone-800 text-slate-600 dark:text-stone-300 border border-slate-200 dark:border-stone-700">웹 브라우저로 실행 중</span>
-            </div>
-          </div>
-          <button id="btn-settings-install" onclick="handleInstallButtonClick()" class="px-3.5 py-1.5 rounded-xl btn-gold text-xs font-bold transition shrink-0 cursor-pointer shadow-sm">
-            앱 설치
-          </button>
-        </div>
-        <!-- PWA 곰돌이 아이콘 갱신 및 재설치 정밀 안내 배너 -->
-        <div class="p-3 rounded-xl bg-amber-500/10 dark:bg-amber-500/15 border border-amber-500/30 space-y-2 text-xs">
-          <div class="flex items-center gap-2 font-black text-[#a2601b] dark:text-amber-300">
-            <span class="text-base shrink-0">📢</span>
-            <span>앱 실행 / 설치 시 비행기 아이콘이 뜨는 이유 & 10초 해결법</span>
-          </div>
-          <div class="text-[11px] text-[#4b5563] dark:text-stone-300 leading-relaxed space-y-1.5">
-            <p>
-              스마트폰에 <b>이미 설치된 술술트래블 앱(WebAPK)은 OS 내부 패키지에 이전 비행기 아이콘이 영구 고정</b>되어 있어, 웹사이트가 업데이트되어도 실행 화면(스플래시)과 홈 아이콘이 자동으로 바뀌지 않습니다.
+            <p class="text-[11px] text-[#78716c] dark:text-stone-400 leading-relaxed">
+              회원가입 없이 <b>URL 압축 링크</b>를 메신저로 전달하면 동행자 스마트폰에 동일한 여행 카드가 즉시 복제됩니다.
             </p>
-            <div class="p-2.5 rounded-lg bg-white/80 dark:bg-stone-900/60 border border-amber-500/20 space-y-1 text-[#1c1917] dark:text-stone-200">
-              <div class="font-bold text-[#a2601b] dark:text-amber-300">👉 새 황금 날개 곰돌이 아이콘 적용 방법 (10초):</div>
-              <ol class="list-decimal list-inside space-y-0.5 text-[10.5px]">
-                <li>스마트폰 홈 화면에서 기존 <b>'술술트래블'</b> 앱을 길게 눌러 <b>[설치 삭제(삭제)]</b>합니다.</li>
-                <li>브라우저(Chrome / 삼성 인터넷)로 술술트래블에 다시 접속합니다.</li>
-                <li>브라우저 메뉴(⋮)에서 <b>[앱 설치]</b> 또는 <b>[홈 화면에 추가]</b>를 진행하면 <b>새 공식 곰돌이 아이콘</b>으로 즉시 설치됩니다!</li>
-              </ol>
+            <button onclick="exportActiveTripShareLink()" class="w-full py-2.5 rounded-xl btn-gold text-xs font-black flex items-center justify-center gap-2 shadow-sm transition cursor-pointer">
+              <i class="fa-solid fa-share-nodes text-xs"></i>
+              <span>현재 여행 공유 링크 복사 (URL 압축 패킹)</span>
+            </button>
+          </div>
+
+          <!-- 전체 데이터 JSON 백업 및 복원 -->
+          <div class="p-4 rounded-xl bg-white dark:bg-[#16181d] border border-[#e8e2d5] dark:border-stone-800 space-y-2 shadow-sm">
+            <span class="text-xs font-black text-[#1c1917] dark:text-stone-200 flex items-center gap-1.5">
+              <i class="fa-solid fa-file-arrow-down text-sky-600"></i>
+              <span>전체 데이터 JSON 백업 & 복원</span>
+            </span>
+            <p class="text-[11px] text-[#78716c] dark:text-stone-400">
+              여행 일정, 가계부, 다이어리 기록 전체를 단일 JSON 파일로 안전하게 백업합니다.
+            </p>
+            <div class="flex items-center gap-2 pt-1">
+              <button onclick="exportAllDataAsJson()" class="flex-1 py-2 px-3 rounded-xl bg-[#faf8f5] dark:bg-stone-800 hover:bg-[#f0ece1] dark:hover:bg-stone-700 border border-[#e8e2d5] dark:border-stone-700 text-[#1c1917] dark:text-stone-200 font-bold text-xs flex items-center justify-center gap-1.5 transition cursor-pointer">
+                <i class="fa-solid fa-download text-[11px] text-[#a2601b]"></i>
+                <span>JSON 백업</span>
+              </button>
+              <label class="flex-1 py-2 px-3 rounded-xl bg-[#faf8f5] dark:bg-stone-800 hover:bg-[#f0ece1] dark:hover:bg-stone-700 border border-[#e8e2d5] dark:border-stone-700 text-[#1c1917] dark:text-stone-200 font-bold text-xs flex items-center justify-center gap-1.5 transition cursor-pointer">
+                <i class="fa-solid fa-upload text-[11px] text-emerald-700"></i>
+                <span>JSON 복원</span>
+                <input type="file" onchange="importDataFromJson(event)" accept=".json" class="hidden">
+              </label>
             </div>
           </div>
-        </div>
-      </div>
 
-      <!-- 6. 전체 데이터 JSON 백업 및 복원 -->
-      <div class="p-4 rounded-xl bg-white border border-[#e8e2d5] space-y-2.5 shadow-sm">
-        <span class="text-xs font-black text-[#1c1917] flex items-center gap-1.5">
-          <i class="fa-solid fa-file-arrow-down text-sky-600"></i>
-          <span>전체 여행 데이터 JSON 백업 및 복원</span>
-        </span>
-        <p class="text-[11px] text-[#78716c]">
-          등록된 모든 여행 카드, 스팟 일정, 가계부 지출, 다이어리 기록을 단일 JSON 파일로 안전하게 백업합니다.
-        </p>
-        <div class="flex items-center gap-2 pt-1">
-          <button onclick="exportAllDataAsJson()" class="flex-1 py-2 px-3 rounded-xl bg-[#faf8f5] hover:bg-[#f0ece1] border border-[#e8e2d5] text-[#1c1917] font-bold text-xs flex items-center justify-center gap-1.5 transition cursor-pointer">
-            <i class="fa-solid fa-download text-[11px] text-[#a2601b]"></i>
-            <span>JSON 백업 다운로드</span>
-          </button>
-          <label class="flex-1 py-2 px-3 rounded-xl bg-[#faf8f5] hover:bg-[#f0ece1] border border-[#e8e2d5] text-[#1c1917] font-bold text-xs flex items-center justify-center gap-1.5 transition cursor-pointer">
-            <i class="fa-solid fa-upload text-[11px] text-emerald-700"></i>
-            <span>백업 복원 (JSON)</span>
-            <input type="file" onchange="importDataFromJson(event)" accept=".json" class="hidden">
-          </label>
-        </div>
-      </div>
+          <!-- 남미 22일 가이드 예제 관리 -->
+          <div class="p-4 rounded-xl bg-white dark:bg-[#16181d] border border-[#e8e2d5] dark:border-stone-800 space-y-2 shadow-sm">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-black text-[#1c1917] dark:text-[#ededed] flex items-center gap-1.5">
+                <i class="fa-solid fa-map-location-dot text-[#a2601b]"></i>
+                <span>남미 4개국 22일 가이드 예제 관리</span>
+              </span>
+              <span class="text-[10px] font-black px-2 py-0.5 rounded-full bg-amber-100 dark:bg-amber-950/50 text-amber-950 dark:text-amber-300 border border-amber-300 dark:border-amber-700">공식 예제</span>
+            </div>
+            <div class="flex items-center gap-2 pt-1">
+              <button onclick="deleteSouthAmericaSample()" class="flex-1 py-2 px-3 rounded-xl bg-rose-50 hover:bg-rose-100 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-800 text-rose-800 dark:text-rose-200 font-bold text-xs flex items-center justify-center gap-1.5 transition cursor-pointer">
+                <i class="fa-regular fa-trash-can text-xs"></i>
+                <span>예제 삭제</span>
+              </button>
+              <button onclick="restoreSouthAmericaSample()" class="flex-1 py-2 px-3 rounded-xl bg-amber-50 hover:bg-amber-100 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-700 text-amber-900 dark:text-amber-200 font-bold text-xs flex items-center justify-center gap-1.5 transition cursor-pointer">
+                <i class="fa-solid fa-wand-magic-sparkles text-xs"></i>
+                <span>예제 복원</span>
+              </button>
+            </div>
+          </div>
 
-      <!-- 7. 술술트래블 엔진 버전 및 업데이트 기록 -->
-      <div class="p-4 rounded-xl bg-white dark:bg-[#16181d] border border-[#e8e2d5] dark:border-stone-800 space-y-2.5 shadow-sm">
-        <div class="flex items-center justify-between">
-          <span class="text-xs font-black text-[#1c1917] dark:text-[#ededed] flex items-center gap-1.5">
-            <i class="fa-solid fa-clock-rotate-left text-[#a2601b] dark:text-[#d4af37]"></i>
-            <span>술술트래블 엔진 버전 & 릴리즈 히스토리</span>
-          </span>
-          <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-500/10 text-[#a2601b] dark:text-[#d4af37] border border-amber-500/30">v1.3.8</span>
+          <!-- 부가 바로가기 버튼들 -->
+          <div class="grid grid-cols-2 gap-2 pt-1">
+            <button onclick="closeModal('modal-settings'); openRouteMapModal();" class="py-2 px-3 rounded-xl bg-[#faf8f5] dark:bg-stone-800 hover:bg-[#f0ece1] dark:hover:bg-stone-700 border border-[#e8e2d5] dark:border-stone-700 text-[#1c1917] dark:text-stone-200 text-xs font-bold transition flex items-center justify-center gap-1.5 cursor-pointer">
+              <i class="fa-solid fa-earth-americas text-[#a2601b]"></i>
+              <span>세계 지도 궤적</span>
+            </button>
+            <button onclick="closeModal('modal-settings'); openVersionHistoryModal();" class="py-2 px-3 rounded-xl bg-[#faf8f5] dark:bg-stone-800 hover:bg-[#f0ece1] dark:hover:bg-stone-700 border border-[#e8e2d5] dark:border-stone-700 text-[#1c1917] dark:text-stone-200 text-xs font-bold transition flex items-center justify-center gap-1.5 cursor-pointer">
+              <i class="fa-solid fa-list-check text-[#a2601b]"></i>
+              <span>버전 기록 전체</span>
+            </button>
+          </div>
         </div>
-        <p class="text-[11px] text-[#78716c] dark:text-stone-400 leading-relaxed">
-          술술 오도미터 순차 올림 원칙에 따른 전체 버전별 기능 추가, UI/UX 개선, 버그 해결 이력을 확인합니다.
-        </p>
-        <button onclick="closeModal('modal-settings'); openVersionHistoryModal();" class="w-full py-2.5 rounded-xl bg-[#faf8f5] dark:bg-stone-800 hover:bg-[#f0ece1] dark:hover:bg-stone-700 border border-[#e8e2d5] dark:border-stone-700 text-[#1c1917] dark:text-[#ededed] text-xs font-bold transition flex items-center justify-center gap-2 cursor-pointer shadow-sm">
-          <i class="fa-solid fa-list-check text-[#a2601b] dark:text-[#d4af37]"></i>
-          <span>버전 업데이트 기록 전체 열람</span>
-        </button>
+
       </div>
     </div>
+  </div>
   </div>
 
   <!-- ========================================== -->
@@ -2672,11 +2656,18 @@
 
       <!-- 버전 목록 스크롤 영역 -->
       <div class="flex-1 overflow-y-auto space-y-3 pr-1 text-xs">
-        <!-- v1.3.8 (Current) -->
+        <!-- v1.3.9 (Current) -->
         <div class="p-4 rounded-2xl border-2 border-emerald-500/40 space-y-2.5">
-          <div class="flex items-center justify-between gap-2"><strong>v1.3.8 · 휴대폰을 위한 여행 노트</strong><span class="companion-status">최신 버전</span></div>
+          <div class="flex items-center justify-between gap-2"><strong>v1.3.9 · 허브 4대 필터 & 설정창 UI/UX 정돈</strong><span class="companion-status">최신 버전</span></div>
+          <p class="text-xs leading-relaxed">허브에 국가·도시·컨셉·필터 4대 분류 체계와 2x2 모바일 그리드를 적용했습니다. 설정 모달에 3대 카테고리 탭(화면·테마, AI·동기화, 데이터·관리)을 도입하고 스크롤 흔들림(Jitter)을 완벽히 해소했습니다.</p>
+          <p class="text-[10px]">2026-09-11 · st-shell-v1.3.9</p>
+        </div>
+
+        <!-- v1.3.8 -->
+        <div class="p-4 rounded-2xl bg-emerald-500/5 dark:bg-emerald-500/10 border-2 border-emerald-500/40 space-y-2.5 shadow-sm relative overflow-hidden">
+          <div class="flex items-center justify-between gap-2"><div class="flex items-center gap-2 min-w-0"><span class="px-2 py-0.5 rounded-lg bg-emerald-500 text-black font-black text-xs shadow-sm shrink-0">v1.3.8</span><span class="text-xs font-black text-[#1c1917] dark:text-white">휴대폰을 위한 여행 노트</span></div></div>
           <p class="text-xs leading-relaxed">하단 고정 메뉴, 거점별 여정과 전체 시간표 분리, 날짜를 골라 보는 하루 계획, 읽기 쉬운 일정·기록 화면을 적용했습니다. 기본 스타일과 아이콘을 앱에 포함해 외부 CDN 장애에도 핵심 화면을 유지합니다.</p>
-          <p class="text-[10px]">2026-09-11 · st-shell-v1.3.8</p>
+          <div class="text-[10px] text-stone-400 dark:text-stone-500 pt-1 border-t border-emerald-500/20 flex items-center justify-between"><span>📅 2026-09-11 릴리즈</span><span class="font-mono">st-shell-v1.3.8</span></div>
         </div>
 
         <!-- v1.3.7 -->
@@ -3040,7 +3031,7 @@
 
       <!-- 모달 푸터 -->
       <div class="pt-3 border-t border-[#e8e2d5] dark:border-stone-800 flex items-center justify-between shrink-0">
-        <span class="text-[11px] text-stone-400 dark:text-stone-500 font-mono">Sulsul Travel Engine v1.3.8</span>
+        <span class="text-[11px] text-stone-400 dark:text-stone-500 font-mono">Sulsul Travel Engine v1.3.9</span>
         <button onclick="closeModal('modal-version-history')" class="px-4 py-2 rounded-xl bg-[#faf8f5] dark:bg-stone-800 hover:bg-[#f0ece1] dark:hover:bg-stone-700 border border-[#e8e2d5] dark:border-stone-700 text-[#1c1917] dark:text-[#ededed] text-xs font-bold transition cursor-pointer shadow-sm">
           닫기
         </button>
@@ -3103,7 +3094,7 @@
     window.showToast = showToast;
 
     // 앱 버전 및 글로벌 네임스페이스 (Sulsul-Travel Invariant Rule R-10, R-11, R-12, R-13, R-14, R-15)
-    const APP_VER = '1.3.8';
+    const APP_VER = '1.3.9';
 
     // ══════════════════════════════════════════
     // [Two-Tone Theme System] 라이트 그레이 & 딥 블랙 테마 엔진
@@ -3210,6 +3201,7 @@
         status: 'all',    // 'all' | 'ongoing' | 'planned' | 'completed' | 'bucketlist'
         search: '',
         country: 'all',
+        city: 'all',
         concept: 'all',
         sort: 'latest'    // 'latest' | 'date-asc' | 'budget-desc' | 'budget-asc'
       },
@@ -4717,6 +4709,30 @@
       openModal('modal-version-history');
     }
 
+    function switchSettingsTab(tabKey = 'theme') {
+      const tabs = ['theme', 'ai', 'data'];
+      tabs.forEach(t => {
+        const btn = document.getElementById(`tab-settings-${t}`);
+        const panel = document.getElementById(`panel-settings-${t}`);
+        if (btn) {
+          if (t === tabKey) {
+            btn.className = 'py-1.5 rounded-lg transition text-center hub-tab-active shadow-sm cursor-pointer truncate whitespace-nowrap';
+          } else {
+            btn.className = 'py-1.5 rounded-lg transition text-center hub-tab-inactive cursor-pointer truncate whitespace-nowrap';
+          }
+        }
+        if (panel) {
+          if (t === tabKey) {
+            panel.classList.remove('hidden');
+          } else {
+            panel.classList.add('hidden');
+          }
+        }
+      });
+      const contentEl = document.getElementById('modal-settings-content');
+      if (contentEl) contentEl.scrollTop = 0;
+    }
+
     function openSettingsModal() {
       if (typeof updateGeminiKeyUi === 'function') {
         updateGeminiKeyUi();
@@ -4732,6 +4748,7 @@
       if (typeof updatePwaUiState === 'function') {
         updatePwaUiState();
       }
+      switchSettingsTab('theme');
       openModal('modal-settings');
     }
 
@@ -5033,14 +5050,26 @@
       renderTripCards();
     }
 
+    function handleHubCountryChange() {
+      const countrySelect = document.getElementById('hub-filter-country');
+      if (countrySelect) {
+        State.hubFilters.country = countrySelect.value;
+      }
+      State.hubFilters.city = 'all';
+      updateHubFilterDropdowns();
+      renderTripCards();
+    }
+
     function handleHubFilterChange() {
       const searchInput = document.getElementById('hub-search-input');
       const countrySelect = document.getElementById('hub-filter-country');
+      const citySelect = document.getElementById('hub-filter-city');
       const conceptSelect = document.getElementById('hub-filter-concept');
       const sortSelect = document.getElementById('hub-filter-sort');
 
       if (searchInput) State.hubFilters.search = searchInput.value.trim().toLowerCase();
       if (countrySelect) State.hubFilters.country = countrySelect.value;
+      if (citySelect) State.hubFilters.city = citySelect.value;
       if (conceptSelect) State.hubFilters.concept = conceptSelect.value;
       if (sortSelect) State.hubFilters.sort = sortSelect.value;
 
@@ -5052,18 +5081,22 @@
         status: 'all',
         search: '',
         country: 'all',
+        city: 'all',
         concept: 'all',
         sort: 'latest'
       };
       const sInput = document.getElementById('hub-search-input');
       const cSelect = document.getElementById('hub-filter-country');
+      const ctSelect = document.getElementById('hub-filter-city');
       const cpSelect = document.getElementById('hub-filter-concept');
       const stSelect = document.getElementById('hub-filter-sort');
       if (sInput) sInput.value = '';
       if (cSelect) cSelect.value = 'all';
+      if (ctSelect) ctSelect.value = 'all';
       if (cpSelect) cpSelect.value = 'all';
       if (stSelect) stSelect.value = 'latest';
 
+      updateHubFilterDropdowns();
       setHubStatusFilter('all');
     }
 
@@ -5089,18 +5122,50 @@
 
     function updateHubFilterDropdowns() {
       const countrySelect = document.getElementById('hub-filter-country');
+      const citySelect = document.getElementById('hub-filter-city');
       if (!countrySelect) return;
+
       const countriesSet = new Set();
+      const citiesSet = new Set();
+      const selCountry = State.hubFilters.country || 'all';
+
       State.trips.forEach(t => {
-        (t.countries || []).forEach(c => countriesSet.add(c));
+        const tCountries = t.countries || [];
+        tCountries.forEach(c => countriesSet.add(c));
+
+        // 도시 수집: 선택된 국가와 매칭되거나 'all'일 때
+        const matchCountry = selCountry === 'all' || tCountries.some(c => c.toLowerCase().includes(selCountry.toLowerCase()));
+        if (matchCountry) {
+          (t.cities || []).forEach(ct => { if (ct && ct.trim()) citiesSet.add(ct.trim()); });
+          (t.days || []).forEach(d => {
+            if (d.city && d.city.trim()) citiesSet.add(d.city.trim());
+          });
+        }
       });
-      let html = '<option value="all">전체 국가</option>';
+
+      // 1. 국가 드롭다운 갱신
+      let cHtml = '<option value="all">전체 국가</option>';
       Array.from(countriesSet).sort().forEach(c => {
-        html += `<option value="${escapeHtml(c)}">${escapeHtml(c)}</option>`;
+        cHtml += `<option value="${escapeHtml(c)}">${escapeHtml(c)}</option>`;
       });
-      countrySelect.innerHTML = html;
+      countrySelect.innerHTML = cHtml;
       if (State.hubFilters.country) {
         countrySelect.value = State.hubFilters.country;
+      }
+
+      // 2. 도시 드롭다운 갱신
+      if (citySelect) {
+        let ctHtml = '<option value="all">전체 도시</option>';
+        Array.from(citiesSet).sort().forEach(ct => {
+          ctHtml += `<option value="${escapeHtml(ct)}">${escapeHtml(ct)}</option>`;
+        });
+        citySelect.innerHTML = ctHtml;
+        if (State.hubFilters.city && Array.from(citiesSet).includes(State.hubFilters.city)) {
+          citySelect.value = State.hubFilters.city;
+        } else {
+          State.hubFilters.city = 'all';
+          citySelect.value = 'all';
+        }
       }
     }
 
@@ -5426,6 +5491,14 @@
         if (State.hubFilters.country && State.hubFilters.country !== 'all') {
           const matchCountry = (trip.countries || []).some(c => c.toLowerCase().includes(State.hubFilters.country.toLowerCase()));
           if (!matchCountry) return false;
+        }
+
+        if (State.hubFilters.city && State.hubFilters.city !== 'all') {
+          const targetCity = State.hubFilters.city.toLowerCase();
+          const matchCity = (trip.cities || []).some(c => c.toLowerCase().includes(targetCity)) ||
+            (trip.days || []).some(d => (d.city || '').toLowerCase().includes(targetCity)) ||
+            (trip.title || '').toLowerCase().includes(targetCity);
+          if (!matchCity) return false;
         }
 
         if (State.hubFilters.concept && State.hubFilters.concept !== 'all') {
@@ -10776,6 +10849,7 @@ JSON 배열만 출력하세요. 각 day는 dayNum, title, city, date, spots를 �
       exportTripAsShareUrl: exportTripAsShareUrl,
       exportActiveTripShareLink: exportActiveTripShareLink,
       setHubStatusFilter: setHubStatusFilter,
+      handleHubCountryChange: handleHubCountryChange,
       handleHubFilterChange: handleHubFilterChange,
       resetHubFilters: resetHubFilters,
       toggleHubViewMode: toggleHubViewMode,
@@ -10786,6 +10860,7 @@ JSON 배열만 출력하세요. 각 day는 dayNum, title, city, date, spots를 �
       navigateToInteractiveMap: navigateToInteractiveMap,
       openVersionHistoryModal: openVersionHistoryModal,
       openSettingsModal: openSettingsModal,
+      switchSettingsTab: switchSettingsTab,
       setTheme: setTheme,
       toggleTheme: toggleTheme,
       getGithubSyncConfig: getGithubSyncConfig,

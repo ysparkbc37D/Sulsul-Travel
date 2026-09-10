@@ -1,14 +1,14 @@
 // Sulsul-Travel Service Worker
-const V = 'st-shell-v1.3.8';
+const V = 'st-shell-v1.3.9';
 const CACHE_NAME = V;
 const CACHE_PREFIX = 'st-shell-';
 
 const PRECACHE_ASSETS = [
   './',
   './index.html',
-  './css/utilities.css?v=1.3.8',
-  './css/companion.css?v=1.3.8',
-  './js/presentation/companion-ui.js?v=1.3.8',
+  './css/utilities.css?v=1.3.9',
+  './css/companion.css?v=1.3.9',
+  './js/presentation/companion-ui.js?v=1.3.9',
   './vendor/fontawesome/css/all.min.css',
   './vendor/fontawesome/webfonts/fa-solid-900.woff2',
   './vendor/fontawesome/webfonts/fa-regular-400.woff2',
