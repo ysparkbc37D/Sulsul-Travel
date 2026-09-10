@@ -51,6 +51,21 @@ test('new trip creation passes major cities into the AI itinerary flow', () => {
   assert.match(html, /void generateAiItinerary\(\)/);
   assert.match(html, /우선 방문할 주요 도시\/거점/);
   assert.match(html, /requestedCities\.join\(', '\)/);
+  assert.match(html, /const provisionalCity = requestedCities\[cityIndex\]/);
+  assert.match(html, /planSource: shouldGenerateAi \? 'ai_pending'/);
+});
+
+test('AI itinerary approval updates day identity, rebuilds initial plan blocks, and rejects sparse schedules', () => {
+  assert.match(html, /target\.title = plainAiValue\(proposed\.title/);
+  assert.match(html, /target\.city = plainAiValue\(proposed\.city/);
+  assert.match(html, /replacePlanStructure: Boolean\(job\.input\.replacePlanStructure\)/);
+  assert.match(html, /trip\.days\.forEach\(day => delete day\.planBlockId\)/);
+  assert.match(html, /dayNum !== dayIndex \+ 1/);
+  assert.match(html, /day\.spots\.length < minimum/);
+  assert.match(html, /minSpotsPerDay: 6/);
+  assert.match(html, /8~12개 일정을 만듭니다/);
+  assert.match(html, /:00 또는 :30으로 시작/);
+  assert.match(html, /result\.errorCode === 'INVALID_OUTPUT'/);
 });
 
 test('big plan edits can trigger scoped AI regeneration without a free-travel fallback', () => {
@@ -89,7 +104,7 @@ test('release version is synchronized', () => {
   const worker = sw.match(/const V\s*=\s*'st-shell-v([^']+)'/)?.[1];
   const release = changelog.match(/## \[v([^\]]+)\]/)?.[1];
   const chronicleRelease = chronicle.match(/^### \[실록 \d+호\].*\(v([^\)]+)\)$/m)?.[1];
-  assert.equal(app, '1.3.6');
+  assert.equal(app, '1.3.7');
   assert.equal(worker, app);
   assert.equal(release, app);
   assert.equal(chronicleRelease, app);

@@ -1,6 +1,6 @@
 # ✈️ 술술트래블 (Sulsul-Travel) - AI 여행 어시스턴트 & 데일리 다이어리
 
-> **v1.3.6 업데이트 (2026-09-10)**: 큰 계획 카드의 편집값을 해당 구간 AI 재생성에 직접 연결했습니다. 거점·기간·숙소·우선 경험·위험 메모를 반영한 제안을 비교·승인하며, AI 실패 시 저장한 큰 계획과 기존 일정은 유지됩니다. [제품 재설계](docs/design-2026-09/README.md) · [구현 기록](docs/design-2026-09/implementation-v1.3.0.md) · [AI 오케스트레이션](docs/orchestration.md). 계약 테스트: `node --test tests/*.test.mjs`.
+> **v1.3.7 업데이트 (2026-09-11)**: AI 일정 승인 시 도시·일차 제목과 큰 계획 그룹을 함께 갱신합니다. 정확한 Day 순서, 일반일 최소 6개(생성 요청 8~12개), 첫날·마지막 날 최소 4개(생성 요청 5~8개), 30분 단위 시간을 검증하고 부족한 응답은 최대 3회 자동 재시도합니다. [제품 재설계](docs/design-2026-09/README.md) · [구현 기록](docs/design-2026-09/implementation-v1.3.0.md) · [AI 오케스트레이션](docs/orchestration.md). 계약 테스트: `node --test tests/*.test.mjs`.
 
 [![PWA Ready](https://img.shields.io/badge/PWA-Ready-22c55e.svg?style=flat-square&logo=pwa)](https://github.com/ysparkbc37D/Sulsul-Travel)
 [![Zero Backend](https://img.shields.io/badge/Zero--Backend-100%25%20Offline--First-3b82f6.svg?style=flat-square)](https://github.com/ysparkbc37D/Sulsul-Travel)
@@ -105,10 +105,10 @@
 Sulsul-Travel/
 ├── .gitignore                     # Git 제외 설정
 ├── .nojekyll                      # GitHub Pages 정적 에셋 무시 방지 플래그
-├── index.html                     # 술술트래블 단일 파일 SPA 코어 (v1.3.6)
+├── index.html                     # 술술트래블 단일 파일 SPA 코어 (v1.3.7)
 ├── kb-travel.js                   # 여행 도메인 지식 베이스 (환율, 22일 남미 시드 데이터)
 ├── manifest.webmanifest           # PWA 웹 매니페스트
-├── sw.js                          # 오프라인 캐싱 Service Worker (st-shell-v1.3.6)
+├── sw.js                          # 오프라인 캐싱 Service Worker (st-shell-v1.3.7)
 ├── south_america_illustrated_map.jpg # 남미 일러스트 루트 지도 에셋
 ├── CHANGELOG.md                   # 술술체인지스 (버전 관리 및 릴리즈 이력)
 ├── 술술트래블신록.md              # 공식 기술 실록 & 린터(Linter) 10대 불변 법칙

@@ -20,7 +20,7 @@ stateDiagram-v2
   queued --> running
   running --> awaiting_review: 출력 검증 통과
   running --> failed: 오류/시간초과
-  failed --> running: 명시적 재시도
+  failed --> running: 재시도
   awaiting_review --> applying: 사용자 승인
   applying --> applied: revision 일치·원자적 저장
   applying --> conflict: 원본 변경
@@ -36,18 +36,19 @@ stateDiagram-v2
 ## 실행 정책
 
 - 같은 버튼 연속 클릭은 같은 요청 ID, 명시적 재생성은 새 ID를 사용한다.
-- 초기값: 동시 실행 1개, 30초 제한, 최대 시도 3회. 지연·비용 실측 후 조정한다.
+- 초기값: 동시 실행 1개, 40초 제한, 최대 시도 3회. 일정 생성의 형식·밀도 검증 실패는 한도 안에서 자동 재시도하고 나머지 실패는 사용자가 재시도한다.
 - 401/403은 키 설정, 입력 오류는 수정, 429는 제공자 대기시간, 일시 서버 오류는 지연 재시도로 분류한다. 모든 오류에 모델 순회를 하지 않는다.
 - 취소 후 늦은 응답은 버린다. 네트워크 미연결은 대기 상태다. 재시도는 저장된 원본을 바꾸지 않는다.
 - 메모/사진/팩 안의 지시는 데이터로 처리하며 저장소 변경·외부 업로드 명령으로 실행하지 않는다.
 - 초안에 sourceIds, 생성 시각, promptVersion, provider/model을 남긴다. 불확실한 장소/금액은 unknown으로 표시한다.
 - 일기는 Moment로 확인된 사실만 사용한다. 계획만 있는 장소를 방문했다고 쓰지 않는다. 경로 검증이 없으면 이동시간 확인 필요를 표시한다.
+- 전체 일정은 요청 일수와 Day 순서가 정확히 일치해야 한다. 일반일은 최소 6개, 첫날·마지막 날은 최소 4개 일정과 `:00`/`:30` 시작 시간을 검증한 뒤에만 검토 화면으로 보낸다.
 
 ## v1.2.4 실행 코어의 범위
 
 `js/application/orchestration.mjs`는 UI/제공자 독립 코어다. 앱이 Gemini 텍스트·비전 생성기와 LegacyTripRepository 적용기를 주입한다. 요청 중복 방지, 오프라인 대기, 실행 제한, 취소/시간초과, 재시도 상한, 출력 검증, 승인/거절, revision 충돌 처리를 포함한다.
 
-작업 큐는 메모리이며 앱 새로고침 시 복원되지 않는다. Gemini 호출과 초안 적용은 연결됐고, 영속 jobs·오류별 자동 백오프·관측 이벤트는 후속이다. 코어 재시도는 명시적 호출이며 모든 실패에 횟수 제한을 적용한다. LegacyTripRepository는 하나의 localStorage 문서 쓰기 안에서 revision 비교·중복 적용·대상 변경·작업 ID 저장을 처리한다.
+작업 큐는 메모리이며 앱 새로고침 시 복원되지 않는다. Gemini 호출과 초안 적용은 연결됐고, 영속 jobs·오류별 자동 백오프·관측 이벤트는 후속이다. 코어 재시도는 명시적 호출이며 앱 어댑터가 일정 출력 검증 실패만 최대 3회 자동 호출한다. LegacyTripRepository는 하나의 localStorage 문서 쓰기 안에서 revision 비교·중복 적용·대상 변경·작업 ID 저장을 처리한다.
 
 ```javascript
 import { Orchestrator } from './js/application/orchestration.mjs';

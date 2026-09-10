@@ -14,7 +14,7 @@
   </script>
 
   <!-- PWA Meta & Icons -->
-  <link rel="manifest" href="manifest.webmanifest?v=1.3.6">
+  <link rel="manifest" href="manifest.webmanifest?v=1.3.7">
   <meta name="theme-color" content="#f5f5f7">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
@@ -644,7 +644,7 @@
             <h1 class="font-serif-brand text-base sm:text-xl font-bold tracking-tight text-[#1c1917] dark:text-[#ededed] whitespace-nowrap">
               Sulsul Travel
             </h1>
-            <span id="app-ver-badge" onclick="event.stopPropagation(); openVersionHistoryModal()" class="px-1.5 py-0.5 rounded-md theme-card-subtle hover:border-amber-500/60 hover:text-amber-600 dark:hover:text-amber-300 text-[#a2601b] dark:text-[#d4af37] text-[10px] font-bold font-mono shadow-inner cursor-pointer shrink-0 transition" title="버전 업데이트 기록 보기 (클릭)">v1.3.6</span>
+            <span id="app-ver-badge" onclick="event.stopPropagation(); openVersionHistoryModal()" class="px-1.5 py-0.5 rounded-md theme-card-subtle hover:border-amber-500/60 hover:text-amber-600 dark:hover:text-amber-300 text-[#a2601b] dark:text-[#d4af37] text-[10px] font-bold font-mono shadow-inner cursor-pointer shrink-0 transition" title="버전 업데이트 기록 보기 (클릭)">v1.3.7</span>
           </div>
           <p id="header-trip-name" class="text-[10px] sm:text-[11px] text-[#78716c] dark:text-stone-400 truncate max-w-[120px] sm:max-w-xs font-normal">인생의 모든 여정을 기록하는 다이어리</p>
         </div>
@@ -2433,7 +2433,7 @@
             <i class="fa-solid fa-clock-rotate-left text-[#a2601b] dark:text-[#d4af37]"></i>
             <span>술술트래블 엔진 버전 & 릴리즈 히스토리</span>
           </span>
-          <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-500/10 text-[#a2601b] dark:text-[#d4af37] border border-amber-500/30">v1.3.6</span>
+          <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-500/10 text-[#a2601b] dark:text-[#d4af37] border border-amber-500/30">v1.3.7</span>
         </div>
         <p class="text-[11px] text-[#78716c] dark:text-stone-400 leading-relaxed">
           술술 오도미터 순차 올림 원칙에 따른 전체 버전별 기능 추가, UI/UX 개선, 버그 해결 이력을 확인합니다.
@@ -2687,9 +2687,16 @@
 
       <!-- 버전 목록 스크롤 영역 -->
       <div class="flex-1 overflow-y-auto space-y-3 pr-1 text-xs">
-        <!-- v1.3.6 (Current) -->
+        <!-- v1.3.7 (Current) -->
         <div class="p-4 rounded-2xl bg-emerald-500/5 dark:bg-emerald-500/10 border-2 border-emerald-500/40 space-y-2.5 shadow-sm relative overflow-hidden">
-          <div class="flex items-center justify-between gap-2"><div class="flex items-center gap-2 min-w-0"><span class="px-2 py-0.5 rounded-lg bg-emerald-500 text-black font-black text-xs shadow-sm shrink-0">v1.3.6</span><span class="text-xs font-black text-[#1c1917] dark:text-white">큰 계획 편집 연동 AI 재생성</span></div><span class="px-2 py-0.5 rounded-full text-[10px] font-black bg-emerald-100 text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300 border border-emerald-300 shrink-0">최신 버전</span></div>
+          <div class="flex items-center justify-between gap-2"><div class="flex items-center gap-2 min-w-0"><span class="px-2 py-0.5 rounded-lg bg-emerald-500 text-black font-black text-xs shadow-sm shrink-0">v1.3.7</span><span class="text-xs font-black text-[#1c1917] dark:text-white">도시·큰 계획 정렬과 일정 밀도 보정</span></div><span class="px-2 py-0.5 rounded-full text-[10px] font-black bg-emerald-100 text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300 border border-emerald-300 shrink-0">최신 버전</span></div>
+          <div class="text-[11px] text-[#44403c] dark:text-stone-300 space-y-1.5 leading-relaxed"><div><b>도시·제목 동기화</b>: AI가 제안한 도시와 일차 제목을 승인 시 카드에 반영하고 거점별 큰 계획을 다시 묶음.</div><div><b>30분 단위 밀도 검증</b>: 일반일 8~12개, 첫날·마지막 날 5~8개 생성을 요청하고 부족하거나 시간이 어긋난 응답은 자동 재시도.</div><div><b>일차 밀림 방지</b>: 정확한 일수와 Day 순서를 검증하며 사용자가 정한 여행 날짜를 보존.</div></div>
+          <div class="text-[10px] text-stone-400 dark:text-stone-500 pt-1 border-t border-emerald-500/20 flex items-center justify-between"><span>📅 2026-09-11 릴리즈</span><span class="font-mono">st-shell-v1.3.7</span></div>
+        </div>
+
+        <!-- v1.3.6 -->
+        <div class="p-4 rounded-2xl bg-emerald-500/5 dark:bg-emerald-500/10 border-2 border-emerald-500/40 space-y-2.5 shadow-sm relative overflow-hidden">
+          <div class="flex items-center justify-between gap-2"><div class="flex items-center gap-2 min-w-0"><span class="px-2 py-0.5 rounded-lg bg-emerald-500 text-black font-black text-xs shadow-sm shrink-0">v1.3.6</span><span class="text-xs font-black text-[#1c1917] dark:text-white">큰 계획 편집 연동 AI 재생성</span></div></div>
           <div class="text-[11px] text-[#44403c] dark:text-stone-300 space-y-1.5 leading-relaxed"><div><b>저장 후 AI 재생성</b>: 큰 계획 편집값을 저장한 직후 해당 카드 범위의 AI 제안과 검토 화면을 실행.</div><div><b>편집 조건 전달</b>: 거점, 기간, 숙소, 우선 경험, 위험·예약 메모를 AI 재생성의 최우선 조건으로 전달.</div><div><b>자유여행 강제값 제거</b>: 목적지나 테마가 비어도 임의로 자유여행을 저장하지 않고 사용자 입력을 유지.</div></div>
           <div class="text-[10px] text-stone-400 dark:text-stone-500 pt-1 border-t border-emerald-500/20 flex items-center justify-between"><span>📅 2026-09-10 릴리즈</span><span class="font-mono">st-shell-v1.3.6</span></div>
         </div>
@@ -3041,7 +3048,7 @@
 
       <!-- 모달 푸터 -->
       <div class="pt-3 border-t border-[#e8e2d5] dark:border-stone-800 flex items-center justify-between shrink-0">
-        <span class="text-[11px] text-stone-400 dark:text-stone-500 font-mono">Sulsul Travel Engine v1.3.6</span>
+        <span class="text-[11px] text-stone-400 dark:text-stone-500 font-mono">Sulsul Travel Engine v1.3.7</span>
         <button onclick="closeModal('modal-version-history')" class="px-4 py-2 rounded-xl bg-[#faf8f5] dark:bg-stone-800 hover:bg-[#f0ece1] dark:hover:bg-stone-700 border border-[#e8e2d5] dark:border-stone-700 text-[#1c1917] dark:text-[#ededed] text-xs font-bold transition cursor-pointer shadow-sm">
           닫기
         </button>
@@ -3104,7 +3111,7 @@
     window.showToast = showToast;
 
     // 앱 버전 및 글로벌 네임스페이스 (Sulsul-Travel Invariant Rule R-10, R-11, R-12, R-13, R-14, R-15)
-    const APP_VER = '1.3.6';
+    const APP_VER = '1.3.7';
 
     // ══════════════════════════════════════════
     // [Two-Tone Theme System] 라이트 그레이 & 딥 블랙 테마 엔진
@@ -8331,7 +8338,11 @@
             return date.toISOString().slice(0, 10);
           };
           for (let i = 1; i <= durationDays; i++) {
-            days.push({ dayNum: i, title: `Day ${i} ${primaryDest || '여행'} 계획`, date: dayDate(i - 1), city: requestedCities[i - 1] || primaryDest || '도시', spots: [] });
+            const cityIndex = requestedCities.length
+              ? Math.min(requestedCities.length - 1, Math.floor((i - 1) * requestedCities.length / durationDays))
+              : 0;
+            const provisionalCity = requestedCities[cityIndex] || primaryDest || '도시';
+            days.push({ dayNum: i, title: `Day ${i} ${provisionalCity} 계획`, date: dayDate(i - 1), city: provisionalCity, spots: [] });
           }
         } else if (aiAuto) {
           if (pack && pack.hasGoldenCourse && typeof pack.getGoldenItinerary === 'function') {
@@ -8448,6 +8459,7 @@
           coverEmoji: tripEmoji,
           concepts: concepts,
           wishlist: wishlist,
+          planSource: shouldGenerateAi ? 'ai_pending' : (aiAuto ? 'local_draft' : 'manual'),
           isBucketlist: (!start && !end),
           roomCode: 'TRIP-' + Math.floor(1000 + Math.random() * 9000),
           days: days,
@@ -9230,16 +9242,27 @@ ${JSON.stringify(snapshotDays)}`;
       }
       if (job.kind === 'itinerary' || job.kind === 'replan') {
         if (!Array.isArray(payload?.days) || payload.days.length < 1 || payload.days.length > 60) return false;
+        if (job.kind === 'itinerary' && Number.isInteger(job.input.expectedDayCount) &&
+            payload.days.length !== job.input.expectedDayCount) return false;
         const dayNumbers = new Set();
-        const validShape = payload.days.every(day => {
+        const validShape = payload.days.every((day, dayIndex) => {
           const dayNum = Number(day.dayNum);
-          if (!Number.isInteger(dayNum) || dayNum < 1 || dayNum > 365 || dayNumbers.has(dayNum) ||
+          if (!Number.isInteger(dayNum) || dayNum !== dayIndex + 1 || dayNum > 365 || dayNumbers.has(dayNum) ||
+              typeof day.title !== 'string' || !day.title.trim() || day.title.length > 200 ||
+              typeof day.city !== 'string' || !day.city.trim() || day.city.length > 100 ||
               !Array.isArray(day.spots) || day.spots.length > 48) return false;
+          if (job.kind === 'itinerary') {
+            const minimum = (dayIndex === 0 || dayIndex === payload.days.length - 1)
+              ? Math.max(4, Number(job.input.edgeMinSpotsPerDay) || 4)
+              : Math.max(6, Number(job.input.minSpotsPerDay) || 6);
+            if (day.spots.length < minimum) return false;
+          }
           dayNumbers.add(dayNum);
           return day.spots.every(spot => {
             const timeMatches = [...String(spot.time || '').matchAll(/(\d{2}):(\d{2})/g)];
             return typeof spot.title === 'string' && spot.title.trim() && spot.title.length <= 200 &&
-              timeMatches.length > 0 && timeMatches.every(match => Number(match[1]) < 24 && Number(match[2]) < 60);
+              timeMatches.length > 0 && timeMatches.every(match => Number(match[1]) < 24 && Number(match[2]) < 60 &&
+                (job.kind !== 'itinerary' || [0, 30].includes(Number(match[2]))));
           });
         });
         if (!validShape) return false;
@@ -9273,7 +9296,7 @@ ${JSON.stringify(snapshotDays)}`;
       return String(value ?? '').replace(/[<>]/g, '').slice(0, maxLength);
     }
 
-    function mergeItineraryProposal(trip, proposedDays) {
+    function mergeItineraryProposal(trip, proposedDays, { replacePlanStructure = false } = {}) {
       if (!Array.isArray(trip.days)) trip.days = [];
       proposedDays.forEach((proposed, proposalIndex) => {
         const dayNum = Number(proposed.dayNum) || proposalIndex + 1;
@@ -9288,6 +9311,8 @@ ${JSON.stringify(snapshotDays)}`;
           };
           trip.days.push(target);
         }
+        target.title = plainAiValue(proposed.title || target.title || `Day ${dayNum} 추천 일정`, 200);
+        target.city = plainAiValue(proposed.city || target.city, 100);
         if (!Array.isArray(target.spots)) target.spots = [];
         (proposed.spots || []).forEach((spot, spotIndex) => {
           const duplicate = target.spots.some(existing =>
@@ -9312,6 +9337,11 @@ ${JSON.stringify(snapshotDays)}`;
         target.spots.sort((a, b) => String(a.time || '').localeCompare(String(b.time || '')));
       });
       trip.days.sort((a, b) => Number(a.dayNum || 0) - Number(b.dayNum || 0));
+      if (replacePlanStructure) {
+        trip.days.forEach(day => delete day.planBlockId);
+        trip.planBlockMeta = {};
+        ensurePlanBlockStructure(trip);
+      }
     }
 
     async function applyAiDraftPayload(job) {
@@ -9328,7 +9358,12 @@ ${JSON.stringify(snapshotDays)}`;
       }
 
       const mutateDraft = (trip) => {
-        if (job.kind === 'itinerary') mergeItineraryProposal(trip, job.draft.days);
+        if (job.kind === 'itinerary') {
+          mergeItineraryProposal(trip, job.draft.days, {
+            replacePlanStructure: Boolean(job.input.replacePlanStructure)
+          });
+          trip.planSource = 'ai';
+        }
         if (job.kind === 'replan') {
           const currentDays = trip.days || [];
           trip.days = JSON.parse(JSON.stringify(job.draft.days)).map((day, dayIndex) => ({
@@ -9415,7 +9450,11 @@ ${JSON.stringify(snapshotDays)}`;
       const flow = await getAiOrchestrator();
       const existing = flow.enqueue(request);
       State.activeAiJobId = existing.id;
-      const result = await flow.run(existing.id);
+      let result = await flow.run(existing.id);
+      while (request.kind === 'itinerary' && result.state === 'failed' &&
+             result.errorCode === 'INVALID_OUTPUT' && result.attempts < 3) {
+        result = await flow.run(existing.id);
+      }
       if (result.state === 'awaiting_review') {
         await renderAiDraftReview(result.id);
       } else if (result.state === 'waiting_network') {
@@ -9500,16 +9539,33 @@ ${JSON.stringify(snapshotDays)}`;
       const departureNote = trip.departureTime ? `\n마지막날 현지 종료/비행 예정 시간: ${trip.departureTime} (체크아웃, 공항 이동, 출국 수속, 귀국 비행기 고려)` : '';
       const cityNote = Array.isArray(trip.cities) && trip.cities.length ? `\n우선 방문할 주요 도시/거점(입력 순서 존중): ${trip.cities.join(', ')}` : '';
       const destination = (trip.countries || []).join(', ') || (trip.cities || []).join(', ') || trip.title || '사용자 지정 여행지';
+      const expectedDayCount = Number(trip.durationDays || trip.days?.length || 5);
+      const hasCustomizedPlanBlocks = Object.values(trip.planBlockMeta || {}).some(meta =>
+        meta && (meta.title || meta.place || meta.lodging || meta.notes ||
+          (Array.isArray(meta.priorities) && meta.priorities.length) ||
+          (meta.status && meta.status !== 'draft'))
+      );
+      const replacePlanStructure = trip.planSource === 'ai_pending' || trip.planSource === 'local_draft' ||
+        (trip.days || []).every(day => !(day.spots || []).length) || (!trip.planSource && !hasCustomizedPlanBlocks);
       const prompt = `당신은 여행 일정 편집자입니다. 확정 사실을 지어내지 말고 추천 후보만 만드세요.
 여행지: ${destination}
 ${cityNote}
-기간: ${trip.durationDays || 5}일
+기간: ${expectedDayCount}일
+여행 날짜: ${trip.startDate || '미정'} ~ ${trip.endDate || '미정'} (날짜는 이 범위를 바꾸지 마세요)
 테마: ${userPrompt || trip.style || trip.subtitle || '랜드마크 & 미식'}${arrivalNote}${departureNote}
-JSON 배열만 출력하세요. 각 day는 dayNum, title, city, spots를 포함하고 각 spot은 time(HH:MM), cat, title, desc, tip, cost를 포함해야 합니다.`;
+아래 일정 밀도와 시간 규칙을 반드시 지키세요.
+- 정확히 ${expectedDayCount}개의 day를 만들고 dayNum은 1부터 순서대로 사용합니다.
+- 입력한 도시를 순서대로 배치하되, 이동 거리와 숙박 흐름을 고려해 여러 날 체류를 자연스럽게 배분합니다.
+- 일반 여행일은 08:30~21:00 사이에 이동·식사·관광·휴식/체크인을 포함한 8~12개 일정을 만듭니다.
+- 첫날과 마지막 날은 도착·출발 시간을 지키면서도 각각 5~8개 일정을 만듭니다.
+- 모든 일정 시간은 :00 또는 :30으로 시작하며, 항공·장거리 열차 외에는 설명 없는 3시간 이상의 공백을 만들지 않습니다.
+JSON 배열만 출력하세요. 각 day는 dayNum, title, city, date, spots를 포함하고 각 spot은 time(HH:MM), cat, title, desc, tip, cost를 포함해야 합니다.`;
       try {
         const id = `itinerary:${trip.id}:${trip.revision}:${Date.now()}`;
         const result = await startAiDraftJob({ id, tripId: trip.id, targetId: 'itinerary',
-          kind: 'itinerary', baseRevision: trip.revision || 0, input: { prompt } });
+          kind: 'itinerary', baseRevision: trip.revision || 0, input: {
+            prompt, expectedDayCount, minSpotsPerDay: 6, edgeMinSpotsPerDay: 4, replacePlanStructure
+          } });
         if (result.state === 'awaiting_review') closeModal('modal-ai-trip', true);
       } catch (error) {
         console.warn('[AI Draft] itinerary failed:', error?.message);
