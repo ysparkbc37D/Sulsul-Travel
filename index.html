@@ -14,7 +14,7 @@
   </script>
 
   <!-- PWA Meta & Icons -->
-  <link rel="manifest" href="manifest.webmanifest?v=1.3.2">
+  <link rel="manifest" href="manifest.webmanifest?v=1.3.4">
   <meta name="theme-color" content="#f5f5f7">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
@@ -627,6 +627,7 @@
   <script src="js/destinations/pack-south-america.js"></script>
   <script src="js/destinations/pack-yunnan.js"></script>
   <script src="js/infrastructure/storage/legacy-trip-repository.js"></script>
+  <script src="js/infrastructure/storage/journal-overflow-repository.js"></script>
 </head>
 <body class="min-h-screen bg-[#f7f6f2] text-[#1c1917] flex flex-col antialiased selection:bg-amber-500/20 selection:text-amber-900">
 
@@ -643,7 +644,7 @@
             <h1 class="font-serif-brand text-base sm:text-xl font-bold tracking-tight text-[#1c1917] dark:text-[#ededed] whitespace-nowrap">
               Sulsul Travel
             </h1>
-            <span id="app-ver-badge" onclick="event.stopPropagation(); openVersionHistoryModal()" class="px-1.5 py-0.5 rounded-md theme-card-subtle hover:border-amber-500/60 hover:text-amber-600 dark:hover:text-amber-300 text-[#a2601b] dark:text-[#d4af37] text-[10px] font-bold font-mono shadow-inner cursor-pointer shrink-0 transition" title="버전 업데이트 기록 보기 (클릭)">v1.3.3</span>
+            <span id="app-ver-badge" onclick="event.stopPropagation(); openVersionHistoryModal()" class="px-1.5 py-0.5 rounded-md theme-card-subtle hover:border-amber-500/60 hover:text-amber-600 dark:hover:text-amber-300 text-[#a2601b] dark:text-[#d4af37] text-[10px] font-bold font-mono shadow-inner cursor-pointer shrink-0 transition" title="버전 업데이트 기록 보기 (클릭)">v1.3.4</span>
           </div>
           <p id="header-trip-name" class="text-[10px] sm:text-[11px] text-[#78716c] dark:text-stone-400 truncate max-w-[120px] sm:max-w-xs font-normal">인생의 모든 여정을 기록하는 다이어리</p>
         </div>
@@ -2423,7 +2424,7 @@
             <i class="fa-solid fa-clock-rotate-left text-[#a2601b] dark:text-[#d4af37]"></i>
             <span>술술트래블 엔진 버전 & 릴리즈 히스토리</span>
           </span>
-          <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-500/10 text-[#a2601b] dark:text-[#d4af37] border border-amber-500/30">v1.3.3</span>
+          <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-500/10 text-[#a2601b] dark:text-[#d4af37] border border-amber-500/30">v1.3.4</span>
         </div>
         <p class="text-[11px] text-[#78716c] dark:text-stone-400 leading-relaxed">
           술술 오도미터 순차 올림 원칙에 따른 전체 버전별 기능 추가, UI/UX 개선, 버그 해결 이력을 확인합니다.
@@ -2677,11 +2678,11 @@
 
       <!-- 버전 목록 스크롤 영역 -->
       <div class="flex-1 overflow-y-auto space-y-3 pr-1 text-xs">
-        <!-- v1.3.3 (Current) -->
+        <!-- v1.3.4 (Current) -->
         <div class="p-4 rounded-2xl bg-emerald-500/5 dark:bg-emerald-500/10 border-2 border-emerald-500/40 space-y-2.5 shadow-sm relative overflow-hidden">
-          <div class="flex items-center justify-between gap-2"><div class="flex items-center gap-2 min-w-0"><span class="px-2 py-0.5 rounded-lg bg-emerald-500 text-black font-black text-xs shadow-sm shrink-0">v1.3.3</span><span class="text-xs font-black text-[#1c1917] dark:text-white">신규 사용자 무료 Gemini 연결</span></div><span class="px-2 py-0.5 rounded-full text-[10px] font-black bg-emerald-100 text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300 border border-emerald-300 shrink-0">최신 버전</span></div>
-          <div class="text-[11px] text-[#44403c] dark:text-stone-300 space-y-1.5 leading-relaxed"><div><b>무료 티어 우선</b>: 신규 프로젝트 접근이 제한된 2.5 Pro 대신 무료 티어가 명시된 Gemini 3.1 Flash-Lite를 1순위로 사용.</div><div><b>안정 폴백</b>: 3.5 Flash-Lite와 3.5 Flash를 순차 재시도해 모델별 접근 제한에 대응.</div><div><b>상태 표시 정정</b>: 오래된 Gemini 2.0 Flash 문구를 현재 연결 모델명으로 교체.</div></div>
-          <div class="text-[10px] text-stone-400 dark:text-stone-500 pt-1 border-t border-emerald-500/20 flex items-center justify-between"><span>📅 2026-09-10 릴리즈</span><span class="font-mono">st-shell-v1.3.3</span></div>
+          <div class="flex items-center justify-between gap-2"><div class="flex items-center gap-2 min-w-0"><span class="px-2 py-0.5 rounded-lg bg-emerald-500 text-black font-black text-xs shadow-sm shrink-0">v1.3.4</span><span class="text-xs font-black text-[#1c1917] dark:text-white">AI 여행기 저장 안정화</span></div><span class="px-2 py-0.5 rounded-full text-[10px] font-black bg-emerald-100 text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300 border border-emerald-300 shrink-0">최신 버전</span></div>
+          <div class="text-[11px] text-[#44403c] dark:text-stone-300 space-y-1.5 leading-relaxed"><div><b>저장 공간 초과 대응</b>: 사진이 많은 모바일 여행에서도 승인한 AI 여행기 문장을 IndexedDB 보조 저장소에 보관.</div><div><b>자동 복구</b>: 앱 재실행 시 보조 저장된 여행기를 원래 여행 카드에 다시 병합.</div><div><b>기존 데이터 보호</b>: localStorage 저장 실패 시 원본 여행 데이터는 건드리지 않고 승인 초안만 별도 보관.</div></div>
+          <div class="text-[10px] text-stone-400 dark:text-stone-500 pt-1 border-t border-emerald-500/20 flex items-center justify-between"><span>📅 2026-09-10 릴리즈</span><span class="font-mono">st-shell-v1.3.4</span></div>
         </div>
 
         <!-- v1.3.1 -->
@@ -3017,7 +3018,7 @@
 
       <!-- 모달 푸터 -->
       <div class="pt-3 border-t border-[#e8e2d5] dark:border-stone-800 flex items-center justify-between shrink-0">
-        <span class="text-[11px] text-stone-400 dark:text-stone-500 font-mono">Sulsul Travel Engine v1.3.3</span>
+        <span class="text-[11px] text-stone-400 dark:text-stone-500 font-mono">Sulsul Travel Engine v1.3.4</span>
         <button onclick="closeModal('modal-version-history')" class="px-4 py-2 rounded-xl bg-[#faf8f5] dark:bg-stone-800 hover:bg-[#f0ece1] dark:hover:bg-stone-700 border border-[#e8e2d5] dark:border-stone-700 text-[#1c1917] dark:text-[#ededed] text-xs font-bold transition cursor-pointer shadow-sm">
           닫기
         </button>
@@ -3080,7 +3081,7 @@
     window.showToast = showToast;
 
     // 앱 버전 및 글로벌 네임스페이스 (Sulsul-Travel Invariant Rule R-10, R-11, R-12, R-13, R-14, R-15)
-    const APP_VER = '1.3.3';
+    const APP_VER = '1.3.4';
 
     // ══════════════════════════════════════════
     // [Two-Tone Theme System] 라이트 그레이 & 딥 블랙 테마 엔진
@@ -3218,6 +3219,7 @@
     };
 
     const TripRepository = new window.SulsulTravel.LegacyTripRepository(localStorage);
+    const JournalOverflowRepository = new window.SulsulTravel.JournalOverflowRepository();
     let aiOrchestratorPromise = null;
     let replanDomainPromise = null;
 
@@ -3275,6 +3277,7 @@
       renderActiveTripWorkspace();
       updateGeminiKeyUi();
       checkStartupInstallOnboarding();
+      restoreJournalOverflowEntries();
       if (State.storageRecovery) {
         showToast('⚠️ 손상된 여행 데이터를 별도 백업하고 복구 모드로 시작했습니다.', 5000);
       }
@@ -3381,6 +3384,44 @@
         showToast('⚠️ 로컬 저장 공간이 부족합니다. 오래된 사진이나 데이터를 정리해주세요.');
         return false;
       }
+    }
+
+    function isStorageWriteFailure(error) {
+      return error?.name === 'QuotaExceededError' || /quota|storage|write/i.test(String(error?.message || error || ''));
+    }
+
+    async function restoreJournalOverflowEntries() {
+      try {
+        const entries = await JournalOverflowRepository.loadAll();
+        let restored = false;
+        entries.forEach(entry => {
+          const trip = State.trips.find(item => item.id === entry.tripId);
+          if (!trip || !Number.isInteger(entry.dayIndex)) return;
+          const localRevision = Number.isInteger(trip.revision) ? trip.revision : 0;
+          if (Number.isInteger(entry.revision) && entry.revision < localRevision) return;
+          if (!trip.journals) trip.journals = {};
+          const current = trip.journals[entry.dayIndex] || { text: '', photos: [] };
+          trip.journals[entry.dayIndex] = { ...current, ...(entry.journal || {}) };
+          if (Number.isInteger(entry.revision)) trip.revision = Math.max(localRevision, entry.revision);
+          restored = true;
+        });
+        if (restored) {
+          renderHub();
+          renderActiveTripWorkspace();
+          showToast('📝 저장 공간이 부족해도 보관된 여행기 내용을 복구했습니다.', 4500);
+        }
+      } catch (error) {
+        console.warn('[Storage] journal overflow restore skipped:', error?.message || error);
+      }
+    }
+
+    async function saveJournalOverflowEntry(trip, dayIndex, journal, revision) {
+      return JournalOverflowRepository.save({
+        tripId: trip.id,
+        dayIndex: Number(dayIndex),
+        journal,
+        revision
+      });
     }
 
     function getActiveTrip() {
@@ -9079,29 +9120,49 @@ ${JSON.stringify(snapshotDays)}`;
         return 'applied';
       }
 
-      const result = TripRepository.applyDraft(State.trips, {
-        tripId: job.tripId,
-        baseRevision: job.baseRevision,
-        jobId: job.id,
-        mutate: (trip) => {
-          if (job.kind === 'itinerary') mergeItineraryProposal(trip, job.draft.days);
-          if (job.kind === 'replan') {
-            const currentDays = trip.days || [];
-            trip.days = JSON.parse(JSON.stringify(job.draft.days)).map((day, dayIndex) => ({
-              ...day,
-              planBlockId: currentDays[dayIndex]?.planBlockId || day.planBlockId
-            }));
-          }
-          if (job.kind === 'journal') {
-            if (!trip.journals) trip.journals = {};
-            const current = trip.journals[job.input.dayIndex] || { text: '', photos: [] };
-            current.originalText = job.input.sourceText;
-            current.text = job.draft.text;
-            current.aiDraftAcceptedAt = new Date().toISOString();
-            trip.journals[job.input.dayIndex] = current;
-          }
+      const mutateDraft = (trip) => {
+        if (job.kind === 'itinerary') mergeItineraryProposal(trip, job.draft.days);
+        if (job.kind === 'replan') {
+          const currentDays = trip.days || [];
+          trip.days = JSON.parse(JSON.stringify(job.draft.days)).map((day, dayIndex) => ({
+            ...day,
+            planBlockId: currentDays[dayIndex]?.planBlockId || day.planBlockId
+          }));
         }
-      });
+        if (job.kind === 'journal') {
+          if (!trip.journals) trip.journals = {};
+          const current = trip.journals[job.input.dayIndex] || { text: '', photos: [] };
+          current.originalText = job.input.sourceText;
+          current.text = job.draft.text;
+          current.aiDraftAcceptedAt = new Date().toISOString();
+          trip.journals[job.input.dayIndex] = current;
+        }
+      };
+
+      let result;
+      try {
+        result = TripRepository.applyDraft(State.trips, {
+          tripId: job.tripId,
+          baseRevision: job.baseRevision,
+          jobId: job.id,
+          mutate: mutateDraft
+        });
+      } catch (error) {
+        // A large photo-heavy trip can exceed mobile localStorage even though
+        // the AI text itself is small. Keep the approved journal in IndexedDB
+        // so the user's writing is durable and can be restored on next launch.
+        if (job.kind !== 'journal' || !isStorageWriteFailure(error)) throw error;
+        const next = JSON.parse(JSON.stringify(State.trips));
+        const fallbackTrip = next.find(item => item.id === job.tripId);
+        if (!fallbackTrip || fallbackTrip.revision !== job.baseRevision) return 'conflict';
+        mutateDraft(fallbackTrip);
+        fallbackTrip.revision = (Number.isInteger(fallbackTrip.revision) ? fallbackTrip.revision : 0) + 1;
+        fallbackTrip.updatedAt = new Date().toISOString();
+        fallbackTrip.appliedAiJobIds = [...(fallbackTrip.appliedAiJobIds || []), job.id].slice(-50);
+        await saveJournalOverflowEntry(fallbackTrip, job.input.dayIndex, fallbackTrip.journals[job.input.dayIndex], fallbackTrip.revision);
+        State.trips = next;
+        return 'applied';
+      }
       if (result.status === 'applied' && result.trips) State.trips = result.trips;
       return result.status;
     }

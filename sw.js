@@ -1,5 +1,5 @@
 // Sulsul-Travel Service Worker
-const V = 'st-shell-v1.3.3';
+const V = 'st-shell-v1.3.4';
 const CACHE_NAME = V;
 const CACHE_PREFIX = 'st-shell-';
 
@@ -13,6 +13,7 @@ const PRECACHE_ASSETS = [
   './js/destinations/pack-south-america.js',
   './js/destinations/pack-yunnan.js',
   './js/infrastructure/storage/legacy-trip-repository.js',
+  './js/infrastructure/storage/journal-overflow-repository.js',
   './js/application/orchestration.mjs',
   './js/domain/replan.mjs',
   './south_america_illustrated_map.jpg',

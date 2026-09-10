@@ -20,7 +20,9 @@ test('AI review wiring and offline cache entries are present', () => {
     assert.match(html, new RegExp(`id=["']${id}["']`));
   }
   assert.match(html, /js\/infrastructure\/storage\/legacy-trip-repository\.js/);
+  assert.match(html, /js\/infrastructure\/storage\/journal-overflow-repository\.js/);
   assert.match(sw, /js\/infrastructure\/storage\/legacy-trip-repository\.js/);
+  assert.match(sw, /js\/infrastructure\/storage\/journal-overflow-repository\.js/);
   assert.match(sw, /js\/application\/orchestration\.mjs/);
   assert.match(sw, /js\/domain\/replan\.mjs/);
 });
@@ -48,6 +50,12 @@ test('legacy destructive AI paths and mock OCR are absent', () => {
   assert.match(html, /TripRepository\.applyDraft/);
 });
 
+test('journal approval has an IndexedDB overflow path for full localStorage', () => {
+  assert.match(html, /async function restoreJournalOverflowEntries\(\)/);
+  assert.match(html, /saveJournalOverflowEntry\(fallbackTrip, job\.input\.dayIndex/);
+  assert.match(html, /job\.kind !== 'journal' \|\| !isStorageWriteFailure\(error\)/);
+});
+
 test('Gemini uses current models and header based API key transport', () => {
   assert.match(html, /const AI_MODELS = \['gemini-3\.1-flash-lite', 'gemini-3\.5-flash-lite', 'gemini-3\.5-flash'\]/);
   assert.match(html, /models\/\$\{AI_MODELS\[0\]\}:generateContent/);
@@ -60,7 +68,7 @@ test('release version is synchronized', () => {
   const app = html.match(/const APP_VER\s*=\s*'([^']+)'/)?.[1];
   const worker = sw.match(/const V\s*=\s*'st-shell-v([^']+)'/)?.[1];
   const release = changelog.match(/## \[v([^\]]+)\]/)?.[1];
-  assert.equal(app, '1.3.3');
+  assert.equal(app, '1.3.4');
   assert.equal(worker, app);
   assert.equal(release, app);
 });
