@@ -1,5 +1,7 @@
 # 🛠️ 술술트래블 개발 셋업 및 기여 가이드 (DEVELOPMENT.md)
 
+> **v1.3.8 모바일 개편**: 배포는 정적 파일을 그대로 제공합니다. 스타일 개발 시에는 `pnpm install --frozen-lockfile` → `pnpm build:css`, 라이브러리 자산 갱신 시 `pnpm build:assets`를 실행해 생성 파일을 커밋하세요. 런타임 Tailwind CDN은 제거했습니다. 최신 버전 검증은 앱·SW·CHANGELOG·신록 4중 동기화입니다. [구현 및 브라우저 테스트 안내](docs/design-2026-09/mobile-ui-v1.3.8.md)를 우선 참조하세요.
+
 > **확장 작업 시작점**: [개발 모델과 ST-001~004 백로그](docs/development-model.md), [목표 아키텍처](docs/architecture-vnext.md). 새 독립 코어는 Node 18 이상에서 `node --test tests/orchestration.test.mjs`로 검증합니다. 앱 실행은 기존 정적 서버를 유지합니다. 현재 실제 여행 저장 키는 `st_trips_v2`이며 아래 구버전 키 목록과 구분하세요.
 
 본 문서는 **술술트래블 (Sulsul-Travel)**의 로컬 개발 환경 구성, 디버깅, PWA 검증, 코드 작성 규칙 및 릴리즈 절차를 안내하는 **공식 개발자 가이드**입니다.

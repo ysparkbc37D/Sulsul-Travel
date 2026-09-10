@@ -14,7 +14,7 @@
   </script>
 
   <!-- PWA Meta & Icons -->
-  <link rel="manifest" href="manifest.webmanifest?v=1.3.7">
+  <link rel="manifest" href="manifest.webmanifest?v=1.3.8">
   <meta name="theme-color" content="#f5f5f7">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
@@ -29,37 +29,16 @@
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700;800&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
 
   <!-- Tailwind CSS & FontAwesome -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="css/utilities.css?v=1.3.8">
+  <link rel="stylesheet" href="vendor/fontawesome/css/all.min.css">
 
   <!-- Leaflet Map CSS & JS -->
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+  <link rel="stylesheet" href="vendor/leaflet/leaflet.css">
+  <script src="vendor/leaflet/leaflet.js"></script>
 
   <!-- LZ-String (Zero-Server URL Compress Share) -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/lz-string/1.5.0/lz-string.min.js"></script>
+  <script src="vendor/lz-string/lz-string.min.js"></script>
 
-  <script>
-    tailwind.config = {
-      darkMode: 'class',
-      theme: {
-        extend: {
-          colors: {
-            brand: {
-              gold: '#a2601b',
-              goldLight: '#d7a643',
-              emerald: '#059669',
-              dark: '#1c1917',
-              card: '#ffffff',
-              cardHover: '#fcfbf9',
-              border: '#e8e2d5',
-              borderLight: '#f0ece1'
-            }
-          }
-        }
-      }
-    }
-  </script>
 
   <style>
     @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
@@ -620,6 +599,9 @@
     }
   </style>
 
+  <link rel="stylesheet" href="css/companion.css?v=1.3.8">
+  <script src="js/presentation/companion-ui.js?v=1.3.8"></script>
+
   <!-- Knowledge Base Seed & Destination Knowledge Packs (DKP) -->
   <script src="kb-travel.js"></script>
   <script src="js/destinations/destination-registry.js"></script>
@@ -634,7 +616,7 @@
   <!-- ========================================== -->
   <!-- 1. 최상단 앱 헤더 (Sulsul-Diary Warm Cream Luxury - Mobile Slim) -->
   <!-- ========================================== -->
-  <header class="sticky top-0 z-30 bg-[#f7f6f2]/95 backdrop-blur-md border-b border-[#e8e2d5] px-3 sm:px-4 py-2.5 sm:py-3 shadow-[0_2px_12px_rgba(0,0,0,0.03)]">
+  <header class="companion-app-header sticky top-0 z-30 bg-[#f7f6f2]/95 backdrop-blur-md border-b border-[#e8e2d5] px-3 sm:px-4 py-2.5 sm:py-3 shadow-[0_2px_12px_rgba(0,0,0,0.03)]">
     <div class="max-w-6xl mx-auto flex items-center justify-between gap-2 sm:gap-3">
       <!-- 좌측 로고 및 버전 (불변 브랜드 블록: 어느 화면에서나 항상 안정적으로 고정) -->
       <div class="flex items-center gap-2 sm:gap-2.5 cursor-pointer select-none shrink-0" onclick="switchView('hub')" title="술술트래블 홈(허브)으로 이동">
@@ -644,7 +626,7 @@
             <h1 class="font-serif-brand text-base sm:text-xl font-bold tracking-tight text-[#1c1917] dark:text-[#ededed] whitespace-nowrap">
               Sulsul Travel
             </h1>
-            <span id="app-ver-badge" onclick="event.stopPropagation(); openVersionHistoryModal()" class="px-1.5 py-0.5 rounded-md theme-card-subtle hover:border-amber-500/60 hover:text-amber-600 dark:hover:text-amber-300 text-[#a2601b] dark:text-[#d4af37] text-[10px] font-bold font-mono shadow-inner cursor-pointer shrink-0 transition" title="버전 업데이트 기록 보기 (클릭)">v1.3.7</span>
+            <span id="app-ver-badge" onclick="event.stopPropagation(); openVersionHistoryModal()" class="px-1.5 py-0.5 rounded-md theme-card-subtle hover:border-amber-500/60 hover:text-amber-600 dark:hover:text-amber-300 text-[#a2601b] dark:text-[#d4af37] text-[10px] font-bold font-mono shadow-inner cursor-pointer shrink-0 transition" title="버전 업데이트 기록 보기 (클릭)">v1.3.8</span>
           </div>
           <p id="header-trip-name" class="text-[10px] sm:text-[11px] text-[#78716c] dark:text-stone-400 truncate max-w-[120px] sm:max-w-xs font-normal">인생의 모든 여정을 기록하는 다이어리</p>
         </div>
@@ -653,7 +635,7 @@
       <!-- 우측 액션 클러스터 (모바일 최적 4대 필수 버튼 유지: 통계 -> AI비서 -> 설정 -> +추가/‹허브) -->
       <div class="flex items-center gap-1 sm:gap-1.5 shrink-0">
         <!-- 1. 통계 버튼 (📊 - 전용 통계 모달 창 열기) -->
-        <button onclick="toggleAnalyticsView()" class="w-8 h-8 sm:w-9 sm:h-9 rounded-xl theme-card-subtle flex items-center justify-center transition shadow-sm cursor-pointer" title="술술 통계 대시보드 열람">
+        <button onclick="toggleAnalyticsView()" class="companion-header-analytics w-8 h-8 sm:w-9 sm:h-9 rounded-xl theme-card-subtle flex items-center justify-center transition shadow-sm cursor-pointer" title="술술 통계 대시보드 열람">
           <span class="text-sm">📊</span>
         </button>
 
@@ -664,7 +646,7 @@
 
         <!-- 3. 설정 버튼 (🎛️) -->
         <button onclick="openSettingsModal()" class="w-8 h-8 sm:w-9 sm:h-9 rounded-xl theme-card-subtle flex items-center justify-center transition shadow-sm cursor-pointer" title="앱 설정 & 백업">
-          <span class="text-sm">🎛️</span>
+          <i class="fa-solid fa-sliders" aria-hidden="true"></i>
         </button>
 
         <!-- 4. + 추가 버튼 (허브 모드 활성 시 노출) -->
@@ -676,7 +658,7 @@
         <!-- 4-ALT. ‹ 허브 복귀 버튼 (워크스페이스 모드 활성 시 노출) -->
         <button id="header-btn-back-hub" onclick="switchView('hub')" class="hidden px-2.5 sm:px-3 py-1.5 rounded-xl btn-gold text-xs font-black transition flex items-center gap-1 shadow-sm cursor-pointer" title="인생 여행 허브로 돌아가기">
           <i class="fa-solid fa-arrow-left text-[10px]"></i>
-          <span>허브</span>
+          <span>내 여행</span>
         </button>
 
         <!-- 히든 보조 버튼들 (Mandatory IDs & 워크스페이스 상태 보존) -->
@@ -694,6 +676,8 @@
     
     <!-- 스마트 웰컴 배너 (미설치 시 최상단 안내 및 원클릭 설치) -->
     <div id="smart-welcome-banner" class="hidden"></div>
+
+    <section class="companion-hub-heading"><p class="companion-eyebrow">YOUR TRAVEL NOTEBOOK</p><h2>여행은 끝나도,<br>이야기는 계속.</h2><p>준비하는 설렘부터, 오래 꺼내 볼 기억까지.</p></section>
 
     <!-- 통합 스마트 여행 필터 & 검색 허브 (100% 모바일 1화면 최적화, 스크롤 0px) -->
     <div class="p-2.5 sm:p-3.5 rounded-2xl bg-white dark:bg-[#16181d] border border-[#e8e2d5] dark:border-stone-800 shadow-[0_2px_12px_rgba(0,0,0,0.03)] space-y-2.5">
@@ -790,7 +774,7 @@
   <main id="view-workspace" class="hidden flex-1 max-w-5xl mx-auto w-full px-4 py-4 space-y-4">
     
     <!-- 워크스페이스 상단 슬림 메타 바 (모바일 친화 1줄 요약 + 퀵 액션) -->
-    <div class="p-3 sm:p-3.5 rounded-2xl bg-white dark:bg-[#16181d] border border-[#e8e2d5] dark:border-stone-800 shadow-sm flex items-center justify-between gap-2.5">
+    <div class="companion-trip-bar p-3 sm:p-3.5 rounded-2xl bg-white dark:bg-[#16181d] border border-[#e8e2d5] dark:border-stone-800 shadow-sm flex items-center justify-between gap-2.5">
       <div class="flex items-center gap-2.5 min-w-0 flex-1">
         <button onclick="switchView('hub')" class="w-8 h-8 rounded-xl theme-card-subtle flex items-center justify-center text-xs font-bold shrink-0 text-[#a2601b] hover:text-[#8a5015] transition cursor-pointer" title="인생 여행 허브로 돌아가기">
           <i class="fa-solid fa-arrow-left"></i>
@@ -822,7 +806,7 @@
     </div>
 
     <!-- 여행 단계 중심 4대 탭 네비게이션 -->
-    <nav class="flex items-center gap-1 sm:gap-1.5 p-1 bg-[#0f1422] rounded-xl border border-[#1e263c] overflow-x-auto no-scrollbar">
+    <nav id="companion-main-nav" aria-label="여행 주요 메뉴" class="flex items-center gap-1 sm:gap-1.5 p-1 bg-[#0f1422] rounded-xl border border-[#1e263c] overflow-x-auto no-scrollbar">
       <button id="nav-tab-plan" onclick="switchTab('plan')" class="flex-1 min-w-[70px] sm:min-w-[80px] py-2 px-2.5 sm:px-3 rounded-lg text-xs font-bold flex items-center justify-center gap-1.5 transition nav-tab-active shadow-sm whitespace-nowrap shrink-0 cursor-pointer">
         <i class="fa-solid fa-layer-group text-xs shrink-0"></i>
         <span>큰 계획</span>
@@ -849,7 +833,8 @@
     <!-- ---------------------------------------- -->
     <!-- TAB 1: 일정 & 인터랙티브 지도 (TAB-PLAN) -->
     <!-- ---------------------------------------- -->
-    <div id="tab-content-plan" class="tab-view space-y-4">
+    <div id="tab-content-plan" class="tab-view space-y-4" data-presentation="overview">
+      <div id="companion-plan-nav" aria-label="계획 보기 방식"><button data-plan-presentation="overview" aria-pressed="true" onclick="openPlanPresentation('overview')">거점별 여정</button><button data-plan-presentation="timeline" aria-pressed="false" onclick="openPlanPresentation('timeline')">전체 시간표</button><button data-plan-presentation="map" aria-pressed="false" onclick="openPlanPresentation('map')">지도·가이드</button></div>
       <div id="big-plan-container" class="space-y-3"></div>
       
       <!-- 서브 탭 (타임라인 / 인터랙티브 지도 / 12대 예약가이드 / 8대 도시간략) -->
@@ -951,7 +936,7 @@
             <span class="w-10 h-10 rounded-xl bg-amber-500/20 text-amber-400 flex items-center justify-center text-lg shrink-0">🤖</span>
             <div>
               <div class="font-bold text-white text-xs sm:text-sm">일정이 비어 있나요? AI 30분 단위 추천을 받아보세요!</div>
-              <p class="text-[11px] text-slate-400 mt-0.5">국가와 여행 테마에 맞춘 최적의 시간별 동선을 Gemini AI가 1초 만에 설계합니다.</p>
+              <p class="text-[11px] text-slate-400 mt-0.5">도시와 여행 취향을 알려 주세요. AI 초안을 검토한 뒤 적용할 수 있어요.</p>
             </div>
           </div>
           <button onclick="openModal('modal-ai-trip')" class="px-4 py-2 bg-gradient-to-r from-amber-500 to-amber-600 text-slate-950 font-black rounded-xl text-xs shrink-0 shadow-md">
@@ -1177,11 +1162,11 @@
         <div class="flex items-center justify-between">
           <h3 class="text-base font-black text-white flex items-center gap-2">
             <i class="fa-solid fa-clipboard-check text-amber-400"></i>
-            <span>남미 여행 필수 준비물 체크리스트</span>
+            <span>출발 전, 하나씩 확인</span>
           </h3>
           <div class="flex items-center gap-2"><span id="checklist-progress-badge" class="px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 text-xs font-black">0% 준비됨</span><button id="nav-tab-sync" onclick="switchTab('sync')" class="px-2.5 py-1 rounded-lg bg-indigo-500/15 border border-indigo-500/30 text-indigo-300 text-[11px] font-bold">동행·백업</button></div>
         </div>
-        <p class="text-xs text-slate-400">고산병 약(다이아목스), 비자, 어댑터 등 현지 생존에 직결되는 준비물을 체크하세요.</p>
+        <p class="text-xs text-slate-400">여행 서류와 예약, 챙길 물건을 확인해 보세요.</p>
       </div>
 
       <div id="checklist-container" class="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -1277,7 +1262,7 @@
           <i class="fa-solid fa-arrow-left"></i>
         </button>
         <div class="min-w-0 flex-1">
-          <p class="text-[10px] tracking-[0.18em] font-black text-emerald-600 dark:text-emerald-300">BIG PLAN · DETAIL</p>
+          <p class="text-[10px] tracking-[0.18em] font-black text-emerald-600 dark:text-emerald-300">하루 계획</p>
           <h2 id="plan-block-detail-title" class="text-base font-black truncate">구간 상세 계획</h2>
           <p id="plan-block-detail-meta" class="text-[11px] mt-0.5 truncate" style="color:var(--ink3)"></p>
         </div>
@@ -2433,7 +2418,7 @@
             <i class="fa-solid fa-clock-rotate-left text-[#a2601b] dark:text-[#d4af37]"></i>
             <span>술술트래블 엔진 버전 & 릴리즈 히스토리</span>
           </span>
-          <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-500/10 text-[#a2601b] dark:text-[#d4af37] border border-amber-500/30">v1.3.7</span>
+          <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-500/10 text-[#a2601b] dark:text-[#d4af37] border border-amber-500/30">v1.3.8</span>
         </div>
         <p class="text-[11px] text-[#78716c] dark:text-stone-400 leading-relaxed">
           술술 오도미터 순차 올림 원칙에 따른 전체 버전별 기능 추가, UI/UX 개선, 버그 해결 이력을 확인합니다.
@@ -2687,9 +2672,16 @@
 
       <!-- 버전 목록 스크롤 영역 -->
       <div class="flex-1 overflow-y-auto space-y-3 pr-1 text-xs">
-        <!-- v1.3.7 (Current) -->
+        <!-- v1.3.8 (Current) -->
+        <div class="p-4 rounded-2xl border-2 border-emerald-500/40 space-y-2.5">
+          <div class="flex items-center justify-between gap-2"><strong>v1.3.8 · 휴대폰을 위한 여행 노트</strong><span class="companion-status">최신 버전</span></div>
+          <p class="text-xs leading-relaxed">하단 고정 메뉴, 거점별 여정과 전체 시간표 분리, 날짜를 골라 보는 하루 계획, 읽기 쉬운 일정·기록 화면을 적용했습니다. 기본 스타일과 아이콘을 앱에 포함해 외부 CDN 장애에도 핵심 화면을 유지합니다.</p>
+          <p class="text-[10px]">2026-09-11 · st-shell-v1.3.8</p>
+        </div>
+
+        <!-- v1.3.7 -->
         <div class="p-4 rounded-2xl bg-emerald-500/5 dark:bg-emerald-500/10 border-2 border-emerald-500/40 space-y-2.5 shadow-sm relative overflow-hidden">
-          <div class="flex items-center justify-between gap-2"><div class="flex items-center gap-2 min-w-0"><span class="px-2 py-0.5 rounded-lg bg-emerald-500 text-black font-black text-xs shadow-sm shrink-0">v1.3.7</span><span class="text-xs font-black text-[#1c1917] dark:text-white">도시·큰 계획 정렬과 일정 밀도 보정</span></div><span class="px-2 py-0.5 rounded-full text-[10px] font-black bg-emerald-100 text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300 border border-emerald-300 shrink-0">최신 버전</span></div>
+          <div class="flex items-center justify-between gap-2"><div class="flex items-center gap-2 min-w-0"><span class="px-2 py-0.5 rounded-lg bg-emerald-500 text-black font-black text-xs shadow-sm shrink-0">v1.3.7</span><span class="text-xs font-black text-[#1c1917] dark:text-white">도시·큰 계획 정렬과 일정 밀도 보정</span></div></div>
           <div class="text-[11px] text-[#44403c] dark:text-stone-300 space-y-1.5 leading-relaxed"><div><b>도시·제목 동기화</b>: AI가 제안한 도시와 일차 제목을 승인 시 카드에 반영하고 거점별 큰 계획을 다시 묶음.</div><div><b>30분 단위 밀도 검증</b>: 일반일 8~12개, 첫날·마지막 날 5~8개 생성을 요청하고 부족하거나 시간이 어긋난 응답은 자동 재시도.</div><div><b>일차 밀림 방지</b>: 정확한 일수와 Day 순서를 검증하며 사용자가 정한 여행 날짜를 보존.</div></div>
           <div class="text-[10px] text-stone-400 dark:text-stone-500 pt-1 border-t border-emerald-500/20 flex items-center justify-between"><span>📅 2026-09-11 릴리즈</span><span class="font-mono">st-shell-v1.3.7</span></div>
         </div>
@@ -3048,7 +3040,7 @@
 
       <!-- 모달 푸터 -->
       <div class="pt-3 border-t border-[#e8e2d5] dark:border-stone-800 flex items-center justify-between shrink-0">
-        <span class="text-[11px] text-stone-400 dark:text-stone-500 font-mono">Sulsul Travel Engine v1.3.7</span>
+        <span class="text-[11px] text-stone-400 dark:text-stone-500 font-mono">Sulsul Travel Engine v1.3.8</span>
         <button onclick="closeModal('modal-version-history')" class="px-4 py-2 rounded-xl bg-[#faf8f5] dark:bg-stone-800 hover:bg-[#f0ece1] dark:hover:bg-stone-700 border border-[#e8e2d5] dark:border-stone-700 text-[#1c1917] dark:text-[#ededed] text-xs font-bold transition cursor-pointer shadow-sm">
           닫기
         </button>
@@ -3111,7 +3103,7 @@
     window.showToast = showToast;
 
     // 앱 버전 및 글로벌 네임스페이스 (Sulsul-Travel Invariant Rule R-10, R-11, R-12, R-13, R-14, R-15)
-    const APP_VER = '1.3.7';
+    const APP_VER = '1.3.8';
 
     // ══════════════════════════════════════════
     // [Two-Tone Theme System] 라이트 그레이 & 딥 블랙 테마 엔진
@@ -3119,6 +3111,7 @@
     function setTheme(theme) {
       if (theme !== 'dark') theme = 'light';
       document.documentElement.setAttribute('data-theme', theme);
+      document.documentElement.classList.toggle('dark', theme === 'dark');
       localStorage.setItem('st_theme', theme);
       updateThemeUi(theme);
     }
@@ -3181,7 +3174,7 @@
       // 3. 브라우저 최상단 시스템 메타 컬러 동기화
       const metaTheme = document.querySelector('meta[name="theme-color"]');
       if (metaTheme) {
-        metaTheme.setAttribute('content', isDark ? '#0b0c0e' : '#f5f5f7');
+        metaTheme.setAttribute('content', isDark ? '#101b17' : '#f4f6f5');
       }
     }
 
@@ -5800,31 +5793,7 @@
     }
 
     function renderBigPlanTab() {
-      const trip = getActiveTrip();
-      const container = document.getElementById('big-plan-container');
-      if (!trip || !container) return;
-      const migrated = ensurePlanBlockStructure(trip);
-      if (migrated) saveTrips({ bump: false });
-      const blocks = buildPlanBlocks(trip);
-      const fixedCount = (trip.days || []).reduce((sum, day) => sum + (day.spots || []).filter(spot => spot.fixed).length, 0);
-      const confirmedCount = blocks.filter(block => ['confirmed', 'completed'].includes(block.status)).length;
-      container.innerHTML = `
-        <section class="p-4 sm:p-5 rounded-2xl bg-gradient-to-br from-[#13231d] to-[#24382f] border border-emerald-500/25 shadow-lg">
-          <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-3">
-            <div><p class="text-[10px] tracking-[0.22em] font-black text-emerald-300">OUR BIG PLAN</p><h3 class="text-xl sm:text-2xl font-black mt-1" style="color:#fff">큰 그림부터, 함께</h3><p class="text-xs mt-1" style="color:rgba(209,250,229,.78)">카드를 눌러 구간을 편집하고, 바뀐 구간만 RePlan할 수 있습니다.</p></div>
-            <div class="flex gap-2"><span class="px-2.5 py-1 rounded-lg bg-white/10 text-[11px] text-white font-bold">${blocks.length}개 거점</span><span class="px-2.5 py-1 rounded-lg bg-emerald-400/15 text-[11px] text-emerald-200 font-bold">확정 ${confirmedCount}개</span><span class="px-2.5 py-1 rounded-lg bg-amber-400/15 text-[11px] text-amber-300 font-bold">고정 ${fixedCount}개</span></div>
-          </div>
-        </section>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-3">${blocks.map((block, index) => {
-          const first = block.days[0], last = block.days[block.days.length - 1];
-          const spots = block.days.flatMap(item => item.day.spots || []);
-          const highlights = (block.priorities.length ? block.priorities : spots.filter(spot => !spot.completed).slice(0, 3).map(spot => spot.title)).map(escapeHtml).join(' · ') || '세부 경험을 추가해 보세요';
-          const protectedCount = spots.filter(spot => spot.completed || spot.fixed).length;
-          const completedCount = spots.filter(spot => spot.completed).length;
-          return `<article role="button" tabindex="0" aria-label="${escapeHtml(block.title || block.place)} 세부 계획 열기" onclick="openPlanBlock(${index})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openPlanBlock(${index})}" class="p-4 rounded-2xl bg-[#0f1422] border border-[#273126] hover:border-emerald-500/50 shadow-sm cursor-pointer transition focus:outline-none focus:ring-2 focus:ring-emerald-500/50">
-            <div class="flex items-start gap-3"><span class="w-10 h-10 rounded-xl bg-[#16231d] border border-[#2e3b31] text-emerald-300 flex items-center justify-center text-xs font-black shrink-0">${String(index + 1).padStart(2, '0')}</span><div class="min-w-0 flex-1"><div class="flex items-start justify-between gap-2"><div class="min-w-0"><div class="flex items-center gap-1.5 flex-wrap"><h4 class="text-sm sm:text-base font-black text-white">${escapeHtml(block.title || block.place)}</h4><span class="px-2 py-0.5 rounded-full border text-[9px] font-bold ${planBlockStatusClass(block.status)}">${planBlockStatusLabel(block.status)}</span></div>${block.title ? `<p class="text-[10px] text-emerald-300 mt-0.5">${escapeHtml(block.place)}</p>` : ''}<p class="text-[11px] text-slate-400 mt-1">${escapeHtml(block.startDate || `Day ${first.dayIndex + 1}`)}${last.dayIndex !== first.dayIndex ? ` ~ ${escapeHtml(block.endDate || `Day ${last.dayIndex + 1}`)}` : ''} · ${block.days.length}일</p></div><span class="text-[10px] text-slate-400 whitespace-nowrap">완료 ${completedCount}/${spots.length}</span></div><p class="text-xs text-slate-300 mt-3 leading-relaxed line-clamp-2">${highlights}</p>${block.lodging ? `<p class="text-[10px] text-slate-400 mt-2"><i class="fa-solid fa-bed mr-1 text-amber-300"></i>${escapeHtml(block.lodging)}</p>` : ''}<div class="grid grid-cols-3 gap-2 mt-3"><button onclick="event.stopPropagation(); openPlanBlock(${index})" class="min-h-11 px-2 rounded-xl bg-emerald-500/15 border border-emerald-500/30 text-emerald-300 text-[10px] font-bold">세부 계획</button><button onclick="event.stopPropagation(); openPlanBlockEditByIndex(${index})" class="min-h-11 px-2 rounded-xl bg-white/5 border border-white/10 text-slate-300 text-[10px] font-bold"><i class="fa-solid fa-pen mr-1"></i>편집</button><button onclick="event.stopPropagation(); regeneratePlanBlockByIndex(${index})" class="min-h-11 px-2 rounded-xl bg-amber-500/15 border border-amber-500/30 text-amber-300 text-[10px] font-bold"><i class="fa-solid fa-wand-magic-sparkles mr-1"></i>AI 재생성</button></div><p class="text-[9px] text-slate-500 mt-2">보호 일정 ${protectedCount}개 · 구간 AI 재생성 시 이 카드 안에서만 변경</p></div></div>
-          </article>`;
-        }).join('')}</div>`;
+      renderCompanionPlan();
     }
 
     function getActivePlanBlock() {
@@ -5834,27 +5803,7 @@
     }
 
     function renderPlanBlockDetail() {
-      const block = getActivePlanBlock();
-      const container = document.getElementById('plan-block-detail-container');
-      if (!block || !container) return;
-      const first = block.days[0], last = block.days[block.days.length - 1];
-      const spots = block.days.flatMap(item => item.day.spots || []);
-      document.getElementById('plan-block-detail-title').textContent = block.title || block.place;
-      document.getElementById('plan-block-detail-meta').textContent = `${block.startDate || `Day ${first.dayIndex + 1}`} ${last.dayIndex !== first.dayIndex ? `~ ${block.endDate || `Day ${last.dayIndex + 1}`}` : ''} · ${block.days.length}일 · ${planBlockStatusLabel(block.status)}`;
-      const renderSpot = (spot, dayIndex, spotIndex) => `<div class="p-3 rounded-xl border ${spot.completed ? 'border-emerald-500/25 bg-emerald-950/10' : spot.fixed ? 'border-indigo-500/25 bg-indigo-950/10' : 'border-[#1a2236] bg-[#080b12]'} flex items-start gap-3"><span class="font-mono text-[11px] text-slate-400 mt-1">${escapeHtml(spot.time || '--:--')}</span><div class="min-w-0 flex-1"><div class="flex items-center gap-1.5 flex-wrap"><strong class="text-xs ${spot.completed ? 'text-slate-400 line-through' : 'text-slate-200'}">${escapeHtml(spot.title || '일정')}</strong>${spot.completed ? '<span class="text-[9px] text-emerald-400">완료</span>' : spot.fixed ? '<span class="text-[9px] text-indigo-300">고정</span>' : ''}</div><p class="text-[10px] text-slate-500 mt-1 leading-relaxed">${escapeHtml(spot.desc || spot.memo || '')}</p></div><div class="flex gap-1 shrink-0"><button onclick="toggleSpotCompleted(${dayIndex},${spotIndex},event)" class="w-11 h-11 rounded-xl ${spot.completed ? 'bg-emerald-500 text-slate-950' : 'bg-emerald-500/15 text-emerald-300'}" title="${spot.completed ? '완료 취소' : '방문 완료'}">✓</button><button onclick="openEditSpotModal(${dayIndex},${spotIndex},event)" class="w-11 h-11 rounded-xl bg-white/5 text-slate-300" title="일정 편집"><i class="fa-solid fa-pen"></i></button></div></div>`;
-      container.innerHTML = `
-        <section class="p-4 rounded-2xl bg-gradient-to-br from-[#13231d] to-[#24382f] border border-emerald-500/25 text-white keep-white shadow-lg space-y-3">
-          <div class="flex items-start justify-between gap-3"><div><p class="text-[10px] tracking-[0.18em] font-black text-emerald-300">${escapeHtml(block.place)}</p><h3 class="text-lg font-black mt-1">${escapeHtml(block.title || '구간 계획')}</h3></div><span class="px-2.5 py-1 rounded-full border text-[10px] font-bold ${planBlockStatusClass(block.status)}">${planBlockStatusLabel(block.status)}</span></div>
-          <div class="grid grid-cols-2 gap-2 text-[11px]"><div class="p-3 rounded-xl bg-white/10"><span class="text-emerald-100/70">기간</span><strong class="block mt-1">${escapeHtml(block.startDate || `Day ${first.dayIndex + 1}`)}${last.dayIndex !== first.dayIndex ? ` ~ ${escapeHtml(block.endDate || `Day ${last.dayIndex + 1}`)}` : ''}</strong></div><div class="p-3 rounded-xl bg-white/10"><span class="text-emerald-100/70">진행</span><strong class="block mt-1">완료 ${spots.filter(spot => spot.completed).length} / ${spots.length}</strong></div></div>
-          ${block.lodging ? `<p class="text-xs text-emerald-50"><i class="fa-solid fa-bed mr-2 text-amber-300"></i>${escapeHtml(block.lodging)}</p>` : ''}
-          ${block.priorities.length ? `<div class="flex flex-wrap gap-1.5">${block.priorities.map(item => `<span class="px-2.5 py-1 rounded-lg bg-white/10 text-[10px] text-emerald-50">${escapeHtml(item)}</span>`).join('')}</div>` : ''}
-          ${block.notes ? `<p class="p-3 rounded-xl bg-amber-400/10 border border-amber-300/20 text-[11px] text-amber-50 leading-relaxed"><i class="fa-solid fa-circle-exclamation mr-1.5 text-amber-300"></i>${escapeHtml(block.notes)}</p>` : ''}
-        </section>
-        <div class="space-y-3">${block.days.map(({ day, dayIndex }) => {
-          const pending = (day.spots || []).map((spot, spotIndex) => ({ spot, spotIndex })).filter(item => !item.spot.completed);
-          const completed = (day.spots || []).map((spot, spotIndex) => ({ spot, spotIndex })).filter(item => item.spot.completed);
-          return `<section class="p-4 rounded-2xl bg-[#0f1422] border border-[#1e263c] shadow-sm"><div class="flex items-start justify-between gap-2 mb-3"><div><p class="text-[10px] font-black text-emerald-300">DAY ${day.dayNum || dayIndex + 1} · ${escapeHtml(day.date || '')}</p><h4 class="text-sm font-black text-white mt-1">${escapeHtml(day.title || day.city || block.place)}</h4></div><button onclick="openScheduleTuningModal(${dayIndex})" class="min-h-11 px-3 rounded-xl bg-amber-500/15 border border-amber-500/30 text-amber-300 text-[11px] font-bold">이 날 RePlan</button></div><div class="space-y-2">${pending.length ? pending.map(item => renderSpot(item.spot, dayIndex, item.spotIndex)).join('') : '<p class="p-3 rounded-xl bg-emerald-500/10 text-emerald-300 text-xs">이 날의 예정 일정을 모두 완료했습니다.</p>'}</div>${completed.length ? `<details class="mt-3 group"><summary class="min-h-11 flex items-center justify-between px-3 rounded-xl bg-white/5 text-[11px] text-slate-300 font-bold cursor-pointer"><span>완료된 일정 ${completed.length}개 보기</span><i class="fa-solid fa-chevron-down group-open:rotate-180 transition"></i></summary><div class="space-y-2 mt-2">${completed.map(item => renderSpot(item.spot, dayIndex, item.spotIndex)).join('')}</div></details>` : ''}<div class="grid grid-cols-2 gap-2 mt-3"><button onclick="openAddSpotToDay(${dayIndex})" class="min-h-11 rounded-xl bg-white/5 border border-white/10 text-slate-300 text-[11px] font-bold">+ 일정 추가</button><button onclick="openJournalFromPlanBlock(${dayIndex})" class="min-h-11 rounded-xl bg-white/5 border border-white/10 text-slate-300 text-[11px] font-bold">여행 기록 쓰기</button></div></section>`;
-        }).join('')}</div>`;
+      renderCompanionDetail();
     }
 
     function showPlanBlockDetail(blockId, { pushHistory = true } = {}) {
@@ -6029,7 +5978,8 @@
 
     function openActivePlanBlockAddSpot() {
       const block = getActivePlanBlock();
-      if (block) openAddSpotToDay(block.days[0].dayIndex);
+      const selection = State.companionDetailSelection;
+      if (block) openAddSpotToDay(selection?.blockId === block.id && block.days.some(item => item.dayIndex === selection.dayIndex) ? selection.dayIndex : block.days[0].dayIndex);
     }
 
     function openJournalFromPlanBlock(dayIndex) {
@@ -6047,23 +5997,7 @@
     }
 
     function renderTodayTab() {
-      const trip = getActiveTrip();
-      const container = document.getElementById('today-overview-container');
-      if (!trip || !container) return;
-      if (!trip.days?.length) { container.innerHTML = '<div class="p-8 text-center rounded-2xl bg-[#0f1422] text-slate-400">큰 계획에서 여행 일정을 먼저 만들어 주세요.</div>'; return; }
-      const dayIndex = resolveTodayDayIndex(trip);
-      State.activeTodayDayIndex = dayIndex;
-      const day = trip.days[dayIndex];
-      const pending = (day.spots || []).filter(spot => !spot.completed && !spot.skipped);
-      const next = pending[0];
-      const completed = (day.spots || []).filter(spot => spot.completed).length;
-      container.innerHTML = `
-        <section class="p-4 sm:p-5 rounded-2xl bg-gradient-to-br from-emerald-950 to-[#173c30] border border-emerald-500/25 shadow-lg">
-          <div class="flex items-start justify-between gap-3"><div><p class="text-[10px] tracking-[0.2em] font-black text-emerald-300">HERE & NOW · DAY ${day.dayNum || dayIndex + 1}</p><h3 class="text-lg sm:text-xl font-black mt-1" style="color:#fff">${next ? escapeHtml(next.title) : '오늘의 여행을 마무리했어요'}</h3><p class="text-xs mt-1" style="color:rgba(209,250,229,.78)">${escapeHtml(day.date || '')} · ${escapeHtml(day.city || day.route || day.loc || day.title || '')}</p></div><span class="px-2.5 py-1 rounded-lg bg-white/10 text-[11px] font-bold whitespace-nowrap" style="color:#fff">완료 ${completed}/${(day.spots || []).length}</span></div>
-          ${next ? `<div class="flex flex-wrap gap-2 mt-4"><span class="px-2.5 py-1 rounded-lg bg-white/10 text-emerald-100 text-xs font-bold">${escapeHtml(next.time || '시간 미정')}</span>${next.fixed ? '<span class="px-2.5 py-1 rounded-lg bg-indigo-400/20 text-indigo-200 text-xs font-bold">고정 일정</span>' : '<span class="px-2.5 py-1 rounded-lg bg-amber-400/15 text-amber-200 text-xs font-bold">조정 가능</span>'}</div>` : ''}
-          <div class="grid grid-cols-2 sm:flex gap-2 mt-4"><button onclick="openScheduleTuningModal(${dayIndex})" class="min-h-11 px-3 rounded-xl bg-amber-400 text-slate-950 text-xs font-black">↻ RePlan</button><button onclick="switchTab('journal'); selectJournalDay(${dayIndex})" class="min-h-11 px-3 rounded-xl bg-white/10 border border-white/15 text-white text-xs font-bold">순간 기록</button></div>
-        </section>
-        <section class="p-4 rounded-2xl bg-[#0f1422] border border-[#1e263c]"><div class="flex items-center justify-between mb-3"><h3 class="text-sm font-black text-white">오늘의 흐름</h3><button onclick="navigateToInteractiveMap()" class="text-[11px] text-sky-400 font-bold">지도 보기</button></div><div class="space-y-2">${(day.spots || []).map((spot, spotIndex) => `<div class="p-3 rounded-xl border ${spot.completed ? 'border-emerald-500/25 bg-emerald-950/10' : spot.fixed ? 'border-indigo-500/25 bg-indigo-950/10' : 'border-[#1a2236] bg-[#080b12]'} flex items-start gap-3"><span class="font-mono text-[11px] text-slate-400 mt-0.5">${escapeHtml(spot.time || '--:--')}</span><div class="min-w-0 flex-1"><div class="flex items-center gap-1.5 flex-wrap"><strong class="text-xs ${spot.completed ? 'text-slate-400 line-through' : 'text-slate-200'}">${escapeHtml(spot.title)}</strong>${spot.completed ? '<span class="text-[9px] text-emerald-400">방문 확인</span>' : spot.skipped ? '<span class="text-[9px] text-slate-500">건너뜀</span>' : spot.fixed ? '<span class="text-[9px] text-indigo-300">고정</span>' : ''}</div><p class="text-[10px] text-slate-500 mt-0.5">${escapeHtml(spot.desc || spot.memo || '')}</p></div>${!spot.completed && !spot.skipped ? `<div class="flex gap-1"><button onclick="completeTodaySpot(${dayIndex},${spotIndex},event)" class="w-8 h-8 rounded-lg bg-emerald-500/15 text-emerald-300" title="다녀왔어요">✓</button><button onclick="skipTodaySpot(${dayIndex},${spotIndex},event)" class="w-8 h-8 rounded-lg bg-slate-700/40 text-slate-400" title="건너뛰기">–</button></div>` : ''}</div>`).join('')}</div></section>`;
+      renderCompanionToday();
     }
 
     function completeTodaySpot(dayIndex, spotIndex, event) { toggleSpotCompleted(dayIndex, spotIndex, event); renderTodayTab(); }
@@ -6221,10 +6155,12 @@
     // ==========================================
     function switchTab(tabId) {
       State.activeTab = tabId;
+      if (tabId === 'plan') setPlanPresentation('overview');
       const tabs = ['plan', 'today', 'journal', 'checklist', 'expenses', 'sync'];
       tabs.forEach(t => {
         const btn = document.getElementById(`nav-tab-${t}`);
         const view = document.getElementById(`tab-content-${t}`);
+        if (btn) btn.setAttribute('aria-current', t === tabId ? 'page' : 'false');
         if (t === tabId) {
           if (btn && btn.closest('nav')) btn.className = "flex-1 min-w-[70px] sm:min-w-[80px] py-2 px-2.5 sm:px-3 rounded-lg text-xs font-bold flex items-center justify-center gap-1.5 transition nav-tab-active shadow-sm whitespace-nowrap shrink-0 cursor-pointer";
           view.classList.remove('hidden');
@@ -6234,11 +6170,12 @@
         }
       });
       if (tabId === 'today') renderTodayTab();
-      window.scrollTo({ top: 120, behavior: 'smooth' });
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
     function switchPlanSubTab(subTabId) {
       State.planSubTab = subTabId;
+      setPlanPresentation(subTabId);
       const subTabs = ['timeline', 'map', 'booking', 'cityguide'];
       subTabs.forEach(st => {
         const btn = document.getElementById(`btn-subtab-${st}`);
@@ -7017,7 +6954,7 @@
       const cardContainer = document.getElementById('journal-day-card');
 
       pillsContainer.innerHTML = days.map((d, idx) => `
-        <button onclick="selectJournalDay(${idx})" class="px-3 py-1 rounded-lg text-xs font-bold shrink-0 transition ${State.activeJournalDay === idx ? 'bg-amber-500 text-slate-950 shadow' : 'bg-[#080b12] text-slate-400 hover:text-white border border-[#1a2236]'}">
+        <button onclick="selectJournalDay(${idx})" aria-pressed="${State.activeJournalDay === idx}" class="px-3 py-1 rounded-lg text-xs font-bold shrink-0 transition ${State.activeJournalDay === idx ? 'bg-amber-500 text-slate-950 shadow' : 'bg-[#080b12] text-slate-400 hover:text-white border border-[#1a2236]'}">
           Day ${d.dayNum || (idx + 1)}
         </button>
       `).join('');
@@ -7040,7 +6977,7 @@
 
           <label class="px-3 py-1.5 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-slate-950 font-black rounded-lg text-xs flex items-center gap-1.5 shadow-sm transition cursor-pointer">
             <i class="fa-solid fa-camera text-[10px]"></i>
-            <span>3:4 사진 등록</span>
+            <span>사진 추가</span>
             <input type="file" accept="image/*" onchange="handleJournalPhotoUpload(event)" class="hidden">
           </label>
         </div>
@@ -7060,7 +6997,7 @@
           <label class="text-xs font-bold text-slate-300 flex items-center justify-between">
             <span>오늘의 여행 일기</span>
             <button onclick="generateAiJournalEssay()" class="text-amber-400 hover:text-amber-300 font-bold text-[11px] flex items-center gap-1">
-              <i class="fa-solid fa-wand-magic-sparkles text-[10px]"></i> AI 감성 에세이 윤문
+              <i class="fa-solid fa-wand-magic-sparkles text-[10px]"></i> AI로 다듬기
             </button>
           </label>
           <textarea id="journal-text-input" rows="4" placeholder="오늘 하루 인상 깊었던 순간, 감정, 만난 사람들의 이야기를 자유롭게 적어보세요..." class="w-full p-3 bg-[#080b12] border border-[#1a2236] rounded-xl text-xs text-slate-200 placeholder-slate-600 focus:outline-none focus:border-amber-500 leading-relaxed">${escapeHtml(journalEntry.text || '')}</textarea>
@@ -7408,13 +7345,7 @@
 
     function checkStartupInstallOnboarding() {
       updatePwaUiState();
-      if (isInstalled()) return;
-      if (!sessionStorage.getItem('st_startup_onboard_shown')) {
-        sessionStorage.setItem('st_startup_onboard_shown', '1');
-        setTimeout(() => {
-          openInstallGuideModal();
-        }, 700);
-      }
+      // Installation remains available from the banner/settings without interrupting planning.
     }
 
     function openInstallGuideModal(preferredPlatform) {
@@ -8845,8 +8776,8 @@ ${JSON.stringify(snapshotDays)}`;
         if (!day || !Array.isArray(day.spots)) return;
 
         day.spots.forEach(spot => {
-          // Invariant: Completed spots are NEVER shifted or touched!
-          if (spot.completed) {
+          // Invariant: Completed or Fixed spots are NEVER shifted or touched!
+          if (spot.completed || spot.fixed) {
             preservedCompletedCount++;
             return;
           }
@@ -10066,7 +9997,7 @@ JSON 배열만 출력하세요. 각 day는 dayNum, title, city, date, spots를 �
       if (m) {
         m.classList.add('sheet-closed');
         const anyOpen = document.querySelector('.sheet-container:not(.sheet-closed)');
-        if (!anyOpen) document.body.style.overflow = '';
+        if (!anyOpen) document.body.style.overflow = document.getElementById('plan-block-detail-page')?.classList.contains('hidden') ? '' : 'hidden';
       }
     }
 
@@ -10875,6 +10806,10 @@ JSON 배열만 출력하세요. 각 day는 dayNum, title, city, date, spots를 �
       executeScheduleTuning: executeScheduleTuning,
       rebalanceTripSchedule: rebalanceTripSchedule,
       toggleSpotCompleted: toggleSpotCompleted,
+      toggleSpotFixed: toggleSpotFixed,
+      openEditSpotModal: openEditSpotModal,
+      sortDaySpotsByTime: sortDaySpotsByTime,
+      submitSpot: submitSpot,
       generateAutoSpotsForTrip: generateAutoSpotsForTrip,
       detectDestinationTimezone: detectDestinationTimezone,
       updateCreateTripTzBanner: updateCreateTripTzBanner

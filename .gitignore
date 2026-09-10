@@ -1,4 +1,7 @@
 .DS_Store
+node_modules/
+.local-review/
+.codex-remote-attachments/
 Thumbs.db
 *.swp
 *.tmp

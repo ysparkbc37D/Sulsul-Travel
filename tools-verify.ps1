@@ -94,7 +94,7 @@ $swVer = if ($mSw.Success) { $mSw.Groups[1].Value } else { "UNKNOWN" }
 $mCl = [regex]::Match($clContent, "##\s*\[v([0-9\.]+)\]")
 $clVer = if ($mCl.Success) { $mCl.Groups[1].Value } else { "UNKNOWN" }
 
-$mSillok = [regex]::Match($sillokContent, "(?m)^###\s*\[실록\s*\d+호\].*\(v([0-9\.]+)\)\s*$")
+$mSillok = [regex]::Match($sillokContent, "(?m)^###\s*\[[^\]]+\].*?\(v([0-9\.]+)\)\s*$")
 $sillokVer = if ($mSillok.Success) { $mSillok.Groups[1].Value } else { "UNKNOWN" }
 
 $verMatch = ($appVer -eq $swVer) -and ($appVer -eq $clVer) -and ($appVer -eq $badgeVer) -and ($appVer -eq $sillokVer) -and ($appVer -ne "UNKNOWN")

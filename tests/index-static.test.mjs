@@ -6,6 +6,9 @@ const html = readFileSync(new URL('../index.html', import.meta.url), 'utf8');
 const sw = readFileSync(new URL('../sw.js', import.meta.url), 'utf8');
 const changelog = readFileSync(new URL('../CHANGELOG.md', import.meta.url), 'utf8');
 const chronicle = readFileSync(new URL('../술술트래블신록.md', import.meta.url), 'utf8');
+const companion = readFileSync(new URL('../js/presentation/companion-ui.js', import.meta.url), 'utf8');
+const companionCss = readFileSync(new URL('../css/companion.css', import.meta.url), 'utf8');
+const utilitiesCss = readFileSync(new URL('../css/utilities.css', import.meta.url), 'utf8');
 
 test('all classic inline scripts parse', () => {
   const scripts = [...html.matchAll(/<script(?![^>]*\bsrc=)(?![^>]*\btype=["']module["'])[^>]*>([\s\S]*?)<\/script>/gi)];
@@ -74,7 +77,7 @@ test('big plan edits can trigger scoped AI regeneration without a free-travel fa
   assert.match(html, /function startPlanBlockAiRegeneration\(blockId, reason\)/);
   assert.match(html, /function buildAiReplanPrompt\(/);
   assert.match(html, /사용자가 편집하고 저장한 큰 계획/);
-  assert.match(html, /regeneratePlanBlockByIndex\(\$\{index\}\)/);
+  assert.match(companion, /regeneratePlanBlockByIndex\(\$\{index\}\)/);
   assert.doesNotMatch(html, /countriesStr \? splitTravelList\(countriesStr\) : \['자유여행'\]/);
   assert.doesNotMatch(html, /State\.createTripSelectedConcepts\.slice\(\)\s*:\s*\['자유여행'\]/);
 });
@@ -99,12 +102,37 @@ test('Gemini uses current models and header based API key transport', () => {
   assert.doesNotMatch(html, /models\/gemini-2\.0-flash:generateContent\?key=/);
 });
 
+test('mobile travel notebook presentation is bundled and protected from CDN regressions', () => {
+  assert.match(html, /css\/utilities\.css\?v=1\.3\.8/);
+  assert.match(html, /css\/companion\.css\?v=1\.3\.8/);
+  assert.match(html, /js\/presentation\/companion-ui\.js\?v=1\.3\.8/);
+  assert.match(html, /id=["']companion-main-nav["']/);
+  assert.match(html, /id=["']companion-plan-nav["']/);
+  assert.doesNotMatch(html, /cdn\.tailwindcss\.com/);
+  assert.doesNotMatch(html, /cdnjs\.cloudflare\.com\/ajax\/libs\/font-awesome/);
+  assert.match(companion, /function renderCompanionPlan\(/);
+  assert.match(companion, /function renderCompanionDetail\(/);
+  assert.match(companion, /function renderCompanionToday\(/);
+  assert.match(companionCss, /#companion-main-nav[\s\S]*position:fixed/);
+  assert.match(companionCss, /min-height:44px/);
+  assert.match(utilitiesCss, /\.flex/);
+  for (const asset of [
+    'css/utilities.css?v=1.3.8',
+    'css/companion.css?v=1.3.8',
+    'js/presentation/companion-ui.js?v=1.3.8',
+    'vendor/fontawesome/css/all.min.css',
+    'vendor/leaflet/leaflet.js',
+    'vendor/leaflet/images/marker-icon-2x.png',
+    'vendor/lz-string/lz-string.min.js'
+  ]) assert.match(sw, new RegExp(asset.replace(/[.?]/g, '\\$&')));
+});
+
 test('release version is synchronized', () => {
   const app = html.match(/const APP_VER\s*=\s*'([^']+)'/)?.[1];
   const worker = sw.match(/const V\s*=\s*'st-shell-v([^']+)'/)?.[1];
   const release = changelog.match(/## \[v([^\]]+)\]/)?.[1];
   const chronicleRelease = chronicle.match(/^### \[실록 \d+호\].*\(v([^\)]+)\)$/m)?.[1];
-  assert.equal(app, '1.3.7');
+  assert.equal(app, '1.3.8');
   assert.equal(worker, app);
   assert.equal(release, app);
   assert.equal(chronicleRelease, app);

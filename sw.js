@@ -1,11 +1,26 @@
 // Sulsul-Travel Service Worker
-const V = 'st-shell-v1.3.7';
+const V = 'st-shell-v1.3.8';
 const CACHE_NAME = V;
 const CACHE_PREFIX = 'st-shell-';
 
 const PRECACHE_ASSETS = [
   './',
   './index.html',
+  './css/utilities.css?v=1.3.8',
+  './css/companion.css?v=1.3.8',
+  './js/presentation/companion-ui.js?v=1.3.8',
+  './vendor/fontawesome/css/all.min.css',
+  './vendor/fontawesome/webfonts/fa-solid-900.woff2',
+  './vendor/fontawesome/webfonts/fa-regular-400.woff2',
+  './vendor/fontawesome/webfonts/fa-brands-400.woff2',
+  './vendor/leaflet/leaflet.css',
+  './vendor/leaflet/leaflet.js',
+  './vendor/leaflet/images/marker-icon.png',
+  './vendor/leaflet/images/marker-icon-2x.png',
+  './vendor/leaflet/images/marker-shadow.png',
+  './vendor/leaflet/images/layers.png',
+  './vendor/leaflet/images/layers-2x.png',
+  './vendor/lz-string/lz-string.min.js',
   './manifest.webmanifest',
   './kb-travel.js',
   './js/destinations/destination-registry.js',
