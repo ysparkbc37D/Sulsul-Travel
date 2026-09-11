@@ -239,3 +239,5 @@ button:focus-visible, summary:focus-visible, a:focus-visible { outline:3px solid
   *, *::before, *::after { scroll-behavior:auto !important; transition:none !important; animation:none !important; }
 }
 @media print { #companion-main-nav, #companion-plan-nav { display:none !important; } }
+.wallet-card { transition: transform 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease; }
+.wallet-card:hover { border-color: rgba(245, 158, 11, 0.4) !important; }

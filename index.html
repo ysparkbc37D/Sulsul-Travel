@@ -14,7 +14,7 @@
   </script>
 
   <!-- PWA Meta & Icons -->
-  <link rel="manifest" href="manifest.webmanifest?v=1.4.7">
+  <link rel="manifest" href="manifest.webmanifest?v=1.4.8">
   <meta name="theme-color" content="#f5f5f7">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
@@ -29,7 +29,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700;800&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
 
   <!-- Local Utilities Bundle (CDN fallback & tailwind utilities) -->
-  <link rel="stylesheet" href="css/utilities.css?v=1.4.7">
+  <link rel="stylesheet" href="css/utilities.css?v=1.4.8">
   <link rel="stylesheet" href="vendor/fontawesome/css/all.min.css">
 
   <!-- Leaflet Map CSS & JS -->
@@ -661,8 +661,8 @@
     }
   </style>
 
-  <link rel="stylesheet" href="css/companion.css?v=1.4.7">
-  <script src="js/presentation/companion-ui.js?v=1.4.7"></script>
+  <link rel="stylesheet" href="css/companion.css?v=1.4.8">
+  <script src="js/presentation/companion-ui.js?v=1.4.8"></script>
 
   <!-- Knowledge Base Seed & Destination Knowledge Packs (DKP) -->
   <script src="kb-travel.js"></script>
@@ -688,7 +688,7 @@
             <h1 class="font-serif-brand text-base sm:text-xl font-bold tracking-tight text-[#1c1917] dark:text-[#ededed] whitespace-nowrap">
               Sulsul Travel
             </h1>
-            <span id="app-ver-badge" onclick="event.stopPropagation(); openVersionHistoryModal()" class="px-1.5 py-0.5 rounded-md theme-card-subtle hover:border-amber-500/60 hover:text-amber-600 dark:hover:text-amber-300 text-[#a2601b] dark:text-[#d4af37] text-[10px] font-bold font-mono shadow-inner cursor-pointer shrink-0 transition" title="버전 업데이트 기록 보기 (클릭)">v1.4.7</span>
+            <span id="app-ver-badge" onclick="event.stopPropagation(); openVersionHistoryModal()" class="px-1.5 py-0.5 rounded-md theme-card-subtle hover:border-amber-500/60 hover:text-amber-600 dark:hover:text-amber-300 text-[#a2601b] dark:text-[#d4af37] text-[10px] font-bold font-mono shadow-inner cursor-pointer shrink-0 transition" title="버전 업데이트 기록 보기 (클릭)">v1.4.8</span>
           </div>
           <p id="header-trip-name" class="text-[10px] sm:text-[11px] text-[#78716c] dark:text-stone-400 truncate max-w-[120px] sm:max-w-xs font-normal">인생의 모든 여정을 기록하는 다이어리</p>
         </div>
@@ -1142,6 +1142,7 @@
     </div>
 
     <!-- ---------------------------------------- -->
+    <!-- ---------------------------------------- -->
     <!-- TAB 2: 다통화 가계부 (TAB-EXPENSES) -->
     <!-- ---------------------------------------- -->
     <div id="tab-content-expenses" class="tab-view hidden space-y-4">
@@ -1154,7 +1155,7 @@
               <i class="fa-solid fa-wallet text-amber-400"></i>
               <span>다통화 실시간 여행 가계부</span>
             </h3>
-            <p class="text-xs text-slate-400 mt-0.5">현지 화폐(USD, PEN, ARS, BRL 등)로 입력하면 실시간 원화로 자동 정산됩니다.</p>
+            <p class="text-xs text-slate-400 mt-0.5">다중 통화 지갑과 실시간 환전·지출 자동 연동으로 똑똑하게 관리합니다.</p>
           </div>
 
           <!-- 아르헨티나 MEP 우대 환율 스위치 (Sulsul Invariant R-6) -->
@@ -1173,7 +1174,7 @@
         <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
           <div class="p-3 bg-[#080b12] rounded-xl border border-[#1a2236] relative">
             <div class="flex items-center justify-between">
-              <span class="text-[11px] text-slate-400">총 예산</span>
+              <span class="text-[11px] text-slate-400">총 예산 (기준 KRW)</span>
               <button onclick="openEditBudgetPrompt()" class="text-[10px] text-amber-400 hover:text-amber-300 font-bold px-1.5 py-0.5 rounded bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/20 cursor-pointer transition flex items-center gap-1" title="목표 예산 변경">
                 <i class="fa-solid fa-pen text-[9px]"></i> 예산 변경
               </button>
@@ -1181,29 +1182,84 @@
             <div id="exp-total-budget" class="text-base font-black text-white mt-0.5">₩8,500,000</div>
           </div>
           <div class="p-3 bg-[#080b12] rounded-xl border border-[#1a2236]">
-            <div class="text-[11px] text-slate-400">현재 총 지출액</div>
+            <div class="text-[11px] text-slate-400">현재 총 지출액 (원화 환산)</div>
             <div id="exp-total-spent" class="text-base font-black text-amber-400 mt-0.5">₩0</div>
           </div>
           <div class="p-3 bg-[#080b12] rounded-xl border border-[#1a2236]">
-            <div class="text-[11px] text-slate-400">남은 예산 잔액</div>
+            <div class="text-[11px] text-slate-400">남은 총 자산 (원화 환산 합산)</div>
             <div id="exp-total-balance" class="text-base font-black text-emerald-400 mt-0.5">₩8,500,000</div>
           </div>
         </div>
 
-        <div class="flex items-center justify-end gap-2 flex-wrap">
-          <label class="px-4 py-2 bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-slate-950 font-black rounded-xl text-xs flex items-center gap-1.5 shadow-md cursor-pointer transition">
-            <i class="fa-solid fa-camera text-[11px]"></i>
-            <span>영수증 AI 스캔 등록</span>
-            <input type="file" id="exp-tab-receipt-file" accept="image/*" class="hidden" onchange="handleReceiptScan(event)">
-          </label>
-          <button onclick="openAddExpenseModal()" class="px-4 py-2 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-slate-950 font-black rounded-xl text-xs flex items-center gap-1.5 shadow-md transition">
-            <i class="fa-solid fa-plus text-[10px]"></i> 새 지출 수동 추가
+        <!-- 다통화 지갑 현황 보드 (Multi-Currency Wallets) -->
+        <div class="p-3.5 bg-[#080b12] rounded-xl border border-[#1a2236] space-y-2.5">
+          <div class="flex items-center justify-between gap-2 flex-wrap">
+            <div class="flex items-center gap-2">
+              <span class="text-xs font-black text-white flex items-center gap-1.5">
+                <i class="fa-solid fa-coins text-amber-400"></i> 보유 통화 지갑 & 잔액
+              </span>
+              <span id="exp-wallets-count-badge" class="text-[10px] font-bold px-1.5 py-0.5 rounded bg-[#141c2e] text-slate-300 border border-[#23304c]">2개 통화</span>
+            </div>
+            <div class="flex items-center gap-1.5 flex-wrap">
+              <button onclick="openAdjustInitialBalanceModal()" class="text-[10px] text-stone-400 hover:text-stone-200 font-bold px-2 py-1 rounded-lg bg-[#141c2e] hover:bg-[#1e2a44] border border-[#23304c] transition flex items-center gap-1 cursor-pointer" title="출국 전 보유 외화 현금 초기 잔액 설정">
+                <i class="fa-solid fa-sliders text-[9px]"></i> 초기 현금 설정
+              </button>
+              <button onclick="openAddCurrencyPrompt()" class="text-[10px] text-sky-400 hover:text-sky-300 font-bold px-2 py-1 rounded-lg bg-sky-500/10 hover:bg-sky-500/20 border border-sky-500/20 transition flex items-center gap-1 cursor-pointer">
+                <i class="fa-solid fa-plus text-[9px]"></i> 통화 추가
+              </button>
+              <button onclick="openExchangeModal()" class="text-[10px] text-amber-400 hover:text-amber-300 font-bold px-2.5 py-1 rounded-lg bg-gradient-to-r from-amber-500/20 to-amber-600/20 hover:from-amber-500/30 hover:to-amber-600/30 border border-amber-500/30 transition flex items-center gap-1 cursor-pointer shadow-sm">
+                <i class="fa-solid fa-arrow-right-arrow-left text-[9px]"></i> 환전하기
+              </button>
+            </div>
+          </div>
+
+          <!-- 통화별 지갑 카드 그리드 (동적 렌더링) -->
+          <div id="exp-wallets-container" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2">
+            <!-- Dynamic Cards -->
+          </div>
+        </div>
+
+        <!-- 액션 버튼 바 -->
+        <div class="flex items-center justify-between gap-2 flex-wrap pt-1 border-t border-[#1a2236]">
+          <div class="text-[11px] text-slate-400 flex items-center gap-1">
+            <span class="inline-block w-2 h-2 rounded-full bg-emerald-500"></span>
+            <span>지출 시 지갑 잔액 또는 한국 카드를 선택해 차감할 수 있습니다.</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <label class="px-3.5 py-2 bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-slate-950 font-black rounded-xl text-xs flex items-center gap-1.5 shadow-md cursor-pointer transition">
+              <i class="fa-solid fa-camera text-[11px]"></i>
+              <span>영수증 AI 스캔</span>
+              <input type="file" id="exp-tab-receipt-file" accept="image/*" class="hidden" onchange="handleReceiptScan(event)">
+            </label>
+            <button onclick="openAddExpenseModal()" class="px-4 py-2 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-slate-950 font-black rounded-xl text-xs flex items-center gap-1.5 shadow-md transition cursor-pointer">
+              <i class="fa-solid fa-plus text-[10px]"></i> 새 지출 기록
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- 거래 내역 뷰 전환 바 (지출 내역 vs 환전 내역) -->
+      <div class="flex items-center justify-between border-b border-[#1e263c] pb-2">
+        <div class="flex items-center gap-1.5">
+          <button id="exp-view-tab-expenses" onclick="switchExpenseViewTab('expenses')" class="px-3 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-1.5 cursor-pointer bg-amber-500/20 text-amber-300 border border-amber-500/30">
+            <i class="fa-solid fa-receipt text-[11px]"></i> 지출 내역 (<span id="exp-count-badge">0</span>)
           </button>
+          <button id="exp-view-tab-exchanges" onclick="switchExpenseViewTab('exchanges')" class="px-3 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-1.5 cursor-pointer text-slate-400 hover:text-white bg-[#0f1422] border border-transparent">
+            <i class="fa-solid fa-arrow-right-arrow-left text-[11px]"></i> 환전 기록 (<span id="exch-count-badge">0</span>)
+          </button>
+        </div>
+        <div id="exp-tab-summary-hint" class="text-[11px] text-slate-400 hidden sm:block">
+          지출 시 선택한 통화 지갑 잔액이 차감됩니다
         </div>
       </div>
 
       <!-- 지출 내역 리스트 -->
       <div id="expenses-list-container" class="space-y-2">
+        <!-- 동적 렌더링 -->
+      </div>
+
+      <!-- 환전 내역 리스트 -->
+      <div id="exchanges-list-container" class="space-y-2 hidden">
         <!-- 동적 렌더링 -->
       </div>
     </div>
@@ -1223,7 +1279,7 @@
             </h3>
             <p class="text-xs text-slate-400 mt-0.5">확인한 경험과 사진, 메모를 한 편의 여행 이야기로 남깁니다.</p>
           </div>
-          <button id="nav-tab-expenses" onclick="switchTab('expenses')" class="px-3 py-1.5 rounded-lg bg-[#141c2e] border border-[#23304c] text-emerald-400 text-xs font-bold shrink-0">가계부 열기</button>
+          <button id="journal-open-expenses-btn" onclick="switchTab('expenses')" class="px-3 py-1.5 rounded-lg bg-[#141c2e] border border-[#23304c] text-emerald-400 text-xs font-bold shrink-0 cursor-pointer">가계부 열기</button>
         </div>
 
         <!-- 일자 빠른 스크롤 선택 바 -->
@@ -1947,7 +2003,7 @@
         <div class="grid grid-cols-2 gap-3">
           <div>
             <label class="font-bold text-slate-300 block mb-1">결제 통화</label>
-            <select id="exp-form-curr" class="w-full px-3 py-2 bg-[#080b12] border border-[#1e263c] rounded-xl text-white focus:outline-none focus:border-amber-500">
+            <select id="exp-form-curr" onchange="updateExpensePaymentSourceOptions()" class="w-full px-3 py-2 bg-[#080b12] border border-[#1e263c] rounded-xl text-white focus:outline-none focus:border-amber-500">
               <option value="KRW">KRW (원)</option>
               <option value="EUR">EUR (€)</option>
               <option value="USD">USD ($)</option>
@@ -1962,7 +2018,7 @@
           </div>
           <div>
             <label class="font-bold text-slate-300 block mb-1">결제 금액</label>
-            <input type="number" id="exp-form-amount" placeholder="예: 95000" class="w-full px-3 py-2 bg-[#080b12] border border-[#1e263c] rounded-xl text-white focus:outline-none focus:border-amber-500">
+            <input type="number" id="exp-form-amount" oninput="onExpensePaymentSourceChange()" placeholder="예: 95000" class="w-full px-3 py-2 bg-[#080b12] border border-[#1e263c] rounded-xl text-white focus:outline-none focus:border-amber-500">
           </div>
         </div>
         <div class="grid grid-cols-2 gap-3">
@@ -1982,11 +2038,103 @@
             <input type="date" id="exp-form-date" class="w-full px-3 py-2 bg-[#080b12] border border-[#1e263c] rounded-xl text-white focus:outline-none focus:border-amber-500">
           </div>
         </div>
+
+        <div>
+          <label class="font-bold text-slate-300 block mb-1">결제 수단 / 출금 지갑</label>
+          <select id="exp-form-payment-source" onchange="onExpensePaymentSourceChange()" class="w-full px-3 py-2 bg-[#080b12] border border-[#1e263c] rounded-xl text-white focus:outline-none focus:border-amber-500">
+            <!-- 동적 바인딩 -->
+          </select>
+          <div id="exp-form-wallet-hint" class="text-[10px] text-slate-400 mt-1 flex items-center gap-1.5">
+            <!-- 실시간 지갑 잔액 안내 -->
+          </div>
+        </div>
       </div>
 
       <div class="flex items-center gap-3 pt-2">
         <button onclick="closeModal('modal-expense')" class="flex-1 py-2.5 rounded-xl bg-[#141c2e] text-slate-300 font-bold text-xs">취소</button>
         <button onclick="submitAddExpense()" class="flex-1 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 text-slate-950 font-black text-xs shadow-md">지출 저장</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 환전(통화 전환) 등록 모달 -->
+  <div id="modal-exchange" class="sheet-container sheet-closed">
+    <div class="sheet-scrim" onclick="closeModal('modal-exchange')"></div>
+    <div class="sheet-box p-6 sm:p-7 space-y-4">
+      <div class="flex items-center justify-between border-b border-[#1e263c] pb-3">
+        <h3 class="text-base font-black text-white flex items-center gap-2">
+          <i class="fa-solid fa-arrow-right-arrow-left text-amber-400"></i> 새 환전(통화 전환) 등록
+        </h3>
+        <button onclick="closeModal('modal-exchange')" class="text-slate-400 hover:text-white text-base">✕</button>
+      </div>
+
+      <div class="p-3 bg-amber-500/10 border border-amber-500/20 rounded-xl space-y-1">
+        <div class="text-xs font-bold text-amber-300 flex items-center gap-1.5">
+          <span>💡</span><span>환전은 지출이 아닌 '자산 형태 전환'입니다</span>
+        </div>
+        <p class="text-[10px] text-slate-400 leading-relaxed">
+          원화가 줄고 외화가 늘어나며 총 여행 자산은 그대로 보존됩니다. 현지에서 외화로 결제할 때 해당 외화 지갑 잔액이 차감됩니다.
+        </p>
+      </div>
+
+      <div class="space-y-3 text-xs">
+        <!-- 출금 지갑 및 출금 금액 -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label class="font-bold text-slate-300 block mb-1">출금 통화 (보내는 지갑)</label>
+            <select id="exch-form-from-curr" onchange="onExchangeFromCurrChange()" class="w-full px-3 py-2 bg-[#080b12] border border-[#1e263c] rounded-xl text-white focus:outline-none focus:border-amber-500">
+              <!-- Dynamically populated -->
+            </select>
+          </div>
+          <div>
+            <label class="font-bold text-slate-300 block mb-1">출금 금액</label>
+            <input type="number" id="exch-form-from-amount" oninput="onExchangeFromAmountInput()" placeholder="예: 1350000" class="w-full px-3 py-2 bg-[#080b12] border border-[#1e263c] rounded-xl text-white focus:outline-none focus:border-amber-500">
+          </div>
+        </div>
+
+        <!-- 입금 지갑 및 적용 환율 -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label class="font-bold text-slate-300 block mb-1">입금 통화 (받는 지갑)</label>
+            <select id="exch-form-to-curr" onchange="onExchangeToCurrChange()" class="w-full px-3 py-2 bg-[#080b12] border border-[#1e263c] rounded-xl text-white focus:outline-none focus:border-amber-500">
+              <!-- Dynamically populated -->
+            </select>
+          </div>
+          <div>
+            <label id="exch-form-rate-label" class="font-bold text-slate-300 block mb-1">적용 환율</label>
+            <input type="number" step="any" id="exch-form-rate" oninput="onExchangeRateInput()" placeholder="예: 1350" class="w-full px-3 py-2 bg-[#080b12] border border-[#1e263c] rounded-xl text-white focus:outline-none focus:border-amber-500">
+          </div>
+        </div>
+
+        <!-- 최종 입금 금액 -->
+        <div>
+          <label class="font-bold text-slate-300 block mb-1">최종 입금(충전) 금액</label>
+          <input type="number" step="any" id="exch-form-to-amount" oninput="onExchangeToAmountInput()" placeholder="예: 1000" class="w-full px-3 py-2 bg-[#080b12] border border-[#1e263c] rounded-xl text-white focus:outline-none focus:border-amber-500 font-black text-amber-400">
+        </div>
+
+        <!-- 환전 메모 & 날짜 -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label class="font-bold text-slate-300 block mb-1">환전처 / 메모</label>
+            <input type="text" id="exch-form-memo" placeholder="예: 트래블로그 USD 충전" class="w-full px-3 py-2 bg-[#080b12] border border-[#1e263c] rounded-xl text-white focus:outline-none focus:border-amber-500">
+          </div>
+          <div>
+            <label class="font-bold text-slate-300 block mb-1">환전 일자</label>
+            <input type="date" id="exch-form-date" class="w-full px-3 py-2 bg-[#080b12] border border-[#1e263c] rounded-xl text-white focus:outline-none focus:border-amber-500">
+          </div>
+        </div>
+
+        <!-- 실시간 요약 배너 -->
+        <div id="exch-form-summary-banner" class="p-3 bg-[#080b12] border border-[#1e263c] rounded-xl text-center">
+          <span class="text-xs font-bold text-emerald-400" id="exch-form-summary-text">
+            출금 금액과 환율을 입력해 주세요.
+          </span>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-3 pt-2">
+        <button onclick="closeModal('modal-exchange')" class="flex-1 py-2.5 rounded-xl bg-[#141c2e] text-slate-300 font-bold text-xs">취소</button>
+        <button onclick="submitAddExchange()" class="flex-1 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 text-slate-950 font-black text-xs shadow-md">💱 환전 완료</button>
       </div>
     </div>
   </div>
@@ -2832,9 +2980,16 @@
 
       <!-- 버전 목록 스크롤 영역 -->
       <div class="flex-1 overflow-y-auto space-y-3 pr-1 text-xs">
-        <!-- v1.4.7 (Current) -->
+        <!-- v1.4.8 (Current) -->
         <div class="p-4 rounded-2xl border-2 border-emerald-500/40 space-y-2.5 bg-emerald-500/5 dark:bg-emerald-500/10">
-          <div class="flex items-center justify-between gap-2"><div class="flex items-center gap-2 min-w-0"><span class="px-2 py-0.5 rounded-lg bg-emerald-500 text-black font-black text-xs shadow-sm shrink-0">v1.4.7</span><span class="text-xs font-black text-[#1c1917] dark:text-white">여행 가계부 1급 탭 복원 및 다차원 자연 지출 업데이트 구축</span></div><span class="companion-status shrink-0">최신 버전</span></div>
+          <div class="flex items-center justify-between gap-2"><div class="flex items-center gap-2 min-w-0"><span class="px-2 py-0.5 rounded-lg bg-emerald-500 text-black font-black text-xs shadow-sm shrink-0">v1.4.8</span><span class="text-xs font-black text-[#1c1917] dark:text-white">여행 다통화 지갑(Multi-Currency Wallet) & 유기적 환전·결제 가계부 관리 시스템 구축</span></div><span class="companion-status shrink-0">최신 버전</span></div>
+          <p class="text-xs leading-relaxed">여행 중 원화(KRW), 달러(USD), 유로(EUR), 엔화(JPY) 등 다중 통화를 한곳에서 관리하는 <b>다통화 지갑 시스템(Multi-Currency Wallet)</b>과 <b>유기적 환전(Exchange) 엔진</b>을 전격 탑재했습니다. 한국 돈을 외화로 환전하면 원화 지갑 잔액이 차감되고 외화 지갑 잔액이 즉시 충전되며, 총 여행 자산은 보존됩니다. 현지에서 식사나 쇼핑 결제 시 <code>[현지 외화 지갑 잔액 차감]</code> 또는 <code>[한국 신용카드 결제(원화 청구)]</code>를 직관적으로 선택할 수 있어 실제 여행 경비 흐름과 100% 일치하는 지갑 잔액 관리가 가능합니다.</p>
+          <div class="text-[10px] text-stone-400 dark:text-stone-500 pt-1 border-t border-emerald-500/20 flex items-center justify-between"><span>📅 2026-09-11 릴리즈</span><span class="font-mono">st-shell-v1.4.8</span></div>
+        </div>
+
+        <!-- v1.4.7 -->
+        <div class="p-4 rounded-2xl bg-emerald-500/5 dark:bg-emerald-500/10 border-2 border-emerald-500/40 space-y-2.5 shadow-sm relative overflow-hidden">
+          <div class="flex items-center justify-between gap-2"><div class="flex items-center gap-2 min-w-0"><span class="px-2 py-0.5 rounded-lg bg-emerald-500 text-black font-black text-xs shadow-sm shrink-0">v1.4.7</span><span class="text-xs font-black text-[#1c1917] dark:text-white">여행 가계부 1급 탭 복원 및 다차원 자연 지출 업데이트 구축</span></div></div>
           <p class="text-xs leading-relaxed">기존 메뉴 개편 과정에서 보조 메뉴로 축소되었던 <b>여행 가계부(<code>nav-tab-expenses</code>)</b>를 하단 메인 네비게이션 5대 탭(큰 계획·오늘·가계부·기록·준비)의 핵심 기능으로 전격 복원했습니다. 술술 통계 대시보드(📊)의 총 지출/목표 예산 카드 터치 및 가계부 관리 액션 버튼을 신설하여 어디서나 즉시 가계부로 직행할 수 있도록 동선을 통합했습니다. 현장 '오늘' 화면에 1초 퀵 <code>[지출 기록]</code> 버튼을 탑재하고, 가계부 탭에서 목표 예산을 바로 변경할 수 있는 <code>[예산 변경]</code> 기능과 전 세계 18개국 통화 자동 매칭 환율 정산 엔진을 완비했습니다.</p>
           <div class="text-[10px] text-stone-400 dark:text-stone-500 pt-1 border-t border-emerald-500/20 flex items-center justify-between"><span>📅 2026-09-11 릴리즈</span><span class="font-mono">st-shell-v1.4.7</span></div>
         </div>
@@ -3263,7 +3418,7 @@
 
       <!-- 모달 푸터 -->
       <div class="pt-3 border-t border-[#e8e2d5] dark:border-stone-800 flex items-center justify-between shrink-0">
-        <span class="text-[11px] text-stone-400 dark:text-stone-500 font-mono">Sulsul Travel Engine v1.4.7</span>
+        <span class="text-[11px] text-stone-400 dark:text-stone-500 font-mono">Sulsul Travel Engine v1.4.8</span>
         <button onclick="closeModal('modal-version-history')" class="px-4 py-2 rounded-xl bg-[#faf8f5] dark:bg-stone-800 hover:bg-[#f0ece1] dark:hover:bg-stone-700 border border-[#e8e2d5] dark:border-stone-700 text-[#1c1917] dark:text-[#ededed] text-xs font-bold transition cursor-pointer shadow-sm">
           닫기
         </button>
@@ -3326,7 +3481,7 @@
     window.showToast = showToast;
 
     // 앱 버전 및 글로벌 네임스페이스 (Sulsul-Travel Invariant Rule R-10, R-11, R-12, R-13, R-14, R-15)
-    const APP_VER = '1.4.7';
+    const APP_VER = '1.4.8';
 
     // ══════════════════════════════════════════
     // [Two-Tone Theme System] 라이트 그레이 & 딥 블랙 테마 엔진
@@ -3649,6 +3804,7 @@
       currentView: 'hub', // 'hub' | 'workspace'
       activeTab: 'plan',  // core: plan/today/journal/checklist; secondary: expenses/sync
       planSubTab: 'timeline', // 'timeline' | 'map' | 'booking' | 'cityguide'
+      activeExpenseSubTab: 'expenses', // 'expenses' | 'exchanges'
       
       trips: [],          // 모든 여행 컬렉션
       activeTripId: null, // 현재 열람 중인 여행 ID
@@ -6907,9 +7063,11 @@
       const elBudget = document.getElementById('exp-total-budget');
       const elSpent = document.getElementById('exp-total-spent');
       const elBal = document.getElementById('exp-total-balance');
+      const walletData = calculateTripWallets(trip);
       if (elBudget) elBudget.innerText = `₩${budget.toLocaleString()}`;
       if (elSpent) elSpent.innerText = `₩${totalSpent.toLocaleString()}`;
-      if (elBal) elBal.innerText = `₩${Math.max(0, budget - totalSpent).toLocaleString()}`;
+      if (elBal) elBal.innerText = `₩${walletData.totalAssetKrw.toLocaleString()}`;
+      if (State.activeTab === 'expenses') renderExpensesTab();
 
       // 서브탭 레이블 및 아이콘 동적 적응 (v1.1.8 DKP Registry)
       const pack = resolveTripPack(trip);
@@ -7694,11 +7852,240 @@
     }
 
     // ==========================================
-    // [5] 가계부 렌더링
+    // [5] 다통화 지갑 & 환전·가계부 렌더링 엔진 (v1.4.8)
     // ==========================================
+    const CURRENCY_INFO = {
+      KRW: { name: '대한민국 원', symbol: '₩', flag: '🇰🇷', rate: 1, step: 1000 },
+      USD: { name: '미국 달러', symbol: '$', flag: '🇺🇸', rate: 1350, step: 1 },
+      EUR: { name: '유로', symbol: '€', flag: '🇪🇺', rate: 1480, step: 1 },
+      JPY: { name: '일본 엔', symbol: '¥', flag: '🇯🇵', rate: 9.2, step: 100 },
+      CNY: { name: '중국 위안', symbol: '¥', flag: '🇨🇳', rate: 190, step: 10 },
+      GBP: { name: '영국 파운드', symbol: '£', flag: '🇬🇧', rate: 1750, step: 1 },
+      CHF: { name: '스위스 프랑', symbol: 'CHF', flag: '🇨🇭', rate: 1550, step: 1 },
+      PEN: { name: '페루 솔', symbol: 'S/.', flag: '🇵🇪', rate: 360, step: 10 },
+      ARS: { name: '아르헨티나 페소', symbol: '$', flag: '🇦🇷', rate: 1.38, mepRate: 0.95, step: 1000 },
+      BRL: { name: '브라질 헤알', symbol: 'R$', flag: '🇧🇷', rate: 250, step: 10 },
+      CLP: { name: '칠레 페소', symbol: '$', flag: '🇨🇱', rate: 1.45, step: 1000 },
+      BOB: { name: '볼리비아 볼리비아노', symbol: 'Bs', flag: '🇧🇴', rate: 195, step: 10 },
+      VND: { name: '베트남 동', symbol: '₫', flag: '🇻🇳', rate: 0.055, step: 10000 },
+      THB: { name: '태국 바트', symbol: '฿', flag: '🇹🇭', rate: 38, step: 100 },
+      TWD: { name: '대만 달러', symbol: 'NT$', flag: '🇹🇼', rate: 42, step: 100 },
+      AUD: { name: '호주 달러', symbol: 'A$', flag: '🇦🇺', rate: 900, step: 10 },
+      CAD: { name: '캐나다 달러', symbol: 'C$', flag: '🇨🇦', rate: 990, step: 10 },
+      SGD: { name: '싱가포르 달러', symbol: 'S$', flag: '🇸🇬', rate: 1020, step: 10 },
+      HKD: { name: '홍콩 달러', symbol: 'HK$', flag: '🇭🇰', rate: 172, step: 10 }
+    };
+    window.CURRENCY_INFO = CURRENCY_INFO;
+
+    function getCurrencyRate(curr) {
+      if (curr === 'ARS') {
+        return State.isMepEnabled ? 0.95 : 1.38;
+      }
+      return CURRENCY_INFO[curr]?.rate || 1;
+    }
+    window.getCurrencyRate = getCurrencyRate;
+
+    function calculateTripWallets(trip) {
+      if (!trip) return { wallets: {}, totalAssetKrw: 0, activeCurrencies: ['KRW'] };
+
+      const activeCurrenciesSet = new Set(['KRW']);
+      if (trip.currency && CURRENCY_INFO[trip.currency]) activeCurrenciesSet.add(trip.currency);
+      if (trip.countries?.length) {
+        const cInfo = resolveCountryInfo(trip.countries[0]);
+        if (cInfo && cInfo.currency && CURRENCY_INFO[cInfo.currency]) activeCurrenciesSet.add(cInfo.currency);
+      }
+      if (isSouthAmericaTrip(trip)) activeCurrenciesSet.add('USD');
+      if (isYunnanTrip(trip)) activeCurrenciesSet.add('CNY');
+
+      if (Array.isArray(trip.activeCurrencies)) {
+        trip.activeCurrencies.forEach(c => { if (CURRENCY_INFO[c]) activeCurrenciesSet.add(c); });
+      }
+      if (trip.initialBalances) {
+        Object.keys(trip.initialBalances).forEach(c => { if (CURRENCY_INFO[c]) activeCurrenciesSet.add(c); });
+      }
+      if (Array.isArray(trip.exchanges)) {
+        trip.exchanges.forEach(x => {
+          if (x.fromCurr && CURRENCY_INFO[x.fromCurr]) activeCurrenciesSet.add(x.fromCurr);
+          if (x.toCurr && CURRENCY_INFO[x.toCurr]) activeCurrenciesSet.add(x.toCurr);
+        });
+      }
+      if (Array.isArray(trip.expenses)) {
+        trip.expenses.forEach(e => {
+          if (e.curr && CURRENCY_INFO[e.curr]) activeCurrenciesSet.add(e.curr);
+          if (e.walletCurr && CURRENCY_INFO[e.walletCurr]) activeCurrenciesSet.add(e.walletCurr);
+        });
+      }
+
+      const activeCurrencies = Array.from(activeCurrenciesSet);
+      const wallets = {};
+
+      activeCurrencies.forEach(curr => {
+        const info = CURRENCY_INFO[curr] || { name: curr, symbol: curr, flag: '🌐', rate: 1 };
+        let initBal = 0;
+        if (trip.initialBalances && trip.initialBalances[curr] != null) {
+          initBal = Number(trip.initialBalances[curr]) || 0;
+        } else if (curr === 'KRW') {
+          initBal = Number(trip.budget) || 0;
+        }
+
+        wallets[curr] = {
+          curr: curr,
+          name: info.name,
+          symbol: info.symbol,
+          flag: info.flag,
+          initial: initBal,
+          exchangedIn: 0,
+          exchangedOut: 0,
+          spent: 0,
+          balance: initBal,
+          krwValue: 0
+        };
+      });
+
+      // 환전 트랜잭션 집계
+      if (Array.isArray(trip.exchanges)) {
+        trip.exchanges.forEach(x => {
+          const from = x.fromCurr;
+          const to = x.toCurr;
+          const fromAmt = Number(x.fromAmount) || 0;
+          const toAmt = Number(x.toAmount) || 0;
+
+          if (wallets[from]) wallets[from].exchangedOut += fromAmt;
+          if (wallets[to]) wallets[to].exchangedIn += toAmt;
+        });
+      }
+
+      // 지출 트랜잭션 집계
+      if (Array.isArray(trip.expenses)) {
+        trip.expenses.forEach(exp => {
+          const amt = Number(exp.amount) || 0;
+          const krwAmt = Number(exp.krw) || 0;
+          const pSource = exp.paymentSource;
+          const wCurr = exp.walletCurr;
+
+          if (pSource === 'none') {
+            // 지갑 잔액 미차감
+            return;
+          }
+
+          if (pSource === 'wallet_krw' || wCurr === 'KRW') {
+            if (wallets['KRW']) wallets['KRW'].spent += krwAmt;
+          } else if (wCurr && wallets[wCurr]) {
+            wallets[wCurr].spent += amt;
+          } else if (exp.curr && wallets[exp.curr]) {
+            wallets[exp.curr].spent += amt;
+          } else {
+            if (wallets['KRW']) wallets['KRW'].spent += krwAmt;
+          }
+        });
+      }
+
+      // 잔액 및 원화 가치 산출
+      let totalAssetKrw = 0;
+      activeCurrencies.forEach(curr => {
+        const w = wallets[curr];
+        w.balance = w.initial + w.exchangedIn - w.exchangedOut - w.spent;
+        w.krwValue = Math.round(w.balance * getCurrencyRate(curr));
+        totalAssetKrw += w.krwValue;
+      });
+
+      return { wallets, totalAssetKrw, activeCurrencies };
+    }
+    window.calculateTripWallets = calculateTripWallets;
+
+    function renderWalletsBoard(trip, walletData) {
+      const countBadge = document.getElementById('exp-wallets-count-badge');
+      const container = document.getElementById('exp-wallets-container');
+      if (countBadge) countBadge.innerText = `${walletData.activeCurrencies.length}개 통화 지갑`;
+      if (!container) return;
+
+      container.innerHTML = walletData.activeCurrencies.map(curr => {
+        const w = walletData.wallets[curr];
+        if (!w) return '';
+        const isDec = (curr !== 'KRW' && curr !== 'JPY' && curr !== 'VND' && curr !== 'CLP');
+        const formattedBal = (w.balance || 0).toLocaleString(undefined, {
+          minimumFractionDigits: isDec ? 2 : 0,
+          maximumFractionDigits: 2
+        });
+
+        const isNegative = w.balance < 0;
+
+        return `
+          <div class="wallet-card p-2.5 rounded-xl bg-[#080b12] border ${isNegative ? 'border-rose-500/40' : 'border-[#1e263c]'} flex flex-col justify-between transition">
+            <div class="flex items-center justify-between gap-1">
+              <span class="text-xs font-black text-white flex items-center gap-1 truncate">
+                <span>${w.flag}</span>
+                <span>${w.curr}</span>
+              </span>
+              <span class="text-[9px] text-slate-400 truncate">${w.name.split(' ')[0]}</span>
+            </div>
+            <div class="my-1">
+              <div class="text-sm font-black ${isNegative ? 'text-rose-400' : 'text-white'} tracking-tight truncate">
+                ${w.symbol}${formattedBal}
+              </div>
+            </div>
+            <div class="text-[10px] flex items-center justify-between gap-1 pt-1 border-t border-[#1a2236]/60">
+              <span class="text-amber-400/90 font-medium truncate">
+                ${curr === 'KRW' ? '원화 자금' : `≈ ₩${(w.krwValue || 0).toLocaleString()}`}
+              </span>
+              ${w.spent > 0 ? `<span class="text-slate-500 text-[9px] shrink-0">지출 ${w.symbol}${(w.spent||0).toLocaleString()}</span>` : ''}
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function switchExpenseViewTab(subTab) {
+      State.activeExpenseSubTab = subTab;
+      const expBtn = document.getElementById('exp-view-tab-expenses');
+      const exchBtn = document.getElementById('exp-view-tab-exchanges');
+      const expList = document.getElementById('expenses-list-container');
+      const exchList = document.getElementById('exchanges-list-container');
+
+      if (subTab === 'exchanges') {
+        if (expBtn) expBtn.className = 'px-3 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-1.5 cursor-pointer text-slate-400 hover:text-white bg-[#0f1422] border border-transparent';
+        if (exchBtn) exchBtn.className = 'px-3 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-1.5 cursor-pointer bg-amber-500/20 text-amber-300 border border-amber-500/30';
+        if (expList) expList.classList.add('hidden');
+        if (exchList) exchList.classList.remove('hidden');
+      } else {
+        if (expBtn) expBtn.className = 'px-3 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-1.5 cursor-pointer bg-amber-500/20 text-amber-300 border border-amber-500/30';
+        if (exchBtn) exchBtn.className = 'px-3 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-1.5 cursor-pointer text-slate-400 hover:text-white bg-[#0f1422] border border-transparent';
+        if (expList) expList.classList.remove('hidden');
+        if (exchList) exchList.classList.add('hidden');
+      }
+      renderExpensesTab();
+    }
+    window.switchExpenseViewTab = switchExpenseViewTab;
+
     function renderExpensesTab() {
       const trip = getActiveTrip();
+      if (!trip) return;
+
+      const walletData = calculateTripWallets(trip);
+      renderWalletsBoard(trip, walletData);
+
+      const expCountBadge = document.getElementById('exp-count-badge');
+      const exchCountBadge = document.getElementById('exch-count-badge');
+      const summaryHint = document.getElementById('exp-tab-summary-hint');
+      const expCount = (trip.expenses || []).length;
+      const exchCount = (trip.exchanges || []).length;
+
+      if (expCountBadge) expCountBadge.innerText = expCount;
+      if (exchCountBadge) exchCountBadge.innerText = exchCount;
+      if (summaryHint) summaryHint.innerText = `총 ${expCount}건 지출 · ${exchCount}건 환전 (자산 실시간 정산 중)`;
+
+      const currentSubTab = State.activeExpenseSubTab || 'expenses';
+      if (currentSubTab === 'exchanges') {
+        renderExchangesList(trip);
+      } else {
+        renderExpensesList(trip);
+      }
+    }
+    window.renderExpensesTab = renderExpensesTab;
+
+    function renderExpensesList(trip) {
       const container = document.getElementById('expenses-list-container');
+      if (!container) return;
       const expenses = trip.expenses || [];
 
       if (expenses.length === 0) {
@@ -7724,27 +8111,390 @@
         return;
       }
 
-      container.innerHTML = expenses.map((exp, expIdx) => `
-        <div class="p-3.5 bg-[#0f1422] rounded-xl border border-[#1e263c] flex items-center justify-between gap-3">
-          <div class="flex items-center gap-3">
-            <span class="w-8 h-8 rounded-lg bg-[#080b12] flex items-center justify-center text-sm border border-[#1a2236]">${getCategoryIcon(exp.cat)}</span>
-            <div>
-              <div class="font-bold text-white text-xs">${exp.title}</div>
-              <div class="text-[10px] text-slate-400">${exp.date} · ${exp.curr} ${(exp.amount || 0).toLocaleString()}</div>
+      container.innerHTML = expenses.map((exp, expIdx) => {
+        let paymentBadge = '';
+        if (exp.paymentSource === 'wallet_krw' || (exp.curr !== 'KRW' && exp.walletCurr === 'KRW')) {
+          paymentBadge = '<span class="px-1.5 py-0.5 rounded text-[9px] font-bold bg-sky-500/10 text-sky-400 border border-sky-500/20 shrink-0">💳 한국 카드</span>';
+        } else if (exp.paymentSource === 'none') {
+          paymentBadge = '<span class="px-1.5 py-0.5 rounded text-[9px] font-bold bg-slate-500/10 text-slate-400 border border-slate-500/20 shrink-0">📝 단순 기록</span>';
+        } else {
+          const wC = exp.walletCurr || exp.curr || 'KRW';
+          const flag = CURRENCY_INFO[wC]?.flag || '💶';
+          paymentBadge = `<span class="px-1.5 py-0.5 rounded text-[9px] font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 shrink-0">${flag} ${wC} 지갑</span>`;
+        }
+
+        return `
+          <div class="p-3.5 bg-[#0f1422] rounded-xl border border-[#1e263c] flex items-center justify-between gap-3">
+            <div class="flex items-center gap-3 min-w-0">
+              <span class="w-8 h-8 rounded-lg bg-[#080b12] flex items-center justify-center text-sm border border-[#1a2236] shrink-0">${getCategoryIcon(exp.cat)}</span>
+              <div class="min-w-0">
+                <div class="font-bold text-white text-xs truncate flex items-center gap-1.5">
+                  <span class="truncate">${escapeHtml(exp.title)}</span>
+                  ${paymentBadge}
+                </div>
+                <div class="text-[10px] text-slate-400 mt-0.5">${exp.date || ''} · ${exp.curr} ${(exp.amount || 0).toLocaleString()}</div>
+              </div>
+            </div>
+            <div class="flex items-center gap-3 shrink-0">
+              <div class="text-right">
+                <div class="font-black text-amber-400 text-xs">₩${(exp.krw || 0).toLocaleString()}</div>
+                <div class="text-[9px] text-slate-500">원화 환산</div>
+              </div>
+              <button onclick="requestDeleteExpense(${expIdx}, event)" class="w-7 h-7 rounded-lg bg-[#080b12] hover:bg-rose-500/20 border border-[#1a2236] hover:border-rose-500/30 text-slate-400 hover:text-rose-400 flex items-center justify-center text-xs transition cursor-pointer" title="지출 삭제">
+                <i class="fa-regular fa-trash-can text-[11px]"></i>
+              </button>
             </div>
           </div>
-          <div class="flex items-center gap-3">
-            <div class="text-right">
-              <div class="font-black text-amber-400 text-xs">₩${(exp.krw || 0).toLocaleString()}</div>
-              <div class="text-[9px] text-slate-500">원화 환산</div>
+        `;
+      }).join('');
+    }
+
+    function renderExchangesList(trip) {
+      const container = document.getElementById('exchanges-list-container');
+      if (!container) return;
+      const exchanges = trip.exchanges || [];
+
+      if (exchanges.length === 0) {
+        container.innerHTML = `
+          <div class="p-8 text-center rounded-2xl bg-[#0f1422] border border-[#1e263c] space-y-3 shadow-lg">
+            <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-amber-500/20 to-amber-600/10 border border-amber-500/30 text-amber-400 mx-auto flex items-center justify-center text-2xl shadow-inner">
+              💱
             </div>
-            <button onclick="requestDeleteExpense(${expIdx}, event)" class="w-7 h-7 rounded-lg bg-[#080b12] hover:bg-rose-500/20 border border-[#1a2236] hover:border-rose-500/30 text-slate-400 hover:text-rose-400 flex items-center justify-center text-xs transition" title="지출 삭제">
+            <div class="space-y-1">
+              <h4 class="text-sm font-black text-white">등록된 환전 내역이 없습니다</h4>
+              <p class="text-xs text-slate-400">한국 원화를 외화로 환전하거나 외화 간 환전을 등록하여 지갑 잔액을 관리하세요.</p>
+            </div>
+            <div class="pt-1">
+              <button onclick="openExchangeModal()" class="btn-gold px-4 py-2 rounded-xl text-xs font-black shadow-md cursor-pointer inline-flex items-center gap-1.5">
+                <i class="fa-solid fa-arrow-right-arrow-left text-[10px]"></i> 첫 환전 등록하기
+              </button>
+            </div>
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = exchanges.map((x, xIdx) => {
+        const fromInfo = CURRENCY_INFO[x.fromCurr] || { flag: '', symbol: x.fromCurr };
+        const toInfo = CURRENCY_INFO[x.toCurr] || { flag: '', symbol: x.toCurr };
+
+        let rateDisplay = '';
+        if (x.rate) {
+          if (x.fromCurr === 'KRW') rateDisplay = `적용환율 ₩${Number(x.rate).toLocaleString()}/${x.toCurr}`;
+          else if (x.toCurr === 'KRW') rateDisplay = `적용환율 ₩${Number(x.rate).toLocaleString()}/${x.fromCurr}`;
+          else rateDisplay = `환율 1 ${x.fromCurr} = ${Number(x.rate).toLocaleString()} ${x.toCurr}`;
+        }
+
+        return `
+          <div class="p-3.5 bg-[#0f1422] rounded-xl border border-[#1e263c] flex items-center justify-between gap-3">
+            <div class="flex items-center gap-3 min-w-0">
+              <span class="w-8 h-8 rounded-lg bg-amber-500/10 text-amber-400 flex items-center justify-center text-sm border border-amber-500/20 shrink-0">💱</span>
+              <div class="min-w-0">
+                <div class="font-bold text-white text-xs flex items-center gap-1.5 flex-wrap">
+                  <span class="text-rose-400 font-bold">${fromInfo.flag} -${fromInfo.symbol}${(Number(x.fromAmount)||0).toLocaleString()} ${x.fromCurr}</span>
+                  <span class="text-slate-500">➔</span>
+                  <span class="text-emerald-400 font-black">${toInfo.flag} +${toInfo.symbol}${(Number(x.toAmount)||0).toLocaleString()} ${x.toCurr}</span>
+                </div>
+                <div class="text-[10px] text-slate-400 mt-0.5">
+                  ${x.date || ''} · ${escapeHtml(x.memo || '환전')} · ${rateDisplay}
+                </div>
+              </div>
+            </div>
+            <button onclick="requestDeleteExchange(${xIdx}, event)" class="w-7 h-7 rounded-lg bg-[#080b12] hover:bg-rose-500/20 border border-[#1a2236] hover:border-rose-500/30 text-slate-400 hover:text-rose-400 flex items-center justify-center text-xs transition cursor-pointer shrink-0" title="환전 기록 취소/삭제">
               <i class="fa-regular fa-trash-can text-[11px]"></i>
             </button>
           </div>
-        </div>
-      `).join('');
+        `;
+      }).join('');
     }
+
+    function requestDeleteExchange(exchIdx, event) {
+      if (event) event.stopPropagation();
+      const trip = getActiveTrip();
+      if (!trip || !trip.exchanges || !trip.exchanges[exchIdx]) return;
+      const exch = trip.exchanges[exchIdx];
+      showConfirmDelete(
+        '환전 내역을 취소하시겠습니까?',
+        `${exch.fromCurr} ${Number(exch.fromAmount).toLocaleString()} ➔ ${exch.toCurr} ${Number(exch.toAmount).toLocaleString()}`,
+        '환전이 취소되어 출금 통화 잔액이 복구되고 입금 통화 잔액이 차감됩니다.',
+        () => {
+          trip.exchanges.splice(exchIdx, 1);
+          saveTrips();
+          renderActiveTripWorkspace();
+          showToast('🗑️ 환전 기록이 취소되어 지갑 잔액이 복구되었습니다.');
+        }
+      );
+    }
+    window.requestDeleteExchange = requestDeleteExchange;
+
+    function openAddCurrencyPrompt() {
+      const trip = getActiveTrip();
+      if (!trip) return;
+      const available = Object.keys(CURRENCY_INFO).filter(c => c !== 'KRW');
+      const listStr = available.map(c => `${CURRENCY_INFO[c].flag} ${c} (${CURRENCY_INFO[c].name})`).join('\n');
+      const input = prompt(`가계부에 활성화할 통화 코드를 3자리 영문으로 입력하세요.\n\n[지원 통화 목록]\n${listStr}`, 'USD');
+      if (!input) return;
+      const code = input.trim().toUpperCase();
+      if (!CURRENCY_INFO[code]) {
+        showToast(`⚠️ 지원되지 않는 통화 코드입니다: ${code}`);
+        return;
+      }
+      if (!Array.isArray(trip.activeCurrencies)) trip.activeCurrencies = ['KRW'];
+      if (trip.activeCurrencies.includes(code)) {
+        showToast(`ℹ️ 이미 활성화되어 있는 통화입니다: ${code}`);
+        return;
+      }
+      trip.activeCurrencies.push(code);
+      saveTrips();
+      renderActiveTripWorkspace();
+      showToast(`🎉 ${CURRENCY_INFO[code].flag} [${code}] 지갑이 가계부에 성공적으로 추가되었습니다!`);
+    }
+    window.openAddCurrencyPrompt = openAddCurrencyPrompt;
+
+    function openAdjustInitialBalanceModal() {
+      const trip = getActiveTrip();
+      if (!trip) return;
+      const walletData = calculateTripWallets(trip);
+      const foreignCurrs = walletData.activeCurrencies.filter(c => c !== 'KRW');
+      if (foreignCurrs.length === 0) {
+        showToast('💡 먼저 [+ 통화 추가]를 통해 외화 지갑을 활성화해 주세요.');
+        return;
+      }
+      const targetCurr = foreignCurrs[0];
+      const currentInit = (trip.initialBalances && trip.initialBalances[targetCurr] != null) ? trip.initialBalances[targetCurr] : 0;
+      const input = prompt(`[${targetCurr} 초기 현금 자금 설정]\n출국 전 이미 보유하고 있던 ${targetCurr} 현금 금액을 숫자로 입력하세요.\n(현재 설정액: ${currentInit})`, currentInit);
+      if (input === null) return;
+      const parsed = parseFloat(String(input).replace(/[^\d.]/g, ''));
+      if (isNaN(parsed) || parsed < 0) {
+        showToast('⚠️ 올바른 금액 숫자를 입력해 주세요.');
+        return;
+      }
+      if (!trip.initialBalances) trip.initialBalances = {};
+      trip.initialBalances[targetCurr] = parsed;
+      saveTrips();
+      renderActiveTripWorkspace();
+      showToast(`💵 [${targetCurr}] 초기 현금 자금이 ${parsed.toLocaleString()} ${targetCurr}로 설정되었습니다.`);
+    }
+    window.openAdjustInitialBalanceModal = openAdjustInitialBalanceModal;
+
+    function getRecommendedExchangeRate(fromCurr, toCurr) {
+      const fromRate = getCurrencyRate(fromCurr);
+      const toRate = getCurrencyRate(toCurr);
+      if (toCurr === 'KRW') {
+        return fromRate;
+      }
+      if (fromCurr === 'KRW') {
+        return toRate;
+      }
+      return parseFloat((fromRate / toRate).toFixed(4));
+    }
+
+    function openExchangeModal() {
+      const trip = getActiveTrip();
+      if (!trip) return;
+      const walletData = calculateTripWallets(trip);
+
+      const fromSel = document.getElementById('exch-form-from-curr');
+      const toSel = document.getElementById('exch-form-to-curr');
+      if (!fromSel || !toSel) return;
+
+      fromSel.innerHTML = walletData.activeCurrencies.map(c => {
+        const w = walletData.wallets[c];
+        const isDec = (c !== 'KRW' && c !== 'JPY' && c !== 'VND');
+        const balStr = w ? `${w.symbol}${w.balance.toLocaleString(undefined, { minimumFractionDigits: isDec ? 2 : 0, maximumFractionDigits: 2 })}` : '0';
+        return `<option value="${c}">${w.flag} ${c} (보유 잔액: ${balStr})</option>`;
+      }).join('');
+
+      const allCurrs = Object.keys(CURRENCY_INFO);
+      toSel.innerHTML = allCurrs.map(c => {
+        const info = CURRENCY_INFO[c];
+        return `<option value="${c}">${info.flag} ${c} (${info.name})</option>`;
+      }).join('');
+
+      fromSel.value = 'KRW';
+      const foreignCurrs = walletData.activeCurrencies.filter(c => c !== 'KRW');
+      if (foreignCurrs.length > 0) {
+        toSel.value = foreignCurrs[0];
+      } else {
+        toSel.value = 'USD';
+      }
+
+      const fromAmtInput = document.getElementById('exch-form-from-amount');
+      const toAmtInput = document.getElementById('exch-form-to-amount');
+      const memoInput = document.getElementById('exch-form-memo');
+      const dateInput = document.getElementById('exch-form-date');
+
+      if (fromAmtInput) fromAmtInput.value = '';
+      if (toAmtInput) toAmtInput.value = '';
+      if (memoInput) memoInput.value = '';
+      if (dateInput) dateInput.value = new Date().toISOString().split('T')[0];
+
+      updateExchangeRateAndBanner();
+      openModal('modal-exchange');
+    }
+    window.openExchangeModal = openExchangeModal;
+
+    function updateExchangeRateAndBanner() {
+      const fromCurr = document.getElementById('exch-form-from-curr')?.value || 'KRW';
+      const toCurr = document.getElementById('exch-form-to-curr')?.value || 'USD';
+      const rateLabel = document.getElementById('exch-form-rate-label');
+      const rateInput = document.getElementById('exch-form-rate');
+
+      const recRate = getRecommendedExchangeRate(fromCurr, toCurr);
+      if (rateInput) rateInput.value = recRate;
+
+      if (rateLabel) {
+        if (fromCurr === 'KRW') rateLabel.innerText = `적용 환율 (1 ${toCurr} 당 원화)`;
+        else if (toCurr === 'KRW') rateLabel.innerText = `적용 환율 (1 ${fromCurr} 당 원화)`;
+        else rateLabel.innerText = `적용 환율 (1 ${fromCurr} 당 ${toCurr})`;
+      }
+
+      onExchangeFromAmountInput();
+    }
+
+    function onExchangeFromCurrChange() {
+      const fromCurr = document.getElementById('exch-form-from-curr')?.value;
+      const toCurrSel = document.getElementById('exch-form-to-curr');
+      if (toCurrSel && toCurrSel.value === fromCurr) {
+        toCurrSel.value = fromCurr === 'KRW' ? 'USD' : 'KRW';
+      }
+      updateExchangeRateAndBanner();
+    }
+    window.onExchangeFromCurrChange = onExchangeFromCurrChange;
+
+    function onExchangeToCurrChange() {
+      const toCurr = document.getElementById('exch-form-to-curr')?.value;
+      const fromCurrSel = document.getElementById('exch-form-from-curr');
+      if (fromCurrSel && fromCurrSel.value === toCurr) {
+        fromCurrSel.value = toCurr === 'KRW' ? 'USD' : 'KRW';
+      }
+      updateExchangeRateAndBanner();
+    }
+    window.onExchangeToCurrChange = onExchangeToCurrChange;
+
+    function onExchangeFromAmountInput() {
+      const fromCurr = document.getElementById('exch-form-from-curr')?.value || 'KRW';
+      const toCurr = document.getElementById('exch-form-to-curr')?.value || 'USD';
+      const fromAmt = parseFloat(document.getElementById('exch-form-from-amount')?.value) || 0;
+      const rate = parseFloat(document.getElementById('exch-form-rate')?.value) || 1;
+      const toAmtInput = document.getElementById('exch-form-to-amount');
+
+      if (fromAmt > 0 && rate > 0) {
+        let toAmt = 0;
+        if (fromCurr === 'KRW') toAmt = fromAmt / rate;
+        else if (toCurr === 'KRW') toAmt = fromAmt * rate;
+        else toAmt = fromAmt * rate;
+
+        const isDec = (toCurr !== 'KRW' && toCurr !== 'JPY' && toCurr !== 'VND' && toCurr !== 'CLP');
+        toAmt = isDec ? parseFloat(toAmt.toFixed(2)) : Math.round(toAmt);
+        if (toAmtInput) toAmtInput.value = toAmt;
+      }
+      updateExchangeSummaryBanner();
+    }
+    window.onExchangeFromAmountInput = onExchangeFromAmountInput;
+
+    function onExchangeRateInput() {
+      onExchangeFromAmountInput();
+    }
+    window.onExchangeRateInput = onExchangeRateInput;
+
+    function onExchangeToAmountInput() {
+      const fromCurr = document.getElementById('exch-form-from-curr')?.value || 'KRW';
+      const toCurr = document.getElementById('exch-form-to-curr')?.value || 'USD';
+      const toAmt = parseFloat(document.getElementById('exch-form-to-amount')?.value) || 0;
+      const fromAmtInput = document.getElementById('exch-form-from-amount');
+      const rateInput = document.getElementById('exch-form-rate');
+
+      if (toAmt > 0) {
+        const rate = parseFloat(rateInput?.value) || 1;
+        let fromAmt = 0;
+        if (fromCurr === 'KRW') fromAmt = Math.round(toAmt * rate);
+        else if (toCurr === 'KRW') fromAmt = parseFloat((toAmt / rate).toFixed(2));
+        else fromAmt = parseFloat((toAmt / rate).toFixed(2));
+
+        if (fromAmtInput) fromAmtInput.value = fromAmt;
+      }
+      updateExchangeSummaryBanner();
+    }
+    window.onExchangeToAmountInput = onExchangeToAmountInput;
+
+    function updateExchangeSummaryBanner() {
+      const fromCurr = document.getElementById('exch-form-from-curr')?.value || 'KRW';
+      const toCurr = document.getElementById('exch-form-to-curr')?.value || 'USD';
+      const fromAmt = parseFloat(document.getElementById('exch-form-from-amount')?.value) || 0;
+      const toAmt = parseFloat(document.getElementById('exch-form-to-amount')?.value) || 0;
+      const rate = parseFloat(document.getElementById('exch-form-rate')?.value) || 1;
+      const summaryText = document.getElementById('exch-form-summary-text');
+      if (!summaryText) return;
+
+      if (fromAmt <= 0 || toAmt <= 0) {
+        summaryText.innerHTML = `<span class="text-slate-400">출금 금액과 환율을 입력하시면 실시간 환전 계산이 표시됩니다.</span>`;
+        return;
+      }
+
+      const fromInfo = CURRENCY_INFO[fromCurr] || { flag: '', symbol: fromCurr };
+      const toInfo = CURRENCY_INFO[toCurr] || { flag: '', symbol: toCurr };
+
+      summaryText.innerHTML = `
+        <div class="flex items-center justify-center gap-2 font-bold text-xs">
+          <span class="text-rose-400 font-black">${fromInfo.flag} -${fromInfo.symbol}${fromAmt.toLocaleString()} ${fromCurr}</span>
+          <span class="text-slate-400">➔</span>
+          <span class="text-emerald-400 font-black">${toInfo.flag} +${toInfo.symbol}${toAmt.toLocaleString()} ${toCurr}</span>
+        </div>
+        <div class="text-[10px] text-amber-400 mt-1">적용 환율: ${rate.toLocaleString()} · 총 여행 자산 유지</div>
+      `;
+    }
+
+    function submitAddExchange() {
+      const fromCurr = document.getElementById('exch-form-from-curr')?.value;
+      const toCurr = document.getElementById('exch-form-to-curr')?.value;
+      const fromAmt = parseFloat(document.getElementById('exch-form-from-amount')?.value);
+      const toAmt = parseFloat(document.getElementById('exch-form-to-amount')?.value);
+      const rate = parseFloat(document.getElementById('exch-form-rate')?.value);
+      const memo = document.getElementById('exch-form-memo')?.value.trim();
+      const date = document.getElementById('exch-form-date')?.value || new Date().toISOString().split('T')[0];
+
+      if (!fromCurr || !toCurr || fromCurr === toCurr) {
+        alert('서로 다른 출금 통화와 입금 통화를 선택하세요.');
+        return;
+      }
+      if (isNaN(fromAmt) || fromAmt <= 0 || isNaN(toAmt) || toAmt <= 0) {
+        alert('출금 금액과 입금 금액을 올바르게 입력하세요.');
+        return;
+      }
+
+      const trip = getActiveTrip();
+      if (!trip) return;
+      const walletData = calculateTripWallets(trip);
+      const fromWallet = walletData.wallets[fromCurr];
+
+      if (fromWallet && fromWallet.balance < fromAmt) {
+        const proceed = confirm(`출금 통화(${fromCurr})의 현재 보유 잔액(${fromWallet.symbol}${fromWallet.balance.toLocaleString()})보다 환전 출금액이 큽니다.\n계속 환전을 진행하시겠습니까?`);
+        if (!proceed) return;
+      }
+
+      if (!Array.isArray(trip.exchanges)) trip.exchanges = [];
+      trip.exchanges.unshift({
+        id: 'exch_' + Date.now(),
+        date: date,
+        fromCurr: fromCurr,
+        fromAmount: fromAmt,
+        toCurr: toCurr,
+        toAmount: toAmt,
+        rate: rate,
+        memo: memo || `${fromCurr} ➔ ${toCurr} 환전`
+      });
+
+      if (!Array.isArray(trip.activeCurrencies)) trip.activeCurrencies = ['KRW'];
+      if (!trip.activeCurrencies.includes(toCurr)) trip.activeCurrencies.push(toCurr);
+      if (!trip.activeCurrencies.includes(fromCurr)) trip.activeCurrencies.push(fromCurr);
+
+      saveTrips();
+      closeModal('modal-exchange', true);
+      renderActiveTripWorkspace();
+      showToast(`💱 [환전 완료] ${fromCurr} ${fromAmt.toLocaleString()} ➔ ${toCurr} ${toAmt.toLocaleString()}`);
+    }
+    window.submitAddExchange = submitAddExchange;
 
     function toggleMepRate() {
       State.isMepEnabled = document.getElementById('chk-mep-rate').checked;
@@ -7759,6 +8509,7 @@
         renderActiveTripWorkspace();
       }
     }
+    window.toggleMepRate = toggleMepRate;
 
     // ==========================================
     // [6] 포토 다이어리 렌더링 (3:4 Canvas 정규화)
@@ -9573,6 +10324,9 @@
           roomCode: 'TRIP-' + Math.floor(1000 + Math.random() * 9000),
           days: days,
           expenses: [],
+          exchanges: [],
+          activeCurrencies: [curr || (pack ? pack.currency : 'KRW'), 'KRW'].filter((v, i, a) => v && a.indexOf(v) === i),
+          initialBalances: { KRW: budget || 0 },
           journals: {},
           checklist: initialChecklist
         };
@@ -10178,6 +10932,8 @@ ${JSON.stringify(snapshotDays)}`;
         return;
       }
       trip.budget = parsed;
+      if (!trip.initialBalances) trip.initialBalances = {};
+      trip.initialBalances.KRW = parsed;
       saveTrips();
       renderActiveTripWorkspace();
       showToast(`💰 목표 예산이 ₩${parsed.toLocaleString()}으로 변경되었습니다.`);
@@ -10216,8 +10972,98 @@ ${JSON.stringify(snapshotDays)}`;
           }
         }
       }
+
+      updateExpensePaymentSourceOptions();
       openModal('modal-expense');
     }
+    window.openAddExpenseModal = openAddExpenseModal;
+
+    function updateExpensePaymentSourceOptions() {
+      const currSelect = document.getElementById('exp-form-curr');
+      const sourceSelect = document.getElementById('exp-form-payment-source');
+      if (!currSelect || !sourceSelect) return;
+
+      const trip = getActiveTrip();
+      const curr = currSelect.value;
+      const walletData = calculateTripWallets(trip);
+      const options = [];
+
+      if (curr !== 'KRW') {
+        // Option 1: 현지 통화 지갑 잔액 차감
+        const w = walletData.wallets[curr];
+        const isDec = (curr !== 'JPY' && curr !== 'VND' && curr !== 'CLP');
+        const balStr = w ? `${w.symbol}${w.balance.toLocaleString(undefined, { minimumFractionDigits: isDec ? 2 : 0, maximumFractionDigits: 2 })}` : '0';
+        const flag = CURRENCY_INFO[curr]?.flag || '💶';
+        options.push(`<option value="wallet_curr" selected>${flag} [${curr} 지갑] 잔액에서 차감 (현재: ${balStr})</option>`);
+
+        // Option 2: 한국 신용카드 / KRW 원화 차감
+        const krwW = walletData.wallets['KRW'];
+        const krwBalStr = krwW ? `₩${krwW.balance.toLocaleString()}` : '₩0';
+        options.push(`<option value="wallet_krw">💳 [한국 카드/원화] KRW 잔액 차감/청구 (원화잔액: ${krwBalStr})</option>`);
+
+        // Option 3: Other active foreign wallets
+        walletData.activeCurrencies.forEach(c => {
+          if (c !== 'KRW' && c !== curr) {
+            const ow = walletData.wallets[c];
+            const owDec = (c !== 'JPY' && c !== 'VND' && c !== 'CLP');
+            const obalStr = ow ? `${ow.symbol}${ow.balance.toLocaleString(undefined, { minimumFractionDigits: owDec ? 2 : 0, maximumFractionDigits: 2 })}` : '0';
+            options.push(`<option value="wallet_${c}">🌐 [${c} 지갑] 잔액 차감 (잔액: ${obalStr})</option>`);
+          }
+        });
+
+        // Option 4: 단순 기록
+        options.push(`<option value="none">📝 단순 기록 (지갑 잔액 미차감)</option>`);
+      } else {
+        // KRW 결제
+        const krwW = walletData.wallets['KRW'];
+        const krwBalStr = krwW ? `₩${krwW.balance.toLocaleString()}` : '₩0';
+        options.push(`<option value="wallet_krw" selected>🇰🇷 [KRW 원화 지갑] 잔액에서 차감 (현재: ${krwBalStr})</option>`);
+        options.push(`<option value="none">📝 단순 기록 (지갑 잔액 미차감)</option>`);
+      }
+
+      sourceSelect.innerHTML = options.join('');
+      onExpensePaymentSourceChange();
+    }
+    window.updateExpensePaymentSourceOptions = updateExpensePaymentSourceOptions;
+
+    function onExpensePaymentSourceChange() {
+      const sourceSelect = document.getElementById('exp-form-payment-source');
+      const currSelect = document.getElementById('exp-form-curr');
+      const hint = document.getElementById('exp-form-wallet-hint');
+      if (!sourceSelect || !hint) return;
+
+      const trip = getActiveTrip();
+      const curr = currSelect ? currSelect.value : 'KRW';
+      const walletData = calculateTripWallets(trip);
+      const val = sourceSelect.value;
+      const amount = parseFloat(document.getElementById('exp-form-amount')?.value) || 0;
+
+      if (val === 'none') {
+        hint.innerHTML = `<span class="text-slate-400">ℹ️ 지출 통계에만 기록되며 지갑 잔액은 차감되지 않습니다.</span>`;
+      } else if (val === 'wallet_krw') {
+        const krwW = walletData.wallets['KRW'];
+        const rate = getCurrencyRate(curr);
+        const krwAmt = (curr === 'KRW') ? amount : Math.round(amount * rate);
+        const curBal = krwW ? krwW.balance : 0;
+        const remain = curBal - krwAmt;
+        if (remain < 0) {
+          hint.innerHTML = `<span class="text-rose-400 font-bold">⚠️ KRW 지갑 잔액 부족 (₩${curBal.toLocaleString()} < ₩${krwAmt.toLocaleString()})</span>`;
+        } else {
+          hint.innerHTML = `<span class="text-emerald-400">✅ KRW 지갑에서 ₩${krwAmt.toLocaleString()} 차감 예정 (남은 잔액: ₩${remain.toLocaleString()})</span>`;
+        }
+      } else {
+        const targetCurr = val === 'wallet_curr' ? curr : val.replace('wallet_', '');
+        const w = walletData.wallets[targetCurr];
+        const bal = w ? w.balance : 0;
+        const remain = bal - amount;
+        if (remain < 0) {
+          hint.innerHTML = `<span class="text-rose-400 font-bold">⚠️ ${targetCurr} 지갑 잔액 부족 (${w?.symbol || ''}${bal.toLocaleString()} < ${amount.toLocaleString()})</span>`;
+        } else {
+          hint.innerHTML = `<span class="text-emerald-400">✅ ${targetCurr} 지갑에서 ${w?.symbol || ''}${amount.toLocaleString()} 차감 예정 (남은 잔액: ${w?.symbol || ''}${remain.toLocaleString()})</span>`;
+        }
+      }
+    }
+    window.onExpensePaymentSourceChange = onExpensePaymentSourceChange;
 
     function submitAddExpense() {
       const title = document.getElementById('exp-form-title').value.trim();
@@ -10225,64 +11071,46 @@ ${JSON.stringify(snapshotDays)}`;
       const amount = parseFloat(document.getElementById('exp-form-amount').value);
       const cat = document.getElementById('exp-form-cat').value;
       const date = document.getElementById('exp-form-date').value;
+      const paymentSource = document.getElementById('exp-form-payment-source')?.value || 'wallet_curr';
 
       if (!title || isNaN(amount)) {
         alert('지출 항목과 금액을 입력하세요.');
         return;
       }
 
-      // 전 세계 주요 통화 원화 환산 딕셔너리 (R-6 아르헨티나 MEP 환율 불변식 연동)
-      const CURRENCY_RATES = {
-        KRW: 1,
-        USD: 1350,
-        EUR: 1480,
-        JPY: 9.2,
-        CNY: 190,
-        GBP: 1750,
-        CHF: 1550,
-        PEN: 360,
-        BRL: 250,
-        CLP: 1.45,
-        BOB: 195,
-        VND: 0.055,
-        THB: 38,
-        TWD: 42,
-        AUD: 900,
-        CAD: 990,
-        SGD: 1020,
-        HKD: 172
-      };
+      const rate = getCurrencyRate(curr);
+      let krw = Math.round(amount * rate);
 
-      let krw = Math.round(amount);
-      if (curr === 'ARS') {
-        krw = State.isMepEnabled ? Math.round(amount * 0.95) : Math.round(amount * 1.38);
-      } else if (CURRENCY_RATES[curr]) {
-        krw = Math.round(amount * CURRENCY_RATES[curr]);
-      } else if (curr === 'USD') {
-        krw = Math.round(amount * 1350);
-      } else if (curr === 'PEN') {
-        krw = Math.round(amount * 360);
-      } else if (curr === 'BRL') {
-        krw = Math.round(amount * 250);
-      } else if (curr === 'EUR') {
-        krw = Math.round(amount * 1480);
-      }
+      let walletCurr = curr;
+      if (paymentSource === 'wallet_krw') walletCurr = 'KRW';
+      else if (paymentSource === 'none') walletCurr = null;
+      else if (paymentSource.startsWith('wallet_') && paymentSource !== 'wallet_curr') walletCurr = paymentSource.replace('wallet_', '');
 
       const trip = getActiveTrip();
       if (!trip.expenses) trip.expenses = [];
       trip.expenses.unshift({
+        id: 'exp_' + Date.now(),
         title: title,
         curr: curr,
         amount: amount,
         krw: krw,
         cat: cat,
-        date: date
+        date: date,
+        paymentSource: paymentSource,
+        walletCurr: walletCurr
       });
+
+      if (!Array.isArray(trip.activeCurrencies)) trip.activeCurrencies = ['KRW'];
+      if (curr !== 'KRW' && !trip.activeCurrencies.includes(curr)) trip.activeCurrencies.push(curr);
 
       saveTrips();
       closeModal('modal-expense', true);
       renderActiveTripWorkspace();
-      showToast(`💳 [${escapeHtml(title)}] ₩${krw.toLocaleString()} 지출이 등록되었습니다.`);
+
+      let debitInfo = '';
+      if (paymentSource === 'wallet_krw') debitInfo = ` (💳 한국 카드 KRW ₩${krw.toLocaleString()} 차감)`;
+      else if (paymentSource === 'wallet_curr') debitInfo = ` (${CURRENCY_INFO[curr]?.flag || ''} ${curr} 지갑 차감)`;
+      showToast(`💳 [${escapeHtml(title)}] ₩${krw.toLocaleString()} 지출이 등록되었습니다.${debitInfo}`);
     }
 
     // ==========================================
@@ -11367,6 +12195,11 @@ JSON 배열만 출력하세요. 각 day는 dayNum, title, city, date, spots를 �
         const amount = document.getElementById('exp-form-amount');
         return (title && title.value.trim().length > 0) ||
                (amount && amount.value.trim().length > 0);
+      }
+      if (modalId === 'modal-exchange') {
+        const fromAmt = document.getElementById('exch-form-from-amount');
+        const toAmt = document.getElementById('exch-form-to-amount');
+        return Boolean((fromAmt && fromAmt.value.trim().length > 0) || (toAmt && toAmt.value.trim().length > 0));
       }
       if (modalId === 'modal-plan-block-edit') {
         const modal = document.getElementById(modalId);
