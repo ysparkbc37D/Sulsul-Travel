@@ -14,7 +14,7 @@
   </script>
 
   <!-- PWA Meta & Icons -->
-  <link rel="manifest" href="manifest.webmanifest?v=1.4.6">
+  <link rel="manifest" href="manifest.webmanifest?v=1.4.7">
   <meta name="theme-color" content="#f5f5f7">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
@@ -23,13 +23,13 @@
   <link rel="shortcut icon" href="favicon.ico">
   <link rel="apple-touch-icon" sizes="180x180" href="icons/apple-touch-icon-v115.png">
 
-  <!-- Editorial Luxury Serif Fonts (Cormorant Garamond / Playfair Display) -->
+  <!-- Google Fonts: Cormorant Garamond & Playfair Display (Editorial Luxury) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700;800&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
 
   <!-- Local Utilities Bundle (CDN fallback & tailwind utilities) -->
-  <link rel="stylesheet" href="css/utilities.css?v=1.4.6">
+  <link rel="stylesheet" href="css/utilities.css?v=1.4.7">
   <link rel="stylesheet" href="vendor/fontawesome/css/all.min.css">
 
   <!-- Leaflet Map CSS & JS -->
@@ -661,8 +661,8 @@
     }
   </style>
 
-  <link rel="stylesheet" href="css/companion.css?v=1.4.6">
-  <script src="js/presentation/companion-ui.js?v=1.4.6"></script>
+  <link rel="stylesheet" href="css/companion.css?v=1.4.7">
+  <script src="js/presentation/companion-ui.js?v=1.4.7"></script>
 
   <!-- Knowledge Base Seed & Destination Knowledge Packs (DKP) -->
   <script src="kb-travel.js"></script>
@@ -688,7 +688,7 @@
             <h1 class="font-serif-brand text-base sm:text-xl font-bold tracking-tight text-[#1c1917] dark:text-[#ededed] whitespace-nowrap">
               Sulsul Travel
             </h1>
-            <span id="app-ver-badge" onclick="event.stopPropagation(); openVersionHistoryModal()" class="px-1.5 py-0.5 rounded-md theme-card-subtle hover:border-amber-500/60 hover:text-amber-600 dark:hover:text-amber-300 text-[#a2601b] dark:text-[#d4af37] text-[10px] font-bold font-mono shadow-inner cursor-pointer shrink-0 transition" title="버전 업데이트 기록 보기 (클릭)">v1.4.6</span>
+            <span id="app-ver-badge" onclick="event.stopPropagation(); openVersionHistoryModal()" class="px-1.5 py-0.5 rounded-md theme-card-subtle hover:border-amber-500/60 hover:text-amber-600 dark:hover:text-amber-300 text-[#a2601b] dark:text-[#d4af37] text-[10px] font-bold font-mono shadow-inner cursor-pointer shrink-0 transition" title="버전 업데이트 기록 보기 (클릭)">v1.4.7</span>
           </div>
           <p id="header-trip-name" class="text-[10px] sm:text-[11px] text-[#78716c] dark:text-stone-400 truncate max-w-[120px] sm:max-w-xs font-normal">인생의 모든 여정을 기록하는 다이어리</p>
         </div>
@@ -880,21 +880,25 @@
       </div>
     </div>
 
-    <!-- 여행 단계 중심 4대 탭 네비게이션 -->
+    <!-- 여행 단계 중심 5대 탭 네비게이션 -->
     <nav id="companion-main-nav" aria-label="여행 주요 메뉴" class="flex items-center gap-1 sm:gap-1.5 p-1 bg-[#0f1422] rounded-xl border border-[#1e263c] overflow-x-auto no-scrollbar">
-      <button id="nav-tab-plan" onclick="switchTab('plan')" class="flex-1 min-w-[70px] sm:min-w-[80px] py-2 px-2.5 sm:px-3 rounded-lg text-xs font-bold flex items-center justify-center gap-1.5 transition nav-tab-active shadow-sm whitespace-nowrap shrink-0 cursor-pointer">
+      <button id="nav-tab-plan" onclick="switchTab('plan')" class="flex-1 min-w-[50px] sm:min-w-[70px] py-2 px-1.5 sm:px-2.5 rounded-lg text-xs font-bold flex items-center justify-center gap-1.5 transition nav-tab-active shadow-sm whitespace-nowrap shrink-0 cursor-pointer">
         <i class="fa-solid fa-layer-group text-xs shrink-0"></i>
         <span>큰 계획</span>
       </button>
-      <button id="nav-tab-today" onclick="switchTab('today')" class="flex-1 min-w-[65px] sm:min-w-[75px] py-2 px-2.5 sm:px-3 rounded-lg text-xs font-bold flex items-center justify-center gap-1.5 transition nav-tab-inactive whitespace-nowrap shrink-0 cursor-pointer">
+      <button id="nav-tab-today" onclick="switchTab('today')" class="flex-1 min-w-[45px] sm:min-w-[65px] py-2 px-1.5 sm:px-2.5 rounded-lg text-xs font-bold flex items-center justify-center gap-1.5 transition nav-tab-inactive whitespace-nowrap shrink-0 cursor-pointer">
         <i class="fa-solid fa-location-arrow text-xs shrink-0"></i>
         <span>오늘</span>
       </button>
-      <button id="nav-tab-journal" onclick="switchTab('journal')" class="flex-1 min-w-[70px] sm:min-w-[75px] py-2 px-2.5 sm:px-3 rounded-lg text-xs font-bold flex items-center justify-center gap-1.5 transition nav-tab-inactive whitespace-nowrap shrink-0 cursor-pointer">
+      <button id="nav-tab-expenses" onclick="switchTab('expenses')" class="flex-1 min-w-[50px] sm:min-w-[70px] py-2 px-1.5 sm:px-2.5 rounded-lg text-xs font-bold flex items-center justify-center gap-1.5 transition nav-tab-inactive whitespace-nowrap shrink-0 cursor-pointer">
+        <i class="fa-solid fa-wallet text-xs shrink-0"></i>
+        <span>가계부</span>
+      </button>
+      <button id="nav-tab-journal" onclick="switchTab('journal')" class="flex-1 min-w-[45px] sm:min-w-[65px] py-2 px-1.5 sm:px-2.5 rounded-lg text-xs font-bold flex items-center justify-center gap-1.5 transition nav-tab-inactive whitespace-nowrap shrink-0 cursor-pointer">
         <i class="fa-solid fa-book-open text-xs shrink-0"></i>
         <span>기록</span>
       </button>
-      <button id="nav-tab-checklist" onclick="switchTab('checklist')" class="flex-1 min-w-[65px] sm:min-w-[75px] py-2 px-2.5 sm:px-3 rounded-lg text-xs font-bold flex items-center justify-center gap-1.5 transition nav-tab-inactive whitespace-nowrap shrink-0 cursor-pointer">
+      <button id="nav-tab-checklist" onclick="switchTab('checklist')" class="flex-1 min-w-[45px] sm:min-w-[65px] py-2 px-1.5 sm:px-2.5 rounded-lg text-xs font-bold flex items-center justify-center gap-1.5 transition nav-tab-inactive whitespace-nowrap shrink-0 cursor-pointer">
         <i class="fa-solid fa-list-check text-xs shrink-0"></i>
         <span>준비</span>
       </button>
@@ -1167,8 +1171,13 @@
 
         <!-- 3대 가계부 지표 카드 -->
         <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
-          <div class="p-3 bg-[#080b12] rounded-xl border border-[#1a2236]">
-            <div class="text-[11px] text-slate-400">총 예산</div>
+          <div class="p-3 bg-[#080b12] rounded-xl border border-[#1a2236] relative">
+            <div class="flex items-center justify-between">
+              <span class="text-[11px] text-slate-400">총 예산</span>
+              <button onclick="openEditBudgetPrompt()" class="text-[10px] text-amber-400 hover:text-amber-300 font-bold px-1.5 py-0.5 rounded bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/20 cursor-pointer transition flex items-center gap-1" title="목표 예산 변경">
+                <i class="fa-solid fa-pen text-[9px]"></i> 예산 변경
+              </button>
+            </div>
             <div id="exp-total-budget" class="text-base font-black text-white mt-0.5">₩8,500,000</div>
           </div>
           <div class="p-3 bg-[#080b12] rounded-xl border border-[#1a2236]">
@@ -1940,11 +1949,15 @@
             <label class="font-bold text-slate-300 block mb-1">결제 통화</label>
             <select id="exp-form-curr" class="w-full px-3 py-2 bg-[#080b12] border border-[#1e263c] rounded-xl text-white focus:outline-none focus:border-amber-500">
               <option value="KRW">KRW (원)</option>
+              <option value="EUR">EUR (€)</option>
               <option value="USD">USD ($)</option>
+              <option value="JPY">JPY (엔)</option>
+              <option value="CNY">CNY (위안)</option>
+              <option value="GBP">GBP (£)</option>
+              <option value="CHF">CHF (프랑)</option>
               <option value="PEN">PEN (솔)</option>
               <option value="ARS">ARS (페소)</option>
               <option value="BRL">BRL (헤알)</option>
-              <option value="EUR">EUR (€)</option>
             </select>
           </div>
           <div>
@@ -2691,11 +2704,15 @@
 
             <!-- 요약 지표 카드 3종 -->
             <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 text-center">
-              <div class="p-2.5 rounded-xl bg-[#faf8f5] dark:bg-[#121316] border border-[#e8e2d5] dark:border-stone-800">
-                <div class="text-[10px] text-[#78716c] dark:text-stone-400 font-medium">총 지출 / 목표 예산</div>
+              <div onclick="closeModal('modal-analytics', true); switchTab('expenses');" class="p-2.5 rounded-xl bg-[#faf8f5] dark:bg-[#121316] border border-[#e8e2d5] dark:border-stone-800 hover:border-amber-500/60 hover:bg-amber-500/5 transition cursor-pointer group" title="가계부로 이동하여 지출 입력 및 예산 관리">
+                <div class="text-[10px] text-[#78716c] dark:text-stone-400 font-medium flex items-center justify-center gap-1">
+                  <span>총 지출 / 목표 예산</span>
+                  <i class="fa-solid fa-arrow-up-right-from-square text-[9px] opacity-0 group-hover:opacity-100 text-amber-500 transition"></i>
+                </div>
                 <div class="text-xs sm:text-sm font-black text-[#1c1917] dark:text-[#ededed] mt-0.5">
                   <span id="stat-ws-spent" class="text-[#a2601b] dark:text-amber-400 font-mono">₩0</span> / <span id="stat-ws-budget" class="font-mono text-stone-500">₩8,500,000</span>
                 </div>
+                <div class="text-[9px] text-amber-600 dark:text-amber-400 font-bold mt-0.5 opacity-80 group-hover:opacity-100">💳 가계부 바로가기 ➔</div>
               </div>
               <div class="p-2.5 rounded-xl bg-[#faf8f5] dark:bg-[#121316] border border-[#e8e2d5] dark:border-stone-800">
                 <div class="text-[10px] text-[#78716c] dark:text-stone-400 font-medium">방문 국가 / 도시</div>
@@ -2707,16 +2724,22 @@
               </div>
             </div>
 
-            <!-- 액션 버튼 -->
-            <div class="flex items-center justify-end gap-2 pt-2 border-t border-[#e8e2d5] dark:border-stone-800">
-              <button onclick="closeModal('modal-analytics'); navigateToInteractiveMap();" class="px-3 py-1.5 rounded-xl theme-card-subtle text-xs font-bold flex items-center gap-1.5 shadow-sm transition cursor-pointer" title="인터랙티브 지도 바로가기">
-                <i class="fa-solid fa-map-location-dot text-amber-500"></i>
-                <span>경로 지도</span>
+            <!-- 액션 버튼 (가계부 / 경로 지도 / 완주 보고서) -->
+            <div class="flex items-center justify-between gap-2 pt-2 border-t border-[#e8e2d5] dark:border-stone-800 flex-wrap">
+              <button onclick="closeModal('modal-analytics', true); switchTab('expenses');" class="px-3 py-1.5 rounded-xl bg-amber-500/10 hover:bg-amber-500/20 text-[#a2601b] dark:text-amber-300 border border-amber-500/30 text-xs font-bold flex items-center gap-1.5 shadow-sm transition cursor-pointer" title="가계부로 이동하여 지출 관리">
+                <i class="fa-solid fa-wallet text-amber-500"></i>
+                <span>가계부 관리</span>
               </button>
-              <button onclick="closeModal('modal-analytics'); openPdfReportModal();" class="px-3 py-1.5 rounded-xl btn-gold text-xs font-bold flex items-center gap-1.5 shadow-sm transition cursor-pointer">
-                <i class="fa-solid fa-file-pdf text-rose-500"></i>
-                <span>완주 보고서</span>
-              </button>
+              <div class="flex items-center gap-2 ml-auto">
+                <button onclick="closeModal('modal-analytics', true); navigateToInteractiveMap();" class="px-3 py-1.5 rounded-xl theme-card-subtle text-xs font-bold flex items-center gap-1.5 shadow-sm transition cursor-pointer" title="인터랙티브 지도 바로가기">
+                  <i class="fa-solid fa-map-location-dot text-amber-500"></i>
+                  <span>경로 지도</span>
+                </button>
+                <button onclick="closeModal('modal-analytics', true); openPdfReportModal();" class="px-3 py-1.5 rounded-xl btn-gold text-xs font-bold flex items-center gap-1.5 shadow-sm transition cursor-pointer">
+                  <i class="fa-solid fa-file-pdf text-rose-500"></i>
+                  <span>완주 보고서</span>
+                </button>
+              </div>
             </div>
           </section>
         </div>
@@ -2809,9 +2832,16 @@
 
       <!-- 버전 목록 스크롤 영역 -->
       <div class="flex-1 overflow-y-auto space-y-3 pr-1 text-xs">
-        <!-- v1.4.6 (Current) -->
+        <!-- v1.4.7 (Current) -->
         <div class="p-4 rounded-2xl border-2 border-emerald-500/40 space-y-2.5 bg-emerald-500/5 dark:bg-emerald-500/10">
-          <div class="flex items-center justify-between gap-2"><div class="flex items-center gap-2 min-w-0"><span class="px-2 py-0.5 rounded-lg bg-emerald-500 text-black font-black text-xs shadow-sm shrink-0">v1.4.6</span><span class="text-xs font-black text-[#1c1917] dark:text-white">AI 일정 생성 타임아웃 확장 · JSON 모드 적용 및 스마트 로컬 엔진 폴백</span></div><span class="companion-status shrink-0">최신 버전</span></div>
+          <div class="flex items-center justify-between gap-2"><div class="flex items-center gap-2 min-w-0"><span class="px-2 py-0.5 rounded-lg bg-emerald-500 text-black font-black text-xs shadow-sm shrink-0">v1.4.7</span><span class="text-xs font-black text-[#1c1917] dark:text-white">여행 가계부 1급 탭 복원 및 다차원 자연 지출 업데이트 구축</span></div><span class="companion-status shrink-0">최신 버전</span></div>
+          <p class="text-xs leading-relaxed">기존 메뉴 개편 과정에서 보조 메뉴로 축소되었던 <b>여행 가계부(<code>nav-tab-expenses</code>)</b>를 하단 메인 네비게이션 5대 탭(큰 계획·오늘·가계부·기록·준비)의 핵심 기능으로 전격 복원했습니다. 술술 통계 대시보드(📊)의 총 지출/목표 예산 카드 터치 및 가계부 관리 액션 버튼을 신설하여 어디서나 즉시 가계부로 직행할 수 있도록 동선을 통합했습니다. 현장 '오늘' 화면에 1초 퀵 <code>[지출 기록]</code> 버튼을 탑재하고, 가계부 탭에서 목표 예산을 바로 변경할 수 있는 <code>[예산 변경]</code> 기능과 전 세계 18개국 통화 자동 매칭 환율 정산 엔진을 완비했습니다.</p>
+          <div class="text-[10px] text-stone-400 dark:text-stone-500 pt-1 border-t border-emerald-500/20 flex items-center justify-between"><span>📅 2026-09-11 릴리즈</span><span class="font-mono">st-shell-v1.4.7</span></div>
+        </div>
+
+        <!-- v1.4.6 -->
+        <div class="p-4 rounded-2xl bg-emerald-500/5 dark:bg-emerald-500/10 border-2 border-emerald-500/40 space-y-2.5 shadow-sm relative overflow-hidden">
+          <div class="flex items-center justify-between gap-2"><div class="flex items-center gap-2 min-w-0"><span class="px-2 py-0.5 rounded-lg bg-emerald-500 text-black font-black text-xs shadow-sm shrink-0">v1.4.6</span><span class="text-xs font-black text-[#1c1917] dark:text-white">AI 일정 생성 타임아웃 확장 · JSON 모드 적용 및 스마트 로컬 엔진 폴백</span></div></div>
           <p class="text-xs leading-relaxed">Gemini AI 기반 다일정(5~22일 등) 일정 생성 시 타임아웃(12초) 중단으로 'AI 초안을 만들지 못했습니다' 오류가 발생하던 결함을 완벽 해결했습니다. API 호출 타임아웃을 30초(오케스트레이터 65초)로 대폭 확장하고, 네이티브 <code>application/json</code> 모드 탑재, 장기 일정 앵커 스팟 밀도 최적화, 스팟 시간(:00/:30) 자동 정규화를 적용했습니다. 또한 AI 서버 장애·지연·오프라인 환경에서도 DKP 마스터 골든 코스와 내장 30분 일정 엔진으로 즉시 자동 전환되는 <b>스마트 로컬 엔진 폴백(Smart Local Engine Fallback)</b>을 구축하여 어떤 환경에서도 100% 일정 생성을 보장합니다.</p>
           <div class="text-[10px] text-stone-400 dark:text-stone-500 pt-1 border-t border-emerald-500/20 flex items-center justify-between"><span>📅 2026-09-11 릴리즈</span><span class="font-mono">st-shell-v1.4.6</span></div>
         </div>
@@ -3233,7 +3263,7 @@
 
       <!-- 모달 푸터 -->
       <div class="pt-3 border-t border-[#e8e2d5] dark:border-stone-800 flex items-center justify-between shrink-0">
-        <span class="text-[11px] text-stone-400 dark:text-stone-500 font-mono">Sulsul Travel Engine v1.4.6</span>
+        <span class="text-[11px] text-stone-400 dark:text-stone-500 font-mono">Sulsul Travel Engine v1.4.7</span>
         <button onclick="closeModal('modal-version-history')" class="px-4 py-2 rounded-xl bg-[#faf8f5] dark:bg-stone-800 hover:bg-[#f0ece1] dark:hover:bg-stone-700 border border-[#e8e2d5] dark:border-stone-700 text-[#1c1917] dark:text-[#ededed] text-xs font-bold transition cursor-pointer shadow-sm">
           닫기
         </button>
@@ -3296,7 +3326,7 @@
     window.showToast = showToast;
 
     // 앱 버전 및 글로벌 네임스페이스 (Sulsul-Travel Invariant Rule R-10, R-11, R-12, R-13, R-14, R-15)
-    const APP_VER = '1.4.6';
+    const APP_VER = '1.4.7';
 
     // ══════════════════════════════════════════
     // [Two-Tone Theme System] 라이트 그레이 & 딥 블랙 테마 엔진
@@ -6941,20 +6971,21 @@
     function switchTab(tabId) {
       State.activeTab = tabId;
       if (tabId === 'plan') setPlanPresentation('overview');
-      const tabs = ['plan', 'today', 'journal', 'checklist', 'expenses', 'sync'];
+      const tabs = ['plan', 'today', 'expenses', 'journal', 'checklist', 'sync'];
       tabs.forEach(t => {
         const btn = document.getElementById(`nav-tab-${t}`);
         const view = document.getElementById(`tab-content-${t}`);
         if (btn) btn.setAttribute('aria-current', t === tabId ? 'page' : 'false');
         if (t === tabId) {
-          if (btn && btn.closest('nav')) btn.className = "flex-1 min-w-[70px] sm:min-w-[80px] py-2 px-2.5 sm:px-3 rounded-lg text-xs font-bold flex items-center justify-center gap-1.5 transition nav-tab-active shadow-sm whitespace-nowrap shrink-0 cursor-pointer";
+          if (btn && btn.closest('nav')) btn.className = "flex-1 min-w-[50px] sm:min-w-[70px] py-2 px-1.5 sm:px-2.5 rounded-lg text-xs font-bold flex items-center justify-center gap-1.5 transition nav-tab-active shadow-sm whitespace-nowrap shrink-0 cursor-pointer";
           view.classList.remove('hidden');
         } else {
-          if (btn && btn.closest('nav')) btn.className = "flex-1 min-w-[65px] sm:min-w-[75px] py-2 px-2.5 sm:px-3 rounded-lg text-xs font-bold flex items-center justify-center gap-1.5 transition nav-tab-inactive whitespace-nowrap shrink-0 cursor-pointer";
+          if (btn && btn.closest('nav')) btn.className = "flex-1 min-w-[45px] sm:min-w-[65px] py-2 px-1.5 sm:px-2.5 rounded-lg text-xs font-bold flex items-center justify-center gap-1.5 transition nav-tab-inactive whitespace-nowrap shrink-0 cursor-pointer";
           view.classList.add('hidden');
         }
       });
       if (tabId === 'today') renderTodayTab();
+      if (tabId === 'expenses') renderExpensesTab();
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
@@ -10135,6 +10166,24 @@ ${JSON.stringify(snapshotDays)}`;
       showToast('기존 계획을 유지합니다.');
     }
 
+    function openEditBudgetPrompt() {
+      const trip = getActiveTrip();
+      if (!trip) return;
+      const current = trip.budget || 0;
+      const input = prompt(`목표 여행 예산을 원(KRW) 단위 숫자로 입력해 주세요.\n(현재 예산: ₩${current.toLocaleString()})`, current);
+      if (input === null) return;
+      const parsed = parseInt(String(input).replace(/[^\d]/g, ''), 10);
+      if (isNaN(parsed) || parsed < 0) {
+        showToast('⚠️ 올바른 금액 숫자를 입력해 주세요.');
+        return;
+      }
+      trip.budget = parsed;
+      saveTrips();
+      renderActiveTripWorkspace();
+      showToast(`💰 목표 예산이 ₩${parsed.toLocaleString()}으로 변경되었습니다.`);
+    }
+    window.openEditBudgetPrompt = openEditBudgetPrompt;
+
     function openAddExpenseModal() {
       const titleInput = document.getElementById('exp-form-title');
       if (titleInput) titleInput.value = '';
@@ -10142,6 +10191,31 @@ ${JSON.stringify(snapshotDays)}`;
       if (amountInput) amountInput.value = '';
       const dateInput = document.getElementById('exp-form-date');
       if (dateInput) dateInput.value = new Date().toISOString().split('T')[0];
+
+      // 여행 목적지 통화 자동 감지 및 선택
+      const trip = getActiveTrip();
+      if (trip) {
+        let destCurr = trip.currency;
+        if (!destCurr && trip.countries?.length) {
+          const cInfo = resolveCountryInfo(trip.countries[0]);
+          if (cInfo && cInfo.currency) destCurr = cInfo.currency;
+        }
+        if (!destCurr && isSouthAmericaTrip(trip)) destCurr = 'USD';
+        if (!destCurr && isYunnanTrip(trip)) destCurr = 'CNY';
+        if (destCurr) {
+          const currSelect = document.getElementById('exp-form-curr');
+          if (currSelect) {
+            let exists = [...currSelect.options].some(o => o.value === destCurr);
+            if (!exists) {
+              const opt = document.createElement('option');
+              opt.value = destCurr;
+              opt.textContent = `${destCurr} (${destCurr})`;
+              currSelect.appendChild(opt);
+            }
+            currSelect.value = destCurr;
+          }
+        }
+      }
       openModal('modal-expense');
     }
 
@@ -10157,13 +10231,42 @@ ${JSON.stringify(snapshotDays)}`;
         return;
       }
 
-      // 원화 환산
+      // 전 세계 주요 통화 원화 환산 딕셔너리 (R-6 아르헨티나 MEP 환율 불변식 연동)
+      const CURRENCY_RATES = {
+        KRW: 1,
+        USD: 1350,
+        EUR: 1480,
+        JPY: 9.2,
+        CNY: 190,
+        GBP: 1750,
+        CHF: 1550,
+        PEN: 360,
+        BRL: 250,
+        CLP: 1.45,
+        BOB: 195,
+        VND: 0.055,
+        THB: 38,
+        TWD: 42,
+        AUD: 900,
+        CAD: 990,
+        SGD: 1020,
+        HKD: 172
+      };
+
       let krw = Math.round(amount);
-      if (curr === 'USD') krw = Math.round(amount * 1350);
-      else if (curr === 'PEN') krw = Math.round(amount * 360);
-      else if (curr === 'ARS') krw = State.isMepEnabled ? Math.round(amount * 0.95) : Math.round(amount * 1.38);
-      else if (curr === 'BRL') krw = Math.round(amount * 250);
-      else if (curr === 'EUR') krw = Math.round(amount * 1480);
+      if (curr === 'ARS') {
+        krw = State.isMepEnabled ? Math.round(amount * 0.95) : Math.round(amount * 1.38);
+      } else if (CURRENCY_RATES[curr]) {
+        krw = Math.round(amount * CURRENCY_RATES[curr]);
+      } else if (curr === 'USD') {
+        krw = Math.round(amount * 1350);
+      } else if (curr === 'PEN') {
+        krw = Math.round(amount * 360);
+      } else if (curr === 'BRL') {
+        krw = Math.round(amount * 250);
+      } else if (curr === 'EUR') {
+        krw = Math.round(amount * 1480);
+      }
 
       const trip = getActiveTrip();
       if (!trip.expenses) trip.expenses = [];
@@ -10179,6 +10282,7 @@ ${JSON.stringify(snapshotDays)}`;
       saveTrips();
       closeModal('modal-expense', true);
       renderActiveTripWorkspace();
+      showToast(`💳 [${escapeHtml(title)}] ₩${krw.toLocaleString()} 지출이 등록되었습니다.`);
     }
 
     // ==========================================
