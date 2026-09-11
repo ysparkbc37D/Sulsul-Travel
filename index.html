@@ -14,7 +14,7 @@
   </script>
 
   <!-- PWA Meta & Icons -->
-  <link rel="manifest" href="manifest.webmanifest?v=1.4.3">
+  <link rel="manifest" href="manifest.webmanifest?v=1.4.4">
   <meta name="theme-color" content="#f5f5f7">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
@@ -29,7 +29,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700;800&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
 
   <!-- Local Utilities Bundle (CDN fallback & tailwind utilities) -->
-  <link rel="stylesheet" href="css/utilities.css?v=1.4.3">
+  <link rel="stylesheet" href="css/utilities.css?v=1.4.4">
   <link rel="stylesheet" href="vendor/fontawesome/css/all.min.css">
 
   <!-- Leaflet Map CSS & JS -->
@@ -624,8 +624,8 @@
     }
   </style>
 
-  <link rel="stylesheet" href="css/companion.css?v=1.4.3">
-  <script src="js/presentation/companion-ui.js?v=1.4.3"></script>
+  <link rel="stylesheet" href="css/companion.css?v=1.4.4">
+  <script src="js/presentation/companion-ui.js?v=1.4.4"></script>
 
   <!-- Knowledge Base Seed & Destination Knowledge Packs (DKP) -->
   <script src="kb-travel.js"></script>
@@ -651,7 +651,7 @@
             <h1 class="font-serif-brand text-base sm:text-xl font-bold tracking-tight text-[#1c1917] dark:text-[#ededed] whitespace-nowrap">
               Sulsul Travel
             </h1>
-            <span id="app-ver-badge" onclick="event.stopPropagation(); openVersionHistoryModal()" class="px-1.5 py-0.5 rounded-md theme-card-subtle hover:border-amber-500/60 hover:text-amber-600 dark:hover:text-amber-300 text-[#a2601b] dark:text-[#d4af37] text-[10px] font-bold font-mono shadow-inner cursor-pointer shrink-0 transition" title="버전 업데이트 기록 보기 (클릭)">v1.4.3</span>
+            <span id="app-ver-badge" onclick="event.stopPropagation(); openVersionHistoryModal()" class="px-1.5 py-0.5 rounded-md theme-card-subtle hover:border-amber-500/60 hover:text-amber-600 dark:hover:text-amber-300 text-[#a2601b] dark:text-[#d4af37] text-[10px] font-bold font-mono shadow-inner cursor-pointer shrink-0 transition" title="버전 업데이트 기록 보기 (클릭)">v1.4.4</span>
           </div>
           <p id="header-trip-name" class="text-[10px] sm:text-[11px] text-[#78716c] dark:text-stone-400 truncate max-w-[120px] sm:max-w-xs font-normal">인생의 모든 여정을 기록하는 다이어리</p>
         </div>
@@ -2770,9 +2770,16 @@
 
       <!-- 버전 목록 스크롤 영역 -->
       <div class="flex-1 overflow-y-auto space-y-3 pr-1 text-xs">
-        <!-- v1.4.3 (Current) -->
+        <!-- v1.4.4 (Current) -->
         <div class="p-4 rounded-2xl border-2 border-emerald-500/40 space-y-2.5 bg-emerald-500/5 dark:bg-emerald-500/10">
-          <div class="flex items-center justify-between gap-2"><div class="flex items-center gap-2 min-w-0"><span class="px-2 py-0.5 rounded-lg bg-emerald-500 text-black font-black text-xs shadow-sm shrink-0">v1.4.3</span><span class="text-xs font-black text-[#1c1917] dark:text-white">모바일 헤더 버전 뱃지 상시 복원 & 히스토리 최신화</span></div><span class="companion-status shrink-0">최신 버전</span></div>
+          <div class="flex items-center justify-between gap-2"><div class="flex items-center gap-2 min-w-0"><span class="px-2 py-0.5 rounded-lg bg-emerald-500 text-black font-black text-xs shadow-sm shrink-0">v1.4.4</span><span class="text-xs font-black text-[#1c1917] dark:text-white">국가 필터 내 도시 노출 결함 근절 & 지명 자가 치유 엔진</span></div><span class="companion-status shrink-0">최신 버전</span></div>
+          <p class="text-xs leading-relaxed">허브 국가 선택 시트에 도시/성(리장, 다리, 운남, 칭다오 등)이 별도 국가로 노출되던 결함을 근절했습니다. 표준 국가 변환 엔진(<code>resolveCanonicalCountry</code>)과 앱 시작 시 기존 불량 데이터를 자동 정규화하는 자가 치유(Self-Healing Migration)를 탑재하고, 카드 뱃지 중복 및 통계 왜곡을 완벽 해결했습니다.</p>
+          <div class="text-[10px] text-stone-400 dark:text-stone-500 pt-1 border-t border-emerald-500/20 flex items-center justify-between"><span>📅 2026-09-11 릴리즈</span><span class="font-mono">st-shell-v1.4.4</span></div>
+        </div>
+
+        <!-- v1.4.3 -->
+        <div class="p-4 rounded-2xl bg-emerald-500/5 dark:bg-emerald-500/10 border-2 border-emerald-500/40 space-y-2.5 shadow-sm relative overflow-hidden">
+          <div class="flex items-center justify-between gap-2"><div class="flex items-center gap-2 min-w-0"><span class="px-2 py-0.5 rounded-lg bg-emerald-500 text-black font-black text-xs shadow-sm shrink-0">v1.4.3</span><span class="text-xs font-black text-[#1c1917] dark:text-white">모바일 헤더 버전 뱃지 상시 복원 & 히스토리 최신화</span></div></div>
           <p class="text-xs leading-relaxed">모바일 화면에서 'Sulsul Travel' 로고 옆 버전 뱃지(<code>#app-ver-badge</code>)가 숨겨지던 결함을 완전히 해결하여 상시 표시되도록 복원했습니다. 버전 릴리즈 히스토리 뷰어를 v1.4.1 ~ v1.4.3 최신 상태로 완전 동기화했습니다.</p>
           <div class="text-[10px] text-stone-400 dark:text-stone-500 pt-1 border-t border-emerald-500/20 flex items-center justify-between"><span>📅 2026-09-11 릴리즈</span><span class="font-mono">st-shell-v1.4.3</span></div>
         </div>
@@ -3173,7 +3180,7 @@
 
       <!-- 모달 푸터 -->
       <div class="pt-3 border-t border-[#e8e2d5] dark:border-stone-800 flex items-center justify-between shrink-0">
-        <span class="text-[11px] text-stone-400 dark:text-stone-500 font-mono">Sulsul Travel Engine v1.4.3</span>
+        <span class="text-[11px] text-stone-400 dark:text-stone-500 font-mono">Sulsul Travel Engine v1.4.4</span>
         <button onclick="closeModal('modal-version-history')" class="px-4 py-2 rounded-xl bg-[#faf8f5] dark:bg-stone-800 hover:bg-[#f0ece1] dark:hover:bg-stone-700 border border-[#e8e2d5] dark:border-stone-700 text-[#1c1917] dark:text-[#ededed] text-xs font-bold transition cursor-pointer shadow-sm">
           닫기
         </button>
@@ -3236,7 +3243,7 @@
     window.showToast = showToast;
 
     // 앱 버전 및 글로벌 네임스페이스 (Sulsul-Travel Invariant Rule R-10, R-11, R-12, R-13, R-14, R-15)
-    const APP_VER = '1.4.3';
+    const APP_VER = '1.4.4';
 
     // ══════════════════════════════════════════
     // [Two-Tone Theme System] 라이트 그레이 & 딥 블랙 테마 엔진
@@ -3327,16 +3334,16 @@
     const COUNTRY_DATABASE = [
       // 1. 동아시아 (east_asia)
       { name: '대한민국', code: 'KR', flag: '🇰🇷', currency: 'KRW', currName: '원', symbol: '₩', region: 'east_asia', popularCities: ['서울', '제주', '부산', '강릉', '경주', '여수', '전주', '속초', '대구'], aliases: ['한국', '남한', '코리아', 'korea'] },
-      { name: '일본', code: 'JP', flag: '🇯🇵', currency: 'JPY', currName: '엔', symbol: '¥', region: 'east_asia', popularCities: ['도쿄', '오사카', '교토', '후쿠오카', '삿포로', '오키나와', '나고야', '유후인', '나라', '고베'], aliases: ['japan', 'tokyo', 'osaka'] },
-      { name: '대만', code: 'TW', flag: '🇹🇼', currency: 'TWD', currName: '신 타이완 달러', symbol: 'NT$', region: 'east_asia', popularCities: ['타이베이', '가오슝', '타이난', '화롄', '지우펀', '타이중'], aliases: ['타이완', 'taiwan', 'taipei'] },
+      { name: '일본', code: 'JP', flag: '🇯🇵', currency: 'JPY', currName: '엔', symbol: '¥', region: 'east_asia', popularCities: ['도쿄', '오사카', '교토', '후쿠오카', '삿포로', '오키나와', '나고야', '유후인', '나라', '고베', '벳푸', '하코네', '다카마쓰', '마쓰야마', '히로시마', '가고시마'], aliases: ['japan', 'tokyo', 'osaka', '일본국', 'nippon'] },
+      { name: '대만', code: 'TW', flag: '🇹🇼', currency: 'TWD', currName: '신 타이완 달러', symbol: 'NT$', region: 'east_asia', popularCities: ['타이베이', '가오슝', '타이난', '화롄', '지우펀', '타이중', '예류', '스펀', '단수이', '컨딩', '이란'], aliases: ['타이완', 'taiwan', 'taipei'] },
       { name: '홍콩', code: 'HK', flag: '🇭🇰', currency: 'HKD', currName: '홍콩 달러', symbol: 'HK$', region: 'east_asia', popularCities: ['침사추이', '센트럴', '몽콕', '빅토리아 피크', '디즈니랜드'], aliases: ['hong kong'] },
       { name: '마카오', code: 'MO', flag: '🇲🇴', currency: 'MOP', currName: '파타카', symbol: 'MOP$', region: 'east_asia', popularCities: ['마카오반도', '코타이', '타이파', '콜로안'], aliases: ['macau'] },
-      { name: '중국', code: 'CN', flag: '🇨🇳', currency: 'CNY', currName: '위안', symbol: '¥', region: 'east_asia', popularCities: ['상하이', '베이징', '쿤밍', '리장', '따리', '샹그릴라', '청두', '장가계', '시안', '광저우'], aliases: ['china', '운남'] },
+      { name: '중국', code: 'CN', flag: '🇨🇳', currency: 'CNY', currName: '위안', symbol: '¥', region: 'east_asia', popularCities: ['상하이', '베이징', '쿤밍', '리장', '따리', '다리', '샹그릴라', '샹그리아', '호도협', '석림', '칭다오', '청도', '칭따오', '연태', '옌타이', '청두', '장가계', '시안', '광저우', '항저우', '쑤저우', '구채구', '샤먼', '하문', '하이난', '삼아', '싼야', '충칭', '천진', '황산', '계림'], aliases: ['china', '운남', '윈난', '운남성', '중국본토', '중화인민공화국'] },
       { name: '몽골', code: 'MN', flag: '🇲🇳', currency: 'MNT', currName: '투그릭', symbol: '₮', region: 'east_asia', popularCities: ['울란바토르', '테를지', '고비사막', '홉스골', '차강소브라가'], aliases: ['mongolia', 'mongol'] },
 
       // 2. 동남아시아 (southeast_asia)
-      { name: '태국', code: 'TH', flag: '🇹🇭', currency: 'THB', currName: '바트', symbol: '฿', region: 'southeast_asia', popularCities: ['방콕', '치앙마이', '푸켓', '파타야', '끄라비', '코사무이', '후아힌'], aliases: ['thailand', 'bangkok'] },
-      { name: '베트남', code: 'VN', flag: '🇻🇳', currency: 'VND', currName: '동', symbol: '₫', region: 'southeast_asia', popularCities: ['다낭', '하노이', '호치민', '나트랑', '푸꾸옥', '호이안', '사파', '달랏'], aliases: ['vietnam'] },
+      { name: '태국', code: 'TH', flag: '🇹🇭', currency: 'THB', currName: '바트', symbol: '฿', region: 'southeast_asia', popularCities: ['방콕', '치앙마이', '푸켓', '파타야', '끄라비', '코사무이', '후아힌', '치앙라이', '파이', '아유타야'], aliases: ['thailand', 'bangkok'] },
+      { name: '베트남', code: 'VN', flag: '🇻🇳', currency: 'VND', currName: '동', symbol: '₫', region: 'southeast_asia', popularCities: ['다낭', '하노이', '호치민', '나트랑', '푸꾸옥', '호이안', '사파', '달랏', '무이네', '하롱베이', '닌빈'], aliases: ['vietnam'] },
       { name: '싱가포르', code: 'SG', flag: '🇸🇬', currency: 'SGD', currName: '싱가포르 달러', symbol: 'S$', region: 'southeast_asia', popularCities: ['마리나베이', '센토사', '오차드', '차이나타운', '클락키'], aliases: ['singapore'] },
       { name: '인도네시아', code: 'ID', flag: '🇮🇩', currency: 'IDR', currName: '루피아', symbol: 'Rp', region: 'southeast_asia', popularCities: ['발리', '자카르타', '롬복', '우붓', '족자카르타', '스미냑'], aliases: ['indonesia', 'bali'] },
       { name: '필리핀', code: 'PH', flag: '🇵🇭', currency: 'PHP', currName: '페소', symbol: '₱', region: 'southeast_asia', popularCities: ['세부', '보라카이', '마닐라', '보홀', '팔라완', '엘니도'], aliases: ['philippines', 'cebu'] },
@@ -3345,11 +3352,11 @@
       { name: '캄보디아', code: 'KH', flag: '🇰🇭', currency: 'KHR', currName: '리엘', symbol: '៛', region: 'southeast_asia', popularCities: ['씨엠립', '프놈펜', '앙코르와트', '시아누크빌'], aliases: ['cambodia'] },
 
       // 3. 유럽 (europe)
-      { name: '스페인', code: 'ES', flag: '🇪🇸', currency: 'EUR', currName: '유로', symbol: '€', region: 'europe', popularCities: ['바르셀로나', '마드리드', '세비야', '그라나다', '론다', '톨레도', '발렌시아', '말라가', '산세바스티안'], aliases: ['spain', 'barcelona', 'madrid'] },
+      { name: '스페인', code: 'ES', flag: '🇪🇸', currency: 'EUR', currName: '유로', symbol: '€', region: 'europe', popularCities: ['바르셀로나', '마드리드', '세비야', '그라나다', '론다', '톨레도', '발렌시아', '말라가', '산세바스티안', '이비자', '마요르카', '세고비아', '코르도바'], aliases: ['spain', 'barcelona', 'madrid'] },
       { name: '포르투갈', code: 'PT', flag: '🇵🇹', currency: 'EUR', currName: '유로', symbol: '€', region: 'europe', popularCities: ['리스본', '포르투', '신트라', '라고스', '카스카이스', '코임브라'], aliases: ['portugal', 'lisbon', 'porto'] },
-      { name: '프랑스', code: 'FR', flag: '🇫🇷', currency: 'EUR', currName: '유로', symbol: '€', region: 'europe', popularCities: ['파리', '니스', '리옹', '마르세유', '스트라스부르', '보르도', '몽생미셸', '아비뇽'], aliases: ['france', 'paris'] },
-      { name: '이탈리아', code: 'IT', flag: '🇮🇹', currency: 'EUR', currName: '유로', symbol: '€', region: 'europe', popularCities: ['로마', '피렌체', '베네치아', '밀라노', '나폴리', '아말피', '포지타노', '베로나', '친퀘테레'], aliases: ['italy', 'rome'] },
-      { name: '스위스', code: 'CH', flag: '🇨🇭', currency: 'CHF', currName: '프랑', symbol: 'CHF', region: 'europe', popularCities: ['인터라켄', '취리히', '루체른', '그린델발트', '체르마트', '제네바', '베른'], aliases: ['switzerland', 'swiss'] },
+      { name: '프랑스', code: 'FR', flag: '🇫🇷', currency: 'EUR', currName: '유로', symbol: '€', region: 'europe', popularCities: ['파리', '니스', '리옹', '마르세유', '스트라스부르', '보르도', '몽생미셸', '아비뇽', '칸', '에즈'], aliases: ['france', 'paris'] },
+      { name: '이탈리아', code: 'IT', flag: '🇮🇹', currency: 'EUR', currName: '유로', symbol: '€', region: 'europe', popularCities: ['로마', '피렌체', '베네치아', '밀라노', '나폴리', '아말피', '포지타노', '베로나', '친퀘테레', '베니스', '피사', '시칠리아'], aliases: ['italy', 'rome', '이태리', 'italia'] },
+      { name: '스위스', code: 'CH', flag: '🇨🇭', currency: 'CHF', currName: '프랑', symbol: 'CHF', region: 'europe', popularCities: ['인터라켄', '취리히', '루체른', '그린델발트', '체르마트', '제네바', '베른', '몽트뢰', '라우터브루넨'], aliases: ['switzerland', 'swiss'] },
       { name: '영국', code: 'GB', flag: '🇬🇧', currency: 'GBP', currName: '파운드', symbol: '£', region: 'europe', popularCities: ['런던', '에든버러', '옥스퍼드', '캠브리지', '맨체스터', '리버풀', '바스'], aliases: ['uk', 'london', 'england', 'britain'] },
       { name: '독일', code: 'DE', flag: '🇩🇪', currency: 'EUR', currName: '유로', symbol: '€', region: 'europe', popularCities: ['베를린', '뮌헨', '프랑크푸르트', '쾰른', '함부르크', '로텐부르크', '드레스덴'], aliases: ['germany'] },
       { name: '오스트리아', code: 'AT', flag: '🇦🇹', currency: 'EUR', currName: '유로', symbol: '€', region: 'europe', popularCities: ['비엔나', '잘츠부르크', '할슈타트', '인스부르크', '그라츠'], aliases: ['austria', 'vienna'] },
@@ -3369,7 +3376,7 @@
       { name: '아일랜드', code: 'IE', flag: '🇮🇪', currency: 'EUR', currName: '유로', symbol: '€', region: 'europe', popularCities: ['더블린', '골웨이', '코크', '모허절벽'], aliases: ['ireland'] },
 
       // 4. 미주 (americas)
-      { name: '미국', code: 'US', flag: '🇺🇸', currency: 'USD', currName: '달러', symbol: '$', region: 'americas', popularCities: ['뉴욕', '로스앤젤레스', '샌프란시스코', '라스베이거스', '하와이', '시애틀', '시카고', '올랜도', '보스턴', '워싱턴DC'], aliases: ['usa', 'america', 'new york', 'la'] },
+      { name: '미국', code: 'US', flag: '🇺🇸', currency: 'USD', currName: '달러', symbol: '$', region: 'americas', popularCities: ['뉴욕', '로스앤젤레스', '샌프란시스코', '라스베이거스', '라스베가스', '하와이', '시애틀', '시카고', '올랜도', '보스턴', '워싱턴DC', '샌디에이고', '마이애미', '포틀랜드'], aliases: ['usa', 'america', 'new york', 'la', 'united states', '미합중국'] },
       { name: '캐나다', code: 'CA', flag: '🇨🇦', currency: 'CAD', currName: '캐나다 달러', symbol: 'C$', region: 'americas', popularCities: ['밴쿠버', '토론토', '몬트리올', '퀘벡', '밴프', '오타와', '캘거리'], aliases: ['canada'] },
       { name: '멕시코', code: 'MX', flag: '🇲🇽', currency: 'MXN', currName: '페소', symbol: '$', region: 'americas', popularCities: ['칸쿤', '멕시코시티', '과달라하라', '플라야델카르멘', '오아하카', '툴룸'], aliases: ['mexico', 'cancun'] },
       { name: '페루', code: 'PE', flag: '🇵🇪', currency: 'PEN', currName: '솔', symbol: 'S/.', region: 'americas', popularCities: ['리마', '쿠스코', '마추픽추', '푸노', '아레키파', '이카'], aliases: ['peru', 'cusco'] },
@@ -3395,26 +3402,57 @@
       { name: '탄자니아', code: 'TZ', flag: '🇹🇿', currency: 'TZS', currName: '실링', symbol: 'TSh', region: 'other', popularCities: ['잔지바르', '세렝게티', '킬리만자로', '아루샤'], aliases: ['tanzania'] }
     ];
 
-    function resolveCountryInfo(query) {
+    // [v1.4.4] 표준 국가 변환 엔진 (도시/별칭/복합지명 -> 표준 국가 + 소속 도시 완벽 분리)
+    function resolveCanonicalCountry(query) {
       if (!query || typeof query !== 'string') return null;
       const q = query.trim().toLowerCase();
       if (!q) return null;
 
-      let found = COUNTRY_DATABASE.find(c => c.name.toLowerCase() === q);
-      if (found) return found;
+      // 1. 정확한 국가명 일치 (예: '중국', '미국')
+      let match = COUNTRY_DATABASE.find(c => c.name.toLowerCase() === q);
+      if (match) return { country: match, canonicalName: match.name, extractedCity: null };
 
-      found = COUNTRY_DATABASE.find(c => (c.aliases || []).some(a => a.toLowerCase() === q));
-      if (found) return found;
+      // 2. 국가 별칭 일치 (예: '운남', '윈난', '한국', 'korea')
+      match = COUNTRY_DATABASE.find(c => (c.aliases || []).some(a => a.toLowerCase() === q));
+      if (match) {
+        const isRegionAlias = /운남|윈난|하와이|시칠리아/.test(q);
+        return { country: match, canonicalName: match.name, extractedCity: isRegionAlias ? query.trim() : null };
+      }
 
-      found = COUNTRY_DATABASE.find(c => c.currency.toLowerCase() === q || c.code.toLowerCase() === q);
-      if (found) return found;
+      // 3. 통화 코드 또는 국가 코드 일치 (예: 'CNY', 'CN', 'USD')
+      match = COUNTRY_DATABASE.find(c => c.currency.toLowerCase() === q || c.code.toLowerCase() === q);
+      if (match) return { country: match, canonicalName: match.name, extractedCity: null };
 
-      found = COUNTRY_DATABASE.find(c => (c.popularCities || []).some(city => city.toLowerCase() === q));
-      if (found) return found;
+      // 4. 대표 도시명 일치 (예: '리장', '다리', '따리', '칭다오', '오사카')
+      match = COUNTRY_DATABASE.find(c => (c.popularCities || []).some(city => city.toLowerCase() === q));
+      if (match) {
+        const foundCity = (match.popularCities || []).find(city => city.toLowerCase() === q);
+        return { country: match, canonicalName: match.name, extractedCity: foundCity || query.trim() };
+      }
 
-      found = COUNTRY_DATABASE.find(c => q.includes(c.name.toLowerCase()) || c.name.toLowerCase().includes(q));
-      if (found) return found;
+      // 5. '국가명 + 도시명' 또는 복합 형태 (예: '중국 연태', '중국 리장', '스페인 바르셀로나')
+      for (const c of COUNTRY_DATABASE) {
+        const cNameLow = c.name.toLowerCase();
+        if (q.startsWith(cNameLow) || q.includes(cNameLow)) {
+          const cityPart = query.replace(new RegExp(c.name, 'gi'), '').replace(/[()[\]·,\/]/g, ' ').trim();
+          return { country: c, canonicalName: c.name, extractedCity: cityPart || null };
+        }
+      }
 
+      // 6. 부분 일치 검색 (문자열 내에 대표 도시명이 포함된 경우)
+      match = COUNTRY_DATABASE.find(c => (c.popularCities || []).some(city => q.includes(city.toLowerCase())));
+      if (match) {
+        const foundCity = (match.popularCities || []).find(city => q.includes(city.toLowerCase()));
+        return { country: match, canonicalName: match.name, extractedCity: foundCity || query.trim() };
+      }
+
+      return null;
+    }
+
+    function resolveCountryInfo(query) {
+      if (!query || typeof query !== 'string') return null;
+      const canonical = resolveCanonicalCountry(query);
+      if (canonical && canonical.country) return canonical.country;
       return null;
     }
 
@@ -3426,6 +3464,101 @@
     function getCountryCurrency(query) {
       const info = resolveCountryInfo(query);
       return info ? info.currency : 'KRW';
+    }
+
+    // 도시명 문자열 정제 (Day 번호, 계획/투어, 괄호, 화살표 등 제거)
+    function cleanCityName(rawCity) {
+      if (!rawCity || typeof rawCity !== 'string') return '';
+      let c = rawCity.replace(/Day\s*\d+/gi, '')
+        .replace(/계획|일정|투어|탐방|코스/g, '')
+        .replace(/\(.*?\)/g, '')
+        .replace(/\[.*?\]/g, '')
+        .replace(/[➔→⇄\-]/g, ' ')
+        .trim();
+      if (c.includes(' ')) c = c.split(/\s+/)[0];
+      return c.trim();
+    }
+
+    // [v1.4.4] 여행 데이터 자동 자가 치유 (Self-Healing Migration): 국가 및 도시 표준 분리·정규화
+    function normalizeTripDestinations(trip) {
+      if (!trip || typeof trip !== 'object') return false;
+      let changed = false;
+
+      if (!Array.isArray(trip.countries)) trip.countries = [];
+      if (!Array.isArray(trip.cities)) trip.cities = [];
+
+      const initialCountriesStr = JSON.stringify(trip.countries);
+      const initialCitiesStr = JSON.stringify(trip.cities);
+
+      const countriesSet = new Set();
+      const citiesSet = new Set();
+
+      // 기존 cities 보존 및 정제
+      (trip.cities || []).forEach(ct => {
+        const cleaned = cleanCityName(ct);
+        if (cleaned) citiesSet.add(cleaned);
+      });
+
+      // 기존 countries 분석 및 정규화 (도시/복합지명 분리)
+      (trip.countries || []).forEach(raw => {
+        if (!raw || typeof raw !== 'string') return;
+        const resolved = resolveCanonicalCountry(raw);
+        if (resolved && resolved.canonicalName) {
+          countriesSet.add(resolved.canonicalName);
+          if (resolved.extractedCity) {
+            const cleanedCity = cleanCityName(resolved.extractedCity);
+            if (cleanedCity) citiesSet.add(cleanedCity);
+          }
+        } else {
+          const cleaned = raw.trim();
+          if (cleaned) countriesSet.add(cleaned);
+        }
+      });
+
+      // days 내 도시 정보 보강
+      (trip.days || []).forEach(d => {
+        if (d.city) {
+          const cleaned = cleanCityName(d.city);
+          if (cleaned) citiesSet.add(cleaned);
+        }
+      });
+
+      // 만약 countries가 비어있고 cities가 있다면 도시로 국가 역추적
+      if (countriesSet.size === 0 && citiesSet.size > 0) {
+        citiesSet.forEach(ct => {
+          const res = resolveCanonicalCountry(ct);
+          if (res && res.canonicalName) countriesSet.add(res.canonicalName);
+        });
+      }
+
+      // 만약 여전히 countries가 비어있다면 title에서 국가/도시 감지
+      if (countriesSet.size === 0 && trip.title) {
+        const res = resolveCanonicalCountry(trip.title);
+        if (res && res.canonicalName) {
+          countriesSet.add(res.canonicalName);
+          if (res.extractedCity) citiesSet.add(cleanCityName(res.extractedCity));
+        }
+      }
+
+      // 국가 목록에 도시명이 중복 포함되어 있으면 제거
+      const finalCountries = [];
+      countriesSet.forEach(c => {
+        const isActuallyCity = Array.from(citiesSet).includes(c) ||
+          COUNTRY_DATABASE.some(cd => (cd.popularCities || []).includes(c));
+        if (isActuallyCity && countriesSet.size > 1) {
+          citiesSet.add(c);
+        } else {
+          finalCountries.push(c);
+        }
+      });
+
+      trip.countries = finalCountries.length > 0 ? finalCountries : Array.from(countriesSet);
+      trip.cities = Array.from(citiesSet);
+
+      if (JSON.stringify(trip.countries) !== initialCountriesStr || JSON.stringify(trip.cities) !== initialCitiesStr) {
+        changed = true;
+      }
+      return changed;
     }
 
     // 전역 상태 스토어 (Multi-Trip State)
@@ -3531,6 +3664,19 @@
 
       // 4. URL 데이터 패킹 공유 임포트 확인 (Zero-Backend)
       checkUrlShareImportOnStartup();
+
+      // 5. [v1.4.4] 여행 데이터 자동 자가 치유 (Self-Healing Migration): 국가 및 도시 표준 분리·정규화
+      if (Array.isArray(State.trips)) {
+        let tripsHealed = false;
+        State.trips.forEach(t => {
+          if (normalizeTripDestinations(t)) {
+            tripsHealed = true;
+          }
+        });
+        if (tripsHealed) {
+          console.log('[Self-Healing] Normalized trip countries and cities to canonical standards.');
+        }
+      }
 
       // 기본 활성 여행 선택
       if (!State.activeTripId && State.trips.length > 0) {
@@ -3730,6 +3876,7 @@
         : (pack.goldenItinerary || []);
       trip.days = JSON.parse(JSON.stringify(itinerary));
       trip.durationDays = trip.days.length;
+      trip.countries = ['중국'];
       trip.cities = ['쿤밍', '따리', '리장', '옥룡설산', '호도협', '샹그릴라'];
       saveTrips();
       renderActiveTripWorkspace();
@@ -5416,25 +5563,44 @@
 
       State.trips.forEach(t => {
         const tCountries = t.countries || [];
-        tCountries.forEach(c => countriesSet.add(c));
+        tCountries.forEach(c => {
+          const resolved = resolveCanonicalCountry(c);
+          const canonicalName = resolved && resolved.canonicalName ? resolved.canonicalName : c;
+          if (canonicalName && canonicalName.trim()) countriesSet.add(canonicalName.trim());
+        });
 
         // 도시 수집: 선택된 국가와 매칭되거나 'all'일 때
-        const matchCountry = selCountry === 'all' || tCountries.some(c => c.toLowerCase().includes(selCountry.toLowerCase()));
+        const matchCountry = selCountry === 'all' ||
+          tCountries.some(c => {
+            const resolved = resolveCanonicalCountry(c);
+            const name = resolved && resolved.canonicalName ? resolved.canonicalName : c;
+            return name.toLowerCase() === selCountry.toLowerCase() || name.toLowerCase().includes(selCountry.toLowerCase());
+          }) ||
+          (t.cities || []).some(ct => {
+            const resolved = resolveCanonicalCountry(ct);
+            return resolved && resolved.canonicalName && resolved.canonicalName.toLowerCase() === selCountry.toLowerCase();
+          });
+
         if (matchCountry) {
-          (t.cities || []).forEach(ct => { if (ct && ct.trim()) citiesSet.add(ct.trim()); });
+          (t.cities || []).forEach(ct => {
+            const cl = cleanCityName(ct);
+            if (cl && !countriesSet.has(cl)) citiesSet.add(cl);
+          });
           (t.days || []).forEach(d => {
-            if (d.city && d.city.trim()) citiesSet.add(d.city.trim());
+            const cl = cleanCityName(d.city);
+            if (cl && !countriesSet.has(cl)) citiesSet.add(cl);
           });
         }
       });
 
-      // 1. 국가 드롭다운 갱신 (국기 + 국가명 + 통화 코드)
+      // 1. 국가 드롭다운 갱신 (국기 + 표준 국가명 + 통화 코드)
       let cHtml = '<option value="all">전체 국가</option>';
       Array.from(countriesSet).sort().forEach(c => {
         const cInfo = resolveCountryInfo(c);
         const flag = cInfo ? cInfo.flag : '🌎';
         const curr = cInfo ? ` (${cInfo.currency})` : '';
-        cHtml += `<option value="${escapeHtml(c)}">${flag} ${escapeHtml(c)}${curr}</option>`;
+        const displayName = cInfo ? cInfo.name : c;
+        cHtml += `<option value="${escapeHtml(displayName)}">${flag} ${escapeHtml(displayName)}${curr}</option>`;
       });
       countrySelect.innerHTML = cHtml;
       if (State.hubFilters.country) {
@@ -5942,14 +6108,23 @@
         }
 
         if (State.hubFilters.country && State.hubFilters.country !== 'all') {
-          const matchCountry = (trip.countries || []).some(c => c.toLowerCase().includes(State.hubFilters.country.toLowerCase()));
+          const targetCountry = State.hubFilters.country.toLowerCase();
+          const matchCountry = (trip.countries || []).some(c => {
+            const res = resolveCanonicalCountry(c);
+            const name = res && res.canonicalName ? res.canonicalName.toLowerCase() : c.toLowerCase();
+            return name === targetCountry || name.includes(targetCountry);
+          }) ||
+          (trip.cities || []).some(ct => {
+            const res = resolveCanonicalCountry(ct);
+            return res && res.canonicalName && res.canonicalName.toLowerCase() === targetCountry;
+          });
           if (!matchCountry) return false;
         }
 
         if (State.hubFilters.city && State.hubFilters.city !== 'all') {
           const targetCity = State.hubFilters.city.toLowerCase();
-          const matchCity = (trip.cities || []).some(c => c.toLowerCase().includes(targetCity)) ||
-            (trip.days || []).some(d => (d.city || '').toLowerCase().includes(targetCity)) ||
+          const matchCity = (trip.cities || []).some(c => c.toLowerCase() === targetCity || c.toLowerCase().includes(targetCity)) ||
+            (trip.days || []).some(d => (cleanCityName(d.city) || '').toLowerCase() === targetCity || (d.city || '').toLowerCase().includes(targetCity)) ||
             (trip.title || '').toLowerCase().includes(targetCity);
           if (!matchCity) return false;
         }
@@ -6043,15 +6218,22 @@
 
         const tripCountries = trip.countries || [];
         const countryBadges = tripCountries.map(c => {
-          const info = resolveCountryInfo(c);
-          const flag = info ? info.flag : '🌎';
-          return `<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-lg bg-[#faf8f5] dark:bg-stone-800 text-[#1c1917] dark:text-stone-200 border border-[#e8e2d5] dark:border-stone-700 text-[11px] font-bold"><span class="text-xs">${flag}</span><span>${escapeHtml(c)}</span></span>`;
+          const resolved = resolveCanonicalCountry(c);
+          const flag = resolved && resolved.country ? resolved.country.flag : getCountryFlag(c);
+          const cName = resolved && resolved.canonicalName ? resolved.canonicalName : c;
+          return `<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-lg bg-[#faf8f5] dark:bg-stone-800 text-[#1c1917] dark:text-stone-200 border border-[#e8e2d5] dark:border-stone-700 text-[11px] font-bold"><span class="text-xs">${flag}</span><span>${escapeHtml(cName)}</span></span>`;
         }).join(' ');
 
         const tripCurrCode = trip.currency || (tripCountries.length > 0 && resolveCountryInfo(tripCountries[0])?.currency) || 'KRW';
         const currBadge = `<span class="px-1.5 py-0.5 rounded text-[10px] font-mono font-bold bg-amber-500/15 text-[#a2601b] dark:text-[#d4af37] border border-amber-500/30">${escapeHtml(tripCurrCode)}</span>`;
 
-        const cityBadges = (trip.cities || []).slice(0, 3).map(ct => `
+        // 도시 뱃지: 국가명과 중복되지 않는 순수 도시만 표시
+        const cleanTripCities = (trip.cities || []).filter(ct => !tripCountries.some(c => {
+          const res = resolveCanonicalCountry(c);
+          const name = res ? res.canonicalName : c;
+          return name === ct;
+        }));
+        const cityBadges = cleanTripCities.slice(0, 3).map(ct => `
           <span class="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded-md bg-stone-100 dark:bg-stone-800 text-stone-700 dark:text-stone-300 text-[10px] font-medium border border-stone-200 dark:border-stone-700"><i class="fa-solid fa-location-dot text-[9px] text-[#a2601b]"></i>${escapeHtml(ct)}</span>
         `).join(' ');
 
@@ -9129,8 +9311,23 @@
           return;
         }
 
-        const countries = countriesStr ? splitTravelList(countriesStr) : [];
+        const rawCountries = countriesStr ? splitTravelList(countriesStr) : [];
         const explicitCities = splitTravelList(citiesStr);
+        const normalizedCountriesSet = new Set();
+        const normalizedCitiesSet = new Set(explicitCities.map(c => cleanCityName(c)).filter(Boolean));
+        rawCountries.forEach(rc => {
+          const resolved = resolveCanonicalCountry(rc);
+          if (resolved && resolved.canonicalName) {
+            normalizedCountriesSet.add(resolved.canonicalName);
+            if (resolved.extractedCity) {
+              const cl = cleanCityName(resolved.extractedCity);
+              if (cl) normalizedCitiesSet.add(cl);
+            }
+          } else if (rc.trim()) {
+            normalizedCountriesSet.add(rc.trim());
+          }
+        });
+        const countries = Array.from(normalizedCountriesSet);
         let durationDays = 5;
         if (start && end) {
           durationDays = Math.max(1, Math.ceil((new Date(end) - new Date(start)) / (1000 * 60 * 60 * 24)) + 1);
@@ -9143,7 +9340,7 @@
         let days = [];
         let shouldGenerateAi = false;
         const hasGeminiKey = Boolean(cleanApiKey(State.geminiKey || localStorage.getItem('st_gemini_key')));
-        const tempTrip = { title, countries, cities: explicitCities };
+        const tempTrip = { title, countries, cities: Array.from(normalizedCitiesSet) };
         const pack = resolveTripPack(tempTrip);
         const isYN = isYunnanTrip(tempTrip);
         const isSA = isSouthAmericaTrip(tempTrip);
@@ -9153,7 +9350,7 @@
           const match = item.match(/\(([^)]+)\)/);
           return match ? match[1].split(/[,/]/).map(s => s.trim()).filter(Boolean) : [];
         });
-        const requestedCities = [...explicitCities, ...inferredCities].filter((city, index, list) => city && list.indexOf(city) === index);
+        const requestedCities = [...Array.from(normalizedCitiesSet), ...inferredCities].filter((city, index, list) => city && list.indexOf(city) === index);
         let primaryDest = requestedCities[0] || countries[0] || '여행지';
         primaryDest = primaryDest.replace(/[()[\]]/g, ' ').trim();
         if (primaryDest.includes(' ')) primaryDest = primaryDest.split(/\s+/)[0];
@@ -9200,18 +9397,15 @@
           const rawCities = [...requestedCities];
           if (wishlist) {
             wishlist.split(/[,\n]/).map(s => s.trim()).filter(Boolean).forEach(w => {
-              const clean = w.replace(/[()[\]]/g, '').trim();
-              if (clean && !rawCities.includes(clean)) rawCities.push(clean);
+              const clean = cleanCityName(w);
+              if (clean && !rawCities.includes(clean) && !countries.includes(clean)) rawCities.push(clean);
             });
           }
-          countries.forEach(c => {
-            const parts = c.replace(/[()[\]]/g, ',').split(',').map(p => p.trim()).filter(Boolean);
-            parts.forEach(p => {
-              if (p && !rawCities.includes(p)) rawCities.push(p);
-            });
+          normalizedCitiesSet.forEach(c => {
+            if (c && !rawCities.includes(c) && !countries.includes(c)) rawCities.push(c);
           });
           if (rawCities.length > 0) {
-            tripCities = rawCities.slice(0, 10);
+            tripCities = rawCities.filter(ct => !countries.includes(ct)).slice(0, 10);
           }
         }
 

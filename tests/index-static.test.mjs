@@ -103,9 +103,9 @@ test('Gemini uses current models and header based API key transport', () => {
 });
 
 test('mobile travel notebook presentation is bundled and protected from CDN regressions', () => {
-  assert.match(html, /css\/utilities\.css\?v=1\.4\.3/);
-  assert.match(html, /css\/companion\.css\?v=1\.4\.3/);
-  assert.match(html, /js\/presentation\/companion-ui\.js\?v=1\.4\.3/);
+  assert.match(html, /css\/utilities\.css\?v=1\.4\.4/);
+  assert.match(html, /css\/companion\.css\?v=1\.4\.4/);
+  assert.match(html, /js\/presentation\/companion-ui\.js\?v=1\.4\.4/);
   assert.match(html, /id=["']companion-main-nav["']/);
   assert.match(html, /id=["']companion-plan-nav["']/);
   assert.doesNotMatch(html, /cdn\.tailwindcss\.com/);
@@ -117,9 +117,9 @@ test('mobile travel notebook presentation is bundled and protected from CDN regr
   assert.match(companionCss, /min-height:44px/);
   assert.match(utilitiesCss, /\.flex/);
   for (const asset of [
-    'css/utilities.css?v=1.4.3',
-    'css/companion.css?v=1.4.3',
-    'js/presentation/companion-ui.js?v=1.4.3',
+    'css/utilities.css?v=1.4.4',
+    'css/companion.css?v=1.4.4',
+    'js/presentation/companion-ui.js?v=1.4.4',
     'vendor/fontawesome/css/all.min.css',
     'vendor/leaflet/leaflet.js',
     'vendor/leaflet/images/marker-icon-2x.png',
@@ -132,7 +132,7 @@ test('release version is synchronized', () => {
   const worker = sw.match(/const V\s*=\s*'st-shell-v([^']+)'/)?.[1];
   const release = changelog.match(/## \[v([^\]]+)\]/)?.[1];
   const chronicleRelease = chronicle.match(/^### \[실록 \d+호\].*\(v([^\)]+)\)$/m)?.[1];
-  assert.equal(app, '1.4.3');
+  assert.equal(app, '1.4.4');
   assert.equal(worker, app);
   assert.equal(release, app);
   assert.equal(chronicleRelease, app);
