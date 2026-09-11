@@ -14,7 +14,7 @@
   </script>
 
   <!-- PWA Meta & Icons -->
-  <link rel="manifest" href="manifest.webmanifest?v=1.4.8">
+  <link rel="manifest" href="manifest.webmanifest?v=1.4.9">
   <meta name="theme-color" content="#f5f5f7">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
@@ -29,7 +29,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700;800&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
 
   <!-- Local Utilities Bundle (CDN fallback & tailwind utilities) -->
-  <link rel="stylesheet" href="css/utilities.css?v=1.4.8">
+  <link rel="stylesheet" href="css/utilities.css?v=1.4.9">
   <link rel="stylesheet" href="vendor/fontawesome/css/all.min.css">
 
   <!-- Leaflet Map CSS & JS -->
@@ -661,8 +661,8 @@
     }
   </style>
 
-  <link rel="stylesheet" href="css/companion.css?v=1.4.8">
-  <script src="js/presentation/companion-ui.js?v=1.4.8"></script>
+  <link rel="stylesheet" href="css/companion.css?v=1.4.9">
+  <script src="js/presentation/companion-ui.js?v=1.4.9"></script>
 
   <!-- Knowledge Base Seed & Destination Knowledge Packs (DKP) -->
   <script src="kb-travel.js"></script>
@@ -688,7 +688,7 @@
             <h1 class="font-serif-brand text-base sm:text-xl font-bold tracking-tight text-[#1c1917] dark:text-[#ededed] whitespace-nowrap">
               Sulsul Travel
             </h1>
-            <span id="app-ver-badge" onclick="event.stopPropagation(); openVersionHistoryModal()" class="px-1.5 py-0.5 rounded-md theme-card-subtle hover:border-amber-500/60 hover:text-amber-600 dark:hover:text-amber-300 text-[#a2601b] dark:text-[#d4af37] text-[10px] font-bold font-mono shadow-inner cursor-pointer shrink-0 transition" title="버전 업데이트 기록 보기 (클릭)">v1.4.8</span>
+            <span id="app-ver-badge" onclick="event.stopPropagation(); openVersionHistoryModal()" class="px-1.5 py-0.5 rounded-md theme-card-subtle hover:border-amber-500/60 hover:text-amber-600 dark:hover:text-amber-300 text-[#a2601b] dark:text-[#d4af37] text-[10px] font-bold font-mono shadow-inner cursor-pointer shrink-0 transition" title="버전 업데이트 기록 보기 (클릭)">v1.4.9</span>
           </div>
           <p id="header-trip-name" class="text-[10px] sm:text-[11px] text-[#78716c] dark:text-stone-400 truncate max-w-[120px] sm:max-w-xs font-normal">인생의 모든 여정을 기록하는 다이어리</p>
         </div>
@@ -1158,15 +1158,32 @@
             <p class="text-xs text-slate-400 mt-0.5">다중 통화 지갑과 실시간 환전·지출 자동 연동으로 똑똑하게 관리합니다.</p>
           </div>
 
-          <!-- 아르헨티나 MEP 우대 환율 스위치 (Sulsul Invariant R-6) -->
-          <div class="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-[#080b12] border border-[#1e263c]">
-            <span class="text-xs font-bold text-slate-300 flex items-center gap-1">
-              🇦🇷 아르헨 MEP 우대 환율
-            </span>
-            <label class="relative inline-flex items-center cursor-pointer">
-              <input type="checkbox" id="chk-mep-rate" onchange="toggleMepRate()" class="sr-only peer" checked>
-              <div class="w-9 h-5 bg-slate-800 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-emerald-500"></div>
-            </label>
+          <!-- 환율 상태, 갱신 및 MEP 스위치 제어 바 -->
+          <div class="flex flex-wrap items-center gap-2">
+            <!-- 실시간 환율 갱신 및 맞춤 관리 버튼 -->
+            <div class="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#080b12] border border-[#1e263c]">
+              <span id="exp-rates-timestamp" class="text-[11px] text-slate-400 font-medium flex items-center">
+                <i class="fa-solid fa-circle-info text-slate-500 mr-1"></i>기본 환율
+              </span>
+              <button id="btn-refresh-rates" onclick="refreshLiveExchangeRates(true)" class="text-xs text-amber-400 hover:text-amber-300 font-bold px-2 py-0.5 rounded bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/30 transition flex items-center gap-1 cursor-pointer" title="실시간 시장 환율로 일괄 갱신">
+                <i id="icon-refresh-rates" class="fa-solid fa-arrows-rotate text-[11px]"></i>
+                <span id="text-refresh-rates">환율 갱신</span>
+              </button>
+              <button onclick="openRatesManagerModal()" class="text-xs text-slate-400 hover:text-slate-200 px-1.5 py-0.5 rounded hover:bg-slate-800 transition cursor-pointer" title="통화별 환율 직접 수정 및 관리">
+                <i class="fa-solid fa-sliders text-[11px]"></i>
+              </button>
+            </div>
+
+            <!-- 아르헨티나 MEP 우대 환율 스위치 (Sulsul Invariant R-6) -->
+            <div class="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-[#080b12] border border-[#1e263c]">
+              <span class="text-xs font-bold text-slate-300 flex items-center gap-1">
+                🇦🇷 아르헨 MEP
+              </span>
+              <label class="relative inline-flex items-center cursor-pointer">
+                <input type="checkbox" id="chk-mep-rate" onchange="toggleMepRate()" class="sr-only peer" checked>
+                <div class="w-9 h-5 bg-slate-800 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-emerald-500"></div>
+              </label>
+            </div>
           </div>
         </div>
 
@@ -2101,7 +2118,12 @@
             </select>
           </div>
           <div>
-            <label id="exch-form-rate-label" class="font-bold text-slate-300 block mb-1">적용 환율</label>
+            <div class="flex items-center justify-between mb-1">
+              <label id="exch-form-rate-label" class="font-bold text-slate-300">적용 환율</label>
+              <button type="button" onclick="syncExchangeModalWithLiveRate()" class="text-[10px] text-amber-400 hover:text-amber-300 font-bold px-1.5 py-0.5 rounded bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/30 transition flex items-center gap-1 cursor-pointer" title="실시간 추천 시장 환율로 즉시 재적용">
+                <i class="fa-solid fa-arrows-rotate text-[9px]"></i> 실시간 환율
+              </button>
+            </div>
             <input type="number" step="any" id="exch-form-rate" oninput="onExchangeRateInput()" placeholder="예: 1350" class="w-full px-3 py-2 bg-[#080b12] border border-[#1e263c] rounded-xl text-white focus:outline-none focus:border-amber-500">
           </div>
         </div>
@@ -2135,6 +2157,45 @@
       <div class="flex items-center gap-3 pt-2">
         <button onclick="closeModal('modal-exchange')" class="flex-1 py-2.5 rounded-xl bg-[#141c2e] text-slate-300 font-bold text-xs">취소</button>
         <button onclick="submitAddExchange()" class="flex-1 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 text-slate-950 font-black text-xs shadow-md">💱 환전 완료</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 통화별 환율 맞춤 관리 & 실시간 갱신 모달 -->
+  <div id="modal-rates-manager" class="sheet-container sheet-closed">
+    <div class="sheet-scrim" onclick="closeModal('modal-rates-manager')"></div>
+    <div class="sheet-box p-6 sm:p-7 space-y-4 max-h-[85vh] flex flex-col">
+      <div class="flex items-center justify-between border-b border-[#1e263c] pb-3 shrink-0">
+        <h3 class="text-base font-black text-white flex items-center gap-2">
+          <i class="fa-solid fa-sliders text-amber-400"></i> 통화별 환율 맞춤 관리 & 실시간 갱신
+        </h3>
+        <button onclick="closeModal('modal-rates-manager')" class="text-slate-400 hover:text-white text-base">✕</button>
+      </div>
+
+      <div class="p-3 bg-[#080b12] border border-[#1e263c] rounded-xl space-y-1.5 shrink-0">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+          <div class="text-xs text-slate-300 leading-relaxed">
+            <span class="font-bold text-amber-400">💡 환율 관리 안내:</span> [실시간 환율 갱신]을 누르면 글로벌 시장 기준 환율로 일괄 동기화됩니다. 은행 우대 환율이나 현지 환전소 환율을 직접 입력하여 우선 적용할 수도 있습니다.
+          </div>
+          <button type="button" onclick="refreshLiveExchangeRates(true)" class="shrink-0 px-3 py-1.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs transition flex items-center gap-1.5 cursor-pointer shadow">
+            <i class="fa-solid fa-arrows-rotate"></i> 실시간 환율 갱신
+          </button>
+        </div>
+      </div>
+
+      <!-- 통화 목록 리스트 (스크롤) -->
+      <div class="flex-1 overflow-y-auto pr-1 space-y-2.5 max-h-[48vh]" id="rates-manager-list">
+        <!-- Dynamically rendered via renderRatesManagerList() -->
+      </div>
+
+      <!-- 모달 하단 액션 버튼 바 -->
+      <div class="pt-3 border-t border-[#1e263c] flex items-center justify-between shrink-0">
+        <button type="button" onclick="resetAllRatesToDefault()" class="px-3 py-2 rounded-xl bg-slate-800/80 hover:bg-slate-700 text-slate-300 hover:text-white text-xs font-bold transition flex items-center gap-1.5 cursor-pointer">
+          <i class="fa-solid fa-rotate-left text-[11px]"></i> 맞춤 환율 전체 초기화
+        </button>
+        <button type="button" onclick="closeModal('modal-rates-manager')" class="px-5 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs transition cursor-pointer shadow">
+          확인 / 닫기
+        </button>
       </div>
     </div>
   </div>
@@ -2980,9 +3041,16 @@
 
       <!-- 버전 목록 스크롤 영역 -->
       <div class="flex-1 overflow-y-auto space-y-3 pr-1 text-xs">
-        <!-- v1.4.8 (Current) -->
+        <!-- v1.4.9 (Current) -->
         <div class="p-4 rounded-2xl border-2 border-emerald-500/40 space-y-2.5 bg-emerald-500/5 dark:bg-emerald-500/10">
-          <div class="flex items-center justify-between gap-2"><div class="flex items-center gap-2 min-w-0"><span class="px-2 py-0.5 rounded-lg bg-emerald-500 text-black font-black text-xs shadow-sm shrink-0">v1.4.8</span><span class="text-xs font-black text-[#1c1917] dark:text-white">여행 다통화 지갑(Multi-Currency Wallet) & 유기적 환전·결제 가계부 관리 시스템 구축</span></div><span class="companion-status shrink-0">최신 버전</span></div>
+          <div class="flex items-center justify-between gap-2"><div class="flex items-center gap-2 min-w-0"><span class="px-2 py-0.5 rounded-lg bg-emerald-500 text-black font-black text-xs shadow-sm shrink-0">v1.4.9</span><span class="text-xs font-black text-[#1c1917] dark:text-white">실시간 환율 갱신(Live FX Rate Refresh) & 통화별 맞춤 환율 관리 시스템 구축</span></div><span class="companion-status shrink-0">최신 버전</span></div>
+          <p class="text-xs leading-relaxed">사용자 제안을 수렴하여 글로벌 무료 실시간 환율 API(<code>open.er-api.com</code>)와 연동된 <b>실시간 환율 갱신(Live FX Refresh)</b> 및 <b>통화별 맞춤 관리 모달(<code>modal-rates-manager</code>)</b>을 전격 탑재했습니다. 가계부 헤더의 <code>[🔄 환율 갱신]</code> 버튼 터치 한 번으로 18개국 전 세계 통화의 최신 환율을 실시간으로 가져와 지갑 원화 환산 가치와 가계부 잔액을 즉시 재계산합니다. 은행 우대 환율이나 현지 사설 환전소 환율을 직접 입력하여 맞춤 적용할 수 있으며, 오프라인 환경에서도 캐시된 환율을 안전하게 보존합니다. 환전 모달(<code>modal-exchange</code>)에도 실시간 환율 원터치 동기화 기능이 완비되었습니다.</p>
+          <div class="text-[10px] text-stone-400 dark:text-stone-500 pt-1 border-t border-emerald-500/20 flex items-center justify-between"><span>📅 2026-09-11 릴리즈</span><span class="font-mono">st-shell-v1.4.9</span></div>
+        </div>
+
+        <!-- v1.4.8 -->
+        <div class="p-4 rounded-2xl bg-emerald-500/5 dark:bg-emerald-500/10 border-2 border-emerald-500/40 space-y-2.5 shadow-sm relative overflow-hidden">
+          <div class="flex items-center justify-between gap-2"><div class="flex items-center gap-2 min-w-0"><span class="px-2 py-0.5 rounded-lg bg-emerald-500 text-black font-black text-xs shadow-sm shrink-0">v1.4.8</span><span class="text-xs font-black text-[#1c1917] dark:text-white">여행 다통화 지갑(Multi-Currency Wallet) & 유기적 환전·결제 가계부 관리 시스템 구축</span></div></div>
           <p class="text-xs leading-relaxed">여행 중 원화(KRW), 달러(USD), 유로(EUR), 엔화(JPY) 등 다중 통화를 한곳에서 관리하는 <b>다통화 지갑 시스템(Multi-Currency Wallet)</b>과 <b>유기적 환전(Exchange) 엔진</b>을 전격 탑재했습니다. 한국 돈을 외화로 환전하면 원화 지갑 잔액이 차감되고 외화 지갑 잔액이 즉시 충전되며, 총 여행 자산은 보존됩니다. 현지에서 식사나 쇼핑 결제 시 <code>[현지 외화 지갑 잔액 차감]</code> 또는 <code>[한국 신용카드 결제(원화 청구)]</code>를 직관적으로 선택할 수 있어 실제 여행 경비 흐름과 100% 일치하는 지갑 잔액 관리가 가능합니다.</p>
           <div class="text-[10px] text-stone-400 dark:text-stone-500 pt-1 border-t border-emerald-500/20 flex items-center justify-between"><span>📅 2026-09-11 릴리즈</span><span class="font-mono">st-shell-v1.4.8</span></div>
         </div>
@@ -3418,7 +3486,7 @@
 
       <!-- 모달 푸터 -->
       <div class="pt-3 border-t border-[#e8e2d5] dark:border-stone-800 flex items-center justify-between shrink-0">
-        <span class="text-[11px] text-stone-400 dark:text-stone-500 font-mono">Sulsul Travel Engine v1.4.8</span>
+        <span class="text-[11px] text-stone-400 dark:text-stone-500 font-mono">Sulsul Travel Engine v1.4.9</span>
         <button onclick="closeModal('modal-version-history')" class="px-4 py-2 rounded-xl bg-[#faf8f5] dark:bg-stone-800 hover:bg-[#f0ece1] dark:hover:bg-stone-700 border border-[#e8e2d5] dark:border-stone-700 text-[#1c1917] dark:text-[#ededed] text-xs font-bold transition cursor-pointer shadow-sm">
           닫기
         </button>
@@ -3481,7 +3549,7 @@
     window.showToast = showToast;
 
     // 앱 버전 및 글로벌 네임스페이스 (Sulsul-Travel Invariant Rule R-10, R-11, R-12, R-13, R-14, R-15)
-    const APP_VER = '1.4.8';
+    const APP_VER = '1.4.9';
 
     // ══════════════════════════════════════════
     // [Two-Tone Theme System] 라이트 그레이 & 딥 블랙 테마 엔진
@@ -3814,6 +3882,11 @@
       allTimelinesExpanded: false,
       geminiKey: cleanApiKey(localStorage.getItem('st_gemini_key') || ''),
       aiFallbackActive: false, // 3-Tier Fallback 감지 플래그
+
+      // 실시간 환율 및 커스텀 환율 관리 상태 (v1.4.9)
+      liveRates: JSON.parse(localStorage.getItem('st_live_rates') || '{}'),
+      customRates: JSON.parse(localStorage.getItem('st_custom_rates') || '{}'),
+      ratesLastUpdated: localStorage.getItem('st_rates_last_updated') || null,
       
       // Sulsul-Diary Hub Filters & View Mode (v1.0.7)
       hubViewMode: localStorage.getItem('st_hub_view_mode') || 'grid', // 'grid' | 'list'
@@ -7068,6 +7141,7 @@
       if (elSpent) elSpent.innerText = `₩${totalSpent.toLocaleString()}`;
       if (elBal) elBal.innerText = `₩${walletData.totalAssetKrw.toLocaleString()}`;
       if (State.activeTab === 'expenses') renderExpensesTab();
+      updateRatesTimestampUI();
 
       // 서브탭 레이블 및 아이콘 동적 적응 (v1.1.8 DKP Registry)
       const pack = resolveTripPack(trip);
@@ -7143,7 +7217,13 @@
         }
       });
       if (tabId === 'today') renderTodayTab();
-      if (tabId === 'expenses') renderExpensesTab();
+      if (tabId === 'expenses') {
+        renderExpensesTab();
+        updateRatesTimestampUI();
+        if (!State.ratesLastUpdated) {
+          refreshLiveExchangeRates(false);
+        }
+      }
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
@@ -7852,7 +7932,7 @@
     }
 
     // ==========================================
-    // [5] 다통화 지갑 & 환전·가계부 렌더링 엔진 (v1.4.8)
+    // [5] 다통화 지갑 & 환전·가계부 렌더링 엔진 (v1.4.9)
     // ==========================================
     const CURRENCY_INFO = {
       KRW: { name: '대한민국 원', symbol: '₩', flag: '🇰🇷', rate: 1, step: 1000 },
@@ -7878,9 +7958,30 @@
     window.CURRENCY_INFO = CURRENCY_INFO;
 
     function getCurrencyRate(curr) {
-      if (curr === 'ARS') {
-        return State.isMepEnabled ? 0.95 : 1.38;
+      if (!curr || curr === 'KRW') return 1;
+
+      // 아르헨티나 페소(ARS) MEP 우대 환율 스위치 (R-6 불변식)
+      if (curr === 'ARS' && State.isMepEnabled) {
+        if (State.customRates && State.customRates['ARS_MEP'] != null && State.customRates['ARS_MEP'] > 0) {
+          return State.customRates['ARS_MEP'];
+        }
+        if (State.liveRates && State.liveRates['ARS']) {
+          return Math.round(State.liveRates['ARS'] * 0.70 * 100) / 100;
+        }
+        return CURRENCY_INFO.ARS?.mepRate || 0.95;
       }
+
+      // 1. 사용자 직접 맞춤 설정 환율 최우선
+      if (State.customRates && State.customRates[curr] != null && State.customRates[curr] > 0) {
+        return State.customRates[curr];
+      }
+
+      // 2. 실시간 글로벌 API 갱신 환율
+      if (State.liveRates && State.liveRates[curr] != null && State.liveRates[curr] > 0) {
+        return State.liveRates[curr];
+      }
+
+      // 3. 내장 기본 기준 환율
       return CURRENCY_INFO[curr]?.rate || 1;
     }
     window.getCurrencyRate = getCurrencyRate;
@@ -8510,6 +8611,218 @@
       }
     }
     window.toggleMepRate = toggleMepRate;
+
+    // ==========================================
+    // [5.1] 실시간 환율 갱신 & 환율 맞춤 관리 엔진 (v1.4.9)
+    // ==========================================
+    function updateRatesTimestampUI() {
+      const el = document.getElementById('exp-rates-timestamp');
+      if (!el) return;
+      if (!State.ratesLastUpdated) {
+        el.innerHTML = `<i class="fa-solid fa-circle-info text-slate-500 mr-1"></i>기본 환율`;
+        return;
+      }
+      const dt = new Date(State.ratesLastUpdated);
+      const timeStr = `${dt.getMonth() + 1}/${dt.getDate()} ${String(dt.getHours()).padStart(2, '0')}:${String(dt.getMinutes()).padStart(2, '0')}`;
+      const hasCustom = State.customRates && Object.keys(State.customRates).length > 0;
+      el.innerHTML = `<span class="inline-block w-1.5 h-1.5 rounded-full bg-emerald-400 mr-1.5 animate-pulse"></span><span>${timeStr} 갱신</span>${hasCustom ? '<span class="text-[9px] text-amber-400 font-bold ml-1">(맞춤)</span>' : ''}`;
+    }
+    window.updateRatesTimestampUI = updateRatesTimestampUI;
+
+    async function refreshLiveExchangeRates(manual = false) {
+      const refreshBtn = document.getElementById('btn-refresh-rates');
+      const refreshIcon = document.getElementById('icon-refresh-rates');
+      const refreshText = document.getElementById('text-refresh-rates');
+
+      if (refreshIcon) refreshIcon.classList.add('fa-spin');
+      if (refreshText) refreshText.innerText = '갱신 중...';
+      if (refreshBtn) refreshBtn.disabled = true;
+
+      try {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 7000);
+
+        const res = await fetch('https://open.er-api.com/v6/latest/USD', {
+          signal: controller.signal
+        });
+        clearTimeout(timeoutId);
+
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const data = await res.json();
+        if (data.result !== 'success' || !data.rates || !data.rates.KRW) {
+          throw new Error('Invalid exchange rate payload');
+        }
+
+        const usdInKrw = Number(data.rates.KRW);
+        if (!State.liveRates) State.liveRates = {};
+
+        Object.keys(CURRENCY_INFO).forEach(c => {
+          if (c === 'KRW') {
+            State.liveRates[c] = 1;
+          } else if (c === 'USD') {
+            State.liveRates[c] = Math.round(usdInKrw * 10) / 10;
+          } else if (data.rates[c] && Number(data.rates[c]) > 0) {
+            const cInKrw = usdInKrw / Number(data.rates[c]);
+            if (cInKrw >= 100) {
+              State.liveRates[c] = Math.round(cInKrw * 10) / 10;
+            } else if (cInKrw >= 1) {
+              State.liveRates[c] = Math.round(cInKrw * 100) / 100;
+            } else {
+              State.liveRates[c] = Math.round(cInKrw * 10000) / 10000;
+            }
+          }
+        });
+
+        State.ratesLastUpdated = new Date().toISOString();
+        localStorage.setItem('st_live_rates', JSON.stringify(State.liveRates));
+        localStorage.setItem('st_rates_last_updated', State.ratesLastUpdated);
+
+        renderActiveTripWorkspace();
+        const mgrModal = document.getElementById('modal-rates-manager');
+        if (mgrModal && !mgrModal.classList.contains('sheet-closed')) {
+          renderRatesManagerList();
+        }
+
+        if (manual) {
+          const usdRate = State.liveRates.USD || CURRENCY_INFO.USD.rate;
+          showToast(`🎉 실시간 시장 환율 갱신 완료! (1 USD = ₩${usdRate.toLocaleString()})`);
+        }
+      } catch (err) {
+        console.warn('[Rates] Live exchange rate refresh failed:', err);
+        if (manual) {
+          showToast('⚠️ 실시간 환율 서버 연결 실패: 기존 캐시(또는 기본 환율)를 유지합니다.');
+        }
+      } finally {
+        if (refreshIcon) refreshIcon.classList.remove('fa-spin');
+        if (refreshText) refreshText.innerText = '환율 갱신';
+        if (refreshBtn) refreshBtn.disabled = false;
+        updateRatesTimestampUI();
+      }
+    }
+    window.refreshLiveExchangeRates = refreshLiveExchangeRates;
+
+    function renderRatesManagerList() {
+      const container = document.getElementById('rates-manager-list');
+      if (!container) return;
+
+      const allCurrs = Object.keys(CURRENCY_INFO);
+      container.innerHTML = allCurrs.map(c => {
+        const info = CURRENCY_INFO[c];
+        if (c === 'KRW') {
+          return `
+            <div class="p-3 bg-[#080b12] border border-[#1e263c] rounded-xl flex items-center justify-between">
+              <div class="flex items-center gap-2.5">
+                <span class="text-2xl">${info.flag}</span>
+                <div>
+                  <div class="flex items-center gap-1.5">
+                    <span class="text-xs font-black text-white">${c}</span>
+                    <span class="text-[10px] text-slate-400">${info.name}</span>
+                    <span class="text-[9px] px-1.5 py-0.5 rounded font-bold bg-amber-500/20 text-amber-300 border border-amber-500/30">기준 통화</span>
+                  </div>
+                  <div class="text-xs text-slate-300 font-bold mt-0.5">1 KRW = ₩1 (기본 기준)</div>
+                </div>
+              </div>
+            </div>
+          `;
+        }
+
+        const appliedRate = getCurrencyRate(c);
+        const hasCustom = State.customRates && State.customRates[c] != null;
+        const hasLive = !hasCustom && State.liveRates && State.liveRates[c] != null;
+
+        let sourceBadge = '';
+        if (hasCustom) {
+          sourceBadge = `<span class="text-[9px] px-1.5 py-0.5 rounded font-bold bg-amber-500/20 text-amber-300 border border-amber-500/30">직접 설정</span>`;
+        } else if (hasLive) {
+          sourceBadge = `<span class="text-[9px] px-1.5 py-0.5 rounded font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">실시간 API</span>`;
+        } else {
+          sourceBadge = `<span class="text-[9px] px-1.5 py-0.5 rounded font-bold bg-slate-800 text-slate-400 border border-slate-700">기본 환율</span>`;
+        }
+
+        return `
+          <div class="p-2.5 bg-[#080b12] border ${hasCustom ? 'border-amber-500/40' : 'border-[#1e263c]'} rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-2 transition">
+            <div class="flex items-center gap-2.5 min-w-0">
+              <span class="text-2xl shrink-0">${info.flag}</span>
+              <div class="min-w-0">
+                <div class="flex items-center gap-1.5 flex-wrap">
+                  <span class="text-xs font-black text-white">${c}</span>
+                  <span class="text-[10px] text-slate-400 truncate">${info.name}</span>
+                  ${sourceBadge}
+                </div>
+                <div class="text-xs text-amber-400 font-black mt-0.5 font-mono">
+                  1 ${c} = ₩${appliedRate.toLocaleString()}
+                </div>
+              </div>
+            </div>
+
+            <div class="flex items-center gap-1.5 self-end sm:self-center shrink-0">
+              <input type="number" step="any" id="custom-rate-input-${c}" value="${appliedRate}" class="w-24 px-2 py-1 bg-[#0f1422] border border-[#1e263c] rounded-lg text-xs text-white text-right focus:outline-none focus:border-amber-500 font-mono font-bold">
+              <span class="text-[11px] text-slate-400">원</span>
+              <button onclick="saveCustomRate('${c}')" class="px-2.5 py-1 rounded-lg bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 text-xs font-bold transition border border-amber-500/30 cursor-pointer">
+                적용
+              </button>
+              ${hasCustom ? `
+                <button onclick="resetCustomRate('${c}')" class="px-2 py-1 rounded-lg bg-rose-500/10 hover:bg-rose-500/20 text-rose-300 text-xs font-bold transition border border-rose-500/30 cursor-pointer" title="직접 맞춤 환율 해제">
+                  해제
+                </button>
+              ` : ''}
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+    window.renderRatesManagerList = renderRatesManagerList;
+
+    function openRatesManagerModal() {
+      renderRatesManagerList();
+      openModal('modal-rates-manager');
+    }
+    window.openRatesManagerModal = openRatesManagerModal;
+
+    function saveCustomRate(curr) {
+      const input = document.getElementById(`custom-rate-input-${curr}`);
+      if (!input) return;
+      const val = parseFloat(input.value);
+      if (isNaN(val) || val <= 0) {
+        showToast('⚠️ 0보다 큰 올바른 환율 숫자를 입력하세요.');
+        return;
+      }
+      if (!State.customRates) State.customRates = {};
+      State.customRates[curr] = val;
+      localStorage.setItem('st_custom_rates', JSON.stringify(State.customRates));
+      renderRatesManagerList();
+      renderActiveTripWorkspace();
+      showToast(`✅ [${curr}] 환율이 ₩${val.toLocaleString()} (사용자 맞춤)으로 설정되었습니다.`);
+    }
+    window.saveCustomRate = saveCustomRate;
+
+    function resetCustomRate(curr) {
+      if (State.customRates && State.customRates[curr] != null) {
+        delete State.customRates[curr];
+        localStorage.setItem('st_custom_rates', JSON.stringify(State.customRates));
+      }
+      renderRatesManagerList();
+      renderActiveTripWorkspace();
+      showToast(`↩️ [${curr}] 맞춤 설정을 해제하고 ${State.liveRates && State.liveRates[curr] ? '실시간' : '기본'} 환율로 복원했습니다.`);
+    }
+    window.resetCustomRate = resetCustomRate;
+
+    function resetAllRatesToDefault() {
+      const ok = confirm('모든 통화의 직접 입력 맞춤 환율을 해제하고 기본/실시간 환율로 초기화하시겠습니까?');
+      if (!ok) return;
+      State.customRates = {};
+      localStorage.removeItem('st_custom_rates');
+      renderRatesManagerList();
+      renderActiveTripWorkspace();
+      showToast('↩️ 모든 통화의 맞춤 환율이 초기화되었습니다.');
+    }
+    window.resetAllRatesToDefault = resetAllRatesToDefault;
+
+    function syncExchangeModalWithLiveRate() {
+      updateExchangeRateAndBanner();
+      showToast('🔄 현재 적용 중인 최신 환율을 환전 입력창에 즉시 반영했습니다.');
+    }
+    window.syncExchangeModalWithLiveRate = syncExchangeModalWithLiveRate;
 
     // ==========================================
     // [6] 포토 다이어리 렌더링 (3:4 Canvas 정규화)
@@ -13075,7 +13388,15 @@ JSON 배열만 출력하세요. 각 day는 dayNum, title, city, date, spots를 �
       selectQuickFormCountry: selectQuickFormCountry,
       resolveCountryInfo: resolveCountryInfo,
       getCountryFlag: getCountryFlag,
-      getCountryCurrency: getCountryCurrency
+      getCountryCurrency: getCountryCurrency,
+      getCurrencyRate: getCurrencyRate,
+      refreshLiveExchangeRates: refreshLiveExchangeRates,
+      openRatesManagerModal: openRatesManagerModal,
+      renderRatesManagerList: renderRatesManagerList,
+      saveCustomRate: saveCustomRate,
+      resetCustomRate: resetCustomRate,
+      resetAllRatesToDefault: resetAllRatesToDefault,
+      syncExchangeModalWithLiveRate: syncExchangeModalWithLiveRate
     };
   </script>
 </body>
