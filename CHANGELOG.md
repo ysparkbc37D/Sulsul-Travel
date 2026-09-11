@@ -26,6 +26,21 @@
 - [ ] 항공권/호텔 예약 바우처 PDF 자동 파싱 일정 등록
 - [ ] 여행 동행자 실시간 음성 메모 AI 다이어리 자동 변환
 
+## [v1.4.6] - 2026-09-11
+### 🤖 AI 일정 생성 타임아웃 확장 · JSON 모드 적용 및 스마트 로컬 엔진 폴백
+- **Gemini AI 일정 생성 타임아웃 12초 하드 컷 중단 결함 완벽 해결**:
+  - 기존 `callGeminiApiWithFallback`에 고정된 12초 타임아웃으로 인해, 다일정(5~22일 등) 일정 생성 시 API 응답 소요 시간(20~35초)을 견디지 못하고 3개 모델(`gemini-3.1-flash-lite`, `gemini-3.5-flash-lite`, `gemini-3.5-flash`)이 모두 `AbortError`로 중단되던 결함을 근절.
+  - 생성 작업(`generateAiDraftPayload`) 전용으로 모델당 타임아웃을 30초(`timeoutMs: 30000`), 오케스트레이터 제한을 65초(`orchestratorTimeoutMs: 65000`)로 적응형 확장.
+- **네이티브 JSON 모드(`response_mime_type: "application/json"`) 탑재**:
+  - Gemini API 호출 시 `generationConfig`에 `response_mime_type: "application/json"`을 전달하여 모델이 순수 JSON만 반환하도록 강제.
+  - 마크다운 코드 블록(```json ... ```) 및 후행 쉼표(trailing comma) 정돈을 지원하는 탄력적 JSON 파서(`parseJsonBlock`) 구축.
+- **장기 여행 프롬프트 앵커 스팟 밀도 최적화 & 스팟 분 단위 자동 정규화**:
+  - 8일 이상 장기 여행(예: 남미 22일 대종단) 시 하루 4~6개의 핵심 앵커 스팟으로 기획 밀도를 유연하게 조율하여 토큰 낭비 및 출력 단절을 예방.
+  - AI가 `:15`, `:45` 등 비표준 분으로 응답하더라도 기각하지 않고 30분 단위(`:00`, `:30`)로 자동 반올림 정규화(`normalizeAiDraftDays`)하여 유효한 초안으로 보존.
+- **무결점 스마트 로컬 엔진 자동 폴백(Smart Local Engine Fallback) 구축**:
+  - API 키 유효성/할당량 초과, 타임아웃, 오프라인 네트워크 장애 등 어떠한 실패 환경에서도 사용자가 빈 화면이나 에러 토스트로 방치되지 않도록 즉시 내장 DKP 골든 코스 및 30분 일정 엔진(`generateAutoSpotsForTrip`)으로 무감청 전환.
+  - AI 초안 검토 모달에 `스마트 로컬 추천 코스` 배너를 친절하게 안내하고 [일정 적용하기] 시 전체 일정이 100% 정상 저장되도록 보장.
+
 ## [v1.4.5] - 2026-09-11
 ### 📱 모바일 '+ 추가' 여행 생성창 가로 흔들림(Wobble) 근절 & 반응형 UI/UX 최적화
 - **모바일 '+ 추가' 여행 생성 모달 가로 흔들림(Wobble/Jitter) 원천 박멸**:

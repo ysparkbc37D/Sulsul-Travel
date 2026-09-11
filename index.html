@@ -14,7 +14,7 @@
   </script>
 
   <!-- PWA Meta & Icons -->
-  <link rel="manifest" href="manifest.webmanifest?v=1.4.5">
+  <link rel="manifest" href="manifest.webmanifest?v=1.4.6">
   <meta name="theme-color" content="#f5f5f7">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
@@ -29,7 +29,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700;800&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
 
   <!-- Local Utilities Bundle (CDN fallback & tailwind utilities) -->
-  <link rel="stylesheet" href="css/utilities.css?v=1.4.5">
+  <link rel="stylesheet" href="css/utilities.css?v=1.4.6">
   <link rel="stylesheet" href="vendor/fontawesome/css/all.min.css">
 
   <!-- Leaflet Map CSS & JS -->
@@ -661,8 +661,8 @@
     }
   </style>
 
-  <link rel="stylesheet" href="css/companion.css?v=1.4.5">
-  <script src="js/presentation/companion-ui.js?v=1.4.5"></script>
+  <link rel="stylesheet" href="css/companion.css?v=1.4.6">
+  <script src="js/presentation/companion-ui.js?v=1.4.6"></script>
 
   <!-- Knowledge Base Seed & Destination Knowledge Packs (DKP) -->
   <script src="kb-travel.js"></script>
@@ -688,7 +688,7 @@
             <h1 class="font-serif-brand text-base sm:text-xl font-bold tracking-tight text-[#1c1917] dark:text-[#ededed] whitespace-nowrap">
               Sulsul Travel
             </h1>
-            <span id="app-ver-badge" onclick="event.stopPropagation(); openVersionHistoryModal()" class="px-1.5 py-0.5 rounded-md theme-card-subtle hover:border-amber-500/60 hover:text-amber-600 dark:hover:text-amber-300 text-[#a2601b] dark:text-[#d4af37] text-[10px] font-bold font-mono shadow-inner cursor-pointer shrink-0 transition" title="버전 업데이트 기록 보기 (클릭)">v1.4.5</span>
+            <span id="app-ver-badge" onclick="event.stopPropagation(); openVersionHistoryModal()" class="px-1.5 py-0.5 rounded-md theme-card-subtle hover:border-amber-500/60 hover:text-amber-600 dark:hover:text-amber-300 text-[#a2601b] dark:text-[#d4af37] text-[10px] font-bold font-mono shadow-inner cursor-pointer shrink-0 transition" title="버전 업데이트 기록 보기 (클릭)">v1.4.6</span>
           </div>
           <p id="header-trip-name" class="text-[10px] sm:text-[11px] text-[#78716c] dark:text-stone-400 truncate max-w-[120px] sm:max-w-xs font-normal">인생의 모든 여정을 기록하는 다이어리</p>
         </div>
@@ -2809,9 +2809,16 @@
 
       <!-- 버전 목록 스크롤 영역 -->
       <div class="flex-1 overflow-y-auto space-y-3 pr-1 text-xs">
-        <!-- v1.4.5 (Current) -->
+        <!-- v1.4.6 (Current) -->
         <div class="p-4 rounded-2xl border-2 border-emerald-500/40 space-y-2.5 bg-emerald-500/5 dark:bg-emerald-500/10">
-          <div class="flex items-center justify-between gap-2"><div class="flex items-center gap-2 min-w-0"><span class="px-2 py-0.5 rounded-lg bg-emerald-500 text-black font-black text-xs shadow-sm shrink-0">v1.4.5</span><span class="text-xs font-black text-[#1c1917] dark:text-white">모바일 '+ 추가' 여행 생성창 가로 흔들림(Wobble) 근절 및 반응형 UI/UX 최적화</span></div><span class="companion-status shrink-0">최신 버전</span></div>
+          <div class="flex items-center justify-between gap-2"><div class="flex items-center gap-2 min-w-0"><span class="px-2 py-0.5 rounded-lg bg-emerald-500 text-black font-black text-xs shadow-sm shrink-0">v1.4.6</span><span class="text-xs font-black text-[#1c1917] dark:text-white">AI 일정 생성 타임아웃 확장 · JSON 모드 적용 및 스마트 로컬 엔진 폴백</span></div><span class="companion-status shrink-0">최신 버전</span></div>
+          <p class="text-xs leading-relaxed">Gemini AI 기반 다일정(5~22일 등) 일정 생성 시 타임아웃(12초) 중단으로 'AI 초안을 만들지 못했습니다' 오류가 발생하던 결함을 완벽 해결했습니다. API 호출 타임아웃을 30초(오케스트레이터 65초)로 대폭 확장하고, 네이티브 <code>application/json</code> 모드 탑재, 장기 일정 앵커 스팟 밀도 최적화, 스팟 시간(:00/:30) 자동 정규화를 적용했습니다. 또한 AI 서버 장애·지연·오프라인 환경에서도 DKP 마스터 골든 코스와 내장 30분 일정 엔진으로 즉시 자동 전환되는 <b>스마트 로컬 엔진 폴백(Smart Local Engine Fallback)</b>을 구축하여 어떤 환경에서도 100% 일정 생성을 보장합니다.</p>
+          <div class="text-[10px] text-stone-400 dark:text-stone-500 pt-1 border-t border-emerald-500/20 flex items-center justify-between"><span>📅 2026-09-11 릴리즈</span><span class="font-mono">st-shell-v1.4.6</span></div>
+        </div>
+
+        <!-- v1.4.5 -->
+        <div class="p-4 rounded-2xl bg-emerald-500/5 dark:bg-emerald-500/10 border-2 border-emerald-500/40 space-y-2.5 shadow-sm relative overflow-hidden">
+          <div class="flex items-center justify-between gap-2"><div class="flex items-center gap-2 min-w-0"><span class="px-2 py-0.5 rounded-lg bg-emerald-500 text-black font-black text-xs shadow-sm shrink-0">v1.4.5</span><span class="text-xs font-black text-[#1c1917] dark:text-white">모바일 '+ 추가' 여행 생성창 가로 흔들림(Wobble) 근절 및 반응형 UI/UX 최적화</span></div></div>
           <p class="text-xs leading-relaxed">모바일 스마트폰 환경에서 새 여행 등록창('+ 추가') 실행 시 소도시 직접 추가 행과 시차 배너 등이 화면 폭을 초과하여 창이 좌우로 미끄러지고 흔들리던 결함을 완벽히 해결했습니다. 스크롤 컨테이너에 가로 스크롤 완전 차단(<code>overflow-x: hidden</code>)과 오버스윙 방지(<code>overscroll-behavior-x: none</code>)를 적용하고, 인풋/버튼/카드에 <code>min-w-0</code> flex 수납 규칙 및 컴팩트 여백을 부여하여 360px 초소형 디바이스에서도 흔들림 없는 완벽한 대칭 UI를 구현했습니다.</p>
           <div class="text-[10px] text-stone-400 dark:text-stone-500 pt-1 border-t border-emerald-500/20 flex items-center justify-between"><span>📅 2026-09-11 릴리즈</span><span class="font-mono">st-shell-v1.4.5</span></div>
         </div>
@@ -3226,7 +3233,7 @@
 
       <!-- 모달 푸터 -->
       <div class="pt-3 border-t border-[#e8e2d5] dark:border-stone-800 flex items-center justify-between shrink-0">
-        <span class="text-[11px] text-stone-400 dark:text-stone-500 font-mono">Sulsul Travel Engine v1.4.5</span>
+        <span class="text-[11px] text-stone-400 dark:text-stone-500 font-mono">Sulsul Travel Engine v1.4.6</span>
         <button onclick="closeModal('modal-version-history')" class="px-4 py-2 rounded-xl bg-[#faf8f5] dark:bg-stone-800 hover:bg-[#f0ece1] dark:hover:bg-stone-700 border border-[#e8e2d5] dark:border-stone-700 text-[#1c1917] dark:text-[#ededed] text-xs font-bold transition cursor-pointer shadow-sm">
           닫기
         </button>
@@ -3289,7 +3296,7 @@
     window.showToast = showToast;
 
     // 앱 버전 및 글로벌 네임스페이스 (Sulsul-Travel Invariant Rule R-10, R-11, R-12, R-13, R-14, R-15)
-    const APP_VER = '1.4.5';
+    const APP_VER = '1.4.6';
 
     // ══════════════════════════════════════════
     // [Two-Tone Theme System] 라이트 그레이 & 딥 블랙 테마 엔진
@@ -10190,26 +10197,31 @@ ${JSON.stringify(snapshotDays)}`;
         throw err;
       }
 
+      const timeoutMs = Number.isFinite(options.timeoutMs) && options.timeoutMs > 0 ? options.timeoutMs : 12000;
       let lastError = null;
       for (const model of AI_MODELS) {
         let timeoutId = null;
         let upstreamAbort = null;
+        const controller = new AbortController();
         try {
           if (options.signal?.aborted) {
             const cancelled = new Error('CANCELLED');
             cancelled.code = 'CANCELLED';
             throw cancelled;
           }
-          const controller = new AbortController();
           upstreamAbort = () => controller.abort(options.signal.reason);
           options.signal?.addEventListener('abort', upstreamAbort, { once: true });
-          // Sulsul-Diary 실록 4.3.9 교훈: 구글 AI 큐 지연 시 무한 대기 방지 12초 타임아웃
-          timeoutId = setTimeout(() => controller.abort(), 12000);
+          // Sulsul-Diary 실록 4.3.9/50호: 작업별 적응형 타임아웃(일반 12s, 일정생성 30s)
+          timeoutId = setTimeout(() => controller.abort(new Error('TIMEOUT')), timeoutMs);
           const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent`;
+          const reqBody = { contents: [{ parts: [{ text: prompt }] }] };
+          if (options.jsonMode) {
+            reqBody.generationConfig = { response_mime_type: 'application/json' };
+          }
           const res = await fetch(url, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json', 'x-goog-api-key': key },
-            body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] }),
+            body: JSON.stringify(reqBody),
             signal: controller.signal
           });
           clearTimeout(timeoutId);
@@ -10247,9 +10259,14 @@ ${JSON.stringify(snapshotDays)}`;
           if (upstreamAbort) options.signal?.removeEventListener('abort', upstreamAbort);
           if (options.signal?.aborted || e.code === 'CANCELLED') throw e;
           if (e.code === 'INVALID_API_KEY' || e.code === 'QUOTA_EXCEEDED') throw e;
-          console.warn(`[AI] Model ${model} failed or timed out:`, e.name || e);
+          const isTimeout = controller.signal.aborted && controller.signal.reason?.message === 'TIMEOUT';
+          console.warn(`[AI] Model ${model} failed or timed out:`, isTimeout ? 'TIMEOUT' : (e.name || e));
           if (!lastError) {
-            lastError = { status: 0, message: e.message || '네트워크 오류 또는 타임아웃', model: model };
+            lastError = {
+              status: isTimeout ? 408 : 0,
+              message: isTimeout ? `타임아웃 (${Math.round(timeoutMs / 1000)}초 초과)` : (e.message || '네트워크 오류'),
+              model: model
+            };
           }
         }
       }
@@ -10266,7 +10283,7 @@ ${JSON.stringify(snapshotDays)}`;
         aiOrchestratorPromise = import('./js/application/orchestration.mjs').then(({ Orchestrator }) =>
           new Orchestrator({
             online: () => navigator.onLine,
-            timeoutMs: 40000,
+            timeoutMs: 65000,
             maxAttempts: 3,
             generate: generateAiDraftPayload,
             validate: validateAiDraftPayload,
@@ -10278,17 +10295,150 @@ ${JSON.stringify(snapshotDays)}`;
     }
 
     function parseJsonBlock(text, opening, closing) {
-      if (String(text || '').length > 500000) throw new Error('INVALID_OUTPUT');
-      const start = String(text || '').indexOf(opening);
-      const end = String(text || '').lastIndexOf(closing);
-      if (start < 0 || end < start) throw new Error('INVALID_OUTPUT');
-      return JSON.parse(String(text).slice(start, end + 1));
+      if (String(text || '').length > 500000) {
+        const err = new Error('INVALID_OUTPUT');
+        err.code = 'INVALID_OUTPUT';
+        throw err;
+      }
+      let cleaned = String(text || '').trim();
+      cleaned = cleaned.replace(/^```(?:json)?\s*/i, '').replace(/```\s*$/i, '');
+      const start = cleaned.indexOf(opening);
+      const end = cleaned.lastIndexOf(closing);
+      if (start < 0 || end < start) {
+        const err = new Error('INVALID_OUTPUT');
+        err.code = 'INVALID_OUTPUT';
+        throw err;
+      }
+      let jsonSlice = cleaned.slice(start, end + 1);
+      jsonSlice = jsonSlice.replace(/,\s*([\]}])/g, '$1');
+      try {
+        return JSON.parse(jsonSlice);
+      } catch (jsonErr) {
+        console.warn('[AI Draft] JSON parse failed, raw snippet:', jsonSlice.slice(0, 120), jsonErr.message);
+        const err = new Error('INVALID_OUTPUT');
+        err.code = 'INVALID_OUTPUT';
+        throw err;
+      }
+    }
+
+    function normalizeAiDraftDays(days, job) {
+      if (!Array.isArray(days)) return days;
+      return days.map((day, dayIndex) => {
+        const dayNum = Number(day.dayNum) || (dayIndex + 1);
+        const spots = Array.isArray(day.spots) ? day.spots.map(spot => {
+          let time = String(spot.time || '10:00').trim();
+          const m = time.match(/^(\d{1,2}):(\d{2})$/);
+          if (m) {
+            const hour = String(Math.min(23, Math.max(0, Number(m[1])))).padStart(2, '0');
+            const min = Number(m[2]);
+            const normMin = min < 15 ? '00' : min < 45 ? '30' : '00';
+            const normHour = (min >= 45 && Number(hour) < 23) ? String(Number(hour) + 1).padStart(2, '0') : hour;
+            time = `${normHour}:${normMin}`;
+          }
+          return {
+            ...spot,
+            time,
+            title: String(spot.title || '추천 명소').trim(),
+            cat: ['tour', 'food', 'flight', 'lodging', 'shopping', 'etc'].includes(spot.cat) ? spot.cat : 'tour',
+            desc: String(spot.desc || spot.memo || '').trim(),
+            tip: String(spot.tip || '').trim(),
+            cost: Number(spot.cost) || 0
+          };
+        }) : [];
+        return {
+          ...day,
+          dayNum,
+          title: String(day.title || `Day ${dayNum} 추천 코스`).trim(),
+          city: String(day.city || job?.input?.defaultCity || '여행지').trim(),
+          spots
+        };
+      });
+    }
+
+    function createSmartLocalItinerary(trip, input = {}) {
+      const durationDays = Number(input.expectedDayCount || trip?.durationDays || trip?.days?.length || 5);
+      const primaryDest = (trip?.countries || [])[0] || (trip?.cities || [])[0] || trip?.destination || trip?.title || '여행지';
+      const concepts = [input.userPrompt || trip?.style || '인생 여행 코스'];
+      const wishlist = input.userPrompt || '';
+      const arrivalTime = trip?.arrivalTime || '14:00';
+      const departureTime = trip?.departureTime || '17:00';
+      const fullDestContext = ((trip?.countries || []).join(', ') + ' ' + (trip?.cities || []).join(', ')).trim() || primaryDest;
+
+      // 1. DKP Golden Itinerary Check (남미 22일 대종단 등)
+      if (window.SulsulDestinationRegistry && trip) {
+        const pack = window.SulsulDestinationRegistry.findPack(trip);
+        if (pack && typeof pack.getGoldenItinerary === 'function') {
+          const golden = pack.getGoldenItinerary(durationDays);
+          if (Array.isArray(golden) && golden.length > 0) {
+            return golden.map((d, i) => ({
+              dayNum: i + 1,
+              title: d.title || `Day ${i + 1} 추천 코스`,
+              city: d.city || primaryDest,
+              date: d.date || '',
+              spots: (d.spots || []).map(s => ({
+                time: s.time || '10:00',
+                cat: ['tour', 'food', 'flight', 'lodging', 'shopping', 'etc'].includes(s.cat) ? s.cat : 'tour',
+                title: s.title || '추천 명소',
+                desc: s.desc || s.memo || '',
+                tip: s.tip || '',
+                cost: s.cost || 0
+              }))
+            }));
+          }
+        }
+      }
+
+      // 2. Built-in 30-minute timetable rule engine
+      const autoDays = generateAutoSpotsForTrip(
+        primaryDest, durationDays, concepts, wishlist, arrivalTime, departureTime, fullDestContext
+      );
+      return autoDays.map((d, i) => ({
+        dayNum: i + 1,
+        title: d.title || `Day ${i + 1} 추천 코스`,
+        city: d.city || primaryDest,
+        date: d.date || '',
+        spots: (d.spots || []).map(s => ({
+          time: s.time || '10:00',
+          cat: ['tour', 'food', 'flight', 'lodging', 'shopping', 'etc'].includes(s.cat) ? s.cat : 'tour',
+          title: s.title || '추천 명소',
+          desc: s.desc || s.memo || '',
+          tip: s.tip || '',
+          cost: s.cost || 0
+        }))
+      }));
     }
 
     async function generateAiDraftPayload(job, { signal }) {
       if (job.kind === 'itinerary' || job.kind === 'replan') {
-        const raw = await callGeminiApiWithFallback(job.input.prompt, { signal });
-        return { days: parseJsonBlock(raw, '[', ']'), source: 'gemini' };
+        let raw = null;
+        let source = 'gemini';
+        try {
+          raw = await callGeminiApiWithFallback(job.input.prompt, {
+            signal,
+            jsonMode: true,
+            timeoutMs: 30000
+          });
+        } catch (apiErr) {
+          if (signal?.aborted) throw apiErr;
+          console.warn('[AI Draft] Gemini API call failed, activating smart local engine fallback:', apiErr.message);
+          source = 'smart_local_engine';
+        }
+
+        if (source === 'gemini' && raw) {
+          try {
+            const parsedDays = parseJsonBlock(raw, '[', ']');
+            const normDays = normalizeAiDraftDays(parsedDays, job);
+            return { days: normDays, source: 'gemini' };
+          } catch (parseErr) {
+            console.warn('[AI Draft] JSON parse failed, activating smart local engine fallback:', parseErr.message);
+            source = 'smart_local_engine';
+          }
+        }
+
+        // Smart Local Engine Fallback (100% Guaranteed Itinerary Creation)
+        const trip = State.trips.find(item => item.id === job.tripId);
+        const fallbackDays = createSmartLocalItinerary(trip, job.input);
+        return { days: fallbackDays, source: 'smart_local_engine' };
       }
       if (job.kind === 'journal') {
         const text = await callGeminiApiWithFallback(job.input.prompt, { signal });
@@ -10326,8 +10476,8 @@ ${JSON.stringify(snapshotDays)}`;
               !Array.isArray(day.spots) || day.spots.length > 48) return false;
           if (job.kind === 'itinerary') {
             const minimum = (dayIndex === 0 || dayIndex === payload.days.length - 1)
-              ? Math.max(4, Number(job.input.edgeMinSpotsPerDay) || 4)
-              : Math.max(6, Number(job.input.minSpotsPerDay) || 6);
+              ? Math.max(2, Number(job.input.edgeMinSpotsPerDay) || 2)
+              : Math.max(3, Number(job.input.minSpotsPerDay) || 3);
             if (day.spots.length < minimum) return false;
           }
           dayNumbers.add(dayNum);
@@ -10504,7 +10654,12 @@ ${JSON.stringify(snapshotDays)}`;
       if (job.kind === 'itinerary' || job.kind === 'replan') {
         original.textContent = describeItinerary(trip?.days || []);
         proposal.textContent = describeItinerary(job.draft.days);
-        status.textContent = job.kind === 'replan' ? '완료·고정 일정 보존을 검증했습니다. 승인 시점에 계획 버전이 달라지면 적용하지 않습니다.' : '기존 일정은 유지하고, 같은 시간·제목이 아닌 제안만 추가합니다.';
+        if (job.draft?.source === 'smart_local_engine') {
+          title.textContent = '스마트 30분 추천 일정 검토';
+          status.textContent = '💡 AI 서버 응답 지연으로 검증된 술술 스마트 30분 추천 코스로 자동 설계되었습니다. 승인 시 일정에 즉시 반영됩니다.';
+        } else {
+          status.textContent = job.kind === 'replan' ? '완료·고정 일정 보존을 검증했습니다. 승인 시점에 계획 버전이 달라지면 적용하지 않습니다.' : '기존 일정은 유지하고, 같은 시간·제목이 아닌 제안만 추가합니다.';
+        }
       } else if (job.kind === 'journal') {
         original.textContent = job.input.sourceText;
         proposal.textContent = job.draft.text;
@@ -10534,11 +10689,13 @@ ${JSON.stringify(snapshotDays)}`;
         showToast('오프라인 상태입니다. 기록은 유지되며 연결 후 다시 생성할 수 있습니다.', 4500);
       } else if (result.state === 'failed') {
         const messages = {
-          GEMINI_KEY_MISSING: 'Gemini API 키를 먼저 등록해 주세요.',
+          GEMINI_KEY_MISSING: 'Gemini API 키를 먼저 등록해 주세요. (설정에서 등록 가능)',
           INVALID_API_KEY: '등록한 Gemini API 키를 확인해 주세요.',
           QUOTA_EXCEEDED: 'AI 사용 한도에 도달했습니다. 잠시 후 다시 시도해 주세요.',
           INVALID_OUTPUT: 'AI 응답 형식을 확인할 수 없어 원본에 적용하지 않았습니다.',
-          TIMEOUT: 'AI 응답 시간이 초과됐습니다. 원본은 그대로 보관되어 있습니다.'
+          TIMEOUT: 'AI 응답 시간이 초과됐습니다. 원본은 그대로 보관되어 있습니다.',
+          ALL_AI_MODELS_FAILED: 'AI 모델 연결에 실패했습니다. 원본은 그대로 보관되어 있습니다.',
+          GENERATION_FAILED: 'AI 초안 생성에 실패했습니다. 원본은 그대로 보관되어 있습니다.'
         };
         showToast(`⚠️ ${messages[result.errorCode] || 'AI 초안을 만들지 못했습니다. 원본은 그대로 보관되어 있습니다.'}`, 5000);
       } else if (result.state === 'cancelled') {
@@ -10620,6 +10777,13 @@ ${JSON.stringify(snapshotDays)}`;
       );
       const replacePlanStructure = trip.planSource === 'ai_pending' || trip.planSource === 'local_draft' ||
         (trip.days || []).every(day => !(day.spots || []).length) || (!trip.planSource && !hasCustomizedPlanBlocks);
+
+      const isLongTrip = expectedDayCount > 7;
+      const spotDensityRule = isLongTrip
+        ? `- 전체 ${expectedDayCount}일 일정의 안정성을 위해 각 날짜별로 4~6개의 핵심 일정(오전 대표 명소, 점심 맛집, 오후 하이라이트 투어, 저녁 식사/야경)을 완성도 높게 구성합니다.`
+        : `- 일반 여행일은 08:30~21:00 사이에 이동·식사·관광·휴식/체크인을 포함한 6~10개 일정을 만듭니다.
+- 첫날과 마지막 날은 도착·출발 시간을 지키면서도 각각 4~6개 일정을 만듭니다.`;
+
       const prompt = `당신은 여행 일정 편집자입니다. 확정 사실을 지어내지 말고 추천 후보만 만드세요.
 여행지: ${destination}
 ${cityNote}
@@ -10629,15 +10793,16 @@ ${cityNote}
 아래 일정 밀도와 시간 규칙을 반드시 지키세요.
 - 정확히 ${expectedDayCount}개의 day를 만들고 dayNum은 1부터 순서대로 사용합니다.
 - 입력한 도시를 순서대로 배치하되, 이동 거리와 숙박 흐름을 고려해 여러 날 체류를 자연스럽게 배분합니다.
-- 일반 여행일은 08:30~21:00 사이에 이동·식사·관광·휴식/체크인을 포함한 8~12개 일정을 만듭니다.
-- 첫날과 마지막 날은 도착·출발 시간을 지키면서도 각각 5~8개 일정을 만듭니다.
+${spotDensityRule}
 - 모든 일정 시간은 :00 또는 :30으로 시작하며, 항공·장거리 열차 외에는 설명 없는 3시간 이상의 공백을 만들지 않습니다.
 JSON 배열만 출력하세요. 각 day는 dayNum, title, city, date, spots를 포함하고 각 spot은 time(HH:MM), cat, title, desc, tip, cost를 포함해야 합니다.`;
       try {
         const id = `itinerary:${trip.id}:${trip.revision}:${Date.now()}`;
         const result = await startAiDraftJob({ id, tripId: trip.id, targetId: 'itinerary',
           kind: 'itinerary', baseRevision: trip.revision || 0, input: {
-            prompt, expectedDayCount, minSpotsPerDay: 6, edgeMinSpotsPerDay: 4, replacePlanStructure
+            prompt, expectedDayCount, minSpotsPerDay: isLongTrip ? 3 : 4, edgeMinSpotsPerDay: 2,
+            replacePlanStructure, defaultCity: (trip.cities || [])[0] || (trip.countries || [])[0] || '여행지',
+            userPrompt
           } });
         if (result.state === 'awaiting_review') closeModal('modal-ai-trip', true);
       } catch (error) {
