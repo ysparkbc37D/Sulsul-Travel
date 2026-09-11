@@ -26,6 +26,21 @@
 - [ ] 항공권/호텔 예약 바우처 PDF 자동 파싱 일정 등록
 - [ ] 여행 동행자 실시간 음성 메모 AI 다이어리 자동 변환
 
+## [v1.4.5] - 2026-09-11
+### 📱 모바일 '+ 추가' 여행 생성창 가로 흔들림(Wobble) 근절 & 반응형 UI/UX 최적화
+- **모바일 '+ 추가' 여행 생성 모달 가로 흔들림(Wobble/Jitter) 원천 박멸**:
+  - 모바일 뷰포트(360px~390px)에서 '+ 추가'(`modal-create-trip`) 창 내부 스크롤 시 화면이 좌우로 미끄러지고 흔들리던 결함을 완벽 근절.
+  - `.sheet-container .sheet-box.sheet-scroll-layout`, `#modal-create-trip .sheet-box`에 `overflow-x: hidden !important;`, `width: 100% !important;`, `max-width: min(680px, 100vw) !important;`, `box-sizing: border-box !important;` 격리 적용.
+  - 모달 내부 스크롤 컨테이너(`.sheet-scroll-body`, `#modal-create-trip-scroll-body`)에 `overflow-x: hidden !important;`, `overscroll-behavior-x: none !important;`를 부여하여 대각선 스와이프에 의한 좌우 출렁임 완전 차단.
+- **소도시 직접 추가 행 Flex 오버플로우 근절 & 콤팩트 규격화**:
+  - 소도시 직접 추가 행의 `<input>`에 기본 너비 팽창을 방지하는 `min-w-0 flex-1 w-full` 수납 규칙 적용.
+  - 모바일 환경에서 인풋 폰트 및 높이 강제 확장 현상을 보정하는 모달 전용 콤팩트 CSS 규칙(`min-height: 38px !important; font-size: 14px !important;`) 적용.
+  - 플레이스홀더를 간결한 `"목록 외 소도시/근교 (예: 론다)"`로 최적화하여 360px 디바이스 가용 폭 내에 `[입력창] + [+ 도시 추가]` 버튼이 우측 잘림 없이 완벽 수납되도록 개선 (63px 오버플로우 $\rightarrow$ 0px 소멸).
+- **목적지 보드 카드 및 헤더/배너 반응형 패딩 최적화**:
+  - 모바일 3중 중첩 패딩(40px+28px+24px)을 12px(`0.75rem`)로 슬림화하여 360px 화면 기준 유효 작업 너비를 268px에서 336px(+68px, 25%↑)로 쾌적하게 확장.
+  - 목적지 보드 카드(`#destination-board-cards`) 및 시차 안내 배너(`#trip-form-tz-banner`)에 `w-full max-w-full overflow-hidden`과 `flex-col sm:flex-row gap-1`을 적용하여 140px 오버플로우 원천 해소.
+  - 대륙 탭 래퍼 및 통화/예산 행에 `truncate min-w-0`을 적용하여 가로 스크롤 발생 0건(`sBodyHasHScroll: false`) 달성.
+
 ## [v1.4.4] - 2026-09-11
 ### 🌏 국가 필터 내 도시 노출 결함 근절 & 지명 자가 치유(Self-Healing) 엔진 탑재
 - **국가 필터 드롭다운 내 도시/성 오노출 결함 근절**:

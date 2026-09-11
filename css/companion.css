@@ -184,7 +184,11 @@ button:focus-visible, summary:focus-visible, a:focus-visible { outline:3px solid
     display:flex !important;
     flex-direction:column !important;
     overflow:hidden !important;
+    overflow-x:hidden !important;
     padding:0 !important;
+    width:100% !important;
+    max-width:min(680px, 100vw) !important;
+    box-sizing:border-box !important;
   }
   .sheet-scroll-body,
   #modal-settings-content,
@@ -192,16 +196,26 @@ button:focus-visible, summary:focus-visible, a:focus-visible { outline:3px solid
     flex:1 1 0 !important;
     min-height:0 !important;
     overflow-y:auto !important;
+    overflow-x:hidden !important;
     -webkit-overflow-scrolling:touch !important;
     overscroll-behavior-y:contain !important;
+    overscroll-behavior-x:none !important;
     touch-action:pan-y !important;
     scrollbar-gutter:stable !important;
+    width:100% !important;
+    max-width:100% !important;
+    box-sizing:border-box !important;
+  }
+  #modal-create-trip-scroll-body {
+    padding:0.875rem 0.75rem !important;
   }
   .sheet-box input:not([type=checkbox]):not([type=radio]), .sheet-box textarea, .sheet-box select { font-size:16px !important; min-height:46px; }
   .sheet-box button { min-height:44px; }
   .sheet-box #create-trip-country-chips button,
   .sheet-box [data-city-chip],
   .sheet-box .chip-btn { min-height:30px !important; }
+  #modal-create-trip input[id^="input-custom-city"] { min-height:38px !important; font-size:14px !important; }
+  #modal-create-trip button[onclick^="addCustomCreateTripCity"] { min-height:38px !important; }
   .sheet-box { font-size:14px; }
   .sheet-sticky-actions { padding-bottom:max(14px,var(--safe-bottom)); }
   #view-hub input, #view-hub select { font-size:16px !important; min-height:44px; }

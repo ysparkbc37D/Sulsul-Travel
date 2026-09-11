@@ -14,7 +14,7 @@
   </script>
 
   <!-- PWA Meta & Icons -->
-  <link rel="manifest" href="manifest.webmanifest?v=1.4.4">
+  <link rel="manifest" href="manifest.webmanifest?v=1.4.5">
   <meta name="theme-color" content="#f5f5f7">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
@@ -29,7 +29,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700;800&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
 
   <!-- Local Utilities Bundle (CDN fallback & tailwind utilities) -->
-  <link rel="stylesheet" href="css/utilities.css?v=1.4.4">
+  <link rel="stylesheet" href="css/utilities.css?v=1.4.5">
   <link rel="stylesheet" href="vendor/fontawesome/css/all.min.css">
 
   <!-- Leaflet Map CSS & JS -->
@@ -205,8 +205,13 @@
     .sheet-scroll-body {
       min-height: 0;
       overflow-y: auto;
-      overscroll-behavior: contain;
+      overflow-x: hidden;
+      overscroll-behavior-y: contain;
+      overscroll-behavior-x: none;
       padding: 1rem 1.25rem;
+      width: 100%;
+      max-width: 100%;
+      box-sizing: border-box;
     }
     .sheet-sticky-actions {
       padding: 0.875rem 1.25rem max(0.875rem, var(--safe-bottom));
@@ -250,17 +255,26 @@
       max-height: min(86dvh, calc(100dvh - max(16px, var(--safe-top)))) !important;
       overscroll-behavior: contain !important;
       overflow: hidden !important;
+      overflow-x: hidden !important;
       padding: 0 !important;
+      width: 100% !important;
+      max-width: min(680px, 100vw) !important;
+      box-sizing: border-box !important;
     }
     #modal-settings-content {
       flex: 1 1 0 !important;
       min-height: 0 !important;
       overflow-y: auto !important;
+      overflow-x: hidden !important;
       overscroll-behavior-y: contain !important;
+      overscroll-behavior-x: none !important;
       -webkit-overflow-scrolling: touch !important;
       scrollbar-gutter: stable !important;
       touch-action: pan-y !important;
       padding: 1.25rem !important;
+      width: 100% !important;
+      max-width: 100% !important;
+      box-sizing: border-box !important;
     }
     #modal-create-trip .sheet-box {
       display: flex !important;
@@ -269,17 +283,40 @@
       max-height: min(88dvh, calc(100dvh - max(16px, var(--safe-top)))) !important;
       overscroll-behavior: contain !important;
       overflow: hidden !important;
+      overflow-x: hidden !important;
       padding: 0 !important;
+      width: 100% !important;
+      max-width: min(680px, 100vw) !important;
+      box-sizing: border-box !important;
     }
     #modal-create-trip-scroll-body {
       flex: 1 1 0 !important;
       min-height: 0 !important;
       overflow-y: auto !important;
+      overflow-x: hidden !important;
       overscroll-behavior-y: contain !important;
+      overscroll-behavior-x: none !important;
       -webkit-overflow-scrolling: touch !important;
       scrollbar-gutter: stable !important;
       touch-action: pan-y !important;
       padding: 1.25rem !important;
+      width: 100% !important;
+      max-width: 100% !important;
+      box-sizing: border-box !important;
+    }
+    @media (max-width: 639px) {
+      #modal-create-trip-scroll-body,
+      #modal-settings-content {
+        padding: 0.875rem 0.75rem !important;
+      }
+      #modal-create-trip .sheet-sticky-header,
+      #modal-settings .sheet-sticky-header {
+        padding: 0.875rem 0.875rem 0.625rem !important;
+      }
+      #modal-create-trip .sheet-sticky-actions,
+      #modal-settings .sheet-sticky-actions {
+        padding: 0.75rem 0.875rem max(0.75rem, var(--safe-bottom)) !important;
+      }
     }
     @media (min-width: 640px) {
       .sheet-container {
@@ -624,8 +661,8 @@
     }
   </style>
 
-  <link rel="stylesheet" href="css/companion.css?v=1.4.4">
-  <script src="js/presentation/companion-ui.js?v=1.4.4"></script>
+  <link rel="stylesheet" href="css/companion.css?v=1.4.5">
+  <script src="js/presentation/companion-ui.js?v=1.4.5"></script>
 
   <!-- Knowledge Base Seed & Destination Knowledge Packs (DKP) -->
   <script src="kb-travel.js"></script>
@@ -651,7 +688,7 @@
             <h1 class="font-serif-brand text-base sm:text-xl font-bold tracking-tight text-[#1c1917] dark:text-[#ededed] whitespace-nowrap">
               Sulsul Travel
             </h1>
-            <span id="app-ver-badge" onclick="event.stopPropagation(); openVersionHistoryModal()" class="px-1.5 py-0.5 rounded-md theme-card-subtle hover:border-amber-500/60 hover:text-amber-600 dark:hover:text-amber-300 text-[#a2601b] dark:text-[#d4af37] text-[10px] font-bold font-mono shadow-inner cursor-pointer shrink-0 transition" title="버전 업데이트 기록 보기 (클릭)">v1.4.4</span>
+            <span id="app-ver-badge" onclick="event.stopPropagation(); openVersionHistoryModal()" class="px-1.5 py-0.5 rounded-md theme-card-subtle hover:border-amber-500/60 hover:text-amber-600 dark:hover:text-amber-300 text-[#a2601b] dark:text-[#d4af37] text-[10px] font-bold font-mono shadow-inner cursor-pointer shrink-0 transition" title="버전 업데이트 기록 보기 (클릭)">v1.4.5</span>
           </div>
           <p id="header-trip-name" class="text-[10px] sm:text-[11px] text-[#78716c] dark:text-stone-400 truncate max-w-[120px] sm:max-w-xs font-normal">인생의 모든 여정을 기록하는 다이어리</p>
         </div>
@@ -1564,62 +1601,64 @@
     <div class="sheet-scrim" onclick="closeModal('modal-create-trip')"></div>
     <div class="sheet-box sheet-scroll-layout max-w-xl">
       <!-- 1. 고정 헤더 -->
-      <div class="sheet-sticky-header flex items-center justify-between pb-3">
-        <div class="flex items-center gap-2.5">
-          <span class="w-8 h-8 rounded-xl bg-[#fdf6ec] dark:bg-amber-950/40 text-[#a2601b] dark:text-[#d4af37] border border-[#f5dfb8] dark:border-amber-800/60 flex items-center justify-center text-sm shadow-inner">
+      <div class="sheet-sticky-header flex items-center justify-between gap-2 pb-3">
+        <div class="flex items-center gap-2 min-w-0 flex-1">
+          <span class="w-8 h-8 rounded-xl bg-[#fdf6ec] dark:bg-amber-950/40 text-[#a2601b] dark:text-[#d4af37] border border-[#f5dfb8] dark:border-amber-800/60 flex items-center justify-center text-sm shadow-inner shrink-0">
             <i class="fa-solid fa-plane-departure"></i>
           </span>
-          <div>
-            <h3 class="text-base font-black text-[#1c1917] dark:text-stone-100">새 여행 다이어리 등록 & AI 맞춤 설계</h3>
-            <p class="text-[11px] text-[#78716c] dark:text-stone-400">국가·도시 선택으로 AI가 일자별 30분 단위 상세 일정을 자동 생성합니다.</p>
+          <div class="min-w-0 flex-1">
+            <h3 class="text-sm sm:text-base font-black text-[#1c1917] dark:text-stone-100 truncate">새 여행 다이어리 등록 & AI 맞춤 설계</h3>
+            <p class="text-[10px] sm:text-[11px] text-[#78716c] dark:text-stone-400 truncate">국가·도시 선택으로 AI가 일자별 30분 단위 상세 일정을 자동 생성합니다.</p>
           </div>
         </div>
-        <button onclick="closeModal('modal-create-trip')" class="w-7 h-7 rounded-lg bg-[#faf8f5] dark:bg-stone-800 hover:bg-[#f0ece1] dark:hover:bg-stone-700 text-[#78716c] dark:text-stone-300 flex items-center justify-center text-sm transition cursor-pointer">✕</button>
+        <button onclick="closeModal('modal-create-trip')" class="w-7 h-7 rounded-lg bg-[#faf8f5] dark:bg-stone-800 hover:bg-[#f0ece1] dark:hover:bg-stone-700 text-[#78716c] dark:text-stone-300 flex items-center justify-center text-sm transition cursor-pointer shrink-0" title="닫기">✕</button>
       </div>
 
       <!-- 2. 독립 스크롤 본문 -->
       <div id="modal-create-trip-scroll-body" class="sheet-scroll-body space-y-3.5 text-xs">
 
         <!-- [Card 1] 🌍 어디로 떠나시나요? (전 세계 국가 필터 & 도시 복수 선택 보드) -->
-        <div class="p-3.5 rounded-xl bg-[#faf8f5] dark:bg-[#16181d] border border-[#e8e2d5] dark:border-stone-800 space-y-3 shadow-sm">
-          <div class="flex items-center justify-between">
-            <span class="text-xs font-black text-[#1c1917] dark:text-stone-200 flex items-center gap-1.5">
-              <i class="fa-solid fa-earth-americas text-[#a2601b] dark:text-[#d4af37]"></i>
-              <span>어디로 떠나시나요? (국가 & 도시 선택)</span>
+        <div class="p-3 sm:p-3.5 rounded-xl bg-[#faf8f5] dark:bg-[#16181d] border border-[#e8e2d5] dark:border-stone-800 space-y-3 shadow-sm w-full max-w-full overflow-hidden">
+          <div class="flex items-center justify-between gap-2 flex-wrap sm:flex-nowrap">
+            <span class="text-xs font-black text-[#1c1917] dark:text-stone-200 flex items-center gap-1.5 min-w-0">
+              <i class="fa-solid fa-earth-americas text-[#a2601b] dark:text-[#d4af37] shrink-0"></i>
+              <span class="truncate">어디로 떠나시나요? (국가 & 도시 선택)</span>
             </span>
-            <span class="text-[10px] font-bold text-amber-700 dark:text-amber-300 bg-amber-50 dark:bg-amber-950/50 px-2 py-0.5 rounded-full border border-amber-200 dark:border-amber-800">통화·시차 자동 매칭</span>
+            <span class="text-[10px] font-bold text-amber-700 dark:text-amber-300 bg-amber-50 dark:bg-amber-950/50 px-2 py-0.5 rounded-full border border-amber-200 dark:border-amber-800 shrink-0">통화·시차 자동 매칭</span>
           </div>
 
-          <!-- 대륙 빠른 필터 탭 바 -->
-          <div class="flex items-center gap-1 overflow-x-auto pb-1 scrollbar-none text-[11px]">
-            <button type="button" onclick="setCreateTripRegionFilter('all')" id="tab-reg-all" class="px-2.5 py-1 rounded-lg font-bold transition whitespace-nowrap bg-[#1c1917] text-white dark:bg-amber-500 dark:text-black cursor-pointer shadow-sm">전체</button>
-            <button type="button" onclick="setCreateTripRegionFilter('east_asia')" id="tab-reg-east_asia" class="px-2.5 py-1 rounded-lg font-medium transition whitespace-nowrap bg-white dark:bg-stone-800 text-stone-600 dark:text-stone-300 border border-stone-200 dark:border-stone-700 cursor-pointer">동아시아</button>
-            <button type="button" onclick="setCreateTripRegionFilter('southeast_asia')" id="tab-reg-southeast_asia" class="px-2.5 py-1 rounded-lg font-medium transition whitespace-nowrap bg-white dark:bg-stone-800 text-stone-600 dark:text-stone-300 border border-stone-200 dark:border-stone-700 cursor-pointer">동남아</button>
-            <button type="button" onclick="setCreateTripRegionFilter('europe')" id="tab-reg-europe" class="px-2.5 py-1 rounded-lg font-medium transition whitespace-nowrap bg-white dark:bg-stone-800 text-stone-600 dark:text-stone-300 border border-stone-200 dark:border-stone-700 cursor-pointer">유럽</button>
-            <button type="button" onclick="setCreateTripRegionFilter('americas')" id="tab-reg-americas" class="px-2.5 py-1 rounded-lg font-medium transition whitespace-nowrap bg-white dark:bg-stone-800 text-stone-600 dark:text-stone-300 border border-stone-200 dark:border-stone-700 cursor-pointer">미주</button>
-            <button type="button" onclick="setCreateTripRegionFilter('other')" id="tab-reg-other" class="px-2.5 py-1 rounded-lg font-medium transition whitespace-nowrap bg-white dark:bg-stone-800 text-stone-600 dark:text-stone-300 border border-stone-200 dark:border-stone-700 cursor-pointer">대양주·중동</button>
+          <!-- 대륙 빠른 필터 탭 바 (독립 가로 스크롤 격리) -->
+          <div class="w-full max-w-full overflow-hidden">
+            <div class="flex items-center gap-1 overflow-x-auto pb-1 scrollbar-none text-[11px] w-full max-w-full">
+              <button type="button" onclick="setCreateTripRegionFilter('all')" id="tab-reg-all" class="px-2.5 py-1 rounded-lg font-bold transition whitespace-nowrap bg-[#1c1917] text-white dark:bg-amber-500 dark:text-black cursor-pointer shadow-sm shrink-0">전체</button>
+              <button type="button" onclick="setCreateTripRegionFilter('east_asia')" id="tab-reg-east_asia" class="px-2.5 py-1 rounded-lg font-medium transition whitespace-nowrap bg-white dark:bg-stone-800 text-stone-600 dark:text-stone-300 border border-stone-200 dark:border-stone-700 cursor-pointer shrink-0">동아시아</button>
+              <button type="button" onclick="setCreateTripRegionFilter('southeast_asia')" id="tab-reg-southeast_asia" class="px-2.5 py-1 rounded-lg font-medium transition whitespace-nowrap bg-white dark:bg-stone-800 text-stone-600 dark:text-stone-300 border border-stone-200 dark:border-stone-700 cursor-pointer shrink-0">동남아</button>
+              <button type="button" onclick="setCreateTripRegionFilter('europe')" id="tab-reg-europe" class="px-2.5 py-1 rounded-lg font-medium transition whitespace-nowrap bg-white dark:bg-stone-800 text-stone-600 dark:text-stone-300 border border-stone-200 dark:border-stone-700 cursor-pointer shrink-0">유럽</button>
+              <button type="button" onclick="setCreateTripRegionFilter('americas')" id="tab-reg-americas" class="px-2.5 py-1 rounded-lg font-medium transition whitespace-nowrap bg-white dark:bg-stone-800 text-stone-600 dark:text-stone-300 border border-stone-200 dark:border-stone-700 cursor-pointer shrink-0">미주</button>
+              <button type="button" onclick="setCreateTripRegionFilter('other')" id="tab-reg-other" class="px-2.5 py-1 rounded-lg font-medium transition whitespace-nowrap bg-white dark:bg-stone-800 text-stone-600 dark:text-stone-300 border border-stone-200 dark:border-stone-700 cursor-pointer shrink-0">대양주·중동</button>
+            </div>
           </div>
 
           <!-- 국가/도시 통합 실시간 검색창 -->
-          <div class="relative">
+          <div class="relative w-full min-w-0">
             <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-stone-400 text-xs"></i>
-            <input type="text" id="create-trip-search-input" oninput="handleCreateTripSearch(this.value)" placeholder="국가명이나 도시명을 검색하세요 (예: 스페인, 파리, 도쿄, 방콕...)" class="w-full pl-8 pr-8 py-2 bg-white dark:bg-stone-900 border border-[#e8e2d5] dark:border-stone-700 rounded-xl text-xs text-[#1c1917] dark:text-[#ededed] focus:outline-none focus:border-[#a2601b]">
+            <input type="text" id="create-trip-search-input" oninput="handleCreateTripSearch(this.value)" placeholder="국가명이나 도시명을 검색하세요 (예: 스페인, 파리, 도쿄, 방콕...)" class="w-full min-w-0 pl-8 pr-8 py-2 bg-white dark:bg-stone-900 border border-[#e8e2d5] dark:border-stone-700 rounded-xl text-xs text-[#1c1917] dark:text-[#ededed] focus:outline-none focus:border-[#a2601b]">
             <button type="button" onclick="clearCreateTripSearch()" id="btn-clear-create-search" class="hidden absolute right-2.5 top-1/2 -translate-y-1/2 text-stone-400 hover:text-stone-600 dark:hover:text-stone-200 text-xs p-1 cursor-pointer">✕</button>
           </div>
 
           <!-- 국가 선택 칩 영역 (실시간 필터 결과) -->
-          <div class="space-y-1">
+          <div class="space-y-1 w-full max-w-full overflow-hidden">
             <div class="flex items-center justify-between text-[11px] text-stone-500 dark:text-stone-400 px-0.5">
               <span>국가 선택 (복수 선택 가능):</span>
               <span id="create-trip-country-count-badge" class="text-[10px] font-bold"></span>
             </div>
-            <div id="create-trip-country-chips" class="flex flex-wrap gap-1.5 max-h-32 overflow-y-auto p-1.5 bg-white dark:bg-stone-900 rounded-xl border border-[#e8e2d5] dark:border-stone-800">
+            <div id="create-trip-country-chips" class="flex flex-wrap gap-1.5 max-h-32 overflow-y-auto p-1.5 bg-white dark:bg-stone-900 rounded-xl border border-[#e8e2d5] dark:border-stone-800 w-full max-w-full">
               <!-- renderCreateTripCountryChips()에 의해 동적 렌더링 -->
             </div>
           </div>
 
           <!-- 선택된 국가별 방문 도시 멀티 셀렉터 보드 (선택 시 동적 확장) -->
-          <div id="create-trip-selected-destinations-board" class="space-y-2.5 pt-1">
+          <div id="create-trip-selected-destinations-board" class="space-y-2.5 pt-1 w-full max-w-full overflow-hidden">
             <!-- renderCreateTripSelectedBoard()에 의해 동적 렌더링 -->
           </div>
 
@@ -1629,7 +1668,7 @@
         </div>
 
         <!-- [Card 2] 🗓️ 언제 떠나시나요? (여행 제목, 기간, 도착/종료 시간) -->
-        <div class="p-3.5 rounded-xl bg-[#faf8f5] dark:bg-[#16181d] border border-[#e8e2d5] dark:border-stone-800 space-y-3 shadow-sm">
+        <div class="p-3 sm:p-3.5 rounded-xl bg-[#faf8f5] dark:bg-[#16181d] border border-[#e8e2d5] dark:border-stone-800 space-y-3 shadow-sm w-full max-w-full overflow-hidden">
           <div class="flex items-center justify-between">
             <span class="text-xs font-black text-[#1c1917] dark:text-stone-200 flex items-center gap-1.5">
               <i class="fa-regular fa-calendar-days text-[#a2601b] dark:text-[#d4af37]"></i>
@@ -1637,67 +1676,67 @@
             </span>
           </div>
 
-          <div>
+          <div class="w-full min-w-0">
             <label class="font-bold text-[#1c1917] dark:text-stone-300 block mb-1">여행 제목 <span class="text-rose-500">*</span></label>
-            <input type="text" id="trip-form-title" placeholder="예: 2026 스페인 & 포르투갈 미식 기행" class="w-full px-3 py-2 bg-white dark:bg-stone-900 border border-[#e8e2d5] dark:border-stone-700 rounded-xl text-[#1c1917] dark:text-[#ededed] focus:outline-none focus:border-[#a2601b]">
+            <input type="text" id="trip-form-title" placeholder="예: 2026 스페인 & 포르투갈 미식 기행" class="w-full min-w-0 px-3 py-2 bg-white dark:bg-stone-900 border border-[#e8e2d5] dark:border-stone-700 rounded-xl text-[#1c1917] dark:text-[#ededed] focus:outline-none focus:border-[#a2601b]">
           </div>
 
-          <div class="grid grid-cols-2 gap-3">
-            <div>
+          <div class="grid grid-cols-2 gap-2 sm:gap-3 w-full">
+            <div class="min-w-0">
               <label class="font-bold text-[#1c1917] dark:text-stone-300 block mb-1">출발일</label>
-              <input type="date" id="trip-form-start" onchange="handleTripDatesChange()" class="w-full px-3 py-2 bg-white dark:bg-stone-900 border border-[#e8e2d5] dark:border-stone-700 rounded-xl text-[#1c1917] dark:text-[#ededed] focus:outline-none focus:border-[#a2601b]">
+              <input type="date" id="trip-form-start" onchange="handleTripDatesChange()" class="w-full min-w-0 max-w-full px-2 sm:px-3 py-2 bg-white dark:bg-stone-900 border border-[#e8e2d5] dark:border-stone-700 rounded-xl text-[#1c1917] dark:text-[#ededed] focus:outline-none focus:border-[#a2601b]">
             </div>
-            <div>
+            <div class="min-w-0">
               <label class="font-bold text-[#1c1917] dark:text-stone-300 block mb-1">종료일</label>
-              <input type="date" id="trip-form-end" onchange="handleTripDatesChange()" class="w-full px-3 py-2 bg-white dark:bg-stone-900 border border-[#e8e2d5] dark:border-stone-700 rounded-xl text-[#1c1917] dark:text-[#ededed] focus:outline-none focus:border-[#a2601b]">
+              <input type="date" id="trip-form-end" onchange="handleTripDatesChange()" class="w-full min-w-0 max-w-full px-2 sm:px-3 py-2 bg-white dark:bg-stone-900 border border-[#e8e2d5] dark:border-stone-700 rounded-xl text-[#1c1917] dark:text-[#ededed] focus:outline-none focus:border-[#a2601b]">
             </div>
           </div>
 
           <!-- 현지 도착/종료 시간 (교통/비행기 고려 실전 일정용) -->
-          <div class="p-2.5 bg-white dark:bg-stone-900/90 border border-[#e8e2d5] dark:border-stone-800 rounded-xl space-y-2">
-            <div class="grid grid-cols-2 gap-3">
-              <div>
-                <label class="font-bold text-[#1c1917] dark:text-stone-300 flex items-center gap-1 text-[11px] mb-1">
-                  <i class="fa-solid fa-plane-arrival text-amber-600"></i>
+          <div class="p-2.5 bg-white dark:bg-stone-900/90 border border-[#e8e2d5] dark:border-stone-800 rounded-xl space-y-2 w-full min-w-0 overflow-hidden">
+            <div class="grid grid-cols-2 gap-2 sm:gap-3 w-full">
+              <div class="min-w-0">
+                <label class="font-bold text-[#1c1917] dark:text-stone-300 flex items-center gap-1 text-[11px] mb-1 truncate">
+                  <i class="fa-solid fa-plane-arrival text-amber-600 shrink-0"></i>
                   <span>현지 도착 시간</span>
                 </label>
-                <input type="time" id="trip-form-arrival-time" value="14:00" class="w-full px-2 py-1.5 bg-[#faf8f5] dark:bg-stone-800 border border-[#e8e2d5] dark:border-stone-700 rounded-lg text-xs text-[#1c1917] dark:text-[#ededed] focus:outline-none focus:border-[#a2601b]">
-                <div class="grid grid-cols-2 gap-1 mt-1.5">
-                  <button type="button" onclick="document.getElementById('trip-form-arrival-time').value='10:00'" class="py-0.5 text-[10px] rounded bg-stone-100 dark:bg-stone-800 text-stone-600 dark:text-stone-300 hover:bg-amber-100 dark:hover:bg-amber-950/40 transition cursor-pointer">오전 10:00</button>
-                  <button type="button" onclick="document.getElementById('trip-form-arrival-time').value='14:00'" class="py-0.5 text-[10px] rounded bg-stone-100 dark:bg-stone-800 text-stone-600 dark:text-stone-300 hover:bg-amber-100 dark:hover:bg-amber-950/40 transition cursor-pointer">오후 14:00</button>
-                  <button type="button" onclick="document.getElementById('trip-form-arrival-time').value='19:00'" class="py-0.5 text-[10px] rounded bg-stone-100 dark:bg-stone-800 text-stone-600 dark:text-stone-300 hover:bg-amber-100 dark:hover:bg-amber-950/40 transition cursor-pointer">저녁 19:00</button>
-                  <button type="button" onclick="document.getElementById('trip-form-arrival-time').value='22:00'" class="py-0.5 text-[10px] rounded bg-stone-100 dark:bg-stone-800 text-stone-600 dark:text-stone-300 hover:bg-amber-100 dark:hover:bg-amber-950/40 transition cursor-pointer">심야 22:00</button>
+                <input type="time" id="trip-form-arrival-time" value="14:00" class="w-full min-w-0 px-2 py-1.5 bg-[#faf8f5] dark:bg-stone-800 border border-[#e8e2d5] dark:border-stone-700 rounded-lg text-xs text-[#1c1917] dark:text-[#ededed] focus:outline-none focus:border-[#a2601b]">
+                <div class="grid grid-cols-2 gap-1 mt-1.5 w-full">
+                  <button type="button" onclick="document.getElementById('trip-form-arrival-time').value='10:00'" class="py-1 px-0.5 text-[10px] rounded bg-stone-100 dark:bg-stone-800 text-stone-600 dark:text-stone-300 hover:bg-amber-100 dark:hover:bg-amber-950/40 transition cursor-pointer truncate">오전 10:00</button>
+                  <button type="button" onclick="document.getElementById('trip-form-arrival-time').value='14:00'" class="py-1 px-0.5 text-[10px] rounded bg-stone-100 dark:bg-stone-800 text-stone-600 dark:text-stone-300 hover:bg-amber-100 dark:hover:bg-amber-950/40 transition cursor-pointer truncate">오후 14:00</button>
+                  <button type="button" onclick="document.getElementById('trip-form-arrival-time').value='19:00'" class="py-1 px-0.5 text-[10px] rounded bg-stone-100 dark:bg-stone-800 text-stone-600 dark:text-stone-300 hover:bg-amber-100 dark:hover:bg-amber-950/40 transition cursor-pointer truncate">저녁 19:00</button>
+                  <button type="button" onclick="document.getElementById('trip-form-arrival-time').value='22:00'" class="py-1 px-0.5 text-[10px] rounded bg-stone-100 dark:bg-stone-800 text-stone-600 dark:text-stone-300 hover:bg-amber-100 dark:hover:bg-amber-950/40 transition cursor-pointer truncate">심야 22:00</button>
                 </div>
               </div>
 
-              <div>
-                <label class="font-bold text-[#1c1917] dark:text-stone-300 flex items-center gap-1 text-[11px] mb-1">
-                  <i class="fa-solid fa-plane-departure text-rose-500"></i>
+              <div class="min-w-0">
+                <label class="font-bold text-[#1c1917] dark:text-stone-300 flex items-center gap-1 text-[11px] mb-1 truncate">
+                  <i class="fa-solid fa-plane-departure text-rose-500 shrink-0"></i>
                   <span>현지 비행/종료</span>
                 </label>
-                <input type="time" id="trip-form-departure-time" value="17:00" class="w-full px-2 py-1.5 bg-[#faf8f5] dark:bg-stone-800 border border-[#e8e2d5] dark:border-stone-700 rounded-lg text-xs text-[#1c1917] dark:text-[#ededed] focus:outline-none focus:border-[#a2601b]">
-                <div class="grid grid-cols-2 gap-1 mt-1.5">
-                  <button type="button" onclick="document.getElementById('trip-form-departure-time').value='11:00'" class="py-0.5 text-[10px] rounded bg-stone-100 dark:bg-stone-800 text-stone-600 dark:text-stone-300 hover:bg-rose-100 dark:hover:bg-rose-950/40 transition cursor-pointer">오전 11:00</button>
-                  <button type="button" onclick="document.getElementById('trip-form-departure-time').value='15:00'" class="py-0.5 text-[10px] rounded bg-stone-100 dark:bg-stone-800 text-stone-600 dark:text-stone-300 hover:bg-rose-100 dark:hover:bg-rose-950/40 transition cursor-pointer">오후 15:00</button>
-                  <button type="button" onclick="document.getElementById('trip-form-departure-time').value='17:00'" class="py-0.5 text-[10px] rounded bg-stone-100 dark:bg-stone-800 text-stone-600 dark:text-stone-300 hover:bg-rose-100 dark:hover:bg-rose-950/40 transition cursor-pointer">오후 17:00</button>
-                  <button type="button" onclick="document.getElementById('trip-form-departure-time').value='21:30'" class="py-0.5 text-[10px] rounded bg-stone-100 dark:bg-stone-800 text-stone-600 dark:text-stone-300 hover:bg-rose-100 dark:hover:bg-rose-950/40 transition cursor-pointer">야간 21:30</button>
+                <input type="time" id="trip-form-departure-time" value="17:00" class="w-full min-w-0 px-2 py-1.5 bg-[#faf8f5] dark:bg-stone-800 border border-[#e8e2d5] dark:border-stone-700 rounded-lg text-xs text-[#1c1917] dark:text-[#ededed] focus:outline-none focus:border-[#a2601b]">
+                <div class="grid grid-cols-2 gap-1 mt-1.5 w-full">
+                  <button type="button" onclick="document.getElementById('trip-form-departure-time').value='11:00'" class="py-1 px-0.5 text-[10px] rounded bg-stone-100 dark:bg-stone-800 text-stone-600 dark:text-stone-300 hover:bg-rose-100 dark:hover:bg-rose-950/40 transition cursor-pointer truncate">오전 11:00</button>
+                  <button type="button" onclick="document.getElementById('trip-form-departure-time').value='15:00'" class="py-1 px-0.5 text-[10px] rounded bg-stone-100 dark:bg-stone-800 text-stone-600 dark:text-stone-300 hover:bg-rose-100 dark:hover:bg-rose-950/40 transition cursor-pointer truncate">오후 15:00</button>
+                  <button type="button" onclick="document.getElementById('trip-form-departure-time').value='17:00'" class="py-1 px-0.5 text-[10px] rounded bg-stone-100 dark:bg-stone-800 text-stone-600 dark:text-stone-300 hover:bg-rose-100 dark:hover:bg-rose-950/40 transition cursor-pointer truncate">오후 17:00</button>
+                  <button type="button" onclick="document.getElementById('trip-form-departure-time').value='21:30'" class="py-1 px-0.5 text-[10px] rounded bg-stone-100 dark:bg-stone-800 text-stone-600 dark:text-stone-300 hover:bg-rose-100 dark:hover:bg-rose-950/40 transition cursor-pointer truncate">야간 21:30</button>
                 </div>
               </div>
             </div>
 
-            <!-- 실시간 시차 & 비행시간 스마트 안내 뱃지 -->
-            <div id="trip-form-tz-banner" class="px-2.5 py-1.5 rounded-lg bg-amber-500/10 border border-amber-500/30 text-[11px] text-[#1c1917] dark:text-stone-200 flex items-center justify-between">
+            <!-- 실시간 시차 & 비행시간 스마트 안내 뱃지 (반응형 래핑) -->
+            <div id="trip-form-tz-banner" class="px-2.5 py-1.5 rounded-lg bg-amber-500/10 border border-amber-500/30 text-[11px] text-[#1c1917] dark:text-stone-200 flex flex-col sm:flex-row sm:items-center justify-between gap-1 w-full overflow-hidden">
               <div class="flex items-center gap-1.5 min-w-0">
-                <i class="fa-solid fa-earth-americas text-[#a2601b] dark:text-[#d4af37] shrink-0"></i>
-                <span id="trip-form-tz-text" class="font-bold truncate">단거리/동아시아 (시차 0h · 직항 약 2.5h)</span>
+                <i class="fa-solid fa-earth-americas text-[#a2601b] dark:text-[#d4af37] shrink-0 text-xs"></i>
+                <span id="trip-form-tz-text" class="font-bold truncate text-[11px]">단거리/동아시아 (시차 0h · 직항 약 2.5h)</span>
               </div>
-              <span id="trip-form-tz-calc" class="text-[10px] text-[#78716c] dark:text-stone-400 shrink-0 ml-1">인천 출발 ➔ 당일 도착</span>
+              <span id="trip-form-tz-calc" class="text-[10px] text-[#78716c] dark:text-stone-400 shrink-0">인천 출발 ➔ 당일 도착</span>
             </div>
           </div>
         </div>
 
         <!-- [Card 3] 🎨 어떤 여행을 원하시나요? (통화/예산, 컨셉, 버킷리스트, AI 설계) -->
-        <div class="p-3.5 rounded-xl bg-[#faf8f5] dark:bg-[#16181d] border border-[#e8e2d5] dark:border-stone-800 space-y-3 shadow-sm">
+        <div class="p-3 sm:p-3.5 rounded-xl bg-[#faf8f5] dark:bg-[#16181d] border border-[#e8e2d5] dark:border-stone-800 space-y-3 shadow-sm w-full max-w-full overflow-hidden">
           <div class="flex items-center justify-between">
             <span class="text-xs font-black text-[#1c1917] dark:text-stone-200 flex items-center gap-1.5">
               <i class="fa-solid fa-wand-magic-sparkles text-[#a2601b] dark:text-[#d4af37]"></i>
@@ -1705,10 +1744,10 @@
             </span>
           </div>
 
-          <div class="grid grid-cols-2 gap-3">
-            <div>
-              <label class="font-bold text-[#1c1917] dark:text-stone-300 block mb-1">기준 통화</label>
-              <select id="trip-form-curr" class="w-full px-3 py-2 bg-white dark:bg-stone-900 border border-[#e8e2d5] dark:border-stone-700 rounded-xl text-[#1c1917] dark:text-[#ededed] focus:outline-none focus:border-[#a2601b] cursor-pointer">
+          <div class="grid grid-cols-2 gap-2 sm:gap-3 w-full">
+            <div class="min-w-0">
+              <label class="font-bold text-[#1c1917] dark:text-stone-300 block mb-1 truncate">기준 통화</label>
+              <select id="trip-form-curr" class="w-full min-w-0 max-w-full truncate px-2 sm:px-3 py-2 bg-white dark:bg-stone-900 border border-[#e8e2d5] dark:border-stone-700 rounded-xl text-[#1c1917] dark:text-[#ededed] focus:outline-none focus:border-[#a2601b] cursor-pointer">
                 <option value="KRW">KRW (대한민국 원)</option>
                 <option value="USD">USD (미국 달러)</option>
                 <option value="EUR">EUR (유럽연합 유로)</option>
@@ -1736,48 +1775,48 @@
                 <option value="PLN">PLN (폴란드 즈워티)</option>
               </select>
             </div>
-            <div>
-              <label class="font-bold text-[#1c1917] dark:text-stone-300 block mb-1">총 목표 예산</label>
-              <input type="number" id="trip-form-budget" placeholder="예: 3000000" class="w-full px-3 py-2 bg-white dark:bg-stone-900 border border-[#e8e2d5] dark:border-stone-700 rounded-xl text-[#1c1917] dark:text-[#ededed] focus:outline-none focus:border-[#a2601b]">
+            <div class="min-w-0">
+              <label class="font-bold text-[#1c1917] dark:text-stone-300 block mb-1 truncate">총 목표 예산</label>
+              <input type="number" id="trip-form-budget" placeholder="예: 3000000" class="w-full min-w-0 px-2 sm:px-3 py-2 bg-white dark:bg-stone-900 border border-[#e8e2d5] dark:border-stone-700 rounded-xl text-[#1c1917] dark:text-[#ededed] focus:outline-none focus:border-[#a2601b]">
             </div>
           </div>
 
           <!-- 여행 컨셉 멀티 칩 선택 -->
-          <div>
+          <div class="w-full min-w-0">
             <label class="font-bold text-[#1c1917] dark:text-stone-300 block mb-1.5">여행 컨셉 및 테마 (복수 선택 가능)</label>
-            <div id="trip-form-concept-chips" class="flex flex-wrap gap-1.5">
+            <div id="trip-form-concept-chips" class="flex flex-wrap gap-1.5 w-full">
               <!-- 동적 렌더링 영역 -->
             </div>
           </div>
 
           <!-- 버킷리스트 & 스타일 요약 아코디언 -->
-          <details class="group bg-white dark:bg-stone-900 border border-[#e8e2d5] dark:border-stone-800 rounded-xl overflow-hidden text-xs">
+          <details class="group bg-white dark:bg-stone-900 border border-[#e8e2d5] dark:border-stone-800 rounded-xl overflow-hidden text-xs w-full min-w-0">
             <summary class="p-2.5 font-bold text-[#44403c] dark:text-stone-300 cursor-pointer flex items-center justify-between select-none">
-              <span class="flex items-center gap-1.5 text-[11px]">
+              <span class="flex items-center gap-1.5 text-[11px] min-w-0 truncate">
                 <span>📝</span>
-                <span>버킷리스트 & 여행 스타일 메모 (선택 사항)</span>
+                <span class="truncate">버킷리스트 & 여행 스타일 메모 (선택 사항)</span>
               </span>
-              <i class="fa-solid fa-chevron-down text-[10px] text-stone-400 group-open:rotate-180 transition-transform"></i>
+              <i class="fa-solid fa-chevron-down text-[10px] text-stone-400 group-open:rotate-180 transition-transform shrink-0 ml-1"></i>
             </summary>
-            <div class="p-3 pt-1 border-t border-[#e8e2d5] dark:border-stone-800 space-y-2 text-[11px]">
-              <div>
+            <div class="p-3 pt-1 border-t border-[#e8e2d5] dark:border-stone-800 space-y-2 text-[11px] w-full min-w-0">
+              <div class="w-full min-w-0">
                 <label class="font-bold text-[#44403c] dark:text-stone-300 block mb-1">가고픈 여행지 · 버킷리스트 메모</label>
-                <textarea id="trip-form-wishlist" rows="2" placeholder="꼭 가고 싶은 스팟이나 경험하고픈 활동을 적어주세요. AI가 일정 설계 시 적극 반영합니다. (예: 사그라다 파밀리아 내부 관람, 타파스 골목 투어, 신트라 페나성...)" class="w-full px-3 py-2 bg-[#faf8f5] dark:bg-stone-800 border border-[#e8e2d5] dark:border-stone-700 rounded-xl text-[#1c1917] dark:text-[#ededed] placeholder-stone-400 focus:outline-none focus:border-[#a2601b]"></textarea>
+                <textarea id="trip-form-wishlist" rows="2" placeholder="꼭 가고 싶은 스팟이나 경험하고픈 활동을 적어주세요. AI가 일정 설계 시 적극 반영합니다. (예: 사그라다 파밀리아 내부 관람, 타파스 골목 투어, 신트라 페나성...)" class="w-full min-w-0 px-3 py-2 bg-[#faf8f5] dark:bg-stone-800 border border-[#e8e2d5] dark:border-stone-700 rounded-xl text-[#1c1917] dark:text-[#ededed] placeholder-stone-400 focus:outline-none focus:border-[#a2601b]"></textarea>
               </div>
-              <div>
+              <div class="w-full min-w-0">
                 <label class="font-bold text-[#44403c] dark:text-stone-300 block mb-1">여행 스타일 한 줄 요약</label>
-                <input type="text" id="trip-form-style" placeholder="예: 미식 투어 + 가우디 건축 기행 + 힐링 산책" class="w-full px-3 py-2 bg-[#faf8f5] dark:bg-stone-800 border border-[#e8e2d5] dark:border-stone-700 rounded-xl text-[#1c1917] dark:text-[#ededed] focus:outline-none focus:border-[#a2601b]">
+                <input type="text" id="trip-form-style" placeholder="예: 미식 투어 + 가우디 건축 기행 + 힐링 산책" class="w-full min-w-0 px-3 py-2 bg-[#faf8f5] dark:bg-stone-800 border border-[#e8e2d5] dark:border-stone-700 rounded-xl text-[#1c1917] dark:text-[#ededed] focus:outline-none focus:border-[#a2601b]">
               </div>
             </div>
           </details>
 
           <!-- AI 자동 30분 일정 설계 토글 (황금빛 하이라이트) -->
-          <label class="flex items-start gap-3 p-3.5 rounded-xl bg-gradient-to-r from-amber-500/10 via-amber-500/15 to-amber-600/10 dark:from-amber-950/30 dark:to-amber-900/20 border border-amber-500/40 cursor-pointer shadow-sm">
-            <input type="checkbox" id="trip-form-ai-auto" checked class="mt-0.5 w-4 h-4 text-[#a2601b] rounded focus:ring-amber-500">
-            <div>
+          <label class="flex items-start gap-2.5 sm:gap-3 p-3 sm:p-3.5 rounded-xl bg-gradient-to-r from-amber-500/10 via-amber-500/15 to-amber-600/10 dark:from-amber-950/30 dark:to-amber-900/20 border border-amber-500/40 cursor-pointer shadow-sm w-full min-w-0">
+            <input type="checkbox" id="trip-form-ai-auto" checked class="mt-0.5 w-4 h-4 text-[#a2601b] rounded focus:ring-amber-500 shrink-0">
+            <div class="min-w-0 flex-1">
               <div class="font-bold text-xs text-[#a2601b] dark:text-[#d4af37] flex items-center gap-1.5">
-                <i class="fa-solid fa-wand-magic-sparkles"></i>
-                <span>AI 맞춤 30분 단위 일정 자동 설계 탑재</span>
+                <i class="fa-solid fa-wand-magic-sparkles shrink-0"></i>
+                <span class="truncate">AI 맞춤 30분 단위 일정 자동 설계 탑재</span>
               </div>
               <div class="text-[11px] text-[#78716c] dark:text-stone-400 mt-0.5 leading-relaxed">
                 체크 시 등록과 동시에 일자별 최적 30분 추천 스팟을 자동 생성하여 즉시 여행 카드를 완성합니다.
@@ -2770,9 +2809,16 @@
 
       <!-- 버전 목록 스크롤 영역 -->
       <div class="flex-1 overflow-y-auto space-y-3 pr-1 text-xs">
-        <!-- v1.4.4 (Current) -->
+        <!-- v1.4.5 (Current) -->
         <div class="p-4 rounded-2xl border-2 border-emerald-500/40 space-y-2.5 bg-emerald-500/5 dark:bg-emerald-500/10">
-          <div class="flex items-center justify-between gap-2"><div class="flex items-center gap-2 min-w-0"><span class="px-2 py-0.5 rounded-lg bg-emerald-500 text-black font-black text-xs shadow-sm shrink-0">v1.4.4</span><span class="text-xs font-black text-[#1c1917] dark:text-white">국가 필터 내 도시 노출 결함 근절 & 지명 자가 치유 엔진</span></div><span class="companion-status shrink-0">최신 버전</span></div>
+          <div class="flex items-center justify-between gap-2"><div class="flex items-center gap-2 min-w-0"><span class="px-2 py-0.5 rounded-lg bg-emerald-500 text-black font-black text-xs shadow-sm shrink-0">v1.4.5</span><span class="text-xs font-black text-[#1c1917] dark:text-white">모바일 '+ 추가' 여행 생성창 가로 흔들림(Wobble) 근절 및 반응형 UI/UX 최적화</span></div><span class="companion-status shrink-0">최신 버전</span></div>
+          <p class="text-xs leading-relaxed">모바일 스마트폰 환경에서 새 여행 등록창('+ 추가') 실행 시 소도시 직접 추가 행과 시차 배너 등이 화면 폭을 초과하여 창이 좌우로 미끄러지고 흔들리던 결함을 완벽히 해결했습니다. 스크롤 컨테이너에 가로 스크롤 완전 차단(<code>overflow-x: hidden</code>)과 오버스윙 방지(<code>overscroll-behavior-x: none</code>)를 적용하고, 인풋/버튼/카드에 <code>min-w-0</code> flex 수납 규칙 및 컴팩트 여백을 부여하여 360px 초소형 디바이스에서도 흔들림 없는 완벽한 대칭 UI를 구현했습니다.</p>
+          <div class="text-[10px] text-stone-400 dark:text-stone-500 pt-1 border-t border-emerald-500/20 flex items-center justify-between"><span>📅 2026-09-11 릴리즈</span><span class="font-mono">st-shell-v1.4.5</span></div>
+        </div>
+
+        <!-- v1.4.4 -->
+        <div class="p-4 rounded-2xl bg-emerald-500/5 dark:bg-emerald-500/10 border-2 border-emerald-500/40 space-y-2.5 shadow-sm relative overflow-hidden">
+          <div class="flex items-center justify-between gap-2"><div class="flex items-center gap-2 min-w-0"><span class="px-2 py-0.5 rounded-lg bg-emerald-500 text-black font-black text-xs shadow-sm shrink-0">v1.4.4</span><span class="text-xs font-black text-[#1c1917] dark:text-white">국가 필터 내 도시 노출 결함 근절 & 지명 자가 치유 엔진</span></div></div>
           <p class="text-xs leading-relaxed">허브 국가 선택 시트에 도시/성(리장, 다리, 운남, 칭다오 등)이 별도 국가로 노출되던 결함을 근절했습니다. 표준 국가 변환 엔진(<code>resolveCanonicalCountry</code>)과 앱 시작 시 기존 불량 데이터를 자동 정규화하는 자가 치유(Self-Healing Migration)를 탑재하고, 카드 뱃지 중복 및 통계 왜곡을 완벽 해결했습니다.</p>
           <div class="text-[10px] text-stone-400 dark:text-stone-500 pt-1 border-t border-emerald-500/20 flex items-center justify-between"><span>📅 2026-09-11 릴리즈</span><span class="font-mono">st-shell-v1.4.4</span></div>
         </div>
@@ -3180,7 +3226,7 @@
 
       <!-- 모달 푸터 -->
       <div class="pt-3 border-t border-[#e8e2d5] dark:border-stone-800 flex items-center justify-between shrink-0">
-        <span class="text-[11px] text-stone-400 dark:text-stone-500 font-mono">Sulsul Travel Engine v1.4.4</span>
+        <span class="text-[11px] text-stone-400 dark:text-stone-500 font-mono">Sulsul Travel Engine v1.4.5</span>
         <button onclick="closeModal('modal-version-history')" class="px-4 py-2 rounded-xl bg-[#faf8f5] dark:bg-stone-800 hover:bg-[#f0ece1] dark:hover:bg-stone-700 border border-[#e8e2d5] dark:border-stone-700 text-[#1c1917] dark:text-[#ededed] text-xs font-bold transition cursor-pointer shadow-sm">
           닫기
         </button>
@@ -3243,7 +3289,7 @@
     window.showToast = showToast;
 
     // 앱 버전 및 글로벌 네임스페이스 (Sulsul-Travel Invariant Rule R-10, R-11, R-12, R-13, R-14, R-15)
-    const APP_VER = '1.4.4';
+    const APP_VER = '1.4.5';
 
     // ══════════════════════════════════════════
     // [Two-Tone Theme System] 라이트 그레이 & 딥 블랙 테마 엔진
@@ -8478,30 +8524,30 @@
         const uniqueCities = allAvailableCities.filter((city, index, self) => self.indexOf(city) === index);
 
         return `
-          <div class="p-3 rounded-xl bg-white dark:bg-stone-900 border border-[#e8e2d5] dark:border-stone-800 space-y-2.5 shadow-sm">
+          <div class="p-3 rounded-xl bg-white dark:bg-stone-900 border border-[#e8e2d5] dark:border-stone-800 space-y-2.5 shadow-sm w-full max-w-full overflow-hidden">
             <!-- 국가 헤더 바 -->
-            <div class="flex items-center justify-between border-b border-[#e8e2d5]/60 dark:border-stone-800 pb-2">
-              <div class="flex items-center gap-2">
-                <span class="text-lg">${country.flag}</span>
-                <span class="font-black text-xs text-[#1c1917] dark:text-stone-100">${escapeHtml(country.name)}</span>
-                <span class="text-[10px] font-bold px-2 py-0.5 rounded-md bg-stone-100 dark:bg-stone-800 text-stone-600 dark:text-stone-300 border border-stone-200 dark:border-stone-700">
+            <div class="flex items-center justify-between gap-2 border-b border-[#e8e2d5]/60 dark:border-stone-800 pb-2 flex-wrap sm:flex-nowrap">
+              <div class="flex items-center gap-1.5 min-w-0 flex-wrap">
+                <span class="text-base sm:text-lg shrink-0">${country.flag}</span>
+                <span class="font-black text-xs text-[#1c1917] dark:text-stone-100 truncate">${escapeHtml(country.name)}</span>
+                <span class="text-[10px] font-bold px-1.5 py-0.5 rounded-md bg-stone-100 dark:bg-stone-800 text-stone-600 dark:text-stone-300 border border-stone-200 dark:border-stone-700 shrink-0">
                   ${country.currency} (${country.currName})
                 </span>
-                <span class="text-[10px] text-emerald-600 dark:text-emerald-400 font-bold">
+                <span class="text-[10px] text-emerald-600 dark:text-emerald-400 font-bold shrink-0">
                   ${selectedCities.length}개 도시 선택됨
                 </span>
               </div>
-              <button type="button" onclick="toggleCreateTripCountry('${country.code}')" class="text-stone-400 hover:text-rose-500 text-xs px-1.5 py-0.5 rounded transition cursor-pointer" title="이 국가 제외">
+              <button type="button" onclick="toggleCreateTripCountry('${country.code}')" class="text-stone-400 hover:text-rose-500 text-xs px-1.5 py-0.5 rounded transition cursor-pointer shrink-0 ml-auto" title="이 국가 제외">
                 ✕ 제외
               </button>
             </div>
 
             <!-- 도시 복수 선택 칩 보드 -->
-            <div class="space-y-1.5">
+            <div class="space-y-1.5 w-full">
               <div class="text-[11px] text-[#44403c] dark:text-stone-300 font-bold flex items-center justify-between">
                 <span>예상 방문 도시 (터치하여 선택/해제, 순서대로 동선 반영):</span>
               </div>
-              <div class="flex flex-wrap gap-1.5 pt-0.5">
+              <div class="flex flex-wrap gap-1.5 pt-0.5 w-full">
                 ${uniqueCities.map(city => {
                   const cityIdx = selectedCities.indexOf(city);
                   const isCitySelected = (cityIdx >= 0);
@@ -8512,7 +8558,7 @@
                     : 'bg-[#faf8f5] dark:bg-stone-800 hover:bg-stone-100 dark:hover:bg-stone-700 text-stone-700 dark:text-stone-300 border border-stone-200 dark:border-stone-700 font-medium';
 
                   return `
-                    <button type="button" onclick="toggleCreateTripCity('${country.code}', '${escapeHtml(city)}')" class="px-2 py-1 rounded-lg text-xs flex items-center gap-1 transition cursor-pointer select-none ${chipClass}">
+                    <button type="button" data-city-chip="true" onclick="toggleCreateTripCity('${country.code}', '${escapeHtml(city)}')" class="px-2 py-1 rounded-lg text-xs flex items-center gap-1 transition cursor-pointer select-none ${chipClass}">
                       ${isCitySelected ? `<span class="w-4 h-4 rounded-full bg-white/25 text-[10px] font-black flex items-center justify-center mr-0.5">${cityIdx + 1}</span>` : '<span class="text-stone-400 text-[10px]">+</span>'}
                       <span>${escapeHtml(city)}</span>
                     </button>
@@ -8522,9 +8568,11 @@
             </div>
 
             <!-- 소도시/근교 직접 추가 입력창 -->
-            <div class="flex items-center gap-1.5 pt-1">
-              <input type="text" id="input-custom-city-${country.code}" placeholder="목록에 없는 소도시/근교 (예: 론다, 미하스...)" class="flex-1 px-2.5 py-1.5 bg-[#faf8f5] dark:bg-stone-800 border border-[#e8e2d5] dark:border-stone-700 rounded-lg text-xs text-[#1c1917] dark:text-[#ededed] focus:outline-none focus:border-[#a2601b]" onkeydown="if(event.key==='Enter'){event.preventDefault(); addCustomCreateTripCity('${country.code}');}">
-              <button type="button" onclick="addCustomCreateTripCity('${country.code}')" class="px-3 py-1.5 rounded-lg bg-stone-100 dark:bg-stone-800 hover:bg-amber-100 dark:hover:bg-amber-950/40 text-stone-700 dark:text-stone-200 text-xs font-bold border border-stone-200 dark:border-stone-700 transition cursor-pointer shrink-0">
+            <div class="flex items-center gap-1.5 pt-1 w-full min-w-0">
+              <div class="relative flex-1 min-w-0">
+                <input type="text" id="input-custom-city-${country.code}" placeholder="목록 외 소도시/근교 (예: 론다)" class="w-full min-w-0 px-2.5 py-1.5 bg-[#faf8f5] dark:bg-stone-800 border border-[#e8e2d5] dark:border-stone-700 rounded-lg text-xs text-[#1c1917] dark:text-[#ededed] placeholder-stone-400 focus:outline-none focus:border-[#a2601b]" onkeydown="if(event.key==='Enter'){event.preventDefault(); addCustomCreateTripCity('${country.code}');}">
+              </div>
+              <button type="button" onclick="addCustomCreateTripCity('${country.code}')" class="px-2.5 sm:px-3 py-1.5 rounded-lg bg-stone-100 dark:bg-stone-800 hover:bg-amber-100 dark:hover:bg-amber-950/40 text-stone-700 dark:text-stone-200 text-xs font-bold border border-stone-200 dark:border-stone-700 transition cursor-pointer shrink-0 whitespace-nowrap">
                 + 도시 추가
               </button>
             </div>
