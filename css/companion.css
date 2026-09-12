@@ -129,7 +129,7 @@ button:focus-visible, summary:focus-visible, a:focus-visible { outline:3px solid
 #tab-content-checklist > div:first-child > div { flex-wrap:wrap; gap:12px; }
 #tab-content-checklist > div:first-child > div > div { width:100%; justify-content:space-between; }
 #tab-content-checklist > div:first-child h3 { font-size:20px; }
-#nav-tab-sync, #nav-tab-expenses { color:var(--accent) !important; background:var(--accent-bg) !important; border-color:var(--accent-line); }
+#nav-tab-sync { color:var(--accent) !important; background:var(--accent-bg) !important; border-color:var(--accent-line); }
 #checklist-container label { min-height:56px; background:var(--surface) !important; }
 #checklist-container label span { font-size:14px; line-height:1.5; }
 #checklist-container input { width:20px; height:20px; accent-color:var(--accent); }

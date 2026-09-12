@@ -29,7 +29,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700;800&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
 
   <!-- Local Utilities Bundle (CDN fallback & tailwind utilities) -->
-  <link rel="stylesheet" href="css/utilities.css?v=1.5.3">
+  <link rel="stylesheet" href="css/utilities.css?v=1.5.4">
   <link rel="stylesheet" href="vendor/fontawesome/css/all.min.css">
 
   <!-- Leaflet Map CSS & JS -->
@@ -720,8 +720,8 @@
     }
   </style>
 
-  <link rel="stylesheet" href="css/companion.css?v=1.5.3">
-  <script src="js/presentation/companion-ui.js?v=1.5.3"></script>
+  <link rel="stylesheet" href="css/companion.css?v=1.5.4">
+  <script src="js/presentation/companion-ui.js?v=1.5.4"></script>
 
   <!-- Knowledge Base Seed & Destination Knowledge Packs (DKP) -->
   <script src="kb-travel.js"></script>
@@ -747,7 +747,7 @@
             <h1 class="font-serif-brand text-base sm:text-xl font-bold tracking-tight text-[#1c1917] dark:text-[#ededed] whitespace-nowrap">
               Sulsul Travel
             </h1>
-            <span id="app-ver-badge" onclick="event.stopPropagation(); openVersionHistoryModal()" class="px-1.5 py-0.5 rounded-md theme-card-subtle hover:border-amber-500/60 hover:text-amber-600 dark:hover:text-amber-300 text-[#a2601b] dark:text-[#d4af37] text-[10px] font-bold font-mono shadow-inner cursor-pointer shrink-0 transition" title="버전 업데이트 기록 보기 (클릭)">v1.5.3</span>
+            <span id="app-ver-badge" onclick="event.stopPropagation(); openVersionHistoryModal()" class="px-1.5 py-0.5 rounded-md theme-card-subtle hover:border-amber-500/60 hover:text-amber-600 dark:hover:text-amber-300 text-[#a2601b] dark:text-[#d4af37] text-[10px] font-bold font-mono shadow-inner cursor-pointer shrink-0 transition" title="버전 업데이트 기록 보기 (클릭)">v1.5.4</span>
           </div>
           <p id="header-trip-name" class="text-[10px] sm:text-[11px] text-[#78716c] dark:text-stone-400 truncate max-w-[120px] sm:max-w-xs font-normal">인생의 모든 여정을 기록하는 다이어리</p>
         </div>
@@ -1501,22 +1501,22 @@
   <!-- ========================================== -->
   <!-- 4. 안전 확인 모달 시스템 (SAFE CONFIRMATION MODAL) -->
   <!-- ========================================== -->
-  <div id="modal-confirm-delete" class="sheet-container sheet-closed">
+  <div id="modal-confirm-delete" class="sheet-container sheet-closed" style="z-index: 90;">
     <div class="sheet-scrim" onclick="closeModal('modal-confirm-delete')"></div>
     <div class="sheet-box p-6 sm:p-7 text-center">
       <div class="w-14 h-14 rounded-2xl bg-rose-500/15 border border-rose-500/30 text-rose-500 mx-auto flex items-center justify-center text-2xl mb-4">
         <i class="fa-solid fa-triangle-exclamation"></i>
       </div>
-      <h3 id="confirm-delete-title" class="text-lg sm:text-xl font-black text-white tracking-tight">정말 삭제하시겠습니까?</h3>
-      <p id="confirm-delete-target" class="text-xs sm:text-sm font-bold text-amber-400 mt-2 px-3 py-1.5 rounded-lg bg-amber-500/10 border border-amber-500/20 inline-block max-w-sm truncate"></p>
-      <p id="confirm-delete-desc" class="text-xs text-slate-400 mt-2">삭제된 데이터는 영구히 제거되며 복구할 수 없습니다.<br>계속 진행하시겠습니까?</p>
+      <h3 id="confirm-delete-title" class="text-lg sm:text-xl font-black text-stone-900 dark:text-white tracking-tight">정말 삭제하시겠습니까?</h3>
+      <p id="confirm-delete-target" class="text-xs sm:text-sm font-bold text-amber-500 dark:text-amber-400 mt-2 px-3 py-1.5 rounded-lg bg-amber-500/10 border border-amber-500/20 inline-block max-w-sm truncate"></p>
+      <p id="confirm-delete-desc" class="text-xs text-stone-600 dark:text-slate-400 mt-2">삭제된 데이터는 영구히 제거되며 복구할 수 없습니다.<br>계속 진행하시겠습니까?</p>
 
       <div class="flex items-center gap-3 mt-6">
-        <button onclick="closeModal('modal-confirm-delete')" class="flex-1 py-2.5 rounded-xl bg-[#141c2e] hover:bg-[#1a263e] border border-[#23304c] text-slate-200 font-bold text-xs transition">
+        <button onclick="closeModal('modal-confirm-delete')" class="flex-1 py-2.5 rounded-xl btn-surface font-bold text-xs transition cursor-pointer">
           취소 (닫기)
         </button>
-        <button id="confirm-delete-btn" class="flex-1 py-2.5 rounded-xl bg-gradient-to-r from-rose-600 to-rose-700 hover:from-rose-700 hover:to-rose-800 text-white font-black text-xs shadow-lg shadow-rose-600/30 transition">
-          삭제 실행 (위험)
+        <button id="confirm-delete-btn" class="flex-1 py-2.5 rounded-xl bg-gradient-to-r from-rose-600 to-rose-700 hover:from-rose-700 hover:to-rose-800 text-white font-black text-xs shadow-lg shadow-rose-600/30 transition cursor-pointer">
+          삭제 실행
         </button>
       </div>
     </div>
@@ -2441,27 +2441,22 @@
         <!-- Dynamically rendered via renderInitialFundsList() -->
       </div>
 
-      <!-- 모달 하단 4대 액션 버튼 바 (추가/삭제/닫기/저장) -->
-      <div class="pt-3 border-t border-stone-200 dark:border-[#1e263c] grid grid-cols-2 sm:grid-cols-4 gap-2 shrink-0">
+      <!-- 모달 하단 3대 액션 버튼 바 (추가 / 취소 / 저장) (v1.5.4) -->
+      <div class="pt-3 border-t border-stone-200 dark:border-[#1e263c] grid grid-cols-3 gap-2 shrink-0">
         <!-- 1. 통화 추가 -->
-        <button type="button" onclick="openAddCurrencyModal()" class="py-2.5 px-2 rounded-xl btn-funds-add text-xs font-bold transition flex items-center justify-center gap-1.5 cursor-pointer shadow-sm">
+        <button type="button" onclick="openAddCurrencyModal()" class="py-2.5 px-1.5 rounded-xl btn-funds-add text-xs font-bold transition flex items-center justify-center gap-1.5 cursor-pointer shadow-sm">
           <i class="fa-solid fa-plus text-[10px]"></i>
           <span>통화 추가</span>
         </button>
-        <!-- 2. 통화 삭제 -->
-        <button type="button" onclick="openDeleteCurrencySelector()" class="py-2.5 px-2 rounded-xl btn-funds-del text-xs font-bold transition flex items-center justify-center gap-1.5 cursor-pointer shadow-sm">
-          <i class="fa-solid fa-trash-can text-[10px]"></i>
-          <span>통화 삭제</span>
-        </button>
-        <!-- 3. 닫기 -->
-        <button type="button" onclick="closeModal('modal-initial-funds')" class="py-2.5 px-2 rounded-xl btn-funds-close text-xs font-bold transition flex items-center justify-center gap-1.5 cursor-pointer shadow-sm">
+        <!-- 2. 취소 -->
+        <button type="button" onclick="closeModal('modal-initial-funds')" class="py-2.5 px-1.5 rounded-xl btn-funds-close text-xs font-bold transition flex items-center justify-center gap-1.5 cursor-pointer shadow-sm">
           <i class="fa-solid fa-xmark text-[10px]"></i>
-          <span>닫기</span>
+          <span>취소</span>
         </button>
-        <!-- 4. 설정 저장 및 적용 -->
-        <button type="button" onclick="saveInitialFundsAndBudget()" class="py-2.5 px-2 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-stone-950 font-black text-xs transition flex items-center justify-center gap-1.5 cursor-pointer shadow-md">
+        <!-- 3. 저장 및 적용 -->
+        <button type="button" onclick="saveInitialFundsAndBudget()" class="py-2.5 px-1.5 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-stone-950 font-black text-xs transition flex items-center justify-center gap-1.5 cursor-pointer shadow-md">
           <i class="fa-solid fa-check text-[10px]"></i>
-          <span>저장 및 적용</span>
+          <span>저장</span>
         </button>
       </div>
     </div>
@@ -3346,11 +3341,18 @@
 
       <!-- 버전 목록 스크롤 영역 -->
       <div class="flex-1 overflow-y-auto space-y-3 pr-1 text-xs">
-        <!-- v1.5.3 (Current) -->
+        <!-- v1.5.4 (Current) -->
         <div class="p-4 rounded-2xl border-2 border-emerald-500/40 space-y-2.5 bg-emerald-500/5 dark:bg-emerald-500/10">
-          <div class="flex items-center justify-between gap-2"><div class="flex items-center gap-2 min-w-0"><span class="px-2 py-0.5 rounded-lg bg-emerald-500 text-black font-black text-xs shadow-sm shrink-0">v1.5.3</span><span class="text-xs font-black text-[#1c1917] dark:text-white">가계부 초기 자산·예산 편집창 고도화: 통화 추가/삭제, 기준통화 단일 지정 & 라이트 모드 시인성 완치</span></div><span class="companion-status shrink-0">최신 버전</span></div>
+          <div class="flex items-center justify-between gap-2"><div class="flex items-center gap-2 min-w-0"><span class="px-2 py-0.5 rounded-lg bg-emerald-500 text-black font-black text-xs shadow-sm shrink-0">v1.5.4</span><span class="text-xs font-black text-[#1c1917] dark:text-white">가계부 탭 상시 활성화 버그 척결, 통화 삭제 안전 확인 팝업 & 3대 액션 바 개편</span></div><span class="companion-status shrink-0">최신 버전</span></div>
+          <p class="text-xs leading-relaxed">사용자 실기기 제보에 따라 <b>큰 계획 등 타 메뉴 이용 중에도 하단 가계부 탭이 비정상적으로 항상 활성화(강제 하이라이트)</b>되던 <code>companion.css</code> 스타일 오버라이드 버그를 완벽히 척결했습니다. 이제 가계부 탭은 사용자가 실제 선택했을 때만 정확히 활성화됩니다. 또한 예산 편집창에서 실수로 통화 삭제 버튼을 터치하여 지갑이 지워지는 사고를 원천 방지하기 위해, <b>모든 통화 삭제 시 전용 확인 팝업 모달(<code>modal-confirm-delete</code>)</b>을 띄워 재확인 후 안전하게 삭제하도록 강화했습니다. 아울러 각 통화 카드에 개별 휴지통 아이콘이 완비됨에 따라 하단 버튼 바의 중복된 통화 삭제 버튼을 정리하고 <b>[+ 통화 추가], [✕ 취소], [✓ 저장] 3대 직관적 액션 바</b>로 간결하게 재구성했습니다.</p>
+          <div class="text-[10px] text-stone-400 dark:text-stone-500 pt-1 border-t border-emerald-500/20 flex items-center justify-between"><span>📅 2026-09-12 릴리즈</span><span class="font-mono">st-shell-v1.5.4</span></div>
+        </div>
+
+        <!-- v1.5.3 -->
+        <div class="p-4 rounded-2xl bg-stone-50 dark:bg-stone-900/50 border border-stone-200 dark:border-stone-800 space-y-2.5 shadow-sm relative overflow-hidden">
+          <div class="flex items-center justify-between gap-2"><div class="flex items-center gap-2 min-w-0"><span class="px-2 py-0.5 rounded-lg bg-stone-200 dark:bg-stone-800 text-stone-800 dark:text-stone-200 font-bold text-[11px] font-mono shrink-0">v1.5.3</span><span class="text-xs font-bold text-[#1c1917] dark:text-stone-200">가계부 초기 자산·예산 편집창 고도화: 통화 추가/삭제, 기준통화 단일 지정 & 라이트 모드 시인성 완치</span></div></div>
           <p class="text-xs leading-relaxed">사용자 실기기 피드백을 반영하여 초기 자산 및 예산 설정 모달(<code>modal-initial-funds</code>)을 전면 고도화했습니다. 각 통화 카드별 단일 라디오를 통해 <b>기준 통화(👑)</b>를 원터치 지정할 수 있으며, 상단 초기 총 자산 및 예산이 해당 기준 통화 단위(₩, $, €, ¥ 등)로 실시간 재계산됩니다. 각 통화 카드에 <b>개별 삭제(🗑️)</b> 기능을 탑재하고 하단을 <b>[+ 통화 추가], [🗑️ 통화 삭제], [✕ 닫기], [💾 설정 저장 및 적용]</b> 4대 액션 바로 재정돈했습니다. 특히 라이트 모드에서 닫기/취소 버튼이 검은색 사각형으로 뭉개지던 시인성 결함을 WCAG AAA 고대비 테마 분리로 완벽히 해결했으며, 여행 생성부터 가계부 대시보드까지 기준 통화 체계를 유기적으로 일원화했습니다.</p>
-          <div class="text-[10px] text-stone-400 dark:text-stone-500 pt-1 border-t border-emerald-500/20 flex items-center justify-between"><span>📅 2026-09-12 릴리즈</span><span class="font-mono">st-shell-v1.5.3</span></div>
+          <div class="text-[10px] text-stone-400 dark:text-stone-500 pt-1 border-t border-stone-200 dark:border-stone-800 flex items-center justify-between"><span>📅 2026-09-12 릴리즈</span><span class="font-mono">st-shell-v1.5.3</span></div>
         </div>
 
         <!-- v1.5.2 -->
@@ -3882,7 +3884,7 @@
     window.showToast = showToast;
 
     // 앱 버전 및 글로벌 네임스페이스 (Sulsul-Travel Invariant Rule R-10, R-11, R-12, R-13, R-14, R-15)
-    const APP_VER = '1.5.3';
+    const APP_VER = '1.5.4';
 
     // ══════════════════════════════════════════
     // [Two-Tone Theme System] 라이트 그레이 & 딥 블랙 테마 엔진
@@ -8875,31 +8877,34 @@
       }
 
       const trip = getActiveTrip();
-      if (trip) {
-        const hasExpenses = (trip.expenses || []).some(e => e.curr === curr || e.walletCurr === curr);
-        const hasExchanges = (trip.exchanges || []).some(x => x.fromCurr === curr || x.toCurr === curr);
-        if (hasExpenses || hasExchanges) {
-          if (!confirm(`⚠️ [${curr}] 통화로 기록된 지출 또는 환전 거래 내역이 있습니다.\n지갑을 삭제하면 해당 지출의 지갑 차감이 해제될 수 있습니다.\n정말 삭제하시겠습니까?`)) {
-            return;
+      const info = CURRENCY_INFO[curr] || { name: curr, flag: '🌐' };
+      const hasExpenses = trip && (trip.expenses || []).some(e => e.curr === curr || e.walletCurr === curr);
+      const hasExchanges = trip && (trip.exchanges || []).some(x => x.fromCurr === curr || x.toCurr === curr);
+
+      const title = '통화 삭제 확인';
+      const targetName = `${info.flag} ${curr} (${info.name})`;
+      let desc = '해당 통화를 예산 및 초기 자산 목록에서 삭제하시겠습니까?\n(실수로 누르셨다면 취소를 선택하세요)';
+      if (hasExpenses || hasExchanges) {
+        desc = `⚠️ [${curr}] 통화로 기록된 지출 또는 환전 거래 내역이 존재합니다.\n목록에서 삭제해도 기존 지출 기록은 보존되지만, 지갑 잔액 관리가 해제됩니다.\n정말 삭제하시겠습니까?`;
+      }
+
+      showConfirmDelete(title, targetName, desc, () => {
+        // Preserve current input values before re-rendering
+        modalActiveCurrencies.forEach(c => {
+          const input = document.getElementById(`init-fund-input-${c}`);
+          if (input && trip && trip.initialBalances) {
+            trip.initialBalances[c] = parseFloat(input.value) || 0;
           }
-        }
-      }
+        });
 
-      // Preserve current input values before re-rendering
-      modalActiveCurrencies.forEach(c => {
-        const input = document.getElementById(`init-fund-input-${c}`);
-        if (input && trip && trip.initialBalances) {
-          trip.initialBalances[c] = parseFloat(input.value) || 0;
+        modalActiveCurrencies = modalActiveCurrencies.filter(c => c !== curr);
+        if (trip && trip.initialBalances) {
+          delete trip.initialBalances[curr];
         }
+
+        renderInitialFundsList();
+        showToast(`🗑️ [${curr}] 통화가 목록에서 삭제되었습니다.`);
       });
-
-      modalActiveCurrencies = modalActiveCurrencies.filter(c => c !== curr);
-      if (trip && trip.initialBalances) {
-        delete trip.initialBalances[curr];
-      }
-
-      renderInitialFundsList();
-      showToast(`🗑️ [${curr}] 통화가 목록에서 삭제되었습니다.`);
     }
     window.removeCurrencyInModal = removeCurrencyInModal;
 
@@ -8909,19 +8914,7 @@
         showToast('ℹ️ 기준 통화 외에 삭제 가능한 추가 통화가 없습니다.');
         return;
       }
-      const names = deletable.map(c => `• ${CURRENCY_INFO[c]?.flag || ''} ${c} (${CURRENCY_INFO[c]?.name || ''})`).join('\n');
-      const target = prompt(`[통화 삭제]\n삭제할 통화 코드를 입력하세요:\n\n${names}\n\n(기준 통화 [${modalBaseCurrency}]는 삭제 불가)`);
-      if (!target) return;
-      const cleanTarget = target.trim().toUpperCase();
-      if (cleanTarget === modalBaseCurrency) {
-        showToast('⚠️ 기준 통화는 삭제할 수 없습니다.');
-        return;
-      }
-      if (modalActiveCurrencies.includes(cleanTarget)) {
-        removeCurrencyInModal(cleanTarget);
-      } else {
-        showToast(`⚠️ 목록에 존재하지 않는 통화입니다: ${cleanTarget}`);
-      }
+      showToast('ℹ️ 각 통화 카드의 휴지통(🗑️) 아이콘을 눌러 확인 후 안전하게 삭제할 수 있습니다.');
     }
     window.openDeleteCurrencySelector = openDeleteCurrencySelector;
 
