@@ -1,25 +1,29 @@
-/* Mobile travel notebook: explicit component colors avoid legacy utility collisions. */
+/* Archival Journal Design System Tokens (v1.6.2) */
 :root, :root[data-theme="light"] {
-  --bg:#f4f6f5; --surface:#fff; --surface2:#edf2ef; --surface3:#e3eae6;
-  --ink:#1b3029; --ink2:#4c6158; --ink3:#5c7066; --line:#dce5df; --line2:#bdcec3;
-  --accent:#17644d; --accent2:#20785e; --accent-bg:#e6f1eb; --accent-line:#b7d6c5;
-  --card-bg:var(--surface); --card-border:var(--line); --header-bg:rgba(244,246,245,.97);
-  --header-border:var(--line); --tab-active-bg:#17644d; --tab-active-text:#fff;
-  --input-bg:var(--surface); --input-border:var(--line2); --companion-warm:#a75131;
-  --companion-next:#e8f1eb;
+  --bg:#F7F5F0; --surface:#FFFFFF; --surface2:#F0ECE1; --surface3:#EAE5D8;
+  --ink:#1C1C1E; --ink2:#484745; --ink3:#706E6B; --line:#E6E2D8; --line2:#D8D2C4;
+  --accent:#2C3A2E; --accent2:#C8A27A; --accent-bg:#EAE6DC; --accent-line:#C8A27A;
+  --card-bg:var(--surface); --card-border:var(--line); --header-bg:rgba(247,245,240,.96);
+  --header-border:var(--line); --tab-active-bg:#2C3A2E; --tab-active-text:#F7F5F0;
+  --input-bg:var(--surface); --input-border:var(--line); --companion-warm:#C8A27A;
+  --companion-next:#F0ECE1;
+  --serif:'Noto Serif KR', 'Cormorant Garamond', 'Playfair Display', Nanum Myeongjo, Georgia, serif;
 }
 :root[data-theme="dark"] {
-  --bg:#101b17; --surface:#182820; --surface2:#22362b; --surface3:#2b4134;
-  --ink:#edf4ef; --ink2:#bdcfc3; --ink3:#a1b7a8; --line:#35493c; --line2:#526b5a;
-  --accent:#9cd8b7; --accent2:#b1e6c8; --accent-bg:#253e30; --accent-line:#537b61;
-  --card-bg:var(--surface); --card-border:var(--line); --header-bg:rgba(16,27,23,.97);
-  --header-border:var(--line); --tab-active-bg:#9cd8b7; --tab-active-text:#10251a;
-  --input-bg:var(--surface); --input-border:var(--line2); --companion-warm:#f0b391;
-  --companion-next:#223c2d;
+  --bg:#0F141C; --surface:#1C222D; --surface2:#242C3A; --surface3:#2D3747;
+  --ink:#EDEDED; --ink2:#94A3B8; --ink3:#64748B; --line:rgba(255,255,255,.08); --line2:rgba(255,255,255,.16);
+  --accent:#D4AF37; --accent2:#7E9A86; --accent-bg:rgba(212,175,55,.12); --accent-line:rgba(212,175,55,.3);
+  --card-bg:var(--surface); --card-border:var(--line); --header-bg:rgba(15,20,28,.96);
+  --header-border:var(--line); --tab-active-bg:#D4AF37; --tab-active-text:#0F141C;
+  --input-bg:var(--surface); --input-border:rgba(255,255,255,.12); --companion-warm:#D4AF37;
+  --companion-next:#242C3A;
+  --serif:'Noto Serif KR', 'Cormorant Garamond', 'Playfair Display', Nanum Myeongjo, Georgia, serif;
 }
 :root[data-theme] body[class] { background:var(--bg) !important; color:var(--ink) !important; }
-:root[data-theme] body .btn-gold { background:var(--tab-active-bg) !important; color:var(--tab-active-text) !important; border:1px solid var(--accent-line) !important; box-shadow:none !important; }
-:root body .btn-gold * { color:inherit !important; }
+:root[data-theme="light"] body .btn-gold { background:#2C3A2E !important; color:#F7F5F0 !important; border:1px solid rgba(200,162,122,.4) !important; box-shadow:0 3px 10px rgba(44,58,46,.2) !important; }
+:root[data-theme="dark"] body .btn-gold { background:linear-gradient(180deg,#D4AF37,#B8860B) !important; color:#0F141C !important; border:1px solid rgba(212,175,55,.4) !important; box-shadow:0 3px 10px rgba(212,175,55,.2) !important; }
+:root[data-theme="light"] body .btn-gold * { color:#F7F5F0 !important; }
+:root[data-theme="dark"] body .btn-gold * { color:#0F141C !important; }
 button, summary, a, input, select, textarea { touch-action:manipulation; }
 button:focus-visible, summary:focus-visible, a:focus-visible { outline:3px solid var(--accent); outline-offset:3px; }
 .companion-app-header { box-shadow:none !important; }

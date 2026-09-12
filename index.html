@@ -15,7 +15,7 @@
 
   <!-- PWA Meta & Icons -->
   <link rel="manifest" href="manifest.webmanifest?v=1.5.1">
-  <meta name="theme-color" content="#f5f5f7">
+  <meta name="theme-color" content="#F7F5F0">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192-v115.png">
@@ -23,13 +23,13 @@
   <link rel="shortcut icon" href="favicon.ico">
   <link rel="apple-touch-icon" sizes="180x180" href="icons/apple-touch-icon-v115.png">
 
-  <!-- Google Fonts: Cormorant Garamond & Playfair Display (Editorial Luxury) -->
+  <!-- Google Fonts: Cormorant Garamond, Noto Serif KR, Playfair Display (Archival Journal Luxury) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700;800&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700;800&family=Noto+Serif+KR:wght@500;600;700;900&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
 
   <!-- Local Utilities Bundle (CDN fallback & tailwind utilities) -->
-  <link rel="stylesheet" href="css/utilities.css?v=1.6.1">
+  <link rel="stylesheet" href="css/utilities.css?v=1.6.2">
   <link rel="stylesheet" href="vendor/fontawesome/css/all.min.css">
 
   <!-- Leaflet Map CSS & JS -->
@@ -43,35 +43,35 @@
   <style>
     @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
     
-    /* ══════════════ Sulsul-Diary Two-Tone Theme System (Light Gray & Deep Black) ══════════════ */
+    /* ══════════════ Sulsul Archival Journal Design System (v1.6.2) ══════════════ */
     :root, :root[data-theme="light"] {
       color-scheme: light;
-      --bg: #f5f5f7;            /* Apple Fog Canvas */
-      --surface: #ffffff;       /* Apple Pure White Surface */
-      --surface2: #f0f0f4;      /* Apple Concrete Inline */
-      --surface3: #e8e8ed;
-      --line: #d6d6d6;          /* Apple Pebble Hairline */
-      --line2: #c5c5c8;
-      --ink: #111827;           /* Pitch Charcoal Black (WCAG AAA 16:1) */
-      --ink2: #374151;          /* Slate 700 - High Contrast Subtext (WCAG AAA 8:1) */
-      --ink3: #4b5563;          /* Slate 600 - Secondary Metadata (WCAG AA 5.5:1) */
-      --accent: #92400e;        /* Deep Whisky Amber (7.2:1 contrast) */
-      --accent2: #c9962f;
-      --accent-bg: #f5ede2;
-      --accent-line: #dfd1be;
-      --card-bg: #ffffff;
-      --card-border: #d6d6d6;
-      --header-bg: rgba(245, 245, 247, 0.94);
-      --header-border: #d6d6d6;
-      --tab-active-bg: #1d1d1f;
-      --tab-active-text: #ffffff;
-      --banner-bg: #f5ede2;
-      --banner-border: #dfd1be;
-      --banner-title: #1d1d1f;
-      --banner-sub: #44403c;
-      --input-bg: #ffffff;
-      --input-border: #d6d6d6;
-      --serif: 'Cormorant Garamond', 'Playfair Display', 'Noto Serif KR', Georgia, serif;
+      --bg: #F7F5F0;            /* Warm Paper Cream */
+      --surface: #FFFFFF;       /* Clean Ivory White */
+      --surface2: #F0ECE1;      /* Vintage Paper Tint */
+      --surface3: #EAE5D8;
+      --line: #E6E2D8;          /* Subtle Warm Border */
+      --line2: #D8D2C4;
+      --ink: #1C1C1E;           /* Deep Charcoal Ink (WCAG AAA) */
+      --ink2: #484745;          /* Deep Slate / Muted Ink */
+      --ink3: #706E6B;          /* Muted Gray Metadata */
+      --accent: #2C3A2E;        /* Deep Sage / Vintage Ink Green */
+      --accent2: #C8A27A;       /* Antique Brass / Muted Gold */
+      --accent-bg: #EAE6DC;
+      --accent-line: #C8A27A;
+      --card-bg: #FFFFFF;
+      --card-border: #E6E2D8;
+      --header-bg: rgba(247, 245, 240, 0.94);
+      --header-border: #E6E2D8;
+      --tab-active-bg: #2C3A2E; /* Deep Sage Fill */
+      --tab-active-text: #F7F5F0;
+      --banner-bg: #F0ECE1;
+      --banner-border: #E6E2D8;
+      --banner-title: #1C1C1E;
+      --banner-sub: #706E6B;
+      --input-bg: #FFFFFF;
+      --input-border: #E6E2D8;
+      --serif: 'Noto Serif KR', 'Cormorant Garamond', 'Playfair Display', Nanum Myeongjo, Georgia, serif;
       --safe-top: env(safe-area-inset-top, 0px);
       --safe-right: env(safe-area-inset-right, 0px);
       --safe-bottom: env(safe-area-inset-bottom, 0px);
@@ -80,32 +80,32 @@
 
     :root[data-theme="dark"] {
       color-scheme: dark;
-      --bg: #0b0c0e;            /* Deep Onyx Pure Black */
-      --surface: #16181d;       /* Card & Sheet Surface */
-      --surface2: #1e2026;      /* Secondary Surface */
-      --surface3: #262930;
+      --bg: #0F141C;            /* Midnight Ink Navy */
+      --surface: #1C222D;       /* Deep Slate Card & Sheet Surface */
+      --surface2: #242C3A;      /* Secondary Deep Surface */
+      --surface3: #2D3747;
       --line: rgba(255, 255, 255, 0.08);   /* Hairline Border */
       --line2: rgba(255, 255, 255, 0.16);
-      --ink: #ededed;           /* Eye-comfort Off-white */
-      --ink2: #a1a1aa;          /* High contrast Subtext */
-      --ink3: #71717a;          /* Muted metadata */
-      --accent: #d4af37;        /* Champagne Gold */
-      --accent2: #c89b58;       /* Warm Amber */
+      --ink: #EDEDED;           /* Eye-comfort Off-white */
+      --ink2: #94A3B8;          /* Slate Gray Secondary */
+      --ink3: #64748B;          /* Muted Metadata */
+      --accent: #D4AF37;        /* Champagne Gold */
+      --accent2: #7E9A86;       /* Soft Sage Point */
       --accent-bg: rgba(212, 175, 55, 0.12);
       --accent-line: rgba(212, 175, 55, 0.3);
-      --card-bg: #16181d;
+      --card-bg: #1C222D;
       --card-border: rgba(255, 255, 255, 0.08);
-      --header-bg: rgba(11, 12, 14, 0.94);
+      --header-bg: rgba(15, 20, 28, 0.94);
       --header-border: rgba(255, 255, 255, 0.08);
-      --tab-active-bg: #d4af37;
-      --tab-active-text: #0b0c0e;
-      --banner-bg: #1e2026;
+      --tab-active-bg: #D4AF37;
+      --tab-active-text: #0F141C;
+      --banner-bg: #242C3A;
       --banner-border: rgba(212, 175, 55, 0.3);
-      --banner-title: #ededed;
-      --banner-sub: #a1a1aa;
-      --input-bg: #16181d;
+      --banner-title: #EDEDED;
+      --banner-sub: #94A3B8;
+      --input-bg: #1C222D;
       --input-border: rgba(255, 255, 255, 0.12);
-      --serif: 'Cormorant Garamond', 'Playfair Display', 'Noto Serif KR', Georgia, serif;
+      --serif: 'Noto Serif KR', 'Cormorant Garamond', 'Playfair Display', Nanum Myeongjo, Georgia, serif;
     }
 
     body {
@@ -126,8 +126,8 @@
       border-color: var(--header-border) !important;
       transition: background-color 0.2s ease, border-color 0.2s ease;
     }
-    .font-serif-brand {
-      font-family: var(--serif);
+    .font-serif, .font-serif-brand {
+      font-family: var(--serif) !important;
     }
     input, textarea, select {
       user-select: text;
@@ -330,31 +330,37 @@
       }
     }
 
-    /* Sulsul Two-Tone Luxury UI Tokens & Buttons */
+    /* Sulsul Archival Journal Luxury UI Tokens & Buttons */
     .btn-gold {
-      background: linear-gradient(180deg, #d4af37, #b8860b) !important;
-      color: #0b0c0e !important;
-      font-weight: 900 !important;
-      border: 1px solid rgba(0, 0, 0, 0.12) !important;
-      box-shadow: 0 4px 14px rgba(184, 134, 11, 0.3) !important;
+      background: #2C3A2E !important;
+      color: #F7F5F0 !important;
+      font-weight: 800 !important;
+      border: 1px solid rgba(200, 162, 122, 0.4) !important;
+      box-shadow: 0 4px 14px rgba(44, 58, 46, 0.25) !important;
       transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
     }
     .btn-gold * {
-      color: #0b0c0e !important;
-      font-weight: 900 !important;
+      color: #F7F5F0 !important;
+      font-weight: 800 !important;
     }
     :root[data-theme="dark"] .btn-gold {
-      background: linear-gradient(180deg, #e5b654, #bd8a2a) !important;
-      color: #0b0c0e !important;
+      background: linear-gradient(180deg, #D4AF37, #B8860B) !important;
+      color: #0F141C !important;
+      border: 1px solid rgba(212, 175, 55, 0.4) !important;
       box-shadow: 0 4px 14px rgba(212, 175, 55, 0.25) !important;
     }
     :root[data-theme="dark"] .btn-gold * {
-      color: #0b0c0e !important;
-      font-weight: 900 !important;
+      color: #0F141C !important;
+      font-weight: 800 !important;
     }
     .btn-gold:hover {
-      box-shadow: 0 6px 20px rgba(162, 96, 27, 0.4);
+      box-shadow: 0 6px 18px rgba(44, 58, 46, 0.35);
+      background: #232E25 !important;
       transform: translateY(-1px);
+    }
+    :root[data-theme="dark"] .btn-gold:hover {
+      background: linear-gradient(180deg, #E5B654, #C9962F) !important;
+      box-shadow: 0 6px 20px rgba(212, 175, 55, 0.4);
     }
     .btn-gold:active {
       transform: translateY(0);
@@ -443,12 +449,18 @@
       background-color: var(--surface) !important;
       border: 1px solid var(--line) !important;
       color: var(--ink) !important;
-      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
+      border-radius: 1rem;
+      box-shadow: 0 4px 20px -2px rgba(44, 58, 46, 0.05), 0 2px 6px -1px rgba(0, 0, 0, 0.03) !important;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    :root[data-theme="dark"] .theme-card {
+      box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.4), 0 2px 6px -1px rgba(0, 0, 0, 0.2) !important;
     }
     .theme-card-subtle {
       background-color: var(--surface2) !important;
       border: 1px solid var(--line) !important;
       color: var(--ink) !important;
+      border-radius: 0.75rem;
     }
 
     /* Hero / Notice Banner */
@@ -484,15 +496,17 @@
       background-color: var(--tab-active-bg) !important;
       color: var(--tab-active-text) !important;
       border: 1px solid transparent !important;
+      box-shadow: 0 2px 8px rgba(44, 58, 46, 0.15) !important;
     }
     .hub-tab-inactive {
       background-color: var(--surface) !important;
       border: 1px solid var(--line) !important;
-      color: var(--ink2) !important;
+      color: var(--ink3) !important;
     }
     .hub-tab-inactive:hover {
       color: var(--ink) !important;
-      border-color: var(--accent) !important;
+      border-color: var(--accent2) !important;
+      background-color: var(--surface2) !important;
     }
 
     /* Tabs: Workspace Main Nav */
@@ -618,6 +632,10 @@
       border: 1px solid var(--input-border) !important;
       color: var(--ink) !important;
     }
+    input:focus, textarea:focus, select:focus {
+      border-color: var(--accent2) !important;
+      outline: none;
+    }
     input::placeholder, textarea::placeholder {
       color: var(--ink3) !important;
     }
@@ -628,7 +646,7 @@
       height: 280px;
       border-radius: 1rem;
       z-index: 10;
-      background: #f7f6f2;
+      background: #F7F5F0;
     }
     @media (min-width: 640px) {
       #leaflet-route-map {
@@ -756,8 +774,8 @@
     }
   </style>
 
-  <link rel="stylesheet" href="css/companion.css?v=1.6.1">
-  <script src="js/presentation/companion-ui.js?v=1.6.1"></script>
+  <link rel="stylesheet" href="css/companion.css?v=1.6.2">
+  <script src="js/presentation/companion-ui.js?v=1.6.2"></script>
 
   <!-- Knowledge Base Seed & Destination Knowledge Packs (DKP) -->
   <script src="kb-travel.js"></script>
@@ -788,8 +806,8 @@
 
       <!-- 우측 액션 클러스터 (동일한 정사각/스퀘어 박스 4단 버튼: 버전 -> 통계 -> 설정 -> +추가) -->
       <div class="flex items-center gap-1 sm:gap-1.5 shrink-0">
-        <!-- 1. 버전 배지 버튼 (v1.6.1 - 클릭 시 버전 이력) -->
-        <button id="app-ver-badge" onclick="event.stopPropagation(); openVersionHistoryModal()" class="h-8 px-2 rounded-xl theme-card-subtle flex items-center justify-center font-mono text-[10px] font-bold text-[#a2601b] dark:text-[#d4af37] shadow-sm hover:border-amber-500/60 transition cursor-pointer shrink-0" title="버전 업데이트 기록 보기 (클릭)">v1.6.1</button>
+        <!-- 1. 버전 배지 버튼 (v1.6.2 - 클릭 시 버전 이력) -->
+        <button id="app-ver-badge" onclick="event.stopPropagation(); openVersionHistoryModal()" class="h-8 px-2 rounded-xl theme-card-subtle flex items-center justify-center font-mono text-[10px] font-bold text-[#a2601b] dark:text-[#d4af37] shadow-sm hover:border-amber-500/60 transition cursor-pointer shrink-0" title="버전 업데이트 기록 보기 (클릭)">v1.6.2</button>
 
         <!-- 2. 통계 버튼 (📊 - 네모박스 형태, 통계 문양) -->
         <button id="header-btn-analytics" onclick="openAnalyticsModal('lifetime')" class="companion-header-analytics w-8 h-8 rounded-xl theme-card-subtle flex items-center justify-center text-[#a2601b] dark:text-[#d4af37] hover:border-amber-500/60 transition shadow-sm cursor-pointer shrink-0" title="술술 여행 통계 대시보드">
@@ -824,10 +842,19 @@
   <!-- ========================================== -->
   <!-- 2. 인생 여행 허브 뷰 (VIEW-HUB) -->
   <!-- ========================================== -->
-  <main id="view-hub" class="flex-1 max-w-6xl mx-auto w-full px-4 py-5 sm:py-6 space-y-5">
+  <main id="view-hub" class="flex-1 max-w-6xl mx-auto w-full px-4 pt-2 pb-5 sm:pt-3 sm:pb-6 space-y-3 sm:space-y-4">
     
     <!-- 스마트 웰컴 배너 (미설치 시 최상단 안내 및 원클릭 설치) -->
     <div id="smart-welcome-banner" class="hidden"></div>
+
+    <!-- 에디토리얼 브랜드 슬로건 바 (Archival Journal Editorial Slogan) -->
+    <div class="sulsul-slogan-bar flex items-center justify-center px-2 py-1.5 rounded-xl bg-transparent border-b border-[#E6E2D8] dark:border-stone-800/80 select-none">
+      <span class="text-[10px] opacity-40 font-serif text-[#C8A27A] dark:text-[#D4AF37] mr-1.5 shrink-0">✦</span>
+      <p class="font-serif italic text-[11px] sm:text-xs md:text-sm tracking-tight sm:tracking-normal text-[#2C3A2E] dark:text-[#D4AF37] font-semibold text-center whitespace-nowrap">
+        “여행의 설렘이 당신 삶의 깊은 에세이로 남도록, 술술 트래블”
+      </p>
+      <span class="text-[10px] opacity-40 font-serif text-[#C8A27A] dark:text-[#D4AF37] ml-1.5 shrink-0">✦</span>
+    </div>
 
     <!-- 통합 스마트 여행 필터 & 검색 허브 (100% 모바일 1화면 최적화, 스크롤 0px) -->
     <div class="p-2.5 sm:p-3.5 rounded-2xl bg-white dark:bg-[#16181d] border border-[#e8e2d5] dark:border-stone-800 shadow-[0_2px_12px_rgba(0,0,0,0.03)] space-y-2.5">
@@ -3490,9 +3517,16 @@
       </div>
 
       <!-- 버전 목록 스크롤 영역 -->
-        <!-- v1.6.1 (Current) -->
+        <!-- v1.6.2 (Current) -->
         <div class="p-4 rounded-2xl border-2 border-emerald-500/40 space-y-2.5 bg-emerald-500/5 dark:bg-emerald-500/10">
-          <div class="flex items-center justify-between gap-2"><div class="flex items-center gap-2 min-w-0"><span class="px-2 py-0.5 rounded-lg bg-emerald-500 text-black font-black text-xs shadow-sm shrink-0">v1.6.1</span><span class="text-xs font-black text-[#1c1917] dark:text-white">모바일 위성 지도 뷰포트 높이 복원 & 평생 통계 대시보드 섹션 배치 최적화</span></div><span class="companion-status shrink-0">최신 버전</span></div>
+          <div class="flex items-center justify-between gap-2"><div class="flex items-center gap-2 min-w-0"><span class="px-2 py-0.5 rounded-lg bg-emerald-500 text-black font-black text-xs shadow-sm shrink-0">v1.6.2</span><span class="text-xs font-black text-[#1c1917] dark:text-white">아카이벌 저널 디자인 시스템 전면 리디자인 & 브랜드 슬로건 배너 신설</span></div><span class="companion-status shrink-0">최신 버전</span></div>
+          <p class="text-xs leading-relaxed">1) <b>브랜드 슬로건 배너 신설 & 상단 여백 최적화</b>: 앱 헤더와 필터 그룹 사이의 과도한 수직 공백을 압축하고, 브랜드 철학 슬로건인 <i>“여행의 설렘이 당신 삶의 깊은 에세이로 남도록, 술술 트래블”</i> 에디토리얼 슬로건 라인을 기품 있게 배치했습니다. 2) <b>Archival Journal 프리미엄 디자인 시스템</b>: 따뜻한 고급 종이 크림(#F7F5F0), 청결한 아이보리 화이트(#FFFFFF), 차분한 딥 세이지/만년필 잉크 그린(#2C3A2E), 앤틱 브라스/골드(#C8A27A), 미드나잇 잉크 네이비(#0F141C), 딥 슬레이트(#1C222D) 팔레트로 전면 개편했습니다. 3) <b>에디토리얼 서체 & 카드 액션 개선</b>: Noto Serif KR 서체 및 자간을 적용하고, 기존 여행 카드의 형광/노랑 액션 버튼을 미니멀 모노크롬 고스트 라인 아이콘으로 전면 세련화했습니다.</p>
+          <div class="text-[10px] text-stone-400 dark:text-stone-500 pt-1 border-t border-emerald-500/20 flex items-center justify-between"><span>📅 2026-09-13 릴리즈</span><span class="font-mono">st-shell-v1.6.2</span></div>
+        </div>
+
+        <!-- v1.6.1 -->
+        <div class="p-4 rounded-2xl bg-stone-50 dark:bg-stone-900/50 border border-stone-200 dark:border-stone-800 space-y-2.5 shadow-sm relative overflow-hidden">
+          <div class="flex items-center justify-between gap-2"><div class="flex items-center gap-2 min-w-0"><span class="px-2 py-0.5 rounded-lg bg-stone-200 dark:bg-stone-800 text-stone-800 dark:text-stone-200 font-bold text-[11px] font-mono shrink-0">v1.6.1</span><span class="text-xs font-bold text-[#1c1917] dark:text-stone-200">모바일 위성 지도 뷰포트 높이 복원 & 평생 통계 대시보드 섹션 배치 최적화</span></div></div>
           <p class="text-xs leading-relaxed">1) <b>위성 지도 뷰포트 높이 붕괴 원인 해결</b>: 번들 CSS 내에 미존재하던 Tailwind 임의 유틸리티 클래스 대신 명시적 반응형 CSS를 도입하여, 모바일/태블릿에서 Leaflet 위성 지도 컨테이너가 0px로 찌그러지지 않고 300px(최대 48vh)의 완벽한 뷰포트로 렌더링되도록 수정했습니다. 또한 탭 전환 시 다단계 <code>invalidateSize()</code>를 적용해 OpenStreetMap 순정 타일이 즉각 선명하게 로딩됩니다. 2) <b>평생 여행 통계 대시보드 섹션 재배치</b>: 사용자 피드백에 맞춰 [1. 평생 여행 아카이브 요약/지표] ➔ [2. 여정 진행 상태 분포] ➔ [3. 세계 및 대종단 비행 궤적 노선도 (지도 열기)] ➔ [4. 방문 국가 아카이브] ➔ [5. 선호하는 여행 테마 및 컨셉] ➔ [6. 등록된 여정 한눈에 보기(전체 비교표)] 순서로 논리적이고 쾌적하게 재정렬했습니다.</p>
           <div class="text-[10px] text-stone-400 dark:text-stone-500 pt-1 border-t border-emerald-500/20 flex items-center justify-between"><span>📅 2026-09-13 릴리즈</span><span class="font-mono">st-shell-v1.6.1</span></div>
         </div>
@@ -4082,7 +4116,7 @@
     window.showToast = showToast;
 
     // 앱 버전 및 글로벌 네임스페이스 (Sulsul-Travel Invariant Rule R-10, R-11, R-12, R-13, R-14, R-15)
-    const APP_VER = '1.6.1';
+    const APP_VER = '1.6.2';
 
     // ══════════════════════════════════════════
     // [Two-Tone Theme System] 라이트 그레이 & 딥 블랙 테마 엔진
@@ -7388,18 +7422,18 @@
           <!-- 상단 우측: D-Day + [📷 대표사진] + [📋 복제] + [📄 PDF] + [🗑️ 삭제] -->
           <div class="relative z-10 flex items-center gap-1.5">
             ${renderDDayBadge(trip, now)}
-            <button onclick="triggerTripCoverUpload('${trip.id}', event)" class="px-2 py-1 rounded-lg bg-black/50 hover:bg-amber-600/80 backdrop-blur-md text-white border border-white/25 flex items-center gap-1 text-[11px] font-bold shadow-sm transition cursor-pointer" title="${photoBtnLabel}">
+            <button onclick="triggerTripCoverUpload('${trip.id}', event)" class="px-2 py-1 rounded-lg bg-black/45 hover:bg-black/70 backdrop-blur-md text-white/90 hover:text-white border border-white/20 flex items-center gap-1 text-[11px] font-bold shadow-sm transition cursor-pointer" title="${photoBtnLabel}">
               <i class="fa-solid fa-camera text-[10px]"></i>
               <span class="hidden sm:inline">${photoBtnLabel}</span>
             </button>
             ${removeBtn}
-            <button onclick="duplicateTrip('${trip.id}', event)" class="w-7 h-7 rounded-lg bg-black/50 hover:bg-amber-600/80 backdrop-blur-md text-white/90 hover:text-white border border-white/25 flex items-center justify-center text-xs shadow-sm transition cursor-pointer" title="여정 복제">
+            <button onclick="duplicateTrip('${trip.id}', event)" class="w-7 h-7 rounded-lg bg-black/45 hover:bg-black/70 backdrop-blur-md text-white/90 hover:text-white border border-white/20 flex items-center justify-center text-xs shadow-sm transition cursor-pointer" title="여정 복제">
               <i class="fa-solid fa-copy"></i>
             </button>
-            <button onclick="openTripPdfReport('${trip.id}', event)" class="w-7 h-7 rounded-lg bg-black/50 hover:bg-black/80 backdrop-blur-md text-white/90 hover:text-white border border-white/25 flex items-center justify-center text-xs shadow-sm transition cursor-pointer" title="여행 보고서 & PDF">
-              <i class="fa-solid fa-file-pdf text-rose-400"></i>
+            <button onclick="openTripPdfReport('${trip.id}', event)" class="w-7 h-7 rounded-lg bg-black/45 hover:bg-black/70 backdrop-blur-md text-white/90 hover:text-white border border-white/20 flex items-center justify-center text-xs shadow-sm transition cursor-pointer" title="여행 보고서 & PDF">
+              <i class="fa-solid fa-file-pdf"></i>
             </button>
-            <button onclick="requestDeleteTrip('${trip.id}', event)" class="w-7 h-7 rounded-lg bg-black/50 hover:bg-rose-600/80 backdrop-blur-md text-white/90 hover:text-white border border-white/25 flex items-center justify-center text-xs shadow-sm transition cursor-pointer" title="여행 삭제">
+            <button onclick="requestDeleteTrip('${trip.id}', event)" class="w-7 h-7 rounded-lg bg-black/45 hover:bg-rose-700/80 backdrop-blur-md text-white/90 hover:text-white border border-white/20 flex items-center justify-center text-xs shadow-sm transition cursor-pointer" title="여행 삭제">
               <i class="fa-regular fa-trash-can"></i>
             </button>
           </div>
@@ -7691,7 +7725,7 @@
         `).join(' ');
 
         const isTripYn = trip.id && trip.id.includes('yunnan');
-        const tripMapIcon = isTripYn ? 'fa-solid fa-earth-asia text-emerald-600' : 'fa-solid fa-earth-americas text-amber-600';
+        const tripMapIcon = isTripYn ? 'fa-solid fa-earth-asia' : 'fa-solid fa-earth-americas';
         const tripMapTitle = isTripYn ? '중국 운남 인터랙티브 지도' : '인터랙티브 경로 지도';
         const cover = resolveTripCover(trip);
         const isHero = (trip.id === heroTripId);
@@ -7710,19 +7744,19 @@
             <div class="relative overflow-hidden rounded-2xl trip-swipe-container shadow-xs" data-trip-id="${trip.id}">
               <!-- 모바일 스와이프 액션 서랍 (터치로 좌측 밀었을 때 노출) -->
               <div class="absolute inset-y-0 right-0 flex items-center gap-1.5 px-3 bg-[#f5f3ed] dark:bg-stone-900 border-l border-[#e8e2d5] dark:border-stone-800 z-0">
-                <button onclick="duplicateTrip('${trip.id}', event)" class="w-9 h-9 rounded-xl bg-amber-500/15 hover:bg-amber-500/25 text-[#a2601b] dark:text-amber-300 border border-amber-500/30 flex items-center justify-center text-xs font-bold transition shadow-xs cursor-pointer" title="여정 복제">
+                <button onclick="duplicateTrip('${trip.id}', event)" class="w-9 h-9 rounded-xl bg-transparent hover:bg-black/5 dark:hover:bg-white/10 text-stone-500 hover:text-[#1c1c1e] dark:hover:text-white border border-[#e6e2d8] dark:border-stone-800 flex items-center justify-center text-xs font-bold transition shadow-xs cursor-pointer" title="여정 복제">
                   <i class="fa-solid fa-copy"></i>
                 </button>
-                <button onclick="openTripPdfReport('${trip.id}', event)" class="w-9 h-9 rounded-xl bg-rose-500/15 hover:bg-rose-500/25 text-rose-600 dark:text-rose-400 border border-rose-500/30 flex items-center justify-center text-xs font-bold transition shadow-xs cursor-pointer" title="PDF 리포트">
+                <button onclick="openTripPdfReport('${trip.id}', event)" class="w-9 h-9 rounded-xl bg-transparent hover:bg-black/5 dark:hover:bg-white/10 text-stone-500 hover:text-[#1c1c1e] dark:hover:text-white border border-[#e6e2d8] dark:border-stone-800 flex items-center justify-center text-xs font-bold transition shadow-xs cursor-pointer" title="PDF 리포트">
                   <i class="fa-solid fa-file-pdf"></i>
                 </button>
-                <button onclick="requestDeleteTrip('${trip.id}', event)" class="w-9 h-9 rounded-xl bg-red-500/15 hover:bg-red-500/25 text-red-600 dark:text-red-400 border border-red-500/30 flex items-center justify-center text-xs font-bold transition shadow-xs cursor-pointer" title="여행 삭제">
+                <button onclick="requestDeleteTrip('${trip.id}', event)" class="w-9 h-9 rounded-xl bg-transparent hover:bg-rose-50 dark:hover:bg-rose-950/30 text-stone-400 hover:text-rose-600 border border-[#e6e2d8] dark:border-stone-800 flex items-center justify-center text-xs font-bold transition shadow-xs cursor-pointer" title="여행 삭제">
                   <i class="fa-regular fa-trash-can"></i>
                 </button>
               </div>
 
               <!-- 스와이프 전면 리스트 카드 바디 -->
-              <div class="trip-swipe-front relative z-10 transition-transform duration-200 ease-out group bg-white dark:bg-[#16181d] border border-[#e8e2d5] dark:border-stone-800 hover:border-[#a2601b]/50 dark:hover:border-amber-500/50 p-3.5 sm:p-4 shadow-[0_2px_10px_rgba(0,0,0,0.02)] flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4 cursor-pointer"
+              <div class="trip-swipe-front relative z-10 transition-transform duration-200 ease-out group bg-white dark:bg-[#16181d] border border-[#e8e2d5] dark:border-stone-800 hover:border-[#2C3A2E]/50 dark:hover:border-[#D4AF37]/50 p-3.5 sm:p-4 shadow-[0_4px_20px_-2px_rgba(44,58,46,0.05),0_2px_6px_-1px_rgba(0,0,0,0.03)] flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4 cursor-pointer"
                    ontouchstart="handleTripSwipeStart(event, this)" 
                    ontouchmove="handleTripSwipeMove(event, this)" 
                    ontouchend="handleTripSwipeEnd(event, this)"
@@ -7731,7 +7765,7 @@
                   ${thumbHtml}
                   <div class="min-w-0 flex-1">
                     <div class="flex items-center gap-2 flex-wrap">
-                      <h4 class="text-sm sm:text-base font-black text-[#1c1917] dark:text-white group-hover:text-[#a2601b] transition truncate">${escapeHtml(trip.title)}</h4>
+                      <h4 class="text-sm sm:text-base font-serif tracking-tight font-black text-[#1c1917] dark:text-white group-hover:text-[#2C3A2E] dark:group-hover:text-[#D4AF37] transition truncate">${escapeHtml(trip.title)}</h4>
                       ${sampleBadge}
                       ${renderDDayBadge(trip, now)}
                     </div>
@@ -7751,19 +7785,19 @@
                     <div class="text-xs font-bold text-[#1c1917] dark:text-stone-200">₩${(totalSpent/10000).toFixed(0)}만 <span class="text-stone-400 font-normal">/ ₩${(budget/10000).toFixed(0)}만</span></div>
                   </div>
                   <div class="flex items-center gap-1.5" onclick="event.stopPropagation()">
-                    <button onclick="triggerTripCoverUpload('${trip.id}', event)" class="w-8 h-8 rounded-xl bg-[#faf8f5] dark:bg-stone-800 hover:bg-amber-50 dark:hover:bg-stone-700 text-[#78716c] dark:text-stone-300 hover:text-[#a2601b] border border-[#e8e2d5] dark:border-stone-700 flex items-center justify-center text-xs transition cursor-pointer" title="대표 사진 등록">
+                    <button onclick="triggerTripCoverUpload('${trip.id}', event)" class="w-8 h-8 rounded-xl bg-transparent hover:bg-black/5 dark:hover:bg-white/10 text-stone-500 hover:text-[#1c1c1e] dark:hover:text-white border border-[#e6e2d8] dark:border-stone-800 flex items-center justify-center text-xs transition cursor-pointer" title="대표 사진 등록">
                       <i class="fa-solid fa-camera"></i>
                     </button>
-                    <button onclick="duplicateTrip('${trip.id}', event)" class="w-8 h-8 rounded-xl bg-[#faf8f5] dark:bg-stone-800 hover:bg-amber-50 dark:hover:bg-stone-700 text-[#78716c] dark:text-stone-300 hover:text-[#a2601b] border border-[#e8e2d5] dark:border-stone-700 flex items-center justify-center text-xs transition cursor-pointer" title="여정 복제">
+                    <button onclick="duplicateTrip('${trip.id}', event)" class="w-8 h-8 rounded-xl bg-transparent hover:bg-black/5 dark:hover:bg-white/10 text-stone-500 hover:text-[#1c1c1e] dark:hover:text-white border border-[#e6e2d8] dark:border-stone-800 flex items-center justify-center text-xs transition cursor-pointer" title="여정 복제">
                       <i class="fa-solid fa-copy"></i>
                     </button>
-                    <button onclick="openTripWorkspace('${trip.id}'); navigateToInteractiveMap(); event.stopPropagation();" class="w-8 h-8 rounded-xl bg-[#faf8f5] dark:bg-stone-800 hover:bg-amber-50 dark:hover:bg-stone-700 text-[#78716c] dark:text-stone-300 hover:text-[#a2601b] border border-[#e8e2d5] dark:border-stone-700 flex items-center justify-center text-xs transition cursor-pointer" title="${tripMapTitle}">
+                    <button onclick="openTripWorkspace('${trip.id}'); navigateToInteractiveMap(); event.stopPropagation();" class="w-8 h-8 rounded-xl bg-transparent hover:bg-black/5 dark:hover:bg-white/10 text-stone-500 hover:text-[#1c1c1e] dark:hover:text-white border border-[#e6e2d8] dark:border-stone-800 flex items-center justify-center text-xs transition cursor-pointer" title="${tripMapTitle}">
                       <i class="${tripMapIcon}"></i>
                     </button>
-                    <button onclick="openTripPdfReport('${trip.id}', event)" class="w-8 h-8 rounded-xl bg-[#faf8f5] dark:bg-stone-800 hover:bg-amber-50 dark:hover:bg-stone-700 text-[#78716c] dark:text-stone-300 hover:text-[#a2601b] border border-[#e8e2d5] dark:border-stone-700 flex items-center justify-center text-xs transition cursor-pointer" title="PDF 리포트">
-                      <i class="fa-solid fa-file-pdf text-rose-500"></i>
+                    <button onclick="openTripPdfReport('${trip.id}', event)" class="w-8 h-8 rounded-xl bg-transparent hover:bg-black/5 dark:hover:bg-white/10 text-stone-500 hover:text-[#1c1c1e] dark:hover:text-white border border-[#e6e2d8] dark:border-stone-800 flex items-center justify-center text-xs transition cursor-pointer" title="PDF 리포트">
+                      <i class="fa-solid fa-file-pdf"></i>
                     </button>
-                    <button onclick="requestDeleteTrip('${trip.id}', event)" class="w-8 h-8 rounded-xl bg-[#faf8f5] dark:bg-stone-800 hover:bg-rose-50 dark:hover:bg-stone-700 text-[#78716c] dark:text-stone-300 hover:text-rose-600 border border-[#e8e2d5] dark:border-stone-700 flex items-center justify-center text-xs transition cursor-pointer" title="여행 삭제">
+                    <button onclick="requestDeleteTrip('${trip.id}', event)" class="w-8 h-8 rounded-xl bg-transparent hover:bg-rose-50 dark:hover:bg-rose-950/30 text-stone-400 hover:text-rose-600 border border-[#e6e2d8] dark:border-stone-800 flex items-center justify-center text-xs transition cursor-pointer" title="여행 삭제">
                       <i class="fa-regular fa-trash-can"></i>
                     </button>
                     <button onclick="openTripWorkspace('${trip.id}')" class="px-3 py-1.5 rounded-xl btn-gold text-xs font-bold shadow-sm transition flex items-center gap-1 cursor-pointer">
@@ -7778,7 +7812,7 @@
         } else if (isHero) {
           // [Hero Featured Card] 대형 와이드 대표 여정 카드 (가장 임박/진행 중인 여행 부각)
           html += `
-            <div class="col-span-full group relative rounded-2xl bg-white dark:bg-[#16181d] border-2 border-amber-500/40 hover:border-amber-500/70 dark:border-amber-500/50 transition-all duration-300 overflow-hidden flex flex-col shadow-md hover:shadow-xl">
+            <div class="col-span-full group relative rounded-2xl bg-white dark:bg-[#16181d] border-2 border-amber-500/40 hover:border-amber-500/70 dark:border-amber-500/50 transition-all duration-300 overflow-hidden flex flex-col shadow-[0_4px_20px_-2px_rgba(44,58,46,0.06),0_2px_6px_-1px_rgba(0,0,0,0.03)] hover:shadow-xl">
               ${renderCoverBannerHtml(trip, cover, true, now)}
 
               <div class="p-4 sm:p-5 flex-1 flex flex-col justify-between space-y-3.5 cursor-pointer" onclick="openTripWorkspace('${trip.id}')">
@@ -7787,15 +7821,15 @@
                     <div class="flex items-center gap-3 min-w-0">
                       <span class="text-3xl sm:text-4xl shrink-0">${trip.coverEmoji || '🌎'}</span>
                       <div class="min-w-0 flex-1">
-                        <h4 class="text-base sm:text-xl font-black text-[#1c1917] dark:text-white truncate group-hover:text-[#a2601b] transition">${escapeHtml(trip.title)}</h4>
+                        <h4 class="text-base sm:text-xl font-serif tracking-tight font-black text-[#1c1917] dark:text-white truncate group-hover:text-[#2C3A2E] dark:group-hover:text-[#D4AF37] transition">${escapeHtml(trip.title)}</h4>
                         <p class="text-xs text-[#78716c] dark:text-stone-400 truncate mt-0.5">${escapeHtml(trip.subtitle || trip.style || '인생의 특별한 여정')}</p>
                       </div>
                     </div>
                   </div>
 
                   <!-- 주요 여행 코스 프리뷰 스트립 -->
-                  <div class="p-2.5 rounded-xl bg-[#faf8f5] dark:bg-stone-900/90 border border-[#e8e2d5] dark:border-stone-800 text-xs flex items-center gap-2 overflow-x-auto no-scrollbar">
-                    <span class="text-amber-600 dark:text-amber-400 font-bold shrink-0 flex items-center gap-1"><i class="fa-solid fa-route text-[11px]"></i> 주요 코스:</span>
+                  <div class="p-2.5 rounded-xl bg-[#F7F5F0] dark:bg-stone-900/90 border border-[#E6E2D8] dark:border-stone-800 text-xs flex items-center gap-2 overflow-x-auto no-scrollbar">
+                    <span class="text-[#2C3A2E] dark:text-[#D4AF37] font-bold shrink-0 flex items-center gap-1"><i class="fa-solid fa-route text-[11px]"></i> 주요 코스:</span>
                     <span class="text-stone-700 dark:text-stone-300 font-medium whitespace-nowrap">${escapeHtml(routePreviewStr)}</span>
                   </div>
 
@@ -7825,7 +7859,7 @@
 
                 <!-- 하단 액션 버튼: [경로 지도] + [다이어리 열기] -->
                 <div class="pt-2 flex items-center gap-2.5">
-                  <button onclick="openTripWorkspace('${trip.id}'); navigateToInteractiveMap(); event.stopPropagation();" class="py-2.5 px-3.5 rounded-xl bg-[#faf8f5] dark:bg-stone-800 hover:bg-amber-50 dark:hover:bg-stone-700 text-[#78716c] dark:text-stone-300 hover:text-[#a2601b] border border-[#e8e2d5] dark:border-stone-700 text-xs font-bold transition flex items-center justify-center gap-1.5 shadow-sm cursor-pointer shrink-0" title="${tripMapTitle}">
+                  <button onclick="openTripWorkspace('${trip.id}'); navigateToInteractiveMap(); event.stopPropagation();" class="py-2.5 px-3.5 rounded-xl bg-transparent hover:bg-black/5 dark:hover:bg-white/10 text-stone-600 dark:text-stone-300 hover:text-[#1c1c1e] dark:hover:text-white border border-[#e6e2d8] dark:border-stone-800 text-xs font-bold transition flex items-center justify-center gap-1.5 shadow-sm cursor-pointer shrink-0" title="${tripMapTitle}">
                     <i class="${tripMapIcon}"></i>
                     <span>경로 지도</span>
                   </button>
@@ -7840,7 +7874,7 @@
         } else {
           // [Standard Compact Card] 콤팩트 표준 여행 카드 (지난 여행 및 기타 여정)
           html += `
-            <div class="group relative rounded-2xl bg-white dark:bg-[#16181d] border border-[#e8e2d5] dark:border-stone-800 hover:border-[#a2601b]/50 dark:hover:border-amber-500/50 transition-all duration-200 overflow-hidden flex flex-col shadow-[0_2px_12px_rgba(0,0,0,0.03)] hover:shadow-lg hover:-translate-y-1">
+            <div class="group relative rounded-2xl bg-white dark:bg-[#16181d] border border-[#e8e2d5] dark:border-stone-800 hover:border-[#2C3A2E]/50 dark:hover:border-[#D4AF37]/50 transition-all duration-200 overflow-hidden flex flex-col shadow-[0_4px_20px_-2px_rgba(44,58,46,0.05),0_2px_6px_-1px_rgba(0,0,0,0.03)] hover:shadow-lg hover:-translate-y-1">
               ${renderCoverBannerHtml(trip, cover, false, now)}
 
               <div class="p-4 flex-1 flex flex-col justify-between space-y-3 cursor-pointer" onclick="openTripWorkspace('${trip.id}')">
@@ -7848,7 +7882,7 @@
                   <div class="flex items-center gap-2.5">
                     <span class="text-2xl shrink-0">${trip.coverEmoji || '🌎'}</span>
                     <div class="min-w-0 flex-1">
-                      <h4 class="text-base font-black text-[#1c1917] dark:text-white truncate group-hover:text-[#a2601b] transition">${escapeHtml(trip.title)}</h4>
+                      <h4 class="text-base font-serif tracking-tight font-black text-[#1c1917] dark:text-white truncate group-hover:text-[#2C3A2E] dark:group-hover:text-[#D4AF37] transition">${escapeHtml(trip.title)}</h4>
                       <p class="text-[11px] text-[#78716c] dark:text-stone-400 truncate mt-0.5">${escapeHtml(trip.subtitle || trip.style || '인생의 특별한 여정')}</p>
                     </div>
                   </div>
@@ -7879,7 +7913,7 @@
 
                 <!-- 하단 액션 버튼: [지도] + [다이어리 열기] -->
                 <div class="pt-2 flex items-center gap-2">
-                  <button onclick="openTripWorkspace('${trip.id}'); navigateToInteractiveMap(); event.stopPropagation();" class="py-2 px-2.5 rounded-xl bg-[#faf8f5] dark:bg-stone-800 hover:bg-amber-50 dark:hover:bg-stone-700 text-[#78716c] dark:text-stone-300 hover:text-[#a2601b] border border-[#e8e2d5] dark:border-stone-700 text-xs font-bold transition flex items-center justify-center gap-1 shadow-sm cursor-pointer shrink-0" title="${tripMapTitle}">
+                  <button onclick="openTripWorkspace('${trip.id}'); navigateToInteractiveMap(); event.stopPropagation();" class="py-2 px-2.5 rounded-xl bg-transparent hover:bg-black/5 dark:hover:bg-white/10 text-stone-600 dark:text-stone-300 hover:text-[#1c1c1e] dark:hover:text-white border border-[#e6e2d8] dark:border-stone-800 text-xs font-bold transition flex items-center justify-center gap-1 shadow-sm cursor-pointer shrink-0" title="${tripMapTitle}">
                     <i class="${tripMapIcon}"></i>
                     <span>지도</span>
                   </button>
