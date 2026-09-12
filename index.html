@@ -23,13 +23,13 @@
   <link rel="shortcut icon" href="favicon.ico">
   <link rel="apple-touch-icon" sizes="180x180" href="icons/apple-touch-icon-v115.png">
 
-  <!-- Google Fonts: Cormorant Garamond, Noto Serif KR, Playfair Display (Archival Journal Luxury) -->
+  <!-- Google Fonts: Great Vibes, Dancing Script (Cursive Calligraphy), Cormorant Garamond, Noto Serif KR, Playfair Display -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700;800&family=Noto+Serif+KR:wght@500;600;700;900&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Great+Vibes&family=Cormorant+Garamond:wght@600;700;800&family=Noto+Serif+KR:wght@500;600;700;900&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
 
   <!-- Local Utilities Bundle (CDN fallback & tailwind utilities) -->
-  <link rel="stylesheet" href="css/utilities.css?v=1.6.3">
+  <link rel="stylesheet" href="css/utilities.css?v=1.6.4">
   <link rel="stylesheet" href="vendor/fontawesome/css/all.min.css">
 
   <!-- Leaflet Map CSS & JS -->
@@ -43,7 +43,7 @@
   <style>
     @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
     
-    /* ══════════════ Sulsul Archival Journal Design System (v1.6.3) ══════════════ */
+    /* ══════════════ Sulsul Archival Journal Design System (v1.6.4) ══════════════ */
     :root, :root[data-theme="light"] {
       color-scheme: light;
       --bg: #F7F5F0;            /* Warm Paper Cream */
@@ -128,6 +128,9 @@
     }
     .font-serif, .font-serif-brand {
       font-family: var(--serif) !important;
+    }
+    .font-brand-script {
+      font-family: 'Great Vibes', 'Dancing Script', 'Brush Script MT', cursive;
     }
     input, textarea, select {
       user-select: text;
@@ -774,8 +777,8 @@
     }
   </style>
 
-  <link rel="stylesheet" href="css/companion.css?v=1.6.3">
-  <script src="js/presentation/companion-ui.js?v=1.6.3"></script>
+  <link rel="stylesheet" href="css/companion.css?v=1.6.4">
+  <script src="js/presentation/companion-ui.js?v=1.6.4"></script>
 
   <!-- Knowledge Base Seed & Destination Knowledge Packs (DKP) -->
   <script src="kb-travel.js"></script>
@@ -793,21 +796,21 @@
   <!-- ========================================== -->
   <header class="sticky top-0 z-40 bg-[#faf8f5]/90 dark:bg-[#121316]/90 backdrop-blur-md border-b border-[#e8e2d5] dark:border-stone-800 transition-colors">
     <div class="max-w-6xl mx-auto px-4 h-14 flex items-center justify-between gap-2">
-      <!-- 좌측 브랜드 로고 & 워크스페이스 타이틀 -->
+      <!-- 좌측 브랜드 로고 & 워크스페이스 타이틀 (새로 만든 빈티지 베어 마스코트 + 필기체 영문 로고) -->
       <div class="flex items-center gap-2.5 min-w-0 cursor-pointer select-none" onclick="switchView('hub')">
-        <span class="w-8 h-8 rounded-xl bg-amber-500/15 border border-amber-500/30 flex items-center justify-center text-base shadow-sm shrink-0">🧭</span>
+        <img src="icons/sulsul_bear_mascot.png" class="w-9 h-9 rounded-xl object-cover border border-[#e6e2d8] dark:border-stone-800 shadow-sm shrink-0" alt="Sulsul Travel">
         <div class="min-w-0">
           <div class="flex items-center gap-1.5">
-            <h1 class="font-extrabold text-sm sm:text-base tracking-tight text-[#1E2B24] dark:text-[#ededed] truncate">술술트래블</h1>
+            <h1 class="font-brand-script text-2xl sm:text-3xl font-bold tracking-normal text-[#1E2B24] dark:text-[#ededed] truncate leading-none pt-0.5">Sulsul Travel</h1>
           </div>
-          <p id="header-trip-name" class="text-[10px] sm:text-[11px] text-[#78716c] dark:text-stone-400 truncate max-w-[120px] sm:max-w-xs font-normal">인생의 모든 여정을 기록하는 다이어리</p>
+          <p id="header-trip-name" class="text-[10px] sm:text-[11px] text-[#78716c] dark:text-stone-400 truncate max-w-[130px] sm:max-w-xs font-normal">인생의 모든 여정을 기록하는 다이어리</p>
         </div>
       </div>
 
       <!-- 우측 액션 클러스터 (동일한 정사각/스퀘어 박스 4단 버튼: 버전 -> 통계 -> 설정 -> +추가) -->
       <div class="flex items-center gap-1 sm:gap-1.5 shrink-0">
-        <!-- 1. 버전 배지 버튼 (v1.6.3 - 클릭 시 버전 이력) -->
-        <button id="app-ver-badge" onclick="event.stopPropagation(); openVersionHistoryModal()" class="h-8 px-2 rounded-xl theme-card-subtle flex items-center justify-center font-mono text-[10px] font-bold text-[#a2601b] dark:text-[#d4af37] shadow-sm hover:border-amber-500/60 transition cursor-pointer shrink-0" title="버전 업데이트 기록 보기 (클릭)">v1.6.3</button>
+        <!-- 1. 버전 배지 버튼 (v1.6.4 - 클릭 시 버전 이력) -->
+        <button id="app-ver-badge" onclick="event.stopPropagation(); openVersionHistoryModal()" class="h-8 px-2 rounded-xl theme-card-subtle flex items-center justify-center font-mono text-[10px] font-bold text-[#a2601b] dark:text-[#d4af37] shadow-sm hover:border-amber-500/60 transition cursor-pointer shrink-0" title="버전 업데이트 기록 보기 (클릭)">v1.6.4</button>
 
         <!-- 2. 통계 버튼 (📊 - 네모박스 형태, 통계 문양) -->
         <button id="header-btn-analytics" onclick="openAnalyticsModal('lifetime')" class="companion-header-analytics w-8 h-8 rounded-xl theme-card-subtle flex items-center justify-center text-[#a2601b] dark:text-[#d4af37] hover:border-amber-500/60 transition shadow-sm cursor-pointer shrink-0" title="술술 여행 통계 대시보드">
@@ -847,19 +850,10 @@
     <!-- 스마트 웰컴 배너 (미설치 시 최상단 안내 및 원클릭 설치) -->
     <div id="smart-welcome-banner" class="hidden"></div>
 
-    <!-- 모던 에디토리얼 매거진 헤더 섹션 (Modern Editorial Magazine Header) -->
-    <div class="editorial-magazine-header sulsul-slogan-bar px-5 pt-4 pb-5 rounded-2xl bg-white dark:bg-[#16181d] border border-[#e6e2d8] dark:border-stone-800 shadow-[0_4px_20px_-2px_rgba(44,58,46,0.04),0_2px_6px_-1px_rgba(0,0,0,0.02)] text-left select-none space-y-1.5 transition-colors">
-      <!-- 1. Eyebrow / Category Label -->
-      <div class="text-[11px] sm:text-xs font-semibold tracking-[0.08em] uppercase text-[#6B7A70] dark:text-[#94A3B8]">
-        YOUR TRAVEL NOTEBOOK
-      </div>
-      <!-- 2. Main Headline (Bold & Impactful, 2 lines, Left-aligned, Sans-serif 800) -->
-      <h2 class="text-[22px] sm:text-[26px] font-extrabold leading-[1.25] tracking-tight text-[#1E2B24] dark:text-[#EDEDED]">
-        여행의 설렘이,<br>삶의 깊은 에세이로.
-      </h2>
-      <!-- 3. Sub-copy (Emotional & Clean, Regular 400) -->
-      <p class="pt-1 text-xs sm:text-sm font-normal text-[#64748B] dark:text-[#94A3B8] leading-relaxed">
-        준비하는 설렘부터 오래 꺼내 볼 기억까지, 술술 트래블
+    <!-- 에디토리얼 브랜드 단일 라인 슬로건 바 (Single-line Slogan) -->
+    <div class="sulsul-slogan-bar flex items-center justify-center px-4 py-2 rounded-xl bg-white/70 dark:bg-[#16181d]/70 border border-[#E6E2D8] dark:border-stone-800/80 shadow-xs select-none">
+      <p class="text-xs sm:text-sm font-semibold tracking-tight text-[#1E2B24] dark:text-[#EDEDED] text-center truncate">
+        여행의 설렘이, 삶의 깊은 에세이로...
       </p>
     </div>
 
@@ -3524,10 +3518,17 @@
       </div>
 
       <!-- 버전 목록 스크롤 영역 -->
-        <!-- v1.6.3 (Current) -->
+        <!-- v1.6.4 (Current) -->
         <div class="p-4 rounded-2xl border-2 border-emerald-500/40 space-y-2.5 bg-emerald-500/5 dark:bg-emerald-500/10">
-          <div class="flex items-center justify-between gap-2"><div class="flex items-center gap-2 min-w-0"><span class="px-2 py-0.5 rounded-lg bg-emerald-500 text-black font-black text-xs shadow-sm shrink-0">v1.6.3</span><span class="text-xs font-black text-[#1c1917] dark:text-white">모던 에디토리얼 매거진 헤더 개편 & 앱 전역 타이포그래피 일관성 통일</span></div><span class="companion-status shrink-0">최신 버전</span></div>
-          <p class="text-xs leading-relaxed">1) <b>모던 에디토리얼 매거진 커버 헤더 신설</b>: 올드한 중앙 정렬 반짝이 슬로건(✦“...”✦)을 완전히 걷어내고, 현대 프리미엄 여행 매거진 커버 스타일의 좌측 정렬 에디토리얼 헤더(Eyebrow: <code>YOUR TRAVEL NOTEBOOK</code>, Main 2줄 볼드 헤드라인: <code>여행의 설렘이,<br>삶의 깊은 에세이로.</code>, 차분한 서브 카피)로 전면 개편했습니다. 2) <b>앱 전역 타이포그래피 통일</b>: 상단 브랜드명과 여행 카드 제목에 섞여 혼잡함(뒤죽박죽)을 유발하던 세리프/명조 폰트를 제거하고 깔끔하고 가독성 높은 현대적 <b>Pretendard / System-ui</b> 산세리프 위계로 통일하여 세련되고 일관된 저널 미학을 완성했습니다.</p>
+          <div class="flex items-center justify-between gap-2"><div class="flex items-center gap-2 min-w-0"><span class="px-2 py-0.5 rounded-lg bg-emerald-500 text-black font-black text-xs shadow-sm shrink-0">v1.6.4</span><span class="text-xs font-black text-[#1c1917] dark:text-white">빈티지 베어 마스코트 & 필기체 영문 로고 탑재 및 단일 라인 슬로건 최적화</span></div><span class="companion-status shrink-0">최신 버전</span></div>
+          <p class="text-xs leading-relaxed">1) <b>빈티지 베어 마스코트 & 필기체 영문 로고 탑재</b>: 상단 앱바에 새로 제작된 감성 수채화 빈티지 베어 마스코트 아이콘과 우아한 필기체 영문 로고(<i>Sulsul Travel</i>, Great Vibes/Dancing Script)를 배치하여 브랜드 아이덴티티를 확립했습니다. 2) <b>상단 슬로건 단일 라인 압축</b>: 다단 박스를 간결하게 정돈하여 <i>“여행의 설렘이, 삶의 깊은 에세이로...”</i> 단 한 줄의 세련된 슬로건 바만 남김으로써 모바일 상단 여백을 극대화했습니다. 3) <b>앱/PWA 전역 아이콘 전면 교체</b>: 새로 공유된 고해상도 마스코트를 기반으로 PWA 192/512px, Maskable, Apple Touch Icon 및 Favicon을 전면 쇄신했습니다.</p>
+          <div class="text-[10px] text-stone-400 dark:text-stone-500 pt-1 border-t border-emerald-500/20 flex items-center justify-between"><span>📅 2026-09-13 릴리즈</span><span class="font-mono">st-shell-v1.6.4</span></div>
+        </div>
+
+        <!-- v1.6.3 -->
+        <div class="p-4 rounded-2xl bg-stone-50 dark:bg-stone-900/50 border border-stone-200 dark:border-stone-800 space-y-2.5 shadow-sm relative overflow-hidden">
+          <div class="flex items-center justify-between gap-2"><div class="flex items-center gap-2 min-w-0"><span class="px-2 py-0.5 rounded-lg bg-stone-200 dark:bg-stone-800 text-stone-800 dark:text-stone-200 font-bold text-[11px] font-mono shrink-0">v1.6.3</span><span class="text-xs font-bold text-[#1c1917] dark:text-stone-200">모던 에디토리얼 매거진 헤더 개편 & 앱 전역 타이포그래피 일관성 통일</span></div></div>
+          <p class="text-xs leading-relaxed">1) <b>모던 에디토리얼 매거진 커버 헤더 신설</b>: 올드한 중앙 정렬 반짝이 슬로건(✦“...”✦)을 완전히 걷어내고, 현대 프리미엄 여행 매거진 커버 스타일의 좌측 정렬 에디토리얼 헤더로 전면 개편했습니다. 2) <b>앱 전역 타이포그래피 통일</b>: 상단 브랜드명과 여행 카드 제목에 섞여 혼잡함(뒤죽박죽)을 유발하던 세리프/명조 폰트를 제거하고 깔끔하고 가독성 높은 현대적 <b>Pretendard / System-ui</b> 산세리프 위계로 통일하여 세련되고 일관된 저널 미학을 완성했습니다.</p>
           <div class="text-[10px] text-stone-400 dark:text-stone-500 pt-1 border-t border-emerald-500/20 flex items-center justify-between"><span>📅 2026-09-13 릴리즈</span><span class="font-mono">st-shell-v1.6.3</span></div>
         </div>
 
@@ -4130,7 +4131,7 @@
     window.showToast = showToast;
 
     // 앱 버전 및 글로벌 네임스페이스 (Sulsul-Travel Invariant Rule R-10, R-11, R-12, R-13, R-14, R-15)
-    const APP_VER = '1.6.3';
+    const APP_VER = '1.6.4';
 
     // ══════════════════════════════════════════
     // [Two-Tone Theme System] 라이트 그레이 & 딥 블랙 테마 엔진

@@ -1,4 +1,4 @@
-/* Archival Journal Design System Tokens (v1.6.3) */
+/* Archival Journal Design System Tokens (v1.6.4) */
 :root, :root[data-theme="light"] {
   --bg:#F7F5F0; --surface:#FFFFFF; --surface2:#F0ECE1; --surface3:#EAE5D8;
   --ink:#1E2B24; --ink2:#4A5568; --ink3:#71717A; --line:#E6E2D8; --line2:#D8D2C4;
@@ -27,6 +27,7 @@
 button, summary, a, input, select, textarea { touch-action:manipulation; }
 button:focus-visible, summary:focus-visible, a:focus-visible { outline:3px solid var(--accent); outline-offset:3px; }
 .editorial-magazine-header { transition: background-color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease; }
+.font-brand-script { font-family:'Great Vibes', 'Dancing Script', 'Brush Script MT', cursive; }
 .companion-app-header { box-shadow:none !important; }
 .companion-app-header .font-serif-brand { font-family:inherit; font-weight:800; letter-spacing:-.04em; }
 .companion-app-header button { min-height:44px; min-width:44px; box-shadow:none !important; }
