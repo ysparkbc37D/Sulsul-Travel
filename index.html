@@ -29,7 +29,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700;800&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
 
   <!-- Local Utilities Bundle (CDN fallback & tailwind utilities) -->
-  <link rel="stylesheet" href="css/utilities.css?v=1.5.6">
+  <link rel="stylesheet" href="css/utilities.css?v=1.5.7">
   <link rel="stylesheet" href="vendor/fontawesome/css/all.min.css">
 
   <!-- Leaflet Map CSS & JS -->
@@ -720,8 +720,8 @@
     }
   </style>
 
-  <link rel="stylesheet" href="css/companion.css?v=1.5.6">
-  <script src="js/presentation/companion-ui.js?v=1.5.6"></script>
+  <link rel="stylesheet" href="css/companion.css?v=1.5.7">
+  <script src="js/presentation/companion-ui.js?v=1.5.7"></script>
 
   <!-- Knowledge Base Seed & Destination Knowledge Packs (DKP) -->
   <script src="kb-travel.js"></script>
@@ -747,7 +747,7 @@
             <h1 class="font-serif-brand text-base sm:text-xl font-bold tracking-tight text-[#1c1917] dark:text-[#ededed] whitespace-nowrap">
               Sulsul Travel
             </h1>
-            <span id="app-ver-badge" onclick="event.stopPropagation(); openVersionHistoryModal()" class="px-1.5 py-0.5 rounded-md theme-card-subtle hover:border-amber-500/60 hover:text-amber-600 dark:hover:text-amber-300 text-[#a2601b] dark:text-[#d4af37] text-[10px] font-bold font-mono shadow-inner cursor-pointer shrink-0 transition" title="버전 업데이트 기록 보기 (클릭)">v1.5.6</span>
+            <span id="app-ver-badge" onclick="event.stopPropagation(); openVersionHistoryModal()" class="px-1.5 py-0.5 rounded-md theme-card-subtle hover:border-amber-500/60 hover:text-amber-600 dark:hover:text-amber-300 text-[#a2601b] dark:text-[#d4af37] text-[10px] font-bold font-mono shadow-inner cursor-pointer shrink-0 transition" title="버전 업데이트 기록 보기 (클릭)">v1.5.7</span>
           </div>
           <p id="header-trip-name" class="text-[10px] sm:text-[11px] text-[#78716c] dark:text-stone-400 truncate max-w-[120px] sm:max-w-xs font-normal">인생의 모든 여정을 기록하는 다이어리</p>
         </div>
@@ -793,8 +793,6 @@
     <!-- 스마트 웰컴 배너 (미설치 시 최상단 안내 및 원클릭 설치) -->
     <div id="smart-welcome-banner" class="hidden"></div>
 
-    <section class="companion-hub-heading"><p class="companion-eyebrow">YOUR TRAVEL NOTEBOOK</p><h2>여행은 끝나도,<br>이야기는 계속.</h2><p>준비하는 설렘부터, 오래 꺼내 볼 기억까지.</p></section>
-
     <!-- 통합 스마트 여행 필터 & 검색 허브 (100% 모바일 1화면 최적화, 스크롤 0px) -->
     <div class="p-2.5 sm:p-3.5 rounded-2xl bg-white dark:bg-[#16181d] border border-[#e8e2d5] dark:border-stone-800 shadow-[0_2px_12px_rgba(0,0,0,0.03)] space-y-2.5">
       
@@ -836,26 +834,26 @@
         </button>
       </div>
 
-      <!-- 3. 드롭다운 4대 정밀 필터 (국가, 도시, 컨셉, 필터 - 모바일 2x2, 데스크톱 4열 최적화) -->
-      <div class="grid grid-cols-2 sm:grid-cols-4 gap-1.5 sm:gap-2">
+      <!-- 3. 드롭다운 3대 정밀 필터 (국가, 도시, 컨셉 - 1줄 3컬럼 최적화) -->
+      <div class="grid grid-cols-3 gap-1.5 sm:gap-2">
         <!-- 1. 국가 필터 -->
         <div class="relative">
-          <select id="hub-filter-country" onchange="handleHubCountryChange()" class="w-full px-2.5 py-2 bg-[#faf8f5] dark:bg-[#0f1117] border border-[#e8e2d5] dark:border-stone-700 rounded-xl text-xs font-bold text-[#44403c] dark:text-stone-200 focus:outline-none focus:border-[#a2601b] cursor-pointer truncate shadow-sm">
-            <option value="all">전체 국가</option>
+          <select id="hub-filter-country" onchange="handleHubCountryChange()" class="w-full px-2 py-2 bg-[#faf8f5] dark:bg-[#0f1117] border border-[#e8e2d5] dark:border-stone-700 rounded-xl text-xs font-bold text-[#44403c] dark:text-stone-200 focus:outline-none focus:border-[#a2601b] cursor-pointer truncate shadow-sm">
+            <option value="all">국가</option>
           </select>
         </div>
 
         <!-- 2. 도시 필터 -->
         <div class="relative">
-          <select id="hub-filter-city" onchange="handleHubFilterChange()" class="w-full px-2.5 py-2 bg-[#faf8f5] dark:bg-[#0f1117] border border-[#e8e2d5] dark:border-stone-700 rounded-xl text-xs font-bold text-[#44403c] dark:text-stone-200 focus:outline-none focus:border-[#a2601b] cursor-pointer truncate shadow-sm">
-            <option value="all">전체 도시</option>
+          <select id="hub-filter-city" onchange="handleHubFilterChange()" class="w-full px-2 py-2 bg-[#faf8f5] dark:bg-[#0f1117] border border-[#e8e2d5] dark:border-stone-700 rounded-xl text-xs font-bold text-[#44403c] dark:text-stone-200 focus:outline-none focus:border-[#a2601b] cursor-pointer truncate shadow-sm">
+            <option value="all">도시</option>
           </select>
         </div>
 
         <!-- 3. 컨셉 필터 -->
         <div class="relative">
-          <select id="hub-filter-concept" onchange="handleHubFilterChange()" class="w-full px-2.5 py-2 bg-[#faf8f5] dark:bg-[#0f1117] border border-[#e8e2d5] dark:border-stone-700 rounded-xl text-xs font-bold text-[#44403c] dark:text-stone-200 focus:outline-none focus:border-[#a2601b] cursor-pointer truncate shadow-sm">
-            <option value="all">전체 컨셉</option>
+          <select id="hub-filter-concept" onchange="handleHubFilterChange()" class="w-full px-2 py-2 bg-[#faf8f5] dark:bg-[#0f1117] border border-[#e8e2d5] dark:border-stone-700 rounded-xl text-xs font-bold text-[#44403c] dark:text-stone-200 focus:outline-none focus:border-[#a2601b] cursor-pointer truncate shadow-sm">
+            <option value="all">컨셉</option>
             <option value="배낭">🎒 배낭여행</option>
             <option value="럭셔리">👑 럭셔리</option>
             <option value="가족">👨‍👩‍👧 가족여행</option>
@@ -864,16 +862,6 @@
             <option value="자연">🏞️ 대자연</option>
             <option value="문화">🏛️ 역사/문화</option>
             <option value="힐링">🧘 힐링</option>
-          </select>
-        </div>
-
-        <!-- 4. 정렬/세부 필터 -->
-        <div class="relative">
-          <select id="hub-filter-sort" onchange="handleHubFilterChange()" class="w-full px-2.5 py-2 bg-[#faf8f5] dark:bg-[#0f1117] border border-[#e8e2d5] dark:border-stone-700 rounded-xl text-xs font-bold text-[#44403c] dark:text-stone-200 focus:outline-none focus:border-[#a2601b] cursor-pointer truncate shadow-sm">
-            <option value="latest">최신 등록순</option>
-            <option value="date-asc">출발일 빠른순</option>
-            <option value="budget-desc">예산 높은순</option>
-            <option value="budget-asc">예산 낮은순</option>
           </select>
         </div>
       </div>
@@ -885,15 +873,23 @@
 
     </div>
 
-    <!-- 여행 카드 목록 섹션 헤더 -->
-    <div class="flex items-center justify-between pt-1">
-      <div class="flex items-center gap-2">
-        <h3 class="text-base sm:text-lg font-black text-[#1c1917]">등록된 여행 컬렉션</h3>
-        <span id="badge-trips-count" class="px-2 py-0.5 rounded-full bg-[#f0ece1] text-[#a2601b] font-bold text-xs">0</span>
+    <!-- 여행 카드 목록 섹션 헤더 (정렬 드롭다운 인라인 통합) -->
+    <div class="flex items-center justify-between pt-1 gap-2">
+      <div class="flex items-center gap-1.5 sm:gap-2 shrink-0">
+        <h3 class="text-sm sm:text-base font-black text-[#1c1917] dark:text-white">등록된 여행 컬렉션</h3>
+        <span id="badge-trips-count" class="px-2 py-0.5 rounded-full bg-[#f0ece1] dark:bg-stone-800 text-[#a2601b] dark:text-amber-400 font-bold text-xs">0</span>
       </div>
-      <button onclick="openCreateTripModal()" class="text-xs font-bold text-[#a2601b] hover:text-[#8a5015] flex items-center gap-1 transition cursor-pointer">
-        <i class="fa-solid fa-plus text-[10px]"></i> 새 여행 만들기
-      </button>
+      <div class="flex items-center gap-1.5 sm:gap-2">
+        <select id="hub-filter-sort" onchange="handleHubFilterChange()" class="px-2 py-1 bg-[#faf8f5] dark:bg-[#0f1117] border border-[#e8e2d5] dark:border-stone-700 rounded-xl text-xs font-bold text-[#44403c] dark:text-stone-300 focus:outline-none focus:border-[#a2601b] cursor-pointer shadow-xs" title="여행 정렬 방식 선택">
+          <option value="latest">최신 등록순</option>
+          <option value="date-asc">출발일 빠른순</option>
+          <option value="budget-desc">예산 높은순</option>
+          <option value="budget-asc">예산 낮은순</option>
+        </select>
+        <button onclick="openCreateTripModal()" class="text-xs font-bold text-[#a2601b] hover:text-[#8a5015] flex items-center gap-1 transition cursor-pointer shrink-0">
+          <i class="fa-solid fa-plus text-[10px]"></i> <span class="hidden xs:inline">새 여행 만들기</span><span class="xs:hidden">새 여행</span>
+        </button>
+      </div>
     </div>
 
     <!-- 여행 카드 그리드/리스트 컨테이너 -->
@@ -3362,11 +3358,18 @@
 
       <!-- 버전 목록 스크롤 영역 -->
       <div class="flex-1 overflow-y-auto space-y-3 pr-1 text-xs">
-        <!-- v1.5.6 (Current) -->
+        <!-- v1.5.7 (Current) -->
         <div class="p-4 rounded-2xl border-2 border-emerald-500/40 space-y-2.5 bg-emerald-500/5 dark:bg-emerald-500/10">
-          <div class="flex items-center justify-between gap-2"><div class="flex items-center gap-2 min-w-0"><span class="px-2 py-0.5 rounded-lg bg-emerald-500 text-black font-black text-xs shadow-sm shrink-0">v1.5.6</span><span class="text-xs font-black text-[#1c1917] dark:text-white">다통화 수입(Income) 지갑 미반영 및 지출 합산 버그 완치, 입금 지갑 스마트 분기 체계 구축</span></div><span class="companion-status shrink-0">최신 버전</span></div>
+          <div class="flex items-center justify-between gap-2"><div class="flex items-center gap-2 min-w-0"><span class="px-2 py-0.5 rounded-lg bg-emerald-500 text-black font-black text-xs shadow-sm shrink-0">v1.5.7</span><span class="text-xs font-black text-[#1c1917] dark:text-white">허브 뷰 상단 여백 최적화(히어로 배너 제거) 및 정밀 필터 1줄 통합(국가·도시·컨셉 3컬럼화)</span></div><span class="companion-status shrink-0">최신 버전</span></div>
+          <p class="text-xs leading-relaxed">사용자 실기기 피드백에 따라 모바일 첫 화면에서 불필요한 수직 공간을 차지하던 상단 문구(<b>YOUR TRAVEL NOTEBOOK / 여행은 끝나도 이야기는 계속...</b>) 히어로 섹션을 과감히 제거하여 앱 진입 즉시 여행 카드 컬렉션이 시원하게 노출되도록 개선했습니다. 또한 2줄(2x2 그리드)을 차지하던 4대 필터를 <b>[국가] [도시] [컨셉] 3대 핵심 필터 1줄(3컬럼 그리드)로 통합</b>하고, <b>[최신 등록순] 정렬 드롭다운은 하단 여행 컬렉션 헤더에 인라인으로 콤팩트하게 통합 배치</b>하여 모바일 스크롤 압박을 180px 이상 획기적으로 줄였습니다.</p>
+          <div class="text-[10px] text-stone-400 dark:text-stone-500 pt-1 border-t border-emerald-500/20 flex items-center justify-between"><span>📅 2026-09-13 릴리즈</span><span class="font-mono">st-shell-v1.5.7</span></div>
+        </div>
+
+        <!-- v1.5.6 -->
+        <div class="p-4 rounded-2xl bg-stone-50 dark:bg-stone-900/50 border border-stone-200 dark:border-stone-800 space-y-2.5 shadow-sm relative overflow-hidden">
+          <div class="flex items-center justify-between gap-2"><div class="flex items-center gap-2 min-w-0"><span class="px-2 py-0.5 rounded-lg bg-stone-200 dark:bg-stone-800 text-stone-800 dark:text-stone-200 font-bold text-[11px] font-mono shrink-0">v1.5.6</span><span class="text-xs font-bold text-[#1c1917] dark:text-stone-200">다통화 수입(Income) 지갑 미반영 및 지출 합산 버그 완치, 입금 지갑 스마트 분기 체계 구축</span></div></div>
           <p class="text-xs leading-relaxed">사용자 실기기 제보에 따라 <b>외화(USD 100 등)를 수입으로 기록했음에도 해당 통화 지갑에 반영되지 않고 지출로 잘못 합산되던 회계 엔진 결함</b>을 원천 완치했습니다. 지갑 계산 엔진(<code>calculateTripWallets</code>)에 수입(<code>income</code>) 집계 라인을 신설하여 <code>잔액 = 초기자금 + 수입 + 환전입금 - 환전출금 - 지출</code>의 복식부기 무결성을 완성했습니다. 또한 총 지출액 통계에서 수입 항목을 정확히 배제하고, 지출/수입 등록 모달에서 수입 선택 시 <b>[입금 지갑 / 수입 상세]</b>로 헤더와 카드 옵션을 스마트 전환하여 외화 수입 시 해당 외화 지갑(<code>wallet_curr</code>)으로 기본 입금되도록 정합성을 확보했습니다. 과거 잘못 기록되었던 외화 수입 내역에 대한 데이터 자동 치유 알고리즘도 함께 탑재되었습니다.</p>
-          <div class="text-[10px] text-stone-400 dark:text-stone-500 pt-1 border-t border-emerald-500/20 flex items-center justify-between"><span>📅 2026-09-12 릴리즈</span><span class="font-mono">st-shell-v1.5.6</span></div>
+          <div class="text-[10px] text-stone-400 dark:text-stone-500 pt-1 border-t border-stone-200 dark:border-stone-800 flex items-center justify-between"><span>📅 2026-09-12 릴리즈</span><span class="font-mono">st-shell-v1.5.6</span></div>
         </div>
 
         <!-- v1.5.5 -->
@@ -3919,7 +3922,7 @@
     window.showToast = showToast;
 
     // 앱 버전 및 글로벌 네임스페이스 (Sulsul-Travel Invariant Rule R-10, R-11, R-12, R-13, R-14, R-15)
-    const APP_VER = '1.5.6';
+    const APP_VER = '1.5.7';
 
     // ══════════════════════════════════════════
     // [Two-Tone Theme System] 라이트 그레이 & 딥 블랙 테마 엔진
@@ -6277,7 +6280,7 @@
       });
 
       // 1. 국가 드롭다운 갱신 (국기 + 표준 국가명 + 통화 코드)
-      let cHtml = '<option value="all">전체 국가</option>';
+      let cHtml = '<option value="all">국가</option>';
       Array.from(countriesSet).sort().forEach(c => {
         const cInfo = resolveCountryInfo(c);
         const flag = cInfo ? cInfo.flag : '🌎';
@@ -6292,7 +6295,7 @@
 
       // 2. 도시 드롭다운 갱신
       if (citySelect) {
-        let ctHtml = '<option value="all">전체 도시</option>';
+        let ctHtml = '<option value="all">도시</option>';
         Array.from(citiesSet).sort().forEach(ct => {
           ctHtml += `<option value="${escapeHtml(ct)}">${escapeHtml(ct)}</option>`;
         });
