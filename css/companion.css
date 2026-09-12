@@ -241,3 +241,113 @@ button:focus-visible, summary:focus-visible, a:focus-visible { outline:3px solid
 @media print { #companion-main-nav, #companion-plan-nav { display:none !important; } }
 .wallet-card { transition: transform 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease; }
 .wallet-card:hover { border-color: rgba(245, 158, 11, 0.4) !important; }
+
+/* ==========================================
+   Advanced Travel Expense Module Styles (v1.5.0)
+   ========================================== */
+.exp-cat-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  cursor: pointer;
+  user-select: none;
+  min-width: 52px;
+}
+.exp-cat-circle {
+  width: 48px;
+  height: 48px;
+  border-radius: 9999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  background: #080b12;
+  border: 1.5px solid #1e263c;
+  color: #94a3b8;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+}
+.exp-cat-item:hover .exp-cat-circle {
+  border-color: #38bdf8;
+  transform: translateY(-2px);
+  color: #ffffff;
+}
+.exp-cat-item.active .exp-cat-circle {
+  background: #0284c7;
+  border-color: #38bdf8;
+  color: #ffffff;
+  box-shadow: 0 0 14px rgba(56, 189, 248, 0.45);
+  transform: scale(1.06);
+}
+.exp-cat-label {
+  font-size: 11px;
+  font-weight: 700;
+  color: #94a3b8;
+  transition: color 0.2s ease;
+}
+.exp-cat-item.active .exp-cat-label {
+  color: #38bdf8;
+  font-weight: 800;
+}
+
+/* Photo Thumbnail Container */
+.exp-photo-box {
+  width: 72px;
+  height: 72px;
+  border-radius: 12px;
+  position: relative;
+  overflow: hidden;
+  border: 1.5px solid #1e263c;
+  background: #080b12;
+  flex-shrink: 0;
+  transition: border-color 0.2s ease;
+}
+.exp-photo-box.is-primary {
+  border-color: #0284c7;
+  box-shadow: 0 0 10px rgba(2, 132, 199, 0.4);
+}
+.exp-photo-thumb {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.exp-primary-badge {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(2, 132, 199, 0.9);
+  color: #ffffff;
+  font-size: 9px;
+  font-weight: 900;
+  text-align: center;
+  padding: 1.5px 0;
+  backdrop-filter: blur(2px);
+}
+.exp-photo-del-btn {
+  position: absolute;
+  top: 3px;
+  right: 3px;
+  width: 18px;
+  height: 18px;
+  border-radius: 9999px;
+  background: rgba(15, 20, 34, 0.85);
+  color: #f87171;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 9px;
+  cursor: pointer;
+  border: 1px solid rgba(248, 113, 113, 0.3);
+}
+
+/* Donut Chart Animation */
+.donut-slice {
+  transition: transform 0.2s ease, opacity 0.2s ease, stroke-width 0.2s ease;
+  cursor: pointer;
+}
+.donut-slice:hover {
+  opacity: 0.9;
+  filter: brightness(1.15);
+}
