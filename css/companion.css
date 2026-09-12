@@ -1,7 +1,7 @@
-/* Archival Journal Design System Tokens (v1.6.2) */
+/* Archival Journal Design System Tokens (v1.6.3) */
 :root, :root[data-theme="light"] {
   --bg:#F7F5F0; --surface:#FFFFFF; --surface2:#F0ECE1; --surface3:#EAE5D8;
-  --ink:#1C1C1E; --ink2:#484745; --ink3:#706E6B; --line:#E6E2D8; --line2:#D8D2C4;
+  --ink:#1E2B24; --ink2:#4A5568; --ink3:#71717A; --line:#E6E2D8; --line2:#D8D2C4;
   --accent:#2C3A2E; --accent2:#C8A27A; --accent-bg:#EAE6DC; --accent-line:#C8A27A;
   --card-bg:var(--surface); --card-border:var(--line); --header-bg:rgba(247,245,240,.96);
   --header-border:var(--line); --tab-active-bg:#2C3A2E; --tab-active-text:#F7F5F0;
@@ -26,6 +26,7 @@
 :root[data-theme="dark"] body .btn-gold * { color:#0F141C !important; }
 button, summary, a, input, select, textarea { touch-action:manipulation; }
 button:focus-visible, summary:focus-visible, a:focus-visible { outline:3px solid var(--accent); outline-offset:3px; }
+.editorial-magazine-header { transition: background-color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease; }
 .companion-app-header { box-shadow:none !important; }
 .companion-app-header .font-serif-brand { font-family:inherit; font-weight:800; letter-spacing:-.04em; }
 .companion-app-header button { min-height:44px; min-width:44px; box-shadow:none !important; }
