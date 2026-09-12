@@ -5,11 +5,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>술술트래블 (Sulsul-Travel) - 인생 여행 다이어리 & AI 어시스턴트</title>
 
-  <!-- 2-Tone Theme FOUC Prevention Script -->
+  <!-- 3-Way Theme FOUC Prevention Script (v1.6.7) -->
   <script>
     (function() {
-      var savedTheme = localStorage.getItem('st_theme') || 'light';
+      var savedTheme = localStorage.getItem('st_theme') || 'modern';
+      if (savedTheme === 'light') savedTheme = 'modern';
+      if (savedTheme === 'dark') savedTheme = 'deepblack';
       document.documentElement.setAttribute('data-theme', savedTheme);
+      if (savedTheme === 'deepblack') document.documentElement.classList.add('dark');
     })();
   </script>
 
@@ -29,7 +32,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Great+Vibes&family=Cormorant+Garamond:wght@600;700;800&family=Noto+Serif+KR:wght@500;600;700;900&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
 
   <!-- Local Utilities Bundle (CDN fallback & tailwind utilities) -->
-  <link rel="stylesheet" href="css/utilities.css?v=1.6.6">
+  <link rel="stylesheet" href="css/utilities.css?v=1.6.7">
   <link rel="stylesheet" href="vendor/fontawesome/css/all.min.css">
 
   <!-- Leaflet Map CSS & JS -->
@@ -777,8 +780,8 @@
     }
   </style>
 
-  <link rel="stylesheet" href="css/companion.css?v=1.6.6">
-  <script src="js/presentation/companion-ui.js?v=1.6.6"></script>
+  <link rel="stylesheet" href="css/companion.css?v=1.6.7">
+  <script src="js/presentation/companion-ui.js?v=1.6.7"></script>
 
   <!-- Knowledge Base Seed & Destination Knowledge Packs (DKP) -->
   <script src="kb-travel.js"></script>
@@ -795,41 +798,39 @@
   <!-- 1. 앱 헤더 (APP-HEADER) -->
   <!-- ========================================== -->
   <header class="sticky top-0 z-40 bg-[#faf8f5]/90 dark:bg-[#121316]/90 backdrop-blur-md border-b border-[#e8e2d5] dark:border-stone-800 transition-colors">
-    <div class="max-w-6xl mx-auto px-4 h-14 flex items-center justify-between gap-2">
-      <!-- 좌측 브랜드 로고 & 워크스페이스 타이틀 (새로 만든 빈티지 베어 마스코트 + 필기체 영문 로고) -->
-      <div class="flex items-center gap-2.5 min-w-0 cursor-pointer select-none" onclick="switchView('hub')">
-        <img src="icons/sulsul_bear_mascot.png" class="w-9 h-9 rounded-xl object-cover border border-[#e6e2d8] dark:border-stone-800 shadow-sm shrink-0" alt="Sulsul Travel">
-        <div class="min-w-0">
-          <div class="flex items-center gap-1.5">
-            <h1 class="font-brand-script text-2xl sm:text-3xl font-bold tracking-normal text-[#1E2B24] dark:text-[#ededed] truncate leading-none pt-0.5">Sulsul Travel</h1>
-          </div>
-          <p id="header-trip-name" class="text-[10px] sm:text-[11px] text-[#78716c] dark:text-stone-400 truncate max-w-[130px] sm:max-w-xs font-normal">인생의 모든 여정을 기록하는 다이어리</p>
+    <div class="max-w-6xl mx-auto px-3 sm:px-4 h-14 flex items-center justify-between gap-1.5 sm:gap-2">
+      <!-- 좌측 브랜드 로고 & 워크스페이스 타이틀 (새로 만든 빈티지 베어 마스코트 + 필기체 영문 로고 + A Deep Life Essay) -->
+      <div class="flex items-center gap-2 sm:gap-2.5 min-w-0 cursor-pointer select-none" onclick="switchView('hub')">
+        <img src="icons/sulsul_bear_mascot.png" class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl object-cover border border-[#e6e2d8] dark:border-stone-800 shadow-sm shrink-0" alt="Sulsul Travel">
+        <div class="min-w-0 flex flex-col justify-center">
+          <h1 class="font-brand-script text-xl sm:text-2xl md:text-3xl font-bold tracking-normal text-[#1E2B24] dark:text-[#ededed] whitespace-nowrap leading-tight">Sulsul Travel</h1>
+          <p id="header-trip-name" class="font-serif text-[10px] sm:text-xs tracking-wider text-[#6B5E51] dark:text-stone-400 whitespace-nowrap font-medium leading-none">A Deep Life Essay</p>
         </div>
       </div>
 
-      <!-- 우측 액션 클러스터 (동일한 정사각/스퀘어 박스 4단 버튼: 버전 -> 통계 -> 설정 -> +추가) -->
+      <!-- 우측 액션 클러스터 (버전 알약 -> 원형 통계 -> 원형 설정 -> 다크그린 캡슐 추가) -->
       <div class="flex items-center gap-1 sm:gap-1.5 shrink-0">
-        <!-- 1. 버전 배지 버튼 (v1.6.6 - 클릭 시 버전 이력) -->
-        <button id="app-ver-badge" onclick="event.stopPropagation(); openVersionHistoryModal()" class="h-8 px-2 rounded-xl theme-card-subtle flex items-center justify-center font-mono text-[10px] font-bold text-[#a2601b] dark:text-[#d4af37] shadow-sm hover:border-amber-500/60 transition cursor-pointer shrink-0" title="버전 업데이트 기록 보기 (클릭)">v1.6.6</button>
+        <!-- 1. 버전 배지 버튼 (v1.6.7 - 클릭 시 버전 이력) -->
+        <button id="app-ver-badge" onclick="event.stopPropagation(); openVersionHistoryModal()" class="h-7 sm:h-8 px-2 sm:px-2.5 rounded-full theme-card-subtle flex items-center justify-center font-mono text-[10px] sm:text-[11px] font-bold text-[#a2601b] dark:text-[#d4af37] shadow-xs hover:border-amber-500/60 transition cursor-pointer shrink-0" title="버전 업데이트 기록 보기 (클릭)">v1.6.7</button>
 
-        <!-- 2. 통계 버튼 (📊 - 네모박스 형태, 통계 문양) -->
-        <button id="header-btn-analytics" onclick="openAnalyticsModal('lifetime')" class="companion-header-analytics w-8 h-8 rounded-xl theme-card-subtle flex items-center justify-center text-[#a2601b] dark:text-[#d4af37] hover:border-amber-500/60 transition shadow-sm cursor-pointer shrink-0" title="술술 여행 통계 대시보드">
+        <!-- 2. 통계 버튼 (📊 - 원형 버튼) -->
+        <button id="header-btn-analytics" onclick="openAnalyticsModal('lifetime')" class="companion-header-analytics w-7 h-7 sm:w-8 sm:h-8 rounded-full theme-card-subtle flex items-center justify-center text-[#a2601b] dark:text-[#d4af37] hover:border-amber-500/60 transition shadow-xs cursor-pointer shrink-0" title="술술 여행 통계 대시보드">
           <i class="fa-solid fa-chart-pie text-xs" aria-hidden="true"></i>
         </button>
 
-        <!-- 3. 설정 버튼 (⚙️ - 네모박스 형태) -->
-        <button onclick="openSettingsModal()" class="w-8 h-8 rounded-xl theme-card-subtle flex items-center justify-center text-[#44403c] dark:text-stone-300 hover:border-amber-500/60 transition shadow-sm cursor-pointer shrink-0" title="앱 설정 & AI & 백업">
+        <!-- 3. 설정 버튼 (⚙️ - 원형 버튼) -->
+        <button onclick="openSettingsModal()" class="w-7 h-7 sm:w-8 sm:h-8 rounded-full theme-card-subtle flex items-center justify-center text-[#44403c] dark:text-stone-300 hover:border-amber-500/60 transition shadow-xs cursor-pointer shrink-0" title="앱 설정 & AI & 백업">
           <i class="fa-solid fa-sliders text-xs" aria-hidden="true"></i>
         </button>
 
-        <!-- 4. + 추가 버튼 (허브 모드 활성 시 노출) -->
-        <button id="header-btn-create-trip" onclick="openCreateTripModal()" class="h-8 px-2.5 sm:px-3 rounded-xl btn-gold text-xs font-black flex items-center gap-1 shadow-sm transition cursor-pointer shrink-0" title="새 여행 추가 및 AI 일정 설계">
+        <!-- 4. + 추가 버튼 (허브 모드 활성 시 노출 - 둥근 캡슐) -->
+        <button id="header-btn-create-trip" onclick="openCreateTripModal()" class="h-7 sm:h-8 px-2.5 sm:px-3.5 rounded-full btn-gold text-xs font-black flex items-center gap-1 shadow-sm transition cursor-pointer shrink-0" title="새 여행 추가 및 AI 일정 설계">
           <i class="fa-solid fa-plus text-[10px]"></i>
           <span>추가</span>
         </button>
 
         <!-- 4-ALT. ‹ 허브 복귀 버튼 (워크스페이스 모드 활성 시 노출) -->
-        <button id="header-btn-back-hub" onclick="switchView('hub')" class="hidden h-8 px-2.5 sm:px-3 rounded-xl btn-gold text-xs font-black transition flex items-center gap-1 shadow-sm cursor-pointer shrink-0" title="인생 여행 허브로 돌아가기">
+        <button id="header-btn-back-hub" onclick="switchView('hub')" class="hidden h-7 sm:h-8 px-2.5 sm:px-3.5 rounded-full btn-gold text-xs font-black transition flex items-center gap-1 shadow-sm cursor-pointer shrink-0" title="인생 여행 허브로 돌아가기">
           <i class="fa-solid fa-arrow-left text-[10px]"></i>
           <span>내 여행</span>
         </button>
@@ -849,13 +850,6 @@
     
     <!-- 스마트 웰컴 배너 (미설치 시 최상단 안내 및 원클릭 설치) -->
     <div id="smart-welcome-banner" class="hidden"></div>
-
-    <!-- 에디토리얼 브랜드 단일 라인 슬로건 바 (Single-line Slogan) -->
-    <div class="sulsul-slogan-bar flex items-center justify-center px-4 py-2 rounded-xl bg-white/70 dark:bg-[#16181d]/70 border border-[#E6E2D8] dark:border-stone-800/80 shadow-xs select-none">
-      <p class="text-xs sm:text-sm font-semibold tracking-tight text-[#1E2B24] dark:text-[#EDEDED] text-center truncate">
-        여행의 설렘이, 삶의 깊은 에세이로...
-      </p>
-    </div>
 
     <!-- 통합 스마트 여행 필터 & 검색 허브 (100% 모바일 1화면 최적화, 스크롤 0px) -->
     <div class="p-2.5 sm:p-3.5 rounded-2xl bg-white dark:bg-[#16181d] border border-[#e8e2d5] dark:border-stone-800 shadow-[0_2px_12px_rgba(0,0,0,0.03)] space-y-2.5">
@@ -2905,20 +2899,27 @@
                 <i class="fa-solid fa-circle-half-stroke text-[#a2601b] dark:text-[#d4af37]"></i>
                 <span>컬러 테마 모드</span>
               </span>
-              <span id="settings-current-theme-badge" class="text-[10px] font-black px-2.5 py-0.5 rounded-full bg-amber-100 dark:bg-amber-950/50 text-amber-950 dark:text-amber-300 border border-amber-300 dark:border-amber-700">라이트 그레이</span>
+              <span id="settings-current-theme-badge" class="text-[10px] font-black px-2.5 py-0.5 rounded-full bg-amber-100 dark:bg-amber-950/50 text-amber-950 dark:text-amber-300 border border-amber-300 dark:border-amber-700">모던</span>
             </div>
             <p class="text-[11px] leading-relaxed" style="color: var(--ink2);">
-              주간 시인성이 뛰어난 애플 포그 <b>라이트 그레이</b>와 야간 눈부심을 줄인 <b>딥 블랙(Deep Onyx)</b> 모드를 자유롭게 전환할 수 있습니다.
+              고풍스러운 양장본 고서 감성의 <b>모던(빈티지 아카이벌)</b>, 단정하고 깔끔한 <b>라이트그레이</b>, 눈부심을 최소화한 <b>딥 블랙(옵시디언 다크)</b> 3대 테마를 자유롭게 선택할 수 있습니다.
             </p>
-            <div class="grid grid-cols-2 gap-2 pt-1">
-              <button id="btn-theme-light" onclick="setTheme('light')" class="py-2.5 px-3 rounded-xl border font-black text-xs flex items-center justify-center gap-2 transition cursor-pointer">
-                <span class="text-sm">☀️</span>
-                <span id="btn-theme-light-txt">라이트 그레이</span>
+            <div class="grid grid-cols-3 gap-1.5 pt-1">
+              <button id="btn-theme-modern" onclick="setTheme('modern')" class="py-2.5 px-2 rounded-xl border font-black text-[11px] flex flex-col items-center justify-center gap-1 transition cursor-pointer">
+                <span class="text-base">📜</span>
+                <span id="btn-theme-modern-txt">모던</span>
               </button>
-              <button id="btn-theme-dark" onclick="setTheme('dark')" class="py-2.5 px-3 rounded-xl border font-black text-xs flex items-center justify-center gap-2 transition cursor-pointer">
-                <span class="text-sm">🌙</span>
-                <span id="btn-theme-dark-txt">딥 블랙</span>
+              <button id="btn-theme-lightgray" onclick="setTheme('lightgray')" class="py-2.5 px-2 rounded-xl border font-black text-[11px] flex flex-col items-center justify-center gap-1 transition cursor-pointer">
+                <span class="text-base">☀️</span>
+                <span id="btn-theme-lightgray-txt">라이트그레이</span>
               </button>
+              <button id="btn-theme-deepblack" onclick="setTheme('deepblack')" class="py-2.5 px-2 rounded-xl border font-black text-[11px] flex flex-col items-center justify-center gap-1 transition cursor-pointer">
+                <span class="text-base">🌙</span>
+                <span id="btn-theme-deepblack-txt">딥 블랙</span>
+              </button>
+              <!-- 하위 호환성 유지용 숨김 버튼 -->
+              <button id="btn-theme-light" onclick="setTheme('light')" class="hidden"><span id="btn-theme-light-txt">라이트</span></button>
+              <button id="btn-theme-dark" onclick="setTheme('dark')" class="hidden"><span id="btn-theme-dark-txt">다크</span></button>
             </div>
           </div>
 
@@ -3516,10 +3517,33 @@
         <button onclick="closeModal('modal-version-history')" class="w-7 h-7 rounded-lg bg-[#faf8f5] dark:bg-stone-800 hover:bg-[#f0ece1] dark:hover:bg-stone-700 text-[#78716c] dark:text-stone-300 flex items-center justify-center text-sm transition cursor-pointer" title="닫기">✕</button>
       </div>
 
-      <!-- 버전 목록 스크롤 영역 -->
-        <!-- v1.6.6 (Current) -->
-        <div class="p-4 rounded-2xl border-2 border-emerald-500/40 space-y-2.5 bg-emerald-500/5 dark:bg-emerald-500/10">
-          <div class="flex items-center justify-between gap-2"><div class="flex items-center gap-2 min-w-0"><span class="px-2 py-0.5 rounded-lg bg-emerald-500 text-black font-black text-xs shadow-sm shrink-0">v1.6.6</span><span class="text-xs font-black text-[#1c1917] dark:text-white">워크스페이스 상단 중복 제거, 공유 버튼 시인성 버그 척결 및 모바일 UX 고도화</span></div><span class="companion-status shrink-0">최신 버전</span></div>
+      <!-- 버전 목록 스크롤 영역 (독립 스크롤 컨테이너로 Flexbox 압축 버그 영구 척결) -->
+      <div class="overflow-y-auto flex-1 min-h-0 space-y-3.5 pr-1.5 custom-scrollbar">
+        <!-- v1.6.7 (Current) -->
+        <div class="p-4 rounded-2xl border-2 border-emerald-500/50 space-y-2.5 bg-emerald-500/5 dark:bg-emerald-500/10 shrink-0 shadow-sm">
+          <div class="flex items-center justify-between gap-2">
+            <div class="flex items-center gap-2 min-w-0">
+              <span class="px-2.5 py-0.5 rounded-lg bg-emerald-500 text-black font-black text-xs shadow-sm shrink-0">v1.6.7</span>
+              <span class="text-xs font-black text-[#1c1917] dark:text-white truncate">3대 테마 시스템, 메인 타이틀 & 카드 캡슐 액션 개편, AI 일정 튜닝 분리 및 버전 기록 쇄신</span>
+            </div>
+            <span class="companion-status shrink-0">최신 버전</span>
+          </div>
+          <p class="text-xs leading-relaxed text-[#44403c] dark:text-stone-300">
+            1) <b>3대 컬러 테마 시스템 도입</b>: 고풍스러운 양장본 고서 감성의 <b>'모던(빈티지 아카이벌)'</b>, 눈이 편안한 <b>'라이트그레이(클린 미니멀)'</b>, 야간 눈부심을 최소화한 <b>'딥 블랙(옵시디언 다크)'</b> 3대 테마를 완성하고 설정 모달에 3단 전환 셀렉터를 탑재했습니다.<br>
+            2) <b>상단 메인 타이틀 엣지 디자인 & 슬로건 일체화</b>: 붕 떠 있던 슬로건 박스를 걷어내고, 빈티지 베어 마스코트 아래 <i>“A Deep Life Essay”</i> 세리프 자간 확장 서브타이틀을 일체화하여 매거진 북커버 미학을 완성했습니다.<br>
+            3) <b>여행 카드 캡슐 액션 필 버튼</b>: 여행 카드 하단 액션 버튼을 둥근 타원형 캡슐(<code>[📷][📋][🌐][📄 PDF][열기 >]</code>)로 전면 개편했습니다.<br>
+            4) <b>큰 계획 AI 일정 튜닝 분리</b>: 22일 대형 여정에서 토큰 제한으로 5일차만 수정되던 기존 초안 모달 대신, 이미 일정이 있는 여행에서는 <b>[ ⚡ AI 스마트 일정 튜닝 ]</b>(전체 일정 재배치·교통/기상 대응)으로 자동 전환되도록 UX를 혁신했습니다.<br>
+            5) <b>버전 히스토리 모달 Flexbox 버그 척결</b>: 내부 카드들이 얇은 띠로 찌그러지던 Flexbox 버그를 전용 스크롤 컨테이너로 완전 해결하고 정갈한 아카이벌 타임라인 컨셉을 구축했습니다.
+          </p>
+          <div class="text-[10px] text-stone-400 dark:text-stone-500 pt-1 border-t border-emerald-500/20 flex items-center justify-between">
+            <span>📅 2026-09-13 릴리즈</span>
+            <span class="font-mono">st-shell-v1.6.7</span>
+          </div>
+        </div>
+
+        <!-- v1.6.6 -->
+        <div class="p-4 rounded-2xl bg-stone-50 dark:bg-stone-900/50 border border-stone-200 dark:border-stone-800 space-y-2.5 shadow-sm relative overflow-hidden shrink-0">
+          <div class="flex items-center justify-between gap-2"><div class="flex items-center gap-2 min-w-0"><span class="px-2 py-0.5 rounded-lg bg-stone-200 dark:bg-stone-800 text-stone-800 dark:text-stone-200 font-bold text-[11px] font-mono shrink-0">v1.6.6</span><span class="text-xs font-bold text-[#1c1917] dark:text-stone-200">워크스페이스 상단 중복 제거, 공유 버튼 시인성 버그 척결 및 모바일 UX 고도화</span></div></div>
           <p class="text-xs leading-relaxed">1) <b>워크스페이스 상단 중복 기능 제거</b>: 하단 플랜 탭의 '지도·가이드'와 완전히 중복되던 상단 액션 바의 지도 버튼(<code>#ws-btn-header-map</code>)을 숨김 처리하여 화면 공간을 절약하고 동선 혼선을 해소했습니다. 2) <b>공유 버튼 글자 시인성 버그 완전 척결</b>: <code>.btn-gold *</code>의 흰색 폰트 강제 규칙과 <code>companion.css</code>의 서피스 배경 오버라이드로 인해 발생하던 '흰색 바탕에 흰색 글자' 증상의 근본 원인을 규명하고, 테마 카드 시스템(<code>theme-card-subtle</code>)과 명시적 고대비(WCAG AAA 13.5:1) 폰트 색상을 확립하여 라이트/다크 모드 전반에서 완벽한 가독성을 보장합니다. 3) <b>모바일 여정 네비게이션 UX 개선</b>: 거점 칩 목록(<code>.companion-route</code>)과 날짜 피커의 투박한 브라우저 가로 스크롤바를 전면 제거하고 터치 제스처에 최적화했으며, 거점 칩 터치 시 해당 도시 카드(<code>#companion-block-idx</code>)로 부드럽게 스크롤 이동(Smooth Scroll & Focus Ring)하는 퀵 점프 인터랙션을 도입했습니다.</p>
           <div class="text-[10px] text-stone-400 dark:text-stone-500 pt-1 border-t border-emerald-500/20 flex items-center justify-between"><span>📅 2026-09-13 릴리즈</span><span class="font-mono">st-shell-v1.6.6</span></div>
         </div>
@@ -4081,7 +4105,7 @@
 
       <!-- 모달 푸터 -->
       <div class="pt-3 border-t border-[#e8e2d5] dark:border-stone-800 flex items-center justify-between shrink-0">
-        <span class="text-[11px] text-stone-400 dark:text-stone-500 font-mono">Sulsul Travel Engine v1.6.6</span>
+        <span class="text-[11px] text-stone-400 dark:text-stone-500 font-mono">Sulsul Travel Engine v1.6.7</span>
         <button onclick="closeModal('modal-version-history')" class="px-4 py-2 rounded-xl bg-[#faf8f5] dark:bg-stone-800 hover:bg-[#f0ece1] dark:hover:bg-stone-700 border border-[#e8e2d5] dark:border-stone-700 text-[#1c1917] dark:text-[#ededed] text-xs font-bold transition cursor-pointer shadow-sm">
           닫기
         </button>
@@ -4144,78 +4168,99 @@
     window.showToast = showToast;
 
     // 앱 버전 및 글로벌 네임스페이스 (Sulsul-Travel Invariant Rule R-10, R-11, R-12, R-13, R-14, R-15)
-    const APP_VER = '1.6.6';
+    const APP_VER = '1.6.7';
 
     // ══════════════════════════════════════════
-    // [Two-Tone Theme System] 라이트 그레이 & 딥 블랙 테마 엔진
+    // [3-Way Theme System] 모던, 라이트그레이, 딥 블랙 테마 엔진 (v1.6.7)
     // ══════════════════════════════════════════
     function setTheme(theme) {
-      if (theme !== 'dark') theme = 'light';
+      if (theme === 'light') theme = 'modern';
+      if (theme === 'dark') theme = 'deepblack';
+      if (theme !== 'modern' && theme !== 'lightgray' && theme !== 'deepblack') {
+        theme = 'modern';
+      }
       document.documentElement.setAttribute('data-theme', theme);
-      document.documentElement.classList.toggle('dark', theme === 'dark');
+      document.documentElement.classList.toggle('dark', theme === 'deepblack');
       localStorage.setItem('st_theme', theme);
       updateThemeUi(theme);
     }
 
     function toggleTheme() {
-      const current = document.documentElement.getAttribute('data-theme') || 'light';
-      const next = current === 'dark' ? 'light' : 'dark';
+      const current = document.documentElement.getAttribute('data-theme') || 'modern';
+      const cycle = {
+        modern: 'lightgray',
+        light: 'lightgray',
+        lightgray: 'deepblack',
+        deepblack: 'modern',
+        dark: 'modern'
+      };
+      const next = cycle[current] || 'modern';
       setTheme(next);
       if (typeof showToast === 'function') {
-        showToast(next === 'dark' ? '🌙 딥 블랙 럭셔리 테마가 적용되었습니다.' : '☀️ 라이트 그레이 정통 테마가 적용되었습니다.');
+        const labels = {
+          modern: '📜 모던 (빈티지 아카이벌) 테마가 적용되었습니다.',
+          lightgray: '☀️ 라이트그레이 (클린 미니멀) 테마가 적용되었습니다.',
+          deepblack: '🌙 딥 블랙 (옵시디언 럭셔리) 테마가 적용되었습니다.'
+        };
+        showToast(labels[next] || '테마가 전환되었습니다.');
       }
     }
 
     function updateThemeUi(theme) {
-      const isDark = theme === 'dark';
+      const isDark = theme === 'deepblack' || theme === 'dark';
+      const isLightgray = theme === 'lightgray';
+      const isModern = !isDark && !isLightgray;
+
       // 1. 헤더 테마 아이콘 및 툴팁
       const headerIcon = document.getElementById('header-theme-icon');
       if (headerIcon) {
-        headerIcon.innerText = isDark ? '☀️' : '🌙';
+        headerIcon.innerText = isDark ? '🌙' : (isLightgray ? '☀️' : '📜');
       }
       const headerBtn = document.getElementById('header-btn-theme');
       if (headerBtn) {
-        headerBtn.setAttribute('title', isDark ? '라이트 그레이 테마로 전환' : '딥 블랙 테마로 전환');
+        headerBtn.setAttribute('title', isModern ? '라이트그레이 테마로 전환' : (isLightgray ? '딥 블랙 테마로 전환' : '모던 테마로 전환'));
       }
 
-      // 2. 설정 모달 테마 뱃지 및 버튼 활성 상태 (술술실록 18호: 텍스트 증발 방어)
+      // 2. 설정 모달 테마 뱃지 및 3단 버튼 활성 상태
       const badge = document.getElementById('settings-current-theme-badge');
       if (badge) {
-        badge.innerText = isDark ? '딥 블랙 (Deep Onyx)' : '라이트 그레이 (Apple Fog)';
+        badge.innerText = isModern ? '모던 (Vintage Archival)' : (isLightgray ? '라이트그레이 (Clean Minimal)' : '딥 블랙 (Deep Obsidian)');
       }
+      const btnModern = document.getElementById('btn-theme-modern');
+      const btnLightgray = document.getElementById('btn-theme-lightgray');
+      const btnDeepblack = document.getElementById('btn-theme-deepblack');
+      const btnModernTxt = document.getElementById('btn-theme-modern-txt');
+      const btnLightgrayTxt = document.getElementById('btn-theme-lightgray-txt');
+      const btnDeepblackTxt = document.getElementById('btn-theme-deepblack-txt');
+
+      const activeClassModern = "py-2.5 px-2 rounded-xl bg-[#2C3A2E] text-white border border-[#2C3A2E] font-black text-[11px] flex flex-col items-center justify-center gap-1 shadow-sm transition ring-2 ring-[#2C3A2E]/40 cursor-pointer";
+      const activeClassLightgray = "py-2.5 px-2 rounded-xl bg-[#111827] text-white border border-[#111827] font-black text-[11px] flex flex-col items-center justify-center gap-1 shadow-sm transition ring-2 ring-stone-900/30 cursor-pointer";
+      const activeClassDeepblack = "py-2.5 px-2 rounded-xl bg-[#d4af37] text-[#0b0c0e] border border-[#d4af37] font-black text-[11px] flex flex-col items-center justify-center gap-1 shadow-sm transition ring-2 ring-amber-400/40 cursor-pointer";
+      const inactiveClass = "py-2.5 px-2 rounded-xl bg-[var(--surface2)] text-[var(--ink)] border border-[var(--line)] font-bold text-[11px] flex flex-col items-center justify-center gap-1 transition cursor-pointer hover:border-[var(--accent)]";
+
+      if (btnModern) {
+        btnModern.className = isModern ? activeClassModern : inactiveClass;
+        if (btnModernTxt) { btnModernTxt.style.color = isModern ? '#ffffff' : 'var(--ink)'; btnModernTxt.style.fontWeight = isModern ? '900' : '700'; }
+      }
+      if (btnLightgray) {
+        btnLightgray.className = isLightgray ? activeClassLightgray : inactiveClass;
+        if (btnLightgrayTxt) { btnLightgrayTxt.style.color = isLightgray ? '#ffffff' : 'var(--ink)'; btnLightgrayTxt.style.fontWeight = isLightgray ? '900' : '700'; }
+      }
+      if (btnDeepblack) {
+        btnDeepblack.className = isDark ? activeClassDeepblack : inactiveClass;
+        if (btnDeepblackTxt) { btnDeepblackTxt.style.color = isDark ? '#0b0c0e' : 'var(--ink)'; btnDeepblackTxt.style.fontWeight = isDark ? '900' : '700'; }
+      }
+
+      // 하위 호환용 2개 버튼 상태 동기화 (오류 방지)
       const btnLight = document.getElementById('btn-theme-light');
       const btnDark = document.getElementById('btn-theme-dark');
-      const btnLightTxt = document.getElementById('btn-theme-light-txt');
-      const btnDarkTxt = document.getElementById('btn-theme-dark-txt');
-
-      if (btnLight && btnDark) {
-        if (isDark) {
-          btnDark.className = "py-2.5 px-3 rounded-xl bg-[#d4af37] border border-[#d4af37] font-black text-xs flex items-center justify-center gap-2 shadow-sm transition ring-2 ring-amber-400/40 cursor-pointer";
-          btnDark.style.backgroundColor = '#d4af37';
-          btnDark.style.color = '#0b0c0e';
-          if (btnDarkTxt) { btnDarkTxt.style.color = '#0b0c0e'; btnDarkTxt.style.fontWeight = '900'; }
-
-          btnLight.className = "py-2.5 px-3 rounded-xl bg-[var(--surface2)] border border-[var(--line)] font-bold text-xs flex items-center justify-center gap-2 transition cursor-pointer";
-          btnLight.style.backgroundColor = 'var(--surface2)';
-          btnLight.style.color = 'var(--ink)';
-          if (btnLightTxt) { btnLightTxt.style.color = 'var(--ink)'; btnLightTxt.style.fontWeight = '700'; }
-        } else {
-          btnLight.className = "py-2.5 px-3 rounded-xl bg-[#111827] border border-[#111827] font-black text-xs flex items-center justify-center gap-2 shadow-sm transition ring-2 ring-stone-900/30 cursor-pointer";
-          btnLight.style.backgroundColor = '#111827';
-          btnLight.style.color = '#ffffff';
-          if (btnLightTxt) { btnLightTxt.style.color = '#ffffff'; btnLightTxt.style.fontWeight = '900'; }
-
-          btnDark.className = "py-2.5 px-3 rounded-xl bg-[var(--surface2)] border border-[var(--line)] font-bold text-xs flex items-center justify-center gap-2 transition cursor-pointer";
-          btnDark.style.backgroundColor = 'var(--surface2)';
-          btnDark.style.color = 'var(--ink)';
-          if (btnDarkTxt) { btnDarkTxt.style.color = 'var(--ink)'; btnDarkTxt.style.fontWeight = '700'; }
-        }
-      }
+      if (btnLight) btnLight.style.display = 'none';
+      if (btnDark) btnDark.style.display = 'none';
 
       // 3. 브라우저 최상단 시스템 메타 컬러 동기화
       const metaTheme = document.querySelector('meta[name="theme-color"]');
       if (metaTheme) {
-        metaTheme.setAttribute('content', isDark ? '#101b17' : '#f4f6f5');
+        metaTheme.setAttribute('content', isDark ? '#080B12' : (isLightgray ? '#F3F4F6' : '#F5EFEB'));
       }
     }
 
@@ -4542,8 +4587,8 @@
     });
 
     function initApp() {
-      // 0. 컬러 테마 초기화 (Two-Tone Theme System)
-      const savedTheme = localStorage.getItem('st_theme') || 'light';
+      // 0. 컬러 테마 초기화 (3-Way Theme System)
+      const savedTheme = localStorage.getItem('st_theme') || 'modern';
       setTheme(savedTheme);
 
       // 1. LocalStorage에서 여행 컬렉션 로드 (하위 호환 마이그레이션)
@@ -4843,7 +4888,7 @@
         if (btnCreateTrip) btnCreateTrip.classList.remove('hidden');
         if (btnShare) btnShare.classList.add('hidden');
         const headerTripName = document.getElementById('header-trip-name');
-        if (headerTripName) headerTripName.innerText = '인생의 모든 여정을 기록하는 다이어리';
+        if (headerTripName) headerTripName.innerText = 'A Deep Life Essay';
         renderHub();
       } else {
         if (vHub) vHub.classList.add('hidden');
@@ -7813,22 +7858,22 @@
                     <div class="text-xs font-bold text-[#1c1917] dark:text-stone-200">₩${(totalSpent/10000).toFixed(0)}만 <span class="text-stone-400 font-normal">/ ₩${(budget/10000).toFixed(0)}만</span></div>
                   </div>
                   <div class="flex items-center gap-1.5" onclick="event.stopPropagation()">
-                    <button onclick="triggerTripCoverUpload('${trip.id}', event)" class="w-8 h-8 rounded-xl bg-transparent hover:bg-black/5 dark:hover:bg-white/10 text-stone-500 hover:text-[#1c1c1e] dark:hover:text-white border border-[#e6e2d8] dark:border-stone-800 flex items-center justify-center text-xs transition cursor-pointer" title="대표 사진 등록">
+                    <button onclick="triggerTripCoverUpload('${trip.id}', event)" class="sulsul-capsule-btn" title="대표 사진 등록">
                       <i class="fa-solid fa-camera"></i>
                     </button>
-                    <button onclick="duplicateTrip('${trip.id}', event)" class="w-8 h-8 rounded-xl bg-transparent hover:bg-black/5 dark:hover:bg-white/10 text-stone-500 hover:text-[#1c1c1e] dark:hover:text-white border border-[#e6e2d8] dark:border-stone-800 flex items-center justify-center text-xs transition cursor-pointer" title="여정 복제">
+                    <button onclick="duplicateTrip('${trip.id}', event)" class="sulsul-capsule-btn" title="여정 복제">
                       <i class="fa-solid fa-copy"></i>
                     </button>
-                    <button onclick="openTripWorkspace('${trip.id}'); navigateToInteractiveMap(); event.stopPropagation();" class="w-8 h-8 rounded-xl bg-transparent hover:bg-black/5 dark:hover:bg-white/10 text-stone-500 hover:text-[#1c1c1e] dark:hover:text-white border border-[#e6e2d8] dark:border-stone-800 flex items-center justify-center text-xs transition cursor-pointer" title="${tripMapTitle}">
+                    <button onclick="openTripWorkspace('${trip.id}'); navigateToInteractiveMap(); event.stopPropagation();" class="sulsul-capsule-btn" title="${tripMapTitle}">
                       <i class="${tripMapIcon}"></i>
                     </button>
-                    <button onclick="openTripPdfReport('${trip.id}', event)" class="w-8 h-8 rounded-xl bg-transparent hover:bg-black/5 dark:hover:bg-white/10 text-stone-500 hover:text-[#1c1c1e] dark:hover:text-white border border-[#e6e2d8] dark:border-stone-800 flex items-center justify-center text-xs transition cursor-pointer" title="PDF 리포트">
+                    <button onclick="openTripPdfReport('${trip.id}', event)" class="sulsul-capsule-btn" title="PDF 리포트">
                       <i class="fa-solid fa-file-pdf"></i>
                     </button>
-                    <button onclick="requestDeleteTrip('${trip.id}', event)" class="w-8 h-8 rounded-xl bg-transparent hover:bg-rose-50 dark:hover:bg-rose-950/30 text-stone-400 hover:text-rose-600 border border-[#e6e2d8] dark:border-stone-800 flex items-center justify-center text-xs transition cursor-pointer" title="여행 삭제">
+                    <button onclick="requestDeleteTrip('${trip.id}', event)" class="sulsul-capsule-btn hover:text-rose-600 dark:hover:text-rose-400 hover:border-rose-400/50" title="여행 삭제">
                       <i class="fa-regular fa-trash-can"></i>
                     </button>
-                    <button onclick="openTripWorkspace('${trip.id}')" class="px-3 py-1.5 rounded-xl btn-gold text-xs font-bold shadow-sm transition flex items-center gap-1 cursor-pointer">
+                    <button onclick="openTripWorkspace('${trip.id}')" class="h-9 px-4 rounded-full btn-gold text-xs font-black shadow-sm transition flex items-center gap-1.5 cursor-pointer shrink-0">
                       <span>열기</span>
                       <i class="fa-solid fa-chevron-right text-[10px]"></i>
                     </button>
@@ -7887,11 +7932,11 @@
 
                 <!-- 하단 액션 버튼: [경로 지도] + [다이어리 열기] -->
                 <div class="pt-2 flex items-center gap-2.5">
-                  <button onclick="openTripWorkspace('${trip.id}'); navigateToInteractiveMap(); event.stopPropagation();" class="py-2.5 px-3.5 rounded-xl bg-transparent hover:bg-black/5 dark:hover:bg-white/10 text-stone-600 dark:text-stone-300 hover:text-[#1c1c1e] dark:hover:text-white border border-[#e6e2d8] dark:border-stone-800 text-xs font-bold transition flex items-center justify-center gap-1.5 shadow-sm cursor-pointer shrink-0" title="${tripMapTitle}">
+                  <button onclick="openTripWorkspace('${trip.id}'); navigateToInteractiveMap(); event.stopPropagation();" class="sulsul-capsule-btn px-3.5" title="${tripMapTitle}">
                     <i class="${tripMapIcon}"></i>
                     <span>경로 지도</span>
                   </button>
-                  <button onclick="openTripWorkspace('${trip.id}')" class="flex-1 py-2.5 rounded-xl btn-gold text-xs sm:text-sm font-black transition flex items-center justify-center gap-2 shadow-md cursor-pointer">
+                  <button onclick="openTripWorkspace('${trip.id}')" class="flex-1 h-10 rounded-full btn-gold text-xs sm:text-sm font-black transition flex items-center justify-center gap-2 shadow-md cursor-pointer">
                     <span>다이어리 열기</span>
                     <i class="fa-solid fa-arrow-right text-[11px]"></i>
                   </button>
@@ -7941,11 +7986,11 @@
 
                 <!-- 하단 액션 버튼: [지도] + [다이어리 열기] -->
                 <div class="pt-2 flex items-center gap-2">
-                  <button onclick="openTripWorkspace('${trip.id}'); navigateToInteractiveMap(); event.stopPropagation();" class="py-2 px-2.5 rounded-xl bg-transparent hover:bg-black/5 dark:hover:bg-white/10 text-stone-600 dark:text-stone-300 hover:text-[#1c1c1e] dark:hover:text-white border border-[#e6e2d8] dark:border-stone-800 text-xs font-bold transition flex items-center justify-center gap-1 shadow-sm cursor-pointer shrink-0" title="${tripMapTitle}">
+                  <button onclick="openTripWorkspace('${trip.id}'); navigateToInteractiveMap(); event.stopPropagation();" class="sulsul-capsule-btn px-3" title="${tripMapTitle}">
                     <i class="${tripMapIcon}"></i>
                     <span>지도</span>
                   </button>
-                  <button onclick="openTripWorkspace('${trip.id}')" class="flex-1 py-2 rounded-xl btn-gold text-xs font-black transition flex items-center justify-center gap-1.5 shadow-sm cursor-pointer">
+                  <button onclick="openTripWorkspace('${trip.id}')" class="flex-1 h-9 rounded-full btn-gold text-xs font-black transition flex items-center justify-center gap-1.5 shadow-sm cursor-pointer">
                     <span>다이어리 열기</span>
                     <i class="fa-solid fa-arrow-right text-[10px]"></i>
                   </button>

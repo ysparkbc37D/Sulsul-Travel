@@ -26,11 +26,18 @@ function renderCompanionPlan() {
   if (ensurePlanBlockStructure(trip)) saveTrips({ bump: false });
   const blocks = buildPlanBlocks(trip);
   const spots = (trip.days || []).flatMap(day => day.spots || []);
+  const hasSpots = spots.length > 0;
+  const aiButtonHtml = hasSpots
+    ? `<div class="flex items-center gap-2 flex-wrap">
+         <button class="companion-button companion-primary" onclick="openScheduleTuningModal('all')" title="전체 일정 재배치, 교통 지연/기상 변수 대응 및 템포 조율"><i class="fa-solid fa-bolt text-amber-400" aria-hidden="true"></i> AI 스마트 일정 튜닝</button>
+         <button class="companion-button text-xs opacity-75 hover:opacity-100" onclick="confirmResetAiDraft()" title="기존 일정을 재검토하고 새로운 AI 초안 작성"><i class="fa-solid fa-wand-magic-sparkles" aria-hidden="true"></i> 새 초안 만들기</button>
+       </div>`
+    : `<button class="companion-button companion-primary" onclick="openModal('modal-ai-trip')" title="여행 기본 정보 기반 최초 AI 일정 초안 생성"><i class="fa-solid fa-wand-magic-sparkles" aria-hidden="true"></i> AI 초안 만들기</button>`;
   container.innerHTML = `
     <section class="companion-intro">
       <div><p class="companion-eyebrow">PLAN YOUR JOURNEY</p><h3>우리의 큰 계획</h3>
       <p class="companion-muted">머무를 도시를 정하고, 하루의 여행을 채워 보세요.</p></div>
-      <button class="companion-button companion-primary" onclick="openModal('modal-ai-trip')"><i class="fa-solid fa-wand-magic-sparkles" aria-hidden="true"></i> AI 초안 만들기</button>
+      ${aiButtonHtml}
       <div class="companion-metrics"><span><b>${blocks.length}</b>개 거점</span><span><b>${(trip.days || []).length}</b>일의 여행</span><span><b>${spots.length}</b>개 일정</span></div>
     </section>
     ${blocks.length ? `<div class="companion-route" aria-label="거점 바로가기">${blocks.map((block, index) => `<button onclick="scrollToPlanBlock(${index})" aria-label="${escapeHtml(block.title || block.place)} 거점으로 이동"><span>${String(index + 1).padStart(2, '0')}</span>${escapeHtml(block.title || block.place)}</button>`).join('<i class="fa-solid fa-arrow-right" aria-hidden="true"></i>')}</div>` : ''}
@@ -160,4 +167,18 @@ function scrollToPlanBlock(blockIndex) {
   }
 }
 window.scrollToPlanBlock = scrollToPlanBlock;
+
+function confirmResetAiDraft() {
+  const trip = typeof getActiveTrip === 'function' ? getActiveTrip() : null;
+  const spotCount = (trip?.days || []).flatMap(d => d.spots || []).length;
+  if (spotCount > 0) {
+    const ok = window.confirm(`현재 여행에 ${spotCount}개의 일정이 등록되어 있습니다.\n새로운 AI 초안을 생성하시겠습니까?\n(기존 일정과 병합/검토할 수 있는 제안창이 제공됩니다.)`);
+    if (!ok) return;
+  }
+  if (typeof openModal === 'function') {
+    openModal('modal-ai-trip');
+  }
+}
+window.confirmResetAiDraft = confirmResetAiDraft;
+
 

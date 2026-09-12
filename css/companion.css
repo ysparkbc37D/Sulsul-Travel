@@ -1,29 +1,75 @@
-/* Archival Journal Design System Tokens (v1.6.4) */
-:root, :root[data-theme="light"] {
-  --bg:#F7F5F0; --surface:#FFFFFF; --surface2:#F0ECE1; --surface3:#EAE5D8;
-  --ink:#1E2B24; --ink2:#4A5568; --ink3:#71717A; --line:#E6E2D8; --line2:#D8D2C4;
-  --accent:#2C3A2E; --accent2:#C8A27A; --accent-bg:#EAE6DC; --accent-line:#C8A27A;
-  --card-bg:var(--surface); --card-border:var(--line); --header-bg:rgba(247,245,240,.96);
-  --header-border:var(--line); --tab-active-bg:#2C3A2E; --tab-active-text:#F7F5F0;
+/* Sulsul Archival Journal 3-Theme Design System Tokens (v1.6.7) */
+/* 1. 모던 (Modern Vintage Archival) - 기본 테마 */
+:root, :root[data-theme="modern"], :root[data-theme="light"] {
+  --bg:#F5EFEB; --surface:#FFFDF9; --surface2:#EDE5DA; --surface3:#E3DACB;
+  --ink:#2B2118; --ink2:#59493B; --ink3:#8A7868; --line:#E2D7C8; --line2:#D0C3B0;
+  --accent:#2C3A2E; --accent2:#C8A27A; --accent-bg:#EAE4D7; --accent-line:#C8A27A;
+  --card-bg:var(--surface); --card-border:var(--line); --header-bg:rgba(245,239,235,.96);
+  --header-border:var(--line); --tab-active-bg:#2C3A2E; --tab-active-text:#FFFDF9;
   --input-bg:var(--surface); --input-border:var(--line); --companion-warm:#C8A27A;
-  --companion-next:#F0ECE1;
-  --serif:'Noto Serif KR', 'Cormorant Garamond', 'Playfair Display', Nanum Myeongjo, Georgia, serif;
+  --companion-next:#EDE5DA;
+  --serif:'Cormorant Garamond', 'Playfair Display', 'Noto Serif KR', Nanum Myeongjo, Georgia, serif;
 }
-:root[data-theme="dark"] {
-  --bg:#0F141C; --surface:#1C222D; --surface2:#242C3A; --surface3:#2D3747;
+/* 2. 라이트그레이 (Light Gray / Clean Minimalist) */
+:root[data-theme="lightgray"] {
+  --bg:#F3F4F6; --surface:#FFFFFF; --surface2:#E5E7EB; --surface3:#D1D5DB;
+  --ink:#111827; --ink2:#4B5563; --ink3:#6B7280; --line:#E5E7EB; --line2:#D1D5DB;
+  --accent:#1E293B; --accent2:#3B82F6; --accent-bg:#E0E7FF; --accent-line:#93C5FD;
+  --card-bg:var(--surface); --card-border:var(--line); --header-bg:rgba(243,244,246,.96);
+  --header-border:var(--line); --tab-active-bg:#1E293B; --tab-active-text:#FFFFFF;
+  --input-bg:var(--surface); --input-border:var(--line); --companion-warm:#3B82F6;
+  --companion-next:#E5E7EB;
+  --serif:'Pretendard', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+/* 3. 딥 블랙 (Deep Black / Obsidian Dark) */
+:root[data-theme="deepblack"], :root[data-theme="dark"] {
+  --bg:#080B12; --surface:#16181D; --surface2:#22252C; --surface3:#2C3039;
   --ink:#EDEDED; --ink2:#94A3B8; --ink3:#64748B; --line:rgba(255,255,255,.08); --line2:rgba(255,255,255,.16);
   --accent:#D4AF37; --accent2:#7E9A86; --accent-bg:rgba(212,175,55,.12); --accent-line:rgba(212,175,55,.3);
-  --card-bg:var(--surface); --card-border:var(--line); --header-bg:rgba(15,20,28,.96);
-  --header-border:var(--line); --tab-active-bg:#D4AF37; --tab-active-text:#0F141C;
+  --card-bg:var(--surface); --card-border:var(--line); --header-bg:rgba(14,17,23,.96);
+  --header-border:var(--line); --tab-active-bg:#D4AF37; --tab-active-text:#080B12;
   --input-bg:var(--surface); --input-border:rgba(255,255,255,.12); --companion-warm:#D4AF37;
-  --companion-next:#242C3A;
+  --companion-next:#22252C;
   --serif:'Noto Serif KR', 'Cormorant Garamond', 'Playfair Display', Nanum Myeongjo, Georgia, serif;
 }
 :root[data-theme] body[class] { background:var(--bg) !important; color:var(--ink) !important; }
-:root[data-theme="light"] body .btn-gold { background:#2C3A2E !important; color:#F7F5F0 !important; border:1px solid rgba(200,162,122,.4) !important; box-shadow:0 3px 10px rgba(44,58,46,.2) !important; }
-:root[data-theme="dark"] body .btn-gold { background:linear-gradient(180deg,#D4AF37,#B8860B) !important; color:#0F141C !important; border:1px solid rgba(212,175,55,.4) !important; box-shadow:0 3px 10px rgba(212,175,55,.2) !important; }
-:root[data-theme="light"] body .btn-gold * { color:#F7F5F0 !important; }
-:root[data-theme="dark"] body .btn-gold * { color:#0F141C !important; }
+:root[data-theme="modern"] body .btn-gold, :root[data-theme="light"] body .btn-gold { background:#2C3A2E !important; color:#FFFDF9 !important; border:1px solid rgba(200,162,122,.4) !important; box-shadow:0 3px 10px rgba(44,58,46,.2) !important; }
+:root[data-theme="lightgray"] body .btn-gold { background:#1E293B !important; color:#FFFFFF !important; border:1px solid #334155 !important; box-shadow:0 3px 10px rgba(30,41,59,.2) !important; }
+:root[data-theme="deepblack"] body .btn-gold, :root[data-theme="dark"] body .btn-gold { background:linear-gradient(180deg,#D4AF37,#B8860B) !important; color:#080B12 !important; border:1px solid rgba(212,175,55,.4) !important; box-shadow:0 3px 10px rgba(212,175,55,.2) !important; }
+:root[data-theme="modern"] body .btn-gold *, :root[data-theme="light"] body .btn-gold * { color:#FFFDF9 !important; }
+:root[data-theme="lightgray"] body .btn-gold * { color:#FFFFFF !important; }
+:root[data-theme="deepblack"] body .btn-gold *, :root[data-theme="dark"] body .btn-gold * { color:#080B12 !important; }
+
+/* Sulsul Capsule Action Pill Buttons (media_1789255472704.png) */
+.sulsul-capsule-btn {
+  height: 38px;
+  min-width: 38px;
+  padding: 0 11px;
+  border-radius: 9999px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  color: var(--ink2);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  font-size: 11px;
+  font-weight: 700;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  cursor: pointer;
+  flex-shrink: 0;
+}
+.sulsul-capsule-btn:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+  background: var(--surface2);
+  transform: translateY(-1px);
+  box-shadow: 0 3px 8px rgba(0,0,0,0.06);
+}
+.sulsul-capsule-btn i {
+  font-size: 12px;
+}
 button, summary, a, input, select, textarea { touch-action:manipulation; }
 button:focus-visible, summary:focus-visible, a:focus-visible { outline:3px solid var(--accent); outline-offset:3px; }
 .editorial-magazine-header { transition: background-color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease; }
@@ -152,7 +198,7 @@ button:focus-visible, summary:focus-visible, a:focus-visible { outline:3px solid
   #view-hub { padding-bottom:32px; }
   .companion-app-header { padding:8px max(12px,var(--safe-right)) 8px max(12px,var(--safe-left)); padding-top:max(8px,var(--safe-top)); }
   .companion-app-header .font-serif-brand { font-size:17px; }
-  #header-trip-name { display:none; }
+  #header-trip-name { display:block !important; font-size:10px; line-height:1.2; letter-spacing:0.04em; }
   #app-ver-badge { display:inline-flex !important; }
   #header-btn-back-hub { font-size:12px; padding:8px !important; }
   .companion-trip-bar > div:first-child { flex-basis:100%; }
@@ -820,3 +866,9 @@ button:focus-visible, summary:focus-visible, a:focus-visible { outline:3px solid
   box-shadow: 0 2px 8px rgba(245, 158, 11, 0.3) !important;
   border-color: #b45309 !important;
 }
+
+/* Modal Version History Timeline Layout (v1.6.7) */
+#modal-version-history .overflow-y-auto > div {
+  flex-shrink: 0 !important;
+}
+
