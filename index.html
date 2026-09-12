@@ -29,7 +29,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700;800&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
 
   <!-- Local Utilities Bundle (CDN fallback & tailwind utilities) -->
-  <link rel="stylesheet" href="css/utilities.css?v=1.6.0">
+  <link rel="stylesheet" href="css/utilities.css?v=1.6.1">
   <link rel="stylesheet" href="vendor/fontawesome/css/all.min.css">
 
   <!-- Leaflet Map CSS & JS -->
@@ -635,6 +635,37 @@
         height: 400px;
       }
     }
+
+    /* Route Map Modal Leaflet Satellite Viewport (Explicit Height & Mobile Control) */
+    #routemap-view-satellite {
+      width: 100%;
+      height: 300px;
+      min-height: 250px;
+      max-height: 48vh;
+      position: relative;
+      border-radius: 1rem;
+      overflow: hidden;
+      flex-shrink: 0;
+      background: #1e293b;
+    }
+    @media (min-width: 640px) {
+      #routemap-view-satellite {
+        height: 380px;
+        max-height: 52vh;
+      }
+    }
+    @media (min-width: 768px) {
+      #routemap-view-satellite {
+        height: 430px;
+        max-height: 56vh;
+      }
+    }
+    #routemap-leaflet-container {
+      width: 100%;
+      height: 100%;
+      min-height: 250px;
+      border-radius: 1rem;
+    }
     .leaflet-popup-content-wrapper {
       background: #ffffff !important;
       color: #1c1917 !important;
@@ -725,8 +756,8 @@
     }
   </style>
 
-  <link rel="stylesheet" href="css/companion.css?v=1.6.0">
-  <script src="js/presentation/companion-ui.js?v=1.6.0"></script>
+  <link rel="stylesheet" href="css/companion.css?v=1.6.1">
+  <script src="js/presentation/companion-ui.js?v=1.6.1"></script>
 
   <!-- Knowledge Base Seed & Destination Knowledge Packs (DKP) -->
   <script src="kb-travel.js"></script>
@@ -737,28 +768,28 @@
   <script src="js/infrastructure/storage/legacy-trip-repository.js"></script>
   <script src="js/infrastructure/storage/journal-overflow-repository.js"></script>
 </head>
-<body class="min-h-screen bg-[#f7f6f2] text-[#1c1917] flex flex-col antialiased selection:bg-amber-500/20 selection:text-amber-900">
+<body class="min-h-screen flex flex-col font-sans transition-colors duration-200">
 
   <!-- ========================================== -->
-  <!-- 1. 최상단 앱 헤더 (Sulsul-Diary Warm Cream Luxury - Mobile Slim) -->
+  <!-- 1. 앱 헤더 (APP-HEADER) -->
   <!-- ========================================== -->
-  <header class="companion-app-header sticky top-0 z-30 bg-[#f7f6f2]/95 backdrop-blur-md border-b border-[#e8e2d5] px-3 sm:px-4 py-2.5 sm:py-3 shadow-[0_2px_12px_rgba(0,0,0,0.03)]">
-    <div class="max-w-6xl mx-auto flex items-center justify-between gap-2 sm:gap-3">
-      <!-- 좌측 로고 및 타이틀 (깔끔하게 정돈된 브랜드 블록) -->
-      <div class="flex items-center gap-2 sm:gap-2.5 cursor-pointer select-none shrink-0" onclick="switchView('hub')" title="술술트래블 홈(허브)으로 이동">
-        <img src="icons/icon-192-v115.png" alt="Sulsul Travel" class="w-8 h-8 sm:w-9 sm:h-9 rounded-xl shadow-md shadow-amber-900/15 shrink-0 object-cover border border-[#e8e2d5] dark:border-[var(--line)]">
+  <header class="sticky top-0 z-40 bg-[#faf8f5]/90 dark:bg-[#121316]/90 backdrop-blur-md border-b border-[#e8e2d5] dark:border-stone-800 transition-colors">
+    <div class="max-w-6xl mx-auto px-4 h-14 flex items-center justify-between gap-2">
+      <!-- 좌측 브랜드 로고 & 워크스페이스 타이틀 -->
+      <div class="flex items-center gap-2.5 min-w-0 cursor-pointer select-none" onclick="switchView('hub')">
+        <span class="w-8 h-8 rounded-xl bg-amber-500/15 border border-amber-500/30 flex items-center justify-center text-base shadow-sm shrink-0">🧭</span>
         <div class="min-w-0">
-          <h1 class="font-serif-brand text-base sm:text-xl font-bold tracking-tight text-[#1c1917] dark:text-[#ededed] whitespace-nowrap">
-            Sulsul Travel
-          </h1>
+          <div class="flex items-center gap-1.5">
+            <h1 class="font-serif font-black text-sm sm:text-base tracking-tight text-[#1c1917] dark:text-[#ededed] truncate">술술트래블</h1>
+          </div>
           <p id="header-trip-name" class="text-[10px] sm:text-[11px] text-[#78716c] dark:text-stone-400 truncate max-w-[120px] sm:max-w-xs font-normal">인생의 모든 여정을 기록하는 다이어리</p>
         </div>
       </div>
 
       <!-- 우측 액션 클러스터 (동일한 정사각/스퀘어 박스 4단 버튼: 버전 -> 통계 -> 설정 -> +추가) -->
       <div class="flex items-center gap-1 sm:gap-1.5 shrink-0">
-        <!-- 1. 버전 배지 버튼 (v1.5.9 - 클릭 시 버전 이력) -->
-        <button id="app-ver-badge" onclick="event.stopPropagation(); openVersionHistoryModal()" class="h-8 px-2 rounded-xl theme-card-subtle flex items-center justify-center font-mono text-[10px] font-bold text-[#a2601b] dark:text-[#d4af37] shadow-sm hover:border-amber-500/60 transition cursor-pointer shrink-0" title="버전 업데이트 기록 보기 (클릭)">v1.6.0</button>
+        <!-- 1. 버전 배지 버튼 (v1.6.1 - 클릭 시 버전 이력) -->
+        <button id="app-ver-badge" onclick="event.stopPropagation(); openVersionHistoryModal()" class="h-8 px-2 rounded-xl theme-card-subtle flex items-center justify-center font-mono text-[10px] font-bold text-[#a2601b] dark:text-[#d4af37] shadow-sm hover:border-amber-500/60 transition cursor-pointer shrink-0" title="버전 업데이트 기록 보기 (클릭)">v1.6.1</button>
 
         <!-- 2. 통계 버튼 (📊 - 네모박스 형태, 통계 문양) -->
         <button id="header-btn-analytics" onclick="openAnalyticsModal('lifetime')" class="companion-header-analytics w-8 h-8 rounded-xl theme-card-subtle flex items-center justify-center text-[#a2601b] dark:text-[#d4af37] hover:border-amber-500/60 transition shadow-sm cursor-pointer shrink-0" title="술술 여행 통계 대시보드">
@@ -3237,7 +3268,21 @@
             </div>
           </div>
 
-          <!-- 2. 발자취를 남긴 국가 랭킹 & 국기 칩 그리드 -->
+          <!-- 2. 대륙별 및 비행 궤적 노선도 바로가기 -->
+          <div class="p-3.5 rounded-2xl bg-white dark:bg-[#16181d] border border-[#e8e2d5] dark:border-stone-800 flex items-center justify-between gap-3 shadow-sm">
+            <div class="flex items-center gap-2.5">
+              <span class="w-8 h-8 rounded-xl bg-amber-500/10 text-amber-600 flex items-center justify-center text-sm"><i class="fa-solid fa-earth-americas"></i></span>
+              <div>
+                <div class="text-xs font-black text-[#1c1917] dark:text-[#ededed]">세계 및 대종단 비행 궤적 노선도</div>
+                <div class="text-[10px] text-[#78716c] dark:text-stone-400">인터랙티브 지도 및 주요 거점 좌표를 확인하세요.</div>
+              </div>
+            </div>
+            <button onclick="closeModal('modal-analytics', true); openGlobalRouteMapModal(null, 'modal-analytics');" class="px-3 py-1.5 rounded-xl btn-gold text-xs font-bold shrink-0 cursor-pointer shadow-sm">
+              지도 열기
+            </button>
+          </div>
+
+          <!-- 3. 발자취를 남긴 국가 랭킹 & 국기 칩 그리드 -->
           <div class="p-4 rounded-2xl bg-white dark:bg-[#16181d] border border-[#e8e2d5] dark:border-stone-800 space-y-2.5 shadow-sm">
             <div class="flex items-center justify-between">
               <span class="text-xs font-black text-[#1c1917] dark:text-[#ededed] flex items-center gap-1.5">
@@ -3251,7 +3296,18 @@
             </div>
           </div>
 
-          <!-- 3. 등록된 여행 종합 비교 요약표 (Travel Collection Summary Table) -->
+          <!-- 4. 선호하는 여행 테마 및 컨셉 태그 -->
+          <div class="p-4 rounded-2xl bg-white dark:bg-[#16181d] border border-[#e8e2d5] dark:border-stone-800 space-y-2.5 shadow-sm">
+            <div class="text-xs font-black text-[#1c1917] dark:text-[#ededed] flex items-center gap-1.5">
+              <i class="fa-solid fa-tags text-amber-500"></i>
+              <span>선호하는 여행 테마 및 컨셉</span>
+            </div>
+            <div id="stat-lt-concepts-grid" class="flex items-center gap-1.5 flex-wrap">
+              <!-- Dynamic Concept Chips -->
+            </div>
+          </div>
+
+          <!-- 5. 등록된 여행 종합 비교 요약표 (Travel Collection Summary Table) -->
           <div class="p-4 rounded-2xl bg-white dark:bg-[#16181d] border border-[#e8e2d5] dark:border-stone-800 space-y-2.5 shadow-sm overflow-hidden">
             <div class="flex items-center justify-between">
               <span class="text-xs font-black text-[#1c1917] dark:text-[#ededed] flex items-center gap-1.5">
@@ -3276,31 +3332,6 @@
                 </tbody>
               </table>
             </div>
-          </div>
-
-          <!-- 4. 선호하는 여행 테마 및 컨셉 태그 -->
-          <div class="p-4 rounded-2xl bg-white dark:bg-[#16181d] border border-[#e8e2d5] dark:border-stone-800 space-y-2.5 shadow-sm">
-            <div class="text-xs font-black text-[#1c1917] dark:text-[#ededed] flex items-center gap-1.5">
-              <i class="fa-solid fa-tags text-amber-500"></i>
-              <span>선호하는 여행 테마 및 컨셉</span>
-            </div>
-            <div id="stat-lt-concepts-grid" class="flex items-center gap-1.5 flex-wrap">
-              <!-- Dynamic Concept Chips -->
-            </div>
-          </div>
-
-          <!-- 대륙별 및 비행 궤적 노선도 바로가기 -->
-          <div class="p-3.5 rounded-2xl bg-white dark:bg-[#16181d] border border-[#e8e2d5] dark:border-stone-800 flex items-center justify-between gap-3 shadow-sm">
-            <div class="flex items-center gap-2.5">
-              <span class="w-8 h-8 rounded-xl bg-amber-500/10 text-amber-600 flex items-center justify-center text-sm"><i class="fa-solid fa-earth-americas"></i></span>
-              <div>
-                <div class="text-xs font-black text-[#1c1917] dark:text-[#ededed]">세계 및 대종단 비행 궤적 노선도</div>
-                <div class="text-[10px] text-[#78716c] dark:text-stone-400">인터랙티브 지도 및 주요 거점 좌표를 확인하세요.</div>
-              </div>
-            </div>
-            <button onclick="closeModal('modal-analytics', true); openGlobalRouteMapModal(null, 'modal-analytics');" class="px-3 py-1.5 rounded-xl btn-gold text-xs font-bold shrink-0 cursor-pointer shadow-sm">
-              지도 열기
-            </button>
           </div>
         </div>
 
@@ -3421,7 +3452,7 @@
       </div>
 
       <!-- 뷰어 2: 인터랙티브 Leaflet 위성 궤적 지도 (모바일 적정 높이 제어 & 터치 제어 안내 캡션) -->
-      <div id="routemap-view-satellite" class="hidden rounded-2xl bg-stone-100 dark:bg-stone-900 border border-[#e8e2d5] dark:border-stone-800 overflow-hidden relative h-[270px] sm:h-[360px] md:h-[420px] max-h-[48vh] shrink-0">
+      <div id="routemap-view-satellite" class="hidden rounded-2xl bg-stone-100 dark:bg-stone-900 border border-[#e8e2d5] dark:border-stone-800 overflow-hidden relative shrink-0">
         <div id="routemap-leaflet-container" class="w-full h-full"></div>
         <div class="absolute bottom-2 left-2 right-2 px-2.5 py-1 rounded-lg bg-black/60 backdrop-blur-sm text-[10px] text-white/90 text-center pointer-events-none z-[1000]">
           🗺️ 두 손가락으로 지도 이동·확대 / 상하 여백을 터치하여 모달 스크롤
@@ -3459,11 +3490,18 @@
       </div>
 
       <!-- 버전 목록 스크롤 영역 -->
-        <!-- v1.6.0 (Current) -->
+        <!-- v1.6.1 (Current) -->
         <div class="p-4 rounded-2xl border-2 border-emerald-500/40 space-y-2.5 bg-emerald-500/5 dark:bg-emerald-500/10">
-          <div class="flex items-center justify-between gap-2"><div class="flex items-center gap-2 min-w-0"><span class="px-2 py-0.5 rounded-lg bg-emerald-500 text-black font-black text-xs shadow-sm shrink-0">v1.6.0</span><span class="text-xs font-black text-[#1c1917] dark:text-white">평생 여행 통계 드릴다운 대시보드 & 모바일 지도 뷰포트 전면 개선</span></div><span class="companion-status shrink-0">최신 버전</span></div>
-          <p class="text-xs leading-relaxed">사용자 피드백을 수렴하여 통계와 지도 경험을 완전히 새롭게 혁신했습니다. 1) <b>통계 모달 군더더기 서브 탭 제거</b>: 모달 상단 듀얼 스위처를 제거하고 6대 요약 지표에 완전히 집중하도록 개편했습니다. 2) <b>6대 아카이브 요약 지표 인터랙티브 드릴다운 리스트</b> 신설: 6대 카드(총 여정, 방문 국가, 방문 도시, 여행 일수, 누적 지출, 기록 일기) 터치 시 <b>어떤 여행에서 며칠을 보냈는지 체류 순위 랭킹(점유율 바)</b> 및 <b>어떤 여행에서 얼마를 썼는지 지출 랭킹(가계부 바로가기)</b>, 일기 목록 등 세부 항목을 즉각 열람할 수 있습니다. 3) <b>노선도 모달 탭 정돈 & 이전 통계 복귀 네비게이션</b>: 불필요한 과거 샘플 '원본 가이드 인포그래픽' 탭을 제거하고, 통계에서 노선도 진입 후 닫기(X) 시 이전 보던 통계 화면으로 자동 복귀하도록 히스토리 스택을 완벽 보존했습니다. 4) <b>모바일 지도 뷰포트 및 터치 제어 전면 개선</b>: 노선도 및 워크스페이스 내 모든 지도의 높이를 모바일 화면에 맞춰 콤팩트하게 제한하고 스크롤 여백을 확보했으며, Carto 타일의 워터마크를 제거하고 무제한 OpenStreetMap 표준 타일로 전면 교체했습니다.</p>
-          <div class="text-[10px] text-stone-400 dark:text-stone-500 pt-1 border-t border-emerald-500/20 flex items-center justify-between"><span>📅 2026-09-13 릴리즈</span><span class="font-mono">st-shell-v1.6.0</span></div>
+          <div class="flex items-center justify-between gap-2"><div class="flex items-center gap-2 min-w-0"><span class="px-2 py-0.5 rounded-lg bg-emerald-500 text-black font-black text-xs shadow-sm shrink-0">v1.6.1</span><span class="text-xs font-black text-[#1c1917] dark:text-white">모바일 위성 지도 뷰포트 높이 복원 & 평생 통계 대시보드 섹션 배치 최적화</span></div><span class="companion-status shrink-0">최신 버전</span></div>
+          <p class="text-xs leading-relaxed">1) <b>위성 지도 뷰포트 높이 붕괴 원인 해결</b>: 번들 CSS 내에 미존재하던 Tailwind 임의 유틸리티 클래스 대신 명시적 반응형 CSS를 도입하여, 모바일/태블릿에서 Leaflet 위성 지도 컨테이너가 0px로 찌그러지지 않고 300px(최대 48vh)의 완벽한 뷰포트로 렌더링되도록 수정했습니다. 또한 탭 전환 시 다단계 <code>invalidateSize()</code>를 적용해 OpenStreetMap 순정 타일이 즉각 선명하게 로딩됩니다. 2) <b>평생 여행 통계 대시보드 섹션 재배치</b>: 사용자 피드백에 맞춰 [1. 평생 여행 아카이브 요약/지표] ➔ [2. 여정 진행 상태 분포] ➔ [3. 세계 및 대종단 비행 궤적 노선도 (지도 열기)] ➔ [4. 방문 국가 아카이브] ➔ [5. 선호하는 여행 테마 및 컨셉] ➔ [6. 등록된 여정 한눈에 보기(전체 비교표)] 순서로 논리적이고 쾌적하게 재정렬했습니다.</p>
+          <div class="text-[10px] text-stone-400 dark:text-stone-500 pt-1 border-t border-emerald-500/20 flex items-center justify-between"><span>📅 2026-09-13 릴리즈</span><span class="font-mono">st-shell-v1.6.1</span></div>
+        </div>
+
+        <!-- v1.6.0 -->
+        <div class="p-4 rounded-2xl bg-stone-50 dark:bg-stone-900/50 border border-stone-200 dark:border-stone-800 space-y-2.5 shadow-sm relative overflow-hidden">
+          <div class="flex items-center justify-between gap-2"><div class="flex items-center gap-2 min-w-0"><span class="px-2 py-0.5 rounded-lg bg-stone-200 dark:bg-stone-800 text-stone-800 dark:text-stone-200 font-bold text-[11px] font-mono shrink-0">v1.6.0</span><span class="text-xs font-bold text-[#1c1917] dark:text-stone-200">평생 여행 통계 드릴다운 대시보드 & 모바일 지도 뷰포트 전면 개선</span></div></div>
+          <p class="text-xs leading-relaxed">사용자 피드백을 수렴하여 통계와 지도 경험을 완전히 새롭게 혁신했습니다. 1) <b>통계 모달 군더더기 서브 탭 제거</b>: 모달 상단 듀얼 스위처를 제거하고 6대 요약 지표에 완전히 집중하도록 개편했습니다. 2) <b>6대 아카이브 요약 지표 인터랙티브 드릴다운 리스트</b> 신설: 6대 카드 터치 시 <b>어떤 여행에서 며칠을 보냈는지 체류 순위 랭킹(점유율 바)</b> 및 <b>어떤 여행에서 얼마를 썼는지 지출 랭킹(가계부 바로가기)</b>, 일기 목록 등 세부 항목을 즉각 열람할 수 있습니다. 3) <b>노선도 모달 탭 정돈 & 이전 통계 복귀 네비게이션</b>: 불필요한 과거 샘플 '원본 가이드 인포그래픽' 탭을 제거하고, 통계에서 노선도 진입 후 닫기(X) 시 이전 보던 통계 화면으로 자동 복귀하도록 히스토리 스택을 완벽 보존했습니다. 4) <b>모바일 지도 뷰포트 및 터치 제어 전면 개선</b>: Carto 타일의 워터마크를 제거하고 무제한 OpenStreetMap 표준 타일로 전면 교체했습니다.</p>
+          <div class="text-[10px] text-stone-400 dark:text-stone-500 pt-1 border-t border-stone-200 dark:border-stone-800 flex items-center justify-between"><span>📅 2026-09-13 릴리즈</span><span class="font-mono">st-shell-v1.6.0</span></div>
         </div>
 
         <!-- v1.5.9 -->
@@ -4044,7 +4082,7 @@
     window.showToast = showToast;
 
     // 앱 버전 및 글로벌 네임스페이스 (Sulsul-Travel Invariant Rule R-10, R-11, R-12, R-13, R-14, R-15)
-    const APP_VER = '1.6.0';
+    const APP_VER = '1.6.1';
 
     // ══════════════════════════════════════════
     // [Two-Tone Theme System] 라이트 그레이 & 딥 블랙 테마 엔진
@@ -4845,7 +4883,15 @@
           } else {
             initOrUpdateRouteMapLeaflet(getActiveTrip());
           }
+          if (routeMapLeafletInstance) {
+            routeMapLeafletInstance.invalidateSize();
+          }
         }, 80);
+        setTimeout(() => {
+          if (routeMapLeafletInstance) {
+            routeMapLeafletInstance.invalidateSize();
+          }
+        }, 300);
       } else if (tab === 'metro') {
         if (window.__routeMapIsGlobalAllTrips) {
           renderGlobalIllustratedRouteMap(State.trips, window.__routeMapFocusCountry);
