@@ -29,7 +29,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700;800&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
 
   <!-- Local Utilities Bundle (CDN fallback & tailwind utilities) -->
-  <link rel="stylesheet" href="css/utilities.css?v=1.5.9">
+  <link rel="stylesheet" href="css/utilities.css?v=1.6.0">
   <link rel="stylesheet" href="vendor/fontawesome/css/all.min.css">
 
   <!-- Leaflet Map CSS & JS -->
@@ -625,10 +625,15 @@
     /* Leaflet Overrides */
     #leaflet-route-map {
       width: 100%;
-      height: 480px;
+      height: 280px;
       border-radius: 1rem;
       z-index: 10;
       background: #f7f6f2;
+    }
+    @media (min-width: 640px) {
+      #leaflet-route-map {
+        height: 400px;
+      }
     }
     .leaflet-popup-content-wrapper {
       background: #ffffff !important;
@@ -720,8 +725,8 @@
     }
   </style>
 
-  <link rel="stylesheet" href="css/companion.css?v=1.5.9">
-  <script src="js/presentation/companion-ui.js?v=1.5.9"></script>
+  <link rel="stylesheet" href="css/companion.css?v=1.6.0">
+  <script src="js/presentation/companion-ui.js?v=1.6.0"></script>
 
   <!-- Knowledge Base Seed & Destination Knowledge Packs (DKP) -->
   <script src="kb-travel.js"></script>
@@ -753,7 +758,7 @@
       <!-- 우측 액션 클러스터 (동일한 정사각/스퀘어 박스 4단 버튼: 버전 -> 통계 -> 설정 -> +추가) -->
       <div class="flex items-center gap-1 sm:gap-1.5 shrink-0">
         <!-- 1. 버전 배지 버튼 (v1.5.9 - 클릭 시 버전 이력) -->
-        <button id="app-ver-badge" onclick="event.stopPropagation(); openVersionHistoryModal()" class="h-8 px-2 rounded-xl theme-card-subtle flex items-center justify-center font-mono text-[10px] font-bold text-[#a2601b] dark:text-[#d4af37] shadow-sm hover:border-amber-500/60 transition cursor-pointer shrink-0" title="버전 업데이트 기록 보기 (클릭)">v1.5.9</button>
+        <button id="app-ver-badge" onclick="event.stopPropagation(); openVersionHistoryModal()" class="h-8 px-2 rounded-xl theme-card-subtle flex items-center justify-center font-mono text-[10px] font-bold text-[#a2601b] dark:text-[#d4af37] shadow-sm hover:border-amber-500/60 transition cursor-pointer shrink-0" title="버전 업데이트 기록 보기 (클릭)">v1.6.0</button>
 
         <!-- 2. 통계 버튼 (📊 - 네모박스 형태, 통계 문양) -->
         <button id="header-btn-analytics" onclick="openAnalyticsModal('lifetime')" class="companion-header-analytics w-8 h-8 rounded-xl theme-card-subtle flex items-center justify-center text-[#a2601b] dark:text-[#d4af37] hover:border-amber-500/60 transition shadow-sm cursor-pointer shrink-0" title="술술 여행 통계 대시보드">
@@ -1108,6 +1113,9 @@
 
           <!-- Leaflet 인터랙티브 지도 컨테이너 -->
           <div id="leaflet-route-map"></div>
+          <div class="text-[10px] text-stone-400 dark:text-stone-500 text-center py-0.5">
+            🗺️ 두 손가락으로 지도 이동·확대 / 지도 밖 여백을 밀어 화면 스크롤
+          </div>
 
           <!-- 동적 도시 정보 카드 & 구글 지도 연동 바 -->
           <div id="card-dynamic-city" class="p-4 rounded-xl bg-[#080b12] border border-[#1e263c] space-y-3">
@@ -3112,23 +3120,18 @@
             <i class="fa-solid fa-chart-pie"></i>
           </span>
           <div>
-            <h3 class="text-base font-black text-[#1c1917] dark:text-[#ededed]">술술 통계 대시보드</h3>
-            <p class="text-[11px] text-[#78716c] dark:text-stone-400">나의 평생 발자취 및 현재 여정 종합 분석</p>
+            <h3 class="text-base font-black text-[#1c1917] dark:text-[#ededed]">술술 평생 여행 통계 대시보드</h3>
+            <p class="text-[11px] text-[#78716c] dark:text-stone-400">나의 모든 여정 누적 아카이브 & 상세 분석</p>
           </div>
         </div>
         <button onclick="closeModal('modal-analytics')" class="w-7 h-7 rounded-lg bg-[#faf8f5] dark:bg-stone-800 hover:bg-[#f0ece1] dark:hover:bg-stone-700 text-[#78716c] dark:text-stone-300 flex items-center justify-center text-sm transition cursor-pointer" title="닫기">✕</button>
       </div>
 
-      <!-- 듀얼 탭 스위처: [평생 여행 발자취] vs [현재 여정 분석] -->
-      <div class="flex items-center gap-1.5 p-1 bg-[#ede8df] dark:bg-[#1e2026] rounded-xl shrink-0">
-        <button id="btn-tab-stat-lifetime" onclick="switchAnalyticsTab('lifetime')" class="flex-1 py-1.5 px-3 rounded-lg text-xs font-bold transition flex items-center justify-center gap-1.5 shadow-sm bg-white dark:bg-[#16181d] text-[#1c1917] dark:text-white cursor-pointer">
-          <i class="fa-solid fa-passport text-[11px] text-[#a2601b]"></i>
-          <span>평생 여행 발자취</span>
-        </button>
-        <button id="btn-tab-stat-workspace" onclick="switchAnalyticsTab('workspace')" class="flex-1 py-1.5 px-3 rounded-lg text-xs font-bold transition flex items-center justify-center gap-1.5 text-stone-500 hover:text-stone-800 dark:hover:text-stone-300 cursor-pointer">
-          <i class="fa-solid fa-plane-departure text-[11px]"></i>
-          <span id="tab-stat-ws-title">현재 여정 분석</span>
-        </button>
+      <!-- 숨김 보존: R-10 DOM ID 및 하위 호환을 위한 레거시 탭 홀더 -->
+      <div id="stat-tabs-wrapper" class="hidden">
+        <button id="btn-tab-stat-lifetime"></button>
+        <button id="btn-tab-stat-workspace"></button>
+        <span id="tab-stat-ws-title"></span>
       </div>
 
       <!-- 스크롤 가능한 통계 본문 -->
@@ -3142,38 +3145,75 @@
                   <i class="fa-solid fa-compass text-[#a2601b]"></i>
                   <span>평생 여행 아카이브 요약</span>
                 </div>
-                <div class="text-[11px] text-[#78716c] dark:text-stone-400 mt-0.5">기록된 모든 여정의 누적 발자취입니다.</div>
+                <div class="text-[11px] text-[#78716c] dark:text-stone-400 mt-0.5">기록된 모든 여정의 누적 발자취입니다. (각 지표 터치 시 상세 목록 표시)</div>
               </div>
               <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-500/10 text-[#a2601b] dark:text-amber-300 border border-amber-500/20">
                 현재 기기 저장
               </span>
             </div>
 
-            <!-- 6대 누적 스펙 그리드 -->
+            <!-- 6대 누적 스펙 그리드 (터치 시 상세 랭킹 및 목록 드릴다운 전개) -->
             <div class="grid grid-cols-3 sm:grid-cols-6 gap-2 text-center">
-              <div class="p-2.5 rounded-xl bg-[#faf8f5] dark:bg-[#121316] border border-[#e8e2d5] dark:border-stone-800">
-                <div class="text-[10px] text-[#78716c] dark:text-stone-400 font-medium">총 여정</div>
+              <div id="stat-card-trips" onclick="toggleStatDrilldown('trips')" class="stat-lt-card p-2.5 rounded-xl bg-[#faf8f5] dark:bg-[#121316] border border-[#e8e2d5] dark:border-stone-800 hover:border-amber-500/60 hover:bg-amber-500/5 transition cursor-pointer select-none group" title="총 여정 상세 목록 보기">
+                <div class="text-[10px] text-[#78716c] dark:text-stone-400 font-medium flex items-center justify-center gap-1">
+                  <span>총 여정</span>
+                  <i class="fa-solid fa-chevron-down text-[8px] opacity-40 group-hover:opacity-100 transition"></i>
+                </div>
                 <div id="stat-lt-trips" class="text-base sm:text-lg font-black text-[#a2601b] dark:text-[#d4af37] mt-0.5">0개</div>
               </div>
-              <div class="p-2.5 rounded-xl bg-[#faf8f5] dark:bg-[#121316] border border-[#e8e2d5] dark:border-stone-800">
-                <div class="text-[10px] text-[#78716c] dark:text-stone-400 font-medium">방문 국가</div>
+              <div id="stat-card-countries" onclick="toggleStatDrilldown('countries')" class="stat-lt-card p-2.5 rounded-xl bg-[#faf8f5] dark:bg-[#121316] border border-[#e8e2d5] dark:border-stone-800 hover:border-emerald-500/60 hover:bg-emerald-500/5 transition cursor-pointer select-none group" title="방문 국가 목록 보기">
+                <div class="text-[10px] text-[#78716c] dark:text-stone-400 font-medium flex items-center justify-center gap-1">
+                  <span>방문 국가</span>
+                  <i class="fa-solid fa-chevron-down text-[8px] opacity-40 group-hover:opacity-100 transition"></i>
+                </div>
                 <div id="stat-lt-countries" class="text-base sm:text-lg font-black text-emerald-600 dark:text-emerald-400 mt-0.5">0개국</div>
               </div>
-              <div class="p-2.5 rounded-xl bg-[#faf8f5] dark:bg-[#121316] border border-[#e8e2d5] dark:border-stone-800">
-                <div class="text-[10px] text-[#78716c] dark:text-stone-400 font-medium">방문 도시</div>
+              <div id="stat-card-cities" onclick="toggleStatDrilldown('cities')" class="stat-lt-card p-2.5 rounded-xl bg-[#faf8f5] dark:bg-[#121316] border border-[#e8e2d5] dark:border-stone-800 hover:border-sky-500/60 hover:bg-sky-500/5 transition cursor-pointer select-none group" title="방문 도시 목록 보기">
+                <div class="text-[10px] text-[#78716c] dark:text-stone-400 font-medium flex items-center justify-center gap-1">
+                  <span>방문 도시</span>
+                  <i class="fa-solid fa-chevron-down text-[8px] opacity-40 group-hover:opacity-100 transition"></i>
+                </div>
                 <div id="stat-lt-cities" class="text-base sm:text-lg font-black text-sky-600 dark:text-sky-400 mt-0.5">0개</div>
               </div>
-              <div class="p-2.5 rounded-xl bg-[#faf8f5] dark:bg-[#121316] border border-[#e8e2d5] dark:border-stone-800">
-                <div class="text-[10px] text-[#78716c] dark:text-stone-400 font-medium">여행 일수</div>
+              <div id="stat-card-days" onclick="toggleStatDrilldown('days')" class="stat-lt-card p-2.5 rounded-xl bg-[#faf8f5] dark:bg-[#121316] border border-[#e8e2d5] dark:border-stone-800 hover:border-indigo-500/60 hover:bg-indigo-500/5 transition cursor-pointer select-none group" title="여정별 체류 일수 랭킹 보기">
+                <div class="text-[10px] text-[#78716c] dark:text-stone-400 font-medium flex items-center justify-center gap-1">
+                  <span>여행 일수</span>
+                  <i class="fa-solid fa-chevron-down text-[8px] opacity-40 group-hover:opacity-100 transition"></i>
+                </div>
                 <div id="stat-lt-days" class="text-base sm:text-lg font-black text-indigo-600 dark:text-indigo-400 mt-0.5">0일</div>
               </div>
-              <div class="p-2.5 rounded-xl bg-[#faf8f5] dark:bg-[#121316] border border-[#e8e2d5] dark:border-stone-800">
-                <div class="text-[10px] text-[#78716c] dark:text-stone-400 font-medium">누적 지출</div>
+              <div id="stat-card-expenses" onclick="toggleStatDrilldown('expenses')" class="stat-lt-card p-2.5 rounded-xl bg-[#faf8f5] dark:bg-[#121316] border border-[#e8e2d5] dark:border-stone-800 hover:border-rose-500/60 hover:bg-rose-500/5 transition cursor-pointer select-none group" title="여정별 누적 지출 랭킹 보기">
+                <div class="text-[10px] text-[#78716c] dark:text-stone-400 font-medium flex items-center justify-center gap-1">
+                  <span>누적 지출</span>
+                  <i class="fa-solid fa-chevron-down text-[8px] opacity-40 group-hover:opacity-100 transition"></i>
+                </div>
                 <div id="stat-lt-expenses" class="text-base sm:text-lg font-black text-rose-600 dark:text-rose-400 mt-0.5">₩0</div>
               </div>
-              <div class="p-2.5 rounded-xl bg-[#faf8f5] dark:bg-[#121316] border border-[#e8e2d5] dark:border-stone-800">
-                <div class="text-[10px] text-[#78716c] dark:text-stone-400 font-medium">기록 일기</div>
+              <div id="stat-card-diaries" onclick="toggleStatDrilldown('diaries')" class="stat-lt-card p-2.5 rounded-xl bg-[#faf8f5] dark:bg-[#121316] border border-[#e8e2d5] dark:border-stone-800 hover:border-purple-500/60 hover:bg-purple-500/5 transition cursor-pointer select-none group" title="여정별 기록 일기 목록 보기">
+                <div class="text-[10px] text-[#78716c] dark:text-stone-400 font-medium flex items-center justify-center gap-1">
+                  <span>기록 일기</span>
+                  <i class="fa-solid fa-chevron-down text-[8px] opacity-40 group-hover:opacity-100 transition"></i>
+                </div>
                 <div id="stat-lt-diaries" class="text-base sm:text-lg font-black text-purple-600 dark:text-purple-400 mt-0.5">0편</div>
+              </div>
+            </div>
+
+            <!-- 신규: 6대 지표 인터랙티브 드릴다운 상세 리스트 컨테이너 -->
+            <div id="stat-drilldown-container" class="hidden p-3 sm:p-3.5 rounded-xl bg-[#faf8f5] dark:bg-[#121316] border border-amber-500/30 dark:border-amber-500/25 shadow-inner space-y-2.5">
+              <div class="flex items-center justify-between border-b border-[#e8e2d5] dark:border-stone-800 pb-2">
+                <div class="flex items-center gap-2 min-w-0">
+                  <span id="stat-drilldown-icon" class="w-6 h-6 rounded-lg bg-amber-500/15 text-[#a2601b] dark:text-[#d4af37] flex items-center justify-center text-xs shrink-0">📋</span>
+                  <span id="stat-drilldown-title" class="text-xs font-black text-[#1c1917] dark:text-[#ededed] truncate">세부 목록</span>
+                  <span id="stat-drilldown-badge" class="px-1.5 py-0.2 rounded-full text-[10px] font-bold bg-amber-500/15 text-[#a2601b] dark:text-amber-300 shrink-0">0건</span>
+                </div>
+                <button onclick="closeStatDrilldown()" class="text-[11px] text-[#78716c] hover:text-[#1c1917] dark:hover:text-white font-bold flex items-center gap-1 px-2 py-0.5 rounded-md hover:bg-stone-200 dark:hover:bg-stone-800 transition cursor-pointer shrink-0">
+                  <span>접기</span>
+                  <i class="fa-solid fa-chevron-up text-[9px]"></i>
+                </button>
+              </div>
+              <!-- 동적 드릴다운 상세 내용 리스트 -->
+              <div id="stat-drilldown-content" class="max-h-[280px] overflow-y-auto space-y-1.5 pr-1">
+                <!-- Dynamic Items -->
               </div>
             </div>
           </section>
@@ -3258,7 +3298,7 @@
                 <div class="text-[10px] text-[#78716c] dark:text-stone-400">인터랙티브 지도 및 주요 거점 좌표를 확인하세요.</div>
               </div>
             </div>
-            <button onclick="closeModal('modal-analytics'); openGlobalRouteMapModal();" class="px-3 py-1.5 rounded-xl btn-gold text-xs font-bold shrink-0 cursor-pointer shadow-sm">
+            <button onclick="closeModal('modal-analytics', true); openGlobalRouteMapModal(null, 'modal-analytics');" class="px-3 py-1.5 rounded-xl btn-gold text-xs font-bold shrink-0 cursor-pointer shadow-sm">
               지도 열기
             </button>
           </div>
@@ -3356,7 +3396,7 @@
         <button onclick="closeModal('modal-route-map')" class="w-7 h-7 rounded-lg bg-[#faf8f5] dark:bg-stone-800 hover:bg-[#f0ece1] text-[#78716c] hover:text-[#1c1917] dark:hover:text-white flex items-center justify-center text-sm transition cursor-pointer shrink-0">✕</button>
       </div>
 
-      <!-- 3대 뷰어 탭 네비게이션 -->
+      <!-- 2대 뷰어 탭 네비게이션 & 통계 복귀 버튼 -->
       <div class="flex items-center justify-between gap-2 border-b border-[#e8e2d5] dark:border-stone-800 pb-2 shrink-0">
         <div class="flex items-center gap-1 sm:gap-1.5 p-1 rounded-xl bg-stone-100 dark:bg-stone-900/80 text-xs font-bold overflow-x-auto no-scrollbar">
           <button id="btn-routemap-tab-metro" onclick="switchRouteMapTab('metro')" class="px-2.5 sm:px-3 py-1.5 rounded-lg transition-all shadow-sm bg-white dark:bg-stone-800 text-[#a2601b] dark:text-[#d4af37] flex items-center gap-1.5 shrink-0 whitespace-nowrap">
@@ -3367,11 +3407,12 @@
             <i class="fa-solid fa-satellite text-xs"></i>
             <span>인터랙티브 위성 궤적</span>
           </button>
-          <button id="btn-routemap-tab-original" onclick="switchRouteMapTab('original')" class="px-2.5 sm:px-3 py-1.5 rounded-lg text-stone-500 hover:text-stone-900 dark:hover:text-stone-200 transition-all flex items-center gap-1.5 shrink-0 whitespace-nowrap">
-            <i class="fa-solid fa-image text-xs"></i>
-            <span>원본 가이드 인포그래픽</span>
-          </button>
         </div>
+        <!-- 이전 통계 모달 복귀 버튼 (통계에서 진입 시 자동 활성화) -->
+        <button id="btn-routemap-back-caller" onclick="handleRouteMapBackClick()" class="hidden px-2.5 py-1.5 rounded-xl bg-amber-500/10 hover:bg-amber-500/20 text-[#a2601b] dark:text-amber-300 border border-amber-500/30 text-xs font-bold flex items-center gap-1 shadow-sm transition cursor-pointer shrink-0">
+          <i class="fa-solid fa-arrow-left text-[10px]"></i>
+          <span>통계로 돌아가기</span>
+        </button>
       </div>
 
       <!-- 뷰어 1: 동적 뱀 모양 메트로 스타일 관광 일러스트 노선도 (Serpentine Metro Journey Track) -->
@@ -3379,14 +3420,12 @@
         <!-- 동적 렌더링 컨테이너 -->
       </div>
 
-      <!-- 뷰어 2: 인터랙티브 Leaflet 위성 궤적 지도 -->
-      <div id="routemap-view-satellite" class="hidden flex-1 rounded-2xl bg-stone-100 dark:bg-stone-900 border border-[#e8e2d5] dark:border-stone-800 overflow-hidden relative min-h-[350px]">
-        <div id="routemap-leaflet-container" class="w-full h-full min-h-[350px]"></div>
-      </div>
-
-      <!-- 뷰어 3: 원본 고화질 인포그래픽 뷰어 -->
-      <div id="routemap-view-original" class="hidden flex-1 overflow-y-auto rounded-2xl bg-stone-100 dark:bg-stone-900 border border-[#e8e2d5] dark:border-stone-800 p-2 flex items-center justify-center min-h-[350px]">
-        <img id="routemap-original-img" src="south_america_illustrated_map.jpg" alt="남미 대종단 일러스트 지도" class="max-h-[55vh] w-auto object-contain rounded-xl shadow-md">
+      <!-- 뷰어 2: 인터랙티브 Leaflet 위성 궤적 지도 (모바일 적정 높이 제어 & 터치 제어 안내 캡션) -->
+      <div id="routemap-view-satellite" class="hidden rounded-2xl bg-stone-100 dark:bg-stone-900 border border-[#e8e2d5] dark:border-stone-800 overflow-hidden relative h-[270px] sm:h-[360px] md:h-[420px] max-h-[48vh] shrink-0">
+        <div id="routemap-leaflet-container" class="w-full h-full"></div>
+        <div class="absolute bottom-2 left-2 right-2 px-2.5 py-1 rounded-lg bg-black/60 backdrop-blur-sm text-[10px] text-white/90 text-center pointer-events-none z-[1000]">
+          🗺️ 두 손가락으로 지도 이동·확대 / 상하 여백을 터치하여 모달 스크롤
+        </div>
       </div>
 
       <!-- 주요 거점 구글 지도 링크 클러스터 (동적 생성) -->
@@ -3420,12 +3459,18 @@
       </div>
 
       <!-- 버전 목록 스크롤 영역 -->
-      <div class="flex-1 overflow-y-auto space-y-3 pr-1 text-xs">
-        <!-- v1.5.9 (Current) -->
+        <!-- v1.6.0 (Current) -->
         <div class="p-4 rounded-2xl border-2 border-emerald-500/40 space-y-2.5 bg-emerald-500/5 dark:bg-emerald-500/10">
-          <div class="flex items-center justify-between gap-2"><div class="flex items-center gap-2 min-w-0"><span class="px-2 py-0.5 rounded-lg bg-emerald-500 text-black font-black text-xs shadow-sm shrink-0">v1.5.9</span><span class="text-xs font-black text-[#1c1917] dark:text-white">허브 모바일 UX 4대 고도화 (시작 가이드 영구 닫기, 컴팩트 리스트 뷰, 카드 스와이프 액션·여정 복제, 통계 지도 연동)</span></div><span class="companion-status shrink-0">최신 버전</span></div>
+          <div class="flex items-center justify-between gap-2"><div class="flex items-center gap-2 min-w-0"><span class="px-2 py-0.5 rounded-lg bg-emerald-500 text-black font-black text-xs shadow-sm shrink-0">v1.6.0</span><span class="text-xs font-black text-[#1c1917] dark:text-white">평생 여행 통계 드릴다운 대시보드 & 모바일 지도 뷰포트 전면 개선</span></div><span class="companion-status shrink-0">최신 버전</span></div>
+          <p class="text-xs leading-relaxed">사용자 피드백을 수렴하여 통계와 지도 경험을 완전히 새롭게 혁신했습니다. 1) <b>통계 모달 군더더기 서브 탭 제거</b>: 모달 상단 듀얼 스위처를 제거하고 6대 요약 지표에 완전히 집중하도록 개편했습니다. 2) <b>6대 아카이브 요약 지표 인터랙티브 드릴다운 리스트</b> 신설: 6대 카드(총 여정, 방문 국가, 방문 도시, 여행 일수, 누적 지출, 기록 일기) 터치 시 <b>어떤 여행에서 며칠을 보냈는지 체류 순위 랭킹(점유율 바)</b> 및 <b>어떤 여행에서 얼마를 썼는지 지출 랭킹(가계부 바로가기)</b>, 일기 목록 등 세부 항목을 즉각 열람할 수 있습니다. 3) <b>노선도 모달 탭 정돈 & 이전 통계 복귀 네비게이션</b>: 불필요한 과거 샘플 '원본 가이드 인포그래픽' 탭을 제거하고, 통계에서 노선도 진입 후 닫기(X) 시 이전 보던 통계 화면으로 자동 복귀하도록 히스토리 스택을 완벽 보존했습니다. 4) <b>모바일 지도 뷰포트 및 터치 제어 전면 개선</b>: 노선도 및 워크스페이스 내 모든 지도의 높이를 모바일 화면에 맞춰 콤팩트하게 제한하고 스크롤 여백을 확보했으며, Carto 타일의 워터마크를 제거하고 무제한 OpenStreetMap 표준 타일로 전면 교체했습니다.</p>
+          <div class="text-[10px] text-stone-400 dark:text-stone-500 pt-1 border-t border-emerald-500/20 flex items-center justify-between"><span>📅 2026-09-13 릴리즈</span><span class="font-mono">st-shell-v1.6.0</span></div>
+        </div>
+
+        <!-- v1.5.9 -->
+        <div class="p-4 rounded-2xl bg-stone-50 dark:bg-stone-900/50 border border-stone-200 dark:border-stone-800 space-y-2.5 shadow-sm relative overflow-hidden">
+          <div class="flex items-center justify-between gap-2"><div class="flex items-center gap-2 min-w-0"><span class="px-2 py-0.5 rounded-lg bg-stone-200 dark:bg-stone-800 text-stone-800 dark:text-stone-200 font-bold text-[11px] font-mono shrink-0">v1.5.9</span><span class="text-xs font-bold text-[#1c1917] dark:text-stone-200">허브 모바일 UX 4대 고도화 (시작 가이드 영구 닫기, 컴팩트 리스트 뷰, 카드 스와이프 액션·여정 복제, 통계 지도 연동)</span></div></div>
           <p class="text-xs leading-relaxed">사용자 제안에 따라 메인 허브 화면의 모바일 사용성을 극대화하는 4대 혁신을 완수했습니다. 1) <b>시작 가이드(PWA 설치 배너)</b> 닫기 시 로컬 스토리지에 영구 기억하여 새 탭마다 화면을 가리지 않도록 최적화하고, 설정 모달에서 언제든 1-클릭으로 복원할 수 있도록 연결했습니다. 2) <b>컴팩트 리스트 뷰 모드</b>를 전면 개편하여 투톤 다크모드를 완벽 지원하고, 모바일에서 한 화면에 4~5개 여정을 일목요연하게 조망할 수 있는 고밀도 레이아웃을 제공합니다. 3) 모바일 터치 스와이프(좌측 밀기) 제스처를 도입하여 네이티브 앱처럼 부드럽게 <b>[📋 복제] [📄 PDF] [🗑️ 삭제]</b> 퀵 서랍이 열리도록 구현했으며, 원클릭 <b>여정 복제(사본 생성)</b> 기능을 신설했습니다. 4) 통계 모달의 <b>방문 국가 칩</b>을 누르면 전 세계 비행 궤적 노선도에서 해당 국가의 여정과 거점이 즉시 하이라이트되며, 요약표 행 터치 시 해당 여정으로 즉시 진입하도록 유기적으로 연동했습니다.</p>
-          <div class="text-[10px] text-stone-400 dark:text-stone-500 pt-1 border-t border-emerald-500/20 flex items-center justify-between"><span>📅 2026-09-13 릴리즈</span><span class="font-mono">st-shell-v1.5.9</span></div>
+          <div class="text-[10px] text-stone-400 dark:text-stone-500 pt-1 border-t border-stone-200 dark:border-stone-800 flex items-center justify-between"><span>📅 2026-09-13 릴리즈</span><span class="font-mono">st-shell-v1.5.9</span></div>
         </div>
 
         <!-- v1.5.8 -->
@@ -3999,7 +4044,7 @@
     window.showToast = showToast;
 
     // 앱 버전 및 글로벌 네임스페이스 (Sulsul-Travel Invariant Rule R-10, R-11, R-12, R-13, R-14, R-15)
-    const APP_VER = '1.5.9';
+    const APP_VER = '1.6.0';
 
     // ══════════════════════════════════════════
     // [Two-Tone Theme System] 라이트 그레이 & 딥 블랙 테마 엔진
@@ -4741,8 +4786,7 @@
         tabWsTitle.innerText = activeTrip ? `${activeTrip.title.slice(0, 10)}... 분석` : '현재 여정 분석';
       }
 
-      const tabToOpen = defaultTab || (State.currentView === 'workspace' ? 'workspace' : 'lifetime');
-      switchAnalyticsTab(tabToOpen);
+      switchAnalyticsTab(defaultTab || 'lifetime');
       openModal('modal-analytics');
     }
 
@@ -4782,21 +4826,17 @@
       currentRouteMapTab = tab;
       const btnMetro = document.getElementById('btn-routemap-tab-metro');
       const btnSatellite = document.getElementById('btn-routemap-tab-satellite');
-      const btnOriginal = document.getElementById('btn-routemap-tab-original');
       const viewMetro = document.getElementById('routemap-view-metro');
       const viewSatellite = document.getElementById('routemap-view-satellite');
-      const viewOriginal = document.getElementById('routemap-view-original');
 
       const activeBtnClass = "px-2.5 sm:px-3 py-1.5 rounded-lg transition-all shadow-sm bg-white dark:bg-stone-800 text-[#a2601b] dark:text-[#d4af37] flex items-center gap-1.5 shrink-0 whitespace-nowrap";
       const inactiveBtnClass = "px-2.5 sm:px-3 py-1.5 rounded-lg text-stone-500 hover:text-stone-900 dark:hover:text-stone-200 transition-all flex items-center gap-1.5 shrink-0 whitespace-nowrap";
 
       if (btnMetro) btnMetro.className = (tab === 'metro') ? activeBtnClass : inactiveBtnClass;
       if (btnSatellite) btnSatellite.className = (tab === 'satellite') ? activeBtnClass : inactiveBtnClass;
-      if (btnOriginal) btnOriginal.className = (tab === 'original') ? activeBtnClass : inactiveBtnClass;
 
       if (viewMetro) viewMetro.classList.toggle('hidden', tab !== 'metro');
       if (viewSatellite) viewSatellite.classList.toggle('hidden', tab !== 'satellite');
-      if (viewOriginal) viewOriginal.classList.toggle('hidden', tab !== 'original');
 
       if (tab === 'satellite') {
         setTimeout(() => {
@@ -4812,6 +4852,7 @@
         }
       }
     }
+    window.switchRouteMapTab = switchRouteMapTab;
 
     function jumpToTripDay(dayNum, tripId) {
       closeModal('modal-route-map', true);
@@ -4933,11 +4974,13 @@
       if (!routeMapLeafletInstance) {
         routeMapLeafletInstance = L.map('routemap-leaflet-container', {
           zoomControl: true,
-          attributionControl: false
+          attributionControl: false,
+          scrollWheelZoom: false
         }).setView([15.0, 10.0], 2);
 
-        L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
-          maxZoom: 18
+        L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+          maxZoom: 18,
+          attribution: '&copy; OpenStreetMap'
         }).addTo(routeMapLeafletInstance);
       }
 
@@ -5726,18 +5769,40 @@
       }, 100);
     }
 
+    let routeMapCallerModal = null;
+
+    function updateRouteMapCallerBtn() {
+      const backBtn = document.getElementById('btn-routemap-back-caller');
+      if (backBtn) {
+        backBtn.classList.toggle('hidden', !routeMapCallerModal);
+      }
+    }
+
+    function handleRouteMapBackClick() {
+      const returnTo = routeMapCallerModal || 'modal-analytics';
+      routeMapCallerModal = null;
+      updateRouteMapCallerBtn();
+      closeModal('modal-route-map', true);
+      openModal(returnTo);
+    }
+    window.handleRouteMapBackClick = handleRouteMapBackClick;
+
     function openRouteMapModal(trip) {
       window.__routeMapIsGlobalAllTrips = false;
       window.__routeMapFocusCountry = null;
+      routeMapCallerModal = null;
+      updateRouteMapCallerBtn();
       const t = trip || getActiveTrip();
       renderDynamicIllustratedRouteMap(t);
       openModal('modal-route-map');
       switchRouteMapTab('metro');
     }
 
-    function openGlobalRouteMapModal(focusCountry) {
+    function openGlobalRouteMapModal(focusCountry, callerModal) {
       window.__routeMapIsGlobalAllTrips = true;
       window.__routeMapFocusCountry = focusCountry || null;
+      if (callerModal) routeMapCallerModal = callerModal;
+      updateRouteMapCallerBtn();
       const allTrips = (State.trips && State.trips.length > 0) ? State.trips : [getActiveTrip()].filter(Boolean);
       renderGlobalIllustratedRouteMap(allTrips, focusCountry);
       openModal('modal-route-map');
@@ -5746,8 +5811,9 @@
     window.openGlobalRouteMapModal = openGlobalRouteMapModal;
 
     function focusCountryFromAnalytics(countryName) {
-      closeModal('modal-analytics');
-      openGlobalRouteMapModal(countryName);
+      routeMapCallerModal = 'modal-analytics';
+      closeModal('modal-analytics', true);
+      openGlobalRouteMapModal(countryName, 'modal-analytics');
       showToast(`🗺️ ${countryName} 발자취 노선도를 확인합니다.`);
     }
     window.focusCountryFromAnalytics = focusCountryFromAnalytics;
@@ -6238,7 +6304,11 @@
       const statusCounts = { ongoing: 0, planned: 0, completed: 0, bucketlist: 0 };
 
       trips.forEach(t => {
-        totalDays += (t.durationDays || (t.days ? t.days.length : 0));
+        let dur = t.durationDays || (t.days ? t.days.length : 0);
+        if (!dur && t.startDate && t.endDate) {
+          dur = Math.max(1, Math.ceil((new Date(t.endDate) - new Date(t.startDate)) / (1000 * 60 * 60 * 24)) + 1);
+        }
+        totalDays += dur;
         (t.countries || []).forEach(c => {
           countriesMap[c] = (countriesMap[c] || 0) + 1;
         });
@@ -6252,11 +6322,16 @@
         else statusCounts.planned++;
 
         (t.expenses || []).forEach(e => {
-          if (e.type !== 'income') totalExpensesKrw += (e.krw || 0);
+          if (e.type !== 'income') {
+            const val = e.krw !== undefined ? Number(e.krw) : (e.amountKrw !== undefined ? Number(e.amountKrw) : (Number(e.amount) || 0));
+            totalExpensesKrw += val;
+          }
         });
 
-        if (t.journals) {
+        if (t.journals && typeof t.journals === 'object') {
           totalDiaries += Object.keys(t.journals).length;
+        } else if (Array.isArray(t.diaries)) {
+          totalDiaries += t.diaries.length;
         }
       });
 
@@ -6401,7 +6476,327 @@
           `).join('');
         }
       }
+
+      if (currentDrilldownMetric) {
+        renderStatDrilldown(currentDrilldownMetric);
+      }
     }
+
+    // ==========================================
+    // 6대 평생 통계 지표 인터랙티브 드릴다운 엔진 (v1.6.0)
+    // ==========================================
+    let currentDrilldownMetric = null;
+
+    function toggleStatDrilldown(metric) {
+      if (currentDrilldownMetric === metric) {
+        closeStatDrilldown();
+        return;
+      }
+      currentDrilldownMetric = metric;
+      renderStatDrilldown(metric);
+    }
+    window.toggleStatDrilldown = toggleStatDrilldown;
+
+    function closeStatDrilldown() {
+      currentDrilldownMetric = null;
+      const container = document.getElementById('stat-drilldown-container');
+      if (container) container.classList.add('hidden');
+      document.querySelectorAll('.stat-lt-card').forEach(el => {
+        el.classList.remove('ring-2', 'ring-amber-500', 'bg-amber-500/10', 'dark:bg-amber-500/15');
+      });
+    }
+    window.closeStatDrilldown = closeStatDrilldown;
+
+    function renderStatDrilldown(metric) {
+      const container = document.getElementById('stat-drilldown-container');
+      const iconEl = document.getElementById('stat-drilldown-icon');
+      const titleEl = document.getElementById('stat-drilldown-title');
+      const badgeEl = document.getElementById('stat-drilldown-badge');
+      const contentEl = document.getElementById('stat-drilldown-content');
+      if (!container || !contentEl) return;
+
+      const trips = State.trips || [];
+
+      // 선택된 카드 하이라이트
+      document.querySelectorAll('.stat-lt-card').forEach(el => {
+        el.classList.remove('ring-2', 'ring-amber-500', 'bg-amber-500/10', 'dark:bg-amber-500/15');
+      });
+      const activeCard = document.getElementById(`stat-card-${metric}`);
+      if (activeCard) {
+        activeCard.classList.add('ring-2', 'ring-amber-500', 'bg-amber-500/10', 'dark:bg-amber-500/15');
+      }
+
+      container.classList.remove('hidden');
+
+      const meta = {
+        trips: { icon: '✈️', title: '총 여정 상세 목록' },
+        countries: { icon: '🌎', title: '방문 국가별 아카이브' },
+        cities: { icon: '🏙️', title: '방문 도시별 목록' },
+        days: { icon: '📅', title: '여정별 체류 일수 랭킹' },
+        expenses: { icon: '💰', title: '여정별 누적 지출 랭킹' },
+        diaries: { icon: '📖', title: '여정별 기록 일기 목록' }
+      };
+
+      const mInfo = meta[metric] || { icon: '📋', title: '상세 목록' };
+      if (iconEl) iconEl.innerText = mInfo.icon;
+      if (titleEl) titleEl.innerText = mInfo.title;
+
+      let html = '';
+
+      if (metric === 'trips') {
+        if (badgeEl) badgeEl.innerText = `${trips.length}개 여정`;
+        if (trips.length === 0) {
+          html = '<div class="text-xs text-stone-400 py-3 text-center">등록된 여정이 없습니다.</div>';
+        } else {
+          html = trips.map((t, idx) => {
+            const days = t.durationDays || (t.days ? t.days.length : 0);
+            const dates = (t.startDate && t.endDate) ? `${t.startDate} ~ ${t.endDate}` : (t.startDate || '일정 미정');
+            const countries = (t.countries && t.countries.length > 0) ? t.countries.join(', ') : (t.country || '-');
+            const budget = t.budgetKrw || 0;
+            let spent = 0;
+            (t.expenses || []).forEach(e => { if (e.type !== 'income') spent += (e.krw || 0); });
+            const sBadge = t.status === 'ongoing' ? '<span class="text-emerald-500 font-bold text-[10px]">여행중</span>' :
+                          t.status === 'completed' ? '<span class="text-stone-400 font-bold text-[10px]">완료</span>' :
+                          t.status === 'bucketlist' ? '<span class="text-amber-500 font-bold text-[10px]">버킷</span>' :
+                          '<span class="text-sky-500 font-bold text-[10px]">예정</span>';
+
+            return `
+              <div onclick="closeModal('modal-analytics'); openTripWorkspace('${t.id}');" class="p-2.5 rounded-xl bg-white dark:bg-[#181a20] border border-[#e8e2d5] dark:border-stone-800 hover:border-amber-500/50 hover:bg-amber-500/5 transition cursor-pointer flex items-center justify-between gap-2 shadow-xs group">
+                <div class="min-w-0 flex-1">
+                  <div class="flex items-center gap-1.5">
+                    <span class="w-5 h-5 rounded-md bg-stone-100 dark:bg-stone-800 text-[10px] font-black flex items-center justify-center text-stone-600 dark:text-stone-300 font-mono">${idx + 1}</span>
+                    <span class="text-xs font-black text-[#1c1917] dark:text-[#ededed] truncate group-hover:text-amber-600 dark:group-hover:text-amber-400 transition">${escapeHtml(t.title)}</span>
+                    ${sBadge}
+                  </div>
+                  <div class="text-[10px] text-[#78716c] dark:text-stone-400 mt-1 flex items-center gap-2 flex-wrap">
+                    <span>📅 ${dates} (${days}일간)</span>
+                    <span>📍 ${escapeHtml(countries)}</span>
+                  </div>
+                </div>
+                <div class="text-right shrink-0">
+                  <div class="text-xs font-mono font-bold text-amber-600 dark:text-amber-400">₩${spent.toLocaleString()}</div>
+                  <div class="text-[10px] text-stone-400">목표 ₩${(budget / 10000).toFixed(0)}만</div>
+                </div>
+              </div>
+            `;
+          }).join('');
+        }
+      } else if (metric === 'countries') {
+        const countryMap = {};
+        trips.forEach(t => {
+          (t.countries || (t.country ? [t.country] : [])).forEach(c => {
+            if (!countryMap[c]) countryMap[c] = { count: 0, trips: [] };
+            countryMap[c].count++;
+            if (!countryMap[c].trips.includes(t.title)) countryMap[c].trips.push(t.title);
+          });
+        });
+        const entries = Object.entries(countryMap).sort((a, b) => b[1].count - a[1].count);
+        if (badgeEl) badgeEl.innerText = `${entries.length}개국`;
+
+        if (entries.length === 0) {
+          html = '<div class="text-xs text-stone-400 py-3 text-center">방문 국가 데이터가 없습니다.</div>';
+        } else {
+          html = entries.map(([countryName, info]) => {
+            const cInfo = resolveCountryInfo(countryName);
+            const flag = cInfo ? cInfo.flag : '🌎';
+            return `
+              <div class="p-2.5 rounded-xl bg-white dark:bg-[#181a20] border border-[#e8e2d5] dark:border-stone-800 flex items-center justify-between gap-2 shadow-xs">
+                <div class="min-w-0 flex-1">
+                  <div class="flex items-center gap-2">
+                    <span class="text-base">${flag}</span>
+                    <span class="text-xs font-black text-[#1c1917] dark:text-[#ededed]">${escapeHtml(countryName)}</span>
+                    <span class="px-1.5 py-0.2 rounded-full bg-emerald-500/15 text-emerald-700 dark:text-emerald-300 text-[10px] font-mono font-bold">${info.count}회 방문</span>
+                  </div>
+                  <div class="text-[10px] text-[#78716c] dark:text-stone-400 mt-1 truncate">
+                    관련 여정: ${info.trips.map(escapeHtml).join(' · ')}
+                  </div>
+                </div>
+                <button onclick="focusCountryFromAnalytics('${escapeHtml(countryName)}')" class="px-2.5 py-1 rounded-lg btn-gold text-[10px] font-bold shrink-0 shadow-xs cursor-pointer flex items-center gap-1">
+                  <i class="fa-solid fa-map-location-dot"></i>
+                  <span>노선도</span>
+                </button>
+              </div>
+            `;
+          }).join('');
+        }
+      } else if (metric === 'cities') {
+        const cityMap = {};
+        trips.forEach(t => {
+          (t.cities || []).forEach(ct => {
+            if (!cityMap[ct]) cityMap[ct] = { count: 0, country: t.country || (t.countries ? t.countries[0] : ''), trips: [] };
+            cityMap[ct].count++;
+            if (!cityMap[ct].trips.includes(t.title)) cityMap[ct].trips.push(t.title);
+          });
+        });
+        const entries = Object.entries(cityMap).sort((a, b) => b[1].count - a[1].count);
+        if (badgeEl) badgeEl.innerText = `${entries.length}개 도시`;
+
+        if (entries.length === 0) {
+          html = '<div class="text-xs text-stone-400 py-3 text-center">방문 도시 데이터가 없습니다.</div>';
+        } else {
+          html = entries.map(([cityName, info]) => {
+            const flag = info.country ? (resolveCountryInfo(info.country)?.flag || '📍') : '📍';
+            return `
+              <div class="p-2.5 rounded-xl bg-white dark:bg-[#181a20] border border-[#e8e2d5] dark:border-stone-800 flex items-center justify-between gap-2 shadow-xs">
+                <div class="min-w-0 flex-1">
+                  <div class="flex items-center gap-1.5">
+                    <span class="text-xs">${flag}</span>
+                    <span class="text-xs font-black text-[#1c1917] dark:text-[#ededed]">${escapeHtml(cityName)}</span>
+                    <span class="text-[10px] text-stone-400">(${escapeHtml(info.country || '거점')})</span>
+                  </div>
+                  <div class="text-[9px] text-[#78716c] dark:text-stone-400 truncate mt-0.5">
+                    ${info.trips.map(escapeHtml).join(' · ')}
+                  </div>
+                </div>
+                <span class="px-2 py-0.5 rounded-full bg-sky-500/15 text-sky-700 dark:text-sky-300 text-[10px] font-mono font-bold shrink-0">${info.count}회</span>
+              </div>
+            `;
+          }).join('');
+        }
+      } else if (metric === 'days') {
+        // 여정별 체류 일수 랭킹 & 점유율 바
+        let totalDays = 0;
+        const tripDays = trips.map(t => {
+          let days = t.durationDays || (t.days ? t.days.length : 0);
+          if (!days && t.startDate && t.endDate) {
+            days = Math.max(1, Math.ceil((new Date(t.endDate) - new Date(t.startDate)) / (1000 * 60 * 60 * 24)) + 1);
+          }
+          totalDays += days;
+          return { trip: t, days };
+        }).sort((a, b) => b.days - a.days);
+
+        if (badgeEl) badgeEl.innerText = `총 ${totalDays}일 누적`;
+
+        if (tripDays.length === 0 || totalDays === 0) {
+          html = '<div class="text-xs text-stone-400 py-3 text-center">등록된 일정 일수가 없습니다.</div>';
+        } else {
+          html = tripDays.map((item, idx) => {
+            const pct = totalDays > 0 ? ((item.days / totalDays) * 100).toFixed(1) : 0;
+            const rankEmoji = idx === 0 ? '🥇 1위' : idx === 1 ? '🥈 2위' : idx === 2 ? '🥉 3위' : `${idx + 1}위`;
+            return `
+              <div onclick="closeModal('modal-analytics'); openTripWorkspace('${item.trip.id}');" class="p-2.5 rounded-xl bg-white dark:bg-[#181a20] border border-[#e8e2d5] dark:border-stone-800 hover:border-indigo-500/50 hover:bg-indigo-500/5 transition cursor-pointer space-y-1.5 shadow-xs group">
+                <div class="flex items-center justify-between gap-2">
+                  <div class="flex items-center gap-2 min-w-0">
+                    <span class="text-[10px] font-black font-mono text-indigo-600 dark:text-indigo-400">${rankEmoji}</span>
+                    <span class="text-xs font-black text-[#1c1917] dark:text-[#ededed] truncate group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition">${escapeHtml(item.trip.title)}</span>
+                  </div>
+                  <div class="text-right shrink-0">
+                    <span class="text-xs font-mono font-black text-indigo-600 dark:text-indigo-400">${item.days}일간</span>
+                    <span class="text-[10px] text-stone-400 font-mono">(${pct}%)</span>
+                  </div>
+                </div>
+                <div class="w-full bg-stone-100 dark:bg-stone-800 rounded-full h-1.5 overflow-hidden">
+                  <div class="bg-indigo-500 h-full rounded-full transition-all duration-300" style="width: ${pct}%"></div>
+                </div>
+              </div>
+            `;
+          }).join('');
+        }
+      } else if (metric === 'expenses') {
+        // 여정별 누적 지출 랭킹 & 예산 집행률
+        let totalExpenses = 0;
+        const tripExpenses = trips.map(t => {
+          let spent = 0;
+          (t.expenses || []).forEach(e => {
+            if (e.type !== 'income') {
+              const val = e.krw !== undefined ? Number(e.krw) : (e.amountKrw !== undefined ? Number(e.amountKrw) : (Number(e.amount) || 0));
+              spent += val;
+            }
+          });
+          totalExpenses += spent;
+          return { trip: t, spent, budget: t.budgetKrw || 0 };
+        }).sort((a, b) => b.spent - a.spent);
+
+        const expStr = totalExpenses >= 1000000 ? `₩${(totalExpenses / 10000).toFixed(0)}만원` : `₩${totalExpenses.toLocaleString()}`;
+        if (badgeEl) badgeEl.innerText = `총 ${expStr}`;
+
+        if (tripExpenses.length === 0) {
+          html = '<div class="text-xs text-stone-400 py-3 text-center">등록된 지출 데이터가 없습니다.</div>';
+        } else {
+          html = tripExpenses.map((item, idx) => {
+            const rankEmoji = idx === 0 ? '🥇 1위' : idx === 1 ? '🥈 2위' : idx === 2 ? '🥉 3위' : `${idx + 1}위`;
+            const spentPct = item.budget > 0 ? Math.min(100, Math.round((item.spent / item.budget) * 100)) : 0;
+            return `
+              <div class="p-2.5 rounded-xl bg-white dark:bg-[#181a20] border border-[#e8e2d5] dark:border-stone-800 space-y-1.5 shadow-xs">
+                <div class="flex items-center justify-between gap-2">
+                  <div class="flex items-center gap-2 min-w-0">
+                    <span class="text-[10px] font-black font-mono text-rose-600 dark:text-rose-400">${rankEmoji}</span>
+                    <span class="text-xs font-black text-[#1c1917] dark:text-[#ededed] truncate">${escapeHtml(item.trip.title)}</span>
+                  </div>
+                  <div class="flex items-center gap-1.5 shrink-0">
+                    <span class="text-xs font-mono font-black text-rose-600 dark:text-rose-400">₩${item.spent.toLocaleString()}</span>
+                    <button onclick="closeModal('modal-analytics'); openTripWorkspace('${item.trip.id}'); switchTab('expenses');" class="px-2 py-0.5 rounded-md bg-amber-500/15 hover:bg-amber-500/25 text-[#a2601b] dark:text-amber-300 text-[10px] font-bold transition cursor-pointer" title="가계부로 이동">
+                      가계부 ➔
+                    </button>
+                  </div>
+                </div>
+                <div class="flex items-center justify-between text-[10px] text-stone-400 font-mono">
+                  <span>목표 ₩${(item.budget / 10000).toFixed(0)}만원</span>
+                  <span>소진율 ${spentPct}%</span>
+                </div>
+                <div class="w-full bg-stone-100 dark:bg-stone-800 rounded-full h-1.5 overflow-hidden">
+                  <div class="bg-rose-500 h-full rounded-full transition-all duration-300" style="width: ${spentPct}%"></div>
+                </div>
+              </div>
+            `;
+          }).join('');
+        }
+      } else if (metric === 'diaries') {
+        // 여정별 기록 일기 목록 및 편수
+        let totalDiaries = 0;
+        const tripDiaries = trips.map(t => {
+          let count = 0;
+          let entries = [];
+          if (t.journals && typeof t.journals === 'object') {
+            entries = Object.entries(t.journals).map(([dayKey, j]) => ({
+              label: `Day ${dayKey}`,
+              title: j.text ? j.text.slice(0, 30) : (j.title || '일기 기록')
+            }));
+            count = entries.length;
+          } else if (Array.isArray(t.diaries)) {
+            entries = t.diaries.map((d, i) => ({
+              label: d.date || `Day ${i + 1}`,
+              title: d.title || d.content?.slice(0, 30) || '일기 기록'
+            }));
+            count = entries.length;
+          }
+          totalDiaries += count;
+          return { trip: t, count, entries };
+        }).sort((a, b) => b.count - a.count);
+
+        if (badgeEl) badgeEl.innerText = `총 ${totalDiaries}편`;
+
+        if (totalDiaries === 0) {
+          html = '<div class="text-xs text-stone-400 py-3 text-center">작성된 여행 일기/기록이 아직 없습니다.</div>';
+        } else {
+          html = tripDiaries.map((item) => {
+            const jList = item.entries.slice(0, 3).map(entry => `
+              <div class="text-[10px] text-[#78716c] dark:text-stone-400 truncate">
+                • <span class="font-mono">${entry.label}</span>: ${escapeHtml(entry.title)}
+              </div>
+            `).join('');
+
+            return `
+              <div class="p-2.5 rounded-xl bg-white dark:bg-[#181a20] border border-[#e8e2d5] dark:border-stone-800 space-y-1 shadow-xs">
+                <div class="flex items-center justify-between gap-2">
+                  <span class="text-xs font-black text-[#1c1917] dark:text-[#ededed] truncate">${escapeHtml(item.trip.title)}</span>
+                  <div class="flex items-center gap-1.5 shrink-0">
+                    <span class="px-2 py-0.5 rounded-full bg-purple-500/15 text-purple-700 dark:text-purple-300 text-[10px] font-bold font-mono">${item.count}편</span>
+                    <button onclick="closeModal('modal-analytics'); openTripWorkspace('${item.trip.id}'); switchTab('journal');" class="px-2 py-0.5 rounded-md bg-purple-500/15 hover:bg-purple-500/25 text-purple-700 dark:text-purple-300 text-[10px] font-bold transition cursor-pointer" title="다이어리로 이동">
+                      다이어리 ➔
+                    </button>
+                  </div>
+                </div>
+                ${jList ? `<div class="pl-1 pt-1 border-t border-stone-100 dark:border-stone-800/60">${jList}</div>` : ''}
+              </div>
+            `;
+          }).join('');
+        }
+      }
+
+      contentEl.innerHTML = html;
+    }
+    window.renderStatDrilldown = renderStatDrilldown;
 
     function setHubStatusFilter(status) {
       State.hubFilters.status = status;
@@ -8307,13 +8702,14 @@
       if (!State.map) {
         State.map = L.map('leaflet-route-map', {
           zoomControl: true,
-          attributionControl: false
+          attributionControl: false,
+          scrollWheelZoom: false
         }).setView(centerCoord, initialZoom);
 
-        // CartoDB Dark Matter 다크 럭셔리 타일 레이어
-        L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+        // OpenStreetMap 표준 타일 레이어 (워터마크 없는 글로벌 고화질 타일)
+        L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
           maxZoom: 18,
-          subdomains: 'abcd'
+          attribution: '&copy; OpenStreetMap'
         }).addTo(State.map);
       } else {
         State.map.setView(centerCoord, initialZoom);
@@ -14855,6 +15251,14 @@ JSON 배열만 출력하세요. 각 day는 dayNum, title, city, date, spots를 �
         m.classList.add('sheet-closed');
         const anyOpen = document.querySelector('.sheet-container:not(.sheet-closed)');
         if (!anyOpen) document.body.style.overflow = document.getElementById('plan-block-detail-page')?.classList.contains('hidden') ? '' : 'hidden';
+
+        // 이전 호출 모달(예: modal-analytics) 복원 처리
+        if (modalId === 'modal-route-map' && typeof routeMapCallerModal !== 'undefined' && routeMapCallerModal) {
+          const returnTo = routeMapCallerModal;
+          routeMapCallerModal = null;
+          if (typeof updateRouteMapCallerBtn === 'function') updateRouteMapCallerBtn();
+          setTimeout(() => openModal(returnTo), 60);
+        }
       }
     }
 
