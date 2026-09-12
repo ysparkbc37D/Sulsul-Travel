@@ -33,7 +33,7 @@ function renderCompanionPlan() {
       <button class="companion-button companion-primary" onclick="openModal('modal-ai-trip')"><i class="fa-solid fa-wand-magic-sparkles" aria-hidden="true"></i> AI 초안 만들기</button>
       <div class="companion-metrics"><span><b>${blocks.length}</b>개 거점</span><span><b>${(trip.days || []).length}</b>일의 여행</span><span><b>${spots.length}</b>개 일정</span></div>
     </section>
-    ${blocks.length ? `<div class="companion-route" aria-label="거점 바로가기">${blocks.map((block, index) => `<button onclick="openPlanBlock(${index})" aria-label="${escapeHtml(block.title || block.place)} 세부 계획"><span>${String(index + 1).padStart(2, '0')}</span>${escapeHtml(block.title || block.place)}</button>`).join('<i class="fa-solid fa-arrow-right" aria-hidden="true"></i>')}</div>` : ''}
+    ${blocks.length ? `<div class="companion-route" aria-label="거점 바로가기">${blocks.map((block, index) => `<button onclick="scrollToPlanBlock(${index})" aria-label="${escapeHtml(block.title || block.place)} 거점으로 이동"><span>${String(index + 1).padStart(2, '0')}</span>${escapeHtml(block.title || block.place)}</button>`).join('<i class="fa-solid fa-arrow-right" aria-hidden="true"></i>')}</div>` : ''}
     <div class="companion-section-title"><h3>우리의 여정</h3><span>도시를 눌러 하루 계획 보기</span></div>
     <div class="companion-block-list">${blocks.map((block, index) => {
       const items = block.days.flatMap(item => item.day.spots || []);
@@ -41,7 +41,7 @@ function renderCompanionPlan() {
       const highlights = (block.priorities.length ? block.priorities : items.filter(spot => !spot.completed).slice(0, 2).map(spot => spot.title));
       const first = block.days[0].dayIndex + 1;
       const last = block.days[block.days.length - 1].dayIndex + 1;
-      return `<article class="companion-block">
+      return `<article class="companion-block" id="companion-block-${index}">
         <button class="companion-block-open" onclick="openPlanBlock(${index})" aria-label="${escapeHtml(block.title || block.place)} 세부 계획 열기">
           <span class="companion-number">${String(index + 1).padStart(2, '0')}</span>
           <span class="companion-block-copy"><span class="companion-block-meta">DAY ${first}${last !== first ? `–${last}` : ''} <span>· ${escapeHtml(companionDate(block.startDate))}${last !== first ? ` – ${escapeHtml(companionDate(block.endDate))}` : ''}</span></span>
@@ -148,3 +148,16 @@ document.addEventListener('DOMContentLoaded', () => {
   document.addEventListener('focusout', () => requestAnimationFrame(updateCompanionViewport));
   updateCompanionViewport();
 });
+
+function scrollToPlanBlock(blockIndex) {
+  const el = document.getElementById(`companion-block-${blockIndex}`);
+  if (el) {
+    el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    el.classList.add('companion-block-focus');
+    setTimeout(() => el.classList.remove('companion-block-focus'), 1400);
+  } else if (typeof openPlanBlock === 'function') {
+    openPlanBlock(blockIndex);
+  }
+}
+window.scrollToPlanBlock = scrollToPlanBlock;
+
