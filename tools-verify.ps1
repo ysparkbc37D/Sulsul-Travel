@@ -264,7 +264,8 @@ new Promise(function(resolve) {
         ready: document.readyState,
         sulsul: !!(node && node.getAttribute("data-sulsul") === "true"),
         ver: node ? node.getAttribute("data-ver") : "",
-        errors: node ? Number(node.getAttribute("data-errs")) : -1
+        errors: node ? Number(node.getAttribute("data-errs")) : -1,
+        errList: window.__errors || []
       }));
     }, 750);
   }
@@ -288,10 +289,11 @@ new Promise(function(resolve) {
         $sulsulReady = [bool]$gateResult.sulsul
         $v8Ver = [string]$gateResult.ver
         $errCount = [int]$gateResult.errors
+        $errDetail = if ($gateResult.errList) { " | Error Detail: " + ($gateResult.errList -join " ; ") } else { "" }
         # External CDN assets can leave a valid app at "interactive" while they
         # finish. The injected gate itself proves DOMContentLoaded has fired.
         $v8Pass = ($gateResult.ready -ne "loading") -and $sulsulReady -and ($errCount -eq 0) -and ($v8Ver -eq $appVer)
-        Report-Gate "Headless Edge V8 Engine Parsing & Zero Runtime Errors" $v8Pass "Ready: $($gateResult.ready) | SulsulTravel: $sulsulReady | V8 Ver: v$v8Ver | Runtime Errors: $errCount"
+        Report-Gate "Headless Edge V8 Engine Parsing & Zero Runtime Errors" $v8Pass "Ready: $($gateResult.ready) | SulsulTravel: $sulsulReady | V8 Ver: v$v8Ver | Runtime Errors: $errCount$errDetail"
 
         if ($browserInfo.webSocketDebuggerUrl) {
             $browserSocketUrl = "$($browserInfo.webSocketDebuggerUrl)"

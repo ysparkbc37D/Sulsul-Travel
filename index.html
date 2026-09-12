@@ -29,7 +29,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700;800&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
 
   <!-- Local Utilities Bundle (CDN fallback & tailwind utilities) -->
-  <link rel="stylesheet" href="css/utilities.css?v=1.5.5">
+  <link rel="stylesheet" href="css/utilities.css?v=1.5.6">
   <link rel="stylesheet" href="vendor/fontawesome/css/all.min.css">
 
   <!-- Leaflet Map CSS & JS -->
@@ -720,8 +720,8 @@
     }
   </style>
 
-  <link rel="stylesheet" href="css/companion.css?v=1.5.5">
-  <script src="js/presentation/companion-ui.js?v=1.5.5"></script>
+  <link rel="stylesheet" href="css/companion.css?v=1.5.6">
+  <script src="js/presentation/companion-ui.js?v=1.5.6"></script>
 
   <!-- Knowledge Base Seed & Destination Knowledge Packs (DKP) -->
   <script src="kb-travel.js"></script>
@@ -747,7 +747,7 @@
             <h1 class="font-serif-brand text-base sm:text-xl font-bold tracking-tight text-[#1c1917] dark:text-[#ededed] whitespace-nowrap">
               Sulsul Travel
             </h1>
-            <span id="app-ver-badge" onclick="event.stopPropagation(); openVersionHistoryModal()" class="px-1.5 py-0.5 rounded-md theme-card-subtle hover:border-amber-500/60 hover:text-amber-600 dark:hover:text-amber-300 text-[#a2601b] dark:text-[#d4af37] text-[10px] font-bold font-mono shadow-inner cursor-pointer shrink-0 transition" title="버전 업데이트 기록 보기 (클릭)">v1.5.5</span>
+            <span id="app-ver-badge" onclick="event.stopPropagation(); openVersionHistoryModal()" class="px-1.5 py-0.5 rounded-md theme-card-subtle hover:border-amber-500/60 hover:text-amber-600 dark:hover:text-amber-300 text-[#a2601b] dark:text-[#d4af37] text-[10px] font-bold font-mono shadow-inner cursor-pointer shrink-0 transition" title="버전 업데이트 기록 보기 (클릭)">v1.5.6</span>
           </div>
           <p id="header-trip-name" class="text-[10px] sm:text-[11px] text-[#78716c] dark:text-stone-400 truncate max-w-[120px] sm:max-w-xs font-normal">인생의 모든 여정을 기록하는 다이어리</p>
         </div>
@@ -2167,7 +2167,7 @@
 
         <div>
           <div class="flex items-center justify-between mb-1.5">
-            <label class="font-bold exp-heading block text-xs">출금 지갑 / 결제 상세</label>
+            <label id="exp-form-wallet-label" class="font-bold exp-heading block text-xs">출금 지갑 / 결제 상세</label>
             <span id="exp-form-wallet-active-badge" class="text-[10px] font-bold text-amber-600 dark:text-amber-400"></span>
           </div>
           <select id="exp-form-payment-source" onchange="onExpensePaymentSourceChange()" class="hidden"></select>
@@ -3362,11 +3362,18 @@
 
       <!-- 버전 목록 스크롤 영역 -->
       <div class="flex-1 overflow-y-auto space-y-3 pr-1 text-xs">
-        <!-- v1.5.5 (Current) -->
+        <!-- v1.5.6 (Current) -->
         <div class="p-4 rounded-2xl border-2 border-emerald-500/40 space-y-2.5 bg-emerald-500/5 dark:bg-emerald-500/10">
-          <div class="flex items-center justify-between gap-2"><div class="flex items-center gap-2 min-w-0"><span class="px-2 py-0.5 rounded-lg bg-emerald-500 text-black font-black text-xs shadow-sm shrink-0">v1.5.5</span><span class="text-xs font-black text-[#1c1917] dark:text-white">지출 통화 보유통화 자동 한정, 모바일 전체화면 select 제거 및 원터치 칩·카드 UI 전면 개편</span></div><span class="companion-status shrink-0">최신 버전</span></div>
+          <div class="flex items-center justify-between gap-2"><div class="flex items-center gap-2 min-w-0"><span class="px-2 py-0.5 rounded-lg bg-emerald-500 text-black font-black text-xs shadow-sm shrink-0">v1.5.6</span><span class="text-xs font-black text-[#1c1917] dark:text-white">다통화 수입(Income) 지갑 미반영 및 지출 합산 버그 완치, 입금 지갑 스마트 분기 체계 구축</span></div><span class="companion-status shrink-0">최신 버전</span></div>
+          <p class="text-xs leading-relaxed">사용자 실기기 제보에 따라 <b>외화(USD 100 등)를 수입으로 기록했음에도 해당 통화 지갑에 반영되지 않고 지출로 잘못 합산되던 회계 엔진 결함</b>을 원천 완치했습니다. 지갑 계산 엔진(<code>calculateTripWallets</code>)에 수입(<code>income</code>) 집계 라인을 신설하여 <code>잔액 = 초기자금 + 수입 + 환전입금 - 환전출금 - 지출</code>의 복식부기 무결성을 완성했습니다. 또한 총 지출액 통계에서 수입 항목을 정확히 배제하고, 지출/수입 등록 모달에서 수입 선택 시 <b>[입금 지갑 / 수입 상세]</b>로 헤더와 카드 옵션을 스마트 전환하여 외화 수입 시 해당 외화 지갑(<code>wallet_curr</code>)으로 기본 입금되도록 정합성을 확보했습니다. 과거 잘못 기록되었던 외화 수입 내역에 대한 데이터 자동 치유 알고리즘도 함께 탑재되었습니다.</p>
+          <div class="text-[10px] text-stone-400 dark:text-stone-500 pt-1 border-t border-emerald-500/20 flex items-center justify-between"><span>📅 2026-09-12 릴리즈</span><span class="font-mono">st-shell-v1.5.6</span></div>
+        </div>
+
+        <!-- v1.5.5 -->
+        <div class="p-4 rounded-2xl bg-stone-50 dark:bg-stone-900/50 border border-stone-200 dark:border-stone-800 space-y-2.5 shadow-sm relative overflow-hidden">
+          <div class="flex items-center justify-between gap-2"><div class="flex items-center gap-2 min-w-0"><span class="px-2 py-0.5 rounded-lg bg-stone-200 dark:bg-stone-800 text-stone-800 dark:text-stone-200 font-bold text-[11px] font-mono shrink-0">v1.5.5</span><span class="text-xs font-bold text-[#1c1917] dark:text-stone-200">지출 통화 보유통화 자동 한정, 모바일 전체화면 select 제거 및 원터치 칩·카드 UI 전면 개편</span></div></div>
           <p class="text-xs leading-relaxed">사용자 실기기 제보에 따라 모바일 브라우저에서 투박한 PC용 <code>&lt;select&gt;</code> 창이 화면 전체를 덮어버려 답답함을 유발하던 결함을 전면 혁신했습니다. 새 지출 기록 시 여행의 <b>보유 통화(KRW, USD 등)를 자동 감지하여 1-터치 칩(<code>#exp-form-curr-chips</code>)</b>으로 깔끔하게 제공하며, 미보유 제3국 통화 필요 시 <b>[+ 다른 통화]</b>로 즉시 추가·선택할 수 있습니다. 또한 거대한 OS 팝업을 띄우던 출금 지갑 선택 역시 <b>원터치 카드 칩(<code>exp-wallet-card</code>)</b>으로 교체하여 실시간 잔액 확인과 원터치 선택을 구현했습니다. 세부 일정 블록 편집 상태 또한 <b>4단 세그먼트 버튼([초안][검토][확정][완료])</b>으로 전환하여 모바일 전체화면 select 팝업을 0건으로 일소했습니다.</p>
-          <div class="text-[10px] text-stone-400 dark:text-stone-500 pt-1 border-t border-emerald-500/20 flex items-center justify-between"><span>📅 2026-09-12 릴리즈</span><span class="font-mono">st-shell-v1.5.5</span></div>
+          <div class="text-[10px] text-stone-400 dark:text-stone-500 pt-1 border-t border-stone-200 dark:border-stone-800 flex items-center justify-between"><span>📅 2026-09-12 릴리즈</span><span class="font-mono">st-shell-v1.5.5</span></div>
         </div>
 
         <!-- v1.5.4 -->
@@ -3912,7 +3919,7 @@
     window.showToast = showToast;
 
     // 앱 버전 및 글로벌 네임스페이스 (Sulsul-Travel Invariant Rule R-10, R-11, R-12, R-13, R-14, R-15)
-    const APP_VER = '1.5.5';
+    const APP_VER = '1.5.6';
 
     // ══════════════════════════════════════════
     // [Two-Tone Theme System] 라이트 그레이 & 딥 블랙 테마 엔진
@@ -6122,7 +6129,7 @@
         (t.cities || []).forEach(ct => citiesSet.add(ct));
 
         (t.expenses || []).forEach(e => {
-          totalExpensesKrw += (e.krw || 0);
+          if (e.type !== 'income') totalExpensesKrw += (e.krw || 0);
         });
 
         if (t.journals) {
@@ -6881,7 +6888,9 @@
 
       filtered.forEach(trip => {
         let totalSpent = 0;
-        (trip.expenses || []).forEach(e => totalSpent += (e.krw || 0));
+        (trip.expenses || []).forEach(e => {
+          if (e.type !== 'income') totalSpent += (e.krw || 0);
+        });
         const budget = trip.budget || 5000000;
         const pct = Math.min(100, Math.round((totalSpent / budget) * 100)) || 0;
 
@@ -7495,7 +7504,9 @@
 
       // 통계 계산
       let totalSpentKrw = 0;
-      (trip.expenses || []).forEach(e => totalSpentKrw += (e.krw || 0));
+      (trip.expenses || []).forEach(e => {
+        if (e.type !== 'income') totalSpentKrw += (e.krw || 0);
+      });
       const baseCurr = (trip.currency && CURRENCY_INFO[trip.currency]) ? trip.currency : 'KRW';
       const baseRate = getCurrencyRate(baseCurr);
       const baseSymbol = getCurrencySymbol(baseCurr);
@@ -8523,6 +8534,7 @@
           exchangedIn: 0,
           exchangedOut: 0,
           spent: 0,
+          income: 0,
           balance: initBal,
           krwValue: 0
         };
@@ -8541,36 +8553,60 @@
         });
       }
 
-      // 지출 트랜잭션 집계
+      // 지출 및 수입 트랜잭션 집계 (v1.5.6)
       if (Array.isArray(trip.expenses)) {
         trip.expenses.forEach(exp => {
+          const isIncome = (exp.type === 'income');
           const amt = Number(exp.amount) || 0;
           const krwAmt = Number(exp.krw) || 0;
-          const pSource = exp.paymentSource;
-          const wCurr = exp.walletCurr;
+          let pSource = exp.paymentSource;
+          let wCurr = exp.walletCurr;
+
+          // 데이터 자동 치유: 외화 수입(예: USD 100)인데 과거 기본값 버그로 wallet_krw(한국 카드)로 저장된 경우
+          // 사용자가 의도한 외화 지갑(wallet_curr)으로 즉시 정상화
+          if (isIncome && exp.curr && exp.curr !== 'KRW' && (pSource === 'wallet_krw' || !wCurr)) {
+            pSource = 'wallet_curr';
+            wCurr = exp.curr;
+            exp.paymentSource = 'wallet_curr';
+            exp.walletCurr = exp.curr;
+          }
 
           if (pSource === 'none') {
-            // 지갑 잔액 미차감
+            // 지갑 잔액 미반영 (통계에만 기록)
             return;
           }
 
-          if (pSource === 'wallet_krw' || wCurr === 'KRW') {
-            if (wallets['KRW']) wallets['KRW'].spent += krwAmt;
-          } else if (wCurr && wallets[wCurr]) {
-            wallets[wCurr].spent += amt;
-          } else if (exp.curr && wallets[exp.curr]) {
-            wallets[exp.curr].spent += amt;
+          if (isIncome) {
+            // 수입: 지갑 잔액 증가 (+충전)
+            if (pSource === 'wallet_krw' || wCurr === 'KRW') {
+              if (wallets['KRW']) wallets['KRW'].income += krwAmt;
+            } else if (wCurr && wallets[wCurr]) {
+              wallets[wCurr].income += amt;
+            } else if (exp.curr && wallets[exp.curr]) {
+              wallets[exp.curr].income += amt;
+            } else {
+              if (wallets['KRW']) wallets['KRW'].income += krwAmt;
+            }
           } else {
-            if (wallets['KRW']) wallets['KRW'].spent += krwAmt;
+            // 지출: 지갑 잔액 차감
+            if (pSource === 'wallet_krw' || wCurr === 'KRW') {
+              if (wallets['KRW']) wallets['KRW'].spent += krwAmt;
+            } else if (wCurr && wallets[wCurr]) {
+              wallets[wCurr].spent += amt;
+            } else if (exp.curr && wallets[exp.curr]) {
+              wallets[exp.curr].spent += amt;
+            } else {
+              if (wallets['KRW']) wallets['KRW'].spent += krwAmt;
+            }
           }
         });
       }
 
-      // 잔액 및 원화/기준통화 가치 산출
+      // 잔액 및 원화/기준통화 가치 산출 (초기자금 + 수입 + 환전입금 - 환전출금 - 지출)
       let totalAssetKrw = 0;
       activeCurrencies.forEach(curr => {
         const w = wallets[curr];
-        w.balance = w.initial + w.exchangedIn - w.exchangedOut - w.spent;
+        w.balance = w.initial + (w.income || 0) + w.exchangedIn - w.exchangedOut - w.spent;
         w.krwValue = Math.round(w.balance * getCurrencyRate(curr));
         totalAssetKrw += w.krwValue;
       });
@@ -8623,7 +8659,10 @@
               <span class="text-amber-400/90 font-medium truncate">
                 ${curr === 'KRW' ? '원화 자금' : `≈ ₩${(w.krwValue || 0).toLocaleString()}`}
               </span>
-              ${w.spent > 0 ? `<span class="text-slate-500 text-[9px] shrink-0">지출 ${w.symbol}${(w.spent||0).toLocaleString()}</span>` : ''}
+              <div class="flex items-center gap-1.5 shrink-0 text-[9px]">
+                ${w.income > 0 ? `<span class="text-emerald-400 font-bold">수입 +${w.symbol}${(w.income||0).toLocaleString()}</span>` : ''}
+                ${w.spent > 0 ? `<span class="text-slate-500">지출 ${w.symbol}${(w.spent||0).toLocaleString()}</span>` : ''}
+              </div>
             </div>
           </div>
         `;
@@ -8662,12 +8701,19 @@
       const expCountBadge = document.getElementById('exp-count-badge');
       const exchCountBadge = document.getElementById('exch-count-badge');
       const summaryHint = document.getElementById('exp-tab-summary-hint');
-      const expCount = (trip.expenses || []).length;
+      const expenses = trip.expenses || [];
+      const expCount = expenses.filter(e => e.type !== 'income').length;
+      const incCount = expenses.filter(e => e.type === 'income').length;
       const exchCount = (trip.exchanges || []).length;
 
-      if (expCountBadge) expCountBadge.innerText = expCount;
+      if (expCountBadge) expCountBadge.innerText = expenses.length;
       if (exchCountBadge) exchCountBadge.innerText = exchCount;
-      if (summaryHint) summaryHint.innerText = `총 ${expCount}건 지출 · ${exchCount}건 환전 (자산 실시간 정산 중)`;
+      if (summaryHint) {
+        const parts = [`지출 ${expCount}건`];
+        if (incCount > 0) parts.push(`수입 ${incCount}건`);
+        if (exchCount > 0) parts.push(`환전 ${exchCount}건`);
+        summaryHint.innerText = `총 ${parts.join(' · ')} (자산 실시간 정산 중)`;
+      }
 
       const currentSubTab = State.activeExpenseSubTab || 'expenses';
       if (currentSubTab === 'exchanges') {
@@ -8708,22 +8754,35 @@
 
       container.innerHTML = expenses.map((exp, expIdx) => {
         let paymentBadge = '';
+        const isIncome = exp.type === 'income';
         const isCash = exp.payMethod === 'cash';
-        if (exp.paymentSource === 'wallet_krw' || (exp.curr !== 'KRW' && exp.walletCurr === 'KRW')) {
-          paymentBadge = '<span class="px-1.5 py-0.5 rounded text-[9px] font-bold bg-sky-500/10 text-sky-400 border border-sky-500/20 shrink-0">💳 한국 카드</span>';
-        } else if (isCash) {
-          const wC = exp.walletCurr || exp.curr || 'KRW';
-          const flag = CURRENCY_INFO[wC]?.flag || '💵';
-          paymentBadge = `<span class="px-1.5 py-0.5 rounded text-[9px] font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 shrink-0">${flag} 현금</span>`;
-        } else if (exp.paymentSource === 'none') {
-          paymentBadge = '<span class="px-1.5 py-0.5 rounded text-[9px] font-bold bg-slate-500/10 text-slate-400 border border-slate-500/20 shrink-0">📝 단순 기록</span>';
+
+        if (isIncome) {
+          if (exp.paymentSource === 'none') {
+            paymentBadge = '<span class="px-1.5 py-0.5 rounded text-[9px] font-bold bg-slate-500/10 text-slate-400 border border-slate-500/20 shrink-0">📝 단순 기록</span>';
+          } else if (exp.paymentSource === 'wallet_krw' || (exp.curr !== 'KRW' && exp.walletCurr === 'KRW')) {
+            paymentBadge = '<span class="px-1.5 py-0.5 rounded text-[9px] font-bold bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 shrink-0">🇰🇷 KRW 입금</span>';
+          } else {
+            const wC = exp.walletCurr || exp.curr || 'KRW';
+            const flag = CURRENCY_INFO[wC]?.flag || '💵';
+            paymentBadge = `<span class="px-1.5 py-0.5 rounded text-[9px] font-bold bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 shrink-0">${flag} ${wC} 지갑 입금</span>`;
+          }
         } else {
-          const wC = exp.walletCurr || exp.curr || 'KRW';
-          const flag = CURRENCY_INFO[wC]?.flag || '💳';
-          paymentBadge = `<span class="px-1.5 py-0.5 rounded text-[9px] font-bold bg-sky-500/10 text-sky-400 border border-sky-500/20 shrink-0">${flag} 카드</span>`;
+          if (exp.paymentSource === 'wallet_krw' || (exp.curr !== 'KRW' && exp.walletCurr === 'KRW')) {
+            paymentBadge = '<span class="px-1.5 py-0.5 rounded text-[9px] font-bold bg-sky-500/10 text-sky-400 border border-sky-500/20 shrink-0">💳 한국 카드</span>';
+          } else if (isCash) {
+            const wC = exp.walletCurr || exp.curr || 'KRW';
+            const flag = CURRENCY_INFO[wC]?.flag || '💵';
+            paymentBadge = `<span class="px-1.5 py-0.5 rounded text-[9px] font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 shrink-0">${flag} 현금</span>`;
+          } else if (exp.paymentSource === 'none') {
+            paymentBadge = '<span class="px-1.5 py-0.5 rounded text-[9px] font-bold bg-slate-500/10 text-slate-400 border border-slate-500/20 shrink-0">📝 단순 기록</span>';
+          } else {
+            const wC = exp.walletCurr || exp.curr || 'KRW';
+            const flag = CURRENCY_INFO[wC]?.flag || '💳';
+            paymentBadge = `<span class="px-1.5 py-0.5 rounded text-[9px] font-bold bg-sky-500/10 text-sky-400 border border-sky-500/20 shrink-0">${flag} 카드</span>`;
+          }
         }
 
-        const isIncome = exp.type === 'income';
         const typeBadge = isIncome
           ? '<span class="px-1.5 py-0.5 rounded text-[9px] font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 shrink-0">수입</span>'
           : '';
@@ -10031,11 +10090,13 @@
       if (event) event.stopPropagation();
       const trip = getActiveTrip();
       const exp = trip.expenses[expIdx];
+      const isIncome = exp.type === 'income';
+      const label = isIncome ? '수입' : '지출';
 
       showConfirmDelete(
-        '지출 내역을 삭제하시겠습니까?',
-        `${exp.title} (₩${(exp.krw||0).toLocaleString()})`,
-        '가계부 및 상단 예산 통계에서 즉시 제외됩니다.',
+        `${label} 내역을 삭제하시겠습니까?`,
+        `${exp.title} (${exp.curr} ${(exp.amount||0).toLocaleString()} · ≈ ₩${(exp.krw||0).toLocaleString()})`,
+        '가계부 및 지갑 잔액 통계에서 즉시 제외됩니다.',
         () => {
           trip.expenses.splice(expIdx, 1);
           saveTrips();
@@ -12342,6 +12403,7 @@ ${JSON.stringify(snapshotDays)}`;
       const signBadge = document.getElementById('exp-form-sign-badge');
       const heading = document.getElementById('exp-modal-heading');
       const submitBtn = document.getElementById('exp-form-submit-btn');
+      const walletLabel = document.getElementById('exp-form-wallet-label');
 
       if (type === 'income') {
         if (expBtn) expBtn.className = 'flex-1 py-1.5 exp-pill-btn flex items-center justify-center gap-1.5';
@@ -12351,6 +12413,7 @@ ${JSON.stringify(snapshotDays)}`;
           signBadge.className = 'text-2xl font-black text-emerald-500 shrink-0 select-none';
         }
         if (heading) heading.textContent = '수입 기록 추가';
+        if (walletLabel) walletLabel.textContent = '입금 지갑 / 수입 상세';
         if (submitBtn) {
           submitBtn.textContent = '수입 저장';
           submitBtn.className = 'flex-1 py-2.5 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-600 text-slate-950 font-black text-xs shadow-md hover:from-emerald-600 hover:to-teal-700 transition';
@@ -12363,11 +12426,13 @@ ${JSON.stringify(snapshotDays)}`;
           signBadge.className = 'text-2xl font-black text-rose-500 shrink-0 select-none';
         }
         if (heading) heading.textContent = '지출 기록 추가';
+        if (walletLabel) walletLabel.textContent = '출금 지갑 / 결제 상세';
         if (submitBtn) {
           submitBtn.textContent = '지출 저장';
           submitBtn.className = 'flex-1 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 text-slate-950 font-black text-xs shadow-md hover:from-amber-600 hover:to-amber-700 transition';
         }
       }
+      updateExpensePaymentSourceOptions();
       updateExpenseInlineKrwPreview();
     }
     window.setExpenseTransType = setExpenseTransType;
@@ -12654,76 +12719,150 @@ ${JSON.stringify(snapshotDays)}`;
 
       const trip = getActiveTrip();
       const curr = currSelect.value;
+      const isIncome = (ExpenseFormState.type === 'income');
       const walletData = calculateTripWallets(trip);
       const options = [];
 
-      if (curr !== 'KRW') {
-        // Option 1: 현지 통화 지갑 잔액 차감
-        const w = walletData.wallets[curr];
-        const isDec = (curr !== 'JPY' && curr !== 'VND' && curr !== 'CLP');
-        const balStr = w ? `${w.symbol}${w.balance.toLocaleString(undefined, { minimumFractionDigits: isDec ? 2 : 0, maximumFractionDigits: 2 })}` : '0';
-        const flag = CURRENCY_INFO[curr]?.flag || '💵';
-        options.push({
-          value: 'wallet_curr',
-          icon: flag,
-          title: `[${curr} 지갑] 잔액에서 차감`,
-          sub: `현재 보유 잔액: ${balStr}`
-        });
+      if (isIncome) {
+        if (curr !== 'KRW') {
+          // Option 1: 현지 통화 지갑으로 입금 (+충전)
+          const w = walletData.wallets[curr];
+          const isDec = (curr !== 'JPY' && curr !== 'VND' && curr !== 'CLP');
+          const balStr = w ? `${w.symbol}${w.balance.toLocaleString(undefined, { minimumFractionDigits: isDec ? 2 : 0, maximumFractionDigits: 2 })}` : '0';
+          const flag = CURRENCY_INFO[curr]?.flag || '💵';
+          options.push({
+            value: 'wallet_curr',
+            icon: flag,
+            title: `[${curr} 지갑] 잔액에 입금 (+충전)`,
+            sub: `현재 보유 잔액: ${balStr}`
+          });
 
-        // Option 2: 한국 신용카드 / KRW 원화 차감
-        const krwW = walletData.wallets['KRW'];
-        const krwBalStr = krwW ? `₩${krwW.balance.toLocaleString()}` : '₩0';
-        options.push({
-          value: 'wallet_krw',
-          icon: '💳',
-          title: '[한국 신용카드 / 원화] 결제·청구',
-          sub: `원화 잔액: ${krwBalStr}`
-        });
+          // Option 2: KRW 원화 지갑으로 입금
+          const krwW = walletData.wallets['KRW'];
+          const krwBalStr = krwW ? `₩${krwW.balance.toLocaleString()}` : '₩0';
+          options.push({
+            value: 'wallet_krw',
+            icon: '🇰🇷',
+            title: '[KRW 원화 지갑] 원화로 입금',
+            sub: `원화 잔액: ${krwBalStr}`
+          });
 
-        // Option 3: Other active foreign wallets
-        walletData.activeCurrencies.forEach(c => {
-          if (c !== 'KRW' && c !== curr) {
-            const ow = walletData.wallets[c];
-            const owDec = (c !== 'JPY' && c !== 'VND' && c !== 'CLP');
-            const obalStr = ow ? `${ow.symbol}${ow.balance.toLocaleString(undefined, { minimumFractionDigits: owDec ? 2 : 0, maximumFractionDigits: 2 })}` : '0';
-            const oflag = CURRENCY_INFO[c]?.flag || '🌐';
-            options.push({
-              value: `wallet_${c}`,
-              icon: oflag,
-              title: `[${c} 지갑] 잔액에서 차감`,
-              sub: `보유 잔액: ${obalStr}`
-            });
-          }
-        });
+          // Option 3: Other active foreign wallets
+          walletData.activeCurrencies.forEach(c => {
+            if (c !== 'KRW' && c !== curr) {
+              const ow = walletData.wallets[c];
+              const owDec = (c !== 'JPY' && c !== 'VND' && c !== 'CLP');
+              const obalStr = ow ? `${ow.symbol}${ow.balance.toLocaleString(undefined, { minimumFractionDigits: owDec ? 2 : 0, maximumFractionDigits: 2 })}` : '0';
+              const oflag = CURRENCY_INFO[c]?.flag || '🌐';
+              options.push({
+                value: `wallet_${c}`,
+                icon: oflag,
+                title: `[${c} 지갑] 입금`,
+                sub: `보유 잔액: ${obalStr}`
+              });
+            }
+          });
 
-        // Option 4: 단순 기록
-        options.push({
-          value: 'none',
-          icon: '📝',
-          title: '단순 기록 (지갑 잔액 미차감)',
-          sub: '지출 통계에만 집계'
-        });
+          // Option 4: 단순 기록
+          options.push({
+            value: 'none',
+            icon: '📝',
+            title: '단순 기록 (지갑 잔액 미반영)',
+            sub: '수입 통계에만 집계'
+          });
+        } else {
+          // KRW 입금
+          const krwW = walletData.wallets['KRW'];
+          const krwBalStr = krwW ? `₩${krwW.balance.toLocaleString()}` : '₩0';
+          options.push({
+            value: 'wallet_krw',
+            icon: '🇰🇷',
+            title: '[KRW 원화 지갑] 입금 (+충전)',
+            sub: `원화 잔액: ${krwBalStr}`
+          });
+          options.push({
+            value: 'none',
+            icon: '📝',
+            title: '단순 기록 (지갑 잔액 미반영)',
+            sub: '수입 통계에만 집계'
+          });
+        }
       } else {
-        // KRW 결제
-        const krwW = walletData.wallets['KRW'];
-        const krwBalStr = krwW ? `₩${krwW.balance.toLocaleString()}` : '₩0';
-        options.push({
-          value: 'wallet_krw',
-          icon: '💳',
-          title: '[KRW 원화 지갑 / 한국 카드] 결제',
-          sub: `원화 잔액: ${krwBalStr}`
-        });
-        options.push({
-          value: 'none',
-          icon: '📝',
-          title: '단순 기록 (지갑 잔액 미차감)',
-          sub: '지출 통계에만 집계'
-        });
+        if (curr !== 'KRW') {
+          // Option 1: 현지 통화 지갑 잔액 차감
+          const w = walletData.wallets[curr];
+          const isDec = (curr !== 'JPY' && curr !== 'VND' && curr !== 'CLP');
+          const balStr = w ? `${w.symbol}${w.balance.toLocaleString(undefined, { minimumFractionDigits: isDec ? 2 : 0, maximumFractionDigits: 2 })}` : '0';
+          const flag = CURRENCY_INFO[curr]?.flag || '💵';
+          options.push({
+            value: 'wallet_curr',
+            icon: flag,
+            title: `[${curr} 지갑] 잔액에서 차감`,
+            sub: `현재 보유 잔액: ${balStr}`
+          });
+
+          // Option 2: 한국 신용카드 / KRW 원화 차감
+          const krwW = walletData.wallets['KRW'];
+          const krwBalStr = krwW ? `₩${krwW.balance.toLocaleString()}` : '₩0';
+          options.push({
+            value: 'wallet_krw',
+            icon: '💳',
+            title: '[한국 신용카드 / 원화] 결제·청구',
+            sub: `원화 잔액: ${krwBalStr}`
+          });
+
+          // Option 3: Other active foreign wallets
+          walletData.activeCurrencies.forEach(c => {
+            if (c !== 'KRW' && c !== curr) {
+              const ow = walletData.wallets[c];
+              const owDec = (c !== 'JPY' && c !== 'VND' && c !== 'CLP');
+              const obalStr = ow ? `${ow.symbol}${ow.balance.toLocaleString(undefined, { minimumFractionDigits: owDec ? 2 : 0, maximumFractionDigits: 2 })}` : '0';
+              const oflag = CURRENCY_INFO[c]?.flag || '🌐';
+              options.push({
+                value: `wallet_${c}`,
+                icon: oflag,
+                title: `[${c} 지갑] 잔액에서 차감`,
+                sub: `보유 잔액: ${obalStr}`
+              });
+            }
+          });
+
+          // Option 4: 단순 기록
+          options.push({
+            value: 'none',
+            icon: '📝',
+            title: '단순 기록 (지갑 잔액 미차감)',
+            sub: '지출 통계에만 집계'
+          });
+        } else {
+          // KRW 결제
+          const krwW = walletData.wallets['KRW'];
+          const krwBalStr = krwW ? `₩${krwW.balance.toLocaleString()}` : '₩0';
+          options.push({
+            value: 'wallet_krw',
+            icon: '💳',
+            title: '[KRW 원화 지갑 / 한국 카드] 결제',
+            sub: `원화 잔액: ${krwBalStr}`
+          });
+          options.push({
+            value: 'none',
+            icon: '📝',
+            title: '단순 기록 (지갑 잔액 미차감)',
+            sub: '지출 통계에만 집계'
+          });
+        }
       }
 
       const prevVal = sourceSelect.value;
       sourceSelect.innerHTML = options.map(opt => `<option value="${opt.value}">${opt.title}</option>`).join('');
-      const defaultVal = (prevVal && options.some(o => o.value === prevVal)) ? prevVal : options[0].value;
+
+      // Smart Default: 수입이고 외화인 경우 무조건 해당 외화 지갑(wallet_curr)을 기본값으로 추천
+      let defaultVal;
+      if (isIncome && curr !== 'KRW') {
+        defaultVal = (prevVal === 'wallet_curr' || prevVal === 'wallet_krw' || !options.some(o => o.value === prevVal)) ? 'wallet_curr' : prevVal;
+      } else {
+        defaultVal = (prevVal && options.some(o => o.value === prevVal)) ? prevVal : options[0].value;
+      }
       sourceSelect.value = defaultVal;
 
       renderExpensePaymentSourceCards(options, defaultVal);
@@ -12778,32 +12917,46 @@ ${JSON.stringify(snapshotDays)}`;
 
       const trip = getActiveTrip();
       const curr = currSelect ? currSelect.value : 'KRW';
+      const isIncome = (ExpenseFormState.type === 'income');
       const walletData = calculateTripWallets(trip);
       const val = sourceSelect.value;
       const amount = parseFloat(document.getElementById('exp-form-amount')?.value) || 0;
 
       if (val === 'none') {
-        hint.innerHTML = `<span class="text-slate-400">ℹ️ 지출 통계에만 기록되며 지갑 잔액은 차감되지 않습니다.</span>`;
+        hint.innerHTML = `<span class="text-slate-400">ℹ️ ${isIncome ? '수입' : '지출'} 통계에만 기록되며 지갑 잔액은 변경되지 않습니다.</span>`;
       } else if (val === 'wallet_krw') {
         const krwW = walletData.wallets['KRW'];
         const rate = getCurrencyRate(curr);
         const krwAmt = (curr === 'KRW') ? amount : Math.round(amount * rate);
         const curBal = krwW ? krwW.balance : 0;
-        const remain = curBal - krwAmt;
-        if (remain < 0) {
-          hint.innerHTML = `<span class="text-rose-400 font-bold">⚠️ KRW 지갑 잔액 부족 (₩${curBal.toLocaleString()} < ₩${krwAmt.toLocaleString()})</span>`;
+        if (isIncome) {
+          const afterBal = curBal + krwAmt;
+          hint.innerHTML = `<span class="text-emerald-400 font-bold">✅ KRW 원화 지갑에 ₩${krwAmt.toLocaleString()} 입금 예정 (충전 후 잔액: ₩${afterBal.toLocaleString()})</span>`;
         } else {
-          hint.innerHTML = `<span class="text-emerald-400">✅ KRW 지갑에서 ₩${krwAmt.toLocaleString()} 차감 예정 (남은 잔액: ₩${remain.toLocaleString()})</span>`;
+          const remain = curBal - krwAmt;
+          if (remain < 0) {
+            hint.innerHTML = `<span class="text-rose-400 font-bold">⚠️ KRW 지갑 잔액 부족 (₩${curBal.toLocaleString()} < ₩${krwAmt.toLocaleString()})</span>`;
+          } else {
+            hint.innerHTML = `<span class="text-emerald-400">✅ KRW 지갑에서 ₩${krwAmt.toLocaleString()} 차감 예정 (남은 잔액: ₩${remain.toLocaleString()})</span>`;
+          }
         }
       } else {
         const targetCurr = val === 'wallet_curr' ? curr : val.replace('wallet_', '');
         const w = walletData.wallets[targetCurr];
         const bal = w ? w.balance : 0;
-        const remain = bal - amount;
-        if (remain < 0) {
-          hint.innerHTML = `<span class="text-rose-400 font-bold">⚠️ ${targetCurr} 지갑 잔액 부족 (${w?.symbol || ''}${bal.toLocaleString()} < ${amount.toLocaleString()})</span>`;
+        const sym = w?.symbol || targetCurr;
+        const isDec = (targetCurr !== 'KRW' && targetCurr !== 'JPY' && targetCurr !== 'VND' && targetCurr !== 'CLP');
+        const formatAmt = (n) => n.toLocaleString(undefined, { minimumFractionDigits: isDec ? 2 : 0, maximumFractionDigits: 2 });
+        if (isIncome) {
+          const afterBal = bal + amount;
+          hint.innerHTML = `<span class="text-emerald-400 font-bold">✅ ${targetCurr} 지갑에 ${sym}${formatAmt(amount)} 입금 예정 (충전 후 잔액: ${sym}${formatAmt(afterBal)})</span>`;
         } else {
-          hint.innerHTML = `<span class="text-emerald-400">✅ ${targetCurr} 지갑에서 ${w?.symbol || ''}${amount.toLocaleString()} 차감 예정 (남은 잔액: ${w?.symbol || ''}${remain.toLocaleString()})</span>`;
+          const remain = bal - amount;
+          if (remain < 0) {
+            hint.innerHTML = `<span class="text-rose-400 font-bold">⚠️ ${targetCurr} 지갑 잔액 부족 (${sym}${formatAmt(bal)} < ${sym}${formatAmt(amount)})</span>`;
+          } else {
+            hint.innerHTML = `<span class="text-emerald-400">✅ ${targetCurr} 지갑에서 ${sym}${formatAmt(amount)} 차감 예정 (남은 잔액: ${sym}${formatAmt(remain)})</span>`;
+          }
         }
       }
     }
@@ -12862,8 +13015,13 @@ ${JSON.stringify(snapshotDays)}`;
       renderActiveTripWorkspace();
 
       let debitInfo = '';
-      if (paymentSource === 'wallet_krw') debitInfo = ` (💳 한국 카드 KRW ₩${krw.toLocaleString()} 차감)`;
-      else if (paymentSource === 'wallet_curr') debitInfo = ` (${CURRENCY_INFO[curr]?.flag || ''} ${curr} 지갑 차감)`;
+      if (transType === 'income') {
+        if (paymentSource === 'wallet_krw') debitInfo = ` (🇰🇷 KRW 지갑 ₩${krw.toLocaleString()} 입금)`;
+        else if (paymentSource === 'wallet_curr') debitInfo = ` (${CURRENCY_INFO[curr]?.flag || ''} ${curr} 지갑 +${amount.toLocaleString()} 입금)`;
+      } else {
+        if (paymentSource === 'wallet_krw') debitInfo = ` (💳 한국 카드 KRW ₩${krw.toLocaleString()} 차감)`;
+        else if (paymentSource === 'wallet_curr') debitInfo = ` (${CURRENCY_INFO[curr]?.flag || ''} ${curr} 지갑 차감)`;
+      }
 
       const verb = transType === 'income' ? '수입이' : '지출이';
       showToast(`💳 [${escapeHtml(title)}] ₩${krw.toLocaleString()} ${verb} 등록되었습니다.${debitInfo}`);
@@ -14761,6 +14919,7 @@ JSON 배열만 출력하세요. 각 day는 dayNum, title, city, date, spots를 �
       const catTotals = { food: 0, tour: 0, lodging: 0, flight: 0, shopping: 0, etc: 0 };
 
       (trip.expenses || []).forEach(e => {
+        if (e.type === 'income') return;
         const krw = e.krw || 0;
         totalSpentKrw += krw;
         if (catTotals[e.cat] !== undefined) catTotals[e.cat] += krw;
