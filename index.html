@@ -29,7 +29,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700;800&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
 
   <!-- Local Utilities Bundle (CDN fallback & tailwind utilities) -->
-  <link rel="stylesheet" href="css/utilities.css?v=1.5.2">
+  <link rel="stylesheet" href="css/utilities.css?v=1.5.3">
   <link rel="stylesheet" href="vendor/fontawesome/css/all.min.css">
 
   <!-- Leaflet Map CSS & JS -->
@@ -371,6 +371,65 @@
       border-color: var(--line2) !important;
       color: var(--ink) !important;
     }
+
+    /* Modal Action Bar 4 Buttons (v1.5.3 - High Contrast Light & Dark) */
+    .btn-funds-add {
+      background: #f0f9ff !important;
+      border: 1px solid #bae6fd !important;
+      color: #0369a1 !important;
+      font-weight: 700 !important;
+      transition: all 0.18s ease;
+    }
+    .btn-funds-add * { color: inherit !important; }
+    .btn-funds-add:hover {
+      background: #e0f2fe !important;
+      color: #0284c7 !important;
+    }
+    :root[data-theme="dark"] .btn-funds-add {
+      background: rgba(14, 165, 233, 0.18) !important;
+      border: 1px solid rgba(56, 189, 248, 0.4) !important;
+      color: #7dd3fc !important;
+    }
+    :root[data-theme="dark"] .btn-funds-add:hover {
+      background: rgba(14, 165, 233, 0.28) !important;
+      color: #bae6fd !important;
+    }
+
+    .btn-funds-del {
+      background: #fff1f2 !important;
+      border: 1px solid #fecdd3 !important;
+      color: #be123c !important;
+      font-weight: 700 !important;
+      transition: all 0.18s ease;
+    }
+    .btn-funds-del * { color: inherit !important; }
+    .btn-funds-del:hover {
+      background: #ffe4e6 !important;
+      color: #e11d48 !important;
+    }
+    :root[data-theme="dark"] .btn-funds-del {
+      background: rgba(244, 63, 94, 0.18) !important;
+      border: 1px solid rgba(251, 113, 133, 0.4) !important;
+      color: #fda4af !important;
+    }
+    :root[data-theme="dark"] .btn-funds-del:hover {
+      background: rgba(244, 63, 94, 0.28) !important;
+      color: #ffe4e6 !important;
+    }
+
+    .btn-funds-close {
+      background: var(--surface2) !important;
+      border: 1px solid var(--line) !important;
+      color: var(--ink) !important;
+      font-weight: 700 !important;
+      transition: all 0.18s ease;
+    }
+    .btn-funds-close * { color: inherit !important; }
+    .btn-funds-close:hover {
+      background: var(--surface3) !important;
+      border-color: var(--line2) !important;
+      color: var(--ink) !important;
+    }
     @keyframes pulseGold {
       0%, 100% { box-shadow: 0 0 0 0 rgba(162, 96, 27, 0.4); }
       50% { box-shadow: 0 0 0 6px rgba(162, 96, 27, 0); }
@@ -661,8 +720,8 @@
     }
   </style>
 
-  <link rel="stylesheet" href="css/companion.css?v=1.5.2">
-  <script src="js/presentation/companion-ui.js?v=1.5.2"></script>
+  <link rel="stylesheet" href="css/companion.css?v=1.5.3">
+  <script src="js/presentation/companion-ui.js?v=1.5.3"></script>
 
   <!-- Knowledge Base Seed & Destination Knowledge Packs (DKP) -->
   <script src="kb-travel.js"></script>
@@ -688,7 +747,7 @@
             <h1 class="font-serif-brand text-base sm:text-xl font-bold tracking-tight text-[#1c1917] dark:text-[#ededed] whitespace-nowrap">
               Sulsul Travel
             </h1>
-            <span id="app-ver-badge" onclick="event.stopPropagation(); openVersionHistoryModal()" class="px-1.5 py-0.5 rounded-md theme-card-subtle hover:border-amber-500/60 hover:text-amber-600 dark:hover:text-amber-300 text-[#a2601b] dark:text-[#d4af37] text-[10px] font-bold font-mono shadow-inner cursor-pointer shrink-0 transition" title="버전 업데이트 기록 보기 (클릭)">v1.5.2</span>
+            <span id="app-ver-badge" onclick="event.stopPropagation(); openVersionHistoryModal()" class="px-1.5 py-0.5 rounded-md theme-card-subtle hover:border-amber-500/60 hover:text-amber-600 dark:hover:text-amber-300 text-[#a2601b] dark:text-[#d4af37] text-[10px] font-bold font-mono shadow-inner cursor-pointer shrink-0 transition" title="버전 업데이트 기록 보기 (클릭)">v1.5.3</span>
           </div>
           <p id="header-trip-name" class="text-[10px] sm:text-[11px] text-[#78716c] dark:text-stone-400 truncate max-w-[120px] sm:max-w-xs font-normal">인생의 모든 여정을 기록하는 다이어리</p>
         </div>
@@ -1180,7 +1239,7 @@
         <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
           <div class="p-3 bg-[#080b12] rounded-xl border border-[#1a2236] relative">
             <div class="flex items-center justify-between">
-              <span class="text-[11px] text-slate-400">총 예산 (기준 KRW)</span>
+              <span id="exp-total-budget-label" class="text-[11px] text-slate-400">총 예산 (기준 KRW)</span>
               <button onclick="openInitialFundsModal()" class="text-[10px] text-amber-400 hover:text-amber-300 font-bold px-1.5 py-0.5 rounded bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/20 cursor-pointer transition flex items-center gap-1" title="목표 예산 및 초기 자산 변경">
                 <i class="fa-solid fa-pen text-[9px]"></i> 예산 변경
               </button>
@@ -1188,11 +1247,11 @@
             <div id="exp-total-budget" class="text-base font-black text-white mt-0.5">₩8,500,000</div>
           </div>
           <div class="p-3 bg-[#080b12] rounded-xl border border-[#1a2236]">
-            <div class="text-[11px] text-slate-400">현재 총 지출액 (원화 환산)</div>
+            <div id="exp-total-spent-label" class="text-[11px] text-slate-400">현재 총 지출액 (원화 환산)</div>
             <div id="exp-total-spent" class="text-base font-black text-amber-400 mt-0.5">₩0</div>
           </div>
           <div class="p-3 bg-[#080b12] rounded-xl border border-[#1a2236]">
-            <div class="text-[11px] text-slate-400">남은 총 자산 (원화 환산 합산)</div>
+            <div id="exp-total-balance-label" class="text-[11px] text-slate-400">남은 총 자산 (원화 환산 합산)</div>
             <div id="exp-total-balance" class="text-base font-black text-emerald-400 mt-0.5">₩8,500,000</div>
           </div>
         </div>
@@ -2343,40 +2402,38 @@
     </div>
   </div>
 
-  <!-- 초기 현금 및 총 예산 설정 모달 (v1.5.2) -->
+  <!-- 초기 현금 및 총 예산 설정 모달 (v1.5.3) -->
   <div id="modal-initial-funds" class="sheet-container sheet-closed">
     <div class="sheet-scrim" onclick="closeModal('modal-initial-funds')"></div>
-    <div class="sheet-box p-5 sm:p-6 space-y-4 max-h-[90vh] flex flex-col w-full max-w-lg mx-auto">
-      <div class="flex items-center justify-between border-b border-[#1e263c] pb-3 shrink-0">
-        <h3 class="text-base font-black text-white flex items-center gap-2">
-          <i class="fa-solid fa-coins text-amber-400"></i> 초기 현금 및 총 예산 설정
+    <div class="sheet-box p-5 sm:p-6 space-y-4 max-h-[92vh] flex flex-col w-full max-w-lg mx-auto">
+      <div class="flex items-center justify-between border-b border-stone-200 dark:border-[#1e263c] pb-3 shrink-0">
+        <h3 class="text-base font-black text-stone-900 dark:text-white flex items-center gap-2">
+          <i class="fa-solid fa-coins text-amber-500 dark:text-amber-400"></i> 초기 자산 및 여행 예산 설정
         </h3>
-        <button onclick="closeModal('modal-initial-funds')" class="text-slate-400 hover:text-white text-base">✕</button>
+        <button onclick="closeModal('modal-initial-funds')" class="text-stone-400 hover:text-stone-700 dark:hover:text-white text-base cursor-pointer">✕</button>
       </div>
 
       <!-- 상단 총 자산 요약 배너 -->
-      <div class="p-3.5 bg-gradient-to-r from-amber-500/10 via-amber-600/10 to-transparent border border-amber-500/30 rounded-xl space-y-2 shrink-0">
-        <div class="flex items-center justify-between">
-          <span class="text-xs text-slate-300 font-medium">설정된 초기 총 자산 (원화 환산)</span>
-          <span id="init-funds-total-krw-preview" class="text-lg font-black text-amber-400 font-mono">₩0</span>
+      <div class="p-3.5 bg-gradient-to-r from-amber-500/15 via-amber-600/10 to-amber-500/5 dark:from-amber-500/10 dark:via-amber-600/10 dark:to-transparent border border-amber-500/30 rounded-xl space-y-2 shrink-0 shadow-sm">
+        <div class="flex items-center justify-between flex-wrap gap-1">
+          <span id="init-funds-base-curr-label" class="text-xs text-stone-700 dark:text-slate-300 font-medium">설정된 초기 총 자산 (기준 통화 환산)</span>
+          <span id="init-funds-total-krw-preview" class="text-lg font-black text-amber-600 dark:text-amber-400 font-mono">₩0</span>
         </div>
-        <div class="pt-2 border-t border-[#1e263c] flex items-center justify-between">
-          <label class="flex items-center gap-2 cursor-pointer text-xs text-slate-200">
+        <div class="pt-2 border-t border-amber-500/20 dark:border-[#1e263c] flex items-center justify-between">
+          <label class="flex items-center gap-2 cursor-pointer text-xs text-stone-800 dark:text-slate-200 select-none">
             <input type="checkbox" id="chk-sync-initial-budget" checked onchange="handleSyncBudgetToggle()" class="rounded accent-amber-500 w-4 h-4 cursor-pointer">
-            <span>초기 총 자산을 여행 총 예산으로 자동 적용</span>
+            <span class="font-bold">초기 총 자산을 여행 총 예산으로 자동 적용</span>
           </label>
         </div>
         <div id="init-funds-custom-budget-row" class="hidden pt-1.5 flex items-center gap-2">
-          <span class="text-xs text-slate-400 shrink-0">직접 지정할 총 예산: ₩</span>
-          <input type="text" id="init-funds-custom-budget" inputmode="numeric" placeholder="직접 예산 입력 (KRW)" class="w-full px-2.5 py-1 text-xs bg-[#080b12] border border-[#2a3655] rounded-lg text-white font-mono focus:outline-none focus:border-amber-400 text-right">
+          <span id="init-funds-custom-budget-symbol" class="text-xs text-stone-600 dark:text-slate-400 shrink-0 font-bold">직접 지정할 총 예산: ₩</span>
+          <input type="text" id="init-funds-custom-budget" inputmode="decimal" placeholder="직접 예산 입력" class="w-full px-2.5 py-1.5 text-xs bg-white dark:bg-[#080b12] border border-stone-300 dark:border-[#2a3655] rounded-lg text-stone-900 dark:text-white font-mono focus:outline-none focus:border-amber-500 text-right font-bold shadow-inner">
         </div>
       </div>
 
-      <div class="text-[11px] text-slate-400 px-1 shrink-0 flex items-center justify-between">
-        <span>출국 전 보유한 통화별 현금/자금을 입력하세요:</span>
-        <button type="button" onclick="openAddCurrencyModal()" class="text-sky-400 hover:text-sky-300 font-bold flex items-center gap-1 cursor-pointer">
-          <i class="fa-solid fa-plus text-[10px]"></i> 새 통화 추가
-        </button>
+      <!-- 안내 문구 (상단 추가 버튼 제거 완료) -->
+      <div class="text-[11px] text-stone-500 dark:text-slate-400 px-1 shrink-0 flex items-center justify-between">
+        <span>출국 전 보유한 통화별 현금/자금을 입력하고 기준 통화(👑)를 지정하세요:</span>
       </div>
 
       <!-- 통화별 입력 목록 (스크롤) -->
@@ -2384,13 +2441,27 @@
         <!-- Dynamically rendered via renderInitialFundsList() -->
       </div>
 
-      <!-- 모달 하단 액션 버튼 바 -->
-      <div class="pt-3 border-t border-[#1e263c] flex items-center justify-end gap-2 shrink-0">
-        <button type="button" onclick="closeModal('modal-initial-funds')" class="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-bold transition cursor-pointer">
-          취소
+      <!-- 모달 하단 4대 액션 버튼 바 (추가/삭제/닫기/저장) -->
+      <div class="pt-3 border-t border-stone-200 dark:border-[#1e263c] grid grid-cols-2 sm:grid-cols-4 gap-2 shrink-0">
+        <!-- 1. 통화 추가 -->
+        <button type="button" onclick="openAddCurrencyModal()" class="py-2.5 px-2 rounded-xl btn-funds-add text-xs font-bold transition flex items-center justify-center gap-1.5 cursor-pointer shadow-sm">
+          <i class="fa-solid fa-plus text-[10px]"></i>
+          <span>통화 추가</span>
         </button>
-        <button type="button" onclick="saveInitialFundsAndBudget()" class="px-5 py-2 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-black text-xs transition cursor-pointer shadow">
-          <i class="fa-solid fa-check mr-1"></i> 설정 저장 및 적용
+        <!-- 2. 통화 삭제 -->
+        <button type="button" onclick="openDeleteCurrencySelector()" class="py-2.5 px-2 rounded-xl btn-funds-del text-xs font-bold transition flex items-center justify-center gap-1.5 cursor-pointer shadow-sm">
+          <i class="fa-solid fa-trash-can text-[10px]"></i>
+          <span>통화 삭제</span>
+        </button>
+        <!-- 3. 닫기 -->
+        <button type="button" onclick="closeModal('modal-initial-funds')" class="py-2.5 px-2 rounded-xl btn-funds-close text-xs font-bold transition flex items-center justify-center gap-1.5 cursor-pointer shadow-sm">
+          <i class="fa-solid fa-xmark text-[10px]"></i>
+          <span>닫기</span>
+        </button>
+        <!-- 4. 설정 저장 및 적용 -->
+        <button type="button" onclick="saveInitialFundsAndBudget()" class="py-2.5 px-2 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-stone-950 font-black text-xs transition flex items-center justify-center gap-1.5 cursor-pointer shadow-md">
+          <i class="fa-solid fa-check text-[10px]"></i>
+          <span>저장 및 적용</span>
         </button>
       </div>
     </div>
@@ -3275,11 +3346,18 @@
 
       <!-- 버전 목록 스크롤 영역 -->
       <div class="flex-1 overflow-y-auto space-y-3 pr-1 text-xs">
-        <!-- v1.5.2 (Current) -->
+        <!-- v1.5.3 (Current) -->
         <div class="p-4 rounded-2xl border-2 border-emerald-500/40 space-y-2.5 bg-emerald-500/5 dark:bg-emerald-500/10">
-          <div class="flex items-center justify-between gap-2"><div class="flex items-center gap-2 min-w-0"><span class="px-2 py-0.5 rounded-lg bg-emerald-500 text-black font-black text-xs shadow-sm shrink-0">v1.5.2</span><span class="text-xs font-black text-[#1c1917] dark:text-white">여행 가계부 UI 최적화: 아르헨 MEP 제거, 초기자금·총예산 완벽 일원화 & 전세계 통화 원터치 선택 모달 구축</span></div><span class="companion-status shrink-0">최신 버전</span></div>
+          <div class="flex items-center justify-between gap-2"><div class="flex items-center gap-2 min-w-0"><span class="px-2 py-0.5 rounded-lg bg-emerald-500 text-black font-black text-xs shadow-sm shrink-0">v1.5.3</span><span class="text-xs font-black text-[#1c1917] dark:text-white">가계부 초기 자산·예산 편집창 고도화: 통화 추가/삭제, 기준통화 단일 지정 & 라이트 모드 시인성 완치</span></div><span class="companion-status shrink-0">최신 버전</span></div>
+          <p class="text-xs leading-relaxed">사용자 실기기 피드백을 반영하여 초기 자산 및 예산 설정 모달(<code>modal-initial-funds</code>)을 전면 고도화했습니다. 각 통화 카드별 단일 라디오를 통해 <b>기준 통화(👑)</b>를 원터치 지정할 수 있으며, 상단 초기 총 자산 및 예산이 해당 기준 통화 단위(₩, $, €, ¥ 등)로 실시간 재계산됩니다. 각 통화 카드에 <b>개별 삭제(🗑️)</b> 기능을 탑재하고 하단을 <b>[+ 통화 추가], [🗑️ 통화 삭제], [✕ 닫기], [💾 설정 저장 및 적용]</b> 4대 액션 바로 재정돈했습니다. 특히 라이트 모드에서 닫기/취소 버튼이 검은색 사각형으로 뭉개지던 시인성 결함을 WCAG AAA 고대비 테마 분리로 완벽히 해결했으며, 여행 생성부터 가계부 대시보드까지 기준 통화 체계를 유기적으로 일원화했습니다.</p>
+          <div class="text-[10px] text-stone-400 dark:text-stone-500 pt-1 border-t border-emerald-500/20 flex items-center justify-between"><span>📅 2026-09-12 릴리즈</span><span class="font-mono">st-shell-v1.5.3</span></div>
+        </div>
+
+        <!-- v1.5.2 -->
+        <div class="p-4 rounded-2xl bg-stone-50 dark:bg-stone-900/50 border border-stone-200 dark:border-stone-800 space-y-2.5 shadow-sm relative overflow-hidden">
+          <div class="flex items-center justify-between gap-2"><div class="flex items-center gap-2 min-w-0"><span class="px-2 py-0.5 rounded-lg bg-stone-200 dark:bg-stone-800 text-stone-800 dark:text-stone-200 font-bold text-[11px] font-mono shrink-0">v1.5.2</span><span class="text-xs font-bold text-[#1c1917] dark:text-stone-200">여행 가계부 UI 최적화: 아르헨 MEP 제거, 초기자금·총예산 완벽 일원화 & 전세계 통화 원터치 선택 모달 구축</span></div></div>
           <p class="text-xs leading-relaxed">사용자 피드백을 반영하여 가계부 메인 화면에서 혼선을 주던 <b>[🇦🇷 아르헨 MEP] 토글 스위치를 완전히 제거</b>하고 상단 환율 관리 모달(<code>modal-rates-manager</code>) 내부로 깔끔하게 이전했습니다. 또한 기존의 텍스트 prompt 방식을 완전히 탈피하여, <b>초기 현금 및 총 예산 설정 모달(<code>modal-initial-funds</code>)</b>을 신설했습니다. 통화별 초기 현금을 입력하면 원화 환산 총액이 총 예산과 남은 총 자산에 완벽하게 자동 연동되어 금액 불일치를 해소했습니다. 아울러 68개국 이상의 전세계 여행 통화를 한눈에 검색하고 터치 한 번으로 지갑을 활성화할 수 있는 <b>통화 지갑 추가 모달(<code>modal-add-currency</code>)</b>을 전격 탑재하여 타이핑 없이 쾌적하게 다통화 가계부를 운영할 수 있도록 개편했습니다.</p>
-          <div class="text-[10px] text-stone-400 dark:text-stone-500 pt-1 border-t border-emerald-500/20 flex items-center justify-between"><span>📅 2026-09-12 릴리즈</span><span class="font-mono">st-shell-v1.5.2</span></div>
+          <div class="text-[10px] text-stone-400 dark:text-stone-500 pt-1 border-t border-stone-200 dark:border-stone-800 flex items-center justify-between"><span>📅 2026-09-12 릴리즈</span><span class="font-mono">st-shell-v1.5.2</span></div>
         </div>
 
         <!-- v1.5.1 -->
@@ -3804,7 +3882,7 @@
     window.showToast = showToast;
 
     // 앱 버전 및 글로벌 네임스페이스 (Sulsul-Travel Invariant Rule R-10, R-11, R-12, R-13, R-14, R-15)
-    const APP_VER = '1.5.2';
+    const APP_VER = '1.5.3';
 
     // ══════════════════════════════════════════
     // [Two-Tone Theme System] 라이트 그레이 & 딥 블랙 테마 엔진
@@ -4258,6 +4336,7 @@
       renderActiveTripWorkspace();
       updateGeminiKeyUi();
       checkStartupInstallOnboarding();
+      populateCreateTripCurrencyOptions();
       restoreJournalOverflowEntries();
       if (State.storageRecovery) {
         showToast('⚠️ 손상된 여행 데이터를 별도 백업하고 복구 모드로 시작했습니다.', 5000);
@@ -7368,13 +7447,32 @@
       }
 
       // 통계 계산
-      let totalSpent = 0;
-      (trip.expenses || []).forEach(e => totalSpent += (e.krw || 0));
-      const budget = trip.budget || 8500000;
-      const pct = Math.min(100, Math.round((totalSpent / budget) * 100)) || 0;
+      let totalSpentKrw = 0;
+      (trip.expenses || []).forEach(e => totalSpentKrw += (e.krw || 0));
+      const baseCurr = (trip.currency && CURRENCY_INFO[trip.currency]) ? trip.currency : 'KRW';
+      const baseRate = getCurrencyRate(baseCurr);
+      const baseSymbol = getCurrencySymbol(baseCurr);
+      const isBaseDec = (baseCurr !== 'KRW' && baseCurr !== 'JPY' && baseCurr !== 'VND' && baseCurr !== 'CLP');
 
-      document.getElementById('stat-ws-spent').innerText = `₩${totalSpent.toLocaleString()}`;
-      document.getElementById('stat-ws-budget').innerText = `₩${budget.toLocaleString()}`;
+      const budget = Number(trip.budget) || (baseCurr === 'KRW' ? 8500000 : 5000);
+      let totalSpentBase = baseCurr === 'KRW' ? totalSpentKrw : (baseRate > 0 ? (totalSpentKrw / baseRate) : 0);
+      if (isBaseDec) {
+        totalSpentBase = Math.round(totalSpentBase * 100) / 100;
+      } else {
+        totalSpentBase = Math.round(totalSpentBase);
+      }
+
+      const pct = Math.min(100, Math.round((totalSpentBase / (budget || 1)) * 100)) || 0;
+
+      const formatBase = (num) => {
+        return num.toLocaleString(undefined, {
+          minimumFractionDigits: isBaseDec ? 2 : 0,
+          maximumFractionDigits: isBaseDec ? 2 : 0
+        });
+      };
+
+      document.getElementById('stat-ws-spent').innerText = `${baseSymbol}${formatBase(totalSpentBase)}`;
+      document.getElementById('stat-ws-budget').innerText = `${baseSymbol}${formatBase(budget)}`;
       document.getElementById('stat-ws-places').innerText = `${(trip.countries||[]).length}개국 ${(trip.cities||[]).length}도시`;
       
       const diaryCount = trip.journals ? Object.keys(trip.journals).length : 0;
@@ -7388,13 +7486,34 @@
       document.getElementById('stat-ws-progress-text').innerText = `${pct}%`;
 
       // 가계부 지표 바인딩
+      const elBudgetLabel = document.getElementById('exp-total-budget-label');
       const elBudget = document.getElementById('exp-total-budget');
+      const elSpentLabel = document.getElementById('exp-total-spent-label');
       const elSpent = document.getElementById('exp-total-spent');
+      const elBalLabel = document.getElementById('exp-total-balance-label');
       const elBal = document.getElementById('exp-total-balance');
       const walletData = calculateTripWallets(trip);
-      if (elBudget) elBudget.innerText = `₩${budget.toLocaleString()}`;
-      if (elSpent) elSpent.innerText = `₩${totalSpent.toLocaleString()}`;
-      if (elBal) elBal.innerText = `₩${walletData.totalAssetKrw.toLocaleString()}`;
+
+      if (elBudgetLabel) elBudgetLabel.innerText = `총 예산 (기준 ${baseCurr})`;
+      if (elBudget) elBudget.innerText = `${baseSymbol}${formatBase(budget)}`;
+
+      if (elSpentLabel) elSpentLabel.innerText = baseCurr === 'KRW' ? '현재 총 지출액 (원화)' : `현재 총 지출액 (${baseCurr} 환산)`;
+      if (elSpent) {
+        if (baseCurr === 'KRW') {
+          elSpent.innerText = `₩${totalSpentKrw.toLocaleString()}`;
+        } else {
+          elSpent.innerHTML = `${baseSymbol}${formatBase(totalSpentBase)} <span class="text-xs text-stone-400 font-normal font-sans">(≈ ₩${totalSpentKrw.toLocaleString()})</span>`;
+        }
+      }
+
+      if (elBalLabel) elBalLabel.innerText = baseCurr === 'KRW' ? '남은 총 자산 (원화)' : `남은 총 자산 (${baseCurr} 환산)`;
+      if (elBal) {
+        if (baseCurr === 'KRW') {
+          elBal.innerText = `₩${walletData.totalAssetKrw.toLocaleString()}`;
+        } else {
+          elBal.innerHTML = `${baseSymbol}${formatBase(walletData.totalAssetBase)} <span class="text-xs text-stone-400 font-normal font-sans">(≈ ₩${walletData.totalAssetKrw.toLocaleString()})</span>`;
+        }
+      }
       if (State.activeTab === 'expenses') renderExpensesTab();
       updateRatesTimestampUI();
 
@@ -8304,37 +8423,39 @@
     window.getCurrencyRate = getCurrencyRate;
 
     function calculateTripWallets(trip) {
-      if (!trip) return { wallets: {}, totalAssetKrw: 0, activeCurrencies: ['KRW'] };
+      if (!trip) return { wallets: {}, totalAssetKrw: 0, totalAssetBase: 0, baseCurrency: 'KRW', activeCurrencies: ['KRW'] };
 
-      const activeCurrenciesSet = new Set(['KRW']);
-      if (trip.currency && CURRENCY_INFO[trip.currency]) activeCurrenciesSet.add(trip.currency);
-      if (trip.countries?.length) {
-        const cInfo = resolveCountryInfo(trip.countries[0]);
-        if (cInfo && cInfo.currency && CURRENCY_INFO[cInfo.currency]) activeCurrenciesSet.add(cInfo.currency);
-      }
-      if (isSouthAmericaTrip(trip)) activeCurrenciesSet.add('USD');
-      if (isYunnanTrip(trip)) activeCurrenciesSet.add('CNY');
+      const baseCurr = (trip.currency && CURRENCY_INFO[trip.currency]) ? trip.currency : 'KRW';
 
-      if (Array.isArray(trip.activeCurrencies)) {
-        trip.activeCurrencies.forEach(c => { if (CURRENCY_INFO[c]) activeCurrenciesSet.add(c); });
+      let activeCurrencies = [];
+      if (Array.isArray(trip.activeCurrencies) && trip.activeCurrencies.length > 0) {
+        const set = new Set(trip.activeCurrencies.filter(c => CURRENCY_INFO[c]));
+        set.add(baseCurr);
+        if (Array.isArray(trip.exchanges)) {
+          trip.exchanges.forEach(x => {
+            if (x.fromCurr && CURRENCY_INFO[x.fromCurr]) set.add(x.fromCurr);
+            if (x.toCurr && CURRENCY_INFO[x.toCurr]) set.add(x.toCurr);
+          });
+        }
+        if (Array.isArray(trip.expenses)) {
+          trip.expenses.forEach(e => {
+            if (e.curr && CURRENCY_INFO[e.curr]) set.add(e.curr);
+            if (e.walletCurr && CURRENCY_INFO[e.walletCurr]) set.add(e.walletCurr);
+          });
+        }
+        activeCurrencies = Array.from(set);
+      } else {
+        const activeCurrenciesSet = new Set([baseCurr, 'KRW']);
+        if (trip.countries?.length) {
+          const cInfo = resolveCountryInfo(trip.countries[0]);
+          if (cInfo && cInfo.currency && CURRENCY_INFO[cInfo.currency]) activeCurrenciesSet.add(cInfo.currency);
+        }
+        if (isSouthAmericaTrip(trip)) activeCurrenciesSet.add('USD');
+        if (isYunnanTrip(trip)) activeCurrenciesSet.add('CNY');
+        activeCurrencies = Array.from(activeCurrenciesSet).filter(c => CURRENCY_INFO[c]);
       }
-      if (trip.initialBalances) {
-        Object.keys(trip.initialBalances).forEach(c => { if (CURRENCY_INFO[c]) activeCurrenciesSet.add(c); });
-      }
-      if (Array.isArray(trip.exchanges)) {
-        trip.exchanges.forEach(x => {
-          if (x.fromCurr && CURRENCY_INFO[x.fromCurr]) activeCurrenciesSet.add(x.fromCurr);
-          if (x.toCurr && CURRENCY_INFO[x.toCurr]) activeCurrenciesSet.add(x.toCurr);
-        });
-      }
-      if (Array.isArray(trip.expenses)) {
-        trip.expenses.forEach(e => {
-          if (e.curr && CURRENCY_INFO[e.curr]) activeCurrenciesSet.add(e.curr);
-          if (e.walletCurr && CURRENCY_INFO[e.walletCurr]) activeCurrenciesSet.add(e.walletCurr);
-        });
-      }
+      trip.activeCurrencies = activeCurrencies;
 
-      const activeCurrencies = Array.from(activeCurrenciesSet);
       const wallets = {};
 
       activeCurrencies.forEach(curr => {
@@ -8342,7 +8463,7 @@
         let initBal = 0;
         if (trip.initialBalances && trip.initialBalances[curr] != null) {
           initBal = Number(trip.initialBalances[curr]) || 0;
-        } else if (curr === 'KRW') {
+        } else if (curr === baseCurr) {
           initBal = Number(trip.budget) || 0;
         }
 
@@ -8398,7 +8519,7 @@
         });
       }
 
-      // 잔액 및 원화 가치 산출
+      // 잔액 및 원화/기준통화 가치 산출
       let totalAssetKrw = 0;
       activeCurrencies.forEach(curr => {
         const w = wallets[curr];
@@ -8407,7 +8528,16 @@
         totalAssetKrw += w.krwValue;
       });
 
-      return { wallets, totalAssetKrw, activeCurrencies };
+      const baseRate = getCurrencyRate(baseCurr);
+      const isBaseDec = (baseCurr !== 'KRW' && baseCurr !== 'JPY' && baseCurr !== 'VND' && baseCurr !== 'CLP');
+      let totalAssetBase = baseCurr === 'KRW' ? totalAssetKrw : (baseRate > 0 ? (totalAssetKrw / baseRate) : 0);
+      if (isBaseDec) {
+        totalAssetBase = Math.round(totalAssetBase * 100) / 100;
+      } else {
+        totalAssetBase = Math.round(totalAssetBase);
+      }
+
+      return { wallets, totalAssetKrw, totalAssetBase, baseCurrency: baseCurr, activeCurrencies };
     }
     window.calculateTripWallets = calculateTripWallets;
 
@@ -8678,23 +8808,46 @@
     window.requestDeleteExchange = requestDeleteExchange;
 
     // ==========================================
-    // [11.2] 초기 자산 및 총 예산 일원화 관리 모달 (v1.5.2)
+    // [11.2] 초기 자산 및 총 예산 일원화 관리 모달 (v1.5.3)
     // ==========================================
     let isInitialBudgetSyncEnabled = true;
+    let modalBaseCurrency = 'KRW';
+    let modalActiveCurrencies = ['KRW'];
+
+    function getCurrencySymbol(curr) {
+      if (!curr) return '₩';
+      return CURRENCY_INFO[curr]?.symbol || curr;
+    }
+    window.getCurrencySymbol = getCurrencySymbol;
 
     function openInitialFundsModal() {
       const trip = getActiveTrip();
       if (!trip) return;
-      if (!trip.initialBalances) {
-        trip.initialBalances = { KRW: Number(trip.budget) || 0 };
+
+      modalBaseCurrency = (trip.currency && CURRENCY_INFO[trip.currency]) ? trip.currency : 'KRW';
+
+      if (Array.isArray(trip.activeCurrencies) && trip.activeCurrencies.length > 0) {
+        modalActiveCurrencies = trip.activeCurrencies.filter(c => CURRENCY_INFO[c]);
+        if (!modalActiveCurrencies.includes(modalBaseCurrency)) {
+          modalActiveCurrencies.unshift(modalBaseCurrency);
+        }
+      } else {
+        const walletData = calculateTripWallets(trip);
+        modalActiveCurrencies = walletData.activeCurrencies.slice();
+        if (!modalActiveCurrencies.includes(modalBaseCurrency)) {
+          modalActiveCurrencies.unshift(modalBaseCurrency);
+        }
       }
+
+      if (!trip.initialBalances) {
+        trip.initialBalances = { [modalBaseCurrency]: Number(trip.budget) || 0 };
+      }
+
       isInitialBudgetSyncEnabled = true;
       const chkSync = document.getElementById('chk-sync-initial-budget');
       if (chkSync) chkSync.checked = true;
       const customRow = document.getElementById('init-funds-custom-budget-row');
       if (customRow) customRow.classList.add('hidden');
-      const customBudgetInput = document.getElementById('init-funds-custom-budget');
-      if (customBudgetInput) customBudgetInput.value = (trip.budget || 0).toLocaleString();
 
       renderInitialFundsList();
       openModal('modal-initial-funds');
@@ -8702,6 +8855,75 @@
     window.openInitialFundsModal = openInitialFundsModal;
     window.openAdjustInitialBalanceModal = openInitialFundsModal;
     window.openEditBudgetPrompt = openInitialFundsModal;
+
+    function setModalBaseCurrency(curr) {
+      if (!curr || !CURRENCY_INFO[curr]) return;
+      modalBaseCurrency = curr;
+      renderInitialFundsList();
+      showToast(`👑 기준 통화가 [${curr}] (${CURRENCY_INFO[curr].name})로 지정되었습니다.`);
+    }
+    window.setModalBaseCurrency = setModalBaseCurrency;
+
+    function removeCurrencyInModal(curr) {
+      if (curr === modalBaseCurrency) {
+        showToast('⚠️ 기준 통화는 삭제할 수 없습니다. 다른 통화를 기준 통화로 먼저 지정해 주세요.');
+        return;
+      }
+      if (modalActiveCurrencies.length <= 1) {
+        showToast('⚠️ 최소 1개 이상의 통화가 필요합니다.');
+        return;
+      }
+
+      const trip = getActiveTrip();
+      if (trip) {
+        const hasExpenses = (trip.expenses || []).some(e => e.curr === curr || e.walletCurr === curr);
+        const hasExchanges = (trip.exchanges || []).some(x => x.fromCurr === curr || x.toCurr === curr);
+        if (hasExpenses || hasExchanges) {
+          if (!confirm(`⚠️ [${curr}] 통화로 기록된 지출 또는 환전 거래 내역이 있습니다.\n지갑을 삭제하면 해당 지출의 지갑 차감이 해제될 수 있습니다.\n정말 삭제하시겠습니까?`)) {
+            return;
+          }
+        }
+      }
+
+      // Preserve current input values before re-rendering
+      modalActiveCurrencies.forEach(c => {
+        const input = document.getElementById(`init-fund-input-${c}`);
+        if (input && trip && trip.initialBalances) {
+          trip.initialBalances[c] = parseFloat(input.value) || 0;
+        }
+      });
+
+      modalActiveCurrencies = modalActiveCurrencies.filter(c => c !== curr);
+      if (trip && trip.initialBalances) {
+        delete trip.initialBalances[curr];
+      }
+
+      renderInitialFundsList();
+      showToast(`🗑️ [${curr}] 통화가 목록에서 삭제되었습니다.`);
+    }
+    window.removeCurrencyInModal = removeCurrencyInModal;
+
+    function openDeleteCurrencySelector() {
+      const deletable = modalActiveCurrencies.filter(c => c !== modalBaseCurrency);
+      if (deletable.length === 0) {
+        showToast('ℹ️ 기준 통화 외에 삭제 가능한 추가 통화가 없습니다.');
+        return;
+      }
+      const names = deletable.map(c => `• ${CURRENCY_INFO[c]?.flag || ''} ${c} (${CURRENCY_INFO[c]?.name || ''})`).join('\n');
+      const target = prompt(`[통화 삭제]\n삭제할 통화 코드를 입력하세요:\n\n${names}\n\n(기준 통화 [${modalBaseCurrency}]는 삭제 불가)`);
+      if (!target) return;
+      const cleanTarget = target.trim().toUpperCase();
+      if (cleanTarget === modalBaseCurrency) {
+        showToast('⚠️ 기준 통화는 삭제할 수 없습니다.');
+        return;
+      }
+      if (modalActiveCurrencies.includes(cleanTarget)) {
+        removeCurrencyInModal(cleanTarget);
+      } else {
+        showToast(`⚠️ 목록에 존재하지 않는 통화입니다: ${cleanTarget}`);
+      }
+    }
+    window.openDeleteCurrencySelector = openDeleteCurrencySelector;
 
     function handleSyncBudgetToggle() {
       const chkSync = document.getElementById('chk-sync-initial-budget');
@@ -8729,41 +8951,86 @@
       const container = document.getElementById('initial-funds-list');
       if (!container) return;
 
-      const walletData = calculateTripWallets(trip);
-      const currs = walletData.activeCurrencies;
+      const baseCurr = modalBaseCurrency || 'KRW';
+      const baseSymbol = getCurrencySymbol(baseCurr);
 
-      container.innerHTML = currs.map(c => {
+      // Update banner labels
+      const baseCurrLabel = document.getElementById('init-funds-base-curr-label');
+      if (baseCurrLabel) {
+        baseCurrLabel.innerText = `설정된 초기 총 자산 (${baseCurr} 환산 합산)`;
+      }
+      const budgetSymbolEl = document.getElementById('init-funds-custom-budget-symbol');
+      if (budgetSymbolEl) {
+        budgetSymbolEl.innerText = `직접 지정할 총 예산 (${baseCurr}): ${baseSymbol}`;
+      }
+
+      container.innerHTML = modalActiveCurrencies.map(c => {
         const info = CURRENCY_INFO[c] || { name: c, flag: '🌐', symbol: c, rate: 1 };
         const rate = getCurrencyRate(c);
-        const currentVal = (trip.initialBalances && trip.initialBalances[c] != null) ? Number(trip.initialBalances[c]) : (c === 'KRW' ? (Number(trip.budget) || 0) : 0);
-        const subtotal = Math.round(currentVal * rate);
-        const isKrw = (c === 'KRW');
+        const currentVal = (trip.initialBalances && trip.initialBalances[c] != null)
+          ? Number(trip.initialBalances[c])
+          : (c === baseCurr ? (Number(trip.budget) || 0) : 0);
+
+        const isBase = (c === baseCurr);
+
+        let rateDesc = '';
+        if (isBase) {
+          rateDesc = `<span class="font-bold text-amber-600 dark:text-amber-400">1 ${c} = 1 ${baseSymbol} (기준 통화)</span>`;
+        } else {
+          rateDesc = `1 ${c} ≈ ₩${rate.toLocaleString()}`;
+        }
 
         return `
-          <div class="p-3 bg-[#080b12] border border-[#1e263c] rounded-xl space-y-2">
-            <div class="flex items-center justify-between gap-2">
-              <div class="flex items-center gap-2">
-                <span class="text-xl">${info.flag}</span>
-                <div>
-                  <span class="text-xs font-black text-white">${c}</span>
-                  <span class="text-[11px] text-slate-400 ml-1 font-medium">${info.name}</span>
+          <div class="p-3.5 rounded-xl border transition ${isBase ? 'bg-amber-500/10 dark:bg-amber-500/10 border-amber-500/60 shadow-sm' : 'bg-white dark:bg-[#0f1422] border-stone-200 dark:border-[#1e263c] hover:border-stone-300 dark:hover:border-[#2a3655]'} space-y-2.5">
+            <!-- 카드 헤더: 기준통화 라디오/뱃지 + 통화정보 + 개별삭제 버튼 -->
+            <div class="flex items-center justify-between gap-2 flex-wrap">
+              <div class="flex items-center gap-2 min-w-0">
+                <label class="flex items-center gap-1.5 cursor-pointer select-none">
+                  <input type="radio" name="modal-base-currency-radio" value="${c}" ${isBase ? 'checked' : ''} onchange="setModalBaseCurrency('${c}')" class="w-4 h-4 accent-amber-500 cursor-pointer">
+                  ${isBase ? `
+                    <span class="text-[10px] font-black px-2 py-0.5 rounded-md bg-amber-500 text-stone-950 flex items-center gap-1 shadow-sm">
+                      <i class="fa-solid fa-crown text-[9px]"></i> 기준 통화
+                    </span>
+                  ` : `
+                    <span onclick="setModalBaseCurrency('${c}')" class="text-[10px] font-bold px-1.5 py-0.5 rounded bg-stone-100 dark:bg-stone-800 hover:bg-stone-200 dark:hover:bg-stone-700 text-stone-600 dark:text-stone-300 border border-stone-200 dark:border-stone-700 cursor-pointer transition">
+                      기준통화 설정
+                    </span>
+                  `}
+                </label>
+                <span class="text-xl shrink-0">${info.flag}</span>
+                <div class="min-w-0">
+                  <div class="flex items-center gap-1.5">
+                    <span class="text-xs font-black text-stone-900 dark:text-white">${c}</span>
+                    <span class="text-[11px] text-stone-500 dark:text-slate-400 font-medium truncate">${info.name}</span>
+                  </div>
                 </div>
               </div>
-              <div class="text-right">
-                <div class="text-[10px] text-slate-400 font-mono">
-                  ${isKrw ? '기준 통화' : `1 ${c} ≈ ₩${rate.toLocaleString()}`}
+
+              <div class="flex items-center gap-2 shrink-0">
+                <div class="text-[10px] text-stone-500 dark:text-slate-400 font-mono text-right">
+                  ${rateDesc}
                 </div>
+                ${isBase ? `
+                  <span class="text-stone-300 dark:text-slate-600 p-1 cursor-not-allowed text-xs" title="기준 통화는 삭제할 수 없습니다">
+                    <i class="fa-solid fa-lock text-[10px]"></i>
+                  </span>
+                ` : `
+                  <button type="button" onclick="removeCurrencyInModal('${c}')" class="p-1 rounded-lg text-rose-500 hover:text-rose-700 hover:bg-rose-50 dark:hover:bg-rose-950/60 transition cursor-pointer" title="${c} 통화 삭제">
+                    <i class="fa-solid fa-trash-can text-xs"></i>
+                  </button>
+                `}
               </div>
             </div>
 
-            <div class="flex items-center justify-between gap-2 pt-1">
+            <!-- 입력부 및 환산 소계 -->
+            <div class="flex items-center justify-between gap-2 pt-0.5">
               <div class="flex-1 relative">
-                <input type="number" step="any" id="init-fund-input-${c}" value="${currentVal || ''}" placeholder="0" oninput="updateInitialFundsPreview()" class="w-full pl-3 pr-10 py-1.5 bg-[#0f1422] border border-[#23304c] rounded-lg text-xs text-white font-mono font-bold focus:outline-none focus:border-amber-400">
-                <span class="absolute right-2.5 top-1/2 -translate-y-1/2 text-[10px] font-bold text-slate-400">${c}</span>
+                <input type="number" step="any" id="init-fund-input-${c}" value="${currentVal || ''}" placeholder="0" oninput="updateInitialFundsPreview()" class="w-full pl-3 pr-11 py-1.5 bg-stone-50 dark:bg-[#080b12] border border-stone-300 dark:border-[#23304c] rounded-lg text-xs text-stone-900 dark:text-white font-mono font-bold focus:outline-none focus:border-amber-500">
+                <span class="absolute right-2.5 top-1/2 -translate-y-1/2 text-[10px] font-bold text-stone-500 dark:text-slate-400">${c}</span>
               </div>
-              <div class="text-right shrink-0 min-w-[100px]">
-                <div class="text-[10px] text-slate-500">원화 환산</div>
-                <div id="init-fund-subtotal-${c}" class="text-xs font-bold text-amber-400 font-mono">₩${subtotal.toLocaleString()}</div>
+              <div class="text-right shrink-0 min-w-[105px]">
+                <div class="text-[9px] text-stone-500 dark:text-slate-400 font-medium">${baseCurr} 환산</div>
+                <div id="init-fund-subtotal-${c}" class="text-xs font-bold text-amber-600 dark:text-amber-400 font-mono">${baseSymbol}0</div>
               </div>
             </div>
           </div>
@@ -8777,30 +9044,56 @@
     function updateInitialFundsPreview() {
       const trip = getActiveTrip();
       if (!trip) return;
-      const walletData = calculateTripWallets(trip);
+
+      const baseCurr = modalBaseCurrency || 'KRW';
+      const baseRate = getCurrencyRate(baseCurr);
+      const baseSymbol = getCurrencySymbol(baseCurr);
+      const isBaseDec = (baseCurr !== 'KRW' && baseCurr !== 'JPY' && baseCurr !== 'VND' && baseCurr !== 'CLP');
+
       let totalInitialKrw = 0;
 
-      walletData.activeCurrencies.forEach(c => {
+      modalActiveCurrencies.forEach(c => {
         const input = document.getElementById(`init-fund-input-${c}`);
         const subtotalEl = document.getElementById(`init-fund-subtotal-${c}`);
         const val = input ? parseFloat(input.value) || 0 : 0;
         const rate = getCurrencyRate(c);
-        const subtotal = Math.round(val * rate);
-        totalInitialKrw += subtotal;
+        const krwAmt = val * rate;
+        totalInitialKrw += krwAmt;
+
+        const valInBase = baseRate > 0 ? (krwAmt / baseRate) : 0;
+        const formattedSubtotal = valInBase.toLocaleString(undefined, {
+          minimumFractionDigits: isBaseDec ? 2 : 0,
+          maximumFractionDigits: isBaseDec ? 2 : 0
+        });
+
         if (subtotalEl) {
-          subtotalEl.innerText = `₩${subtotal.toLocaleString()}`;
+          if (baseCurr === 'KRW') {
+            subtotalEl.innerText = `₩${Math.round(krwAmt).toLocaleString()}`;
+          } else {
+            subtotalEl.innerHTML = `${baseSymbol}${formattedSubtotal}<span class="block text-[8px] text-stone-400 font-normal font-sans">≈ ₩${Math.round(krwAmt).toLocaleString()}</span>`;
+          }
         }
+      });
+
+      const totalInBase = baseCurr === 'KRW' ? totalInitialKrw : (baseRate > 0 ? (totalInitialKrw / baseRate) : 0);
+      const formattedTotalBase = totalInBase.toLocaleString(undefined, {
+        minimumFractionDigits: isBaseDec ? 2 : 0,
+        maximumFractionDigits: isBaseDec ? 2 : 0
       });
 
       const totalPreviewEl = document.getElementById('init-funds-total-krw-preview');
       if (totalPreviewEl) {
-        totalPreviewEl.innerText = `₩${Math.round(totalInitialKrw).toLocaleString()}`;
+        if (baseCurr === 'KRW') {
+          totalPreviewEl.innerText = `₩${Math.round(totalInitialKrw).toLocaleString()}`;
+        } else {
+          totalPreviewEl.innerHTML = `${baseSymbol}${formattedTotalBase} <span class="text-xs text-stone-500 dark:text-slate-400 font-normal font-sans">(≈ ₩${Math.round(totalInitialKrw).toLocaleString()})</span>`;
+        }
       }
 
       if (isInitialBudgetSyncEnabled) {
         const customBudgetInput = document.getElementById('init-funds-custom-budget');
         if (customBudgetInput) {
-          customBudgetInput.value = Math.round(totalInitialKrw).toLocaleString();
+          customBudgetInput.value = isBaseDec ? totalInBase.toFixed(2) : Math.round(totalInBase).toLocaleString();
         }
       }
     }
@@ -8809,38 +9102,55 @@
     function saveInitialFundsAndBudget() {
       const trip = getActiveTrip();
       if (!trip) return;
+
+      const baseCurr = modalBaseCurrency || 'KRW';
+      trip.currency = baseCurr;
+      trip.activeCurrencies = modalActiveCurrencies.slice();
       if (!trip.initialBalances) trip.initialBalances = {};
 
-      const walletData = calculateTripWallets(trip);
-      let totalInitialKrw = 0;
+      // Clear deleted currencies from initial balances
+      Object.keys(trip.initialBalances).forEach(k => {
+        if (!modalActiveCurrencies.includes(k)) {
+          delete trip.initialBalances[k];
+        }
+      });
 
-      walletData.activeCurrencies.forEach(c => {
+      const baseRate = getCurrencyRate(baseCurr);
+      const baseSymbol = getCurrencySymbol(baseCurr);
+      const isBaseDec = (baseCurr !== 'KRW' && baseCurr !== 'JPY' && baseCurr !== 'VND' && baseCurr !== 'CLP');
+
+      let totalInitialKrw = 0;
+      modalActiveCurrencies.forEach(c => {
         const input = document.getElementById(`init-fund-input-${c}`);
         const val = input ? parseFloat(input.value) || 0 : 0;
         trip.initialBalances[c] = Math.max(0, val);
         const rate = getCurrencyRate(c);
-        totalInitialKrw += Math.round(Math.max(0, val) * rate);
+        totalInitialKrw += Math.max(0, val) * rate;
       });
+
+      const totalInBase = baseCurr === 'KRW' ? totalInitialKrw : (baseRate > 0 ? (totalInitialKrw / baseRate) : 0);
 
       const chkSync = document.getElementById('chk-sync-initial-budget');
       const isSync = chkSync ? chkSync.checked : true;
 
       if (isSync) {
-        trip.budget = Math.round(totalInitialKrw);
+        trip.budget = isBaseDec ? parseFloat(totalInBase.toFixed(2)) : Math.round(totalInBase);
       } else {
         const customInput = document.getElementById('init-funds-custom-budget');
-        const customVal = customInput ? parseInt(String(customInput.value).replace(/[^\d]/g, ''), 10) : 0;
+        const customVal = customInput ? parseFloat(String(customInput.value).replace(/,/g, '')) : 0;
         if (!isNaN(customVal) && customVal > 0) {
-          trip.budget = customVal;
-        } else if (totalInitialKrw > 0) {
-          trip.budget = Math.round(totalInitialKrw);
+          trip.budget = isBaseDec ? parseFloat(customVal.toFixed(2)) : Math.round(customVal);
+        } else if (totalInBase > 0) {
+          trip.budget = isBaseDec ? parseFloat(totalInBase.toFixed(2)) : Math.round(totalInBase);
         }
       }
 
       saveTrips();
       renderActiveTripWorkspace();
       closeModal('modal-initial-funds', true);
-      showToast(`💰 초기 총 자산 ₩${Math.round(totalInitialKrw).toLocaleString()} 및 여행 예산이 성공적으로 저장되었습니다!`);
+
+      const formattedBudget = (trip.budget || 0).toLocaleString();
+      showToast(`💰 기준 통화 [${baseCurr}] 및 초기 자산·총 예산(${baseSymbol}${formattedBudget})이 성공적으로 저장되었습니다!`);
     }
     window.saveInitialFundsAndBudget = saveInitialFundsAndBudget;
 
@@ -9003,6 +9313,9 @@
       // If initial funds modal is open, immediately refresh its list
       const initModal = document.getElementById('modal-initial-funds');
       if (initModal && !initModal.classList.contains('sheet-closed')) {
+        if (!modalActiveCurrencies.includes(code)) {
+          modalActiveCurrencies.push(code);
+        }
         renderInitialFundsList();
       }
     }
@@ -10407,7 +10720,28 @@
       updateCreateTripTzBanner();
     }
 
+    function populateCreateTripCurrencyOptions() {
+      const sel = document.getElementById('trip-form-curr');
+      if (!sel) return;
+      const currentVal = sel.value || 'KRW';
+      const popular = ['KRW', 'USD', 'EUR', 'JPY', 'CNY', 'GBP', 'CHF', 'TWD', 'HKD', 'THB', 'VND', 'SGD', 'AUD', 'CAD'];
+      const allCurrs = Object.keys(CURRENCY_INFO);
+      const others = allCurrs.filter(c => !popular.includes(c)).sort();
+      const sorted = [...popular, ...others];
+      sel.innerHTML = sorted.map(c => {
+        const info = CURRENCY_INFO[c] || { name: c, flag: '🌐' };
+        return `<option value="${c}">${info.flag} ${c} (${info.name})</option>`;
+      }).join('');
+      if (sorted.includes(currentVal)) {
+        sel.value = currentVal;
+      } else {
+        sel.value = 'KRW';
+      }
+    }
+    window.populateCreateTripCurrencyOptions = populateCreateTripCurrencyOptions;
+
     function openCreateTripModal() {
+      populateCreateTripCurrencyOptions();
       const today = new Date().toISOString().split('T')[0];
       const titleInput = document.getElementById('trip-form-title');
       if (titleInput) titleInput.value = '';
@@ -11257,6 +11591,10 @@
           ];
         }
 
+        const baseCurr = curr || (pack ? pack.currency : 'KRW');
+        const initBalances = { [baseCurr]: budget || 0 };
+        if (baseCurr !== 'KRW') initBalances['KRW'] = 0;
+
         const newTrip = {
           id: 'trip_' + Date.now(),
           title: title,
@@ -11266,7 +11604,7 @@
           durationDays: durationDays,
           arrivalTime: arrivalTime || '14:00',
           departureTime: departureTime || '17:00',
-          currency: curr || (pack ? pack.currency : 'KRW'),
+          currency: baseCurr,
           budget: budget,
           countries: countries,
           cities: tripCities,
@@ -11279,8 +11617,8 @@
           days: days,
           expenses: [],
           exchanges: [],
-          activeCurrencies: [curr || (pack ? pack.currency : 'KRW'), 'KRW'].filter((v, i, a) => v && a.indexOf(v) === i),
-          initialBalances: { KRW: budget || 0 },
+          activeCurrencies: [baseCurr, 'KRW'].filter((v, i, a) => v && a.indexOf(v) === i),
+          initialBalances: initBalances,
           journals: {},
           checklist: initialChecklist
         };
@@ -14613,6 +14951,10 @@ JSON 배열만 출력하세요. 각 day는 dayNum, title, city, date, spots를 �
       renderRatesManagerList: renderRatesManagerList,
       openInitialFundsModal: openInitialFundsModal,
       saveInitialFundsAndBudget: saveInitialFundsAndBudget,
+      setModalBaseCurrency: setModalBaseCurrency,
+      removeCurrencyInModal: removeCurrencyInModal,
+      openDeleteCurrencySelector: openDeleteCurrencySelector,
+      getCurrencySymbol: getCurrencySymbol,
       openAddCurrencyModal: openAddCurrencyModal,
       selectAddCurrency: selectAddCurrency,
       saveCustomRate: saveCustomRate,
