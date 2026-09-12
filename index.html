@@ -29,7 +29,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700;800&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
 
   <!-- Local Utilities Bundle (CDN fallback & tailwind utilities) -->
-  <link rel="stylesheet" href="css/utilities.css?v=1.5.8">
+  <link rel="stylesheet" href="css/utilities.css?v=1.5.9">
   <link rel="stylesheet" href="vendor/fontawesome/css/all.min.css">
 
   <!-- Leaflet Map CSS & JS -->
@@ -720,8 +720,8 @@
     }
   </style>
 
-  <link rel="stylesheet" href="css/companion.css?v=1.5.8">
-  <script src="js/presentation/companion-ui.js?v=1.5.8"></script>
+  <link rel="stylesheet" href="css/companion.css?v=1.5.9">
+  <script src="js/presentation/companion-ui.js?v=1.5.9"></script>
 
   <!-- Knowledge Base Seed & Destination Knowledge Packs (DKP) -->
   <script src="kb-travel.js"></script>
@@ -752,8 +752,8 @@
 
       <!-- 우측 액션 클러스터 (동일한 정사각/스퀘어 박스 4단 버튼: 버전 -> 통계 -> 설정 -> +추가) -->
       <div class="flex items-center gap-1 sm:gap-1.5 shrink-0">
-        <!-- 1. 버전 배지 버튼 (v1.5.8 - 클릭 시 버전 이력) -->
-        <button id="app-ver-badge" onclick="event.stopPropagation(); openVersionHistoryModal()" class="h-8 px-2 rounded-xl theme-card-subtle flex items-center justify-center font-mono text-[10px] font-bold text-[#a2601b] dark:text-[#d4af37] shadow-sm hover:border-amber-500/60 transition cursor-pointer shrink-0" title="버전 업데이트 기록 보기 (클릭)">v1.5.8</button>
+        <!-- 1. 버전 배지 버튼 (v1.5.9 - 클릭 시 버전 이력) -->
+        <button id="app-ver-badge" onclick="event.stopPropagation(); openVersionHistoryModal()" class="h-8 px-2 rounded-xl theme-card-subtle flex items-center justify-center font-mono text-[10px] font-bold text-[#a2601b] dark:text-[#d4af37] shadow-sm hover:border-amber-500/60 transition cursor-pointer shrink-0" title="버전 업데이트 기록 보기 (클릭)">v1.5.9</button>
 
         <!-- 2. 통계 버튼 (📊 - 네모박스 형태, 통계 문양) -->
         <button id="header-btn-analytics" onclick="openAnalyticsModal('lifetime')" class="companion-header-analytics w-8 h-8 rounded-xl theme-card-subtle flex items-center justify-center text-[#a2601b] dark:text-[#d4af37] hover:border-amber-500/60 transition shadow-sm cursor-pointer shrink-0" title="술술 여행 통계 대시보드">
@@ -3079,7 +3079,7 @@
           </div>
 
           <!-- 부가 바로가기 버튼들 -->
-          <div class="grid grid-cols-2 gap-2 pt-1">
+          <div class="grid grid-cols-2 sm:grid-cols-3 gap-2 pt-1">
             <button onclick="closeModal('modal-settings'); openRouteMapModal();" class="py-2 px-3 rounded-xl bg-[#faf8f5] dark:bg-stone-800 hover:bg-[#f0ece1] dark:hover:bg-stone-700 border border-[#e8e2d5] dark:border-stone-700 text-[#1c1917] dark:text-stone-200 text-xs font-bold transition flex items-center justify-center gap-1.5 cursor-pointer">
               <i class="fa-solid fa-earth-americas text-[#a2601b]"></i>
               <span>세계 지도 궤적</span>
@@ -3087,6 +3087,10 @@
             <button onclick="closeModal('modal-settings'); openVersionHistoryModal();" class="py-2 px-3 rounded-xl bg-[#faf8f5] dark:bg-stone-800 hover:bg-[#f0ece1] dark:hover:bg-stone-700 border border-[#e8e2d5] dark:border-stone-700 text-[#1c1917] dark:text-stone-200 text-xs font-bold transition flex items-center justify-center gap-1.5 cursor-pointer">
               <i class="fa-solid fa-list-check text-[#a2601b]"></i>
               <span>버전 기록 전체</span>
+            </button>
+            <button onclick="restoreSmartWelcomeBanner();" class="col-span-2 sm:col-span-1 py-2 px-3 rounded-xl bg-[#faf8f5] dark:bg-stone-800 hover:bg-[#f0ece1] dark:hover:bg-stone-700 border border-[#e8e2d5] dark:border-stone-700 text-[#1c1917] dark:text-stone-200 text-xs font-bold transition flex items-center justify-center gap-1.5 cursor-pointer" title="상단 시작 가이드 배너 다시 활성화">
+              <i class="fa-solid fa-lightbulb text-amber-500"></i>
+              <span>시작 가이드 복원</span>
             </button>
           </div>
         </div>
@@ -3417,11 +3421,18 @@
 
       <!-- 버전 목록 스크롤 영역 -->
       <div class="flex-1 overflow-y-auto space-y-3 pr-1 text-xs">
-        <!-- v1.5.8 (Current) -->
+        <!-- v1.5.9 (Current) -->
         <div class="p-4 rounded-2xl border-2 border-emerald-500/40 space-y-2.5 bg-emerald-500/5 dark:bg-emerald-500/10">
-          <div class="flex items-center justify-between gap-2"><div class="flex items-center gap-2 min-w-0"><span class="px-2 py-0.5 rounded-lg bg-emerald-500 text-black font-black text-xs shadow-sm shrink-0">v1.5.8</span><span class="text-xs font-black text-[#1c1917] dark:text-white">허브 헤더 정사각 액션 클러스터 통일, 2열 필터 압축 및 여정 비주얼 통계 대시보드 구축</span></div><span class="companion-status shrink-0">최신 버전</span></div>
+          <div class="flex items-center justify-between gap-2"><div class="flex items-center gap-2 min-w-0"><span class="px-2 py-0.5 rounded-lg bg-emerald-500 text-black font-black text-xs shadow-sm shrink-0">v1.5.9</span><span class="text-xs font-black text-[#1c1917] dark:text-white">허브 모바일 UX 4대 고도화 (시작 가이드 영구 닫기, 컴팩트 리스트 뷰, 카드 스와이프 액션·여정 복제, 통계 지도 연동)</span></div><span class="companion-status shrink-0">최신 버전</span></div>
+          <p class="text-xs leading-relaxed">사용자 제안에 따라 메인 허브 화면의 모바일 사용성을 극대화하는 4대 혁신을 완수했습니다. 1) <b>시작 가이드(PWA 설치 배너)</b> 닫기 시 로컬 스토리지에 영구 기억하여 새 탭마다 화면을 가리지 않도록 최적화하고, 설정 모달에서 언제든 1-클릭으로 복원할 수 있도록 연결했습니다. 2) <b>컴팩트 리스트 뷰 모드</b>를 전면 개편하여 투톤 다크모드를 완벽 지원하고, 모바일에서 한 화면에 4~5개 여정을 일목요연하게 조망할 수 있는 고밀도 레이아웃을 제공합니다. 3) 모바일 터치 스와이프(좌측 밀기) 제스처를 도입하여 네이티브 앱처럼 부드럽게 <b>[📋 복제] [📄 PDF] [🗑️ 삭제]</b> 퀵 서랍이 열리도록 구현했으며, 원클릭 <b>여정 복제(사본 생성)</b> 기능을 신설했습니다. 4) 통계 모달의 <b>방문 국가 칩</b>을 누르면 전 세계 비행 궤적 노선도에서 해당 국가의 여정과 거점이 즉시 하이라이트되며, 요약표 행 터치 시 해당 여정으로 즉시 진입하도록 유기적으로 연동했습니다.</p>
+          <div class="text-[10px] text-stone-400 dark:text-stone-500 pt-1 border-t border-emerald-500/20 flex items-center justify-between"><span>📅 2026-09-13 릴리즈</span><span class="font-mono">st-shell-v1.5.9</span></div>
+        </div>
+
+        <!-- v1.5.8 -->
+        <div class="p-4 rounded-2xl bg-stone-50 dark:bg-stone-900/50 border border-stone-200 dark:border-stone-800 space-y-2.5 shadow-sm relative overflow-hidden">
+          <div class="flex items-center justify-between gap-2"><div class="flex items-center gap-2 min-w-0"><span class="px-2 py-0.5 rounded-lg bg-stone-200 dark:bg-stone-800 text-stone-800 dark:text-stone-200 font-bold text-[11px] font-mono shrink-0">v1.5.8</span><span class="text-xs font-bold text-[#1c1917] dark:text-stone-200">허브 헤더 정사각 액션 클러스터 통일, 2열 필터 압축 및 여정 비주얼 통계 대시보드 구축</span></div></div>
           <p class="text-xs leading-relaxed">사용자 피드백에 따라 허브 화면의 수직 공간을 최적화하고 인터페이스의 일관성을 극대화했습니다. 1) 상단 우측 액션 영역을 <b>[버전 뱃지][📊 통계][⚙️ 설정][+ 추가]의 4개 정사각(square) 박스 버튼 클러스터로 규격 통일</b>하여 시각적 정돈감을 높였습니다. 2) 불필요한 '등록된 여행 컬렉션' 헤더 행을 완전 제거하고, <b>필터를 [국가 ▾] [컨셉 ▾] 2열(50%:50%)로 최적화</b>했으며 정렬 드롭다운을 검색창 우측으로 통합하여 여행 카드가 첫 화면 상단에 즉각 노출되도록 했습니다. 3) 평생 여행 통계 모달을 대폭 강화하여 <b>여정 상태 세그먼트 바, 방문 국가 칩, 여정별 기간/방문지/예산 집행률 비교 테이블, 여행 테마 그리드</b> 등 한눈에 파악할 수 있는 비주얼 대시보드를 탑재했습니다.</p>
-          <div class="text-[10px] text-stone-400 dark:text-stone-500 pt-1 border-t border-emerald-500/20 flex items-center justify-between"><span>📅 2026-09-13 릴리즈</span><span class="font-mono">st-shell-v1.5.8</span></div>
+          <div class="text-[10px] text-stone-400 dark:text-stone-500 pt-1 border-t border-stone-200 dark:border-stone-800 flex items-center justify-between"><span>📅 2026-09-13 릴리즈</span><span class="font-mono">st-shell-v1.5.8</span></div>
         </div>
 
         <!-- v1.5.7 -->
@@ -3988,7 +3999,7 @@
     window.showToast = showToast;
 
     // 앱 버전 및 글로벌 네임스페이스 (Sulsul-Travel Invariant Rule R-10, R-11, R-12, R-13, R-14, R-15)
-    const APP_VER = '1.5.8';
+    const APP_VER = '1.5.9';
 
     // ══════════════════════════════════════════
     // [Two-Tone Theme System] 라이트 그레이 & 딥 블랙 테마 엔진
@@ -4797,7 +4808,7 @@
         }, 80);
       } else if (tab === 'metro') {
         if (window.__routeMapIsGlobalAllTrips) {
-          renderGlobalIllustratedRouteMap(State.trips);
+          renderGlobalIllustratedRouteMap(State.trips, window.__routeMapFocusCountry);
         }
       }
     }
@@ -5107,7 +5118,7 @@
       }
     }
 
-    function renderGlobalIllustratedRouteMap(allTrips) {
+    function renderGlobalIllustratedRouteMap(allTrips, focusCountry) {
       if (!allTrips || allTrips.length === 0) {
         allTrips = (State.trips && State.trips.length > 0) ? State.trips : [getActiveTrip()].filter(Boolean);
       }
@@ -5129,8 +5140,20 @@
         totalDays += (t.durationDays || (t.days ? t.days.length : 0) || 0);
       });
 
+      // focusCountry 지정 시 해당 국가 방문 여정을 최상단으로 정렬
+      let displayTrips = [...allTrips];
+      if (focusCountry) {
+        displayTrips.sort((a, b) => {
+          const aMatch = (a.countries || []).some(c => c.toLowerCase().includes(focusCountry.toLowerCase()));
+          const bMatch = (b.countries || []).some(c => c.toLowerCase().includes(focusCountry.toLowerCase()));
+          if (aMatch && !bMatch) return -1;
+          if (!aMatch && bMatch) return 1;
+          return 0;
+        });
+      }
+
       if (titleEl) {
-        titleEl.innerText = '나의 평생 세계 및 대종단 비행 궤적 통합 노선도';
+        titleEl.innerText = focusCountry ? `[${focusCountry}] 발자취 및 비행 궤적 노선도` : '나의 평생 세계 및 대종단 비행 궤적 통합 노선도';
       }
       if (subEl) {
         subEl.innerText = `총 ${allTrips.length}개 여정 · ${allCountries.size}개국 · ${allCities.size}개 거점 · ${totalDays}일간의 대종단 궤적`;
@@ -5145,6 +5168,13 @@
       if (!metroContainer) return;
 
       let metroHtml = `
+        ${focusCountry ? `
+          <div class="p-3 rounded-xl bg-amber-500/15 border border-amber-500/40 text-xs font-bold text-[#a2601b] dark:text-amber-300 flex items-center justify-between gap-2 shadow-sm">
+            <span class="flex items-center gap-1.5"><i class="fa-solid fa-location-dot text-amber-600"></i> [${escapeHtml(focusCountry)}] 관련 여정 및 거점이 하이라이트되었습니다.</span>
+            <button onclick="renderGlobalIllustratedRouteMap(State.trips)" class="px-2 py-0.5 rounded bg-amber-500/20 hover:bg-amber-500/30 text-[11px] font-extrabold cursor-pointer transition">전체 보기</button>
+          </div>
+        ` : ''}
+
         <!-- 평생 발자취 요약 배너 -->
         <div class="p-3.5 sm:p-4 rounded-xl bg-gradient-to-r from-amber-500/10 via-emerald-500/10 to-sky-500/10 dark:from-amber-950/30 dark:via-emerald-950/30 dark:to-sky-950/30 border border-amber-500/30 dark:border-amber-700/40 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 shadow-sm">
           <div class="flex items-center gap-3">
@@ -5167,14 +5197,16 @@
         <div class="space-y-6 pt-2">
       `;
 
-      allTrips.forEach((trip, tIdx) => {
+      displayTrips.forEach((trip, tIdx) => {
         const isSA = isSouthAmericaTrip(trip);
         const isYN = isYunnanTrip(trip);
         const flag = (trip.countries && trip.countries.length > 0) ? (isYN ? '🇨🇳' : (isSA ? '🌎' : '✈️')) : (trip.coverEmoji || '✈️');
         const tripCities = trip.cities || [];
+        const isCountryMatch = focusCountry && (trip.countries || []).some(c => c.toLowerCase().includes(focusCountry.toLowerCase()));
+        const cardBorderClass = isCountryMatch ? 'border-2 border-amber-500 ring-2 ring-amber-500/20 shadow-md' : 'border border-[#e8e2d5] dark:border-stone-800 shadow-sm';
 
         metroHtml += `
-          <div class="p-4 rounded-2xl bg-white dark:bg-[#151922] border border-[#e8e2d5] dark:border-stone-800 shadow-sm space-y-3">
+          <div class="p-4 rounded-2xl bg-white dark:bg-[#151922] ${cardBorderClass} space-y-3">
             <!-- 여행 헤더 배너 -->
             <div class="flex items-center justify-between border-b border-stone-200 dark:border-stone-800 pb-2.5">
               <div class="flex items-center gap-2.5">
@@ -5696,19 +5728,29 @@
 
     function openRouteMapModal(trip) {
       window.__routeMapIsGlobalAllTrips = false;
+      window.__routeMapFocusCountry = null;
       const t = trip || getActiveTrip();
       renderDynamicIllustratedRouteMap(t);
       openModal('modal-route-map');
       switchRouteMapTab('metro');
     }
 
-    function openGlobalRouteMapModal() {
+    function openGlobalRouteMapModal(focusCountry) {
       window.__routeMapIsGlobalAllTrips = true;
+      window.__routeMapFocusCountry = focusCountry || null;
       const allTrips = (State.trips && State.trips.length > 0) ? State.trips : [getActiveTrip()].filter(Boolean);
-      renderGlobalIllustratedRouteMap(allTrips);
+      renderGlobalIllustratedRouteMap(allTrips, focusCountry);
       openModal('modal-route-map');
-      switchRouteMapTab('satellite');
+      switchRouteMapTab(focusCountry ? 'metro' : 'satellite');
     }
+    window.openGlobalRouteMapModal = openGlobalRouteMapModal;
+
+    function focusCountryFromAnalytics(countryName) {
+      closeModal('modal-analytics');
+      openGlobalRouteMapModal(countryName);
+      showToast(`🗺️ ${countryName} 발자취 노선도를 확인합니다.`);
+    }
+    window.focusCountryFromAnalytics = focusCountryFromAnalytics;
 
     let isAllTripsWorkspaceMapActive = false;
 
@@ -6283,11 +6325,12 @@
             const cInfo = resolveCountryInfo(countryName);
             const flag = cInfo ? cInfo.flag : '🌎';
             return `
-              <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-xl bg-[#faf8f5] dark:bg-[#121316] border border-[#e8e2d5] dark:border-stone-800 text-xs font-bold text-[#44403c] dark:text-stone-200 shadow-xs">
+              <button onclick="focusCountryFromAnalytics('${escapeHtml(countryName)}')" class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-xl bg-[#faf8f5] dark:bg-[#121316] hover:bg-amber-500/10 hover:border-amber-500/40 border border-[#e8e2d5] dark:border-stone-800 text-xs font-bold text-[#44403c] dark:text-stone-200 shadow-xs cursor-pointer transition" title="${escapeHtml(countryName)} 발자취 노선도 확인">
                 <span>${flag}</span>
                 <span>${escapeHtml(countryName)}</span>
                 <span class="px-1.5 py-0.2 rounded-full bg-amber-500/15 text-[#a2601b] dark:text-amber-300 text-[10px] font-mono">${cnt}회</span>
-              </span>
+                <i class="fa-solid fa-arrow-up-right-from-square text-[9px] opacity-60 text-amber-600 dark:text-amber-400"></i>
+              </button>
             `;
           }).join('');
         }
@@ -6317,7 +6360,7 @@
             const sBadge = statusBadgeMap[t.status || 'planned'] || statusBadgeMap.planned;
 
             return `
-              <tr class="hover:bg-[#faf8f5] dark:hover:bg-[#121316]/60 transition">
+              <tr onclick="closeModal('modal-analytics'); openTripWorkspace('${t.id}');" class="hover:bg-amber-500/10 dark:hover:bg-amber-500/15 transition cursor-pointer" title="${escapeHtml(t.title)} 여정 열기">
                 <td class="py-2 px-2 font-bold text-[#1c1917] dark:text-[#ededed] max-w-[120px] truncate" title="${escapeHtml(t.title)}">
                   ${escapeHtml(t.title)}
                 </td>
@@ -6433,15 +6476,18 @@
     }
 
     function updateHubViewModeButtonUi() {
+      const btn = document.getElementById('btn-hub-view-mode');
       const btnIcon = document.getElementById('btn-hub-view-mode-icon');
       const btnTxt = document.getElementById('btn-hub-view-mode-txt');
       if (!btnIcon || !btnTxt) return;
       if (State.hubViewMode === 'list') {
         btnIcon.className = 'fa-solid fa-list-ul text-xs text-[#a2601b]';
         btnTxt.innerText = '목록';
+        if (btn) btn.title = '격자 뷰로 전환 (대형 카드)';
       } else {
         btnIcon.className = 'fa-solid fa-table-cells text-xs text-[#a2601b]';
         btnTxt.innerText = '격자';
+        if (btn) btn.title = '컴팩트 목록 뷰로 전환 (1줄 요약)';
       }
     }
 
@@ -6898,7 +6944,7 @@
             ${trip.isSample ? `<span class="px-2 py-0.5 rounded-full bg-black/60 backdrop-blur-md text-amber-300 border border-amber-500/40 text-[10px] font-bold">✨ 공식 가이드 예제</span>` : ''}
           </div>
 
-          <!-- 상단 우측: D-Day + [📷 대표사진] + [📄 PDF] + [🗑️ 삭제] (중복 지도 버튼 제거 완료) -->
+          <!-- 상단 우측: D-Day + [📷 대표사진] + [📋 복제] + [📄 PDF] + [🗑️ 삭제] -->
           <div class="relative z-10 flex items-center gap-1.5">
             ${renderDDayBadge(trip, now)}
             <button onclick="triggerTripCoverUpload('${trip.id}', event)" class="px-2 py-1 rounded-lg bg-black/50 hover:bg-amber-600/80 backdrop-blur-md text-white border border-white/25 flex items-center gap-1 text-[11px] font-bold shadow-sm transition cursor-pointer" title="${photoBtnLabel}">
@@ -6906,6 +6952,9 @@
               <span class="hidden sm:inline">${photoBtnLabel}</span>
             </button>
             ${removeBtn}
+            <button onclick="duplicateTrip('${trip.id}', event)" class="w-7 h-7 rounded-lg bg-black/50 hover:bg-amber-600/80 backdrop-blur-md text-white/90 hover:text-white border border-white/25 flex items-center justify-center text-xs shadow-sm transition cursor-pointer" title="여정 복제">
+              <i class="fa-solid fa-copy"></i>
+            </button>
             <button onclick="openTripPdfReport('${trip.id}', event)" class="w-7 h-7 rounded-lg bg-black/50 hover:bg-black/80 backdrop-blur-md text-white/90 hover:text-white border border-white/25 flex items-center justify-center text-xs shadow-sm transition cursor-pointer" title="여행 보고서 & PDF">
               <i class="fa-solid fa-file-pdf text-rose-400"></i>
             </button>
@@ -6915,6 +6964,74 @@
           </div>
         </div>
       `;
+    }
+
+    // ══════════════════════════════════════════
+    // 모바일 카드 스와이프 제스처 엔진 (iOS/Android 네이티브 퀵 액션 서랍)
+    // ══════════════════════════════════════════
+    let swipeTouchStartX = 0;
+    let swipeTouchStartY = 0;
+    let swipeCurrentDiffX = 0;
+    let activeSwipedCard = null;
+
+    function handleTripSwipeStart(e, el) {
+      if (!e.touches || e.touches.length !== 1) return;
+      swipeTouchStartX = e.touches[0].clientX;
+      swipeTouchStartY = e.touches[0].clientY;
+      swipeCurrentDiffX = 0;
+      el.style.transition = 'none';
+    }
+
+    function handleTripSwipeMove(e, el) {
+      if (!e.touches || e.touches.length !== 1) return;
+      const diffX = e.touches[0].clientX - swipeTouchStartX;
+      const diffY = e.touches[0].clientY - swipeTouchStartY;
+
+      // 수직 스크롤 시 가로 스와이프 차단
+      if (Math.abs(diffY) > Math.abs(diffX) && Math.abs(diffX) < 15) return;
+
+      const isAlreadySwiped = el.dataset.swiped === 'true';
+      if (diffX < 0) {
+        const base = isAlreadySwiped ? -150 : 0;
+        swipeCurrentDiffX = Math.max(base + diffX, -155);
+        el.style.transform = `translateX(${swipeCurrentDiffX}px)`;
+      } else if (isAlreadySwiped && diffX > 0) {
+        swipeCurrentDiffX = Math.min(-150 + diffX, 0);
+        el.style.transform = `translateX(${swipeCurrentDiffX}px)`;
+      }
+    }
+
+    function handleTripSwipeEnd(e, el) {
+      el.style.transition = 'transform 0.25s cubic-bezier(0.2, 0.8, 0.2, 1)';
+      const isAlreadySwiped = el.dataset.swiped === 'true';
+      if (swipeCurrentDiffX < -40 || (isAlreadySwiped && swipeCurrentDiffX < -100)) {
+        el.style.transform = 'translateX(-150px)';
+        el.dataset.swiped = 'true';
+        if (activeSwipedCard && activeSwipedCard !== el) {
+          resetTripSwipe(activeSwipedCard);
+        }
+        activeSwipedCard = el;
+      } else {
+        resetTripSwipe(el);
+      }
+      swipeCurrentDiffX = 0;
+    }
+
+    function resetTripSwipe(el) {
+      if (!el) return;
+      el.style.transition = 'transform 0.25s cubic-bezier(0.2, 0.8, 0.2, 1)';
+      el.style.transform = 'translateX(0px)';
+      el.dataset.swiped = 'false';
+      if (activeSwipedCard === el) activeSwipedCard = null;
+    }
+
+    function handleTripCardClick(e, tripId, el) {
+      if (el && el.dataset.swiped === 'true') {
+        resetTripSwipe(el);
+        e.stopPropagation();
+        return;
+      }
+      openTripWorkspace(tripId);
     }
 
     function renderTripCards() {
@@ -7143,54 +7260,76 @@
         const routePreviewStr = routeCities.slice(0, 5).join(' ➔ ') + (routeCities.length > 5 ? ' ...' : '');
 
         if (State.hubViewMode === 'list') {
-          // Elegant List View Mode (Sulsul-Diary UI)
+          // Elegant Compact List View Mode (Two-Tone Theme & Swipe Action Ready)
           const thumbHtml = cover.url ? 
-            `<img src="${cover.url}" class="w-12 h-12 rounded-xl object-cover border border-[#e8e2d5] shadow-sm shrink-0">` :
-            `<div class="w-12 h-12 rounded-xl bg-gradient-to-br from-[#fdf6ec] to-[#f5dfb8] border border-[#e8e2d5] flex items-center justify-center text-2xl shrink-0 group-hover:scale-105 transition-transform">${trip.coverEmoji || '🌎'}</div>`;
+            `<img src="${cover.url}" class="w-12 h-12 rounded-xl object-cover border border-[#e8e2d5] dark:border-stone-700 shadow-sm shrink-0">` :
+            `<div class="w-12 h-12 rounded-xl bg-gradient-to-br from-[#fdf6ec] to-[#f5dfb8] dark:from-stone-800 dark:to-stone-900 border border-[#e8e2d5] dark:border-stone-700 flex items-center justify-center text-2xl shrink-0 group-hover:scale-105 transition-transform">${trip.coverEmoji || '🌎'}</div>`;
 
           html += `
-            <div class="group rounded-2xl bg-white border border-[#e8e2d5] hover:border-[#a2601b]/50 p-4 transition-all duration-200 shadow-[0_2px_10px_rgba(0,0,0,0.02)] hover:shadow-md flex flex-col sm:flex-row sm:items-center justify-between gap-4 cursor-pointer" onclick="openTripWorkspace('${trip.id}')">
-              <div class="flex items-center gap-3.5 min-w-0">
-                ${thumbHtml}
-                <div class="min-w-0">
-                  <div class="flex items-center gap-2 flex-wrap">
-                    <h4 class="text-sm sm:text-base font-black text-[#1c1917] group-hover:text-[#a2601b] transition truncate">${escapeHtml(trip.title)}</h4>
-                    ${sampleBadge}
-                    ${renderDDayBadge(trip, now)}
-                  </div>
-                  <div class="flex items-center gap-1.5 mt-1.5 text-xs text-[#78716c] flex-wrap">
-                    <span class="font-medium">${trip.startDate || '일정 미정'} ~ ${trip.endDate || ''} (${trip.durationDays || 22}일)</span>
-                    <span class="text-stone-300">•</span>
-                    ${countryBadges || `<span>${(trip.countries || []).join(', ') || '전세계'}</span>`}
-                    ${currBadge}
-                    ${cityBadges}
-                    ${conceptChips}
-                  </div>
-                </div>
+            <div class="relative overflow-hidden rounded-2xl trip-swipe-container shadow-xs" data-trip-id="${trip.id}">
+              <!-- 모바일 스와이프 액션 서랍 (터치로 좌측 밀었을 때 노출) -->
+              <div class="absolute inset-y-0 right-0 flex items-center gap-1.5 px-3 bg-[#f5f3ed] dark:bg-stone-900 border-l border-[#e8e2d5] dark:border-stone-800 z-0">
+                <button onclick="duplicateTrip('${trip.id}', event)" class="w-9 h-9 rounded-xl bg-amber-500/15 hover:bg-amber-500/25 text-[#a2601b] dark:text-amber-300 border border-amber-500/30 flex items-center justify-center text-xs font-bold transition shadow-xs cursor-pointer" title="여정 복제">
+                  <i class="fa-solid fa-copy"></i>
+                </button>
+                <button onclick="openTripPdfReport('${trip.id}', event)" class="w-9 h-9 rounded-xl bg-rose-500/15 hover:bg-rose-500/25 text-rose-600 dark:text-rose-400 border border-rose-500/30 flex items-center justify-center text-xs font-bold transition shadow-xs cursor-pointer" title="PDF 리포트">
+                  <i class="fa-solid fa-file-pdf"></i>
+                </button>
+                <button onclick="requestDeleteTrip('${trip.id}', event)" class="w-9 h-9 rounded-xl bg-red-500/15 hover:bg-red-500/25 text-red-600 dark:text-red-400 border border-red-500/30 flex items-center justify-center text-xs font-bold transition shadow-xs cursor-pointer" title="여행 삭제">
+                  <i class="fa-regular fa-trash-can"></i>
+                </button>
               </div>
 
-              <div class="flex items-center justify-between sm:justify-end gap-3 shrink-0 pt-2 sm:pt-0 border-t sm:border-t-0 border-[#f0ece1]">
-                <div class="text-right">
-                  <div class="text-[10px] text-[#78716c]">지출 / 예산 (${pct}%)</div>
-                  <div class="text-xs font-bold text-[#1c1917]">₩${(totalSpent/10000).toFixed(0)}만 / <span class="text-stone-500 font-normal">₩${(budget/10000).toFixed(0)}만</span></div>
+              <!-- 스와이프 전면 리스트 카드 바디 -->
+              <div class="trip-swipe-front relative z-10 transition-transform duration-200 ease-out group bg-white dark:bg-[#16181d] border border-[#e8e2d5] dark:border-stone-800 hover:border-[#a2601b]/50 dark:hover:border-amber-500/50 p-3.5 sm:p-4 shadow-[0_2px_10px_rgba(0,0,0,0.02)] flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4 cursor-pointer"
+                   ontouchstart="handleTripSwipeStart(event, this)" 
+                   ontouchmove="handleTripSwipeMove(event, this)" 
+                   ontouchend="handleTripSwipeEnd(event, this)"
+                   onclick="handleTripCardClick(event, '${trip.id}', this)">
+                <div class="flex items-center gap-3 min-w-0">
+                  ${thumbHtml}
+                  <div class="min-w-0 flex-1">
+                    <div class="flex items-center gap-2 flex-wrap">
+                      <h4 class="text-sm sm:text-base font-black text-[#1c1917] dark:text-white group-hover:text-[#a2601b] transition truncate">${escapeHtml(trip.title)}</h4>
+                      ${sampleBadge}
+                      ${renderDDayBadge(trip, now)}
+                    </div>
+                    <div class="flex items-center gap-1.5 mt-1 text-xs text-[#78716c] dark:text-stone-400 flex-wrap">
+                      <span class="font-medium">${trip.startDate || '일정 미정'} ~ ${trip.endDate || ''} (${trip.durationDays || 22}일)</span>
+                      <span class="text-stone-300 dark:text-stone-600">•</span>
+                      ${countryBadges || `<span>${(trip.countries || []).join(', ') || '전세계'}</span>`}
+                      ${currBadge}
+                      ${conceptChips}
+                    </div>
+                  </div>
                 </div>
-                <div class="flex items-center gap-1.5" onclick="event.stopPropagation()">
-                  <button onclick="triggerTripCoverUpload('${trip.id}', event)" class="w-8 h-8 rounded-xl bg-[#faf8f5] hover:bg-amber-50 text-[#78716c] hover:text-[#a2601b] border border-[#e8e2d5] flex items-center justify-center text-xs transition cursor-pointer" title="대표 사진 등록">
-                    <i class="fa-solid fa-camera"></i>
-                  </button>
-                  <button onclick="openTripWorkspace('${trip.id}'); navigateToInteractiveMap(); event.stopPropagation();" class="w-8 h-8 rounded-xl bg-[#faf8f5] hover:bg-amber-50 text-[#78716c] hover:text-[#a2601b] border border-[#e8e2d5] flex items-center justify-center text-xs transition cursor-pointer" title="${tripMapTitle}">
-                    <i class="${tripMapIcon}"></i>
-                  </button>
-                  <button onclick="openTripPdfReport('${trip.id}', event)" class="w-8 h-8 rounded-xl bg-[#faf8f5] hover:bg-amber-50 text-[#78716c] hover:text-[#a2601b] border border-[#e8e2d5] flex items-center justify-center text-xs transition cursor-pointer" title="PDF 리포트">
-                    <i class="fa-solid fa-file-pdf text-rose-500"></i>
-                  </button>
-                  <button onclick="requestDeleteTrip('${trip.id}', event)" class="w-8 h-8 rounded-xl bg-[#faf8f5] hover:bg-rose-50 text-[#78716c] hover:text-rose-600 border border-[#e8e2d5] flex items-center justify-center text-xs transition cursor-pointer" title="여행 삭제">
-                    <i class="fa-regular fa-trash-can"></i>
-                  </button>
-                  <button onclick="openTripWorkspace('${trip.id}')" class="px-3 py-1.5 rounded-xl btn-gold text-xs font-bold shadow-sm transition flex items-center gap-1">
-                    <span>열기</span>
-                    <i class="fa-solid fa-chevron-right text-[10px]"></i>
-                  </button>
+
+                <div class="flex items-center justify-between sm:justify-end gap-3 shrink-0 pt-2 sm:pt-0 border-t sm:border-t-0 border-[#f0ece1] dark:border-stone-800">
+                  <div class="text-right shrink-0">
+                    <div class="text-[10px] text-[#78716c] dark:text-stone-400 font-bold">지출 / 예산 (${pct}%)</div>
+                    <div class="text-xs font-bold text-[#1c1917] dark:text-stone-200">₩${(totalSpent/10000).toFixed(0)}만 <span class="text-stone-400 font-normal">/ ₩${(budget/10000).toFixed(0)}만</span></div>
+                  </div>
+                  <div class="flex items-center gap-1.5" onclick="event.stopPropagation()">
+                    <button onclick="triggerTripCoverUpload('${trip.id}', event)" class="w-8 h-8 rounded-xl bg-[#faf8f5] dark:bg-stone-800 hover:bg-amber-50 dark:hover:bg-stone-700 text-[#78716c] dark:text-stone-300 hover:text-[#a2601b] border border-[#e8e2d5] dark:border-stone-700 flex items-center justify-center text-xs transition cursor-pointer" title="대표 사진 등록">
+                      <i class="fa-solid fa-camera"></i>
+                    </button>
+                    <button onclick="duplicateTrip('${trip.id}', event)" class="w-8 h-8 rounded-xl bg-[#faf8f5] dark:bg-stone-800 hover:bg-amber-50 dark:hover:bg-stone-700 text-[#78716c] dark:text-stone-300 hover:text-[#a2601b] border border-[#e8e2d5] dark:border-stone-700 flex items-center justify-center text-xs transition cursor-pointer" title="여정 복제">
+                      <i class="fa-solid fa-copy"></i>
+                    </button>
+                    <button onclick="openTripWorkspace('${trip.id}'); navigateToInteractiveMap(); event.stopPropagation();" class="w-8 h-8 rounded-xl bg-[#faf8f5] dark:bg-stone-800 hover:bg-amber-50 dark:hover:bg-stone-700 text-[#78716c] dark:text-stone-300 hover:text-[#a2601b] border border-[#e8e2d5] dark:border-stone-700 flex items-center justify-center text-xs transition cursor-pointer" title="${tripMapTitle}">
+                      <i class="${tripMapIcon}"></i>
+                    </button>
+                    <button onclick="openTripPdfReport('${trip.id}', event)" class="w-8 h-8 rounded-xl bg-[#faf8f5] dark:bg-stone-800 hover:bg-amber-50 dark:hover:bg-stone-700 text-[#78716c] dark:text-stone-300 hover:text-[#a2601b] border border-[#e8e2d5] dark:border-stone-700 flex items-center justify-center text-xs transition cursor-pointer" title="PDF 리포트">
+                      <i class="fa-solid fa-file-pdf text-rose-500"></i>
+                    </button>
+                    <button onclick="requestDeleteTrip('${trip.id}', event)" class="w-8 h-8 rounded-xl bg-[#faf8f5] dark:bg-stone-800 hover:bg-rose-50 dark:hover:bg-stone-700 text-[#78716c] dark:text-stone-300 hover:text-rose-600 border border-[#e8e2d5] dark:border-stone-700 flex items-center justify-center text-xs transition cursor-pointer" title="여행 삭제">
+                      <i class="fa-regular fa-trash-can"></i>
+                    </button>
+                    <button onclick="openTripWorkspace('${trip.id}')" class="px-3 py-1.5 rounded-xl btn-gold text-xs font-bold shadow-sm transition flex items-center gap-1 cursor-pointer">
+                      <span>열기</span>
+                      <i class="fa-solid fa-chevron-right text-[10px]"></i>
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
@@ -7198,7 +7337,7 @@
         } else if (isHero) {
           // [Hero Featured Card] 대형 와이드 대표 여정 카드 (가장 임박/진행 중인 여행 부각)
           html += `
-            <div class="col-span-full group relative rounded-2xl bg-white border-2 border-amber-500/40 hover:border-amber-500/70 transition-all duration-300 overflow-hidden flex flex-col shadow-md hover:shadow-xl">
+            <div class="col-span-full group relative rounded-2xl bg-white dark:bg-[#16181d] border-2 border-amber-500/40 hover:border-amber-500/70 dark:border-amber-500/50 transition-all duration-300 overflow-hidden flex flex-col shadow-md hover:shadow-xl">
               ${renderCoverBannerHtml(trip, cover, true, now)}
 
               <div class="p-4 sm:p-5 flex-1 flex flex-col justify-between space-y-3.5 cursor-pointer" onclick="openTripWorkspace('${trip.id}')">
@@ -7207,8 +7346,8 @@
                     <div class="flex items-center gap-3 min-w-0">
                       <span class="text-3xl sm:text-4xl shrink-0">${trip.coverEmoji || '🌎'}</span>
                       <div class="min-w-0 flex-1">
-                        <h4 class="text-base sm:text-xl font-black text-[#1c1917] truncate group-hover:text-[#a2601b] transition">${escapeHtml(trip.title)}</h4>
-                        <p class="text-xs text-[#78716c] truncate mt-0.5">${escapeHtml(trip.subtitle || trip.style || '인생의 특별한 여정')}</p>
+                        <h4 class="text-base sm:text-xl font-black text-[#1c1917] dark:text-white truncate group-hover:text-[#a2601b] transition">${escapeHtml(trip.title)}</h4>
+                        <p class="text-xs text-[#78716c] dark:text-stone-400 truncate mt-0.5">${escapeHtml(trip.subtitle || trip.style || '인생의 특별한 여정')}</p>
                       </div>
                     </div>
                   </div>
@@ -7227,25 +7366,25 @@
                     ${conceptChips}
                   </div>
 
-                  <div class="flex items-center justify-between text-xs text-[#78716c] pt-2 border-t border-[#f0ece1]">
+                  <div class="flex items-center justify-between text-xs text-[#78716c] dark:text-stone-400 pt-2 border-t border-[#f0ece1] dark:border-stone-800">
                     <span class="font-medium">${trip.startDate || '일정 미정'} ~ ${trip.endDate || ''}</span>
-                    <span class="font-black text-[#1c1917]">${trip.durationDays || (trip.days ? trip.days.length : 22)}일간</span>
+                    <span class="font-black text-[#1c1917] dark:text-white">${trip.durationDays || (trip.days ? trip.days.length : 22)}일간</span>
                   </div>
                 </div>
 
                 <div class="space-y-1.5 pt-1">
                   <div class="flex items-center justify-between text-[11px]">
-                    <span class="text-[#78716c] font-medium">지출액 / 목표 예산 (${pct}%)</span>
-                    <span class="font-bold text-[#1c1917]">₩${totalSpent.toLocaleString()} <span class="text-stone-400 font-normal">/ ₩${budget.toLocaleString()}</span></span>
+                    <span class="text-[#78716c] dark:text-stone-400 font-medium">지출액 / 목표 예산 (${pct}%)</span>
+                    <span class="font-bold text-[#1c1917] dark:text-stone-200">₩${totalSpent.toLocaleString()} <span class="text-stone-400 font-normal">/ ₩${budget.toLocaleString()}</span></span>
                   </div>
-                  <div class="w-full bg-[#f0ece1] rounded-full h-2 overflow-hidden">
+                  <div class="w-full bg-[#f0ece1] dark:bg-stone-800 rounded-full h-2 overflow-hidden">
                     <div class="bg-gradient-to-r from-[#d7a643] to-[#a2601b] h-full rounded-full transition-all duration-500" style="width: ${pct}%"></div>
                   </div>
                 </div>
 
-                <!-- 하단 액션 버튼: [경로 지도] + [다이어리 열기] 단일 명확화 -->
+                <!-- 하단 액션 버튼: [경로 지도] + [다이어리 열기] -->
                 <div class="pt-2 flex items-center gap-2.5">
-                  <button onclick="openTripWorkspace('${trip.id}'); navigateToInteractiveMap(); event.stopPropagation();" class="py-2.5 px-3.5 rounded-xl bg-[#faf8f5] hover:bg-amber-50 text-[#78716c] hover:text-[#a2601b] border border-[#e8e2d5] text-xs font-bold transition flex items-center justify-center gap-1.5 shadow-sm cursor-pointer shrink-0" title="${tripMapTitle}">
+                  <button onclick="openTripWorkspace('${trip.id}'); navigateToInteractiveMap(); event.stopPropagation();" class="py-2.5 px-3.5 rounded-xl bg-[#faf8f5] dark:bg-stone-800 hover:bg-amber-50 dark:hover:bg-stone-700 text-[#78716c] dark:text-stone-300 hover:text-[#a2601b] border border-[#e8e2d5] dark:border-stone-700 text-xs font-bold transition flex items-center justify-center gap-1.5 shadow-sm cursor-pointer shrink-0" title="${tripMapTitle}">
                     <i class="${tripMapIcon}"></i>
                     <span>경로 지도</span>
                   </button>
@@ -7260,7 +7399,7 @@
         } else {
           // [Standard Compact Card] 콤팩트 표준 여행 카드 (지난 여행 및 기타 여정)
           html += `
-            <div class="group relative rounded-2xl bg-white border border-[#e8e2d5] hover:border-[#a2601b]/50 transition-all duration-200 overflow-hidden flex flex-col shadow-[0_2px_12px_rgba(0,0,0,0.03)] hover:shadow-lg hover:-translate-y-1">
+            <div class="group relative rounded-2xl bg-white dark:bg-[#16181d] border border-[#e8e2d5] dark:border-stone-800 hover:border-[#a2601b]/50 dark:hover:border-amber-500/50 transition-all duration-200 overflow-hidden flex flex-col shadow-[0_2px_12px_rgba(0,0,0,0.03)] hover:shadow-lg hover:-translate-y-1">
               ${renderCoverBannerHtml(trip, cover, false, now)}
 
               <div class="p-4 flex-1 flex flex-col justify-between space-y-3 cursor-pointer" onclick="openTripWorkspace('${trip.id}')">
@@ -7268,8 +7407,8 @@
                   <div class="flex items-center gap-2.5">
                     <span class="text-2xl shrink-0">${trip.coverEmoji || '🌎'}</span>
                     <div class="min-w-0 flex-1">
-                      <h4 class="text-base font-black text-[#1c1917] truncate group-hover:text-[#a2601b] transition">${escapeHtml(trip.title)}</h4>
-                      <p class="text-[11px] text-[#78716c] truncate mt-0.5">${escapeHtml(trip.subtitle || trip.style || '인생의 특별한 여정')}</p>
+                      <h4 class="text-base font-black text-[#1c1917] dark:text-white truncate group-hover:text-[#a2601b] transition">${escapeHtml(trip.title)}</h4>
+                      <p class="text-[11px] text-[#78716c] dark:text-stone-400 truncate mt-0.5">${escapeHtml(trip.subtitle || trip.style || '인생의 특별한 여정')}</p>
                     </div>
                   </div>
 
@@ -7281,25 +7420,25 @@
                     ${conceptChips}
                   </div>
 
-                  <div class="mt-2.5 flex items-center justify-between text-xs text-[#78716c] pt-2 border-t border-[#f0ece1]">
+                  <div class="mt-2.5 flex items-center justify-between text-xs text-[#78716c] dark:text-stone-400 pt-2 border-t border-[#f0ece1] dark:border-stone-800">
                     <span>${trip.startDate || '일정 미정'} ~ ${trip.endDate || ''}</span>
-                    <span class="font-bold text-[#1c1917]">${trip.durationDays || (trip.days ? trip.days.length : 22)}일간</span>
+                    <span class="font-bold text-[#1c1917] dark:text-white">${trip.durationDays || (trip.days ? trip.days.length : 22)}일간</span>
                   </div>
                 </div>
 
                 <div class="space-y-1.5 pt-1">
                   <div class="flex items-center justify-between text-[11px]">
-                    <span class="text-[#78716c]">지출액 / 목표 예산</span>
-                    <span class="font-bold text-[#1c1917]">₩${totalSpent.toLocaleString()} <span class="text-stone-400 font-normal">/ ₩${budget.toLocaleString()}</span></span>
+                    <span class="text-[#78716c] dark:text-stone-400">지출액 / 목표 예산</span>
+                    <span class="font-bold text-[#1c1917] dark:text-stone-200">₩${totalSpent.toLocaleString()} <span class="text-stone-400 font-normal">/ ₩${budget.toLocaleString()}</span></span>
                   </div>
-                  <div class="w-full bg-[#f0ece1] rounded-full h-1.5 overflow-hidden">
+                  <div class="w-full bg-[#f0ece1] dark:bg-stone-800 rounded-full h-1.5 overflow-hidden">
                     <div class="bg-gradient-to-r from-[#d7a643] to-[#a2601b] h-full rounded-full" style="width: ${pct}%"></div>
                   </div>
                 </div>
 
                 <!-- 하단 액션 버튼: [지도] + [다이어리 열기] -->
                 <div class="pt-2 flex items-center gap-2">
-                  <button onclick="openTripWorkspace('${trip.id}'); navigateToInteractiveMap(); event.stopPropagation();" class="py-2 px-2.5 rounded-xl bg-[#faf8f5] hover:bg-amber-50 text-[#78716c] hover:text-[#a2601b] border border-[#e8e2d5] text-xs font-bold transition flex items-center justify-center gap-1 shadow-sm cursor-pointer shrink-0" title="${tripMapTitle}">
+                  <button onclick="openTripWorkspace('${trip.id}'); navigateToInteractiveMap(); event.stopPropagation();" class="py-2 px-2.5 rounded-xl bg-[#faf8f5] dark:bg-stone-800 hover:bg-amber-50 dark:hover:bg-stone-700 text-[#78716c] dark:text-stone-300 hover:text-[#a2601b] border border-[#e8e2d5] dark:border-stone-700 text-xs font-bold transition flex items-center justify-center gap-1 shadow-sm cursor-pointer shrink-0" title="${tripMapTitle}">
                     <i class="${tripMapIcon}"></i>
                     <span>지도</span>
                   </button>
@@ -10279,6 +10418,40 @@
       );
     }
 
+    function duplicateTrip(tripId, event) {
+      if (event) event.stopPropagation();
+      const trip = State.trips.find(t => t.id === tripId);
+      if (!trip) return;
+
+      const newId = 'trip_' + Date.now();
+      const cloned = JSON.parse(JSON.stringify(trip));
+      cloned.id = newId;
+      cloned.title = `${cloned.title} (사본)`;
+      cloned.createdAt = new Date().toISOString();
+      delete cloned.isSample;
+
+      // 새 spot 및 expense 고유 ID 부여
+      if (Array.isArray(cloned.expenses)) {
+        cloned.expenses = cloned.expenses.map(e => ({ ...e, id: 'exp_' + Math.random().toString(36).substr(2, 9) }));
+      }
+      if (Array.isArray(cloned.days)) {
+        cloned.days = cloned.days.map(d => {
+          if (Array.isArray(d.spots)) {
+            d.spots = d.spots.map(s => ({ ...s, id: 'spot_' + Math.random().toString(36).substr(2, 9) }));
+          }
+          return d;
+        });
+      }
+
+      State.trips.unshift(cloned);
+      State.activeTripId = cloned.id;
+      saveTrips();
+      updateHubFilterDropdowns();
+      renderHub();
+      showToast(`📋 [${cloned.title}] 여정이 성공적으로 복제되었습니다!`);
+    }
+    window.duplicateTrip = duplicateTrip;
+
     function requestDeleteSpot(dayIdx, spotIdx, event) {
       if (event) event.stopPropagation();
       const trip = getActiveTrip();
@@ -10440,13 +10613,28 @@
     }
 
     function dismissSmartWelcomeBanner() {
-      sessionStorage.setItem('st_hide_swb', '1');
+      try {
+        localStorage.setItem('st_hide_swb', '1');
+        sessionStorage.setItem('st_hide_swb', '1');
+      } catch (e) {}
       const banner = document.getElementById('smart-welcome-banner');
       if (banner) {
         banner.classList.add('hidden');
         banner.innerHTML = '';
       }
+      showToast('💡 시작 가이드 배너가 닫혔습니다. (설정에서 다시 표시 가능)');
     }
+    window.dismissSmartWelcomeBanner = dismissSmartWelcomeBanner;
+
+    function restoreSmartWelcomeBanner() {
+      try {
+        localStorage.removeItem('st_hide_swb');
+        sessionStorage.removeItem('st_hide_swb');
+      } catch (e) {}
+      renderSmartWelcomeBanner();
+      showToast('💡 시작 가이드 배너가 다시 활성화되었습니다.');
+    }
+    window.restoreSmartWelcomeBanner = restoreSmartWelcomeBanner;
 
     function copyCurrentUrl() {
       const url = window.location.href.split('#')[0];
@@ -10465,7 +10653,14 @@
       const banner = document.getElementById('smart-welcome-banner');
       if (!banner) return;
       const installed = isInstalled();
-      if (installed || sessionStorage.getItem('st_hide_swb') === '1') {
+      const isHidden = (function() {
+        try {
+          return localStorage.getItem('st_hide_swb') === '1' || sessionStorage.getItem('st_hide_swb') === '1';
+        } catch (e) {
+          return false;
+        }
+      })();
+      if (installed || isHidden) {
         banner.classList.add('hidden');
         banner.innerHTML = '';
         return;
