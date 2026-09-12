@@ -14,7 +14,7 @@
   </script>
 
   <!-- PWA Meta & Icons -->
-  <link rel="manifest" href="manifest.webmanifest?v=1.5.0">
+  <link rel="manifest" href="manifest.webmanifest?v=1.5.1">
   <meta name="theme-color" content="#f5f5f7">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
@@ -29,7 +29,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700;800&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
 
   <!-- Local Utilities Bundle (CDN fallback & tailwind utilities) -->
-  <link rel="stylesheet" href="css/utilities.css?v=1.5.0">
+  <link rel="stylesheet" href="css/utilities.css?v=1.5.1">
   <link rel="stylesheet" href="vendor/fontawesome/css/all.min.css">
 
   <!-- Leaflet Map CSS & JS -->
@@ -661,8 +661,8 @@
     }
   </style>
 
-  <link rel="stylesheet" href="css/companion.css?v=1.5.0">
-  <script src="js/presentation/companion-ui.js?v=1.5.0"></script>
+  <link rel="stylesheet" href="css/companion.css?v=1.5.1">
+  <script src="js/presentation/companion-ui.js?v=1.5.1"></script>
 
   <!-- Knowledge Base Seed & Destination Knowledge Packs (DKP) -->
   <script src="kb-travel.js"></script>
@@ -688,7 +688,7 @@
             <h1 class="font-serif-brand text-base sm:text-xl font-bold tracking-tight text-[#1c1917] dark:text-[#ededed] whitespace-nowrap">
               Sulsul Travel
             </h1>
-            <span id="app-ver-badge" onclick="event.stopPropagation(); openVersionHistoryModal()" class="px-1.5 py-0.5 rounded-md theme-card-subtle hover:border-amber-500/60 hover:text-amber-600 dark:hover:text-amber-300 text-[#a2601b] dark:text-[#d4af37] text-[10px] font-bold font-mono shadow-inner cursor-pointer shrink-0 transition" title="버전 업데이트 기록 보기 (클릭)">v1.5.0</span>
+            <span id="app-ver-badge" onclick="event.stopPropagation(); openVersionHistoryModal()" class="px-1.5 py-0.5 rounded-md theme-card-subtle hover:border-amber-500/60 hover:text-amber-600 dark:hover:text-amber-300 text-[#a2601b] dark:text-[#d4af37] text-[10px] font-bold font-mono shadow-inner cursor-pointer shrink-0 transition" title="버전 업데이트 기록 보기 (클릭)">v1.5.1</span>
           </div>
           <p id="header-trip-name" class="text-[10px] sm:text-[11px] text-[#78716c] dark:text-stone-400 truncate max-w-[120px] sm:max-w-xs font-normal">인생의 모든 여정을 기록하는 다이어리</p>
         </div>
@@ -1982,36 +1982,36 @@
     </div>
   </div>
 
-  <!-- 지출 추가 모달 (v1.5.0 고도화) -->
+  <!-- 지출 추가 모달 (v1.5.1 고도화) -->
   <div id="modal-expense" class="sheet-container sheet-closed">
     <div class="sheet-scrim" onclick="closeModal('modal-expense')"></div>
-    <div class="sheet-box p-5 sm:p-7 space-y-4 max-h-[90vh] overflow-y-auto">
-      <div class="flex items-center justify-between border-b border-[#1e263c] pb-3">
-        <h3 class="text-base font-black text-white flex items-center gap-2">
-          <i class="fa-solid fa-receipt text-amber-400"></i> <span id="exp-modal-heading">지출 기록 추가</span>
+    <div class="sheet-box p-4 sm:p-6 space-y-4 max-h-[90vh] overflow-y-auto">
+      <div class="flex items-center justify-between border-b border-stone-200 dark:border-stone-800 pb-3">
+        <h3 class="text-base font-black exp-heading flex items-center gap-2">
+          <i class="fa-solid fa-receipt text-amber-500 dark:text-amber-400"></i> <span id="exp-modal-heading">지출 기록 추가</span>
         </h3>
         <!-- 간편입력 vs 상세입력 탭 스위처 -->
-        <div class="flex items-center bg-[#080b12] p-1 rounded-xl border border-[#1e263c]">
-          <button id="exp-modal-tab-simple" type="button" onclick="switchExpenseModalMode('simple')" class="px-3 py-1 rounded-lg text-xs font-bold transition cursor-pointer bg-amber-500/20 text-amber-300 border border-amber-500/30">
+        <div class="exp-pill-tray">
+          <button id="exp-modal-tab-simple" type="button" onclick="switchExpenseModalMode('simple')" class="exp-pill-btn active-tab px-3 py-1 text-xs">
             간편입력
           </button>
-          <button id="exp-modal-tab-detailed" type="button" onclick="switchExpenseModalMode('detailed')" class="px-3 py-1 rounded-lg text-xs font-bold transition cursor-pointer text-slate-400 hover:text-white border border-transparent">
+          <button id="exp-modal-tab-detailed" type="button" onclick="switchExpenseModalMode('detailed')" class="exp-pill-btn px-3 py-1 text-xs">
             상세입력
           </button>
         </div>
-        <button onclick="closeModal('modal-expense')" class="text-slate-400 hover:text-white text-base ml-2">✕</button>
+        <button onclick="closeModal('modal-expense')" class="text-slate-400 hover:text-slate-700 dark:hover:text-white text-base ml-1 p-1" aria-label="닫기">✕</button>
       </div>
 
-      <!-- 영수증/티켓 AI 스캔 배너 -->
-      <div class="p-3 bg-gradient-to-r from-emerald-500/10 to-teal-500/10 border border-emerald-500/20 rounded-xl flex items-center justify-between gap-2">
-        <div class="flex items-center gap-2.5">
-          <span class="w-8 h-8 rounded-lg bg-emerald-500/20 text-emerald-400 flex items-center justify-center text-sm shrink-0">📷</span>
-          <div>
-            <div class="text-[11px] font-black text-white">영수증/티켓 AI 자동 입력</div>
-            <p class="text-[10px] text-slate-400">Gemini Vision AI가 상호명, 금액, 통화, 일자를 즉시 판독합니다.</p>
+      <!-- 영수증/티켓 AI 스캔 배너 (샴페인 골드 럭셔리 컨시어지) -->
+      <div class="exp-scan-banner p-3 flex items-center justify-between gap-2.5">
+        <div class="flex items-center gap-2.5 min-w-0">
+          <span class="w-8 h-8 rounded-xl exp-scan-badge flex items-center justify-center text-sm shrink-0">📷</span>
+          <div class="min-w-0">
+            <div class="text-[11px] font-black exp-heading truncate">영수증/티켓 AI 자동 입력</div>
+            <p class="text-[10px] exp-subtext truncate">Gemini Vision AI가 상호명, 금액, 통화, 일자를 즉시 판독합니다.</p>
           </div>
         </div>
-        <label class="px-3 py-1.5 rounded-lg bg-emerald-500 hover:bg-emerald-600 text-slate-950 font-black text-xs cursor-pointer shrink-0 transition flex items-center gap-1 shadow">
+        <label class="exp-scan-btn px-3 py-1.5 rounded-xl font-black text-xs cursor-pointer shrink-0 transition flex items-center gap-1.5 shadow">
           <i class="fa-solid fa-camera text-[10px]"></i>
           <span>스캔하기</span>
           <input type="file" id="exp-receipt-file" accept="image/*" class="hidden" onchange="handleReceiptScan(event)">
@@ -2019,23 +2019,23 @@
       </div>
 
       <!-- AI 스캔 로딩 인디케이터 -->
-      <div id="receipt-scan-loading" class="hidden p-3 bg-indigo-500/10 border border-indigo-500/30 rounded-xl text-center space-y-1">
-        <div class="inline-block animate-spin text-amber-400 text-base"><i class="fa-solid fa-circle-notch"></i></div>
-        <div class="text-xs font-bold text-slate-200">Gemini Vision AI가 영수증을 정밀 판독 중...</div>
-        <p class="text-[10px] text-slate-400">통화(USD/ARS/PEN 등), 결제금액, 사용처를 자동 추출하고 있습니다.</p>
+      <div id="receipt-scan-loading" class="hidden p-3 bg-amber-500/10 border border-amber-500/30 rounded-xl text-center space-y-1">
+        <div class="inline-block animate-spin text-amber-500 text-base"><i class="fa-solid fa-circle-notch"></i></div>
+        <div class="text-xs font-bold exp-heading">Gemini Vision AI가 영수증을 정밀 판독 중...</div>
+        <p class="text-[10px] exp-subtext">통화(USD/ARS/PEN 등), 결제금액, 사용처를 자동 추출하고 있습니다.</p>
       </div>
 
-      <!-- 상단 금액 및 통화 헤더 (스크린샷 1 반영) -->
-      <div class="p-4 bg-[#0a0f1d] border border-[#1e263c] rounded-2xl space-y-2">
-        <div class="text-[11px] font-bold text-slate-400 flex items-center justify-between">
+      <!-- 상단 금액 및 통화 헤더 (럭셔리 핀테크 카드 & 제로 오버플로) -->
+      <div class="exp-amount-card space-y-2">
+        <div class="text-[11px] font-bold exp-subtext flex items-center justify-between">
           <span>결제 금액 및 통화</span>
-          <span id="exp-form-krw-preview" class="text-xs font-bold text-amber-400">≈ ₩0</span>
+          <span id="exp-form-krw-preview" class="text-xs font-bold text-amber-600 dark:text-amber-400">≈ ₩0</span>
         </div>
-        <div class="flex items-center gap-2">
-          <span id="exp-form-sign-badge" class="text-xl font-black text-rose-400 shrink-0 select-none">-</span>
-          <input type="number" id="exp-form-amount" oninput="onExpenseAmountOrCurrChange()" placeholder="0" class="flex-1 text-2xl font-black bg-transparent border-b-2 border-slate-700 focus:border-amber-500 text-white px-1 py-0.5 focus:outline-none placeholder:text-slate-600">
-          <div class="relative shrink-0">
-            <select id="exp-form-curr" onchange="onExpenseAmountOrCurrChange()" class="appearance-none px-3 py-1.5 pr-7 bg-[#141c2e] border border-[#2a3650] rounded-xl text-white font-bold text-xs focus:outline-none focus:border-amber-500 cursor-pointer">
+        <div class="flex items-center gap-2 w-full min-w-0">
+          <span id="exp-form-sign-badge" class="text-2xl font-black text-rose-500 shrink-0 select-none">-</span>
+          <input type="number" id="exp-form-amount" oninput="onExpenseAmountOrCurrChange()" placeholder="0" class="min-w-0 flex-1 w-full text-2xl sm:text-3xl font-black bg-transparent exp-heading px-1 py-0.5 focus:outline-none placeholder:text-slate-400 dark:placeholder:text-slate-600">
+          <div class="relative shrink-0 w-24 sm:w-28">
+            <select id="exp-form-curr" onchange="onExpenseAmountOrCurrChange()" class="exp-curr-select w-full">
               <option value="KRW">KRW (원)</option>
               <option value="EUR">EUR (€)</option>
               <option value="USD">USD ($)</option>
@@ -2047,7 +2047,7 @@
               <option value="ARS">ARS (페소)</option>
               <option value="BRL">BRL (헤알)</option>
             </select>
-            <i class="fa-solid fa-chevron-down text-[10px] text-slate-400 absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none"></i>
+            <i class="fa-solid fa-chevron-down text-[10px] text-slate-400 dark:text-slate-500 absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none"></i>
           </div>
         </div>
       </div>
@@ -2055,30 +2055,30 @@
       <!-- 듀얼 세그먼트 토글: [카드 | 현금] & [지출 | 수입] -->
       <div class="grid grid-cols-2 gap-2.5">
         <!-- 결제수단 토글 -->
-        <div class="p-1 bg-[#080b12] rounded-xl border border-[#1e263c] flex items-center">
-          <button id="exp-form-method-card" type="button" onclick="setExpensePayMethod('card')" class="flex-1 py-1.5 rounded-lg text-xs font-bold transition flex items-center justify-center gap-1.5 bg-sky-500/20 text-sky-300 border border-sky-500/30">
+        <div class="exp-pill-tray">
+          <button id="exp-form-method-card" type="button" onclick="setExpensePayMethod('card')" class="flex-1 py-1.5 exp-pill-btn active-card flex items-center justify-center gap-1.5">
             <i class="fa-regular fa-credit-card text-[11px]"></i> 카드
           </button>
-          <button id="exp-form-method-cash" type="button" onclick="setExpensePayMethod('cash')" class="flex-1 py-1.5 rounded-lg text-xs font-bold transition flex items-center justify-center gap-1.5 text-slate-400 hover:text-white border border-transparent">
+          <button id="exp-form-method-cash" type="button" onclick="setExpensePayMethod('cash')" class="flex-1 py-1.5 exp-pill-btn flex items-center justify-center gap-1.5">
             <i class="fa-solid fa-money-bill-wave text-[11px]"></i> 현금
           </button>
         </div>
 
         <!-- 거래구분 토글 -->
-        <div class="p-1 bg-[#080b12] rounded-xl border border-[#1e263c] flex items-center">
-          <button id="exp-form-type-expense" type="button" onclick="setExpenseTransType('expense')" class="flex-1 py-1.5 rounded-lg text-xs font-bold transition flex items-center justify-center gap-1.5 bg-rose-500/20 text-rose-300 border border-rose-500/30">
+        <div class="exp-pill-tray">
+          <button id="exp-form-type-expense" type="button" onclick="setExpenseTransType('expense')" class="flex-1 py-1.5 exp-pill-btn active-expense flex items-center justify-center gap-1.5">
             <i class="fa-solid fa-minus text-[10px]"></i> 지출
           </button>
-          <button id="exp-form-type-income" type="button" onclick="setExpenseTransType('income')" class="flex-1 py-1.5 rounded-lg text-xs font-bold transition flex items-center justify-center gap-1.5 text-slate-400 hover:text-white border border-transparent">
+          <button id="exp-form-type-income" type="button" onclick="setExpenseTransType('income')" class="flex-1 py-1.5 exp-pill-btn flex items-center justify-center gap-1.5">
             <i class="fa-solid fa-plus text-[10px]"></i> 수입
           </button>
         </div>
       </div>
 
-      <!-- 카테고리 선택: 원형 컬러 아이콘 그리드 (스크린샷 1 반영) -->
+      <!-- 카테고리 선택: 원형 컬러 아이콘 그리드 -->
       <div class="space-y-1.5">
-        <label class="font-bold text-slate-300 text-xs block">카테고리</label>
-        <div id="exp-cat-grid" class="grid grid-cols-5 gap-2 pt-1 pb-1">
+        <label class="font-bold exp-heading text-xs block">카테고리</label>
+        <div id="exp-cat-grid" class="grid grid-cols-5 gap-y-3 gap-x-1 sm:gap-2 pt-1 pb-1 w-full min-w-0">
           <!-- 동적 바인딩 및 선택 지원 (JS selectExpenseCategory) -->
         </div>
         <!-- R-10 하위 호환성 보장용 hidden select -->
@@ -2102,44 +2102,44 @@
       <!-- 공통 기본 필드 -->
       <div class="space-y-3 text-xs">
         <div>
-          <label class="font-bold text-slate-300 block mb-1">사용처 / 항목명</label>
-          <input type="text" id="exp-form-title" placeholder="예: 돈 훌리오 꽃등심 스테이크 2인" class="w-full px-3 py-2 bg-[#080b12] border border-[#1e263c] rounded-xl text-white focus:outline-none focus:border-amber-500">
+          <label class="font-bold exp-heading block mb-1">사용처 / 항목명</label>
+          <input type="text" id="exp-form-title" placeholder="예: 돈 훌리오 꽃등심 스테이크 2인" class="exp-input">
         </div>
 
-        <div class="grid grid-cols-2 gap-3">
-          <div>
-            <label class="font-bold text-slate-300 block mb-1">결제 일자</label>
-            <input type="date" id="exp-form-date" class="w-full px-3 py-2 bg-[#080b12] border border-[#1e263c] rounded-xl text-white focus:outline-none focus:border-amber-500">
+        <div class="grid grid-cols-2 gap-2.5">
+          <div class="min-w-0">
+            <label class="font-bold exp-heading block mb-1 truncate">결제 일자</label>
+            <input type="date" id="exp-form-date" class="exp-input">
           </div>
-          <div>
-            <label class="font-bold text-slate-300 block mb-1">결제 시간</label>
-            <input type="time" id="exp-form-time" class="w-full px-3 py-2 bg-[#080b12] border border-[#1e263c] rounded-xl text-white focus:outline-none focus:border-amber-500">
+          <div class="min-w-0">
+            <label class="font-bold exp-heading block mb-1 truncate">결제 시간</label>
+            <input type="time" id="exp-form-time" class="exp-input">
           </div>
         </div>
 
         <div>
-          <label class="font-bold text-slate-300 block mb-1">출금 지갑 / 결제 상세</label>
-          <select id="exp-form-payment-source" onchange="onExpensePaymentSourceChange()" class="w-full px-3 py-2 bg-[#080b12] border border-[#1e263c] rounded-xl text-white focus:outline-none focus:border-amber-500">
+          <label class="font-bold exp-heading block mb-1">출금 지갑 / 결제 상세</label>
+          <select id="exp-form-payment-source" onchange="onExpensePaymentSourceChange()" class="exp-input">
             <!-- 동적 바인딩 -->
           </select>
-          <div id="exp-form-wallet-hint" class="text-[10px] text-slate-400 mt-1 flex items-center gap-1.5">
+          <div id="exp-form-wallet-hint" class="text-[10px] exp-subtext mt-1 flex items-center gap-1.5">
             <!-- 실시간 지갑 잔액 안내 -->
           </div>
         </div>
       </div>
 
       <!-- 상세입력 모드 전용 필드 (메모, 사진 첨부 및 대표사진 설정) -->
-      <div id="exp-detailed-fields" class="space-y-3 text-xs pt-1 border-t border-[#1e263c]">
+      <div id="exp-detailed-fields" class="space-y-3 text-xs pt-1 border-t border-stone-200 dark:border-stone-800">
         <div>
-          <label class="font-bold text-slate-300 block mb-1">상세 메모</label>
-          <textarea id="exp-form-memo" rows="2" placeholder="주문한 메뉴, 현장 팁, 함께한 사람 등 기록..." class="w-full px-3 py-2 bg-[#080b12] border border-[#1e263c] rounded-xl text-white focus:outline-none focus:border-amber-500 resize-none"></textarea>
+          <label class="font-bold exp-heading block mb-1">상세 메모</label>
+          <textarea id="exp-form-memo" rows="2" placeholder="주문한 메뉴, 현장 팁, 함께한 사람 등 기록..." class="exp-input resize-none"></textarea>
         </div>
 
         <!-- 사진 첨부 및 대표 사진 지정 영역 -->
         <div>
           <div class="flex items-center justify-between mb-1.5">
-            <label class="font-bold text-slate-300">영수증 및 현장 사진</label>
-            <span class="text-[10px] text-slate-400">사진을 탭하면 대표 사진으로 지정됩니다</span>
+            <label class="font-bold exp-heading">영수증 및 현장 사진</label>
+            <span class="text-[10px] exp-subtext">사진을 탭하면 대표 사진으로 지정됩니다</span>
           </div>
           <div id="exp-photos-list" class="flex items-center gap-2 overflow-x-auto py-1">
             <!-- 동적 썸네일 박스 렌더링 -->
@@ -2149,63 +2149,63 @@
       </div>
 
       <div class="flex items-center gap-3 pt-2">
-        <button onclick="closeModal('modal-expense')" class="flex-1 py-2.5 rounded-xl bg-[#141c2e] text-slate-300 font-bold text-xs hover:bg-[#1a243a] transition">취소</button>
+        <button onclick="closeModal('modal-expense')" class="flex-1 py-2.5 exp-btn-cancel text-xs">취소</button>
         <button id="exp-form-submit-btn" onclick="submitAddExpense()" class="flex-1 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 text-slate-950 font-black text-xs shadow-md hover:from-amber-600 hover:to-amber-700 transition">지출 저장</button>
       </div>
     </div>
   </div>
 
-  <!-- 사용내역 통계 모달 (v1.5.0 신설) -->
+  <!-- 사용내역 통계 모달 (v1.5.1 고도화) -->
   <div id="modal-expense-analytics" class="sheet-container sheet-closed">
     <div class="sheet-scrim" onclick="closeModal('modal-expense-analytics')"></div>
-    <div class="sheet-box p-5 sm:p-7 space-y-4 max-h-[90vh] overflow-y-auto">
-      <div class="flex items-center justify-between border-b border-[#1e263c] pb-3">
+    <div class="sheet-box p-4 sm:p-6 space-y-4 max-h-[90vh] overflow-y-auto">
+      <div class="flex items-center justify-between border-b border-stone-200 dark:border-stone-800 pb-3">
         <div class="flex items-center gap-2">
-          <button onclick="closeModal('modal-expense-analytics')" class="w-7 h-7 rounded-lg bg-[#080b12] hover:bg-[#141c2e] border border-[#1e263c] text-slate-300 flex items-center justify-center text-xs">
+          <button onclick="closeModal('modal-expense-analytics')" class="w-8 h-8 rounded-xl exp-btn-cancel flex items-center justify-center text-xs">
             <i class="fa-solid fa-arrow-left"></i>
           </button>
-          <h3 class="text-base font-black text-white flex items-center gap-2">
-            <i class="fa-solid fa-chart-pie text-sky-400"></i> 사용내역 통계
+          <h3 class="text-base font-black exp-heading flex items-center gap-2">
+            <i class="fa-solid fa-chart-pie text-amber-500 dark:text-amber-400"></i> 사용내역 통계
           </h3>
         </div>
-        <button onclick="closeModal('modal-expense-analytics')" class="text-slate-400 hover:text-white text-base">✕</button>
+        <button onclick="closeModal('modal-expense-analytics')" class="text-slate-400 hover:text-slate-700 dark:hover:text-white text-base ml-1 p-1">✕</button>
       </div>
 
-      <!-- 상단 총 지출 금액 카드 (스크린샷 2/3 반영) -->
-      <div class="p-4 bg-gradient-to-br from-[#0c1222] to-[#141d33] border border-[#23304c] rounded-2xl text-center space-y-1 shadow-inner">
-        <div class="text-xs text-slate-400 font-medium">총 지출 금액</div>
-        <div id="exp-stat-total-krw" class="text-2xl sm:text-3xl font-black text-white tracking-tight">0 KRW</div>
-        <div id="exp-stat-count-sub" class="text-[11px] text-slate-400">총 0건의 지출 내역</div>
+      <!-- 상단 총 지출 금액 카드 -->
+      <div class="exp-amount-card text-center space-y-1">
+        <div class="text-xs exp-subtext font-medium">총 지출 금액</div>
+        <div id="exp-stat-total-krw" class="text-2xl sm:text-3xl font-black exp-heading tracking-tight">0 KRW</div>
+        <div id="exp-stat-count-sub" class="text-[11px] exp-subtext">총 0건의 지출 내역</div>
       </div>
 
       <!-- 3대 분석 탭: [지출 구분] [지출 카테고리] [지출 및 수입 구분] -->
-      <div class="flex items-center bg-[#080b12] p-1 rounded-xl border border-[#1e263c]">
-        <button id="exp-stat-tab-method" onclick="switchExpenseAnalyticsTab('method')" class="flex-1 py-1.5 rounded-lg text-xs font-bold transition cursor-pointer bg-sky-500/20 text-sky-300 border border-sky-500/30">
+      <div class="exp-pill-tray">
+        <button id="exp-stat-tab-method" onclick="switchExpenseAnalyticsTab('method')" class="flex-1 py-1.5 exp-pill-btn active-card">
           지출 구분
         </button>
-        <button id="exp-stat-tab-cat" onclick="switchExpenseAnalyticsTab('cat')" class="flex-1 py-1.5 rounded-lg text-xs font-bold transition cursor-pointer text-slate-400 hover:text-white border border-transparent">
+        <button id="exp-stat-tab-cat" onclick="switchExpenseAnalyticsTab('cat')" class="flex-1 py-1.5 exp-pill-btn">
           지출 카테고리
         </button>
-        <button id="exp-stat-tab-type" onclick="switchExpenseAnalyticsTab('type')" class="flex-1 py-1.5 rounded-lg text-xs font-bold transition cursor-pointer text-slate-400 hover:text-white border border-transparent">
+        <button id="exp-stat-tab-type" onclick="switchExpenseAnalyticsTab('type')" class="flex-1 py-1.5 exp-pill-btn">
           지출 및 수입 구분
         </button>
       </div>
 
       <!-- SVG 도넛 차트 컨테이너 -->
-      <div class="p-4 bg-[#0a0f1d] border border-[#1e263c] rounded-2xl flex flex-col items-center justify-center relative">
+      <div class="exp-amount-card flex flex-col items-center justify-center relative">
         <div id="exp-donut-chart-box" class="w-48 h-48 relative flex items-center justify-center">
           <!-- 동적 SVG 도넛 차트 렌더링 -->
         </div>
-        <div id="exp-donut-center-text" class="text-center mt-1 text-xs text-slate-300">
+        <div id="exp-donut-center-text" class="text-center mt-1 text-xs exp-subtext">
           <!-- 도넛 차트 중앙 지표 텍스트 -->
         </div>
       </div>
 
       <!-- 랭킹 및 세부 항목 리스트 -->
       <div class="space-y-2">
-        <div class="text-xs font-bold text-slate-300 flex items-center justify-between px-1">
+        <div class="text-xs font-bold exp-heading flex items-center justify-between px-1">
           <span>세부 점유율 현황</span>
-          <span class="text-[10px] text-slate-400">금액 기준 정렬</span>
+          <span class="text-[10px] exp-subtext">금액 기준 정렬</span>
         </div>
         <div id="exp-stat-breakdown-list" class="space-y-2">
           <!-- 동적 랭킹 리스트 바인딩 -->
@@ -3181,9 +3181,16 @@
 
       <!-- 버전 목록 스크롤 영역 -->
       <div class="flex-1 overflow-y-auto space-y-3 pr-1 text-xs">
-        <!-- v1.5.0 (Current) -->
+        <!-- v1.5.1 (Current) -->
         <div class="p-4 rounded-2xl border-2 border-emerald-500/40 space-y-2.5 bg-emerald-500/5 dark:bg-emerald-500/10">
-          <div class="flex items-center justify-between gap-2"><div class="flex items-center gap-2 min-w-0"><span class="px-2 py-0.5 rounded-lg bg-emerald-500 text-black font-black text-xs shadow-sm shrink-0">v1.5.0</span><span class="text-xs font-black text-[#1c1917] dark:text-white">고도화된 여행 가계부(Travel Expense) UI/UX 전면 개편 & 통계 대시보드 구축</span></div><span class="companion-status shrink-0">최신 버전</span></div>
+          <div class="flex items-center justify-between gap-2"><div class="flex items-center gap-2 min-w-0"><span class="px-2 py-0.5 rounded-lg bg-emerald-500 text-black font-black text-xs shadow-sm shrink-0">v1.5.1</span><span class="text-xs font-black text-[#1c1917] dark:text-white">모바일 화면 배치 깨짐(오버플로/좌측 잘림) 완벽 해결 및 여행 가계부 디자인·색감 전면 고급화</span></div><span class="companion-status shrink-0">최신 버전</span></div>
+          <p class="text-xs leading-relaxed">모바일 실기기(360px~430px) 환경에서 발생하던 <b>금액/통화 박스 가로 오버플로 및 좌측 타이틀·라벨 잘림 현상</b>을 완벽하게 근절했습니다. flex 입력 영역의 <code>min-w-0</code> 및 반응형 통화 셀렉트 박스를 구축하여 제로 오버플로(Zero-Overflow)를 달성했습니다. 또한 백색 모달 카드에 이질적이던 투박한 검은색 원형 아이콘을 <b>술술트래블 고유의 샴페인 골드 & 웜 아이보리/옵시디언 럭셔리 에디토리얼 테마</b>로 전면 리디자인하여, 라이트 모드에서는 부드러운 샌드 아이보리 디스크와 화사한 앰버 골드 액티브 링, 다크 모드에서는 일렉트릭 샴페인 골드 글로우로 고급감을 극대화했습니다. 아울러 애플/노션 스타일의 소프트 필(Pill) 세그먼트 컨트롤과 컨시어지 AI 스캔 배너를 적용하여 완성도를 한 단계 끌어올렸습니다.</p>
+          <div class="text-[10px] text-stone-400 dark:text-stone-500 pt-1 border-t border-emerald-500/20 flex items-center justify-between"><span>📅 2026-09-12 릴리즈</span><span class="font-mono">st-shell-v1.5.1</span></div>
+        </div>
+
+        <!-- v1.5.0 -->
+        <div class="p-4 rounded-2xl bg-emerald-500/5 dark:bg-emerald-500/10 border-2 border-emerald-500/40 space-y-2.5 shadow-sm relative overflow-hidden">
+          <div class="flex items-center justify-between gap-2"><div class="flex items-center gap-2 min-w-0"><span class="px-2 py-0.5 rounded-lg bg-emerald-500 text-black font-black text-xs shadow-sm shrink-0">v1.5.0</span><span class="text-xs font-black text-[#1c1917] dark:text-white">고도화된 여행 가계부(Travel Expense) UI/UX 전면 개편 & 통계 대시보드 구축</span></div></div>
           <p class="text-xs leading-relaxed">여행 현장 환경에 최적화된 차세대 여행 가계부 모듈을 전면 구축했습니다. 초고속 입력을 위한 <code>[간편입력]</code>과 세부 컨텍스트를 담는 <code>[상세입력]</code> 탭을 분리하고, 상단 대형 금액 헤더와 실시간 원화(KRW) 환산 예상액 프리뷰를 제공합니다. <code>[카드|현금]</code> 및 <code>[지출|수입]</code> 듀얼 세그먼트 토글과 10대 직관적 원형 컬러 카테고리 그리드, 영수증·현장 사진 복수 첨부 및 대표 사진 지정 기능을 탑재했습니다. Gemini Vision AI 영수증 자동 스캔 시 영수증 사진이 대표 사진으로 자동 첨부되며 필드가 자동 프리필됩니다. 아울러 인터랙티브 SVG 도넛 차트 기반의 <b>사용내역 통계 모달(<code>modal-expense-analytics</code>)</b>을 신설하여 지출 구분(카드 vs 현금), 카테고리별 랭킹 점유율, 수지 현황을 한눈에 시각화합니다.</p>
           <div class="text-[10px] text-stone-400 dark:text-stone-500 pt-1 border-t border-emerald-500/20 flex items-center justify-between"><span>📅 2026-09-12 릴리즈</span><span class="font-mono">st-shell-v1.5.0</span></div>
         </div>
@@ -3633,7 +3640,7 @@
 
       <!-- 모달 푸터 -->
       <div class="pt-3 border-t border-[#e8e2d5] dark:border-stone-800 flex items-center justify-between shrink-0">
-        <span class="text-[11px] text-stone-400 dark:text-stone-500 font-mono">Sulsul Travel Engine v1.5.0</span>
+        <span class="text-[11px] text-stone-400 dark:text-stone-500 font-mono">Sulsul Travel Engine v1.5.1</span>
         <button onclick="closeModal('modal-version-history')" class="px-4 py-2 rounded-xl bg-[#faf8f5] dark:bg-stone-800 hover:bg-[#f0ece1] dark:hover:bg-stone-700 border border-[#e8e2d5] dark:border-stone-700 text-[#1c1917] dark:text-[#ededed] text-xs font-bold transition cursor-pointer shadow-sm">
           닫기
         </button>
@@ -3696,7 +3703,7 @@
     window.showToast = showToast;
 
     // 앱 버전 및 글로벌 네임스페이스 (Sulsul-Travel Invariant Rule R-10, R-11, R-12, R-13, R-14, R-15)
-    const APP_VER = '1.5.0';
+    const APP_VER = '1.5.1';
 
     // ══════════════════════════════════════════
     // [Two-Tone Theme System] 라이트 그레이 & 딥 블랙 테마 엔진
@@ -11465,12 +11472,12 @@ ${JSON.stringify(snapshotDays)}`;
       const detailedFields = document.getElementById('exp-detailed-fields');
 
       if (mode === 'detailed') {
-        if (simpleTab) simpleTab.className = 'px-3 py-1 rounded-lg text-xs font-bold transition cursor-pointer text-slate-400 hover:text-white border border-transparent';
-        if (detailedTab) detailedTab.className = 'px-3 py-1 rounded-lg text-xs font-bold transition cursor-pointer bg-amber-500/20 text-amber-300 border border-amber-500/30';
+        if (simpleTab) simpleTab.className = 'exp-pill-btn px-3 py-1 text-xs';
+        if (detailedTab) detailedTab.className = 'exp-pill-btn active-tab px-3 py-1 text-xs';
         if (detailedFields) detailedFields.classList.remove('hidden');
       } else {
-        if (simpleTab) simpleTab.className = 'px-3 py-1 rounded-lg text-xs font-bold transition cursor-pointer bg-amber-500/20 text-amber-300 border border-amber-500/30';
-        if (detailedTab) detailedTab.className = 'px-3 py-1 rounded-lg text-xs font-bold transition cursor-pointer text-slate-400 hover:text-white border border-transparent';
+        if (simpleTab) simpleTab.className = 'exp-pill-btn active-tab px-3 py-1 text-xs';
+        if (detailedTab) detailedTab.className = 'exp-pill-btn px-3 py-1 text-xs';
         if (detailedFields) detailedFields.classList.add('hidden');
       }
     }
@@ -11483,15 +11490,15 @@ ${JSON.stringify(snapshotDays)}`;
       const sourceSelect = document.getElementById('exp-form-payment-source');
 
       if (method === 'cash') {
-        if (cardBtn) cardBtn.className = 'flex-1 py-1.5 rounded-lg text-xs font-bold transition flex items-center justify-center gap-1.5 text-slate-400 hover:text-white border border-transparent';
-        if (cashBtn) cashBtn.className = 'flex-1 py-1.5 rounded-lg text-xs font-bold transition flex items-center justify-center gap-1.5 bg-emerald-500/20 text-emerald-300 border border-emerald-500/30';
+        if (cardBtn) cardBtn.className = 'flex-1 py-1.5 exp-pill-btn flex items-center justify-center gap-1.5';
+        if (cashBtn) cashBtn.className = 'flex-1 py-1.5 exp-pill-btn active-cash flex items-center justify-center gap-1.5';
         if (sourceSelect) {
           const opt = [...sourceSelect.options].find(o => o.value === 'wallet_curr');
           if (opt) sourceSelect.value = 'wallet_curr';
         }
       } else {
-        if (cardBtn) cardBtn.className = 'flex-1 py-1.5 rounded-lg text-xs font-bold transition flex items-center justify-center gap-1.5 bg-sky-500/20 text-sky-300 border border-sky-500/30';
-        if (cashBtn) cashBtn.className = 'flex-1 py-1.5 rounded-lg text-xs font-bold transition flex items-center justify-center gap-1.5 text-slate-400 hover:text-white border border-transparent';
+        if (cardBtn) cardBtn.className = 'flex-1 py-1.5 exp-pill-btn active-card flex items-center justify-center gap-1.5';
+        if (cashBtn) cashBtn.className = 'flex-1 py-1.5 exp-pill-btn flex items-center justify-center gap-1.5';
         if (sourceSelect) {
           const opt = [...sourceSelect.options].find(o => o.value === 'wallet_krw');
           if (opt) sourceSelect.value = 'wallet_krw';
@@ -11510,11 +11517,11 @@ ${JSON.stringify(snapshotDays)}`;
       const submitBtn = document.getElementById('exp-form-submit-btn');
 
       if (type === 'income') {
-        if (expBtn) expBtn.className = 'flex-1 py-1.5 rounded-lg text-xs font-bold transition flex items-center justify-center gap-1.5 text-slate-400 hover:text-white border border-transparent';
-        if (incBtn) incBtn.className = 'flex-1 py-1.5 rounded-lg text-xs font-bold transition flex items-center justify-center gap-1.5 bg-emerald-500/20 text-emerald-300 border border-emerald-500/30';
+        if (expBtn) expBtn.className = 'flex-1 py-1.5 exp-pill-btn flex items-center justify-center gap-1.5';
+        if (incBtn) incBtn.className = 'flex-1 py-1.5 exp-pill-btn active-income flex items-center justify-center gap-1.5';
         if (signBadge) {
           signBadge.textContent = '+';
-          signBadge.className = 'text-xl font-black text-emerald-400 shrink-0 select-none';
+          signBadge.className = 'text-2xl font-black text-emerald-500 shrink-0 select-none';
         }
         if (heading) heading.textContent = '수입 기록 추가';
         if (submitBtn) {
@@ -11522,11 +11529,11 @@ ${JSON.stringify(snapshotDays)}`;
           submitBtn.className = 'flex-1 py-2.5 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-600 text-slate-950 font-black text-xs shadow-md hover:from-emerald-600 hover:to-teal-700 transition';
         }
       } else {
-        if (expBtn) expBtn.className = 'flex-1 py-1.5 rounded-lg text-xs font-bold transition flex items-center justify-center gap-1.5 bg-rose-500/20 text-rose-300 border border-rose-500/30';
-        if (incBtn) incBtn.className = 'flex-1 py-1.5 rounded-lg text-xs font-bold transition flex items-center justify-center gap-1.5 text-slate-400 hover:text-white border border-transparent';
+        if (expBtn) expBtn.className = 'flex-1 py-1.5 exp-pill-btn active-expense flex items-center justify-center gap-1.5';
+        if (incBtn) incBtn.className = 'flex-1 py-1.5 exp-pill-btn flex items-center justify-center gap-1.5';
         if (signBadge) {
           signBadge.textContent = '-';
-          signBadge.className = 'text-xl font-black text-rose-400 shrink-0 select-none';
+          signBadge.className = 'text-2xl font-black text-rose-500 shrink-0 select-none';
         }
         if (heading) heading.textContent = '지출 기록 추가';
         if (submitBtn) {
@@ -11912,15 +11919,15 @@ ${JSON.stringify(snapshotDays)}`;
       const typeBtn = document.getElementById('exp-stat-tab-type');
 
       [methodBtn, catBtn, typeBtn].forEach(b => {
-        if (b) b.className = 'flex-1 py-1.5 rounded-lg text-xs font-bold transition cursor-pointer text-slate-400 hover:text-white border border-transparent';
+        if (b) b.className = 'flex-1 py-1.5 exp-pill-btn';
       });
 
       if (tab === 'method' && methodBtn) {
-        methodBtn.className = 'flex-1 py-1.5 rounded-lg text-xs font-bold transition cursor-pointer bg-sky-500/20 text-sky-300 border border-sky-500/30';
+        methodBtn.className = 'flex-1 py-1.5 exp-pill-btn active-card';
       } else if (tab === 'cat' && catBtn) {
-        catBtn.className = 'flex-1 py-1.5 rounded-lg text-xs font-bold transition cursor-pointer bg-sky-500/20 text-sky-300 border border-sky-500/30';
+        catBtn.className = 'flex-1 py-1.5 exp-pill-btn active-card';
       } else if (tab === 'type' && typeBtn) {
-        typeBtn.className = 'flex-1 py-1.5 rounded-lg text-xs font-bold transition cursor-pointer bg-sky-500/20 text-sky-300 border border-sky-500/30';
+        typeBtn.className = 'flex-1 py-1.5 exp-pill-btn active-card';
       }
 
       renderExpenseAnalytics(tab);

@@ -243,52 +243,385 @@ button:focus-visible, summary:focus-visible, a:focus-visible { outline:3px solid
 .wallet-card:hover { border-color: rgba(245, 158, 11, 0.4) !important; }
 
 /* ==========================================
-   Advanced Travel Expense Module Styles (v1.5.0)
+   Advanced Travel Expense Module Styles (v1.5.1)
    ========================================== */
+
+/* Mobile Viewport Constraints & Zero Overflow (v1.5.1) */
+#modal-expense,
+#modal-expense-analytics,
+#modal-exchange {
+  box-sizing: border-box;
+  width: 100vw;
+  max-width: 100vw;
+  overflow-x: hidden;
+}
+#modal-expense .sheet-box,
+#modal-expense-analytics .sheet-box,
+#modal-exchange .sheet-box {
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 520px;
+  margin-left: auto;
+  margin-right: auto;
+  overflow-x: hidden;
+}
+@media (max-width: 639px) {
+  #modal-expense .sheet-box,
+  #modal-expense-analytics .sheet-box,
+  #modal-exchange .sheet-box {
+    padding-left: 16px !important;
+    padding-right: 16px !important;
+  }
+}
+
+/* Theme-adaptive text helpers for Expense Module */
+.exp-heading {
+  color: var(--ink) !important;
+}
+.exp-subtext {
+  color: var(--ink2) !important;
+}
+
+/* Category Grid & Responsive Circles */
 .exp-cat-item {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 4px;
+  gap: 5px;
   cursor: pointer;
   user-select: none;
-  min-width: 52px;
+  min-width: 0;
+  width: 100%;
+  background: transparent;
+  border: none;
+  padding: 2px 0;
 }
 .exp-cat-circle {
-  width: 48px;
-  height: 48px;
+  width: 44px;
+  height: 44px;
   border-radius: 9999px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 20px;
-  background: #080b12;
-  border: 1.5px solid #1e263c;
-  color: #94a3b8;
-  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+  font-size: 19px;
+  background: #f8f6f0;
+  border: 1.5px solid #e5e0d4;
+  color: #475569;
+  transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+}
+@media (min-width: 640px) {
+  .exp-cat-circle {
+    width: 48px;
+    height: 48px;
+    font-size: 21px;
+  }
 }
 .exp-cat-item:hover .exp-cat-circle {
-  border-color: #38bdf8;
+  border-color: #d97706;
+  background: #fffcf7;
   transform: translateY(-2px);
-  color: #ffffff;
 }
 .exp-cat-item.active .exp-cat-circle {
-  background: #0284c7;
-  border-color: #38bdf8;
-  color: #ffffff;
-  box-shadow: 0 0 14px rgba(56, 189, 248, 0.45);
-  transform: scale(1.06);
+  background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+  border: 2px solid #d97706;
+  color: #92400e;
+  box-shadow: 0 4px 14px rgba(217, 119, 6, 0.28);
+  transform: scale(1.08);
 }
 .exp-cat-label {
   font-size: 11px;
   font-weight: 700;
-  color: #94a3b8;
+  color: #64748b;
   transition: color 0.2s ease;
+  text-align: center;
+  line-height: 1.2;
+  width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .exp-cat-item.active .exp-cat-label {
-  color: #38bdf8;
+  color: #92400e;
   font-weight: 800;
+}
+
+/* Dark Mode Overrides for Category Grid */
+:root[data-theme="dark"] .exp-cat-circle {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1.5px solid rgba(255, 255, 255, 0.1);
+  color: #cbd5e1;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+}
+:root[data-theme="dark"] .exp-cat-item:hover .exp-cat-circle {
+  border-color: #f59e0b;
+  background: rgba(245, 158, 11, 0.1);
+  transform: translateY(-2px);
+}
+:root[data-theme="dark"] .exp-cat-item.active .exp-cat-circle {
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.3) 0%, rgba(217, 119, 6, 0.18) 100%);
+  border: 2px solid #f59e0b;
+  color: #ffffff;
+  box-shadow: 0 0 16px rgba(245, 158, 11, 0.45);
+  transform: scale(1.08);
+}
+:root[data-theme="dark"] .exp-cat-label {
+  color: #94a3b8;
+}
+:root[data-theme="dark"] .exp-cat-item.active .exp-cat-label {
+  color: #fbbf24;
+}
+
+/* Amount & Currency Luxury Card */
+.exp-amount-card {
+  background: linear-gradient(180deg, #fdfbf7 0%, #f7f3ec 100%);
+  border: 1.5px solid #e8e2d6;
+  border-radius: 18px;
+  padding: 14px 16px;
+  box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.8), 0 2px 8px rgba(0, 0, 0, 0.03);
+}
+:root[data-theme="dark"] .exp-amount-card {
+  background: linear-gradient(180deg, #131722 0%, #0c0f17 100%);
+  border: 1.5px solid #1e263c;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
+}
+
+.exp-curr-select {
+  appearance: none;
+  -webkit-appearance: none;
+  background: #ffffff;
+  border: 1.5px solid #dfd7ca;
+  border-radius: 12px;
+  color: #1e293b;
+  font-weight: 800;
+  font-size: 13px;
+  padding: 8px 28px 8px 12px;
+  cursor: pointer;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+  transition: all 0.2s ease;
+}
+.exp-curr-select:focus {
+  outline: none;
+  border-color: #d97706;
+  box-shadow: 0 0 0 3px rgba(217, 119, 6, 0.15);
+}
+:root[data-theme="dark"] .exp-curr-select {
+  background: #182032;
+  border: 1.5px solid #283550;
+  color: #f1f5f9;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+}
+:root[data-theme="dark"] .exp-curr-select:focus {
+  border-color: #f59e0b;
+  box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.25);
+}
+
+/* Segmented Controls (Card/Cash, Expense/Income, Simple/Detailed) */
+.exp-pill-tray {
+  background: #ede8df;
+  border: 1px solid #dfd8cb;
+  border-radius: 14px;
+  padding: 3px;
+  display: flex;
+  align-items: center;
+}
+:root[data-theme="dark"] .exp-pill-tray {
+  background: #0e121d;
+  border: 1px solid #1c2336;
+}
+
+.exp-pill-btn {
+  border: 1px solid transparent;
+  border-radius: 10px;
+  font-size: 12px;
+  font-weight: 700;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  color: #64748b;
+  background: transparent;
+  cursor: pointer;
+}
+.exp-pill-btn:hover {
+  color: #1e293b;
+}
+:root[data-theme="dark"] .exp-pill-btn {
+  color: #94a3b8;
+}
+:root[data-theme="dark"] .exp-pill-btn:hover {
+  color: #ffffff;
+}
+
+/* Active Segment States - Light Theme */
+.exp-pill-btn.active-tab {
+  background: #ffffff;
+  color: #b45309;
+  border-color: rgba(0, 0, 0, 0.06);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+  font-weight: 800;
+}
+.exp-pill-btn.active-card {
+  background: #ffffff;
+  color: #0284c7;
+  border-color: rgba(0, 0, 0, 0.06);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+  font-weight: 800;
+}
+.exp-pill-btn.active-cash {
+  background: #ffffff;
+  color: #059669;
+  border-color: rgba(0, 0, 0, 0.06);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+  font-weight: 800;
+}
+.exp-pill-btn.active-expense {
+  background: #ffffff;
+  color: #e11d48;
+  border-color: rgba(0, 0, 0, 0.06);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+  font-weight: 800;
+}
+.exp-pill-btn.active-income {
+  background: #ffffff;
+  color: #0d9488;
+  border-color: rgba(0, 0, 0, 0.06);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+  font-weight: 800;
+}
+
+/* Active Segment States - Dark Theme */
+:root[data-theme="dark"] .exp-pill-btn.active-tab {
+  background: #1f283d;
+  color: #fbbf24;
+  border-color: rgba(251, 191, 36, 0.25);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.35);
+  font-weight: 800;
+}
+:root[data-theme="dark"] .exp-pill-btn.active-card {
+  background: #152238;
+  color: #38bdf8;
+  border-color: rgba(56, 189, 248, 0.25);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.35);
+  font-weight: 800;
+}
+:root[data-theme="dark"] .exp-pill-btn.active-cash {
+  background: #122822;
+  color: #34d399;
+  border-color: rgba(52, 211, 153, 0.25);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.35);
+  font-weight: 800;
+}
+:root[data-theme="dark"] .exp-pill-btn.active-expense {
+  background: #2b161f;
+  color: #fb7185;
+  border-color: rgba(251, 113, 133, 0.25);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.35);
+  font-weight: 800;
+}
+:root[data-theme="dark"] .exp-pill-btn.active-income {
+  background: #122827;
+  color: #2dd4bf;
+  border-color: rgba(45, 212, 191, 0.25);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.35);
+  font-weight: 800;
+}
+
+/* AI Scan Concierge Banner */
+.exp-scan-banner {
+  background: linear-gradient(135deg, #fffcf5 0%, #fbf4e8 100%);
+  border: 1.5px solid #ede0cc;
+  border-radius: 16px;
+}
+.exp-scan-badge {
+  background: #faebd3;
+  color: #b45309;
+}
+.exp-scan-btn {
+  background: linear-gradient(135deg, #d97706 0%, #b45309 100%);
+  color: #ffffff;
+  box-shadow: 0 2px 8px rgba(180, 83, 9, 0.25);
+}
+:root[data-theme="dark"] .exp-scan-banner {
+  background: linear-gradient(135deg, rgba(212, 175, 55, 0.1) 0%, rgba(184, 134, 11, 0.05) 100%);
+  border: 1.5px solid rgba(212, 175, 55, 0.25);
+}
+:root[data-theme="dark"] .exp-scan-badge {
+  background: rgba(245, 158, 11, 0.15);
+  color: #f59e0b;
+}
+:root[data-theme="dark"] .exp-scan-btn {
+  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+  color: #0b0c0e;
+  box-shadow: 0 2px 10px rgba(245, 158, 11, 0.3);
+}
+
+/* Modal Form Inputs */
+.exp-input {
+  width: 100%;
+  padding: 8px 12px;
+  background: #ffffff;
+  border: 1.5px solid #dfd8cb;
+  border-radius: 12px;
+  color: #0f172a;
+  font-size: 14px;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  box-sizing: border-box;
+}
+.exp-input:focus {
+  outline: none;
+  border-color: #d97706;
+  box-shadow: 0 0 0 3px rgba(217, 119, 6, 0.15);
+}
+:root[data-theme="dark"] .exp-input {
+  background: #111522;
+  border: 1.5px solid #1e263c;
+  color: #f1f5f9;
+}
+:root[data-theme="dark"] .exp-input:focus {
+  border-color: #f59e0b;
+  box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.25);
+}
+
+/* Cancel Button */
+.exp-btn-cancel {
+  background: #ece7de;
+  color: #475569;
+  border: 1px solid #ded6c9;
+  border-radius: 12px;
+  font-weight: 700;
+  transition: all 0.2s ease;
+}
+.exp-btn-cancel:hover {
+  background: #e2dbcf;
+  color: #1e293b;
+}
+:root[data-theme="dark"] .exp-btn-cancel {
+  background: #141926;
+  color: #94a3b8;
+  border: 1px solid #222b40;
+}
+:root[data-theme="dark"] .exp-btn-cancel:hover {
+  background: #1b2234;
+  color: #ffffff;
+}
+
+/* Amount Input Direct Override */
+#exp-form-amount {
+  border-top: none !important;
+  border-left: none !important;
+  border-right: none !important;
+  border-bottom: 2px solid rgba(0, 0, 0, 0.15) !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  border-radius: 0 !important;
+}
+:root[data-theme="dark"] #exp-form-amount {
+  border-bottom: 2px solid rgba(255, 255, 255, 0.18) !important;
+}
+#exp-form-amount:focus {
+  border-bottom-color: #d97706 !important;
+  outline: none !important;
+}
+:root[data-theme="dark"] #exp-form-amount:focus {
+  border-bottom-color: #f59e0b !important;
 }
 
 /* Photo Thumbnail Container */
@@ -298,14 +631,22 @@ button:focus-visible, summary:focus-visible, a:focus-visible { outline:3px solid
   border-radius: 12px;
   position: relative;
   overflow: hidden;
-  border: 1.5px solid #1e263c;
-  background: #080b12;
+  border: 1.5px solid #dfd8cb;
+  background: #f8f6f0;
   flex-shrink: 0;
   transition: border-color 0.2s ease;
 }
+:root[data-theme="dark"] .exp-photo-box {
+  border: 1.5px solid #1e263c;
+  background: #0e121d;
+}
 .exp-photo-box.is-primary {
-  border-color: #0284c7;
-  box-shadow: 0 0 10px rgba(2, 132, 199, 0.4);
+  border-color: #d97706;
+  box-shadow: 0 0 10px rgba(217, 119, 6, 0.35);
+}
+:root[data-theme="dark"] .exp-photo-box.is-primary {
+  border-color: #f59e0b;
+  box-shadow: 0 0 10px rgba(245, 158, 11, 0.45);
 }
 .exp-photo-thumb {
   width: 100%;
@@ -317,7 +658,7 @@ button:focus-visible, summary:focus-visible, a:focus-visible { outline:3px solid
   bottom: 0;
   left: 0;
   right: 0;
-  background: rgba(2, 132, 199, 0.9);
+  background: rgba(217, 119, 6, 0.9);
   color: #ffffff;
   font-size: 9px;
   font-weight: 900;
