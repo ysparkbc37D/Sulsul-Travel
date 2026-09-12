@@ -29,7 +29,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700;800&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
 
   <!-- Local Utilities Bundle (CDN fallback & tailwind utilities) -->
-  <link rel="stylesheet" href="css/utilities.css?v=1.5.7">
+  <link rel="stylesheet" href="css/utilities.css?v=1.5.8">
   <link rel="stylesheet" href="vendor/fontawesome/css/all.min.css">
 
   <!-- Leaflet Map CSS & JS -->
@@ -720,8 +720,8 @@
     }
   </style>
 
-  <link rel="stylesheet" href="css/companion.css?v=1.5.7">
-  <script src="js/presentation/companion-ui.js?v=1.5.7"></script>
+  <link rel="stylesheet" href="css/companion.css?v=1.5.8">
+  <script src="js/presentation/companion-ui.js?v=1.5.8"></script>
 
   <!-- Knowledge Base Seed & Destination Knowledge Packs (DKP) -->
   <script src="kb-travel.js"></script>
@@ -739,40 +739,40 @@
   <!-- ========================================== -->
   <header class="companion-app-header sticky top-0 z-30 bg-[#f7f6f2]/95 backdrop-blur-md border-b border-[#e8e2d5] px-3 sm:px-4 py-2.5 sm:py-3 shadow-[0_2px_12px_rgba(0,0,0,0.03)]">
     <div class="max-w-6xl mx-auto flex items-center justify-between gap-2 sm:gap-3">
-      <!-- 좌측 로고 및 버전 (불변 브랜드 블록: 어느 화면에서나 항상 안정적으로 고정) -->
+      <!-- 좌측 로고 및 타이틀 (깔끔하게 정돈된 브랜드 블록) -->
       <div class="flex items-center gap-2 sm:gap-2.5 cursor-pointer select-none shrink-0" onclick="switchView('hub')" title="술술트래블 홈(허브)으로 이동">
         <img src="icons/icon-192-v115.png" alt="Sulsul Travel" class="w-8 h-8 sm:w-9 sm:h-9 rounded-xl shadow-md shadow-amber-900/15 shrink-0 object-cover border border-[#e8e2d5] dark:border-[var(--line)]">
         <div class="min-w-0">
-          <div class="flex items-center gap-1.5">
-            <h1 class="font-serif-brand text-base sm:text-xl font-bold tracking-tight text-[#1c1917] dark:text-[#ededed] whitespace-nowrap">
-              Sulsul Travel
-            </h1>
-            <span id="app-ver-badge" onclick="event.stopPropagation(); openVersionHistoryModal()" class="px-1.5 py-0.5 rounded-md theme-card-subtle hover:border-amber-500/60 hover:text-amber-600 dark:hover:text-amber-300 text-[#a2601b] dark:text-[#d4af37] text-[10px] font-bold font-mono shadow-inner cursor-pointer shrink-0 transition" title="버전 업데이트 기록 보기 (클릭)">v1.5.7</span>
-          </div>
+          <h1 class="font-serif-brand text-base sm:text-xl font-bold tracking-tight text-[#1c1917] dark:text-[#ededed] whitespace-nowrap">
+            Sulsul Travel
+          </h1>
           <p id="header-trip-name" class="text-[10px] sm:text-[11px] text-[#78716c] dark:text-stone-400 truncate max-w-[120px] sm:max-w-xs font-normal">인생의 모든 여정을 기록하는 다이어리</p>
         </div>
       </div>
 
-      <!-- 우측 액션 클러스터 (심플 & 정돈된 2대 액션: 설정 -> +추가/‹허브) -->
+      <!-- 우측 액션 클러스터 (동일한 정사각/스퀘어 박스 4단 버튼: 버전 -> 통계 -> 설정 -> +추가) -->
       <div class="flex items-center gap-1 sm:gap-1.5 shrink-0">
-        <!-- 1. 통계 버튼 (📊 - 전용 통계 모달 창 열기, 데스크톱용) -->
-        <button onclick="toggleAnalyticsView()" class="companion-header-analytics w-8 h-8 sm:w-9 sm:h-9 rounded-xl theme-card-subtle flex items-center justify-center transition shadow-sm cursor-pointer" title="술술 통계 대시보드 열람">
-          <span class="text-sm">📊</span>
+        <!-- 1. 버전 배지 버튼 (v1.5.8 - 클릭 시 버전 이력) -->
+        <button id="app-ver-badge" onclick="event.stopPropagation(); openVersionHistoryModal()" class="h-8 px-2 rounded-xl theme-card-subtle flex items-center justify-center font-mono text-[10px] font-bold text-[#a2601b] dark:text-[#d4af37] shadow-sm hover:border-amber-500/60 transition cursor-pointer shrink-0" title="버전 업데이트 기록 보기 (클릭)">v1.5.8</button>
+
+        <!-- 2. 통계 버튼 (📊 - 네모박스 형태, 통계 문양) -->
+        <button id="header-btn-analytics" onclick="openAnalyticsModal('lifetime')" class="companion-header-analytics w-8 h-8 rounded-xl theme-card-subtle flex items-center justify-center text-[#a2601b] dark:text-[#d4af37] hover:border-amber-500/60 transition shadow-sm cursor-pointer shrink-0" title="술술 여행 통계 대시보드">
+          <i class="fa-solid fa-chart-pie text-xs" aria-hidden="true"></i>
         </button>
 
-        <!-- 2. 설정 버튼 (🎛️) -->
-        <button onclick="openSettingsModal()" class="w-8 h-8 sm:w-9 sm:h-9 rounded-xl theme-card-subtle flex items-center justify-center transition shadow-sm cursor-pointer" title="앱 설정 & AI & 백업">
-          <i class="fa-solid fa-sliders" aria-hidden="true"></i>
+        <!-- 3. 설정 버튼 (⚙️ - 네모박스 형태) -->
+        <button onclick="openSettingsModal()" class="w-8 h-8 rounded-xl theme-card-subtle flex items-center justify-center text-[#44403c] dark:text-stone-300 hover:border-amber-500/60 transition shadow-sm cursor-pointer shrink-0" title="앱 설정 & AI & 백업">
+          <i class="fa-solid fa-sliders text-xs" aria-hidden="true"></i>
         </button>
 
-        <!-- 3. + 추가 버튼 (허브 모드 활성 시 노출) -->
-        <button id="header-btn-create-trip" onclick="openCreateTripModal()" class="px-2.5 sm:px-3.5 py-1.5 rounded-xl btn-gold text-xs font-black flex items-center gap-1 shadow-sm transition cursor-pointer" title="새 여행 추가 및 AI 일정 설계">
+        <!-- 4. + 추가 버튼 (허브 모드 활성 시 노출) -->
+        <button id="header-btn-create-trip" onclick="openCreateTripModal()" class="h-8 px-2.5 sm:px-3 rounded-xl btn-gold text-xs font-black flex items-center gap-1 shadow-sm transition cursor-pointer shrink-0" title="새 여행 추가 및 AI 일정 설계">
           <i class="fa-solid fa-plus text-[10px]"></i>
           <span>추가</span>
         </button>
 
         <!-- 4-ALT. ‹ 허브 복귀 버튼 (워크스페이스 모드 활성 시 노출) -->
-        <button id="header-btn-back-hub" onclick="switchView('hub')" class="hidden px-2.5 sm:px-3 py-1.5 rounded-xl btn-gold text-xs font-black transition flex items-center gap-1 shadow-sm cursor-pointer" title="인생 여행 허브로 돌아가기">
+        <button id="header-btn-back-hub" onclick="switchView('hub')" class="hidden h-8 px-2.5 sm:px-3 rounded-xl btn-gold text-xs font-black transition flex items-center gap-1 shadow-sm cursor-pointer shrink-0" title="인생 여행 허브로 돌아가기">
           <i class="fa-solid fa-arrow-left text-[10px]"></i>
           <span>내 여행</span>
         </button>
@@ -815,12 +815,20 @@
         </button>
       </div>
 
-      <!-- 2. 실시간 통합 검색창 + 리셋 / 뷰 모드 전환 버튼 -->
+      <!-- 2. 실시간 통합 검색창 + 정렬 선택 + 리셋 / 뷰 모드 전환 버튼 -->
       <div class="flex items-center gap-1.5 sm:gap-2">
-        <div class="relative flex-1">
+        <div class="relative flex-1 min-w-0">
           <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-stone-400 text-xs"></i>
-          <input id="hub-search-input" type="text" placeholder="여행지, 국가, 도시, 컨셉 검색..." oninput="handleHubFilterChange()" class="w-full pl-8 pr-3 py-2 bg-[#faf8f5] dark:bg-[#0f1117] border border-[#e8e2d5] dark:border-stone-700 rounded-xl text-xs text-[#1c1917] dark:text-[#ededed] placeholder-stone-400 focus:outline-none focus:border-[#a2601b] transition shadow-inner">
+          <input id="hub-search-input" type="text" placeholder="여행지, 국가, 도시, 컨셉 검색..." oninput="handleHubFilterChange()" class="w-full pl-8 pr-2.5 py-2 bg-[#faf8f5] dark:bg-[#0f1117] border border-[#e8e2d5] dark:border-stone-700 rounded-xl text-xs text-[#1c1917] dark:text-[#ededed] placeholder-stone-400 focus:outline-none focus:border-[#a2601b] transition shadow-inner">
         </div>
+
+        <!-- 정렬 선택 (최신순 등) -->
+        <select id="hub-filter-sort" onchange="handleHubFilterChange()" class="h-8 px-2 bg-[#faf8f5] dark:bg-[#0f1117] border border-[#e8e2d5] dark:border-stone-700 rounded-xl text-[11px] font-bold text-[#44403c] dark:text-stone-300 focus:outline-none focus:border-[#a2601b] cursor-pointer shadow-sm shrink-0" title="여행 정렬 방식 선택">
+          <option value="latest">최신순</option>
+          <option value="date-asc">출발일순</option>
+          <option value="budget-desc">예산높은순</option>
+          <option value="budget-asc">예산낮은순</option>
+        </select>
 
         <!-- 필터 초기화 버튼 -->
         <button onclick="resetHubFilters()" class="w-8 h-8 rounded-xl bg-[#faf8f5] dark:bg-[#0f1117] hover:bg-[#f0ece1] dark:hover:bg-stone-800 border border-[#e8e2d5] dark:border-stone-700 text-[#78716c] dark:text-stone-300 flex items-center justify-center transition cursor-pointer shrink-0 shadow-sm" title="필터 초기화">
@@ -834,25 +842,18 @@
         </button>
       </div>
 
-      <!-- 3. 드롭다운 3대 정밀 필터 (국가, 도시, 컨셉 - 1줄 3컬럼 최적화) -->
-      <div class="grid grid-cols-3 gap-1.5 sm:gap-2">
+      <!-- 3. 드롭다운 2대 핵심 정밀 필터 (국가, 컨셉 - 1줄 2컬럼 50/50 최적화) -->
+      <div class="grid grid-cols-2 gap-1.5 sm:gap-2">
         <!-- 1. 국가 필터 -->
         <div class="relative">
-          <select id="hub-filter-country" onchange="handleHubCountryChange()" class="w-full px-2 py-2 bg-[#faf8f5] dark:bg-[#0f1117] border border-[#e8e2d5] dark:border-stone-700 rounded-xl text-xs font-bold text-[#44403c] dark:text-stone-200 focus:outline-none focus:border-[#a2601b] cursor-pointer truncate shadow-sm">
+          <select id="hub-filter-country" onchange="handleHubCountryChange()" class="w-full px-2.5 py-2 bg-[#faf8f5] dark:bg-[#0f1117] border border-[#e8e2d5] dark:border-stone-700 rounded-xl text-xs font-bold text-[#44403c] dark:text-stone-200 focus:outline-none focus:border-[#a2601b] cursor-pointer truncate shadow-sm">
             <option value="all">국가</option>
           </select>
         </div>
 
-        <!-- 2. 도시 필터 -->
+        <!-- 2. 컨셉 필터 -->
         <div class="relative">
-          <select id="hub-filter-city" onchange="handleHubFilterChange()" class="w-full px-2 py-2 bg-[#faf8f5] dark:bg-[#0f1117] border border-[#e8e2d5] dark:border-stone-700 rounded-xl text-xs font-bold text-[#44403c] dark:text-stone-200 focus:outline-none focus:border-[#a2601b] cursor-pointer truncate shadow-sm">
-            <option value="all">도시</option>
-          </select>
-        </div>
-
-        <!-- 3. 컨셉 필터 -->
-        <div class="relative">
-          <select id="hub-filter-concept" onchange="handleHubFilterChange()" class="w-full px-2 py-2 bg-[#faf8f5] dark:bg-[#0f1117] border border-[#e8e2d5] dark:border-stone-700 rounded-xl text-xs font-bold text-[#44403c] dark:text-stone-200 focus:outline-none focus:border-[#a2601b] cursor-pointer truncate shadow-sm">
+          <select id="hub-filter-concept" onchange="handleHubFilterChange()" class="w-full px-2.5 py-2 bg-[#faf8f5] dark:bg-[#0f1117] border border-[#e8e2d5] dark:border-stone-700 rounded-xl text-xs font-bold text-[#44403c] dark:text-stone-200 focus:outline-none focus:border-[#a2601b] cursor-pointer truncate shadow-sm">
             <option value="all">컨셉</option>
             <option value="배낭">🎒 배낭여행</option>
             <option value="럭셔리">👑 럭셔리</option>
@@ -866,6 +867,9 @@
         </div>
       </div>
 
+      <!-- 보조 셀렉트 (DOM 호환성 유지) -->
+      <select id="hub-filter-city" class="hidden"><option value="all">도시</option></select>
+
       <!-- 4. 활성 필터 요약 칩 컨테이너 (조건 선택 시 즉시 노출, 원클릭 개별/전체 해제) -->
       <div id="hub-active-chips" class="hidden flex items-center gap-1.5 flex-wrap pt-2 border-t border-[#f0ece1] dark:border-stone-800/80 text-xs">
         <!-- renderHubActiveChips()에 의해 동적 렌더링 -->
@@ -873,24 +877,8 @@
 
     </div>
 
-    <!-- 여행 카드 목록 섹션 헤더 (정렬 드롭다운 인라인 통합) -->
-    <div class="flex items-center justify-between pt-1 gap-2">
-      <div class="flex items-center gap-1.5 sm:gap-2 shrink-0">
-        <h3 class="text-sm sm:text-base font-black text-[#1c1917] dark:text-white">등록된 여행 컬렉션</h3>
-        <span id="badge-trips-count" class="px-2 py-0.5 rounded-full bg-[#f0ece1] dark:bg-stone-800 text-[#a2601b] dark:text-amber-400 font-bold text-xs">0</span>
-      </div>
-      <div class="flex items-center gap-1.5 sm:gap-2">
-        <select id="hub-filter-sort" onchange="handleHubFilterChange()" class="px-2 py-1 bg-[#faf8f5] dark:bg-[#0f1117] border border-[#e8e2d5] dark:border-stone-700 rounded-xl text-xs font-bold text-[#44403c] dark:text-stone-300 focus:outline-none focus:border-[#a2601b] cursor-pointer shadow-xs" title="여행 정렬 방식 선택">
-          <option value="latest">최신 등록순</option>
-          <option value="date-asc">출발일 빠른순</option>
-          <option value="budget-desc">예산 높은순</option>
-          <option value="budget-asc">예산 낮은순</option>
-        </select>
-        <button onclick="openCreateTripModal()" class="text-xs font-bold text-[#a2601b] hover:text-[#8a5015] flex items-center gap-1 transition cursor-pointer shrink-0">
-          <i class="fa-solid fa-plus text-[10px]"></i> <span class="hidden xs:inline">새 여행 만들기</span><span class="xs:hidden">새 여행</span>
-        </button>
-      </div>
-    </div>
+    <!-- 히든 보조 카운터 (DOM 호환성 유지) -->
+    <span id="badge-trips-count" class="hidden">0</span>
 
     <!-- 여행 카드 그리드/리스트 컨테이너 -->
     <div id="trip-cards-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
@@ -3186,6 +3174,77 @@
             </div>
           </section>
 
+          <!-- 1. 여정 상태별 시각적 분포 바 (Visual Status Bar & Legend) -->
+          <div class="p-4 rounded-2xl bg-white dark:bg-[#16181d] border border-[#e8e2d5] dark:border-stone-800 space-y-2.5 shadow-sm">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-black text-[#1c1917] dark:text-[#ededed] flex items-center gap-1.5">
+                <i class="fa-solid fa-chart-pie text-[#a2601b] dark:text-[#d4af37]"></i>
+                <span>여정 진행 상태 분포</span>
+              </span>
+              <span id="stat-lt-status-ratio-txt" class="text-[10px] text-[#78716c] dark:text-stone-400 font-mono font-bold"></span>
+            </div>
+            <!-- Multi-color Segmented Progress Bar -->
+            <div id="stat-lt-status-bar" class="w-full h-3 rounded-full overflow-hidden bg-stone-100 dark:bg-stone-800 flex shadow-inner">
+              <!-- Dynamic Segments -->
+            </div>
+            <!-- Legend Pills -->
+            <div id="stat-lt-status-legend" class="flex items-center gap-2 flex-wrap text-[11px] font-bold">
+              <!-- Dynamic Legend -->
+            </div>
+          </div>
+
+          <!-- 2. 발자취를 남긴 국가 랭킹 & 국기 칩 그리드 -->
+          <div class="p-4 rounded-2xl bg-white dark:bg-[#16181d] border border-[#e8e2d5] dark:border-stone-800 space-y-2.5 shadow-sm">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-black text-[#1c1917] dark:text-[#ededed] flex items-center gap-1.5">
+                <i class="fa-solid fa-earth-americas text-emerald-600 dark:text-emerald-400"></i>
+                <span>방문 국가 아카이브</span>
+              </span>
+              <span id="stat-lt-countries-summary" class="text-[10px] text-[#78716c] dark:text-stone-400 font-bold"></span>
+            </div>
+            <div id="stat-lt-countries-grid" class="flex items-center gap-1.5 flex-wrap">
+              <!-- Dynamic Country Chips -->
+            </div>
+          </div>
+
+          <!-- 3. 등록된 여행 종합 비교 요약표 (Travel Collection Summary Table) -->
+          <div class="p-4 rounded-2xl bg-white dark:bg-[#16181d] border border-[#e8e2d5] dark:border-stone-800 space-y-2.5 shadow-sm overflow-hidden">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-black text-[#1c1917] dark:text-[#ededed] flex items-center gap-1.5">
+                <i class="fa-solid fa-table-list text-indigo-600 dark:text-indigo-400"></i>
+                <span>등록된 여정 한눈에 보기</span>
+              </span>
+              <span class="text-[10px] text-[#78716c] dark:text-stone-400 font-medium">전체 비교표</span>
+            </div>
+            <div class="overflow-x-auto -mx-1">
+              <table class="w-full text-[11px] text-left border-collapse min-w-[320px]">
+                <thead>
+                  <tr class="border-b border-[#e8e2d5] dark:border-stone-800 text-[#78716c] dark:text-stone-400 text-[10px]">
+                    <th class="py-1.5 px-2 font-bold">여정명</th>
+                    <th class="py-1.5 px-2 font-bold">기간</th>
+                    <th class="py-1.5 px-2 font-bold">방문지</th>
+                    <th class="py-1.5 px-2 font-bold text-right">예산 대비 지출</th>
+                    <th class="py-1.5 px-2 font-bold text-center">상태</th>
+                  </tr>
+                </thead>
+                <tbody id="stat-lt-trips-tbody" class="divide-y divide-[#f0ece1] dark:divide-stone-800/60 font-medium">
+                  <!-- Dynamic Rows -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- 4. 선호하는 여행 테마 및 컨셉 태그 -->
+          <div class="p-4 rounded-2xl bg-white dark:bg-[#16181d] border border-[#e8e2d5] dark:border-stone-800 space-y-2.5 shadow-sm">
+            <div class="text-xs font-black text-[#1c1917] dark:text-[#ededed] flex items-center gap-1.5">
+              <i class="fa-solid fa-tags text-amber-500"></i>
+              <span>선호하는 여행 테마 및 컨셉</span>
+            </div>
+            <div id="stat-lt-concepts-grid" class="flex items-center gap-1.5 flex-wrap">
+              <!-- Dynamic Concept Chips -->
+            </div>
+          </div>
+
           <!-- 대륙별 및 비행 궤적 노선도 바로가기 -->
           <div class="p-3.5 rounded-2xl bg-white dark:bg-[#16181d] border border-[#e8e2d5] dark:border-stone-800 flex items-center justify-between gap-3 shadow-sm">
             <div class="flex items-center gap-2.5">
@@ -3358,11 +3417,18 @@
 
       <!-- 버전 목록 스크롤 영역 -->
       <div class="flex-1 overflow-y-auto space-y-3 pr-1 text-xs">
-        <!-- v1.5.7 (Current) -->
+        <!-- v1.5.8 (Current) -->
         <div class="p-4 rounded-2xl border-2 border-emerald-500/40 space-y-2.5 bg-emerald-500/5 dark:bg-emerald-500/10">
-          <div class="flex items-center justify-between gap-2"><div class="flex items-center gap-2 min-w-0"><span class="px-2 py-0.5 rounded-lg bg-emerald-500 text-black font-black text-xs shadow-sm shrink-0">v1.5.7</span><span class="text-xs font-black text-[#1c1917] dark:text-white">허브 뷰 상단 여백 최적화(히어로 배너 제거) 및 정밀 필터 1줄 통합(국가·도시·컨셉 3컬럼화)</span></div><span class="companion-status shrink-0">최신 버전</span></div>
+          <div class="flex items-center justify-between gap-2"><div class="flex items-center gap-2 min-w-0"><span class="px-2 py-0.5 rounded-lg bg-emerald-500 text-black font-black text-xs shadow-sm shrink-0">v1.5.8</span><span class="text-xs font-black text-[#1c1917] dark:text-white">허브 헤더 정사각 액션 클러스터 통일, 2열 필터 압축 및 여정 비주얼 통계 대시보드 구축</span></div><span class="companion-status shrink-0">최신 버전</span></div>
+          <p class="text-xs leading-relaxed">사용자 피드백에 따라 허브 화면의 수직 공간을 최적화하고 인터페이스의 일관성을 극대화했습니다. 1) 상단 우측 액션 영역을 <b>[버전 뱃지][📊 통계][⚙️ 설정][+ 추가]의 4개 정사각(square) 박스 버튼 클러스터로 규격 통일</b>하여 시각적 정돈감을 높였습니다. 2) 불필요한 '등록된 여행 컬렉션' 헤더 행을 완전 제거하고, <b>필터를 [국가 ▾] [컨셉 ▾] 2열(50%:50%)로 최적화</b>했으며 정렬 드롭다운을 검색창 우측으로 통합하여 여행 카드가 첫 화면 상단에 즉각 노출되도록 했습니다. 3) 평생 여행 통계 모달을 대폭 강화하여 <b>여정 상태 세그먼트 바, 방문 국가 칩, 여정별 기간/방문지/예산 집행률 비교 테이블, 여행 테마 그리드</b> 등 한눈에 파악할 수 있는 비주얼 대시보드를 탑재했습니다.</p>
+          <div class="text-[10px] text-stone-400 dark:text-stone-500 pt-1 border-t border-emerald-500/20 flex items-center justify-between"><span>📅 2026-09-13 릴리즈</span><span class="font-mono">st-shell-v1.5.8</span></div>
+        </div>
+
+        <!-- v1.5.7 -->
+        <div class="p-4 rounded-2xl bg-stone-50 dark:bg-stone-900/50 border border-stone-200 dark:border-stone-800 space-y-2.5 shadow-sm relative overflow-hidden">
+          <div class="flex items-center justify-between gap-2"><div class="flex items-center gap-2 min-w-0"><span class="px-2 py-0.5 rounded-lg bg-stone-200 dark:bg-stone-800 text-stone-800 dark:text-stone-200 font-bold text-[11px] font-mono shrink-0">v1.5.7</span><span class="text-xs font-bold text-[#1c1917] dark:text-stone-200">허브 뷰 상단 여백 최적화(히어로 배너 제거) 및 정밀 필터 1줄 통합(국가·도시·컨셉 3컬럼화)</span></div></div>
           <p class="text-xs leading-relaxed">사용자 실기기 피드백에 따라 모바일 첫 화면에서 불필요한 수직 공간을 차지하던 상단 문구(<b>YOUR TRAVEL NOTEBOOK / 여행은 끝나도 이야기는 계속...</b>) 히어로 섹션을 과감히 제거하여 앱 진입 즉시 여행 카드 컬렉션이 시원하게 노출되도록 개선했습니다. 또한 2줄(2x2 그리드)을 차지하던 4대 필터를 <b>[국가] [도시] [컨셉] 3대 핵심 필터 1줄(3컬럼 그리드)로 통합</b>하고, <b>[최신 등록순] 정렬 드롭다운은 하단 여행 컬렉션 헤더에 인라인으로 콤팩트하게 통합 배치</b>하여 모바일 스크롤 압박을 180px 이상 획기적으로 줄였습니다.</p>
-          <div class="text-[10px] text-stone-400 dark:text-stone-500 pt-1 border-t border-emerald-500/20 flex items-center justify-between"><span>📅 2026-09-13 릴리즈</span><span class="font-mono">st-shell-v1.5.7</span></div>
+          <div class="text-[10px] text-stone-400 dark:text-stone-500 pt-1 border-t border-stone-200 dark:border-stone-800 flex items-center justify-between"><span>📅 2026-09-13 릴리즈</span><span class="font-mono">st-shell-v1.5.7</span></div>
         </div>
 
         <!-- v1.5.6 -->
@@ -3922,7 +3988,7 @@
     window.showToast = showToast;
 
     // 앱 버전 및 글로벌 네임스페이스 (Sulsul-Travel Invariant Rule R-10, R-11, R-12, R-13, R-14, R-15)
-    const APP_VER = '1.5.7';
+    const APP_VER = '1.5.8';
 
     // ══════════════════════════════════════════
     // [Two-Tone Theme System] 라이트 그레이 & 딥 블랙 테마 엔진
@@ -6119,17 +6185,29 @@
     }
 
     function renderLifetimeAnalytics() {
-      let totalTrips = State.trips.length;
+      const trips = State.trips || [];
+      let totalTrips = trips.length;
       let totalDays = 0;
       let totalExpensesKrw = 0;
       let totalDiaries = 0;
-      const countriesSet = new Set();
+      const countriesMap = {};
       const citiesSet = new Set();
+      const conceptsMap = {};
+      const statusCounts = { ongoing: 0, planned: 0, completed: 0, bucketlist: 0 };
 
-      State.trips.forEach(t => {
+      trips.forEach(t => {
         totalDays += (t.durationDays || (t.days ? t.days.length : 0));
-        (t.countries || []).forEach(c => countriesSet.add(c));
+        (t.countries || []).forEach(c => {
+          countriesMap[c] = (countriesMap[c] || 0) + 1;
+        });
         (t.cities || []).forEach(ct => citiesSet.add(ct));
+        (t.concepts || []).forEach(cp => {
+          conceptsMap[cp] = (conceptsMap[cp] || 0) + 1;
+        });
+
+        const st = t.status || 'planned';
+        if (statusCounts[st] !== undefined) statusCounts[st]++;
+        else statusCounts.planned++;
 
         (t.expenses || []).forEach(e => {
           if (e.type !== 'income') totalExpensesKrw += (e.krw || 0);
@@ -6140,17 +6218,146 @@
         }
       });
 
-      document.getElementById('stat-lt-trips').innerText = `${totalTrips}개`;
-      document.getElementById('stat-lt-countries').innerText = `${countriesSet.size}개국`;
-      document.getElementById('stat-lt-cities').innerText = `${citiesSet.size}개`;
-      document.getElementById('stat-lt-days').innerText = `${totalDays}일`;
+      const ltTripsEl = document.getElementById('stat-lt-trips');
+      if (ltTripsEl) ltTripsEl.innerText = `${totalTrips}개`;
+      const ltCountriesEl = document.getElementById('stat-lt-countries');
+      if (ltCountriesEl) ltCountriesEl.innerText = `${Object.keys(countriesMap).length}개국`;
+      const ltCitiesEl = document.getElementById('stat-lt-cities');
+      if (ltCitiesEl) ltCitiesEl.innerText = `${citiesSet.size}개`;
+      const ltDaysEl = document.getElementById('stat-lt-days');
+      if (ltDaysEl) ltDaysEl.innerText = `${totalDays}일`;
       
       const expStr = totalExpensesKrw >= 1000000 ? 
         `₩${(totalExpensesKrw / 10000).toFixed(0)}만` : 
         `₩${totalExpensesKrw.toLocaleString()}`;
-      document.getElementById('stat-lt-expenses').innerText = expStr;
-      document.getElementById('stat-lt-diaries').innerText = `${totalDiaries}편`;
-      document.getElementById('badge-trips-count').innerText = totalTrips;
+      const ltExpensesEl = document.getElementById('stat-lt-expenses');
+      if (ltExpensesEl) ltExpensesEl.innerText = expStr;
+      const ltDiariesEl = document.getElementById('stat-lt-diaries');
+      if (ltDiariesEl) ltDiariesEl.innerText = `${totalDiaries}편`;
+      const badgeCountEl = document.getElementById('badge-trips-count');
+      if (badgeCountEl) badgeCountEl.innerText = totalTrips;
+
+      // 1. 여정 상태별 시각적 세그먼트 프로그레스 바 & 범례
+      const statusBar = document.getElementById('stat-lt-status-bar');
+      const statusLegend = document.getElementById('stat-lt-status-legend');
+      const statusRatioTxt = document.getElementById('stat-lt-status-ratio-txt');
+      if (statusBar && statusLegend) {
+        if (totalTrips === 0) {
+          statusBar.innerHTML = '<div class="w-full h-full bg-stone-200 dark:bg-stone-700"></div>';
+          statusLegend.innerHTML = '<span class="text-stone-400 font-normal">등록된 여정이 없습니다.</span>';
+          if (statusRatioTxt) statusRatioTxt.innerText = '0%';
+        } else {
+          const pctOngoing = Math.round((statusCounts.ongoing / totalTrips) * 100);
+          const pctPlanned = Math.round((statusCounts.planned / totalTrips) * 100);
+          const pctCompleted = Math.round((statusCounts.completed / totalTrips) * 100);
+          const pctBucket = 100 - pctOngoing - pctPlanned - pctCompleted;
+
+          statusBar.innerHTML = `
+            ${statusCounts.ongoing > 0 ? `<div style="width:${pctOngoing}%" class="h-full bg-emerald-500" title="진행중: ${statusCounts.ongoing}개 (${pctOngoing}%)"></div>` : ''}
+            ${statusCounts.planned > 0 ? `<div style="width:${pctPlanned}%" class="h-full bg-sky-500" title="예정: ${statusCounts.planned}개 (${pctPlanned}%)"></div>` : ''}
+            ${statusCounts.completed > 0 ? `<div style="width:${pctCompleted}%" class="h-full bg-indigo-500" title="완료: ${statusCounts.completed}개 (${pctCompleted}%)"></div>` : ''}
+            ${statusCounts.bucketlist > 0 ? `<div style="width:${pctBucket}%" class="h-full bg-amber-500" title="버킷리스트: ${statusCounts.bucketlist}개 (${pctBucket}%)"></div>` : ''}
+          `;
+
+          statusLegend.innerHTML = `
+            <span class="inline-flex items-center gap-1.5 px-2 py-1 rounded-lg bg-emerald-500/10 text-emerald-700 dark:text-emerald-300 border border-emerald-500/20"><span class="w-2 h-2 rounded-full bg-emerald-500"></span> 진행중 ${statusCounts.ongoing}</span>
+            <span class="inline-flex items-center gap-1.5 px-2 py-1 rounded-lg bg-sky-500/10 text-sky-700 dark:text-sky-300 border border-sky-500/20"><span class="w-2 h-2 rounded-full bg-sky-500"></span> 예정 ${statusCounts.planned}</span>
+            <span class="inline-flex items-center gap-1.5 px-2 py-1 rounded-lg bg-indigo-500/10 text-indigo-700 dark:text-indigo-300 border border-indigo-500/20"><span class="w-2 h-2 rounded-full bg-indigo-500"></span> 완료 ${statusCounts.completed}</span>
+            <span class="inline-flex items-center gap-1.5 px-2 py-1 rounded-lg bg-amber-500/10 text-amber-700 dark:text-amber-300 border border-amber-500/20"><span class="w-2 h-2 rounded-full bg-amber-500"></span> 버킷 ${statusCounts.bucketlist}</span>
+          `;
+          if (statusRatioTxt) statusRatioTxt.innerText = `총 ${totalTrips}개 여정`;
+        }
+      }
+
+      // 2. 발자취를 남긴 국가 칩 그리드
+      const countriesGrid = document.getElementById('stat-lt-countries-grid');
+      const countriesSummary = document.getElementById('stat-lt-countries-summary');
+      if (countriesGrid) {
+        const cEntries = Object.entries(countriesMap).sort((a, b) => b[1] - a[1]);
+        if (cEntries.length === 0) {
+          countriesGrid.innerHTML = '<span class="text-xs text-stone-400">아직 등록된 방문 국가가 없습니다.</span>';
+          if (countriesSummary) countriesSummary.innerText = '0개국';
+        } else {
+          if (countriesSummary) countriesSummary.innerText = `총 ${cEntries.length}개국 발자취`;
+          countriesGrid.innerHTML = cEntries.map(([countryName, cnt]) => {
+            const cInfo = resolveCountryInfo(countryName);
+            const flag = cInfo ? cInfo.flag : '🌎';
+            return `
+              <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-xl bg-[#faf8f5] dark:bg-[#121316] border border-[#e8e2d5] dark:border-stone-800 text-xs font-bold text-[#44403c] dark:text-stone-200 shadow-xs">
+                <span>${flag}</span>
+                <span>${escapeHtml(countryName)}</span>
+                <span class="px-1.5 py-0.2 rounded-full bg-amber-500/15 text-[#a2601b] dark:text-amber-300 text-[10px] font-mono">${cnt}회</span>
+              </span>
+            `;
+          }).join('');
+        }
+      }
+
+      // 3. 등록된 여행 종합 비교 요약표
+      const tripsTbody = document.getElementById('stat-lt-trips-tbody');
+      if (tripsTbody) {
+        if (trips.length === 0) {
+          tripsTbody.innerHTML = '<tr><td colspan="5" class="py-4 text-center text-stone-400">등록된 여행이 없습니다.</td></tr>';
+        } else {
+          tripsTbody.innerHTML = trips.map(t => {
+            const days = t.durationDays || (t.days ? t.days.length : 0);
+            const dates = (t.startDate && t.endDate) ? `${t.startDate.slice(5)} ~ ${t.endDate.slice(5)}` : (t.startDate ? `${t.startDate.slice(5)}~` : '-');
+            const place = (t.countries && t.countries.length > 0) ? t.countries.join(', ') : (t.country || '-');
+            const budget = t.budgetKrw || 0;
+            let spent = 0;
+            (t.expenses || []).forEach(e => { if (e.type !== 'income') spent += (e.krw || 0); });
+            const spentPct = budget > 0 ? Math.min(100, Math.round((spent / budget) * 100)) : 0;
+            
+            const statusBadgeMap = {
+              ongoing: '<span class="px-1.5 py-0.5 rounded text-[10px] font-bold bg-emerald-500/15 text-emerald-700 dark:text-emerald-300 border border-emerald-500/30">여행중</span>',
+              planned: '<span class="px-1.5 py-0.5 rounded text-[10px] font-bold bg-sky-500/15 text-sky-700 dark:text-sky-300 border border-sky-500/30">예정</span>',
+              completed: '<span class="px-1.5 py-0.5 rounded text-[10px] font-bold bg-stone-500/15 text-stone-700 dark:text-stone-300 border border-stone-500/30">완료</span>',
+              bucketlist: '<span class="px-1.5 py-0.5 rounded text-[10px] font-bold bg-amber-500/15 text-amber-700 dark:text-amber-300 border border-amber-500/30">버킷</span>'
+            };
+            const sBadge = statusBadgeMap[t.status || 'planned'] || statusBadgeMap.planned;
+
+            return `
+              <tr class="hover:bg-[#faf8f5] dark:hover:bg-[#121316]/60 transition">
+                <td class="py-2 px-2 font-bold text-[#1c1917] dark:text-[#ededed] max-w-[120px] truncate" title="${escapeHtml(t.title)}">
+                  ${escapeHtml(t.title)}
+                </td>
+                <td class="py-2 px-2 text-[#78716c] dark:text-stone-400 whitespace-nowrap">
+                  <div>${dates}</div>
+                  <div class="text-[10px] text-amber-600 dark:text-amber-400 font-bold">${days}일간</div>
+                </td>
+                <td class="py-2 px-2 text-[#44403c] dark:text-stone-300 max-w-[90px] truncate" title="${escapeHtml(place)}">
+                  ${escapeHtml(place)}
+                </td>
+                <td class="py-2 px-2 text-right whitespace-nowrap">
+                  <div class="font-mono font-bold text-[#1c1917] dark:text-stone-200">₩${(spent / 10000).toFixed(0)}만 <span class="text-stone-400 font-normal">/ ₩${(budget / 10000).toFixed(0)}만</span></div>
+                  <div class="w-16 ml-auto bg-stone-200 dark:bg-stone-700 rounded-full h-1 mt-1 overflow-hidden">
+                    <div class="bg-amber-500 h-full rounded-full" style="width:${spentPct}%"></div>
+                  </div>
+                </td>
+                <td class="py-2 px-2 text-center whitespace-nowrap">
+                  ${sBadge}
+                </td>
+              </tr>
+            `;
+          }).join('');
+        }
+      }
+
+      // 4. 선호하는 여행 테마 및 컨셉 태그
+      const conceptsGrid = document.getElementById('stat-lt-concepts-grid');
+      if (conceptsGrid) {
+        const cpEntries = Object.entries(conceptsMap).sort((a, b) => b[1] - a[1]);
+        if (cpEntries.length === 0) {
+          conceptsGrid.innerHTML = '<span class="text-xs text-stone-400">등록된 여행 컨셉 태그가 없습니다.</span>';
+        } else {
+          conceptsGrid.innerHTML = cpEntries.map(([cp, cnt]) => `
+            <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-xl bg-amber-500/10 text-[#a2601b] dark:text-amber-300 border border-amber-500/20 text-xs font-bold shadow-xs">
+              <span>#${escapeHtml(cp)}</span>
+              <span class="px-1.5 py-0.2 rounded-full bg-amber-500/20 text-[10px] font-mono">${cnt}개</span>
+            </span>
+          `).join('');
+        }
+      }
     }
 
     function setHubStatusFilter(status) {

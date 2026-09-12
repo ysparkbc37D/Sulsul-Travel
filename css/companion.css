@@ -143,7 +143,7 @@ button:focus-visible, summary:focus-visible, a:focus-visible { outline:3px solid
   #view-hub { padding-bottom:32px; }
   .companion-app-header { padding:8px max(12px,var(--safe-right)) 8px max(12px,var(--safe-left)); padding-top:max(8px,var(--safe-top)); }
   .companion-app-header .font-serif-brand { font-size:17px; }
-  #header-trip-name, .companion-header-analytics { display:none; }
+  #header-trip-name { display:none; }
   #app-ver-badge { display:inline-flex !important; }
   #header-btn-back-hub { font-size:12px; padding:8px !important; }
   .companion-trip-bar > div:first-child { flex-basis:100%; }
