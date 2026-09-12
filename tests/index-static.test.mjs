@@ -117,9 +117,9 @@ test('mobile travel notebook presentation is bundled and protected from CDN regr
   assert.match(companionCss, /min-height:44px/);
   assert.match(utilitiesCss, /\.flex/);
   for (const asset of [
-    'css/utilities.css?v=1.5.1',
-    'css/companion.css?v=1.5.1',
-    'js/presentation/companion-ui.js?v=1.5.1',
+    'css/utilities.css?v=1.5.2',
+    'css/companion.css?v=1.5.2',
+    'js/presentation/companion-ui.js?v=1.5.2',
     'vendor/fontawesome/css/all.min.css',
     'vendor/leaflet/leaflet.js',
     'vendor/leaflet/images/marker-icon-2x.png',
@@ -132,7 +132,7 @@ test('release version is synchronized', () => {
   const worker = sw.match(/const V\s*=\s*'st-shell-v([^']+)'/)?.[1];
   const release = changelog.match(/## \[v([^\]]+)\]/)?.[1];
   const chronicleRelease = chronicle.match(/^### \[실록 \d+호\].*\(v([^\)]+)\)$/m)?.[1];
-  assert.equal(app, '1.5.1');
+  assert.equal(app, '1.5.2');
   assert.equal(worker, app);
   assert.equal(release, app);
   assert.equal(chronicleRelease, app);
