@@ -29,7 +29,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700;800&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
 
   <!-- Local Utilities Bundle (CDN fallback & tailwind utilities) -->
-  <link rel="stylesheet" href="css/utilities.css?v=1.5.4">
+  <link rel="stylesheet" href="css/utilities.css?v=1.5.5">
   <link rel="stylesheet" href="vendor/fontawesome/css/all.min.css">
 
   <!-- Leaflet Map CSS & JS -->
@@ -720,8 +720,8 @@
     }
   </style>
 
-  <link rel="stylesheet" href="css/companion.css?v=1.5.4">
-  <script src="js/presentation/companion-ui.js?v=1.5.4"></script>
+  <link rel="stylesheet" href="css/companion.css?v=1.5.5">
+  <script src="js/presentation/companion-ui.js?v=1.5.5"></script>
 
   <!-- Knowledge Base Seed & Destination Knowledge Packs (DKP) -->
   <script src="kb-travel.js"></script>
@@ -747,7 +747,7 @@
             <h1 class="font-serif-brand text-base sm:text-xl font-bold tracking-tight text-[#1c1917] dark:text-[#ededed] whitespace-nowrap">
               Sulsul Travel
             </h1>
-            <span id="app-ver-badge" onclick="event.stopPropagation(); openVersionHistoryModal()" class="px-1.5 py-0.5 rounded-md theme-card-subtle hover:border-amber-500/60 hover:text-amber-600 dark:hover:text-amber-300 text-[#a2601b] dark:text-[#d4af37] text-[10px] font-bold font-mono shadow-inner cursor-pointer shrink-0 transition" title="버전 업데이트 기록 보기 (클릭)">v1.5.4</span>
+            <span id="app-ver-badge" onclick="event.stopPropagation(); openVersionHistoryModal()" class="px-1.5 py-0.5 rounded-md theme-card-subtle hover:border-amber-500/60 hover:text-amber-600 dark:hover:text-amber-300 text-[#a2601b] dark:text-[#d4af37] text-[10px] font-bold font-mono shadow-inner cursor-pointer shrink-0 transition" title="버전 업데이트 기록 보기 (클릭)">v1.5.5</span>
           </div>
           <p id="header-trip-name" class="text-[10px] sm:text-[11px] text-[#78716c] dark:text-stone-400 truncate max-w-[120px] sm:max-w-xs font-normal">인생의 모든 여정을 기록하는 다이어리</p>
         </div>
@@ -2082,20 +2082,20 @@
         <div class="flex items-center gap-2 w-full min-w-0">
           <span id="exp-form-sign-badge" class="text-2xl font-black text-rose-500 shrink-0 select-none">-</span>
           <input type="number" id="exp-form-amount" oninput="onExpenseAmountOrCurrChange()" placeholder="0" class="min-w-0 flex-1 w-full text-2xl sm:text-3xl font-black bg-transparent exp-heading px-1 py-0.5 focus:outline-none placeholder:text-slate-400 dark:placeholder:text-slate-600">
-          <div class="relative shrink-0 w-24 sm:w-28">
-            <select id="exp-form-curr" onchange="onExpenseAmountOrCurrChange()" class="exp-curr-select w-full">
-              <option value="KRW">KRW (원)</option>
-              <option value="EUR">EUR (€)</option>
-              <option value="USD">USD ($)</option>
-              <option value="JPY">JPY (엔)</option>
-              <option value="CNY">CNY (위안)</option>
-              <option value="GBP">GBP (£)</option>
-              <option value="CHF">CHF (프랑)</option>
-              <option value="PEN">PEN (솔)</option>
-              <option value="ARS">ARS (페소)</option>
-              <option value="BRL">BRL (헤알)</option>
-            </select>
-            <i class="fa-solid fa-chevron-down text-[10px] text-slate-400 dark:text-slate-500 absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none"></i>
+          <div class="relative shrink-0 flex items-center">
+            <span id="exp-form-curr-badge" class="text-xs sm:text-sm font-black px-2.5 py-1.5 rounded-xl bg-amber-500/15 text-amber-700 dark:text-amber-300 border border-amber-500/30 whitespace-nowrap shadow-sm">KRW (₩)</span>
+            <select id="exp-form-curr" onchange="onExpenseAmountOrCurrChange()" class="hidden"></select>
+          </div>
+        </div>
+
+        <!-- 보유 통화 원터치 칩 선택 바 (v1.5.5) -->
+        <div class="pt-1.5 border-t border-stone-200/60 dark:border-stone-800/80">
+          <div class="text-[10px] text-stone-500 dark:text-stone-400 mb-1.5 flex items-center justify-between">
+            <span>보유 통화에서 바로 선택:</span>
+            <span id="exp-form-curr-active-desc" class="font-bold text-amber-600 dark:text-amber-400"></span>
+          </div>
+          <div id="exp-form-curr-chips" class="flex items-center gap-1.5 overflow-x-auto no-scrollbar py-0.5">
+            <!-- Dynamically populated via renderExpenseCurrencyChips() -->
           </div>
         </div>
       </div>
@@ -2166,11 +2166,15 @@
         </div>
 
         <div>
-          <label class="font-bold exp-heading block mb-1">출금 지갑 / 결제 상세</label>
-          <select id="exp-form-payment-source" onchange="onExpensePaymentSourceChange()" class="exp-input">
-            <!-- 동적 바인딩 -->
-          </select>
-          <div id="exp-form-wallet-hint" class="text-[10px] exp-subtext mt-1 flex items-center gap-1.5">
+          <div class="flex items-center justify-between mb-1.5">
+            <label class="font-bold exp-heading block text-xs">출금 지갑 / 결제 상세</label>
+            <span id="exp-form-wallet-active-badge" class="text-[10px] font-bold text-amber-600 dark:text-amber-400"></span>
+          </div>
+          <select id="exp-form-payment-source" onchange="onExpensePaymentSourceChange()" class="hidden"></select>
+          <div id="exp-form-wallet-cards" class="space-y-1.5">
+            <!-- Dynamically populated via renderExpensePaymentSourceCards() -->
+          </div>
+          <div id="exp-form-wallet-hint" class="text-[10px] exp-subtext mt-1.5 flex items-center gap-1.5">
             <!-- 실시간 지갑 잔액 안내 -->
           </div>
         </div>
@@ -2590,7 +2594,24 @@
         <label class="space-y-1.5 block"><span class="font-bold">숙소 / 체류 기준</span><input id="plan-block-edit-lodging" type="text" maxlength="140" placeholder="예: 타이베이 메인역 도보 10분 이내" class="w-full px-3 py-2.5 rounded-xl theme-card-subtle focus:outline-none focus:border-emerald-500"></label>
         <label class="space-y-1.5 block"><span class="font-bold">꼭 하고 싶은 경험</span><textarea id="plan-block-edit-priorities" rows="3" maxlength="500" placeholder="한 줄에 하나씩 입력" class="w-full px-3 py-2.5 rounded-xl theme-card-subtle focus:outline-none focus:border-emerald-500 resize-y"></textarea></label>
         <label class="space-y-1.5 block"><span class="font-bold">메모 / 위험·예약 확인</span><textarea id="plan-block-edit-notes" rows="3" maxlength="600" placeholder="티켓, 이동, 날씨, 동행 합의 사항" class="w-full px-3 py-2.5 rounded-xl theme-card-subtle focus:outline-none focus:border-emerald-500 resize-y"></textarea></label>
-        <label class="space-y-1.5 block"><span class="font-bold">확정 상태</span><select id="plan-block-edit-status" class="w-full px-3 py-2.5 rounded-xl theme-card-subtle focus:outline-none focus:border-emerald-500"><option value="draft">초안</option><option value="review">함께 검토 중</option><option value="confirmed">확정</option><option value="completed">여행 완료</option></select></label>
+        <div class="space-y-1.5">
+          <div class="flex items-center justify-between">
+            <span class="font-bold">확정 상태</span>
+            <span id="plan-block-status-desc" class="text-[10px] text-amber-500 font-bold"></span>
+          </div>
+          <select id="plan-block-edit-status" class="hidden">
+            <option value="draft">초안</option>
+            <option value="review">함께 검토 중</option>
+            <option value="confirmed">확정</option>
+            <option value="completed">여행 완료</option>
+          </select>
+          <div id="plan-block-status-chips" class="grid grid-cols-4 gap-1.5 p-1 bg-stone-200/50 dark:bg-black/30 border border-stone-300/60 dark:border-white/10 rounded-xl">
+            <button type="button" onclick="setPlanBlockStatus('draft')" data-status="draft" class="plan-status-pill py-2 text-[11px] font-bold rounded-lg text-center">초안</button>
+            <button type="button" onclick="setPlanBlockStatus('review')" data-status="review" class="plan-status-pill py-2 text-[11px] font-bold rounded-lg text-center">검토 중</button>
+            <button type="button" onclick="setPlanBlockStatus('confirmed')" data-status="confirmed" class="plan-status-pill py-2 text-[11px] font-bold rounded-lg text-center">확정</button>
+            <button type="button" onclick="setPlanBlockStatus('completed')" data-status="completed" class="plan-status-pill py-2 text-[11px] font-bold rounded-lg text-center">완료</button>
+          </div>
+        </div>
       </div>
       <div class="sheet-sticky-actions grid grid-cols-2 gap-2">
         <button onclick="closeModal('modal-plan-block-edit')" class="min-h-12 px-4 rounded-xl theme-card-subtle text-xs font-bold">취소</button>
@@ -3341,11 +3362,18 @@
 
       <!-- 버전 목록 스크롤 영역 -->
       <div class="flex-1 overflow-y-auto space-y-3 pr-1 text-xs">
-        <!-- v1.5.4 (Current) -->
+        <!-- v1.5.5 (Current) -->
         <div class="p-4 rounded-2xl border-2 border-emerald-500/40 space-y-2.5 bg-emerald-500/5 dark:bg-emerald-500/10">
-          <div class="flex items-center justify-between gap-2"><div class="flex items-center gap-2 min-w-0"><span class="px-2 py-0.5 rounded-lg bg-emerald-500 text-black font-black text-xs shadow-sm shrink-0">v1.5.4</span><span class="text-xs font-black text-[#1c1917] dark:text-white">가계부 탭 상시 활성화 버그 척결, 통화 삭제 안전 확인 팝업 & 3대 액션 바 개편</span></div><span class="companion-status shrink-0">최신 버전</span></div>
+          <div class="flex items-center justify-between gap-2"><div class="flex items-center gap-2 min-w-0"><span class="px-2 py-0.5 rounded-lg bg-emerald-500 text-black font-black text-xs shadow-sm shrink-0">v1.5.5</span><span class="text-xs font-black text-[#1c1917] dark:text-white">지출 통화 보유통화 자동 한정, 모바일 전체화면 select 제거 및 원터치 칩·카드 UI 전면 개편</span></div><span class="companion-status shrink-0">최신 버전</span></div>
+          <p class="text-xs leading-relaxed">사용자 실기기 제보에 따라 모바일 브라우저에서 투박한 PC용 <code>&lt;select&gt;</code> 창이 화면 전체를 덮어버려 답답함을 유발하던 결함을 전면 혁신했습니다. 새 지출 기록 시 여행의 <b>보유 통화(KRW, USD 등)를 자동 감지하여 1-터치 칩(<code>#exp-form-curr-chips</code>)</b>으로 깔끔하게 제공하며, 미보유 제3국 통화 필요 시 <b>[+ 다른 통화]</b>로 즉시 추가·선택할 수 있습니다. 또한 거대한 OS 팝업을 띄우던 출금 지갑 선택 역시 <b>원터치 카드 칩(<code>exp-wallet-card</code>)</b>으로 교체하여 실시간 잔액 확인과 원터치 선택을 구현했습니다. 세부 일정 블록 편집 상태 또한 <b>4단 세그먼트 버튼([초안][검토][확정][완료])</b>으로 전환하여 모바일 전체화면 select 팝업을 0건으로 일소했습니다.</p>
+          <div class="text-[10px] text-stone-400 dark:text-stone-500 pt-1 border-t border-emerald-500/20 flex items-center justify-between"><span>📅 2026-09-12 릴리즈</span><span class="font-mono">st-shell-v1.5.5</span></div>
+        </div>
+
+        <!-- v1.5.4 -->
+        <div class="p-4 rounded-2xl bg-stone-50 dark:bg-stone-900/50 border border-stone-200 dark:border-stone-800 space-y-2.5 shadow-sm relative overflow-hidden">
+          <div class="flex items-center justify-between gap-2"><div class="flex items-center gap-2 min-w-0"><span class="px-2 py-0.5 rounded-lg bg-stone-200 dark:bg-stone-800 text-stone-800 dark:text-stone-200 font-bold text-[11px] font-mono shrink-0">v1.5.4</span><span class="text-xs font-bold text-[#1c1917] dark:text-stone-200">가계부 탭 상시 활성화 버그 척결, 통화 삭제 안전 확인 팝업 & 3대 액션 바 개편</span></div></div>
           <p class="text-xs leading-relaxed">사용자 실기기 제보에 따라 <b>큰 계획 등 타 메뉴 이용 중에도 하단 가계부 탭이 비정상적으로 항상 활성화(강제 하이라이트)</b>되던 <code>companion.css</code> 스타일 오버라이드 버그를 완벽히 척결했습니다. 이제 가계부 탭은 사용자가 실제 선택했을 때만 정확히 활성화됩니다. 또한 예산 편집창에서 실수로 통화 삭제 버튼을 터치하여 지갑이 지워지는 사고를 원천 방지하기 위해, <b>모든 통화 삭제 시 전용 확인 팝업 모달(<code>modal-confirm-delete</code>)</b>을 띄워 재확인 후 안전하게 삭제하도록 강화했습니다. 아울러 각 통화 카드에 개별 휴지통 아이콘이 완비됨에 따라 하단 버튼 바의 중복된 통화 삭제 버튼을 정리하고 <b>[+ 통화 추가], [✕ 취소], [✓ 저장] 3대 직관적 액션 바</b>로 간결하게 재구성했습니다.</p>
-          <div class="text-[10px] text-stone-400 dark:text-stone-500 pt-1 border-t border-emerald-500/20 flex items-center justify-between"><span>📅 2026-09-12 릴리즈</span><span class="font-mono">st-shell-v1.5.4</span></div>
+          <div class="text-[10px] text-stone-400 dark:text-stone-500 pt-1 border-t border-stone-200 dark:border-stone-800 flex items-center justify-between"><span>📅 2026-09-12 릴리즈</span><span class="font-mono">st-shell-v1.5.4</span></div>
         </div>
 
         <!-- v1.5.3 -->
@@ -3884,7 +3912,7 @@
     window.showToast = showToast;
 
     // 앱 버전 및 글로벌 네임스페이스 (Sulsul-Travel Invariant Rule R-10, R-11, R-12, R-13, R-14, R-15)
-    const APP_VER = '1.5.4';
+    const APP_VER = '1.5.5';
 
     // ══════════════════════════════════════════
     // [Two-Tone Theme System] 라이트 그레이 & 딥 블랙 테마 엔진
@@ -7237,6 +7265,23 @@
     function openActivePlanBlock() { const block = getActivePlanBlock(); if (block) showPlanBlockDetail(block.id, { pushHistory: false }); }
     function openActivePlanBlockEdit() { const block = getActivePlanBlock(); if (block) openPlanBlockEdit(block); }
 
+    function setPlanBlockStatus(status) {
+      const statusMap = {
+        draft: '초안',
+        review: '함께 검토 중',
+        confirmed: '확정',
+        completed: '여행 완료'
+      };
+      const sel = document.getElementById('plan-block-edit-status');
+      if (sel) sel.value = status;
+      const desc = document.getElementById('plan-block-status-desc');
+      if (desc) desc.innerText = statusMap[status] ? `${statusMap[status]} 적용됨` : '';
+      document.querySelectorAll('#plan-block-status-chips .plan-status-pill').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.status === status);
+      });
+    }
+    window.setPlanBlockStatus = setPlanBlockStatus;
+
     function openPlanBlockEdit(block) {
       document.getElementById('plan-block-edit-id').value = block.id;
       document.getElementById('plan-block-edit-title').value = block.title || '';
@@ -7249,7 +7294,7 @@
       document.getElementById('plan-block-edit-lodging').value = block.lodging || '';
       document.getElementById('plan-block-edit-priorities').value = block.priorities.join('\n');
       document.getElementById('plan-block-edit-notes').value = block.notes || '';
-      document.getElementById('plan-block-edit-status').value = block.status || 'draft';
+      setPlanBlockStatus(block.status || 'draft');
       document.getElementById('modal-plan-block-edit').dataset.snapshot = planBlockEditFormSnapshot();
       openModal('modal-plan-block-edit');
     }
@@ -9310,6 +9355,17 @@
           modalActiveCurrencies.push(code);
         }
         renderInitialFundsList();
+      }
+
+      // If expense modal is open, immediately refresh its currency chips and select the new currency!
+      const expModal = document.getElementById('modal-expense');
+      if (expModal && !expModal.classList.contains('sheet-closed')) {
+        if (typeof renderExpenseCurrencyChips === 'function') {
+          renderExpenseCurrencyChips(code);
+        }
+        if (typeof selectExpenseCurrency === 'function') {
+          selectExpenseCurrency(code);
+        }
       }
     }
     window.selectAddCurrency = selectAddCurrency;
@@ -12490,36 +12546,106 @@ ${JSON.stringify(snapshotDays)}`;
       renderExpenseCategoryGrid();
       renderExpensePhotos();
 
-      // 여행 목적지 통화 자동 감지 및 선택
+      // 여행 목적지 및 보유 통화 자동 감지 및 1-터치 칩 렌더링 (v1.5.5)
       const trip = getActiveTrip();
+      let initCurr = 'KRW';
       if (trip) {
-        let destCurr = trip.currency;
-        if (!destCurr && trip.countries?.length) {
+        if (trip.currency && CURRENCY_INFO[trip.currency]) {
+          initCurr = trip.currency;
+        } else if (Array.isArray(trip.activeCurrencies) && trip.activeCurrencies.length > 0) {
+          initCurr = trip.activeCurrencies[0];
+        } else if (trip.countries?.length) {
           const cInfo = resolveCountryInfo(trip.countries[0]);
-          if (cInfo && cInfo.currency) destCurr = cInfo.currency;
+          if (cInfo && cInfo.currency) initCurr = cInfo.currency;
         }
-        if (!destCurr && isSouthAmericaTrip(trip)) destCurr = 'USD';
-        if (!destCurr && isYunnanTrip(trip)) destCurr = 'CNY';
-        if (destCurr) {
-          const currSelect = document.getElementById('exp-form-curr');
-          if (currSelect) {
-            let exists = [...currSelect.options].some(o => o.value === destCurr);
-            if (!exists) {
-              const opt = document.createElement('option');
-              opt.value = destCurr;
-              opt.textContent = `${destCurr} (${destCurr})`;
-              currSelect.appendChild(opt);
-            }
-            currSelect.value = destCurr;
-          }
-        }
+        if (!initCurr && isSouthAmericaTrip(trip)) initCurr = 'USD';
+        if (!initCurr && isYunnanTrip(trip)) initCurr = 'CNY';
       }
 
+      renderExpenseCurrencyChips(initCurr);
       updateExpenseInlineKrwPreview();
       updateExpensePaymentSourceOptions();
       openModal('modal-expense');
     }
     window.openAddExpenseModal = openAddExpenseModal;
+
+    function renderExpenseCurrencyChips(targetCurr) {
+      const trip = getActiveTrip();
+      if (!trip) return;
+      const walletData = calculateTripWallets(trip);
+      let currs = (walletData.activeCurrencies && walletData.activeCurrencies.length > 0)
+        ? walletData.activeCurrencies.slice()
+        : ['KRW'];
+
+      if (trip.currency && !currs.includes(trip.currency)) {
+        currs.unshift(trip.currency);
+      }
+
+      let activeCurr = targetCurr;
+      if (!activeCurr) {
+        const selectEl = document.getElementById('exp-form-curr');
+        activeCurr = (selectEl && selectEl.value) ? selectEl.value : currs[0];
+      }
+      if (!currs.includes(activeCurr)) {
+        currs.push(activeCurr);
+      }
+
+      // 1. Sync hidden select for 100% backward compatibility & tests
+      const currSelect = document.getElementById('exp-form-curr');
+      if (currSelect) {
+        currSelect.innerHTML = currs.map(c => {
+          const info = CURRENCY_INFO[c] || { name: c, symbol: c };
+          return `<option value="${c}">${c} (${info.symbol || c})</option>`;
+        }).join('');
+        currSelect.value = activeCurr;
+      }
+
+      // 2. Update amount header badge
+      const badge = document.getElementById('exp-form-curr-badge');
+      if (badge) {
+        const info = CURRENCY_INFO[activeCurr] || { name: activeCurr, symbol: activeCurr, flag: '🌐' };
+        badge.innerText = `${info.flag || ''} ${activeCurr} (${info.symbol || activeCurr})`;
+      }
+
+      // 3. Render 1-touch chips
+      const container = document.getElementById('exp-form-curr-chips');
+      if (container) {
+        let html = currs.map(c => {
+          const info = CURRENCY_INFO[c] || { name: c, flag: '🌐', symbol: c };
+          const isSel = (c === activeCurr);
+          return `
+            <button type="button" onclick="selectExpenseCurrency('${c}')" class="exp-curr-chip ${isSel ? 'active' : ''}">
+              <span>${info.flag || ''}</span>
+              <span>${c}</span>
+              <span class="text-[9px] opacity-80">(${info.symbol || c})</span>
+            </button>
+          `;
+        }).join('');
+
+        // "+ 다른 통화" button
+        html += `
+          <button type="button" onclick="openAddCurrencyModal()" class="exp-curr-chip exp-curr-chip-add" title="68개국 전세계 통화 검색 및 추가">
+            <i class="fa-solid fa-plus text-[9px]"></i>
+            <span>다른 통화</span>
+          </button>
+        `;
+        container.innerHTML = html;
+      }
+
+      const descEl = document.getElementById('exp-form-curr-active-desc');
+      if (descEl) {
+        const info = CURRENCY_INFO[activeCurr] || { name: activeCurr };
+        descEl.innerText = `${activeCurr} (${info.name || ''}) 적용됨`;
+      }
+    }
+    window.renderExpenseCurrencyChips = renderExpenseCurrencyChips;
+
+    function selectExpenseCurrency(curr) {
+      if (!curr) return;
+      renderExpenseCurrencyChips(curr);
+      onExpenseAmountOrCurrChange();
+    }
+    window.selectExpenseCurrency = selectExpenseCurrency;
 
     function updateExpensePaymentSourceOptions() {
       const currSelect = document.getElementById('exp-form-curr');
@@ -12536,13 +12662,23 @@ ${JSON.stringify(snapshotDays)}`;
         const w = walletData.wallets[curr];
         const isDec = (curr !== 'JPY' && curr !== 'VND' && curr !== 'CLP');
         const balStr = w ? `${w.symbol}${w.balance.toLocaleString(undefined, { minimumFractionDigits: isDec ? 2 : 0, maximumFractionDigits: 2 })}` : '0';
-        const flag = CURRENCY_INFO[curr]?.flag || '💶';
-        options.push(`<option value="wallet_curr" selected>${flag} [${curr} 지갑] 잔액에서 차감 (현재: ${balStr})</option>`);
+        const flag = CURRENCY_INFO[curr]?.flag || '💵';
+        options.push({
+          value: 'wallet_curr',
+          icon: flag,
+          title: `[${curr} 지갑] 잔액에서 차감`,
+          sub: `현재 보유 잔액: ${balStr}`
+        });
 
         // Option 2: 한국 신용카드 / KRW 원화 차감
         const krwW = walletData.wallets['KRW'];
         const krwBalStr = krwW ? `₩${krwW.balance.toLocaleString()}` : '₩0';
-        options.push(`<option value="wallet_krw">💳 [한국 카드/원화] KRW 잔액 차감/청구 (원화잔액: ${krwBalStr})</option>`);
+        options.push({
+          value: 'wallet_krw',
+          icon: '💳',
+          title: '[한국 신용카드 / 원화] 결제·청구',
+          sub: `원화 잔액: ${krwBalStr}`
+        });
 
         // Option 3: Other active foreign wallets
         walletData.activeCurrencies.forEach(c => {
@@ -12550,24 +12686,89 @@ ${JSON.stringify(snapshotDays)}`;
             const ow = walletData.wallets[c];
             const owDec = (c !== 'JPY' && c !== 'VND' && c !== 'CLP');
             const obalStr = ow ? `${ow.symbol}${ow.balance.toLocaleString(undefined, { minimumFractionDigits: owDec ? 2 : 0, maximumFractionDigits: 2 })}` : '0';
-            options.push(`<option value="wallet_${c}">🌐 [${c} 지갑] 잔액 차감 (잔액: ${obalStr})</option>`);
+            const oflag = CURRENCY_INFO[c]?.flag || '🌐';
+            options.push({
+              value: `wallet_${c}`,
+              icon: oflag,
+              title: `[${c} 지갑] 잔액에서 차감`,
+              sub: `보유 잔액: ${obalStr}`
+            });
           }
         });
 
         // Option 4: 단순 기록
-        options.push(`<option value="none">📝 단순 기록 (지갑 잔액 미차감)</option>`);
+        options.push({
+          value: 'none',
+          icon: '📝',
+          title: '단순 기록 (지갑 잔액 미차감)',
+          sub: '지출 통계에만 집계'
+        });
       } else {
         // KRW 결제
         const krwW = walletData.wallets['KRW'];
         const krwBalStr = krwW ? `₩${krwW.balance.toLocaleString()}` : '₩0';
-        options.push(`<option value="wallet_krw" selected>🇰🇷 [KRW 원화 지갑] 잔액에서 차감 (현재: ${krwBalStr})</option>`);
-        options.push(`<option value="none">📝 단순 기록 (지갑 잔액 미차감)</option>`);
+        options.push({
+          value: 'wallet_krw',
+          icon: '💳',
+          title: '[KRW 원화 지갑 / 한국 카드] 결제',
+          sub: `원화 잔액: ${krwBalStr}`
+        });
+        options.push({
+          value: 'none',
+          icon: '📝',
+          title: '단순 기록 (지갑 잔액 미차감)',
+          sub: '지출 통계에만 집계'
+        });
       }
 
-      sourceSelect.innerHTML = options.join('');
+      const prevVal = sourceSelect.value;
+      sourceSelect.innerHTML = options.map(opt => `<option value="${opt.value}">${opt.title}</option>`).join('');
+      const defaultVal = (prevVal && options.some(o => o.value === prevVal)) ? prevVal : options[0].value;
+      sourceSelect.value = defaultVal;
+
+      renderExpensePaymentSourceCards(options, defaultVal);
       onExpensePaymentSourceChange();
     }
     window.updateExpensePaymentSourceOptions = updateExpensePaymentSourceOptions;
+
+    function renderExpensePaymentSourceCards(options, selectedVal) {
+      const container = document.getElementById('exp-form-wallet-cards');
+      if (!container) return;
+
+      container.innerHTML = options.map(opt => {
+        const isSel = (opt.value === selectedVal);
+        return `
+          <div onclick="selectExpensePaymentSource('${opt.value}')" class="exp-wallet-card ${isSel ? 'active' : ''}">
+            <div class="flex items-center gap-2.5 min-w-0">
+              <span class="text-base shrink-0">${opt.icon}</span>
+              <div class="min-w-0">
+                <div class="text-xs font-bold text-stone-900 dark:text-stone-100 truncate">${opt.title}</div>
+                <div class="text-[10px] text-stone-500 dark:text-stone-400 font-mono">${opt.sub}</div>
+              </div>
+            </div>
+            <div class="exp-wallet-card-radio">
+              ${isSel ? '<div class="exp-wallet-card-radio-dot"></div>' : ''}
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      const badge = document.getElementById('exp-form-wallet-active-badge');
+      if (badge) {
+        const selOpt = options.find(o => o.value === selectedVal);
+        badge.innerText = selOpt ? selOpt.title.split(']')[0].replace('[', '') : '';
+      }
+    }
+
+    function selectExpensePaymentSource(val) {
+      const sourceSelect = document.getElementById('exp-form-payment-source');
+      if (sourceSelect) {
+        sourceSelect.value = val;
+      }
+      const cards = document.querySelectorAll('.exp-wallet-card');
+      updateExpensePaymentSourceOptions();
+    }
+    window.selectExpensePaymentSource = selectExpensePaymentSource;
 
     function onExpensePaymentSourceChange() {
       const sourceSelect = document.getElementById('exp-form-payment-source');

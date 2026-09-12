@@ -692,3 +692,122 @@ button:focus-visible, summary:focus-visible, a:focus-visible { outline:3px solid
   opacity: 0.9;
   filter: brightness(1.15);
 }
+
+/* ══════════════════════════════════════════════════════════════
+   v1.5.5 Mobile-First Zero-Select Chips & Wallet Cards System
+   ══════════════════════════════════════════════════════════════ */
+.exp-curr-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 6px 11px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 700;
+  background: var(--surface2);
+  color: var(--ink2);
+  border: 1px solid var(--line);
+  transition: all 0.18s ease;
+  cursor: pointer;
+  white-space: nowrap;
+  user-select: none;
+  flex-shrink: 0;
+}
+.exp-curr-chip:hover {
+  background: var(--surface3);
+  color: var(--ink);
+  border-color: var(--line2);
+}
+.exp-curr-chip.active {
+  background: linear-gradient(135deg, #f59e0b, #d97706) !important;
+  color: #0b0c0e !important;
+  border-color: #b45309 !important;
+  box-shadow: 0 2px 8px rgba(217, 119, 6, 0.3) !important;
+  font-weight: 900 !important;
+}
+.exp-curr-chip.active * {
+  color: #0b0c0e !important;
+}
+.exp-curr-chip-add {
+  border-style: dashed !important;
+  background: transparent !important;
+  color: #0284c7 !important;
+  border-color: #38bdf8 !important;
+}
+:root[data-theme="dark"] .exp-curr-chip-add {
+  color: #38bdf8 !important;
+  border-color: rgba(56, 189, 248, 0.4) !important;
+}
+
+/* Wallet Selection Card */
+.exp-wallet-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 10px 12px;
+  border-radius: 14px;
+  background: var(--surface);
+  border: 1.5px solid var(--line);
+  transition: all 0.18s ease;
+  cursor: pointer;
+  user-select: none;
+}
+.exp-wallet-card:hover {
+  border-color: var(--line2);
+  background: var(--surface2);
+}
+.exp-wallet-card.active {
+  background: rgba(245, 158, 11, 0.08) !important;
+  border-color: #f59e0b !important;
+  box-shadow: 0 0 0 1px #f59e0b, 0 2px 10px rgba(245, 158, 11, 0.15) !important;
+}
+:root[data-theme="dark"] .exp-wallet-card.active {
+  background: rgba(245, 158, 11, 0.12) !important;
+  border-color: #f59e0b !important;
+}
+.exp-wallet-card-radio {
+  width: 16px;
+  height: 16px;
+  border-radius: 9999px;
+  border: 2px solid var(--line2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: all 0.15s ease;
+}
+.exp-wallet-card.active .exp-wallet-card-radio {
+  border-color: #f59e0b;
+  background: #f59e0b;
+}
+.exp-wallet-card-radio-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 9999px;
+  background: #ffffff;
+}
+:root[data-theme="dark"] .exp-wallet-card-radio-dot {
+  background: #0b0c0e;
+}
+
+/* Plan block status segmented pills (v1.5.5) */
+.plan-status-pill {
+  background: transparent;
+  color: var(--ink3, #94a3b8);
+  border: 1px solid transparent;
+  transition: all 0.18s ease;
+  cursor: pointer;
+  user-select: none;
+}
+.plan-status-pill:hover {
+  filter: brightness(1.1);
+  color: var(--ink, #1e293b);
+}
+.plan-status-pill.active {
+  background: linear-gradient(135deg, #f59e0b, #d97706) !important;
+  color: #0b0c0e !important;
+  font-weight: 800 !important;
+  box-shadow: 0 2px 8px rgba(245, 158, 11, 0.3) !important;
+  border-color: #b45309 !important;
+}
