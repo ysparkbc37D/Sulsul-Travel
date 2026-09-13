@@ -117,9 +117,9 @@ test('mobile travel notebook presentation is bundled and protected from CDN regr
   assert.match(companionCss, /min-height:44px/);
   assert.match(utilitiesCss, /\.flex/);
   for (const asset of [
-    'css/utilities.css?v=1.7.5',
-    'css/companion.css?v=1.7.5',
-    'js/presentation/companion-ui.js?v=1.7.5',
+    'css/utilities.css?v=1.7.6',
+    'css/companion.css?v=1.7.6',
+    'js/presentation/companion-ui.js?v=1.7.6',
     'vendor/fontawesome/css/all.min.css',
     'vendor/leaflet/leaflet.js',
     'vendor/leaflet/images/marker-icon-2x.png',
@@ -250,12 +250,44 @@ test('unified sulsul-chip design system & high contrast WCAG AAA compliance supp
   assert.match(html, /sulsul-chip-badge/);
 });
 
+test('draft studio destination editor & receipt camera capture supported (v1.7.6)', () => {
+  // 1. Receipt camera capture inputs with capture="environment"
+  assert.match(html, /id=["']exp-tab-receipt-camera["'][^>]*capture=["']environment["']/);
+  assert.match(html, /id=["']exp-receipt-camera["'][^>]*capture=["']environment["']/);
+  assert.match(html, /id=["']exp-tab-receipt-file["']/);
+  assert.match(html, /id=["']exp-receipt-file["']/);
+
+  // 2. Receipt translation and international currency
+  assert.match(html, /itemSummary/);
+  assert.match(html, /한국어로 번역/);
+
+  // 3. Draft Studio destination editor Card 1 components
+  assert.match(html, /id=["']draft-tab-reg-all["']/);
+  assert.match(html, /id=["']draft-studio-search-input["']/);
+  assert.match(html, /id=["']draft-studio-country-chips["']/);
+  assert.match(html, /id=["']draft-studio-selected-destinations-board["']/);
+  assert.match(html, /id=["']draft-studio-countries-container["']/);
+
+  // 4. Draft Studio destination editor JS engine
+  assert.match(html, /function setDraftStudioRegionFilter\(/);
+  assert.match(html, /function handleDraftStudioSearch\(/);
+  assert.match(html, /function renderDraftStudioCountryChips\(/);
+  assert.match(html, /function renderDraftStudioSelectedBoard\(/);
+  assert.match(html, /function toggleDraftStudioCountry\(/);
+  assert.match(html, /function toggleDraftStudioCity\(/);
+  assert.match(html, /function addCustomDraftStudioCity\(/);
+  assert.match(html, /function recalcDraftStudioHubs\(/);
+
+  // 5. Companion UI button renamed to '초안 편집'
+  assert.match(companion, /초안 편집/);
+});
+
 test('release version is synchronized', () => {
   const app = html.match(/const APP_VER\s*=\s*'([^']+)'/)?.[1];
   const worker = sw.match(/const V\s*=\s*'st-shell-v([^']+)'/)?.[1];
   const release = changelog.match(/## \[v([^\]]+)\]/)?.[1];
   const chronicleRelease = chronicle.match(/^### \[실록 \d+호\].*\(v([^\)]+)\)$/m)?.[1];
-  assert.equal(app, '1.7.5');
+  assert.equal(app, '1.7.6');
   assert.equal(worker, app);
   assert.equal(release, app);
   assert.equal(chronicleRelease, app);

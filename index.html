@@ -17,14 +17,14 @@
   </script>
 
   <!-- PWA Meta & Icons -->
-  <link rel="manifest" href="manifest.webmanifest?v=1.7.5">
+  <link rel="manifest" href="manifest.webmanifest?v=1.7.6">
   <meta name="theme-color" content="#F7F5F0">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
-  <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192-v115.png?v=1.7.5">
-  <link rel="icon" type="image/png" sizes="32x32" href="favicon.png?v=1.7.5">
+  <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192-v115.png?v=1.7.6">
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon.png?v=1.7.6">
   <link rel="shortcut icon" href="favicon.ico">
-  <link rel="apple-touch-icon" sizes="180x180" href="icons/apple-touch-icon-v115.png?v=1.7.5">
+  <link rel="apple-touch-icon" sizes="180x180" href="icons/apple-touch-icon-v115.png?v=1.7.6">
 
   <!-- Google Fonts: Great Vibes, Dancing Script (Cursive Calligraphy), Cormorant Garamond, Noto Serif KR, Playfair Display -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -32,7 +32,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Great+Vibes&family=Cormorant+Garamond:wght@600;700;800&family=Noto+Serif+KR:wght@500;600;700;900&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
 
   <!-- Local Utilities Bundle (CDN fallback & tailwind utilities) -->
-  <link rel="stylesheet" href="css/utilities.css?v=1.7.5">
+  <link rel="stylesheet" href="css/utilities.css?v=1.7.6">
   <link rel="stylesheet" href="vendor/fontawesome/css/all.min.css">
 
   <!-- Leaflet Map CSS & JS -->
@@ -1188,8 +1188,8 @@
     }
   </style>
 
-  <link rel="stylesheet" href="css/companion.css?v=1.7.5">
-  <script src="js/presentation/companion-ui.js?v=1.7.5"></script>
+  <link rel="stylesheet" href="css/companion.css?v=1.7.6">
+  <script src="js/presentation/companion-ui.js?v=1.7.6"></script>
 
   <!-- Knowledge Base Seed & Destination Knowledge Packs (DKP) -->
   <script src="kb-travel.js"></script>
@@ -1218,8 +1218,8 @@
 
       <!-- 우측 액션 클러스터 (버전 알약 -> 원형 통계 -> 원형 설정 -> 다크그린 캡슐 추가) -->
       <div class="flex items-center gap-1 sm:gap-1.5 shrink-0">
-        <!-- 1. 버전 배지 버튼 (v1.7.5 - 클릭 시 버전 이력) -->
-        <button id="app-ver-badge" onclick="event.stopPropagation(); openVersionHistoryModal()" class="h-7 sm:h-8 px-2 sm:px-2.5 rounded-full theme-card-subtle flex items-center justify-center font-mono text-[10px] sm:text-[11px] font-bold text-[#a2601b] dark:text-[#d4af37] shadow-xs hover:border-amber-500/60 transition cursor-pointer shrink-0" title="버전 업데이트 기록 보기 (클릭)">v1.7.5</button>
+        <!-- 1. 버전 배지 버튼 (v1.7.6 - 클릭 시 버전 이력) -->
+        <button id="app-ver-badge" onclick="event.stopPropagation(); openVersionHistoryModal()" class="h-7 sm:h-8 px-2 sm:px-2.5 rounded-full theme-card-subtle flex items-center justify-center font-mono text-[10px] sm:text-[11px] font-bold text-[#a2601b] dark:text-[#d4af37] shadow-xs hover:border-amber-500/60 transition cursor-pointer shrink-0" title="버전 업데이트 기록 보기 (클릭)">v1.7.6</button>
 
         <!-- 2. 통계 버튼 (📊 - 원형 버튼) -->
         <button id="header-btn-analytics" onclick="openAnalyticsModal('lifetime')" class="companion-header-analytics w-7 h-7 sm:w-8 sm:h-8 rounded-full theme-card-subtle flex items-center justify-center text-[#a2601b] dark:text-[#d4af37] hover:border-amber-500/60 transition shadow-xs cursor-pointer shrink-0" title="술술 여행 통계 대시보드">
@@ -1784,11 +1784,20 @@
               <i class="fa-solid fa-chart-pie text-[11px]"></i>
               <span>사용내역 통계</span>
             </button>
-            <label class="px-3.5 py-2 bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-slate-950 font-black rounded-xl text-xs flex items-center gap-1.5 shadow-md cursor-pointer transition">
-              <i class="fa-solid fa-camera text-[11px]"></i>
-              <span>영수증 AI 스캔</span>
-              <input type="file" id="exp-tab-receipt-file" accept="image/*" class="hidden" onchange="handleReceiptScan(event)">
-            </label>
+            <!-- 영수증 AI 스캔 2원화: 📸 즉시 촬영 & 🖼️ 앨범 선택 -->
+            <div class="inline-flex items-center rounded-xl bg-gradient-to-r from-emerald-500 to-teal-600 p-0.5 shadow-md shrink-0">
+              <label class="px-2.5 sm:px-3 py-1.5 text-slate-950 font-black text-xs flex items-center gap-1 cursor-pointer hover:bg-white/20 rounded-lg transition" title="카메라로 영수증 즉시 촬영">
+                <i class="fa-solid fa-camera text-[11px]"></i>
+                <span class="whitespace-nowrap">즉시 촬영</span>
+                <input type="file" id="exp-tab-receipt-camera" accept="image/*" capture="environment" class="hidden" onchange="handleReceiptScan(event)">
+              </label>
+              <span class="w-px h-3.5 bg-slate-950/25"></span>
+              <label class="px-2 sm:px-2.5 py-1.5 text-slate-950 font-bold text-xs flex items-center gap-1 cursor-pointer hover:bg-white/20 rounded-lg transition" title="사진 보관함/파일에서 영수증 선택">
+                <i class="fa-regular fa-image text-[11px]"></i>
+                <span class="whitespace-nowrap">앨범</span>
+                <input type="file" id="exp-tab-receipt-file" accept="image/*" class="hidden" onchange="handleReceiptScan(event)">
+              </label>
+            </div>
             <button onclick="openAddExpenseModal()" class="px-4 py-2 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-slate-950 font-black rounded-xl text-xs flex items-center gap-1.5 shadow-md transition cursor-pointer">
               <i class="fa-solid fa-plus text-[10px]"></i> 새 지출 기록
             </button>
@@ -2550,11 +2559,18 @@
             <p class="text-[10px] exp-subtext truncate">Gemini Vision AI가 상호명, 금액, 통화, 일자를 즉시 판독합니다.</p>
           </div>
         </div>
-        <label class="exp-scan-btn px-3 py-1.5 rounded-xl font-black text-xs cursor-pointer shrink-0 transition flex items-center gap-1.5 shadow">
-          <i class="fa-solid fa-camera text-[10px]"></i>
-          <span>스캔하기</span>
-          <input type="file" id="exp-receipt-file" accept="image/*" class="hidden" onchange="handleReceiptScan(event)">
-        </label>
+        <div class="flex items-center gap-1.5 shrink-0">
+          <label class="exp-scan-btn px-2.5 sm:px-3 py-1.5 rounded-xl font-black text-xs cursor-pointer shrink-0 transition flex items-center gap-1 shadow" title="카메라로 영수증 즉시 촬영">
+            <i class="fa-solid fa-camera text-[10px]"></i>
+            <span class="whitespace-nowrap">즉시 촬영</span>
+            <input type="file" id="exp-receipt-camera" accept="image/*" capture="environment" class="hidden" onchange="handleReceiptScan(event)">
+          </label>
+          <label class="px-2.5 py-1.5 rounded-xl bg-stone-100 dark:bg-stone-800 hover:bg-stone-200 dark:hover:bg-stone-700 text-stone-700 dark:text-stone-300 font-bold text-xs cursor-pointer shrink-0 transition flex items-center gap-1 border border-stone-200 dark:border-stone-700 shadow-xs" title="사진 보관함/파일에서 선택">
+            <i class="fa-regular fa-image text-[10px]"></i>
+            <span class="whitespace-nowrap">앨범</span>
+            <input type="file" id="exp-receipt-file" accept="image/*" class="hidden" onchange="handleReceiptScan(event)">
+          </label>
+        </div>
       </div>
 
       <!-- AI 스캔 로딩 인디케이터 -->
@@ -3005,10 +3021,10 @@
           <span class="w-9 h-9 rounded-xl bg-amber-500/20 text-amber-500 flex items-center justify-center text-base shrink-0 shadow-sm">✨</span>
           <div class="min-w-0">
             <h3 class="text-sm sm:text-base font-black text-[#1c1917] dark:text-white flex items-center gap-1.5 truncate">
-              <span>새 일정 초안 설계 & 여행 설정 스튜디오</span>
+              <span>여행 설정 & 일정 초안 편집 스튜디오</span>
             </h3>
             <p id="draft-studio-subtitle" class="text-[11px] text-[#78716c] dark:text-stone-400 truncate">
-              목적지, 체류 기간, 거점별 일수를 편집하고 최적의 새 초안을 만듭니다.
+              목적지와 방문 도시, 기간, 거점별 일수를 자유롭게 편집하고 저장하거나 새 초안을 생성합니다.
             </p>
           </div>
         </div>
@@ -3018,18 +3034,55 @@
       <!-- 스크롤 가능한 본문 -->
       <div class="flex-1 overflow-y-auto space-y-3.5 pr-1 text-xs" id="draft-studio-scroll-body">
         
-        <!-- [Card 1] 🌍 방문 국가 & 거점 도시 관리 -->
-        <div class="p-3 sm:p-3.5 rounded-xl bg-[#faf8f5] dark:bg-[#16181d] border border-[#e8e2d5] dark:border-stone-800 space-y-2.5 shadow-sm">
-          <div class="flex items-center justify-between">
-            <span class="font-bold text-[#1c1917] dark:text-stone-200 flex items-center gap-1.5">
-              <i class="fa-solid fa-earth-asia text-[#a2601b] dark:text-amber-400"></i>
-              <span>방문 국가 및 주요 도시</span>
+        <!-- [Card 1] 🌍 방문 국가 & 거점 도시 편집 (전 세계 140+개국 필터 & 방문 도시 보드) -->
+        <div class="p-3 sm:p-3.5 rounded-xl bg-[#faf8f5] dark:bg-[#16181d] border border-[#e8e2d5] dark:border-stone-800 space-y-3 shadow-sm w-full max-w-full overflow-hidden">
+          <div class="flex items-center justify-between gap-2 flex-wrap sm:flex-nowrap">
+            <span class="text-xs font-black text-[#1c1917] dark:text-stone-200 flex items-center gap-1.5 min-w-0">
+              <i class="fa-solid fa-earth-americas text-[#a2601b] dark:text-[#d4af37] shrink-0"></i>
+              <span class="truncate">방문 국가 및 주요 도시 편집</span>
             </span>
-            <span class="text-[10px] text-stone-400 font-medium" id="draft-studio-country-count">선택된 여행지</span>
+            <span class="text-[10px] font-bold text-amber-700 dark:text-amber-300 bg-amber-50 dark:bg-amber-950/50 px-2 py-0.5 rounded-full border border-amber-200 dark:border-amber-800 shrink-0" id="draft-studio-country-count">선택된 여행지</span>
           </div>
-          <div id="draft-studio-countries-container" class="space-y-2">
-            <!-- Dynamically rendered country cards & city chips -->
+
+          <!-- 대륙 빠른 필터 탭 바 (독립 가로 스크롤 격리, 8대 권역 완비) -->
+          <div class="w-full max-w-full overflow-hidden">
+            <div class="flex items-center gap-1 overflow-x-auto pb-1 scrollbar-none text-[11px] w-full max-w-full">
+              <button type="button" onclick="setDraftStudioRegionFilter('all')" id="draft-tab-reg-all" class="sulsul-chip is-active shrink-0">전체</button>
+              <button type="button" onclick="setDraftStudioRegionFilter('east_asia')" id="draft-tab-reg-east_asia" class="sulsul-chip shrink-0">동아시아</button>
+              <button type="button" onclick="setDraftStudioRegionFilter('southeast_asia')" id="draft-tab-reg-southeast_asia" class="sulsul-chip shrink-0">동남아</button>
+              <button type="button" onclick="setDraftStudioRegionFilter('south_central_asia')" id="draft-tab-reg-south_central_asia" class="sulsul-chip shrink-0">남·중앙아시아</button>
+              <button type="button" onclick="setDraftStudioRegionFilter('europe')" id="draft-tab-reg-europe" class="sulsul-chip shrink-0">유럽</button>
+              <button type="button" onclick="setDraftStudioRegionFilter('americas')" id="draft-tab-reg-americas" class="sulsul-chip shrink-0">미주</button>
+              <button type="button" onclick="setDraftStudioRegionFilter('oceania')" id="draft-tab-reg-oceania" class="sulsul-chip shrink-0">대양주</button>
+              <button type="button" onclick="setDraftStudioRegionFilter('mideast_africa')" id="draft-tab-reg-mideast_africa" class="sulsul-chip shrink-0">중동·아프리카</button>
+            </div>
           </div>
+
+          <!-- 국가/도시 통합 실시간 검색창 -->
+          <div class="relative w-full min-w-0">
+            <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-stone-400 text-xs"></i>
+            <input type="text" id="draft-studio-search-input" oninput="handleDraftStudioSearch(this.value)" placeholder="국가명이나 도시명을 검색하세요 (예: 스페인, 파리, 도쿄, 방콕...)" class="w-full min-w-0 pl-8 pr-8 py-2 bg-white dark:bg-stone-900 border border-[#e8e2d5] dark:border-stone-700 rounded-xl text-xs text-[#1c1917] dark:text-[#ededed] focus:outline-none focus:border-[#a2601b]">
+            <button type="button" onclick="clearDraftStudioSearch()" id="btn-clear-draft-search" class="hidden absolute right-2.5 top-1/2 -translate-y-1/2 text-stone-400 hover:text-stone-600 dark:hover:text-stone-200 text-xs p-1 cursor-pointer">✕</button>
+          </div>
+
+          <!-- 국가 선택 칩 영역 (실시간 필터 결과) -->
+          <div class="space-y-1 w-full max-w-full overflow-hidden">
+            <div class="flex items-center justify-between text-[11px] text-stone-500 dark:text-stone-400 px-0.5">
+              <span>국가 추가/제외 (복수 선택 가능):</span>
+              <span id="draft-studio-country-count-badge" class="text-[10px] font-bold"></span>
+            </div>
+            <div id="draft-studio-country-chips" class="flex flex-wrap gap-1.5 max-h-32 overflow-y-auto p-1.5 bg-white dark:bg-stone-900 rounded-xl border border-[#e8e2d5] dark:border-stone-800 w-full max-w-full">
+              <!-- renderDraftStudioCountryChips()에 의해 동적 렌더링 -->
+            </div>
+          </div>
+
+          <!-- 선택된 국가별 방문 도시 멀티 셀렉터 보드 (선택 시 동적 확장) -->
+          <div id="draft-studio-selected-destinations-board" class="space-y-2.5 pt-1 w-full max-w-full overflow-hidden">
+            <!-- renderDraftStudioSelectedBoard()에 의해 동적 렌더링 -->
+          </div>
+
+          <!-- 기존 호환용 숨김 엘리먼트 (R-10 Invariant 보존) -->
+          <div id="draft-studio-countries-container" class="hidden"></div>
         </div>
 
         <!-- [Card 2] 🗓️ 여행 기간 & 거점별 체류 일수 배분 (Macro Day Allocation) -->
@@ -4082,14 +4135,34 @@
 
       <!-- 버전 목록 스크롤 영역 (독립 스크롤 컨테이너로 Flexbox 압축 버그 영구 척결) -->
       <div class="overflow-y-auto flex-1 min-h-0 space-y-3.5 pr-1.5 custom-scrollbar">
-        <!-- v1.7.5 (Current) -->
+        <!-- v1.7.6 (Current) -->
         <div class="p-4 rounded-2xl border-2 border-emerald-500/50 space-y-2.5 bg-emerald-500/5 dark:bg-emerald-500/10 shrink-0 shadow-sm">
           <div class="flex items-center justify-between gap-2">
             <div class="flex items-center gap-2 min-w-0">
-              <span class="px-2.5 py-0.5 rounded-lg bg-emerald-500 text-black font-black text-xs shadow-sm shrink-0">v1.7.5</span>
-              <span class="text-xs font-black text-[#1c1917] dark:text-white truncate">술술 통합 셀렉션 칩 & 탭 디자인 시스템 (.sulsul-chip) 도입 및 3대 테마(Modern/Lightgray/Deepblack) 고대비 가독성·시인성(WCAG AAA) 전면 확립</span>
+              <span class="px-2.5 py-0.5 rounded-lg bg-emerald-500 text-black font-black text-xs shadow-sm shrink-0">v1.7.6</span>
+              <span class="text-xs font-black text-[#1c1917] dark:text-white truncate">여행 설정 & 초안 편집 스튜디오(방문 국가·도시 자유 편집 & 거점 자동 동기화) 전면 개편 및 가계부 카메라 즉시 촬영(140+개국 통화 & 한글 번역) 탑재</span>
             </div>
             <span class="companion-status shrink-0">최신 버전</span>
+          </div>
+          <p class="text-xs leading-relaxed text-[#44403c] dark:text-stone-300">
+            1) <b>'새 초안 만들기' → '초안 편집'(여행 설정 & 초안 편집 스튜디오) 전면 개편</b>: 기존의 읽기 전용 국가/도시 카드에서 탈피하여, '새 여행 만들기'와 동일한 8대 권역 빠른 필터 탭(전체/동아시아/동남아/남·중앙아시아/유럽/미주/대양주/중동·아프리카), 140+개국 칩, 방문 도시 보드, 소도시 직접 추가 인풋을 완전 이식했습니다. 기존 여행에 등록된 모든 설정값(국가, 도시, 기간, 시간, 컨셉, 프롬프트)을 완벽 보존한 상태로 열리며, 국가/도시 수정 시 거점별 체류 일수 배분(Hub Allocation)과 실시간 양방향 동기화됩니다.<br>
+            2) <b>데이터 안전 분기 유지 ([설정만 저장] vs [새 초안 생성하기])</b>: 기존 일정을 안전하게 유지하면서 여행 메타데이터(국가/도시/기간/거점)만 업데이트하는 <code>[설정만 저장]</code>과 새 동선으로 전체 일정을 다시 빌드하는 <code>[새 초안 생성하기]</code> 2단계 선택권을 완벽 보존했습니다.<br>
+            3) <b>가계부 영수증 스캔 카메라 즉시 촬영 (<code>capture="environment"</code>) 2원화</b>: 가계부 탭 액션 바와 지출 모달 스캔 배너 양쪽에 <code>[📸 즉시 촬영]</code>과 <code>[🖼️ 앨범]</code> 버튼을 분리 제공하여, 복잡한 사진 보관함 탐색 없이 모바일 후면 카메라를 1터치로 즉시 띄워 영수증을 촬영할 수 있습니다.<br>
+            4) <b>Gemini Vision AI 외국어 영수증 한글 자동 번역 & 글로벌 140+개국 통화 지원</b>: 영수증 내 외국어(일본어, 베트남어, 태국어, 중국어, 영어, 스페인어, 프랑스어, 이탈리아어 등) 상호명과 구매 품목 내역을 한국인 여행자가 직관적으로 이해할 수 있는 친절한 한국어로 자동 번역하여 지출 제목과 메모에 자동 기록합니다. 또한 기존 6개국 통화 제한을 완전히 해제하여 전 세계 140+개국 통화(THB, VND, JPY, EUR, USD, KRW 등)를 100% 인식·적용합니다.
+          </p>
+          <div class="text-[10px] text-stone-400 dark:text-stone-500 pt-1 border-t border-emerald-500/20 flex items-center justify-between">
+            <span>📅 2026-09-13 릴리즈</span>
+            <span class="font-mono">st-shell-v1.7.6</span>
+          </div>
+        </div>
+
+        <!-- v1.7.5 -->
+        <div class="p-4 rounded-2xl bg-stone-50 dark:bg-stone-900/50 border border-stone-200 dark:border-stone-800 space-y-2.5 shadow-sm relative overflow-hidden shrink-0">
+          <div class="flex items-center justify-between gap-2">
+            <div class="flex items-center gap-2 min-w-0">
+              <span class="px-2 py-0.5 rounded-lg bg-stone-200 dark:bg-stone-800 text-stone-800 dark:text-stone-200 font-bold text-[11px] font-mono shrink-0">v1.7.5</span>
+              <span class="text-xs font-bold text-[#1c1917] dark:text-stone-200 truncate">술술 통합 셀렉션 칩 & 탭 디자인 시스템 (.sulsul-chip) 도입 및 3대 테마(Modern/Lightgray/Deepblack) 고대비 가독성·시인성(WCAG AAA) 전면 확립</span>
+            </div>
           </div>
           <p class="text-xs leading-relaxed text-[#44403c] dark:text-stone-300">
             1) <b>권역 탭 흰색 글씨 시인성 저하 버그 원천 척결</b>: CSS <code>[class*="bg-amber-"]</code> 와일드카드 선택자가 <code>dark:bg-amber-500</code> 및 <code>hover:bg-amber-50</code>을 오인 매칭하여 라이트 모드에서 버튼 배경을 연노랑(<code>#fef3c7</code>)으로 강제 덮어쓰고 흰색 글씨(<code>text-white</code>)가 남아 발생하던 치명적 대비 붕괴 현상을 의사 클래스 격리 규칙(<code>:not([class*="dark:"]):not([class*="hover:"])</code>)과 <code>.sulsul-chip</code> 전용 고대비 규칙으로 완벽히 근절했습니다.<br>
@@ -4100,7 +4173,7 @@
             &nbsp;&nbsp;• <b>딥 블랙(Deep Black)</b>: 비활성 시 흑요석 서피스(<code>#1A1D24</code>/<code>#D6D3D1</code>), 활성 시 샴페인 골드 그라디언트(<code>linear-gradient(135deg, #D4AF37, #B8860B)</code>) 배경에 칠흑 피치 블랙(<code>#080B12</code>) 텍스트 (대비비 10.5:1).<br>
             4) <b>방문 도시 순서 뱃지(.sulsul-chip-badge) & 시간 프리셋 버튼 톤앤매너 정돈</b>: 방문 도시 칩 내 순서 뱃지(1, 2, 3...)에 테마별 일체형 원형 알약을 적용하고, 도착/종료 시간 프리셋 버튼의 무분별한 앰버/로즈 호버를 중립 스톤 서피스로 정돈하여 시각적 파편화를 종결했습니다.
           </p>
-          <div class="text-[10px] text-stone-400 dark:text-stone-500 pt-1 border-t border-emerald-500/20 flex items-center justify-between">
+          <div class="text-[10px] text-stone-400 dark:text-stone-500 pt-1 border-t border-stone-200 dark:border-stone-800 flex items-center justify-between">
             <span>📅 2026-09-13 릴리즈</span>
             <span class="font-mono">st-shell-v1.7.5</span>
           </div>
@@ -4827,7 +4900,7 @@
 
       <!-- 모달 푸터 -->
       <div class="pt-3 border-t border-[#e8e2d5] dark:border-stone-800 flex items-center justify-between shrink-0">
-        <span class="text-[11px] text-stone-400 dark:text-stone-500 font-mono">Sulsul Travel Engine v1.7.5</span>
+        <span class="text-[11px] text-stone-400 dark:text-stone-500 font-mono">Sulsul Travel Engine v1.7.6</span>
         <button onclick="closeModal('modal-version-history')" class="px-4 py-2 rounded-xl bg-[#faf8f5] dark:bg-stone-800 hover:bg-[#f0ece1] dark:hover:bg-stone-700 border border-[#e8e2d5] dark:border-stone-700 text-[#1c1917] dark:text-[#ededed] text-xs font-bold transition cursor-pointer shadow-sm">
           닫기
         </button>
@@ -5174,7 +5247,7 @@
     window.showToast = showToast;
 
     // 앱 버전 및 글로벌 네임스페이스 (Sulsul-Travel Invariant Rule R-10, R-11, R-12, R-13, R-14, R-15, R-16)
-    const APP_VER = '1.7.5';
+    const APP_VER = '1.7.6';
 
     // ══════════════════════════════════════════
     // [3-Way Theme System] 모던, 라이트그레이, 딥 블랙 테마 엔진 (v1.6.7)
@@ -16049,6 +16122,40 @@ ${JSON.stringify(snapshotDays)}`;
       }
     }
 
+    function validateAiDraftPayload(payload, job) {
+      if (job.kind === 'journal') return typeof payload?.text === 'string' && payload.text.length > 0 && payload.text.length <= 20000;
+      if (job.kind === 'receipt') {
+        const receipt = payload?.receipt;
+        return receipt && typeof receipt.merchant === 'string' && receipt.merchant.trim() && receipt.merchant.length <= 200 &&
+          Number.isFinite(Number(receipt.amount)) && Number(receipt.amount) > 0 && Number(receipt.amount) <= 1000000000000 &&
+          (typeof receipt.currency === 'string' && receipt.currency.trim().length >= 2) &&
+          ['food', 'flight', 'lodging', 'tour', 'shopping', 'etc', 'meal', 'transport', 'snack', 'drink', 'beverage', 'rental'].includes(receipt.category) &&
+          (!receipt.date || /^\d{4}-\d{2}-\d{2}$/.test(receipt.date));
+      }
+      return Array.isArray(payload?.days) && payload.days.length > 0 &&
+        payload.days.every(d => Array.isArray(d.spots) && d.spots.length >= 0);
+    }
+
+    function createEmptyTripDraft(trip) {
+      return {
+        days: trip.days.map(d => ({
+          dayNum: d.dayNum,
+          date: d.date,
+          theme: d.theme || '',
+          spots: []
+        }))
+      };
+    }
+
+    function normalizeDraftDaysOrder(trip, replacePlanStructure = false) {
+      trip.days.sort((a, b) => Number(a.dayNum || 0) - Number(b.dayNum || 0));
+      if (replacePlanStructure) {
+        trip.days.forEach(day => delete day.planBlockId);
+        trip.planBlockMeta = {};
+        ensurePlanBlockStructure(trip);
+      }
+    }
+
     async function applyAiDraftPayload(job) {
       if (job.kind === 'receipt') {
         const trip = State.trips.find(item => item.id === job.tripId);
@@ -16058,9 +16165,29 @@ ${JSON.stringify(snapshotDays)}`;
         const currEl = document.getElementById('exp-form-curr');
         const amountEl = document.getElementById('exp-form-amount');
         const dateEl = document.getElementById('exp-form-date');
+        const memoEl = document.getElementById('exp-form-memo');
 
-        if (titleEl && receipt.merchant) titleEl.value = receipt.merchant;
-        if (currEl && receipt.currency) currEl.value = receipt.currency;
+        // 한글 번역된 상호명 및 품목 내역 자동 반영
+        if (titleEl) {
+          if (receipt.merchant && receipt.itemSummary) {
+            titleEl.value = `${receipt.merchant} · ${receipt.itemSummary}`;
+          } else if (receipt.merchant) {
+            titleEl.value = receipt.merchant;
+          } else if (receipt.itemSummary) {
+            titleEl.value = receipt.itemSummary;
+          }
+        }
+        if (memoEl && receipt.itemSummary) {
+          memoEl.value = `[품목 내역] ${receipt.itemSummary}`;
+        }
+        if (currEl && receipt.currency) {
+          const matchedCurr = receipt.currency.toUpperCase();
+          if (typeof setExpenseCurrency === 'function') {
+            setExpenseCurrency(matchedCurr);
+          } else {
+            currEl.value = matchedCurr;
+          }
+        }
         if (amountEl && receipt.amount) amountEl.value = receipt.amount;
         if (dateEl && receipt.date) dateEl.value = receipt.date;
 
@@ -16072,13 +16199,13 @@ ${JSON.stringify(snapshotDays)}`;
         if (typeof updateExpenseInlineKrwPreview === 'function') updateExpenseInlineKrwPreview();
         if (typeof updateExpensePaymentSourceOptions === 'function') updateExpensePaymentSourceOptions();
 
-        [titleEl, currEl, amountEl, dateEl].forEach(el => {
+        [titleEl, currEl, amountEl, dateEl, memoEl].forEach(el => {
           if (el) {
             el.classList.add('ring-2', 'ring-emerald-400');
             setTimeout(() => el.classList.remove('ring-2', 'ring-emerald-400'), 2500);
           }
         });
-        showToast('✨ Vision AI가 영수증 정보를 자동 입력했습니다! (대표 사진 자동 등록)');
+        showToast(`🧾 영수증 스캔 완료: ${receipt.merchant || '지출'} (한글 번역 적용됨)`);
         return 'applied';
       }
 
@@ -16258,9 +16385,14 @@ ${JSON.stringify(snapshotDays)}`;
       }
     }
 
-    // [v1.7.4] 새 초안 설계 & 여행 설정 편집 스튜디오 엔진 (Trip Blueprint & AI Draft Studio)
+    // [v1.7.6] 여행 설정 & 초안 편집 스튜디오 엔진 (Trip Blueprint & AI Draft Studio)
     let draftStudioState = {
       tripId: null,
+      selectedRegion: 'all',
+      searchQuery: '',
+      selectedCountries: [],
+      selectedCities: {},
+      customCities: {},
       countries: [],
       cities: [],
       startDate: '',
@@ -16278,8 +16410,99 @@ ${JSON.stringify(snapshotDays)}`;
       if (!trip) return;
 
       draftStudioState.tripId = trip.id;
-      draftStudioState.countries = Array.isArray(trip.countries) ? trip.countries.slice() : [];
-      draftStudioState.cities = Array.isArray(trip.cities) ? trip.cities.slice() : [];
+      draftStudioState.selectedRegion = 'all';
+      draftStudioState.searchQuery = '';
+      draftStudioState.selectedCountries = [];
+      draftStudioState.selectedCities = {};
+      draftStudioState.customCities = {};
+
+      const rawCountries = Array.isArray(trip.countries) ? trip.countries : (trip.countries ? [trip.countries] : []);
+      rawCountries.forEach(item => {
+        if (!item || typeof item !== 'string') return;
+        const clean = item.replace(/[()[\]]/g, ' ').trim().split(/\s+/)[0];
+        let country = (typeof COUNTRY_DATABASE !== 'undefined')
+          ? COUNTRY_DATABASE.find(c => c.name === clean || c.name === item || c.code === clean || c.code === item || (c.aliases || []).includes(clean.toLowerCase()) || (c.aliases || []).includes(item.toLowerCase()))
+          : null;
+        if (country) {
+          if (!draftStudioState.selectedCountries.includes(country.code)) {
+            draftStudioState.selectedCountries.push(country.code);
+          }
+        } else if (clean) {
+          const customCode = 'CUST_' + Math.random().toString(36).substring(2, 7).toUpperCase();
+          const newCountry = {
+            name: clean,
+            code: customCode,
+            flag: '🌐',
+            currency: 'USD',
+            currName: '달러',
+            symbol: '$',
+            region: 'all',
+            popularCities: [clean],
+            aliases: [clean.toLowerCase()]
+          };
+          if (typeof COUNTRY_DATABASE !== 'undefined') COUNTRY_DATABASE.push(newCountry);
+          draftStudioState.selectedCountries.push(customCode);
+        }
+      });
+
+      draftStudioState.selectedCountries.forEach(code => {
+        draftStudioState.selectedCities[code] = [];
+        draftStudioState.customCities[code] = [];
+      });
+
+      if (Array.isArray(trip.hubAllocations) && trip.hubAllocations.length > 0) {
+        trip.hubAllocations.forEach(hub => {
+          const cMatch = (typeof COUNTRY_DATABASE !== 'undefined')
+            ? COUNTRY_DATABASE.find(c => c.code === hub.code || c.name === hub.name || c.name === hub.country)
+            : null;
+          const targetCode = cMatch ? cMatch.code : draftStudioState.selectedCountries[0];
+          if (targetCode && Array.isArray(hub.cities)) {
+            if (!draftStudioState.selectedCities[targetCode]) draftStudioState.selectedCities[targetCode] = [];
+            hub.cities.forEach(city => {
+              if (!draftStudioState.selectedCities[targetCode].includes(city)) {
+                draftStudioState.selectedCities[targetCode].push(city);
+              }
+            });
+          }
+        });
+      }
+
+      const rawTripCities = Array.isArray(trip.cities) ? trip.cities : (trip.cities ? [trip.cities] : []);
+      rawTripCities.forEach(cityName => {
+        if (!cityName || typeof cityName !== 'string') return;
+        const clName = cleanCityName(cityName);
+        let matchedCode = null;
+        for (const code of draftStudioState.selectedCountries) {
+          const cObj = (typeof COUNTRY_DATABASE !== 'undefined') ? COUNTRY_DATABASE.find(c => c.code === code) : null;
+          if (cObj && ((cObj.popularCities || []).some(pc => pc.includes(clName) || clName.includes(pc)) || (draftStudioState.customCities[code] || []).includes(cityName))) {
+            matchedCode = code;
+            break;
+          }
+        }
+        if (!matchedCode && draftStudioState.selectedCountries.length > 0) {
+          matchedCode = draftStudioState.selectedCountries[0];
+        }
+        if (matchedCode) {
+          if (!draftStudioState.selectedCities[matchedCode]) draftStudioState.selectedCities[matchedCode] = [];
+          if (!draftStudioState.selectedCities[matchedCode].includes(cityName)) {
+            draftStudioState.selectedCities[matchedCode].push(cityName);
+          }
+        }
+      });
+
+      draftStudioState.selectedCountries.forEach(code => {
+        const cObj = (typeof COUNTRY_DATABASE !== 'undefined') ? COUNTRY_DATABASE.find(c => c.code === code) : null;
+        const popular = cObj ? (cObj.popularCities || []) : [];
+        (draftStudioState.selectedCities[code] || []).forEach(ct => {
+          if (!popular.includes(ct)) {
+            if (!draftStudioState.customCities[code]) draftStudioState.customCities[code] = [];
+            if (!draftStudioState.customCities[code].includes(ct)) {
+              draftStudioState.customCities[code].push(ct);
+            }
+          }
+        });
+      });
+
       draftStudioState.startDate = trip.startDate || '';
       draftStudioState.endDate = trip.endDate || '';
       draftStudioState.durationDays = Math.max(1, Number(trip.durationDays || trip.days?.length || 5));
@@ -16288,16 +16511,26 @@ ${JSON.stringify(snapshotDays)}`;
       draftStudioState.concepts = Array.isArray(trip.concepts) ? trip.concepts.slice() : [];
       draftStudioState.prompt = trip.wishlist || '';
 
-      if (trip.hubAllocations && Array.isArray(trip.hubAllocations) && trip.hubAllocations.length > 0) {
+      if (trip.hubAllocations && Array.isArray(trip.hubAllocations) && trip.hubAllocations.length > 0 && trip.hubAllocations.length === draftStudioState.selectedCountries.length) {
         draftStudioState.hubs = trip.hubAllocations.map(h => ({ ...h }));
       } else {
-        draftStudioState.hubs = allocateTripHubs(draftStudioState.countries, draftStudioState.cities, draftStudioState.durationDays);
+        recalcDraftStudioHubs();
       }
 
       const subtitleEl = document.getElementById('draft-studio-subtitle');
-      if (subtitleEl) subtitleEl.textContent = `${trip.title || trip.name || '여행'} · ${draftStudioState.countries.join(', ') || '여행지'}`;
+      if (subtitleEl) {
+        const cNames = draftStudioState.selectedCountries.map(code => COUNTRY_DATABASE.find(c => c.code === code)?.name || code);
+        subtitleEl.textContent = `${trip.title || trip.name || '여행'} · ${cNames.join(', ') || '여행지'}`;
+      }
 
-      renderDraftStudioCountries();
+      const searchInput = document.getElementById('draft-studio-search-input');
+      if (searchInput) searchInput.value = '';
+      const clearBtn = document.getElementById('btn-clear-draft-search');
+      if (clearBtn) clearBtn.classList.add('hidden');
+
+      setDraftStudioRegionFilter('all');
+      renderDraftStudioCountryChips();
+      renderDraftStudioSelectedBoard();
 
       const startEl = document.getElementById('draft-studio-start-date');
       const endEl = document.getElementById('draft-studio-end-date');
@@ -16311,6 +16544,7 @@ ${JSON.stringify(snapshotDays)}`;
       if (arrEl) arrEl.value = draftStudioState.arrivalTime;
       if (depEl) depEl.value = draftStudioState.departureTime;
 
+      renderDraftStudioCountries();
       renderDraftStudioHubSteppers();
       renderDraftStudioConcepts();
 
@@ -16321,14 +16555,319 @@ ${JSON.stringify(snapshotDays)}`;
     }
     window.openTripDraftStudio = openTripDraftStudio;
 
+    function setDraftStudioRegionFilter(regionKey = 'all') {
+      draftStudioState.selectedRegion = regionKey;
+      const regions = ['all', 'east_asia', 'southeast_asia', 'south_central_asia', 'europe', 'americas', 'oceania', 'mideast_africa'];
+      regions.forEach(r => {
+        const tab = document.getElementById(`draft-tab-reg-${r}`);
+        if (tab) {
+          if (r === regionKey) {
+            tab.className = 'sulsul-chip is-active shrink-0';
+          } else {
+            tab.className = 'sulsul-chip shrink-0';
+          }
+        }
+      });
+      renderDraftStudioCountryChips();
+    }
+    window.setDraftStudioRegionFilter = setDraftStudioRegionFilter;
+
+    function handleDraftStudioSearch(val) {
+      draftStudioState.searchQuery = (val || '').trim().toLowerCase();
+      const clearBtn = document.getElementById('btn-clear-draft-search');
+      if (clearBtn) {
+        if (draftStudioState.searchQuery) clearBtn.classList.remove('hidden');
+        else clearBtn.classList.add('hidden');
+      }
+      renderDraftStudioCountryChips();
+    }
+    window.handleDraftStudioSearch = handleDraftStudioSearch;
+
+    function clearDraftStudioSearch() {
+      const searchInput = document.getElementById('draft-studio-search-input');
+      if (searchInput) searchInput.value = '';
+      handleDraftStudioSearch('');
+    }
+    window.clearDraftStudioSearch = clearDraftStudioSearch;
+
+    function renderDraftStudioCountryChips() {
+      const container = document.getElementById('draft-studio-country-chips');
+      const badge = document.getElementById('draft-studio-country-count-badge');
+      if (!container) return;
+
+      const q = draftStudioState.searchQuery;
+      const reg = draftStudioState.selectedRegion;
+
+      const filtered = COUNTRY_DATABASE.filter(c => {
+        const matchesReg = (reg === 'all' || c.region === reg || (reg === 'other' && (c.region === 'oceania' || c.region === 'mideast_africa')));
+        if (!matchesReg) return false;
+        if (!q) return true;
+        return c.name.toLowerCase().includes(q) ||
+          c.code.toLowerCase().includes(q) ||
+          c.currency.toLowerCase().includes(q) ||
+          (c.aliases || []).some(a => a.toLowerCase().includes(q)) ||
+          (c.popularCities || []).some(city => city.toLowerCase().includes(q));
+      });
+
+      if (badge) badge.innerText = `${filtered.length}개국 검색됨`;
+
+      if (filtered.length === 0) {
+        container.innerHTML = `
+          <div class="py-3 px-3 text-[11px] text-stone-500 dark:text-stone-400 w-full text-center space-y-2">
+            <div>'${escapeHtml(q)}' 검색 결과가 데이터베이스에 없습니다.</div>
+            <button type="button" onclick="addCustomDraftStudioCountry('${escapeHtml(q)}')" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-amber-500 hover:bg-amber-600 text-black font-bold text-xs shadow-sm cursor-pointer transition">
+              <span>🌐</span>
+              <span>'${escapeHtml(q)}' 직접 여행지로 추가</span>
+            </button>
+          </div>
+        `;
+        return;
+      }
+
+      let chipsHtml = filtered.map(c => {
+        const isSelected = draftStudioState.selectedCountries.includes(c.code);
+        const activeClass = isSelected ? 'is-active' : '';
+
+        return `
+          <button type="button" onclick="toggleDraftStudioCountry('${c.code}')" class="sulsul-chip ${activeClass}">
+            <span class="text-sm">${c.flag}</span>
+            <span>${escapeHtml(c.name)}</span>
+            <span class="text-[10px] opacity-70">${c.currency}</span>
+            ${isSelected ? '<span class="text-[10px] ml-0.5">✓</span>' : ''}
+          </button>
+        `;
+      }).join('');
+
+      if (q) {
+        chipsHtml += `
+          <button type="button" onclick="addCustomDraftStudioCountry('${escapeHtml(q)}')" class="sulsul-chip border-dashed font-bold shrink-0" title="직접 입력하여 새 여행지 추가">
+            <span>🌐</span>
+            <span>+ '${escapeHtml(q)}' 직접 추가</span>
+          </button>
+        `;
+      }
+
+      container.innerHTML = chipsHtml;
+    }
+    window.renderDraftStudioCountryChips = renderDraftStudioCountryChips;
+
+    function addCustomDraftStudioCountry(rawName) {
+      if (!rawName || typeof rawName !== 'string') return;
+      const name = rawName.trim();
+      if (!name) return;
+
+      let existing = COUNTRY_DATABASE.find(c => c.name.toLowerCase() === name.toLowerCase() || (c.aliases || []).some(a => a.toLowerCase() === name.toLowerCase()));
+      if (existing) {
+        if (!draftStudioState.selectedCountries.includes(existing.code)) {
+          toggleDraftStudioCountry(existing.code);
+        }
+        if (typeof showToast === 'function') showToast(`'${existing.name}' 여행지가 선택되었습니다.`);
+        return;
+      }
+
+      const customCode = 'CUST_' + Math.random().toString(36).substring(2, 7).toUpperCase();
+      const newCountry = {
+        name: name,
+        code: customCode,
+        flag: '🌐',
+        currency: 'USD',
+        currName: '달러',
+        symbol: '$',
+        region: 'all',
+        popularCities: [name],
+        aliases: [name.toLowerCase()]
+      };
+      COUNTRY_DATABASE.push(newCountry);
+
+      toggleDraftStudioCountry(customCode);
+      if (!draftStudioState.selectedCities[customCode]) {
+        draftStudioState.selectedCities[customCode] = [];
+      }
+      if (!draftStudioState.selectedCities[customCode].includes(name)) {
+        draftStudioState.selectedCities[customCode].push(name);
+      }
+      renderDraftStudioCountryChips();
+      renderDraftStudioSelectedBoard();
+      recalcDraftStudioHubs();
+      if (typeof showToast === 'function') showToast(`'${name}'(이)가 여행지로 추가되었습니다.`);
+    }
+    window.addCustomDraftStudioCountry = addCustomDraftStudioCountry;
+
+    function toggleDraftStudioCountry(countryCode) {
+      const country = COUNTRY_DATABASE.find(c => c.code === countryCode);
+      if (!country) return;
+
+      const idx = draftStudioState.selectedCountries.indexOf(countryCode);
+      if (idx >= 0) {
+        draftStudioState.selectedCountries.splice(idx, 1);
+        delete draftStudioState.selectedCities[countryCode];
+        delete draftStudioState.customCities[countryCode];
+      } else {
+        draftStudioState.selectedCountries.push(countryCode);
+        draftStudioState.selectedCities[countryCode] = [];
+      }
+
+      renderDraftStudioCountryChips();
+      renderDraftStudioSelectedBoard();
+      recalcDraftStudioHubs();
+    }
+    window.toggleDraftStudioCountry = toggleDraftStudioCountry;
+
+    function renderDraftStudioSelectedBoard() {
+      const container = document.getElementById('draft-studio-selected-destinations-board');
+      if (!container) return;
+
+      if (!draftStudioState.selectedCountries || draftStudioState.selectedCountries.length === 0) {
+        container.innerHTML = `
+          <div class="p-3 rounded-xl bg-white dark:bg-stone-900 border border-dashed border-amber-400/60 dark:border-amber-700/50 text-center space-y-1">
+            <div class="text-amber-600 dark:text-amber-400 font-bold text-xs flex items-center justify-center gap-1.5">
+              <i class="fa-solid fa-map-location-dot"></i>
+              <span>방문할 국가를 위에서 선택해 주세요</span>
+            </div>
+            <p class="text-[10px] text-stone-500 dark:text-stone-400">
+              국가를 선택하면 예상 방문 도시를 복수로 선택하고 일정 거점을 조율할 수 있습니다.
+            </p>
+          </div>
+        `;
+        return;
+      }
+
+      let globalCityOrder = 0;
+      container.innerHTML = draftStudioState.selectedCountries.map(code => {
+        const country = COUNTRY_DATABASE.find(c => c.code === code);
+        if (!country) return '';
+
+        const selectedCities = draftStudioState.selectedCities[code] || [];
+        const customCities = draftStudioState.customCities[code] || [];
+        const allAvailableCities = [...(country.popularCities || []), ...customCities];
+        const uniqueCities = allAvailableCities.filter((city, index, self) => self.indexOf(city) === index);
+
+        return `
+          <div class="p-3 rounded-xl bg-white dark:bg-stone-900 border border-[#e8e2d5] dark:border-stone-800 space-y-2.5 shadow-sm w-full max-w-full overflow-hidden">
+            <!-- 국가 헤더 바 -->
+            <div class="flex items-center justify-between gap-2 border-b border-[#e8e2d5]/60 dark:border-stone-800 pb-2 flex-wrap sm:flex-nowrap">
+              <div class="flex items-center gap-1.5 min-w-0 flex-wrap">
+                <span class="text-base sm:text-lg shrink-0">${country.flag}</span>
+                <span class="font-black text-xs text-[#1c1917] dark:text-stone-100 truncate">${escapeHtml(country.name)}</span>
+                <span class="text-[10px] font-bold px-1.5 py-0.5 rounded-md bg-stone-100 dark:bg-stone-800 text-stone-600 dark:text-stone-300 border border-stone-200 dark:border-stone-700 shrink-0">
+                  ${country.currency} (${country.currName || ''})
+                </span>
+                <span class="text-[10px] text-emerald-600 dark:text-emerald-400 font-bold shrink-0">
+                  ${selectedCities.length}개 도시 선택됨
+                </span>
+              </div>
+              <button type="button" onclick="toggleDraftStudioCountry('${country.code}')" class="text-stone-400 hover:text-rose-500 text-xs px-1.5 py-0.5 rounded transition cursor-pointer shrink-0 ml-auto" title="이 국가 제외">
+                ✕ 제외
+              </button>
+            </div>
+
+            <!-- 도시 복수 선택 칩 보드 -->
+            <div class="space-y-1.5 w-full">
+              <div class="text-[11px] text-[#44403c] dark:text-stone-300 font-bold flex items-center justify-between">
+                <span>예상 방문 도시 (터치하여 선택/해제, 순서대로 거점 반영):</span>
+              </div>
+              <div class="flex flex-wrap gap-1.5 pt-0.5 w-full">
+                ${uniqueCities.map(city => {
+                  const cityIdx = selectedCities.indexOf(city);
+                  const isCitySelected = (cityIdx >= 0);
+                  if (isCitySelected) globalCityOrder++;
+
+                  const chipClass = isCitySelected ? 'is-active' : '';
+
+                  return `
+                    <button type="button" data-draft-city-chip="true" onclick="toggleDraftStudioCity('${country.code}', '${escapeHtml(city)}')" class="sulsul-chip ${chipClass}">
+                      ${isCitySelected ? `<span class="sulsul-chip-badge">${cityIdx + 1}</span>` : '<span class="text-stone-400 text-[10px]">+</span>'}
+                      <span>${escapeHtml(city)}</span>
+                    </button>
+                  `;
+                }).join('')}
+              </div>
+            </div>
+
+            <!-- 소도시/근교 직접 추가 입력창 -->
+            <div class="flex items-center gap-1.5 pt-1 w-full min-w-0">
+              <div class="relative flex-1 min-w-0">
+                <input type="text" id="input-draft-custom-city-${country.code}" placeholder="목록 외 소도시/근교 (예: 론다)" class="w-full min-w-0 px-2.5 py-1.5 bg-[#faf8f5] dark:bg-stone-800 border border-[#e8e2d5] dark:border-stone-700 rounded-lg text-xs text-[#1c1917] dark:text-[#ededed] placeholder-stone-400 focus:outline-none focus:border-[#a2601b]" onkeydown="if(event.key==='Enter'){event.preventDefault(); addCustomDraftStudioCity('${country.code}');}">
+              </div>
+              <button type="button" onclick="addCustomDraftStudioCity('${country.code}')" class="px-2.5 sm:px-3 py-1.5 rounded-lg bg-stone-100 dark:bg-stone-800 hover:bg-stone-200 dark:hover:bg-stone-700 text-stone-700 dark:text-stone-200 text-xs font-bold border border-stone-200 dark:border-stone-700 transition cursor-pointer shrink-0 whitespace-nowrap">
+                + 도시 추가
+              </button>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+    window.renderDraftStudioSelectedBoard = renderDraftStudioSelectedBoard;
+
+    function toggleDraftStudioCity(countryCode, cityName) {
+      if (!draftStudioState.selectedCities[countryCode]) {
+        draftStudioState.selectedCities[countryCode] = [];
+      }
+      const list = draftStudioState.selectedCities[countryCode];
+      const idx = list.indexOf(cityName);
+      if (idx >= 0) {
+        list.splice(idx, 1);
+      } else {
+        list.push(cityName);
+      }
+      renderDraftStudioSelectedBoard();
+      recalcDraftStudioHubs();
+    }
+    window.toggleDraftStudioCity = toggleDraftStudioCity;
+
+    function addCustomDraftStudioCity(countryCode) {
+      const input = document.getElementById(`input-draft-custom-city-${countryCode}`);
+      if (!input) return;
+      const val = input.value.trim();
+      if (!val) return;
+
+      if (!draftStudioState.customCities[countryCode]) {
+        draftStudioState.customCities[countryCode] = [];
+      }
+      if (!draftStudioState.customCities[countryCode].includes(val)) {
+        draftStudioState.customCities[countryCode].push(val);
+      }
+      if (!draftStudioState.selectedCities[countryCode]) {
+        draftStudioState.selectedCities[countryCode] = [];
+      }
+      if (!draftStudioState.selectedCities[countryCode].includes(val)) {
+        draftStudioState.selectedCities[countryCode].push(val);
+      }
+
+      input.value = '';
+      renderDraftStudioSelectedBoard();
+      recalcDraftStudioHubs();
+    }
+    window.addCustomDraftStudioCity = addCustomDraftStudioCity;
+
+    function recalcDraftStudioHubs() {
+      const selectedCountryObjs = (draftStudioState.selectedCountries || [])
+        .map(code => COUNTRY_DATABASE.find(c => c.code === code))
+        .filter(Boolean);
+      const countryNames = selectedCountryObjs.map(c => c.name);
+      const allCities = [];
+      (draftStudioState.selectedCountries || []).forEach(code => {
+        (draftStudioState.selectedCities[code] || []).forEach(ct => {
+          if (!allCities.includes(ct)) allCities.push(ct);
+        });
+      });
+
+      draftStudioState.countries = countryNames;
+      draftStudioState.cities = allCities;
+      draftStudioState.hubs = allocateTripHubs(countryNames, allCities, draftStudioState.durationDays);
+      renderDraftStudioCountries();
+      renderDraftStudioHubSteppers();
+    }
+    window.recalcDraftStudioHubs = recalcDraftStudioHubs;
+
     function renderDraftStudioCountries() {
       const container = document.getElementById('draft-studio-countries-container');
       const countEl = document.getElementById('draft-studio-country-count');
-      if (!container) return;
-
+      const numDest = (draftStudioState.selectedCountries || []).length;
       if (countEl) {
-        countEl.textContent = `${draftStudioState.hubs.length}개 거점/국가`;
+        countEl.textContent = `${numDest}개국 선택됨`;
       }
+      if (!container) return;
 
       if (!draftStudioState.hubs.length) {
         container.innerHTML = '<p class="text-stone-400">설정된 국가나 거점이 없습니다.</p>';
@@ -16367,9 +16906,7 @@ ${JSON.stringify(snapshotDays)}`;
         const badgeEl = document.getElementById('draft-studio-total-days-badge');
         if (badgeEl) badgeEl.textContent = `총 ${diff}일간`;
 
-        draftStudioState.hubs = allocateTripHubs(draftStudioState.countries, draftStudioState.cities, diff);
-        renderDraftStudioCountries();
-        renderDraftStudioHubSteppers();
+        recalcDraftStudioHubs();
       }
     }
     window.handleDraftStudioDatesChange = handleDraftStudioDatesChange;
@@ -16431,9 +16968,7 @@ ${JSON.stringify(snapshotDays)}`;
     window.adjustDraftStudioHubDays = adjustDraftStudioHubDays;
 
     function autoBalanceDraftStudioHubs() {
-      draftStudioState.hubs = allocateTripHubs(draftStudioState.countries, draftStudioState.cities, draftStudioState.durationDays);
-      renderDraftStudioCountries();
-      renderDraftStudioHubSteppers();
+      recalcDraftStudioHubs();
     }
     window.autoBalanceDraftStudioHubs = autoBalanceDraftStudioHubs;
 
@@ -16485,6 +17020,19 @@ ${JSON.stringify(snapshotDays)}`;
         draftStudioState.durationDays = sumDays;
       }
 
+      const selectedCountryObjs = (draftStudioState.selectedCountries || [])
+        .map(code => COUNTRY_DATABASE.find(c => c.code === code))
+        .filter(Boolean);
+      const countryNames = selectedCountryObjs.map(c => c.name);
+      const allCities = [];
+      (draftStudioState.selectedCountries || []).forEach(code => {
+        (draftStudioState.selectedCities[code] || []).forEach(ct => {
+          if (!allCities.includes(ct)) allCities.push(ct);
+        });
+      });
+
+      trip.countries = countryNames.length ? countryNames : (trip.countries || []);
+      trip.cities = allCities;
       trip.startDate = document.getElementById('draft-studio-start-date')?.value || trip.startDate;
       trip.endDate = document.getElementById('draft-studio-end-date')?.value || trip.endDate;
       trip.durationDays = draftStudioState.durationDays;
@@ -16497,7 +17045,7 @@ ${JSON.stringify(snapshotDays)}`;
       saveTrips();
       renderActiveTripWorkspace();
       closeModal('modal-ai-trip', true);
-      showToast('✅ 여행 설정값 및 거점 배분이 안전하게 저장되었습니다.');
+      showToast('✅ 여행 설정(국가/도시/기간/거점)이 안전하게 저장되었습니다.');
     }
     window.saveDraftStudioSettingsOnly = saveDraftStudioSettingsOnly;
 
@@ -16509,6 +17057,20 @@ ${JSON.stringify(snapshotDays)}`;
       if (sumDays !== draftStudioState.durationDays) {
         draftStudioState.durationDays = sumDays;
       }
+
+      const selectedCountryObjs = (draftStudioState.selectedCountries || [])
+        .map(code => COUNTRY_DATABASE.find(c => c.code === code))
+        .filter(Boolean);
+      const countryNames = selectedCountryObjs.map(c => c.name);
+      const allCities = [];
+      (draftStudioState.selectedCountries || []).forEach(code => {
+        (draftStudioState.selectedCities[code] || []).forEach(ct => {
+          if (!allCities.includes(ct)) allCities.push(ct);
+        });
+      });
+
+      trip.countries = countryNames.length ? countryNames : (trip.countries || []);
+      trip.cities = allCities;
       trip.startDate = document.getElementById('draft-studio-start-date')?.value || trip.startDate;
       trip.endDate = document.getElementById('draft-studio-end-date')?.value || trip.endDate;
       trip.durationDays = draftStudioState.durationDays;
@@ -17553,8 +18115,9 @@ JSON 배열만 출력하세요. 각 day는 dayNum, title, city, date, spots를 �
     }
 
     function handleReceiptScan(event) {
-      const file = event.target.files[0];
+      const file = event.target?.files?.[0];
       if (!file) return;
+      if (event.target) event.target.value = '';
 
       openModal('modal-expense');
       const loader = document.getElementById('receipt-scan-loading');
@@ -17590,13 +18153,14 @@ JSON 배열만 출력하세요. 각 day는 dayNum, title, city, date, spots를 �
           switchExpenseModalMode('detailed');
           renderExpensePhotos();
 
-          const visionPrompt = `당신은 세계 최고 수준의 여행 영수증 및 입장권 정밀 OCR 전문가입니다.
-제공된 영수증/티켓 사진에서 다음 정보를 정밀 판독하여 오직 순수 JSON 규격으로만 출력하세요:
+          const visionPrompt = `당신은 세계 최고 수준의 글로벌 여행 영수증 및 티켓 정밀 OCR & 한국어 번역 전문가입니다.
+제공된 영수증/티켓 사진에서 다음 정보를 정밀 판독하고, 외국어(일본어, 베트남어, 태국어, 중국어, 영어, 스페인어, 프랑스어, 이탈리아어, 독일어 등)로 된 상호명과 구매 품목 내역을 한국인 여행자가 직관적으로 이해할 수 있는 자연스러운 한국어로 번역하여 오직 순수 JSON 규격으로만 출력하세요:
 {
-  "merchant": "상호명/방문장소명 (한글 또는 영문)",
-  "currency": "USD 또는 KRW 또는 ARS 또는 PEN 또는 BRL 또는 EUR",
-  "amount": 숫자만 (소수점 포함 가능, 쉼표 제외),
-  "category": "food" (식비) 또는 "flight" (항공/교통) 또는 "lodging" (숙박) 또는 "tour" (관광/투어) 또는 "shopping" (쇼핑) 또는 "etc" (기타),
+  "merchant": "상호명/방문장소명 (외국어일 경우 원어와 친절한 한글 번역 병기, 예: '이치란 라멘 (Ichiran)', '콩카페 (Cộng Cà Phê)', '스타벅스 시부야점 (Starbucks)', '빅씨 마트 (Big C)')",
+  "itemSummary": "결제 품목 및 사용 내역의 친절한 한글 번역 요약 (예: '돈코츠 라멘 2그릇 + 반숙란 2개', '코코넛 스무디 커피 2잔 + 크루아상', '사그라다 파밀리아 성인 입장권 2매', '생수 및 망고 간식')",
+  "currency": "영수증에 명시된 통화 코드 (ISO 4217 대문자 3자리, 예: THB, VND, JPY, EUR, USD, KRW, TWD, HKD, GBP, CHF 등 전 세계 통화)",
+  "amount": 총 결제 금액 (숫자만, 소수점 포함 가능, 쉼표 제외),
+  "category": "food" (식비/카페) 또는 "flight" (항공/교통) 또는 "lodging" (숙박) 또는 "tour" (관광/투어/입장권) 또는 "shopping" (쇼핑/마트) 또는 "etc" (기타),
   "date": "YYYY-MM-DD" (영수증에 명시된 경우만, 없으면 빈 문자열)
 }
 반드시 JSON 문자열 외에 아무런 마크다운이나 텍스트를 출력하지 마세요.`;
