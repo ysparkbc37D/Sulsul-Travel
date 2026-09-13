@@ -169,13 +169,9 @@ function scrollToPlanBlock(blockIndex) {
 window.scrollToPlanBlock = scrollToPlanBlock;
 
 function confirmResetAiDraft() {
-  const trip = typeof getActiveTrip === 'function' ? getActiveTrip() : null;
-  const spotCount = (trip?.days || []).flatMap(d => d.spots || []).length;
-  if (spotCount > 0) {
-    const ok = window.confirm(`현재 여행에 ${spotCount}개의 일정이 등록되어 있습니다.\n새로운 AI 초안을 생성하시겠습니까?\n(기존 일정과 병합/검토할 수 있는 제안창이 제공됩니다.)`);
-    if (!ok) return;
-  }
-  if (typeof openModal === 'function') {
+  if (typeof openTripDraftStudio === 'function') {
+    openTripDraftStudio();
+  } else if (typeof openModal === 'function') {
     openModal('modal-ai-trip');
   }
 }

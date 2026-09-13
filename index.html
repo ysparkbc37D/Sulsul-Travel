@@ -17,14 +17,14 @@
   </script>
 
   <!-- PWA Meta & Icons -->
-  <link rel="manifest" href="manifest.webmanifest?v=1.7.3">
+  <link rel="manifest" href="manifest.webmanifest?v=1.7.4">
   <meta name="theme-color" content="#F7F5F0">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
-  <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192-v115.png?v=1.7.3">
-  <link rel="icon" type="image/png" sizes="32x32" href="favicon.png?v=1.7.3">
+  <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192-v115.png?v=1.7.4">
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon.png?v=1.7.4">
   <link rel="shortcut icon" href="favicon.ico">
-  <link rel="apple-touch-icon" sizes="180x180" href="icons/apple-touch-icon-v115.png?v=1.7.3">
+  <link rel="apple-touch-icon" sizes="180x180" href="icons/apple-touch-icon-v115.png?v=1.7.4">
 
   <!-- Google Fonts: Great Vibes, Dancing Script (Cursive Calligraphy), Cormorant Garamond, Noto Serif KR, Playfair Display -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -32,7 +32,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Great+Vibes&family=Cormorant+Garamond:wght@600;700;800&family=Noto+Serif+KR:wght@500;600;700;900&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
 
   <!-- Local Utilities Bundle (CDN fallback & tailwind utilities) -->
-  <link rel="stylesheet" href="css/utilities.css?v=1.7.3">
+  <link rel="stylesheet" href="css/utilities.css?v=1.7.4">
   <link rel="stylesheet" href="vendor/fontawesome/css/all.min.css">
 
   <!-- Leaflet Map CSS & JS -->
@@ -923,6 +923,39 @@
     .gold-marker-pin:hover {
       transform: scale(1.25);
     }
+    /* Sulsul Editorial Footer Styles (v1.7.4) */
+    #hub-sulsul-footer nav {
+      display: flex !important;
+      flex-wrap: wrap !important;
+      align-items: center !important;
+      justify-content: center !important;
+      gap: 8px 18px !important;
+      margin: 6px 0 !important;
+    }
+    #hub-sulsul-footer nav button {
+      display: inline-flex !important;
+      align-items: center !important;
+      padding: 4px 6px !important;
+      text-decoration: underline !important;
+      text-underline-offset: 4px !important;
+      font-size: 12px !important;
+      color: #78716c !important;
+      background: transparent !important;
+      border: none !important;
+      cursor: pointer !important;
+      transition: color 0.15s ease !important;
+    }
+    #hub-sulsul-footer nav button:hover {
+      color: #b45309 !important;
+    }
+    :root.dark #hub-sulsul-footer nav button,
+    [data-theme="deepblack"] #hub-sulsul-footer nav button {
+      color: #a8a29e !important;
+    }
+    :root.dark #hub-sulsul-footer nav button:hover,
+    [data-theme="deepblack"] #hub-sulsul-footer nav button:hover {
+      color: #f59e0b !important;
+    }
     /* Sulsul-Travel Print & PDF Report Layout Styles */
     @media print {
       body {
@@ -984,8 +1017,8 @@
     }
   </style>
 
-  <link rel="stylesheet" href="css/companion.css?v=1.7.3">
-  <script src="js/presentation/companion-ui.js?v=1.7.3"></script>
+  <link rel="stylesheet" href="css/companion.css?v=1.7.4">
+  <script src="js/presentation/companion-ui.js?v=1.7.4"></script>
 
   <!-- Knowledge Base Seed & Destination Knowledge Packs (DKP) -->
   <script src="kb-travel.js"></script>
@@ -1014,8 +1047,8 @@
 
       <!-- 우측 액션 클러스터 (버전 알약 -> 원형 통계 -> 원형 설정 -> 다크그린 캡슐 추가) -->
       <div class="flex items-center gap-1 sm:gap-1.5 shrink-0">
-        <!-- 1. 버전 배지 버튼 (v1.7.3 - 클릭 시 버전 이력) -->
-        <button id="app-ver-badge" onclick="event.stopPropagation(); openVersionHistoryModal()" class="h-7 sm:h-8 px-2 sm:px-2.5 rounded-full theme-card-subtle flex items-center justify-center font-mono text-[10px] sm:text-[11px] font-bold text-[#a2601b] dark:text-[#d4af37] shadow-xs hover:border-amber-500/60 transition cursor-pointer shrink-0" title="버전 업데이트 기록 보기 (클릭)">v1.7.3</button>
+        <!-- 1. 버전 배지 버튼 (v1.7.4 - 클릭 시 버전 이력) -->
+        <button id="app-ver-badge" onclick="event.stopPropagation(); openVersionHistoryModal()" class="h-7 sm:h-8 px-2 sm:px-2.5 rounded-full theme-card-subtle flex items-center justify-center font-mono text-[10px] sm:text-[11px] font-bold text-[#a2601b] dark:text-[#d4af37] shadow-xs hover:border-amber-500/60 transition cursor-pointer shrink-0" title="버전 업데이트 기록 보기 (클릭)">v1.7.4</button>
 
         <!-- 2. 통계 버튼 (📊 - 원형 버튼) -->
         <button id="header-btn-analytics" onclick="openAnalyticsModal('lifetime')" class="companion-header-analytics w-7 h-7 sm:w-8 sm:h-8 rounded-full theme-card-subtle flex items-center justify-center text-[#a2601b] dark:text-[#d4af37] hover:border-amber-500/60 transition shadow-xs cursor-pointer shrink-0" title="술술 여행 통계 대시보드">
@@ -2791,35 +2824,151 @@
     </div>
   </div>
 
-  <!-- AI 일정 추천 모달 -->
+  <!-- AI 일정 추천 모달 & 여행 설정 편집 스튜디오 (v1.7.4) -->
   <div id="modal-ai-trip" class="sheet-container sheet-closed">
     <div class="sheet-scrim" onclick="closeModal('modal-ai-trip')"></div>
-    <div class="sheet-box p-6 sm:p-7 space-y-4">
-      <div class="flex items-center justify-between border-b border-[#1e263c] pb-3">
-        <div class="flex items-center gap-2">
-          <span class="w-8 h-8 rounded-lg bg-amber-500/20 text-amber-400 flex items-center justify-center text-sm">🤖</span>
-          <h3 class="text-base font-black text-white">Gemini AI 스마트 30분 일정 생성</h3>
+    <div class="sheet-box p-5 sm:p-6 space-y-4 max-h-[90vh] flex flex-col w-full max-w-2xl mx-auto">
+      <!-- 헤더 -->
+      <div class="flex items-center justify-between border-b border-[#e8e2d5] dark:border-stone-800 pb-3 shrink-0">
+        <div class="flex items-center gap-2.5 min-w-0">
+          <span class="w-9 h-9 rounded-xl bg-amber-500/20 text-amber-500 flex items-center justify-center text-base shrink-0 shadow-sm">✨</span>
+          <div class="min-w-0">
+            <h3 class="text-sm sm:text-base font-black text-[#1c1917] dark:text-white flex items-center gap-1.5 truncate">
+              <span>새 일정 초안 설계 & 여행 설정 스튜디오</span>
+            </h3>
+            <p id="draft-studio-subtitle" class="text-[11px] text-[#78716c] dark:text-stone-400 truncate">
+              목적지, 체류 기간, 거점별 일수를 편집하고 최적의 새 초안을 만듭니다.
+            </p>
+          </div>
         </div>
-        <button onclick="closeModal('modal-ai-trip')" class="text-slate-400 hover:text-white text-base">✕</button>
+        <button onclick="closeModal('modal-ai-trip')" class="w-8 h-8 rounded-xl hover:bg-stone-200/50 dark:hover:bg-stone-800 text-stone-400 hover:text-stone-600 dark:hover:text-white flex items-center justify-center text-sm transition cursor-pointer shrink-0" title="닫기">✕</button>
       </div>
 
-      <p class="text-xs text-slate-400">설정된 목적지와 여행 스타일에 맞춰 일자별 30분 단위 동선과 필수 스팟을 AI가 자동 기획합니다.</p>
-
-      <div class="space-y-3 text-xs">
-        <div>
-          <label class="font-bold text-slate-300 block mb-1">여행 테마 및 원하는 활동</label>
-          <input type="text" id="ai-trip-prompt" placeholder="예: 미식 투어와 랜드마크 오픈런, 여유로운 카페 탐방 위주" class="w-full px-3 py-2 bg-[#080b12] border border-[#1e263c] rounded-xl text-white focus:outline-none focus:border-amber-500">
+      <!-- 스크롤 가능한 본문 -->
+      <div class="flex-1 overflow-y-auto space-y-3.5 pr-1 text-xs" id="draft-studio-scroll-body">
+        
+        <!-- [Card 1] 🌍 방문 국가 & 거점 도시 관리 -->
+        <div class="p-3 sm:p-3.5 rounded-xl bg-[#faf8f5] dark:bg-[#16181d] border border-[#e8e2d5] dark:border-stone-800 space-y-2.5 shadow-sm">
+          <div class="flex items-center justify-between">
+            <span class="font-bold text-[#1c1917] dark:text-stone-200 flex items-center gap-1.5">
+              <i class="fa-solid fa-earth-asia text-[#a2601b] dark:text-amber-400"></i>
+              <span>방문 국가 및 주요 도시</span>
+            </span>
+            <span class="text-[10px] text-stone-400 font-medium" id="draft-studio-country-count">선택된 여행지</span>
+          </div>
+          <div id="draft-studio-countries-container" class="space-y-2">
+            <!-- Dynamically rendered country cards & city chips -->
+          </div>
         </div>
+
+        <!-- [Card 2] 🗓️ 여행 기간 & 거점별 체류 일수 배분 (Macro Day Allocation) -->
+        <div class="p-3 sm:p-3.5 rounded-xl bg-[#faf8f5] dark:bg-[#16181d] border border-[#e8e2d5] dark:border-stone-800 space-y-2.5 shadow-sm">
+          <div class="flex items-center justify-between">
+            <span class="font-bold text-[#1c1917] dark:text-stone-200 flex items-center gap-1.5">
+              <i class="fa-solid fa-calendar-days text-[#a2601b] dark:text-amber-400"></i>
+              <span>여행 기간 및 거점별 체류 일수 배분</span>
+            </span>
+            <span id="draft-studio-total-days-badge" class="px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-800 dark:text-amber-300 font-bold text-[10px]">총 6일간</span>
+          </div>
+          
+          <div class="grid grid-cols-2 gap-2">
+            <div>
+              <label class="text-[11px] font-semibold text-stone-500 dark:text-stone-400 block mb-1">출발일</label>
+              <input type="date" id="draft-studio-start-date" onchange="handleDraftStudioDatesChange()" class="w-full px-2.5 py-1.5 rounded-lg bg-white dark:bg-[#0f1117] border border-[#e8e2d5] dark:border-stone-700 text-xs text-[#1c1917] dark:text-stone-200 focus:outline-none focus:border-[#a2601b]">
+            </div>
+            <div>
+              <label class="text-[11px] font-semibold text-stone-500 dark:text-stone-400 block mb-1">종료일</label>
+              <input type="date" id="draft-studio-end-date" onchange="handleDraftStudioDatesChange()" class="w-full px-2.5 py-1.5 rounded-lg bg-white dark:bg-[#0f1117] border border-[#e8e2d5] dark:border-stone-700 text-xs text-[#1c1917] dark:text-stone-200 focus:outline-none focus:border-[#a2601b]">
+            </div>
+          </div>
+
+          <div class="grid grid-cols-2 gap-2 pt-1">
+            <div>
+              <label class="text-[11px] font-semibold text-stone-500 dark:text-stone-400 block mb-1">첫날 현지 도착 시간</label>
+              <input type="time" id="draft-studio-arr-time" value="14:00" class="w-full px-2.5 py-1.5 rounded-lg bg-white dark:bg-[#0f1117] border border-[#e8e2d5] dark:border-stone-700 text-xs text-[#1c1917] dark:text-stone-200 focus:outline-none focus:border-[#a2601b]">
+            </div>
+            <div>
+              <label class="text-[11px] font-semibold text-stone-500 dark:text-stone-400 block mb-1">마지막날 귀국 출발 시간</label>
+              <input type="time" id="draft-studio-dep-time" value="17:00" class="w-full px-2.5 py-1.5 rounded-lg bg-white dark:bg-[#0f1117] border border-[#e8e2d5] dark:border-stone-700 text-xs text-[#1c1917] dark:text-stone-200 focus:outline-none focus:border-[#a2601b]">
+            </div>
+          </div>
+
+          <!-- 거점별 일수 배분 스테퍼 리스트 -->
+          <div class="pt-2 border-t border-[#f0ece1] dark:border-stone-800 space-y-2">
+            <div class="flex items-center justify-between text-[11px]">
+              <span class="font-bold text-stone-600 dark:text-stone-300">거점별 체류 일수 (터치하여 조절):</span>
+              <button type="button" onclick="autoBalanceDraftStudioHubs()" class="text-amber-700 dark:text-amber-400 hover:underline font-bold text-[10px] cursor-pointer">
+                <i class="fa-solid fa-scale-balanced mr-1"></i>균등 배분
+              </button>
+            </div>
+            <div id="draft-studio-hub-steppers" class="space-y-1.5">
+              <!-- Dynamically populated via renderDraftStudioHubSteppers() -->
+            </div>
+            <div id="draft-studio-balance-status" class="text-[10px] font-bold text-emerald-600 dark:text-emerald-400 text-right">
+              배분 합계: 6일 / 총 6일 (일치 ✅)
+            </div>
+          </div>
+        </div>
+
+        <!-- [Card 3] 🎯 여행 테마 & 버킷리스트 / 프롬프트 -->
+        <div class="p-3 sm:p-3.5 rounded-xl bg-[#faf8f5] dark:bg-[#16181d] border border-[#e8e2d5] dark:border-stone-800 space-y-2.5 shadow-sm">
+          <div class="flex items-center justify-between">
+            <span class="font-bold text-[#1c1917] dark:text-stone-200 flex items-center gap-1.5">
+              <i class="fa-solid fa-wand-magic-sparkles text-[#a2601b] dark:text-amber-400"></i>
+              <span>여행 테마 및 원하는 활동</span>
+            </span>
+          </div>
+
+          <!-- 컨셉 칩 토글 -->
+          <div class="flex items-center gap-1.5 flex-wrap" id="draft-studio-concept-chips">
+            <!-- 8대 컨셉 칩 동적 렌더링 -->
+          </div>
+
+          <div>
+            <textarea id="ai-trip-prompt" rows="2" placeholder="예: 미식 투어와 랜드마크 오픈런, 여유로운 카페 탐방 위주 (비워두면 테마에 맞춰 자동 생성)" class="w-full px-3 py-2 bg-white dark:bg-[#0f1117] border border-[#e8e2d5] dark:border-stone-700 rounded-xl text-xs text-[#1c1917] dark:text-stone-200 placeholder-stone-400 focus:outline-none focus:border-[#a2601b] resize-none"></textarea>
+          </div>
+        </div>
+
+        <!-- [Card 4] ⚡ 생성 엔진 선택 -->
+        <div class="p-3 sm:p-3.5 rounded-xl bg-[#faf8f5] dark:bg-[#16181d] border border-[#e8e2d5] dark:border-stone-800 space-y-2 shadow-sm">
+          <span class="font-bold text-[#1c1917] dark:text-stone-200 block text-[11px]">일정 생성 엔진 선택</span>
+          <div class="grid grid-cols-2 gap-2">
+            <label class="flex items-center gap-2 p-2 rounded-lg border border-[#e8e2d5] dark:border-stone-700 bg-white dark:bg-[#0f1117] cursor-pointer hover:border-amber-500 transition">
+              <input type="radio" name="draft-studio-engine" value="smart_local" checked class="text-amber-500 focus:ring-0 cursor-pointer">
+              <div class="min-w-0">
+                <div class="font-bold text-[#1c1917] dark:text-stone-200 text-[11px]">🏛️ 스마트 로컬 엔진</div>
+                <div class="text-[9px] text-stone-400">오프라인 즉시 생성 · 토큰 소모 없음</div>
+              </div>
+            </label>
+            <label class="flex items-center gap-2 p-2 rounded-lg border border-[#e8e2d5] dark:border-stone-700 bg-white dark:bg-[#0f1117] cursor-pointer hover:border-amber-500 transition">
+              <input type="radio" name="draft-studio-engine" value="gemini" class="text-amber-500 focus:ring-0 cursor-pointer">
+              <div class="min-w-0">
+                <div class="font-bold text-[#1c1917] dark:text-stone-200 text-[11px]">🤖 Gemini AI 2단계 생성</div>
+                <div class="text-[9px] text-stone-400">거점별 분할 생성 · 최신 AI 맞춤 동선</div>
+              </div>
+            </label>
+          </div>
+          <p class="text-[10px] text-stone-400 dark:text-stone-500">
+            ℹ️ 완료(체크)된 일정과 고정된 스팟은 보호되며, AI 검토 창에서 변경점을 대조한 후 적용할 수 있습니다.
+          </p>
+        </div>
+
       </div>
 
-      <div id="ai-trip-loading" class="hidden py-4 text-center space-y-2">
-        <div class="inline-block w-8 h-8 border-3 border-amber-500 border-t-transparent rounded-full animate-spin"></div>
-        <div class="text-xs text-amber-400 font-bold">AI가 30분 단위 정밀 코스를 설계하는 중입니다...</div>
+      <!-- 로딩 인디케이터 (R-10 ID 보존) -->
+      <div id="ai-trip-loading" class="hidden py-3 text-center space-y-2 shrink-0">
+        <div class="inline-block w-7 h-7 border-3 border-amber-500 border-t-transparent rounded-full animate-spin"></div>
+        <div id="draft-studio-loading-text" class="text-xs text-amber-600 dark:text-amber-400 font-bold">거점별 30분 단위 최적화 동선을 설계하는 중입니다...</div>
       </div>
 
-      <div class="flex items-center gap-3 pt-2">
-        <button onclick="cancelActiveAiJob(); closeModal('modal-ai-trip')" class="flex-1 py-2.5 rounded-xl bg-[#141c2e] text-slate-300 font-bold text-xs">취소</button>
-        <button id="btn-generate-ai-itinerary" onclick="generateAiItinerary()" class="flex-1 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 text-slate-950 font-black text-xs shadow-md disabled:opacity-50">일정 생성 시작</button>
+      <!-- 하단 액션 버튼 바 -->
+      <div class="flex items-center gap-2 pt-2 border-t border-[#e8e2d5] dark:border-stone-800 shrink-0">
+        <button onclick="cancelActiveAiJob(); closeModal('modal-ai-trip')" class="px-4 py-2.5 rounded-xl bg-stone-100 dark:bg-stone-800 hover:bg-stone-200 dark:hover:bg-stone-700 text-stone-600 dark:text-stone-300 font-bold text-xs transition cursor-pointer">취소</button>
+        <button onclick="saveDraftStudioSettingsOnly()" class="px-3 py-2.5 rounded-xl bg-[#fdf6ec] dark:bg-stone-800 hover:bg-[#faebd7] dark:hover:bg-stone-700 text-[#8a5015] dark:text-[#f5dfb8] border border-[#f5dfb8] dark:border-stone-700 font-bold text-xs transition cursor-pointer">설정만 저장</button>
+        <button id="btn-generate-ai-itinerary" onclick="executeDraftStudioGeneration()" class="flex-1 py-2.5 rounded-xl btn-gold text-xs font-black shadow-md cursor-pointer flex items-center justify-center gap-1.5">
+          <i class="fa-solid fa-wand-magic-sparkles text-[11px]"></i>
+          <span>새 초안 생성하기</span>
+        </button>
       </div>
     </div>
   </div>
@@ -3762,14 +3911,34 @@
 
       <!-- 버전 목록 스크롤 영역 (독립 스크롤 컨테이너로 Flexbox 압축 버그 영구 척결) -->
       <div class="overflow-y-auto flex-1 min-h-0 space-y-3.5 pr-1.5 custom-scrollbar">
-        <!-- v1.7.3 (Current) -->
+        <!-- v1.7.4 (Current) -->
         <div class="p-4 rounded-2xl border-2 border-emerald-500/50 space-y-2.5 bg-emerald-500/5 dark:bg-emerald-500/10 shrink-0 shadow-sm">
           <div class="flex items-center justify-between gap-2">
             <div class="flex items-center gap-2 min-w-0">
-              <span class="px-2.5 py-0.5 rounded-lg bg-emerald-500 text-black font-black text-xs shadow-sm shrink-0">v1.7.3</span>
-              <span class="text-xs font-black text-[#1c1917] dark:text-white truncate">전 세계 국가 데이터베이스 대확장 (59개국 → 140+개국) & 8대 권역 세분화 및 여행지 직접 추가 기능 구현</span>
+              <span class="px-2.5 py-0.5 rounded-lg bg-emerald-500 text-black font-black text-xs shadow-sm shrink-0">v1.7.4</span>
+              <span class="text-xs font-black text-[#1c1917] dark:text-white truncate">술술다이어리풍 푸터 가이드 간격 개선, 다국가 2단계 여정 생성 엔진 & '새 초안 만들기' 여행 설계 스튜디오 UI/UX 전면 개편</span>
             </div>
             <span class="companion-status shrink-0">최신 버전</span>
+          </div>
+          <p class="text-xs leading-relaxed text-[#44403c] dark:text-stone-300">
+            1) <b>술술다이어리 스타일 에디토리얼 푸터 가이드 링크 간격 최적화</b>: 술술다이어리 푸터 레이아웃을 계승하여 푸터 내 4개 정책/가이드 링크(<code>사용 가이드</code>, <code>기기 간 동기화</code>, <code>개인정보처리방침</code>, <code>변경 이력</code>)에 <code>gap: 8px 18px</code>의 넉넉한 간격과 터치 타겟(패딩 <code>4px 6px</code>), 텍스트 언더라인 오프셋을 부여해 글자가 붙어 보이던 시각적 답답함을 완벽히 해소했습니다.<br>
+            2) <b>다국가 거시적 거점 & 세부 일정 2단계 분할 생성 엔진 (allocateTripHubs)</b>: 3개국 이상(예: 홍콩·마카오·중국 6일) 여행 시 첫 번째 국가에만 일정이 쏠리던 결함을 척결했습니다. 거시적 여정 설계(Macro Hub Allocation)를 통해 국가별 체류 일수를 균등 분배(2일/2일/2일)하고, 거점 전환일 환승 스팟(페리, 강주아오 대교, 국경 출입국) 자동 배치 및 각 일자별 <code>hub</code>, <code>city</code>, <code>blockPlace</code> 메타데이터를 정밀 매핑하여 독립된 국가별 Plan Block 생성을 보장합니다.<br>
+            3) <b>'새 초안 만들기' 여행 설계 스튜디오 전면 개편 (openTripDraftStudio)</b>: 기존의 단순 1줄 모달을 탈피하여, 여행 추가 시 설정된 모든 여행값(국가/도시 칩, 일정 기간, 거점별 일수 조절 <code>[-] N일 [+]</code> 인터랙티브 스테퍼 & 균등 배분 버튼, 여행 컨셉 칩, 엔진 선택)을 자유롭게 수정·설계할 수 있는 <b>종합 여행 설계 스튜디오</b>로 업그레이드했습니다.<br>
+            4) <b>유연한 2단계 분기 (설정만 저장 vs 새 초안 생성)</b>: 기존 일정을 유지하면서 여행 메타데이터만 업데이트하는 <code>[설정만 저장]</code>과 새 일정으로 다시 빌드하는 <code>[새 초안 생성하기]</code>를 분리 지원하여 데이터 유실을 방지했습니다.
+          </p>
+          <div class="text-[10px] text-stone-400 dark:text-stone-500 pt-1 border-t border-emerald-500/20 flex items-center justify-between">
+            <span>📅 2026-09-13 릴리즈</span>
+            <span class="font-mono">st-shell-v1.7.4</span>
+          </div>
+        </div>
+
+        <!-- v1.7.3 -->
+        <div class="p-4 rounded-2xl bg-stone-50 dark:bg-stone-900/50 border border-stone-200 dark:border-stone-800 space-y-2.5 shadow-sm relative overflow-hidden shrink-0">
+          <div class="flex items-center justify-between gap-2">
+            <div class="flex items-center gap-2 min-w-0">
+              <span class="px-2 py-0.5 rounded-lg bg-stone-200 dark:bg-stone-800 text-stone-800 dark:text-stone-200 font-bold text-[11px] font-mono shrink-0">v1.7.3</span>
+              <span class="text-xs font-bold text-[#1c1917] dark:text-stone-200 truncate">전 세계 국가 데이터베이스 대확장 (59개국 → 140+개국) & 8대 권역 세분화 및 여행지 직접 추가 기능 구현</span>
+            </div>
           </div>
           <p class="text-xs leading-relaxed text-[#44403c] dark:text-stone-300">
             1) <b>전 세계 국가 데이터베이스 대확장 (140개국+)</b>: 기존 59개국에서 남·중앙아시아(인도, 네팔, 몰디브, 스리랑카, 우즈베키스탄 등), 동남아(미얀마, 브루나이 등), 유럽(슬로베니아, 루마니아, 몰타, 모나코 등), 미주(에콰도르, 우루과이, 코스타리카, 자메이카 등), 대양주(팔라우, 타히티 등), 중동·아프리카(사우디, 오만, 요르단, 나미비아, 모리셔스 등)를 총망라하여 140개국 이상으로 2.4배 대폭 확장했습니다.<br>
@@ -3777,7 +3946,7 @@
             3) <b>전 세계 여행지 직접 추가 액션 (100% 커버리지)</b>: 검색 결과가 없거나 목록에 없는 특수 도서/오지/소도시라도 검색창에서 <code>['검색어' 직접 여행지로 추가]</code> 버튼을 클릭하면 즉시 국가 및 방문 도시로 자동 등록되어 전 세계 어디든 100% 일정 구성이 가능합니다.<br>
             4) <b>신규 통화 35종 완벽 동기화 (CURRENCY_INFO)</b>: 새로 추가된 국가들의 현지 통화(MMK, MVR, BTN, KGS, BAM, XPF 등 35종) 환율과 기호를 가계부 및 다통화 지갑에 완벽 연동했습니다.
           </p>
-          <div class="text-[10px] text-stone-400 dark:text-stone-500 pt-1 border-t border-emerald-500/20 flex items-center justify-between">
+          <div class="text-[10px] text-stone-400 dark:text-stone-500 pt-1 border-t border-stone-200 dark:border-stone-800 flex items-center justify-between">
             <span>📅 2026-09-13 릴리즈</span>
             <span class="font-mono">st-shell-v1.7.3</span>
           </div>
@@ -4464,7 +4633,7 @@
 
       <!-- 모달 푸터 -->
       <div class="pt-3 border-t border-[#e8e2d5] dark:border-stone-800 flex items-center justify-between shrink-0">
-        <span class="text-[11px] text-stone-400 dark:text-stone-500 font-mono">Sulsul Travel Engine v1.7.3</span>
+        <span class="text-[11px] text-stone-400 dark:text-stone-500 font-mono">Sulsul Travel Engine v1.7.4</span>
         <button onclick="closeModal('modal-version-history')" class="px-4 py-2 rounded-xl bg-[#faf8f5] dark:bg-stone-800 hover:bg-[#f0ece1] dark:hover:bg-stone-700 border border-[#e8e2d5] dark:border-stone-700 text-[#1c1917] dark:text-[#ededed] text-xs font-bold transition cursor-pointer shadow-sm">
           닫기
         </button>
@@ -4811,7 +4980,7 @@
     window.showToast = showToast;
 
     // 앱 버전 및 글로벌 네임스페이스 (Sulsul-Travel Invariant Rule R-10, R-11, R-12, R-13, R-14, R-15, R-16)
-    const APP_VER = '1.7.3';
+    const APP_VER = '1.7.4';
 
     // ══════════════════════════════════════════
     // [3-Way Theme System] 모던, 라이트그레이, 딥 블랙 테마 엔진 (v1.6.7)
@@ -8729,6 +8898,17 @@
     // 큰 계획: 연속된 날짜를 거점 단위 카드로 요약
     // ==========================================
     function inferPlanBlockPlace(day) {
+      if (day.blockPlace) return day.blockPlace;
+      if (day.hub) return day.hub;
+      if (day.hubName) return day.hubName;
+      if (day.city && !['여정 전반', '도시', '여행지'].includes(day.city)) {
+        const explicitCity = String(day.city)
+          .split(/[→➔]/).pop()
+          .split('·')[0]
+          .replace(/\([^)]*\)/g, '')
+          .trim();
+        if (explicitCity && explicitCity.length >= 2) return explicitCity;
+      }
       const knownPlaces = [
         [/귀국|일상 복귀|한국 공항 도착|인천공항.*도착/, '귀로'],
         [/리우|리오|rio|코파카바나|이파네마|코르코바두|슈가로프/, '리우데자네이루'],
@@ -12917,15 +13097,121 @@
       return isNextDay ? `+1일 ${formatted}` : formatted;
     }
 
-    function generateAutoSpotsForTrip(destination, durationDays, concepts, wishlist, arrivalTime = '14:00', departureTime = '17:00', fullDestContext = '') {
+    // [v1.7.4] 거시적 거점 & 일자 배분 엔진 (Macro Hub Allocation Engine)
+    function allocateTripHubs(countries = [], cities = [], durationDays = 5, manualDaysMap = null) {
+      let rawCountries = (Array.isArray(countries) ? countries : [countries]).filter(Boolean);
+      let rawCities = (Array.isArray(cities) ? cities : [cities]).filter(Boolean);
+
+      let hubs = [];
+      if (rawCountries.length > 0) {
+        hubs = rawCountries.map(cName => {
+          const cClean = String(cName).replace(/[()[\]]/g, ' ').trim().split(/\s+/)[0];
+          const dbObj = (typeof COUNTRY_DATABASE !== 'undefined')
+            ? COUNTRY_DATABASE.find(c => c.name === cClean || c.code === cClean || (c.aliases || []).includes(cClean))
+            : null;
+
+          const myCities = rawCities.filter(cityName => {
+            if (!dbObj) return false;
+            const cleanCt = cleanCityName(cityName);
+            return (dbObj.cities || []).some(dbCt => dbCt.includes(cleanCt) || cleanCt.includes(dbCt)) ||
+                   (State.createTripSelectedCities && State.createTripSelectedCities[dbObj.code] && State.createTripSelectedCities[dbObj.code].includes(cityName));
+          });
+
+          return {
+            name: cClean,
+            country: cClean,
+            code: dbObj ? dbObj.code : '',
+            flag: dbObj ? dbObj.flag : '✈️',
+            currency: dbObj ? dbObj.currency : 'KRW',
+            cities: myCities
+          };
+        });
+
+        rawCities.forEach(ct => {
+          const matched = hubs.some(h => h.cities.includes(ct));
+          if (!matched && hubs.length > 0) {
+            hubs[0].cities.push(ct);
+          }
+        });
+      } else if (rawCities.length > 0) {
+        hubs = rawCities.map(cityName => ({
+          name: cleanCityName(cityName),
+          country: cleanCityName(cityName),
+          flag: '📍',
+          currency: 'KRW',
+          cities: [cityName]
+        }));
+      } else {
+        hubs = [{ name: '여행지', country: '여행지', flag: '✈️', currency: 'KRW', cities: [] }];
+      }
+
+      const totalDays = Math.max(1, Number(durationDays) || 5);
+      const numHubs = hubs.length;
+
+      let allocatedDays = [];
+      if (manualDaysMap && Array.isArray(manualDaysMap) && manualDaysMap.length === numHubs) {
+        const sum = manualDaysMap.reduce((a, b) => a + (Number(b) || 0), 0);
+        if (sum === totalDays) {
+          allocatedDays = manualDaysMap.map(d => Math.max(1, Number(d) || 1));
+        }
+      }
+
+      if (!allocatedDays.length) {
+        if (totalDays <= numHubs) {
+          allocatedDays = hubs.map((_, idx) => (idx < totalDays ? 1 : 0));
+        } else {
+          const base = Math.floor(totalDays / numHubs);
+          let rem = totalDays % numHubs;
+          allocatedDays = hubs.map((hub, idx) => {
+            let d = base;
+            if (rem > 0) {
+              d += 1;
+              rem -= 1;
+            }
+            return Math.max(1, d);
+          });
+        }
+      }
+
+      let curDay = 1;
+      return hubs.map((hub, idx) => {
+        const days = allocatedDays[idx] || 1;
+        const startDay = curDay;
+        const endDay = curDay + days - 1;
+        curDay += days;
+        return {
+          ...hub,
+          dayCount: days,
+          startDayNum: startDay,
+          endDayNum: endDay
+        };
+      }).filter(h => h.dayCount > 0);
+    }
+    window.allocateTripHubs = allocateTripHubs;
+
+    function generateAutoSpotsForTrip(destination, durationDays, concepts, wishlist, arrivalTime = '14:00', departureTime = '17:00', fullDestContext = '', customHubs = null) {
       const conceptList = (concepts && concepts.length > 0) ? concepts : ['사용자 맞춤 여행'];
       const conceptStr = conceptList.join(', ');
       const wishlistItems = wishlist ? wishlist.split(/[,\n]/).map(s => s.trim()).filter(Boolean) : [];
       let wishIndex = 0;
 
-      const tzInfo = detectDestinationTimezone(fullDestContext || destination);
-      const arrMin = timeToMinutes(arrivalTime, 14 * 60);
-      const depMin = timeToMinutes(departureTime, 17 * 60);
+      // 1. Resolve multi-hub allocation
+      let hubs = customHubs;
+      if (!hubs || !Array.isArray(hubs) || hubs.length === 0) {
+        const detectedCountries = splitTravelList(fullDestContext || destination);
+        if (detectedCountries.length > 1) {
+          hubs = allocateTripHubs(detectedCountries, [], durationDays);
+        } else {
+          hubs = [{
+            name: destination || '여행지',
+            country: destination || '여행지',
+            cities: [],
+            dayCount: durationDays,
+            startDayNum: 1,
+            endDayNum: durationDays
+          }];
+        }
+      }
 
       const days = [];
 
@@ -12934,17 +13220,26 @@
         const isFirstDay = (i === 1);
         const isLastDay = (i === durationDays);
 
+        // Find which hub covers day i:
+        const hub = hubs.find(h => i >= h.startDayNum && i <= h.endDayNum) || hubs[0];
+        const hubIdx = hubs.indexOf(hub);
+        const hubDay = i - hub.startDayNum + 1;
+        const hubCity = (hub.cities && hub.cities.length > 0)
+          ? (hub.cities[(hubDay - 1) % hub.cities.length] || hub.name)
+          : hub.name;
+        const isTransitDay = (!isFirstDay && hubDay === 1 && hubIdx > 0);
+        const prevHub = isTransitDay ? hubs[hubIdx - 1] : null;
+
+        const tzInfo = detectDestinationTimezone(hub.name + ' ' + hubCity + ' ' + (fullDestContext || ''));
+        const arrMin = timeToMinutes(arrivalTime, 14 * 60);
+        const depMin = timeToMinutes(departureTime, 17 * 60);
+
         if (isFirstDay && durationDays > 1) {
           // --- Day 1: 시차 & 비행시간 반영 실전 출국 라이프사이클 ---
-          // 1. 현지 도착 시각(arrMin)을 한국 시각(KST)으로 환산: arrKst = arrLocal - (tzDiff * 60)
           const arrKstTotalMin = arrMin - (tzInfo.tzDiff * 60);
-          // 2. 비행기 이륙 시각 (한국 KST) = 도착 KST - 비행소요시간
           const flightDepKstTotalMin = arrKstTotalMin - Math.round(tzInfo.flightHours * 60);
-          // 시간을 24시간 내 시계(00:00~23:59)로 표준화
           const flightDepKstMins = ((flightDepKstTotalMin % 1440) + 1440) % 1440;
-          // 공항 수속 (이륙 3시간 전)
           const airportCheckinKstMins = ((flightDepKstMins - 180 + 1440) % 1440);
-          // 집 출발 (수속 1~1.5시간 전)
           const homeDepKstMins = ((airportCheckinKstMins - 60 + 1440) % 1440);
 
           const flightDepKstStr = minutesToTime(flightDepKstMins);
@@ -12952,7 +13247,6 @@
           const homeDepKstStr = minutesToTime(homeDepKstMins);
           const arrLocalStr = minutesToTime(arrMin);
 
-          // 1) 집 출발 및 공항 이동 (한국 시각)
           daySpots.push({
             id: 'spot_' + Date.now() + '_1_0',
             time: homeDepKstStr,
@@ -12965,7 +13259,6 @@
             isDateLine: tzInfo.isCrossDateLine
           });
 
-          // 2) 공항 수속 및 보안검색/출국심사 (한국 시각)
           daySpots.push({
             id: 'spot_' + Date.now() + '_1_1',
             time: airportCheckinKstStr,
@@ -12978,11 +13271,10 @@
             isDateLine: tzInfo.isCrossDateLine
           });
 
-          // 3) 비행기 탑승 및 비행 이동 (한국 시각)
           daySpots.push({
             id: 'spot_' + Date.now() + '_1_2',
             time: flightDepKstStr,
-            title: `비행기 탑승 & ${destination}행 항공편 이륙`,
+            title: `비행기 탑승 & ${hub.name}행 항공편 이륙`,
             memo: `[비행 이동: 한국 KST ${flightDepKstStr}] 약 ${tzInfo.flightHours}시간 비행 (기내식, 기내 수면). 시차 ${tzInfo.tzDiff}시간 적용`,
             cat: 'flight',
             cost: 0,
@@ -12991,12 +13283,11 @@
             isDateLine: tzInfo.isCrossDateLine
           });
 
-          // 4) 현지 공항 착륙 및 입국 심사 (현지 도착 시간)
           const dateLineNote = tzInfo.isCrossDateLine ? ' (날짜변경선 통과 당일 오전 도착)' : '';
           daySpots.push({
             id: 'spot_' + Date.now() + '_1_3',
             time: arrLocalStr,
-            title: `🛬 ${destination} 공항 착륙 & 입국 수속`,
+            title: `🛬 ${hub.name} 공항 착륙 & 입국 수속`,
             memo: `[현지 도착: ${tzInfo.tzLabel}${dateLineNote}] 현지 시각 ${arrLocalStr} 착륙. 입국 심사, 수하물 수취, 현지 교통편 탑승`,
             cat: 'flight',
             cost: 10000,
@@ -13005,11 +13296,10 @@
             isDateLine: tzInfo.isCrossDateLine
           });
 
-          // 5) 현지 공항에서 숙소/호텔 이동 (착륙 1시간 후, 현지 시각)
           daySpots.push({
             id: 'spot_' + Date.now() + '_1_4',
             time: minutesToTime(arrMin + 60),
-            title: `${destination} 공항 ➔ 숙소/호텔 이동`,
+            title: `${hub.name} 공항 ➔ 숙소/호텔 이동`,
             memo: `[시내 이동: 현지시각] 공항철도/리무진버스/택시 탑승 및 시내 이동`,
             cat: 'tour',
             cost: 20000,
@@ -13017,11 +13307,10 @@
             completed: false
           });
 
-          // 6) 호텔 체크인 & 짐 풀기 (착륙 2시간 후, 현지 시각)
           daySpots.push({
             id: 'spot_' + Date.now() + '_1_5',
             time: minutesToTime(arrMin + 120),
-            title: `호텔 체크인 & 짐 정리 및 가벼운 휴식`,
+            title: `${hub.name} 호텔 체크인 & 짐 정리 및 가벼운 휴식`,
             memo: `[체크인: 현지시각] 예약 바우처 확인, 짐 풀기 및 외출 준비`,
             cat: 'lodging',
             cost: 0,
@@ -13029,10 +13318,9 @@
             completed: false
           });
 
-          // 7) 첫날 저녁 식사 및 나이트 산책 (현지 시각)
           const dinnerMin = Math.max(arrMin + 180, 18 * 60 + 30);
           if (dinnerMin < 22 * 60) {
-            let firstDinnerName = `${destination} 첫날 시그니처 로컬 디너`;
+            let firstDinnerName = `${hub.name} ${hubCity !== hub.name ? hubCity + ' ' : ''}시그니처 로컬 디너`;
             if (wishIndex < wishlistItems.length) {
               firstDinnerName = `⭐ ${wishlistItems[wishIndex++]}`;
             }
@@ -13040,7 +13328,7 @@
               id: 'spot_' + Date.now() + '_1_6',
               time: minutesToTime(dinnerMin),
               title: firstDinnerName,
-              memo: `[첫날 미식: ${conceptStr}] 숙소 근처 검증된 대표 맛집 탐방 (현지 시각)`,
+              memo: `[첫날 미식: ${conceptStr}] ${hub.name} 숙소 근처 검증된 대표 맛집 탐방`,
               cat: 'food',
               cost: 40000,
               currency: 'KRW',
@@ -13051,7 +13339,7 @@
               daySpots.push({
                 id: 'spot_' + Date.now() + '_1_7',
                 time: minutesToTime(dinnerMin + 90),
-                title: `${destination} 숙소 주변 나이트 산책 & 마트 장보기`,
+                title: `${hub.name} 숙소 주변 나이트 산책 & 마트 장보기`,
                 memo: `[야경/산책] 가벼운 거리 구경, 편의점/마트 생수 및 간식 구매`,
                 cat: 'tour',
                 cost: 15000,
@@ -13060,12 +13348,99 @@
               });
             }
           }
+        } else if (isTransitDay) {
+          // --- 거점 간 환승 이동일 (예: 홍콩 -> 마카오, 마카오 -> 중국 등) ---
+          let transitTitle = `${prevHub.name} ➔ ${hub.name} 도시 간 환승 이동 (페리/고속철)`;
+          let transitMemo = `[거점 이동] ${prevHub.name}에서 ${hub.name}으로 이동 및 새 거점 여정 시작`;
+          if (prevHub.name.includes('홍콩') && hub.name.includes('마카오')) {
+            transitTitle = `홍콩 ➔ 마카오 페리/강주아오 대교 탑승 & 이동 (약 1시간)`;
+            transitMemo = `[해상/대교 이동] 홍콩 페리 터미널 또는 HZMB 버스 탑승, 마카오 입국 심사`;
+          } else if (prevHub.name.includes('마카오') && hub.name.includes('중국')) {
+            transitTitle = `마카오 ➔ 중국 국경(공베이/주하이) 출입국 수속 & 시내 이동`;
+            transitMemo = `[국경 통과] 공베이 코안 수속 및 중국 시내/고속철 탑승`;
+          } else if (prevHub.country === '일본' && hub.country === '일본') {
+            transitTitle = `${prevHub.name} ➔ ${hub.name} 신칸센 고속열차 탑승 & 이동`;
+            transitMemo = `[고속철 이동] 신칸센 지정석 탑승 및 ${hub.name} 역 도착`;
+          }
+
+          daySpots.push({
+            id: 'spot_' + Date.now() + '_' + i + '_0',
+            time: '09:00',
+            title: `${prevHub.name} 호텔 체크아웃 & 이동 준비`,
+            memo: `[체크아웃] 객실 정리, 체크아웃 수속 및 환승 터미널 이동`,
+            cat: 'lodging',
+            cost: 0,
+            currency: 'KRW',
+            completed: false
+          });
+
+          daySpots.push({
+            id: 'spot_' + Date.now() + '_' + i + '_1',
+            time: '10:00',
+            title: transitTitle,
+            memo: transitMemo,
+            cat: 'flight',
+            cost: 30000,
+            currency: 'KRW',
+            completed: false
+          });
+
+          daySpots.push({
+            id: 'spot_' + Date.now() + '_' + i + '_2',
+            time: '12:00',
+            title: `🛬 ${hub.name} 도착, 호텔 짐 보관 & 시그니처 웰컴 런치`,
+            memo: `[새 거점 도착] ${hub.name} 호텔 프론트 짐 보관 후 현지 대표 요리로 점심 식사`,
+            cat: 'food',
+            cost: 35000,
+            currency: 'KRW',
+            completed: false
+          });
+
+          daySpots.push({
+            id: 'spot_' + Date.now() + '_' + i + '_3',
+            time: '14:30',
+            title: `${hub.name} ${hubCity !== hub.name ? hubCity + ' ' : ''}대표 랜드마크 & 명소 집중 탐방`,
+            memo: `[랜드마크] ${hub.name}의 대표 볼거리 및 필수 코스 탐방 (${conceptStr})`,
+            cat: 'tour',
+            cost: 25000,
+            currency: 'KRW',
+            completed: false
+          });
+
+          daySpots.push({
+            id: 'spot_' + Date.now() + '_' + i + '_4',
+            time: '17:30',
+            title: `${hub.name} 감성 카페 & 로컬 마켓 투어`,
+            memo: `[로컬 문화] 골목길 산책, 전통 마켓 및 분위기 좋은 카페 휴식`,
+            cat: 'shopping',
+            cost: 20000,
+            currency: 'KRW',
+            completed: false
+          });
+
+          daySpots.push({
+            id: 'spot_' + Date.now() + '_' + i + '_5',
+            time: '19:30',
+            title: `${hub.name} 시그니처 디너 & 로컬 미식`,
+            memo: `[미식 탐방] ${hub.name} 밤을 여는 현지 추천 디너 코스`,
+            cat: 'food',
+            cost: 45000,
+            currency: 'KRW',
+            completed: false
+          });
+
+          daySpots.push({
+            id: 'spot_' + Date.now() + '_' + i + '_6',
+            time: '21:30',
+            title: `${hub.name} 야경 명소 감상 & 체크인 룸 휴식`,
+            memo: `[야경 산책] 화려한 도시 야경 산책 후 객실 체크인 및 휴식`,
+            cat: 'tour',
+            cost: 0,
+            currency: 'KRW',
+            completed: false
+          });
         } else if (isLastDay && durationDays > 1) {
-          // --- Day N: 시차 & 비행시간 반영 귀국 실전 라이프사이클 ---
-          // 귀국 비행기 이륙 시각 (현지 시각 depMin)
-          // 한국 귀국 착륙 시각 (한국 KST):
-          // flightDepKst = depMin - (tzDiff * 60)
-          // landingKstTotal = flightDepKst + (returnFlightHours * 60)
+          // --- 마지막 날 귀국 라이프사이클 ---
           const flightDepKstTotal = depMin - (tzInfo.tzDiff * 60);
           const landingKstTotal = flightDepKstTotal + Math.round(tzInfo.returnFlightHours * 60);
           const isNextDayLanding = (landingKstTotal >= 1440);
@@ -13076,11 +13451,10 @@
           const homeTimeStr = isNextDayLanding ? `+1일 ${minutesToTime(homeKstMins)}` : minutesToTime(homeKstMins);
 
           if (depMin >= 14 * 60) {
-            // 오후/저녁 비행기: 오전 일정 가능
             daySpots.push({
               id: 'spot_' + Date.now() + '_' + i + '_0',
               time: '09:30',
-              title: `호텔 체크아웃 & 프론트 짐 보관`,
+              title: `${hub.name} 호텔 체크아웃 & 프론트 짐 보관`,
               memo: `[체크아웃] 짐 보관 서비스 이용 후 가벼운 복장으로 마지막 날 일정 시작`,
               cat: 'lodging',
               cost: 0,
@@ -13088,7 +13462,7 @@
               completed: false
             });
 
-            let lastSpotName = `${destination} 기념품 쇼핑 & 로컬 마켓 탐방`;
+            let lastSpotName = `${hub.name} 특산품·기념품 쇼핑 & 로컬 마켓`;
             if (wishIndex < wishlistItems.length) {
               lastSpotName = `⭐ ${wishlistItems[wishIndex++]}`;
             }
@@ -13106,7 +13480,7 @@
             daySpots.push({
               id: 'spot_' + Date.now() + '_' + i + '_2',
               time: '12:30',
-              title: `${destination} 여행 마무리 시그니처 런치`,
+              title: `${hub.name} 여행 마무리 시그니처 런치`,
               memo: `[라스트 미식] 현지에서 가장 기억에 남는 대표 요리 즐기기`,
               cat: 'food',
               cost: 35000,
@@ -13118,7 +13492,7 @@
             daySpots.push({
               id: 'spot_' + Date.now() + '_' + i + '_3',
               time: minutesToTime(airportMoveMin),
-              title: `숙소 짐 픽업 & ${destination} 공항 이동`,
+              title: `숙소 짐 픽업 & ${hub.name} 공항 이동`,
               memo: `[공항 이동] 호텔에서 짐 찾기 후 공항철도/리무진/택시로 공항 이동`,
               cat: 'tour',
               cost: 20000,
@@ -13140,7 +13514,7 @@
             daySpots.push({
               id: 'spot_' + Date.now() + '_' + i + '_5',
               time: minutesToTime(depMin),
-              title: `🛫 ${destination} 공항 출발 & 귀국 비행기 탑승`,
+              title: `🛫 ${hub.name} 공항 출발 & 귀국 비행기 탑승`,
               memo: `[귀국 비행: 현지 시각 ${minutesToTime(depMin)}] 항공기 탑승, 한국행 출발 (약 ${tzInfo.returnFlightHours}시간 비행)`,
               cat: 'flight',
               cost: 0,
@@ -13170,12 +13544,12 @@
               completed: false
             });
           } else {
-            // 오전/이른 비행기
+            // 이른 귀국편
             const earlyCheckoutMin = Math.max(5 * 60, depMin - 210);
             daySpots.push({
               id: 'spot_' + Date.now() + '_' + i + '_0',
               time: minutesToTime(earlyCheckoutMin),
-              title: `호텔 얼리 체크아웃 & 공항 이동`,
+              title: `${hub.name} 호텔 얼리 체크아웃 & 공항 이동`,
               memo: `[이른 출국] 체크아웃 및 공항 이동 (조식 테이크아웃)`,
               cat: 'lodging',
               cost: 20000,
@@ -13228,19 +13602,19 @@
             });
           }
         } else {
-          // --- 일반 여행일 (Day 2 ~ Day N-1, 또는 1일 여행) ---
+          // --- 일반 여행일 (거점 내부 탐방) ---
           const generalTemplates = [
             { time: '09:00', prefix: '모닝 산책 & 로컬 브런치/조식', cat: 'food', estCost: 15000 },
-            { time: '10:30', prefix: '대표 랜드마크 & 명소 집중 탐방', cat: 'tour', estCost: 25000 },
+            { time: '10:30', prefix: `${hubCity !== hub.name ? hubCity + ' ' : ''}대표 랜드마크 & 명소 집중 탐방`, cat: 'tour', estCost: 25000 },
             { time: '12:30', prefix: '현지인 추천 시그니처 미식 런치', cat: 'food', estCost: 30000 },
-            { time: '14:30', prefix: '테마 맞춤 익스피리언스 & 문화 체험', cat: 'tour', estCost: 35000 },
+            { time: '14:30', prefix: `${hubCity !== hub.name ? hubCity + ' ' : ''}테마 맞춤 익스피리언스 & 문화 체험`, cat: 'tour', estCost: 35000 },
             { time: '17:00', prefix: '감성 카페 & 로컬 마켓 투어', cat: 'shopping', estCost: 20000 },
             { time: '19:00', prefix: '선셋 전망 & 디너 코스', cat: 'food', estCost: 50000 },
             { time: '21:00', prefix: '야경 감상 및 하루 다이어리 기록', cat: 'tour', estCost: 0 }
           ];
 
           generalTemplates.forEach((tpl, sIdx) => {
-            let spotName = `${destination} ${tpl.prefix}`;
+            let spotName = `${hub.name} ${tpl.prefix}`;
             let spotMemo = `[컨셉: ${conceptStr}] 30분~1시간 단위 최적화 동선`;
 
             if ((sIdx === 1 || sIdx === 3) && wishIndex < wishlistItems.length) {
@@ -13248,7 +13622,7 @@
               spotMemo = `[버킷리스트] 희망 방문 스팟 탐방 (${conceptStr})`;
               wishIndex++;
             } else if (sIdx === 3) {
-              spotName = `${destination} ${conceptList[(i - 1) % conceptList.length]} 맞춤 스팟`;
+              spotName = `${hub.name} ${conceptList[(i - 1) % conceptList.length]} 맞춤 스팟`;
             }
 
             daySpots.push({
@@ -13266,9 +13640,12 @@
 
         days.push({
           dayNum: i,
-          title: `Day ${i} ${destination} ${conceptList[(i - 1) % conceptList.length] || '여행'}`,
+          title: `Day ${i} ${hub.name} ${hubCity !== hub.name ? hubCity + ' ' : ''}${isFirstDay ? '도착 및 첫 여정' : isLastDay ? '마무리 및 귀국' : isTransitDay ? '이동 및 탐방' : (conceptList[(i - 1) % conceptList.length] || '여행')}`,
           date: `Day ${i}`,
-          city: destination,
+          city: hub.name,
+          subCity: hubCity,
+          hub: hub.name,
+          blockPlace: hub.name,
           spots: daySpots
         });
       }
@@ -13358,6 +13735,8 @@
         primaryDest = primaryDest.replace(/[()[\]]/g, ' ').trim();
         if (primaryDest.includes(' ')) primaryDest = primaryDest.split(/\s+/)[0];
 
+        const calculatedHubs = allocateTripHubs(countries, requestedCities, durationDays);
+
         if (aiAuto && hasGeminiKey) {
           shouldGenerateAi = true;
           const dayDate = (offset) => {
@@ -13367,26 +13746,38 @@
             return date.toISOString().slice(0, 10);
           };
           for (let i = 1; i <= durationDays; i++) {
-            const cityIndex = requestedCities.length
-              ? Math.min(requestedCities.length - 1, Math.floor((i - 1) * requestedCities.length / durationDays))
-              : 0;
-            const provisionalCity = requestedCities[cityIndex] || primaryDest || '도시';
-            days.push({ dayNum: i, title: `Day ${i} ${provisionalCity} 계획`, date: dayDate(i - 1), city: provisionalCity, spots: [] });
+            const currentHub = calculatedHubs.find(h => i >= h.startDayNum && i <= h.endDayNum) || calculatedHubs[0];
+            const hubCity = (currentHub.cities && currentHub.cities.length > 0) ? currentHub.cities[0] : currentHub.name;
+            days.push({
+              dayNum: i,
+              title: `Day ${i} ${currentHub.name} ${hubCity !== currentHub.name ? hubCity + ' ' : ''}계획`,
+              date: dayDate(i - 1),
+              city: currentHub.name,
+              subCity: hubCity,
+              hub: currentHub.name,
+              blockPlace: currentHub.name,
+              spots: []
+            });
           }
         } else if (aiAuto) {
           if (pack && pack.hasGoldenCourse && typeof pack.getGoldenItinerary === 'function') {
             days = pack.getGoldenItinerary(durationDays);
           } else {
             const fullDestContext = (countriesStr ? countriesStr + ' ' : '') + (citiesStr ? citiesStr + ' ' : '') + (title || primaryDest || '여행지');
-            days = generateAutoSpotsForTrip(primaryDest || '여행지', durationDays, concepts, wishlist, arrivalTime, departureTime, fullDestContext);
+            days = generateAutoSpotsForTrip(primaryDest || '여행지', durationDays, concepts, wishlist, arrivalTime, departureTime, fullDestContext, calculatedHubs);
           }
         } else {
           for (let i = 1; i <= durationDays; i++) {
+            const currentHub = calculatedHubs.find(h => i >= h.startDayNum && i <= h.endDayNum) || calculatedHubs[0];
+            const hubCity = (currentHub.cities && currentHub.cities.length > 0) ? currentHub.cities[0] : currentHub.name;
             days.push({
               dayNum: i,
-              title: `Day ${i} 여행 일정`,
+              title: `Day ${i} ${currentHub.name} 여행 일정`,
               date: `Day ${i}`,
-              city: primaryDest || '도시',
+              city: currentHub.name,
+              subCity: hubCity,
+              hub: currentHub.name,
+              blockPlace: currentHub.name,
               spots: []
             });
           }
@@ -13489,6 +13880,7 @@
           coverEmoji: tripEmoji,
           concepts: concepts,
           wishlist: wishlist,
+          hubAllocations: calculatedHubs,
           planSource: shouldGenerateAi ? 'ai_pending' : (aiAuto ? 'local_draft' : 'manual'),
           isBucketlist: (!start && !end),
           roomCode: 'TRIP-' + Math.floor(1000 + Math.random() * 9000),
@@ -15276,14 +15668,21 @@ ${JSON.stringify(snapshotDays)}`;
         }
       }
 
-      // 2. Built-in 30-minute timetable rule engine
+      // 2. Built-in 30-minute timetable rule engine with multi-hub support
+      const hubs = (trip?.hubAllocations && trip.hubAllocations.length > 0)
+        ? trip.hubAllocations
+        : allocateTripHubs(trip?.countries || [], trip?.cities || [], durationDays);
+
       const autoDays = generateAutoSpotsForTrip(
-        primaryDest, durationDays, concepts, wishlist, arrivalTime, departureTime, fullDestContext
+        primaryDest, durationDays, concepts, wishlist, arrivalTime, departureTime, fullDestContext, hubs
       );
       return autoDays.map((d, i) => ({
         dayNum: i + 1,
         title: d.title || `Day ${i + 1} 추천 코스`,
         city: d.city || primaryDest,
+        subCity: d.subCity || '',
+        hub: d.hub || primaryDest,
+        blockPlace: d.blockPlace || primaryDest,
         date: d.date || '',
         spots: (d.spots || []).map(s => ({
           time: s.time || '10:00',
@@ -15664,6 +16063,311 @@ ${JSON.stringify(snapshotDays)}`;
       }
     }
 
+    // [v1.7.4] 새 초안 설계 & 여행 설정 편집 스튜디오 엔진 (Trip Blueprint & AI Draft Studio)
+    let draftStudioState = {
+      tripId: null,
+      countries: [],
+      cities: [],
+      startDate: '',
+      endDate: '',
+      durationDays: 5,
+      arrivalTime: '14:00',
+      departureTime: '17:00',
+      concepts: [],
+      prompt: '',
+      hubs: []
+    };
+
+    function openTripDraftStudio() {
+      const trip = getActiveTrip();
+      if (!trip) return;
+
+      draftStudioState.tripId = trip.id;
+      draftStudioState.countries = Array.isArray(trip.countries) ? trip.countries.slice() : [];
+      draftStudioState.cities = Array.isArray(trip.cities) ? trip.cities.slice() : [];
+      draftStudioState.startDate = trip.startDate || '';
+      draftStudioState.endDate = trip.endDate || '';
+      draftStudioState.durationDays = Math.max(1, Number(trip.durationDays || trip.days?.length || 5));
+      draftStudioState.arrivalTime = trip.arrivalTime || '14:00';
+      draftStudioState.departureTime = trip.departureTime || '17:00';
+      draftStudioState.concepts = Array.isArray(trip.concepts) ? trip.concepts.slice() : [];
+      draftStudioState.prompt = trip.wishlist || '';
+
+      if (trip.hubAllocations && Array.isArray(trip.hubAllocations) && trip.hubAllocations.length > 0) {
+        draftStudioState.hubs = trip.hubAllocations.map(h => ({ ...h }));
+      } else {
+        draftStudioState.hubs = allocateTripHubs(draftStudioState.countries, draftStudioState.cities, draftStudioState.durationDays);
+      }
+
+      const subtitleEl = document.getElementById('draft-studio-subtitle');
+      if (subtitleEl) subtitleEl.textContent = `${trip.title || trip.name || '여행'} · ${draftStudioState.countries.join(', ') || '여행지'}`;
+
+      renderDraftStudioCountries();
+
+      const startEl = document.getElementById('draft-studio-start-date');
+      const endEl = document.getElementById('draft-studio-end-date');
+      const badgeEl = document.getElementById('draft-studio-total-days-badge');
+      const arrEl = document.getElementById('draft-studio-arr-time');
+      const depEl = document.getElementById('draft-studio-dep-time');
+
+      if (startEl) startEl.value = draftStudioState.startDate;
+      if (endEl) endEl.value = draftStudioState.endDate;
+      if (badgeEl) badgeEl.textContent = `총 ${draftStudioState.durationDays}일간`;
+      if (arrEl) arrEl.value = draftStudioState.arrivalTime;
+      if (depEl) depEl.value = draftStudioState.departureTime;
+
+      renderDraftStudioHubSteppers();
+      renderDraftStudioConcepts();
+
+      const promptEl = document.getElementById('ai-trip-prompt');
+      if (promptEl) promptEl.value = draftStudioState.prompt;
+
+      openModal('modal-ai-trip');
+    }
+    window.openTripDraftStudio = openTripDraftStudio;
+
+    function renderDraftStudioCountries() {
+      const container = document.getElementById('draft-studio-countries-container');
+      const countEl = document.getElementById('draft-studio-country-count');
+      if (!container) return;
+
+      if (countEl) {
+        countEl.textContent = `${draftStudioState.hubs.length}개 거점/국가`;
+      }
+
+      if (!draftStudioState.hubs.length) {
+        container.innerHTML = '<p class="text-stone-400">설정된 국가나 거점이 없습니다.</p>';
+        return;
+      }
+
+      container.innerHTML = draftStudioState.hubs.map((hub) => {
+        const flag = hub.flag || '✈️';
+        const cityTags = (hub.cities && hub.cities.length > 0)
+          ? hub.cities.map(c => `<span class="px-2 py-0.5 rounded-md bg-white dark:bg-stone-800 text-stone-700 dark:text-stone-300 border border-stone-200 dark:border-stone-700 text-[10px] font-medium">${escapeHtml(c)}</span>`).join(' ')
+          : '<span class="text-[10px] text-stone-400">등록된 세부 도시 없음 (거점 전반)</span>';
+
+        return `
+          <div class="p-2.5 rounded-lg bg-white dark:bg-[#0f1117] border border-[#e8e2d5] dark:border-stone-700 flex items-center justify-between gap-2 shadow-xs">
+            <div class="flex items-center gap-2 min-w-0">
+              <span class="text-base">${flag}</span>
+              <div class="min-w-0">
+                <div class="font-bold text-[#1c1917] dark:text-stone-200 text-xs">${escapeHtml(hub.name)}</div>
+                <div class="flex items-center gap-1 flex-wrap mt-0.5">${cityTags}</div>
+              </div>
+            </div>
+            <span class="px-2 py-0.5 rounded-md bg-amber-50 dark:bg-amber-950/40 text-amber-800 dark:text-amber-300 border border-amber-200 dark:border-amber-800/50 font-bold text-[10px] shrink-0">${hub.dayCount}일 체류</span>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function handleDraftStudioDatesChange() {
+      const start = document.getElementById('draft-studio-start-date')?.value;
+      const end = document.getElementById('draft-studio-end-date')?.value;
+      if (start && end) {
+        const diff = Math.max(1, Math.ceil((new Date(end) - new Date(start)) / (1000 * 60 * 60 * 24)) + 1);
+        draftStudioState.durationDays = diff;
+        draftStudioState.startDate = start;
+        draftStudioState.endDate = end;
+        const badgeEl = document.getElementById('draft-studio-total-days-badge');
+        if (badgeEl) badgeEl.textContent = `총 ${diff}일간`;
+
+        draftStudioState.hubs = allocateTripHubs(draftStudioState.countries, draftStudioState.cities, diff);
+        renderDraftStudioCountries();
+        renderDraftStudioHubSteppers();
+      }
+    }
+    window.handleDraftStudioDatesChange = handleDraftStudioDatesChange;
+
+    function renderDraftStudioHubSteppers() {
+      const container = document.getElementById('draft-studio-hub-steppers');
+      const statusEl = document.getElementById('draft-studio-balance-status');
+      if (!container) return;
+
+      const sumDays = draftStudioState.hubs.reduce((a, b) => a + (Number(b.dayCount) || 0), 0);
+      const total = draftStudioState.durationDays;
+
+      if (statusEl) {
+        if (sumDays === total) {
+          statusEl.className = 'text-[10px] font-bold text-emerald-600 dark:text-emerald-400 text-right';
+          statusEl.textContent = `배분 합계: ${sumDays}일 / 총 ${total}일 (일치 ✅)`;
+        } else {
+          const diff = total - sumDays;
+          statusEl.className = 'text-[10px] font-bold text-rose-600 dark:text-rose-400 text-right';
+          statusEl.textContent = `배분 합계: ${sumDays}일 / 총 ${total}일 (${diff > 0 ? diff + '일 부족 ⚠️' : Math.abs(diff) + '일 초과 ⚠️'})`;
+        }
+      }
+
+      container.innerHTML = draftStudioState.hubs.map((hub, idx) => {
+        return `
+          <div class="flex items-center justify-between p-2 rounded-lg bg-white dark:bg-[#0f1117] border border-[#e8e2d5] dark:border-stone-700 text-xs">
+            <div class="flex items-center gap-2 min-w-0">
+              <span>${hub.flag || '✈️'}</span>
+              <span class="font-bold text-[#1c1917] dark:text-stone-200 truncate">${escapeHtml(hub.name)}</span>
+              <span class="text-[10px] text-stone-400">(Day ${hub.startDayNum}~${hub.endDayNum})</span>
+            </div>
+            <div class="flex items-center gap-1.5 shrink-0">
+              <button type="button" onclick="adjustDraftStudioHubDays(${idx}, -1)" class="w-6 h-6 rounded-md bg-stone-100 dark:bg-stone-800 hover:bg-stone-200 dark:hover:bg-stone-700 text-stone-600 dark:text-stone-300 font-bold flex items-center justify-center text-xs cursor-pointer">-</button>
+              <span class="w-8 text-center font-black text-amber-700 dark:text-amber-400 text-xs">${hub.dayCount}일</span>
+              <button type="button" onclick="adjustDraftStudioHubDays(${idx}, 1)" class="w-6 h-6 rounded-md bg-stone-100 dark:bg-stone-800 hover:bg-stone-200 dark:hover:bg-stone-700 text-stone-600 dark:text-stone-300 font-bold flex items-center justify-center text-xs cursor-pointer">+</button>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function adjustDraftStudioHubDays(hubIndex, delta) {
+      const hub = draftStudioState.hubs[hubIndex];
+      if (!hub) return;
+      const newDays = hub.dayCount + delta;
+      if (newDays < 1) return;
+      hub.dayCount = newDays;
+
+      let cur = 1;
+      draftStudioState.hubs.forEach(h => {
+        h.startDayNum = cur;
+        h.endDayNum = cur + h.dayCount - 1;
+        cur += h.dayCount;
+      });
+
+      renderDraftStudioCountries();
+      renderDraftStudioHubSteppers();
+    }
+    window.adjustDraftStudioHubDays = adjustDraftStudioHubDays;
+
+    function autoBalanceDraftStudioHubs() {
+      draftStudioState.hubs = allocateTripHubs(draftStudioState.countries, draftStudioState.cities, draftStudioState.durationDays);
+      renderDraftStudioCountries();
+      renderDraftStudioHubSteppers();
+    }
+    window.autoBalanceDraftStudioHubs = autoBalanceDraftStudioHubs;
+
+    function renderDraftStudioConcepts() {
+      const container = document.getElementById('draft-studio-concept-chips');
+      if (!container) return;
+      const allConcepts = [
+        { id: '배낭', label: '🎒 배낭' },
+        { id: '맛집', label: '🍽️ 미식' },
+        { id: '문화', label: '🏛️ 문화' },
+        { id: '럭셔리', label: '👑 럭셔리' },
+        { id: '자연', label: '🏞️ 자연' },
+        { id: '힐링', label: '🧘 힐링' },
+        { id: '가성비', label: '💰 가성비' },
+        { id: '가족', label: '👨‍👩‍👧 가족' }
+      ];
+
+      container.innerHTML = allConcepts.map(c => {
+        const isSelected = draftStudioState.concepts.includes(c.id);
+        return `
+          <button type="button" onclick="toggleDraftStudioConcept('${c.id}')" class="px-2 py-1 rounded-lg text-[10px] font-bold transition cursor-pointer ${
+            isSelected
+              ? 'bg-[#1c1917] text-white dark:bg-amber-500 dark:text-black shadow-sm'
+              : 'bg-white dark:bg-stone-800 text-stone-600 dark:text-stone-300 border border-stone-200 dark:border-stone-700 hover:bg-stone-100'
+          }">
+            ${c.label}
+          </button>
+        `;
+      }).join('');
+    }
+
+    function toggleDraftStudioConcept(conceptId) {
+      const idx = draftStudioState.concepts.indexOf(conceptId);
+      if (idx >= 0) {
+        draftStudioState.concepts.splice(idx, 1);
+      } else {
+        draftStudioState.concepts.push(conceptId);
+      }
+      renderDraftStudioConcepts();
+    }
+    window.toggleDraftStudioConcept = toggleDraftStudioConcept;
+
+    function saveDraftStudioSettingsOnly() {
+      const trip = getActiveTrip();
+      if (!trip) return;
+
+      const sumDays = draftStudioState.hubs.reduce((a, b) => a + (Number(b.dayCount) || 0), 0);
+      if (sumDays !== draftStudioState.durationDays) {
+        if (!confirm(`거점별 일수 합계(${sumDays}일)가 총 여행 기간(${draftStudioState.durationDays}일)과 일치하지 않습니다. 기간을 ${sumDays}일로 맞추시겠습니까?`)) {
+          return;
+        }
+        draftStudioState.durationDays = sumDays;
+      }
+
+      trip.startDate = document.getElementById('draft-studio-start-date')?.value || trip.startDate;
+      trip.endDate = document.getElementById('draft-studio-end-date')?.value || trip.endDate;
+      trip.durationDays = draftStudioState.durationDays;
+      trip.arrivalTime = document.getElementById('draft-studio-arr-time')?.value || trip.arrivalTime;
+      trip.departureTime = document.getElementById('draft-studio-dep-time')?.value || trip.departureTime;
+      trip.concepts = draftStudioState.concepts.slice();
+      trip.wishlist = document.getElementById('ai-trip-prompt')?.value.trim() || '';
+      trip.hubAllocations = draftStudioState.hubs.map(h => ({ ...h }));
+
+      saveTrips();
+      renderActiveTripWorkspace();
+      closeModal('modal-ai-trip', true);
+      showToast('✅ 여행 설정값 및 거점 배분이 안전하게 저장되었습니다.');
+    }
+    window.saveDraftStudioSettingsOnly = saveDraftStudioSettingsOnly;
+
+    async function executeDraftStudioGeneration() {
+      const trip = getActiveTrip();
+      if (!trip) return;
+
+      const sumDays = draftStudioState.hubs.reduce((a, b) => a + (Number(b.dayCount) || 0), 0);
+      if (sumDays !== draftStudioState.durationDays) {
+        draftStudioState.durationDays = sumDays;
+      }
+      trip.startDate = document.getElementById('draft-studio-start-date')?.value || trip.startDate;
+      trip.endDate = document.getElementById('draft-studio-end-date')?.value || trip.endDate;
+      trip.durationDays = draftStudioState.durationDays;
+      trip.arrivalTime = document.getElementById('draft-studio-arr-time')?.value || trip.arrivalTime;
+      trip.departureTime = document.getElementById('draft-studio-dep-time')?.value || trip.departureTime;
+      trip.concepts = draftStudioState.concepts.slice();
+      trip.wishlist = document.getElementById('ai-trip-prompt')?.value.trim() || '';
+      trip.hubAllocations = draftStudioState.hubs.map(h => ({ ...h }));
+      saveTrips();
+
+      const engine = document.querySelector('input[name="draft-studio-engine"]:checked')?.value || 'smart_local';
+
+      if (engine === 'smart_local') {
+        const loader = document.getElementById('ai-trip-loading');
+        if (loader) loader.classList.remove('hidden');
+        setTimeout(() => {
+          try {
+            const concepts = trip.concepts.length ? trip.concepts : ['사용자 맞춤 여행'];
+            const fullDestContext = ((trip.countries || []).join(', ') + ' ' + (trip.cities || []).join(', ')).trim();
+            const newDays = generateAutoSpotsForTrip(
+              (trip.countries || [])[0] || '여행지',
+              trip.durationDays,
+              concepts,
+              trip.wishlist,
+              trip.arrivalTime,
+              trip.departureTime,
+              fullDestContext,
+              trip.hubAllocations
+            );
+
+            trip.days = newDays;
+            trip.planSource = 'local_draft';
+            trip.planBlockMeta = {};
+            ensurePlanBlockStructure(trip);
+            saveTrips();
+            renderActiveTripWorkspace();
+            closeModal('modal-ai-trip', true);
+            showToast(`🎉 ${trip.hubAllocations.length}대 거점 기반 새 일정 초안이 생성되었습니다!`, 4000);
+          } catch (e) {
+            console.error('Local draft generation error:', e);
+            showToast('⚠️ 초안 생성 중 오류가 발생했습니다: ' + e.message);
+          } finally {
+            if (loader) loader.classList.add('hidden');
+          }
+        }, 300);
+      } else {
+        await generateAiItinerary();
+      }
+    }
+    window.executeDraftStudioGeneration = executeDraftStudioGeneration;
+
     async function generateAiItinerary() {
       const trip = getActiveTrip();
       if (!trip) return;
@@ -15678,6 +16382,15 @@ ${JSON.stringify(snapshotDays)}`;
       const cityNote = Array.isArray(trip.cities) && trip.cities.length ? `\n우선 방문할 주요 도시/거점(입력 순서 존중): ${trip.cities.join(', ')}` : '';
       const destination = (trip.countries || []).join(', ') || (trip.cities || []).join(', ') || trip.title || '사용자 지정 여행지';
       const expectedDayCount = Number(trip.durationDays || trip.days?.length || 5);
+
+      const hubs = (trip.hubAllocations && trip.hubAllocations.length > 0)
+        ? trip.hubAllocations
+        : allocateTripHubs(trip.countries || [], trip.cities || [], expectedDayCount);
+
+      const hubAllocationDesc = hubs.length > 1
+        ? `\n거점별 체류 계획 (반드시 준수):\n` + hubs.map(h => `- Day ${h.startDayNum}~${h.endDayNum}: ${h.name} (${h.dayCount}일 체류, 세부 도시: ${h.cities.join(', ') || h.name})`).join('\n')
+        : '';
+
       const hasCustomizedPlanBlocks = Object.values(trip.planBlockMeta || {}).some(meta =>
         meta && (meta.title || meta.place || meta.lodging || meta.notes ||
           (Array.isArray(meta.priorities) && meta.priorities.length) ||
@@ -15688,7 +16401,7 @@ ${JSON.stringify(snapshotDays)}`;
 
       const isLongTrip = expectedDayCount > 7;
       const spotDensityRule = isLongTrip
-        ? `- 전체 ${expectedDayCount}일 일정의 안정성을 위해 각 날짜별로 4~6개의 핵심 일정(오전 대표 명소, 점심 맛집, 오후 하이라이트 투어, 저녁 식사/야경)을 완성도 높게 구성합니다.`
+        ? `- 전체 ${expectedDayCount}일 일정의 안정성을 위해 각 날짜별로 4~6개의 핵심 일정(오전 대표 명소, 점심 맛집, 오후 하이라이트 투어, 저녁 식사/야경)을 구성합니다.`
         : `- 일반 여행일은 08:30~21:00 사이에 이동·식사·관광·휴식/체크인을 포함한 6~10개 일정을 만듭니다.
 - 첫날과 마지막 날은 도착·출발 시간을 지키면서도 각각 4~6개 일정을 만듭니다.`;
 
@@ -15698,9 +16411,11 @@ ${cityNote}
 기간: ${expectedDayCount}일
 여행 날짜: ${trip.startDate || '미정'} ~ ${trip.endDate || '미정'} (날짜는 이 범위를 바꾸지 마세요)
 테마: ${userPrompt || trip.style || trip.subtitle || '랜드마크 & 미식'}${arrivalNote}${departureNote}
+${hubAllocationDesc}
 아래 일정 밀도와 시간 규칙을 반드시 지키세요.
 - 정확히 ${expectedDayCount}개의 day를 만들고 dayNum은 1부터 순서대로 사용합니다.
-- 입력한 도시를 순서대로 배치하되, 이동 거리와 숙박 흐름을 고려해 여러 날 체류를 자연스럽게 배분합니다.
+- 각 날짜의 city 필드는 해당 날짜가 속한 거점 명칭(${hubs.map(h => h.name).join(', ')})을 반드시 정확히 기재하세요.
+- 거점이 바뀌는 첫날에는 이전 거점에서 다음 거점으로의 이동/환승(페리, 대교, 고속철 등) 스팟을 포함하세요.
 ${spotDensityRule}
 - 모든 일정 시간은 :00 또는 :30으로 시작하며, 항공·장거리 열차 외에는 설명 없는 3시간 이상의 공백을 만들지 않습니다.
 JSON 배열만 출력하세요. 각 day는 dayNum, title, city, date, spots를 포함하고 각 spot은 time(HH:MM), cat, title, desc, tip, cost를 포함해야 합니다.`;
@@ -15710,7 +16425,7 @@ JSON 배열만 출력하세요. 각 day는 dayNum, title, city, date, spots를 �
           kind: 'itinerary', baseRevision: trip.revision || 0, input: {
             prompt, expectedDayCount, minSpotsPerDay: isLongTrip ? 3 : 4, edgeMinSpotsPerDay: 2,
             replacePlanStructure, defaultCity: (trip.cities || [])[0] || (trip.countries || [])[0] || '여행지',
-            userPrompt
+            userPrompt, hubs
           } });
         if (result.state === 'awaiting_review') closeModal('modal-ai-trip', true);
       } catch (error) {
