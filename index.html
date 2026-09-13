@@ -17,14 +17,14 @@
   </script>
 
   <!-- PWA Meta & Icons -->
-  <link rel="manifest" href="manifest.webmanifest?v=1.7.2">
+  <link rel="manifest" href="manifest.webmanifest?v=1.7.3">
   <meta name="theme-color" content="#F7F5F0">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
-  <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192-v115.png?v=1.7.2">
-  <link rel="icon" type="image/png" sizes="32x32" href="favicon.png?v=1.7.2">
+  <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192-v115.png?v=1.7.3">
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon.png?v=1.7.3">
   <link rel="shortcut icon" href="favicon.ico">
-  <link rel="apple-touch-icon" sizes="180x180" href="icons/apple-touch-icon-v115.png?v=1.7.2">
+  <link rel="apple-touch-icon" sizes="180x180" href="icons/apple-touch-icon-v115.png?v=1.7.3">
 
   <!-- Google Fonts: Great Vibes, Dancing Script (Cursive Calligraphy), Cormorant Garamond, Noto Serif KR, Playfair Display -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -32,7 +32,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Great+Vibes&family=Cormorant+Garamond:wght@600;700;800&family=Noto+Serif+KR:wght@500;600;700;900&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
 
   <!-- Local Utilities Bundle (CDN fallback & tailwind utilities) -->
-  <link rel="stylesheet" href="css/utilities.css?v=1.7.2">
+  <link rel="stylesheet" href="css/utilities.css?v=1.7.3">
   <link rel="stylesheet" href="vendor/fontawesome/css/all.min.css">
 
   <!-- Leaflet Map CSS & JS -->
@@ -984,8 +984,8 @@
     }
   </style>
 
-  <link rel="stylesheet" href="css/companion.css?v=1.7.2">
-  <script src="js/presentation/companion-ui.js?v=1.7.2"></script>
+  <link rel="stylesheet" href="css/companion.css?v=1.7.3">
+  <script src="js/presentation/companion-ui.js?v=1.7.3"></script>
 
   <!-- Knowledge Base Seed & Destination Knowledge Packs (DKP) -->
   <script src="kb-travel.js"></script>
@@ -1014,8 +1014,8 @@
 
       <!-- 우측 액션 클러스터 (버전 알약 -> 원형 통계 -> 원형 설정 -> 다크그린 캡슐 추가) -->
       <div class="flex items-center gap-1 sm:gap-1.5 shrink-0">
-        <!-- 1. 버전 배지 버튼 (v1.7.2 - 클릭 시 버전 이력) -->
-        <button id="app-ver-badge" onclick="event.stopPropagation(); openVersionHistoryModal()" class="h-7 sm:h-8 px-2 sm:px-2.5 rounded-full theme-card-subtle flex items-center justify-center font-mono text-[10px] sm:text-[11px] font-bold text-[#a2601b] dark:text-[#d4af37] shadow-xs hover:border-amber-500/60 transition cursor-pointer shrink-0" title="버전 업데이트 기록 보기 (클릭)">v1.7.2</button>
+        <!-- 1. 버전 배지 버튼 (v1.7.3 - 클릭 시 버전 이력) -->
+        <button id="app-ver-badge" onclick="event.stopPropagation(); openVersionHistoryModal()" class="h-7 sm:h-8 px-2 sm:px-2.5 rounded-full theme-card-subtle flex items-center justify-center font-mono text-[10px] sm:text-[11px] font-bold text-[#a2601b] dark:text-[#d4af37] shadow-xs hover:border-amber-500/60 transition cursor-pointer shrink-0" title="버전 업데이트 기록 보기 (클릭)">v1.7.3</button>
 
         <!-- 2. 통계 버튼 (📊 - 원형 버튼) -->
         <button id="header-btn-analytics" onclick="openAnalyticsModal('lifetime')" class="companion-header-analytics w-7 h-7 sm:w-8 sm:h-8 rounded-full theme-card-subtle flex items-center justify-center text-[#a2601b] dark:text-[#d4af37] hover:border-amber-500/60 transition shadow-xs cursor-pointer shrink-0" title="술술 여행 통계 대시보드">
@@ -2046,15 +2046,17 @@
             <span class="text-[10px] font-bold text-amber-700 dark:text-amber-300 bg-amber-50 dark:bg-amber-950/50 px-2 py-0.5 rounded-full border border-amber-200 dark:border-amber-800 shrink-0">통화·시차 자동 매칭</span>
           </div>
 
-          <!-- 대륙 빠른 필터 탭 바 (독립 가로 스크롤 격리) -->
+          <!-- 대륙 빠른 필터 탭 바 (독립 가로 스크롤 격리, 8대 권역 완비) -->
           <div class="w-full max-w-full overflow-hidden">
             <div class="flex items-center gap-1 overflow-x-auto pb-1 scrollbar-none text-[11px] w-full max-w-full">
               <button type="button" onclick="setCreateTripRegionFilter('all')" id="tab-reg-all" class="px-2.5 py-1 rounded-lg font-bold transition whitespace-nowrap bg-[#1c1917] text-white dark:bg-amber-500 dark:text-black cursor-pointer shadow-sm shrink-0">전체</button>
               <button type="button" onclick="setCreateTripRegionFilter('east_asia')" id="tab-reg-east_asia" class="px-2.5 py-1 rounded-lg font-medium transition whitespace-nowrap bg-white dark:bg-stone-800 text-stone-600 dark:text-stone-300 border border-stone-200 dark:border-stone-700 cursor-pointer shrink-0">동아시아</button>
               <button type="button" onclick="setCreateTripRegionFilter('southeast_asia')" id="tab-reg-southeast_asia" class="px-2.5 py-1 rounded-lg font-medium transition whitespace-nowrap bg-white dark:bg-stone-800 text-stone-600 dark:text-stone-300 border border-stone-200 dark:border-stone-700 cursor-pointer shrink-0">동남아</button>
+              <button type="button" onclick="setCreateTripRegionFilter('south_central_asia')" id="tab-reg-south_central_asia" class="px-2.5 py-1 rounded-lg font-medium transition whitespace-nowrap bg-white dark:bg-stone-800 text-stone-600 dark:text-stone-300 border border-stone-200 dark:border-stone-700 cursor-pointer shrink-0">남·중앙아시아</button>
               <button type="button" onclick="setCreateTripRegionFilter('europe')" id="tab-reg-europe" class="px-2.5 py-1 rounded-lg font-medium transition whitespace-nowrap bg-white dark:bg-stone-800 text-stone-600 dark:text-stone-300 border border-stone-200 dark:border-stone-700 cursor-pointer shrink-0">유럽</button>
               <button type="button" onclick="setCreateTripRegionFilter('americas')" id="tab-reg-americas" class="px-2.5 py-1 rounded-lg font-medium transition whitespace-nowrap bg-white dark:bg-stone-800 text-stone-600 dark:text-stone-300 border border-stone-200 dark:border-stone-700 cursor-pointer shrink-0">미주</button>
-              <button type="button" onclick="setCreateTripRegionFilter('other')" id="tab-reg-other" class="px-2.5 py-1 rounded-lg font-medium transition whitespace-nowrap bg-white dark:bg-stone-800 text-stone-600 dark:text-stone-300 border border-stone-200 dark:border-stone-700 cursor-pointer shrink-0">대양주·중동</button>
+              <button type="button" onclick="setCreateTripRegionFilter('oceania')" id="tab-reg-oceania" class="px-2.5 py-1 rounded-lg font-medium transition whitespace-nowrap bg-white dark:bg-stone-800 text-stone-600 dark:text-stone-300 border border-stone-200 dark:border-stone-700 cursor-pointer shrink-0">대양주</button>
+              <button type="button" onclick="setCreateTripRegionFilter('mideast_africa')" id="tab-reg-mideast_africa" class="px-2.5 py-1 rounded-lg font-medium transition whitespace-nowrap bg-white dark:bg-stone-800 text-stone-600 dark:text-stone-300 border border-stone-200 dark:border-stone-700 cursor-pointer shrink-0">중동·아프리카</button>
             </div>
           </div>
 
@@ -3760,14 +3762,34 @@
 
       <!-- 버전 목록 스크롤 영역 (독립 스크롤 컨테이너로 Flexbox 압축 버그 영구 척결) -->
       <div class="overflow-y-auto flex-1 min-h-0 space-y-3.5 pr-1.5 custom-scrollbar">
-        <!-- v1.7.2 (Current) -->
+        <!-- v1.7.3 (Current) -->
         <div class="p-4 rounded-2xl border-2 border-emerald-500/50 space-y-2.5 bg-emerald-500/5 dark:bg-emerald-500/10 shrink-0 shadow-sm">
           <div class="flex items-center justify-between gap-2">
             <div class="flex items-center gap-2 min-w-0">
-              <span class="px-2.5 py-0.5 rounded-lg bg-emerald-500 text-black font-black text-xs shadow-sm shrink-0">v1.7.2</span>
-              <span class="text-xs font-black text-[#1c1917] dark:text-white truncate">술술다이어리풍 4대 여정 상태 좌측 그라데이션 및 하단 앰버 진행률 바, 후원 QR 모달 & 전용 가이드/개인정보처리방침 구축</span>
+              <span class="px-2.5 py-0.5 rounded-lg bg-emerald-500 text-black font-black text-xs shadow-sm shrink-0">v1.7.3</span>
+              <span class="text-xs font-black text-[#1c1917] dark:text-white truncate">전 세계 국가 데이터베이스 대확장 (59개국 → 140+개국) & 8대 권역 세분화 및 여행지 직접 추가 기능 구현</span>
             </div>
             <span class="companion-status shrink-0">최신 버전</span>
+          </div>
+          <p class="text-xs leading-relaxed text-[#44403c] dark:text-stone-300">
+            1) <b>전 세계 국가 데이터베이스 대확장 (140개국+)</b>: 기존 59개국에서 남·중앙아시아(인도, 네팔, 몰디브, 스리랑카, 우즈베키스탄 등), 동남아(미얀마, 브루나이 등), 유럽(슬로베니아, 루마니아, 몰타, 모나코 등), 미주(에콰도르, 우루과이, 코스타리카, 자메이카 등), 대양주(팔라우, 타히티 등), 중동·아프리카(사우디, 오만, 요르단, 나미비아, 모리셔스 등)를 총망라하여 140개국 이상으로 2.4배 대폭 확장했습니다.<br>
+            2) <b>대륙 필터 8대 권역 체계 고도화</b>: 전체, 동아시아, 동남아, 남·중앙아시아, 유럽, 미주, 대양주, 중동·아프리카 8개 탭으로 세분화하여 직관적인 탐색과 필터링을 지원합니다.<br>
+            3) <b>전 세계 여행지 직접 추가 액션 (100% 커버리지)</b>: 검색 결과가 없거나 목록에 없는 특수 도서/오지/소도시라도 검색창에서 <code>['검색어' 직접 여행지로 추가]</code> 버튼을 클릭하면 즉시 국가 및 방문 도시로 자동 등록되어 전 세계 어디든 100% 일정 구성이 가능합니다.<br>
+            4) <b>신규 통화 35종 완벽 동기화 (CURRENCY_INFO)</b>: 새로 추가된 국가들의 현지 통화(MMK, MVR, BTN, KGS, BAM, XPF 등 35종) 환율과 기호를 가계부 및 다통화 지갑에 완벽 연동했습니다.
+          </p>
+          <div class="text-[10px] text-stone-400 dark:text-stone-500 pt-1 border-t border-emerald-500/20 flex items-center justify-between">
+            <span>📅 2026-09-13 릴리즈</span>
+            <span class="font-mono">st-shell-v1.7.3</span>
+          </div>
+        </div>
+
+        <!-- v1.7.2 -->
+        <div class="p-4 rounded-2xl bg-stone-50 dark:bg-stone-900/50 border border-stone-200 dark:border-stone-800 space-y-2.5 shadow-sm relative overflow-hidden shrink-0">
+          <div class="flex items-center justify-between gap-2">
+            <div class="flex items-center gap-2 min-w-0">
+              <span class="px-2 py-0.5 rounded-lg bg-stone-200 dark:bg-stone-800 text-stone-800 dark:text-stone-200 font-bold text-[11px] font-mono shrink-0">v1.7.2</span>
+              <span class="text-xs font-bold text-[#1c1917] dark:text-stone-200 truncate">술술다이어리풍 4대 여정 상태 좌측 그라데이션 및 하단 앰버 진행률 바, 후원 QR 모달 & 전용 가이드/개인정보처리방침 구축</span>
+            </div>
           </div>
           <p class="text-xs leading-relaxed text-[#44403c] dark:text-stone-300">
             1) <b>술술다이어리 스타일 4대 여정 상태 좌측 그라데이션</b>: 진행 중(에메랄드), 예정(스카이블루), 완료(골드브론즈), 버킷리스트(퍼플)에 따라 카드 좌측에 5px 컬러 액센트 보더와 부드러운 수평 페이드 그라데이션 틴트를 부여하여 여정 상태의 시각적 직관성을 획기적으로 향상시켰습니다.<br>
@@ -3775,7 +3797,7 @@
             3) <b>술술트래블 후원 QR 모달 & 링크 복사/열기</b>: 술술다이어리에서 검증된 <code>donate-qr.png</code> 고해상도 자산과 네이버 블로그 후원 연동 링크를 연계하고, 원클릭 계좌이체 QR 뷰어 및 링크 복사/열기 액션을 완비했습니다.<br>
             4) <b>에디토리얼 푸터 4종 가이드/정책 모달 & 저작권 고지</b>: 사용 가이드(<code>modal-user-guide</code>), 기기 간 동기화(<code>modal-device-sync</code>), 개인정보처리방침(<code>modal-privacy</code>), 변경 이력 모달 연동 및 <i>"Copyright © 2026 CoBa's Sulsul Travel. All rights reserved."</i> 공식 저작권 표기를 완료했습니다.
           </p>
-          <div class="text-[10px] text-stone-400 dark:text-stone-500 pt-1 border-t border-emerald-500/20 flex items-center justify-between">
+          <div class="text-[10px] text-stone-400 dark:text-stone-500 pt-1 border-t border-stone-200 dark:border-stone-800 flex items-center justify-between">
             <span>📅 2026-09-13 릴리즈</span>
             <span class="font-mono">st-shell-v1.7.2</span>
           </div>
@@ -4442,7 +4464,7 @@
 
       <!-- 모달 푸터 -->
       <div class="pt-3 border-t border-[#e8e2d5] dark:border-stone-800 flex items-center justify-between shrink-0">
-        <span class="text-[11px] text-stone-400 dark:text-stone-500 font-mono">Sulsul Travel Engine v1.7.2</span>
+        <span class="text-[11px] text-stone-400 dark:text-stone-500 font-mono">Sulsul Travel Engine v1.7.3</span>
         <button onclick="closeModal('modal-version-history')" class="px-4 py-2 rounded-xl bg-[#faf8f5] dark:bg-stone-800 hover:bg-[#f0ece1] dark:hover:bg-stone-700 border border-[#e8e2d5] dark:border-stone-700 text-[#1c1917] dark:text-[#ededed] text-xs font-bold transition cursor-pointer shadow-sm">
           닫기
         </button>
@@ -4789,7 +4811,7 @@
     window.showToast = showToast;
 
     // 앱 버전 및 글로벌 네임스페이스 (Sulsul-Travel Invariant Rule R-10, R-11, R-12, R-13, R-14, R-15, R-16)
-    const APP_VER = '1.7.2';
+    const APP_VER = '1.7.3';
 
     // ══════════════════════════════════════════
     // [3-Way Theme System] 모던, 라이트그레이, 딥 블랙 테마 엔진 (v1.6.7)
@@ -4918,7 +4940,7 @@
       { id: '힐링', label: '🧘 힐링/휴양' }
     ];
 
-    // 전 세계 주요 여행지 국가·국기·통화·도시 마스터 데이터베이스 (ISO 4217 & ISO 3166 기반)
+    // 전 세계 주요 여행지 국가·국기·통화·도시 마스터 데이터베이스 (ISO 4217 & ISO 3166 기반, 140개국+)
     const COUNTRY_DATABASE = [
       // 1. 동아시아 (east_asia)
       { name: '대한민국', code: 'KR', flag: '🇰🇷', currency: 'KRW', currName: '원', symbol: '₩', region: 'east_asia', popularCities: ['서울', '제주', '부산', '강릉', '경주', '여수', '전주', '속초', '대구'], aliases: ['한국', '남한', '코리아', 'korea'] },
@@ -4938,8 +4960,27 @@
       { name: '말레이시아', code: 'MY', flag: '🇲🇾', currency: 'MYR', currName: '링깃', symbol: 'RM', region: 'southeast_asia', popularCities: ['쿠알라룸푸르', '코타키나발루', '페낭', '랑카위', '말라카'], aliases: ['malaysia'] },
       { name: '라오스', code: 'LA', flag: '🇱🇦', currency: 'LAK', currName: '킵', symbol: '₭', region: 'southeast_asia', popularCities: ['루앙프라방', '방비엥', '비엔티안', '팍세'], aliases: ['laos'] },
       { name: '캄보디아', code: 'KH', flag: '🇰🇭', currency: 'KHR', currName: '리엘', symbol: '៛', region: 'southeast_asia', popularCities: ['씨엠립', '프놈펜', '앙코르와트', '시아누크빌'], aliases: ['cambodia'] },
+      { name: '미얀마', code: 'MM', flag: '🇲🇲', currency: 'MMK', currName: '짯', symbol: 'K', region: 'southeast_asia', popularCities: ['양곤', '바간', '만달레이', '인레호수', '네피도'], aliases: ['myanmar', 'burma', 'yangon', 'bagan'] },
+      { name: '브루나이', code: 'BN', flag: '🇧🇳', currency: 'BND', currName: '브루나이 달러', symbol: 'B$', region: 'southeast_asia', popularCities: ['반다르스리브가완', '템부롱', '투퉁'], aliases: ['brunei', 'bandar seri begawan'] },
+      { name: '동티모르', code: 'TL', flag: '🇹🇱', currency: 'USD', currName: '달러', symbol: '$', region: 'southeast_asia', popularCities: ['딜리', '바우카우', '아타우로섬'], aliases: ['timor-leste', 'east timor', 'dili'] },
 
-      // 3. 유럽 (europe)
+      // 3. 남·중앙아시아 & 코카서스 (south_central_asia)
+      { name: '인도', code: 'IN', flag: '🇮🇳', currency: 'INR', currName: '루피', symbol: '₹', region: 'south_central_asia', popularCities: ['델리', '뉴델리', '자이푸르', '아그라', '바라나시', '뭄바이', '고아', '레', '라다크', '우다이푸르', '콜카타', '벵갈루루'], aliases: ['india', 'delhi', 'jaipur', 'agra', 'varanasi'] },
+      { name: '네팔', code: 'NP', flag: '🇳🇵', currency: 'NPR', currName: '루피', symbol: 'Rs', region: 'south_central_asia', popularCities: ['카트만두', '포카라', '안나푸르나', '룸비니', '치트완', '에베레스트', '파탄', '박타푸르'], aliases: ['nepal', 'kathmandu', 'pokhara', 'himalaya'] },
+      { name: '몰디브', code: 'MV', flag: '🇲🇻', currency: 'MVR', currName: '루피야', symbol: 'Rf', region: 'south_central_asia', popularCities: ['말레', '마아푸시', '후룰말레', '아리아톨', '바아톨'], aliases: ['maldives', 'male', 'hulhumale'] },
+      { name: '스리랑카', code: 'LK', flag: '🇱🇰', currency: 'LKR', currName: '루피', symbol: 'Rs', region: 'south_central_asia', popularCities: ['콜롬보', '캔디', '시기리야', '갈레', '엘라', '누와라엘리야', '네곰보'], aliases: ['sri lanka', 'colombo', 'kandy', 'sigiriya'] },
+      { name: '부탄', code: 'BT', flag: '🇧🇹', currency: 'BTN', currName: '눌트럼', symbol: 'Nu', region: 'south_central_asia', popularCities: ['팀부', '파로', '푸나카', '트롱사'], aliases: ['bhutan', 'thimphu', 'paro'] },
+      { name: '우즈베키스탄', code: 'UZ', flag: '🇺🇿', currency: 'UZS', currName: '숨', symbol: "so'm", region: 'south_central_asia', popularCities: ['타슈켄트', '사마르칸트', '부하라', '히바', '샤흐리삽스'], aliases: ['uzbekistan', 'tashkent', 'samarkand', 'bukhara'] },
+      { name: '카자흐스탄', code: 'KZ', flag: '🇰🇿', currency: 'KZT', currName: '텡게', symbol: '₸', region: 'south_central_asia', popularCities: ['알마티', '아스타나', '침불락', '차른캐니언', '콜사이호수'], aliases: ['kazakhstan', 'almaty', 'astana'] },
+      { name: '키르기스스탄', code: 'KG', flag: '🇰🇬', currency: 'KGS', currName: '솜', symbol: 'сом', region: 'south_central_asia', popularCities: ['비슈케크', '이식쿨', '카라콜', '송쿨', '알라아르차'], aliases: ['kyrgyzstan', 'bishkek', 'issyk-kul'] },
+      { name: '타지키스탄', code: 'TJ', flag: '🇹🇯', currency: 'TJS', currName: '소모니', symbol: 'смн', region: 'south_central_asia', popularCities: ['두샨베', '파미르', '호로그', '이스칸데르쿨'], aliases: ['tajikistan', 'dushanbe', 'pamir'] },
+      { name: '방글라데시', code: 'BD', flag: '🇧🇩', currency: 'BDT', currName: '타카', symbol: 'Tk', region: 'south_central_asia', popularCities: ['다카', '치타공', '콕스바자르', '실렛'], aliases: ['bangladesh', 'dhaka'] },
+      { name: '파키스탄', code: 'PK', flag: '🇵🇰', currency: 'PKR', currName: '루피', symbol: 'Rs', region: 'south_central_asia', popularCities: ['이슬라마바드', '라호르', '훈자', '카라치', '스카르두', '길기트'], aliases: ['pakistan', 'hunza', 'lahore'] },
+      { name: '조지아', code: 'GE', flag: '🇬🇪', currency: 'GEL', currName: '라리', symbol: '₾', region: 'south_central_asia', popularCities: ['트빌리시', '카즈베기', '바투미', '시그나기', '메스티아', '쿠타이시'], aliases: ['georgia', 'tbilisi', 'kazbegi', '그루지야'] },
+      { name: '아르메니아', code: 'AM', flag: '🇦🇲', currency: 'AMD', currName: '드람', symbol: '֏', region: 'south_central_asia', popularCities: ['예레반', '세반', '가르니', '딜리잔', '타테브'], aliases: ['armenia', 'yerevan'] },
+      { name: '아제르바이잔', code: 'AZ', flag: '🇦🇿', currency: 'AZN', currName: '마나트', symbol: '₼', region: 'south_central_asia', popularCities: ['바쿠', '셰키', '고부스탄', '가발라'], aliases: ['azerbaijan', 'baku'] },
+
+      // 4. 유럽 (europe)
       { name: '스페인', code: 'ES', flag: '🇪🇸', currency: 'EUR', currName: '유로', symbol: '€', region: 'europe', popularCities: ['바르셀로나', '마드리드', '세비야', '그라나다', '론다', '톨레도', '발렌시아', '말라가', '산세바스티안', '이비자', '마요르카', '세고비아', '코르도바'], aliases: ['spain', 'barcelona', 'madrid'] },
       { name: '포르투갈', code: 'PT', flag: '🇵🇹', currency: 'EUR', currName: '유로', symbol: '€', region: 'europe', popularCities: ['리스본', '포르투', '신트라', '라고스', '카스카이스', '코임브라'], aliases: ['portugal', 'lisbon', 'porto'] },
       { name: '프랑스', code: 'FR', flag: '🇫🇷', currency: 'EUR', currName: '유로', symbol: '€', region: 'europe', popularCities: ['파리', '니스', '리옹', '마르세유', '스트라스부르', '보르도', '몽생미셸', '아비뇽', '칸', '에즈'], aliases: ['france', 'paris'] },
@@ -4962,8 +5003,28 @@
       { name: '아이슬란드', code: 'IS', flag: '🇮🇸', currency: 'ISK', currName: '크로나', symbol: 'kr', region: 'europe', popularCities: ['레이캬비크', '비크', '골든서클', '아쿠레이리', '스카프타펠'], aliases: ['iceland'] },
       { name: '튀르키예', code: 'TR', flag: '🇹🇷', currency: 'TRY', currName: '리라', symbol: '₺', region: 'europe', popularCities: ['이스탄불', '카파도키아', '안탈리아', '파묵칼레', '이즈미르', '보드룸'], aliases: ['터키', 'turkey', 'istanbul'] },
       { name: '아일랜드', code: 'IE', flag: '🇮🇪', currency: 'EUR', currName: '유로', symbol: '€', region: 'europe', popularCities: ['더블린', '골웨이', '코크', '모허절벽'], aliases: ['ireland'] },
+      { name: '슬로베니아', code: 'SI', flag: '🇸🇮', currency: 'EUR', currName: '유로', symbol: '€', region: 'europe', popularCities: ['류블랴나', '블레드', '피란', '포스토이나', '보힌'], aliases: ['slovenia', 'ljubljana', 'bled'] },
+      { name: '슬로바키아', code: 'SK', flag: '🇸🇰', currency: 'EUR', currName: '유로', symbol: '€', region: 'europe', popularCities: ['브라티슬라바', '타트라', '코시체', '보이니체'], aliases: ['slovakia', 'bratislava', 'tatra'] },
+      { name: '루마니아', code: 'RO', flag: '🇷🇴', currency: 'RON', currName: '레우', symbol: 'lei', region: 'europe', popularCities: ['부쿠레슈티', '브라쇼브', '시비우', '클루지나포카', '시기쇼아라', '브란성'], aliases: ['romania', 'bucharest', 'brasov'] },
+      { name: '불가리아', code: 'BG', flag: '🇧🇬', currency: 'BGN', currName: '레프', symbol: 'лв', region: 'europe', popularCities: ['소피아', '플로브디프', '바르나', '벨리코투르노보', '릴라'], aliases: ['bulgaria', 'sofia', 'plovdiv'] },
+      { name: '세르비아', code: 'RS', flag: '🇷🇸', currency: 'RSD', currName: '디나르', symbol: 'din', region: 'europe', popularCities: ['베오그라드', '노비사드', '니시', '수보티차'], aliases: ['serbia', 'belgrade'] },
+      { name: '보스니아 헤르체고비나', code: 'BA', flag: '🇧🇦', currency: 'BAM', currName: '마르카', symbol: 'KM', region: 'europe', popularCities: ['사라예보', '모스타르', '블라가이', '야이체'], aliases: ['bosnia', 'sarajevo', 'mostar', '보스니아'] },
+      { name: '몬테네그로', code: 'ME', flag: '🇲🇪', currency: 'EUR', currName: '유로', symbol: '€', region: 'europe', popularCities: ['코토르', '부드바', '포드고리차', '페라스트', '두르미토르'], aliases: ['montenegro', 'kotor', 'budva'] },
+      { name: '북마케도니아', code: 'MK', flag: '🇲🇰', currency: 'MKD', currName: '디나르', symbol: 'ден', region: 'europe', popularCities: ['스코페', '오흐리드', '비톨라'], aliases: ['macedonia', 'north macedonia', 'skopje', 'ohrid', '마케도니아'] },
+      { name: '알바니아', code: 'AL', flag: '🇦🇱', currency: 'ALL', currName: '레크', symbol: 'Lek', region: 'europe', popularCities: ['티라나', '사란더', '블로러', '베라트', '슈코더르'], aliases: ['albania', 'tirana', 'saranda'] },
+      { name: '에스토니아', code: 'EE', flag: '🇪🇪', currency: 'EUR', currName: '유로', symbol: '€', region: 'europe', popularCities: ['탈린', '타르투', '패르누', '사레마섬'], aliases: ['estonia', 'tallinn'] },
+      { name: '라트비아', code: 'LV', flag: '🇱🇻', currency: 'EUR', currName: '유로', symbol: '€', region: 'europe', popularCities: ['리가', '유르말라', '시굴다', '룬달레'], aliases: ['latvia', 'riga'] },
+      { name: '리투아니아', code: 'LT', flag: '🇱🇹', currency: 'EUR', currName: '유로', symbol: '€', region: 'europe', popularCities: ['빌뉴스', '카우나스', '트라카이', '클라이페다'], aliases: ['lithuania', 'vilnius'] },
+      { name: '룩셈부르크', code: 'LU', flag: '🇱🇺', currency: 'EUR', currName: '유로', symbol: '€', region: 'europe', popularCities: ['룩셈부르크시티', '비안덴', '에히터나흐'], aliases: ['luxembourg'] },
+      { name: '몰타', code: 'MT', flag: '🇲🇹', currency: 'EUR', currName: '유로', symbol: '€', region: 'europe', popularCities: ['발레타', '슬리에마', '고조', '임디나', '세인트줄리언스'], aliases: ['malta', 'valletta', 'gozo'] },
+      { name: '키프로스', code: 'CY', flag: '🇨🇾', currency: 'EUR', currName: '유로', symbol: '€', region: 'europe', popularCities: ['니코시아', '파포스', '리마솔', '아야나파', '라르나카'], aliases: ['cyprus', 'nicosia', 'paphos'] },
+      { name: '모나코', code: 'MC', flag: '🇲🇨', currency: 'EUR', currName: '유로', symbol: '€', region: 'europe', popularCities: ['몬테카를로', '모나코빌', '라콩다민'], aliases: ['monaco', 'monte carlo'] },
+      { name: '안도라', code: 'AD', flag: '🇦🇩', currency: 'EUR', currName: '유로', symbol: '€', region: 'europe', popularCities: ['안도라라베야', '에스칼데스', '엔캄프'], aliases: ['andorra'] },
+      { name: '산마리노', code: 'SM', flag: '🇸🇲', currency: 'EUR', currName: '유로', symbol: '€', region: 'europe', popularCities: ['산마리노시티', '보르고마조레'], aliases: ['san marino'] },
+      { name: '바티칸', code: 'VA', flag: '🇻🇦', currency: 'EUR', currName: '유로', symbol: '€', region: 'europe', popularCities: ['바티칸시국', '성베드로대성당'], aliases: ['vatican', 'vatican city'] },
+      { name: '리히텐슈타인', code: 'LI', flag: '🇱🇮', currency: 'CHF', currName: '프랑', symbol: 'CHF', region: 'europe', popularCities: ['파두츠', '샨', '발체르스'], aliases: ['liechtenstein', 'vaduz'] },
 
-      // 4. 미주 (americas)
+      // 5. 미주 (americas)
       { name: '미국', code: 'US', flag: '🇺🇸', currency: 'USD', currName: '달러', symbol: '$', region: 'americas', popularCities: ['뉴욕', '로스앤젤레스', '샌프란시스코', '라스베이거스', '라스베가스', '하와이', '시애틀', '시카고', '올랜도', '보스턴', '워싱턴DC', '샌디에이고', '마이애미', '포틀랜드'], aliases: ['usa', 'america', 'new york', 'la', 'united states', '미합중국'] },
       { name: '캐나다', code: 'CA', flag: '🇨🇦', currency: 'CAD', currName: '캐나다 달러', symbol: 'C$', region: 'americas', popularCities: ['밴쿠버', '토론토', '몬트리올', '퀘벡', '밴프', '오타와', '캘거리'], aliases: ['canada'] },
       { name: '멕시코', code: 'MX', flag: '🇲🇽', currency: 'MXN', currName: '페소', symbol: '$', region: 'americas', popularCities: ['칸쿤', '멕시코시티', '과달라하라', '플라야델카르멘', '오아하카', '툴룸'], aliases: ['mexico', 'cancun'] },
@@ -4974,20 +5035,66 @@
       { name: '칠레', code: 'CL', flag: '🇨🇱', currency: 'CLP', currName: '페소', symbol: '$', region: 'americas', popularCities: ['산티아고', '발파라이소', '아타카마', '토레스델파이네', '푸에르토몬트'], aliases: ['chile'] },
       { name: '콜롬비아', code: 'CO', flag: '🇨🇴', currency: 'COP', currName: '페소', symbol: '$', region: 'americas', popularCities: ['보고타', '메데인', '카르타헤나', '칼리'], aliases: ['colombia'] },
       { name: '쿠바', code: 'CU', flag: '🇨🇺', currency: 'CUP', currName: '페소', symbol: '₱', region: 'americas', popularCities: ['아바나', '바라데로', '트리니다드', '비냘레스'], aliases: ['cuba', 'havana'] },
+      { name: '에콰도르', code: 'EC', flag: '🇪🇨', currency: 'USD', currName: '달러', symbol: '$', region: 'americas', popularCities: ['키토', '갈라파고스', '과야킬', '쿠엥카', '바뇨스', '오타발로'], aliases: ['ecuador', 'galapagos', 'quito', 'cuenca'] },
+      { name: '우루과이', code: 'UY', flag: '🇺🇾', currency: 'UYU', currName: '페소', symbol: '$', region: 'americas', popularCities: ['몬테비데오', '푼타델에스테', '콜로니아', '카보폴로니오'], aliases: ['uruguay', 'montevideo', 'punta del este'] },
+      { name: '파라과이', code: 'PY', flag: '🇵🇾', currency: 'PYG', currName: '과라니', symbol: '₲', region: 'americas', popularCities: ['아순시온', '시우다드델에스테', '엔카르나시온'], aliases: ['paraguay', 'asuncion'] },
+      { name: '코스타리카', code: 'CR', flag: '🇨🇷', currency: 'CRC', currName: '콜론', symbol: '₡', region: 'americas', popularCities: ['산호세', '아레날', '몬테베르데', '마누엘안토니오', '타마린도'], aliases: ['costa rica', 'san jose'] },
+      { name: '파나마', code: 'PA', flag: '🇵🇦', currency: 'USD', currName: '달러', symbol: '$', region: 'americas', popularCities: ['파나마시티', '보카스델토로', '산블라스', '보케테'], aliases: ['panama', 'panama city'] },
+      { name: '과테말라', code: 'GT', flag: '🇬🇹', currency: 'GTQ', currName: '케찰', symbol: 'Q', region: 'americas', popularCities: ['안티구아', '아티틀란', '티칼', '과테말라시티', '세묵참페이'], aliases: ['guatemala', 'antigua', 'tikal'] },
+      { name: '벨리즈', code: 'BZ', flag: '🇧🇿', currency: 'BZD', currName: '벨리즈 달러', symbol: 'BZ$', region: 'americas', popularCities: ['벨리즈시티', '산페드로', '카요', '키코커', '블루홀'], aliases: ['belize', 'caye caulker'] },
+      { name: '온두라스', code: 'HN', flag: '🇭🇳', currency: 'HNL', currName: '렘피라', symbol: 'L', region: 'americas', popularCities: ['테구시갈파', '로아탄', '코판유적', '산페드로술라'], aliases: ['honduras', 'roatan', 'copan'] },
+      { name: '엘살바도르', code: 'SV', flag: '🇸🇻', currency: 'USD', currName: '달러', symbol: '$', region: 'americas', popularCities: ['산살바도르', '산타아나', '엘툰코', '수치토토'], aliases: ['el salvador', 'san salvador'] },
+      { name: '니카라과', code: 'NI', flag: '🇳🇮', currency: 'NIO', currName: '코르도바', symbol: 'C$', region: 'americas', popularCities: ['마나과', '그라나다', '레온', '산후안델수르', '오메테페'], aliases: ['nicaragua', 'granada'] },
+      { name: '자메이카', code: 'JM', flag: '🇯🇲', currency: 'JMD', currName: '자메이카 달러', symbol: 'J$', region: 'americas', popularCities: ['킹스턴', '몬테고베이', '네그릴', '오초리오스'], aliases: ['jamaica', 'kingston', 'montego bay'] },
+      { name: '도미니카공화국', code: 'DO', flag: '🇩🇴', currency: 'DOP', currName: '도미니카 페소', symbol: 'RD$', region: 'americas', popularCities: ['산토도밍고', '푼타카나', '푸에르토플라타', '사마나'], aliases: ['dominican republic', 'punta cana'] },
+      { name: '바하마', code: 'BS', flag: '🇧🇸', currency: 'BSD', currName: '바하마 달러', symbol: 'B$', region: 'americas', popularCities: ['나소', '파라다이스섬', '엑수마', '그랜드바하마'], aliases: ['bahamas', 'nassau'] },
+      { name: '푸에르토리코', code: 'PR', flag: '🇵🇷', currency: 'USD', currName: '달러', symbol: '$', region: 'americas', popularCities: ['산후안', '폰세', '비에케스', '쿨레브라', '엘융케'], aliases: ['puerto rico', 'san juan'] },
+      { name: '아루바', code: 'AW', flag: '🇦🇼', currency: 'AWG', currName: '플로린', symbol: 'Afl.', region: 'americas', popularCities: ['오라녜스타트', '이글비치', '팜비치'], aliases: ['aruba', 'oranjestad'] },
+      { name: '퀴라소', code: 'CW', flag: '🇨🇼', currency: 'ANG', currName: '길더', symbol: 'NAƒ', region: 'americas', popularCities: ['빌렘스타트', '웨스트푼트'], aliases: ['curacao', 'willemstad'] },
 
-      // 5. 대양주 & 중동·아프리카 (other)
-      { name: '호주', code: 'AU', flag: '🇦🇺', currency: 'AUD', currName: '호주 달러', symbol: 'A$', region: 'other', popularCities: ['시드니', '멜버른', '브리즈번', '골드코스트', '케언즈', '퍼스', '울루루'], aliases: ['australia', 'sydney'] },
-      { name: '뉴질랜드', code: 'NZ', flag: '🇳🇿', currency: 'NZD', currName: '뉴질랜드 달러', symbol: 'NZ$', region: 'other', popularCities: ['오클랜드', '퀸스타운', '크라이스트처치', '로토루아', '테카포', '와나카'], aliases: ['new zealand'] },
-      { name: '괌', code: 'GU', flag: '🇬🇺', currency: 'USD', currName: '달러', symbol: '$', region: 'other', popularCities: ['투몬', '하갓냐', '타무닝'], aliases: ['guam'] },
-      { name: '사이판', code: 'MP', flag: '🇲🇵', currency: 'USD', currName: '달러', symbol: '$', region: 'other', popularCities: ['가라판', '마나가하섬', '산안토니오'], aliases: ['saipan'] },
-      { name: '피지', code: 'FJ', flag: '🇫🇯', currency: 'FJD', currName: '피지 달러', symbol: 'FJ$', region: 'other', popularCities: ['난디', '수바', '데나라우'], aliases: ['fiji'] },
-      { name: '아랍에미리트', code: 'AE', flag: '🇦🇪', currency: 'AED', currName: '디르함', symbol: 'AED', region: 'other', popularCities: ['두바이', '아부다비', '샤르자'], aliases: ['uae', 'dubai'] },
-      { name: '카타르', code: 'QA', flag: '🇶🇦', currency: 'QAR', currName: '리얄', symbol: 'QR', region: 'other', popularCities: ['도하', '루사일'], aliases: ['qatar', 'doha'] },
-      { name: '이집트', code: 'EG', flag: '🇪🇬', currency: 'EGP', currName: '이집트 파운드', symbol: 'E£', region: 'other', popularCities: ['카이로', '룩소르', '아스완', '후르가다', '알렉산드리아', '다합'], aliases: ['egypt', 'cairo'] },
-      { name: '모로코', code: 'MA', flag: '🇲🇦', currency: 'MAD', currName: '디르함', symbol: 'DH', region: 'other', popularCities: ['마라케시', '카사블랑카', '페스', '셰프샤우엔', '탕헤르'], aliases: ['morocco'] },
-      { name: '남아프리카공화국', code: 'ZA', flag: '🇿🇦', currency: 'ZAR', currName: '랜드', symbol: 'R', region: 'other', popularCities: ['케이프타운', '요하네스버그', '더반', '크루거국립공원'], aliases: ['south africa'] },
-      { name: '케냐', code: 'KE', flag: '🇰🇪', currency: 'KES', currName: '실링', symbol: 'KSh', region: 'other', popularCities: ['나이로비', '마사이마라', '몸바사'], aliases: ['kenya'] },
-      { name: '탄자니아', code: 'TZ', flag: '🇹🇿', currency: 'TZS', currName: '실링', symbol: 'TSh', region: 'other', popularCities: ['잔지바르', '세렝게티', '킬리만자로', '아루샤'], aliases: ['tanzania'] }
+      // 6. 대양주 (oceania)
+      { name: '호주', code: 'AU', flag: '🇦🇺', currency: 'AUD', currName: '호주 달러', symbol: 'A$', region: 'oceania', popularCities: ['시드니', '멜버른', '브리즈번', '골드코스트', '케언즈', '퍼스', '울루루'], aliases: ['australia', 'sydney'] },
+      { name: '뉴질랜드', code: 'NZ', flag: '🇳🇿', currency: 'NZD', currName: '뉴질랜드 달러', symbol: 'NZ$', region: 'oceania', popularCities: ['오클랜드', '퀸스타운', '크라이스트처치', '로토루아', '테카포', '와나카'], aliases: ['new zealand'] },
+      { name: '괌', code: 'GU', flag: '🇬🇺', currency: 'USD', currName: '달러', symbol: '$', region: 'oceania', popularCities: ['투몬', '하갓냐', '타무닝'], aliases: ['guam'] },
+      { name: '사이판', code: 'MP', flag: '🇲🇵', currency: 'USD', currName: '달러', symbol: '$', region: 'oceania', popularCities: ['가라판', '마나가하섬', '산안토니오'], aliases: ['saipan'] },
+      { name: '피지', code: 'FJ', flag: '🇫🇯', currency: 'FJD', currName: '피지 달러', symbol: 'FJ$', region: 'oceania', popularCities: ['난디', '수바', '데나라우'], aliases: ['fiji'] },
+      { name: '팔라우', code: 'PW', flag: '🇵🇼', currency: 'USD', currName: '달러', symbol: '$', region: 'oceania', popularCities: ['코롤', '펠렐리우', '바벨다오브', '락아일랜드'], aliases: ['palau', 'koror'] },
+      { name: '뉴칼레도니아', code: 'NC', flag: '🇳🇨', currency: 'XPF', currName: 'CFP 프랑', symbol: 'CFP', region: 'oceania', popularCities: ['누메아', '일데팽', '아메데등대'], aliases: ['new caledonia', 'noumea'] },
+      { name: '프렌치 폴리네시아', code: 'PF', flag: '🇵🇫', currency: 'XPF', currName: 'CFP 프랑', symbol: 'CFP', region: 'oceania', popularCities: ['파페에테', '보라보라', '무레아', '타히티', '랑기로아'], aliases: ['tahiti', 'bora bora', 'french polynesia', '타히티', '보라보라'] },
+      { name: '바누아투', code: 'VU', flag: '🇻🇺', currency: 'VUV', currName: '바투', symbol: 'VT', region: 'oceania', popularCities: ['포트빌라', '탄나', '에스피리투산토'], aliases: ['vanuatu', 'port vila'] },
+      { name: '사모아', code: 'WS', flag: '🇼🇸', currency: 'WST', currName: '탈라', symbol: 'WS$', region: 'oceania', popularCities: ['아피아', '우폴루', '사바이'], aliases: ['samoa', 'apia'] },
+      { name: '쿡 제도', code: 'CK', flag: '🇨🇰', currency: 'NZD', currName: '뉴질랜드 달러', symbol: 'NZ$', region: 'oceania', popularCities: ['라로통가', '아이투타키'], aliases: ['cook islands', 'rarotonga'] },
+      { name: '파푸아뉴기니', code: 'PG', flag: '🇵🇬', currency: 'PGK', currName: '키나', symbol: 'K', region: 'oceania', popularCities: ['포트모르즈비', '마당', '고로카'], aliases: ['papua new guinea', 'port moresby'] },
+
+      // 7. 중동 & 아프리카 (mideast_africa)
+      { name: '사우디아라비아', code: 'SA', flag: '🇸🇦', currency: 'SAR', currName: '사우디 리얄', symbol: 'SR', region: 'mideast_africa', popularCities: ['리야드', '제다', '알울라', '메카', '메디나', '담맘'], aliases: ['saudi arabia', 'saudi', 'riyadh', 'jeddah', 'alula'] },
+      { name: '아랍에미리트', code: 'AE', flag: '🇦🇪', currency: 'AED', currName: '디르함', symbol: 'AED', region: 'mideast_africa', popularCities: ['두바이', '아부다비', '샤르자'], aliases: ['uae', 'dubai'] },
+      { name: '카타르', code: 'QA', flag: '🇶🇦', currency: 'QAR', currName: '리얄', symbol: 'QR', region: 'mideast_africa', popularCities: ['도하', '루사일'], aliases: ['qatar', 'doha'] },
+      { name: '오만', code: 'OM', flag: '🇴🇲', currency: 'OMR', currName: '오만 리얄', symbol: 'RO', region: 'mideast_africa', popularCities: ['무스카트', '살랄라', '니즈와', '와히바사막', '수르'], aliases: ['oman', 'muscat', 'salalah'] },
+      { name: '요르단', code: 'JO', flag: '🇯🇴', currency: 'JOD', currName: '요르단 디나르', symbol: 'JD', region: 'mideast_africa', popularCities: ['암만', '페트라', '와디럼', '사해', '아카바', '제라시'], aliases: ['jordan', 'petra', 'amman', 'wadi rum'] },
+      { name: '이스라엘', code: 'IL', flag: '🇮🇱', currency: 'ILS', currName: '신 셰켈', symbol: '₪', region: 'mideast_africa', popularCities: ['텔아비브', '예루살렘', '사해', '하이파', '나사렛', '에일라트'], aliases: ['israel', 'jerusalem', 'tel aviv'] },
+      { name: '바레인', code: 'BH', flag: '🇧🇭', currency: 'BHD', currName: '바레인 디나르', symbol: 'BD', region: 'mideast_africa', popularCities: ['마나마', '무하라크', '리파'], aliases: ['bahrain', 'manama'] },
+      { name: '쿠웨이트', code: 'KW', flag: '🇰🇼', currency: 'KWD', currName: '쿠웨이트 디나르', symbol: 'KD', region: 'mideast_africa', popularCities: ['쿠웨이트시티', '살미야'], aliases: ['kuwait', 'kuwait city'] },
+      { name: '레바논', code: 'LB', flag: '🇱🇧', currency: 'USD', currName: '달러', symbol: '$', region: 'mideast_africa', popularCities: ['베이루트', '비블로스', '바알베크', '트리폴리'], aliases: ['lebanon', 'beirut'] },
+      { name: '이집트', code: 'EG', flag: '🇪🇬', currency: 'EGP', currName: '이집트 파운드', symbol: 'E£', region: 'mideast_africa', popularCities: ['카이로', '룩소르', '아스완', '후르가다', '알렉산드리아', '다합'], aliases: ['egypt', 'cairo'] },
+      { name: '모로코', code: 'MA', flag: '🇲🇦', currency: 'MAD', currName: '디르함', symbol: 'DH', region: 'mideast_africa', popularCities: ['마라케시', '카사블랑카', '페스', '셰프샤우엔', '탕헤르'], aliases: ['morocco'] },
+      { name: '튀니지', code: 'TN', flag: '🇹🇳', currency: 'TND', currName: '튀니지 디나르', symbol: 'DT', region: 'mideast_africa', popularCities: ['튀니스', '시디부사이드', '카르타고', '함마메트', '사하라', '수스'], aliases: ['tunisia', 'tunis', 'sidi bou said'] },
+      { name: '알제리', code: 'DZ', flag: '🇩🇿', currency: 'DZD', currName: '알제리 디나르', symbol: 'DA', region: 'mideast_africa', popularCities: ['알제', '오랑', '콘스탄틴', '팀가드'], aliases: ['algeria', 'algiers'] },
+      { name: '남아프리카공화국', code: 'ZA', flag: '🇿🇦', currency: 'ZAR', currName: '랜드', symbol: 'R', region: 'mideast_africa', popularCities: ['케이프타운', '요하네스버그', '더반', '크루거국립공원'], aliases: ['south africa'] },
+      { name: '나미비아', code: 'NA', flag: '🇳🇦', currency: 'NAD', currName: '나미비아 달러', symbol: 'N$', region: 'mideast_africa', popularCities: ['빈트후크', '소서스블레이', '스와코프문트', '에토샤', '데드블레이', '왈비스베이'], aliases: ['namibia', 'sossusvlei', 'windhoek'] },
+      { name: '보츠와나', code: 'BW', flag: '🇧🇼', currency: 'BWP', currName: '풀라', symbol: 'P', region: 'mideast_africa', popularCities: ['가보로네', '오카방고', '초베', '마운', '카사네'], aliases: ['botswana', 'okavango', 'chobe'] },
+      { name: '짐바브웨', code: 'ZW', flag: '🇿🇼', currency: 'USD', currName: '달러', symbol: '$', region: 'mideast_africa', popularCities: ['빅토리아폴스', '하라레', '불라와요', '마토보'], aliases: ['zimbabwe', 'victoria falls', 'harare'] },
+      { name: '잠비아', code: 'ZM', flag: '🇿🇲', currency: 'ZMW', currName: '콰차', symbol: 'ZK', region: 'mideast_africa', popularCities: ['리빙스턴', '루사카', '빅토리아폭포', '사우스루앙과'], aliases: ['zambia', 'livingstone', 'lusaka'] },
+      { name: '케냐', code: 'KE', flag: '🇰🇪', currency: 'KES', currName: '실링', symbol: 'KSh', region: 'mideast_africa', popularCities: ['나이로비', '마사이마라', '몸바사'], aliases: ['kenya'] },
+      { name: '탄자니아', code: 'TZ', flag: '🇹🇿', currency: 'TZS', currName: '실링', symbol: 'TSh', region: 'mideast_africa', popularCities: ['잔지바르', '세렝게티', '킬리만자로', '아루샤'], aliases: ['tanzania'] },
+      { name: '모리셔스', code: 'MU', flag: '🇲🇺', currency: 'MUR', currName: '모리셔스 루피', symbol: 'Rs', region: 'mideast_africa', popularCities: ['포트루이스', '그랑베', '르몬', '샤마렐', '벨마르', '플릭앤플락'], aliases: ['mauritius', 'port louis'] },
+      { name: '세이셸', code: 'SC', flag: '🇸🇨', currency: 'SCR', currName: '세이셸 루피', symbol: 'SR', region: 'mideast_africa', popularCities: ['빅토리아', '프랄린', '라디그', '마헤섬'], aliases: ['seychelles', 'mahe', 'praslin', 'la digue'] },
+      { name: '마다가스카르', code: 'MG', flag: '🇲🇬', currency: 'MGA', currName: '아리아리', symbol: 'Ar', region: 'mideast_africa', popularCities: ['안타나나리보', '무룬다바', '노시베', '바오밥거리', '안다시베'], aliases: ['madagascar', 'morondava'] },
+      { name: '에티오피아', code: 'ET', flag: '🇪🇹', currency: 'ETB', currName: '비르', symbol: 'Br', region: 'mideast_africa', popularCities: ['아디스아바바', '랄리벨라', '곤다르', '시미엔', '악숨'], aliases: ['ethiopia', 'addis ababa', 'lalibela'] },
+      { name: '르완다', code: 'RW', flag: '🇷🇼', currency: 'RWF', currName: '르완다 프랑', symbol: 'FRw', region: 'mideast_africa', popularCities: ['키갈리', '화산국립공원', '키부호수', '뉴웅궤'], aliases: ['rwanda', 'kigali'] },
+      { name: '가나', code: 'GH', flag: '🇬🇭', currency: 'GHS', currName: '세디', symbol: 'GH₵', region: 'mideast_africa', popularCities: ['아크라', '케이프코스트', '쿠마시', '엘미나'], aliases: ['ghana', 'accra'] },
+      { name: '세네갈', code: 'SN', flag: '🇸🇳', currency: 'XOF', currName: 'CFA 프랑', symbol: 'CFA', region: 'mideast_africa', popularCities: ['다카르', '생루이', '고레섬', '살룸삼각주'], aliases: ['senegal', 'dakar'] },
+      { name: '우간다', code: 'UG', flag: '🇺🇬', currency: 'UGX', currName: '실링', symbol: 'USh', region: 'mideast_africa', popularCities: ['캄팔라', '엔테베', '브윈디', '진자', '퀸엘리자베스'], aliases: ['uganda', 'kampala', 'entebbe'] }
     ];
 
     // [v1.4.4] 표준 국가 변환 엔진 (도시/별칭/복합지명 -> 표준 국가 + 소속 도시 완벽 분리)
@@ -9911,6 +10018,14 @@
       LKR: { name: '스리랑카 루피', symbol: 'Rs', flag: '🇱🇰', rate: 4.5, step: 100, region: 'ASIA', country: '스리랑카' },
       KHR: { name: '캄보디아 리엘', symbol: '៛', flag: '🇰🇭', rate: 0.33, step: 1000, region: 'ASIA', country: '캄보디아 (앙코르와트)' },
       LAK: { name: '라오스 킵', symbol: '₭', flag: '🇱🇦', rate: 0.062, step: 10000, region: 'ASIA', country: '라오스' },
+      MMK: { name: '미얀마 짯', symbol: 'K', flag: '🇲🇲', rate: 0.64, step: 1000, region: 'ASIA', country: '미얀마 (양곤, 바간)' },
+      BND: { name: '브루나이 달러', symbol: 'B$', flag: '🇧🇳', rate: 1020, step: 10, region: 'ASIA', country: '브루나이' },
+      MVR: { name: '몰디브 루피야', symbol: 'Rf', flag: '🇲🇻', rate: 87.5, step: 10, region: 'ASIA', country: '몰디브 (말레)' },
+      BTN: { name: '부탄 눌트럼', symbol: 'Nu', flag: '🇧🇹', rate: 16.2, step: 100, region: 'ASIA', country: '부탄 (팀부)' },
+      KGS: { name: '키르기스스탄 솜', symbol: 'сом', flag: '🇰🇬', rate: 15.5, step: 100, region: 'ASIA', country: '키르기스스탄 (비슈케크)' },
+      TJS: { name: '타지키스탄 소모니', symbol: 'смн', flag: '🇹🇯', rate: 125, step: 10, region: 'ASIA', country: '타지키스탄' },
+      BDT: { name: '방글라데시 타카', symbol: 'Tk', flag: '🇧🇩', rate: 11.3, step: 100, region: 'ASIA', country: '방글라데시' },
+      PKR: { name: '파키스탄 루피', symbol: 'Rs', flag: '🇵🇰', rate: 4.85, step: 100, region: 'ASIA', country: '파키스탄' },
 
       // 4. 유럽 및 주변 국가 통화
       CZK: { name: '체코 코루나', symbol: 'Kč', flag: '🇨🇿', rate: 58, step: 10, region: 'EUROPE', country: '체코 (프라하)' },
@@ -9925,6 +10040,11 @@
       RON: { name: '루마니아 레우', symbol: 'lei', flag: '🇷🇴', rate: 295, step: 10, region: 'EUROPE', country: '루마니아' },
       BGN: { name: '불가리아 레프', symbol: 'лв', flag: '🇧🇬', rate: 755, step: 10, region: 'EUROPE', country: '불가리아' },
       RSD: { name: '세르비아 디나르', symbol: 'дин', flag: '🇷🇸', rate: 12.6, step: 100, region: 'EUROPE', country: '세르비아' },
+      AMD: { name: '아르메니아 드람', symbol: '֏', flag: '🇦🇲', rate: 3.5, step: 100, region: 'EUROPE', country: '아르메니아 (예레반)' },
+      AZN: { name: '아제르바이잔 마나트', symbol: '₼', flag: '🇦🇿', rate: 795, step: 1, region: 'EUROPE', country: '아제르바이잔 (바쿠)' },
+      BAM: { name: '보스니아 마르카', symbol: 'KM', flag: '🇧🇦', rate: 755, step: 10, region: 'EUROPE', country: '보스니아 헤르체고비나 (사라예보)' },
+      MKD: { name: '북마케도니아 디나르', symbol: 'ден', flag: '🇲🇰', rate: 24, step: 100, region: 'EUROPE', country: '북마케도니아' },
+      ALL: { name: '알바니아 레크', symbol: 'Lek', flag: '🇦🇱', rate: 14.8, step: 100, region: 'EUROPE', country: '알바니아 (티라나)' },
 
       // 5. 아메리카 및 남미 주요 여행지 통화
       PEN: { name: '페루 솔', symbol: 'S/.', flag: '🇵🇪', rate: 360, step: 10, region: 'AMERICAS', country: '페루 (리마, 쿠스코, 마추픽추)' },
@@ -9940,6 +10060,13 @@
       DOP: { name: '도미니카 페소', symbol: 'RD$', flag: '🇩🇴', rate: 23, step: 10, region: 'AMERICAS', country: '도미니카 공화국' },
       GTQ: { name: '과테말라 케찰', symbol: 'Q', flag: '🇬🇹', rate: 175, step: 10, region: 'AMERICAS', country: '과테말라' },
       JMD: { name: '자메이카 달러', symbol: 'J$', flag: '🇯🇲', rate: 8.7, step: 100, region: 'AMERICAS', country: '자메이카' },
+      BZD: { name: '벨리즈 달러', symbol: 'BZ$', flag: '🇧🇿', rate: 670, step: 10, region: 'AMERICAS', country: '벨리즈' },
+      HNL: { name: '온두라스 렘피라', symbol: 'L', flag: '🇭🇳', rate: 54, step: 10, region: 'AMERICAS', country: '온두라스' },
+      NIO: { name: '니카라과 코르도바', symbol: 'C$', flag: '🇳🇮', rate: 36.8, step: 10, region: 'AMERICAS', country: '니카라과' },
+      BSD: { name: '바하마 달러', symbol: 'B$', flag: '🇧🇸', rate: 1350, step: 1, region: 'AMERICAS', country: '바하마 (나소)' },
+      AWG: { name: '아루바 플로린', symbol: 'Afl.', flag: '🇦🇼', rate: 750, step: 10, region: 'AMERICAS', country: '아루바' },
+      ANG: { name: '퀴라소 길더', symbol: 'NAƒ', flag: '🇨🇼', rate: 750, step: 10, region: 'AMERICAS', country: '퀴라소' },
+      CUP: { name: '쿠바 페소', symbol: '₱', flag: '🇨🇺', rate: 56, step: 10, region: 'AMERICAS', country: '쿠바 (아바나)' },
 
       // 6. 중동 및 아프리카
       AED: { name: '아랍에미리트 디르함', symbol: 'د.إ', flag: '🇦🇪', rate: 367, step: 10, region: 'MEA', country: '아랍에미리트 (두바이, 아부다비)' },
@@ -9957,9 +10084,24 @@
       TZS: { name: '탄자니아 실링', symbol: 'TSh', flag: '🇹🇿', rate: 0.52, step: 1000, region: 'MEA', country: '탄자니아 (세렝게티, 잔지바르)' },
       MUR: { name: '모리셔스 루피', symbol: '₨', flag: '🇲🇺', rate: 29.5, step: 100, region: 'MEA', country: '모리셔스' },
       TND: { name: '튀니지 디나르', symbol: 'DT', flag: '🇹🇳', rate: 435, step: 10, region: 'MEA', country: '튀니지' },
+      SCR: { name: '세이셸 루피', symbol: 'SR', flag: '🇸🇨', rate: 98, step: 10, region: 'MEA', country: '세이셸' },
+      MGA: { name: '마다가스카르 아리아리', symbol: 'Ar', flag: '🇲🇬', rate: 0.3, step: 1000, region: 'MEA', country: '마다가스카르' },
+      NAD: { name: '나미비아 달러', symbol: 'N$', flag: '🇳🇦', rate: 75, step: 10, region: 'MEA', country: '나미비아' },
+      BWP: { name: '보츠와나 풀라', symbol: 'P', flag: '🇧🇼', rate: 99, step: 10, region: 'MEA', country: '보츠와나' },
+      ZMW: { name: '잠비아 콰차', symbol: 'ZK', flag: '🇿🇲', rate: 50, step: 10, region: 'MEA', country: '잠비아' },
+      ETB: { name: '에티오피아 비르', symbol: 'Br', flag: '🇪🇹', rate: 11, step: 100, region: 'MEA', country: '에티오피아' },
+      RWF: { name: '르완다 프랑', symbol: 'FRw', flag: '🇷🇼', rate: 1.0, step: 1000, region: 'MEA', country: '르완다' },
+      DZD: { name: '알제리 디나르', symbol: 'DA', flag: '🇩🇿', rate: 10.1, step: 100, region: 'MEA', country: '알제리' },
+      GHS: { name: '가나 세디', symbol: 'GH₵', flag: '🇬🇭', rate: 88, step: 10, region: 'MEA', country: '가나' },
+      XOF: { name: 'CFA 프랑 (서아프리카)', symbol: 'CFA', flag: '🇸🇳', rate: 2.25, step: 1000, region: 'MEA', country: '세네갈' },
+      UGX: { name: '우간다 실링', symbol: 'USh', flag: '🇺🇬', rate: 0.37, step: 1000, region: 'MEA', country: '우간다' },
 
       // 7. 오세아니아 기타
-      FJD: { name: '피지 달러', symbol: 'FJ$', flag: '🇫🇯', rate: 600, step: 10, region: 'OCEANIA', country: '피지' }
+      FJD: { name: '피지 달러', symbol: 'FJ$', flag: '🇫🇯', rate: 600, step: 10, region: 'OCEANIA', country: '피지' },
+      XPF: { name: 'CFP 프랑', symbol: 'CFP', flag: '🇵🇫', rate: 12.4, step: 100, region: 'OCEANIA', country: '타히티, 뉴칼레도니아' },
+      VUV: { name: '바누아투 바투', symbol: 'VT', flag: '🇻🇺', rate: 11.2, step: 100, region: 'OCEANIA', country: '바누아투' },
+      WST: { name: '사모아 탈라', symbol: 'WS$', flag: '🇼🇸', rate: 490, step: 10, region: 'OCEANIA', country: '사모아' },
+      PGK: { name: '파푸아뉴기니 키나', symbol: 'K', flag: '🇵🇬', rate: 345, step: 10, region: 'OCEANIA', country: '파푸아뉴기니' }
     };
     window.CURRENCY_INFO = CURRENCY_INFO;
 
@@ -12118,14 +12260,14 @@
 
     function setCreateTripRegionFilter(regionKey = 'all') {
       State.createTripSelectedRegion = regionKey;
-      const regions = ['all', 'east_asia', 'southeast_asia', 'europe', 'americas', 'other'];
+      const regions = ['all', 'east_asia', 'southeast_asia', 'south_central_asia', 'europe', 'americas', 'oceania', 'mideast_africa'];
       regions.forEach(r => {
         const tab = document.getElementById(`tab-reg-${r}`);
         if (tab) {
           if (r === regionKey) {
-            tab.className = 'px-2.5 py-1 rounded-lg font-bold transition whitespace-nowrap bg-[#1c1917] text-white dark:bg-amber-500 dark:text-black cursor-pointer shadow-sm';
+            tab.className = 'px-2.5 py-1 rounded-lg font-bold transition whitespace-nowrap bg-[#1c1917] text-white dark:bg-amber-500 dark:text-black cursor-pointer shadow-sm shrink-0';
           } else {
-            tab.className = 'px-2.5 py-1 rounded-lg font-medium transition whitespace-nowrap bg-white dark:bg-stone-800 text-stone-600 dark:text-stone-300 border border-stone-200 dark:border-stone-700 cursor-pointer';
+            tab.className = 'px-2.5 py-1 rounded-lg font-medium transition whitespace-nowrap bg-white dark:bg-stone-800 text-stone-600 dark:text-stone-300 border border-stone-200 dark:border-stone-700 cursor-pointer shrink-0';
           }
         }
       });
@@ -12157,7 +12299,7 @@
       const reg = State.createTripSelectedRegion;
 
       const filtered = COUNTRY_DATABASE.filter(c => {
-        const matchesReg = (reg === 'all' || c.region === reg);
+        const matchesReg = (reg === 'all' || c.region === reg || (reg === 'other' && (c.region === 'oceania' || c.region === 'mideast_africa')));
         if (!matchesReg) return false;
         if (!q) return true;
         return c.name.toLowerCase().includes(q) ||
@@ -12171,14 +12313,18 @@
 
       if (filtered.length === 0) {
         container.innerHTML = `
-          <div class="py-2.5 px-3 text-[11px] text-stone-400 dark:text-stone-500 w-full text-center">
-            '${escapeHtml(q)}' 검색 결과가 없습니다. 다른 검색어를 입력해 보세요.
+          <div class="py-3 px-3 text-[11px] text-stone-500 dark:text-stone-400 w-full text-center space-y-2">
+            <div>'${escapeHtml(q)}' 검색 결과가 데이터베이스에 없습니다.</div>
+            <button type="button" onclick="addCustomCreateTripCountry('${escapeHtml(q)}')" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-amber-500 hover:bg-amber-600 text-black font-bold text-xs shadow-sm cursor-pointer transition">
+              <span>🌐</span>
+              <span>'${escapeHtml(q)}' 직접 여행지로 추가</span>
+            </button>
           </div>
         `;
         return;
       }
 
-      container.innerHTML = filtered.map(c => {
+      let chipsHtml = filtered.map(c => {
         const isSelected = State.createTripSelectedCountries.includes(c.code);
         const activeClass = isSelected
           ? 'btn-gold font-bold shadow-sm ring-1 ring-amber-600/40'
@@ -12193,7 +12339,61 @@
           </button>
         `;
       }).join('');
+
+      if (q) {
+        chipsHtml += `
+          <button type="button" onclick="addCustomCreateTripCountry('${escapeHtml(q)}')" class="px-2 py-1 rounded-lg text-xs flex items-center gap-1 bg-amber-50 hover:bg-amber-100 dark:bg-amber-950/30 dark:hover:bg-amber-900/50 text-amber-800 dark:text-amber-200 border border-dashed border-amber-400 dark:border-amber-600 font-bold transition cursor-pointer shrink-0" title="직접 입력하여 새 여행지 추가">
+            <span>🌐</span>
+            <span>+ '${escapeHtml(q)}' 직접 추가</span>
+          </button>
+        `;
+      }
+
+      container.innerHTML = chipsHtml;
     }
+
+    function addCustomCreateTripCountry(rawName) {
+      if (!rawName || typeof rawName !== 'string') return;
+      const name = rawName.trim();
+      if (!name) return;
+
+      let existing = COUNTRY_DATABASE.find(c => c.name.toLowerCase() === name.toLowerCase() || (c.aliases || []).some(a => a.toLowerCase() === name.toLowerCase()));
+      if (existing) {
+        if (!State.createTripSelectedCountries.includes(existing.code)) {
+          toggleCreateTripCountry(existing.code);
+        }
+        if (typeof showToast === 'function') showToast(`'${existing.name}' 여행지가 선택되었습니다.`);
+        return;
+      }
+
+      // 신규 커스텀 여행지 객체 생성 (전 세계 미등재 소도시/도서지역/특수목적지 완벽 수용)
+      const customCode = 'CUST_' + Math.random().toString(36).substring(2, 7).toUpperCase();
+      const newCountry = {
+        name: name,
+        code: customCode,
+        flag: '🌐',
+        currency: 'USD',
+        currName: '달러',
+        symbol: '$',
+        region: 'all',
+        popularCities: [name],
+        aliases: [name.toLowerCase()]
+      };
+      COUNTRY_DATABASE.push(newCountry);
+
+      toggleCreateTripCountry(customCode);
+      if (!State.createTripSelectedCities[customCode]) {
+        State.createTripSelectedCities[customCode] = [];
+      }
+      if (!State.createTripSelectedCities[customCode].includes(name)) {
+        State.createTripSelectedCities[customCode].push(name);
+      }
+      renderCreateTripCountryChips();
+      renderCreateTripSelectedBoard();
+      syncCreateTripHiddenInputs();
+      if (typeof showToast === 'function') showToast(`'${name}'(이)가 여행지로 추가되었습니다.`);
+    }
+    window.addCustomCreateTripCountry = addCustomCreateTripCountry;
 
     function toggleCreateTripCountry(countryCode) {
       const country = COUNTRY_DATABASE.find(c => c.code === countryCode);

@@ -117,9 +117,9 @@ test('mobile travel notebook presentation is bundled and protected from CDN regr
   assert.match(companionCss, /min-height:44px/);
   assert.match(utilitiesCss, /\.flex/);
   for (const asset of [
-    'css/utilities.css?v=1.7.2',
-    'css/companion.css?v=1.7.2',
-    'js/presentation/companion-ui.js?v=1.7.2',
+    'css/utilities.css?v=1.7.3',
+    'css/companion.css?v=1.7.3',
+    'js/presentation/companion-ui.js?v=1.7.3',
     'vendor/fontawesome/css/all.min.css',
     'vendor/leaflet/leaflet.js',
     'vendor/leaflet/images/marker-icon-2x.png',
@@ -153,9 +153,9 @@ test('card touch swipe handlers and hidden drawers are purged for mobile stabili
 });
 
 test('pwa manifest and safe-zone icon assets are wired with cache-busting', () => {
-  assert.match(html, /<link rel="manifest" href="manifest\.webmanifest\?v=1\.7\.2">/);
-  assert.match(html, /icons\/icon-192-v115\.png\?v=1\.7\.2/);
-  assert.match(html, /favicon\.png\?v=1\.7\.2/);
+  assert.match(html, /<link rel="manifest" href="manifest\.webmanifest\?v=1\.7\.3">/);
+  assert.match(html, /icons\/icon-192-v115\.png\?v=1\.7\.3/);
+  assert.match(html, /favicon\.png\?v=1\.7\.3/);
 });
 
 test('modern theme yellow/amber text has high-contrast override and theme buttons have explicit active styles (v1.7.1)', () => {
@@ -193,12 +193,37 @@ test('editorial footer, donation modal, guides, and copyright are complete (v1.7
   assert.match(html, /https:\/\/blog\.naver\.com\/PostList\.naver\?blogId=ysparkbc37&from=postList&categoryNo=15/);
 });
 
+test('global country database expanded to 140+ countries and custom destination fallback supported (v1.7.3)', () => {
+  // Region filter tabs 8 categories
+  assert.match(html, /id=["']tab-reg-south_central_asia["']/);
+  assert.match(html, /id=["']tab-reg-oceania["']/);
+  assert.match(html, /id=["']tab-reg-mideast_africa["']/);
+
+  // Representative newly added countries
+  assert.match(html, /name:\s*['"]인도['"]/);
+  assert.match(html, /name:\s*['"]네팔['"]/);
+  assert.match(html, /name:\s*['"]몰디브['"]/);
+  assert.match(html, /name:\s*['"]우즈베키스탄['"]/);
+  assert.match(html, /name:\s*['"]슬로베니아['"]/);
+  assert.match(html, /name:\s*['"]몰타['"]/);
+  assert.match(html, /name:\s*['"]에콰도르['"]/);
+  assert.match(html, /name:\s*['"]팔라우['"]/);
+  assert.match(html, /name:\s*['"]프렌치 폴리네시아['"]/);
+  assert.match(html, /name:\s*['"]사우디아라비아['"]/);
+  assert.match(html, /name:\s*['"]모리셔스['"]/);
+  assert.match(html, /name:\s*['"]나미비아['"]/);
+
+  // Fallback custom addition function
+  assert.match(html, /function addCustomCreateTripCountry\(/);
+  assert.match(html, /window\.addCustomCreateTripCountry\s*=/);
+});
+
 test('release version is synchronized', () => {
   const app = html.match(/const APP_VER\s*=\s*'([^']+)'/)?.[1];
   const worker = sw.match(/const V\s*=\s*'st-shell-v([^']+)'/)?.[1];
   const release = changelog.match(/## \[v([^\]]+)\]/)?.[1];
   const chronicleRelease = chronicle.match(/^### \[실록 \d+호\].*\(v([^\)]+)\)$/m)?.[1];
-  assert.equal(app, '1.7.2');
+  assert.equal(app, '1.7.3');
   assert.equal(worker, app);
   assert.equal(release, app);
   assert.equal(chronicleRelease, app);
