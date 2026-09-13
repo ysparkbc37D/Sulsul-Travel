@@ -117,9 +117,9 @@ test('mobile travel notebook presentation is bundled and protected from CDN regr
   assert.match(companionCss, /min-height:44px/);
   assert.match(utilitiesCss, /\.flex/);
   for (const asset of [
-    'css/utilities.css?v=1.6.8',
-    'css/companion.css?v=1.6.8',
-    'js/presentation/companion-ui.js?v=1.6.8',
+    'css/utilities.css?v=1.6.9',
+    'css/companion.css?v=1.6.9',
+    'js/presentation/companion-ui.js?v=1.6.9',
     'vendor/fontawesome/css/all.min.css',
     'vendor/leaflet/leaflet.js',
     'vendor/leaflet/images/marker-icon-2x.png',
@@ -144,12 +144,18 @@ test('hub filter has 3-column single row and card actions are streamlined to 4 b
   assert.match(html, /title=["']여행 삭제["']/);
 });
 
+test('pwa manifest and safe-zone icon assets are wired with cache-busting', () => {
+  assert.match(html, /<link rel="manifest" href="manifest\.webmanifest\?v=1\.6\.9">/);
+  assert.match(html, /icons\/icon-192-v115\.png\?v=1\.6\.9/);
+  assert.match(html, /favicon\.png\?v=1\.6\.9/);
+});
+
 test('release version is synchronized', () => {
   const app = html.match(/const APP_VER\s*=\s*'([^']+)'/)?.[1];
   const worker = sw.match(/const V\s*=\s*'st-shell-v([^']+)'/)?.[1];
   const release = changelog.match(/## \[v([^\]]+)\]/)?.[1];
   const chronicleRelease = chronicle.match(/^### \[실록 \d+호\].*\(v([^\)]+)\)$/m)?.[1];
-  assert.equal(app, '1.6.8');
+  assert.equal(app, '1.6.9');
   assert.equal(worker, app);
   assert.equal(release, app);
   assert.equal(chronicleRelease, app);

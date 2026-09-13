@@ -26,6 +26,20 @@
 - [ ] 항공권/호텔 예약 바우처 PDF 자동 파싱 일정 등록
 - [ ] 여행 동행자 실시간 음성 메모 AI 다이어리 자동 변환
 
+## [v1.6.9] - 2026-09-13
+### 🎨 안드로이드 PWA 스플래시 / 홈 화면 런처 아이콘 안전영역(Safe Zone) 최적화 & 로고 하단 잘림 완전 척결
+- **안드로이드 적응형 아이콘(Adaptive Icon) 안전구역(Safe Zone 85%) 최적화**:
+  - 모바일 PWA 앱 구동 스플래시 화면에서 스쿼클(Squircle) 마스크 및 서클 런처 모서리 곡선에 의해 하단 영문 로고(*"SULSUL TRAVEL"*)가 절단되던 현상 완전 해결.
+  - 마스코트 카드 아크워크 및 텍스트를 Android 적응형 아이콘 권장 안전영역(직경 80~85%) 내에 정확히 안착(ContentSize 435 / 512px)시켜, 텍스트 하단 및 양옆 날개 여백을 45px 이상 확보.
+- **양장본 양피지 텍스처 심리스 확장 블리딩**:
+  - 카드 외곽 여백을 단색 플랫 채움이 아닌 마스터 원본의 천연 수채화 양피지 결 질감(TileFlipXY 및 블리딩)으로 확장하여, 어떠한 OEM 마스크(원형, 스쿼클, 물방울형 등)에서도 자연스럽고 일체감 높은 빈티지 북커버 미학 완성.
+- **15대 전 규격 브랜드 아이콘 전면 리빌드 & 캐시 버스팅**:
+  - `icons/icon-512.png`, `icons/icon-512-v115.png`, `icons/icon-maskable-512.png`, `icons/icon-maskable-512-v115.png`, `icons/sulsul_bear_mascot.png`, `icon-512.png` (512x512)
+  - `icons/icon-192.png`, `icons/icon-192-v115.png`, `icons/icon-maskable-192.png`, `icons/icon-maskable-192-v115.png`, `icon-192.png` (192x192)
+  - `icons/apple-touch-icon.png`, `icons/apple-touch-icon-v115.png`, `apple-touch-icon.png` (180x180)
+  - `favicon.png` (64x64)
+  - 웹 매니페스트(`manifest.webmanifest?v=1.6.9`), `id: sulsul-travel-pwa-v169`, 서비스워커 캐시(`st-shell-v1.6.9`) 갱신으로 모바일 단말기 즉시 재다운로드 보장.
+
 ## [v1.6.8] - 2026-09-13
 ### 📱 모바일 360px 가로 터짐 0px 불변 린터(R-16) 탑재, 3열 단일 라인 필터(국가·도시·컨셉) 및 여행 카드 4대 핵심 액션 정예화
 - **상단 정밀 필터 1줄 3열(`grid-cols-3`) 통합 (`국가`, `도시`, `컨셉`)**:
