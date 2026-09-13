@@ -1,0 +1,69 @@
+﻿<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>사용 가이드 — 술술트래블</title>
+<meta name="theme-color" content="#faf8f5">
+<meta name="description" content="술술트래블 완벽 사용 가이드 — 100% 오프라인 동작, 30분 단위 타임라인, 다통화 스마트 가계부 및 AI 비서 활용법.">
+<link rel="icon" href="./favicon.png?v=1.7.2">
+<link rel="stylesheet" href="./docs.css">
+<script>
+  try {
+    var t = localStorage.getItem('sulsul_travel_theme');
+    if (t === 'deepblack' || t === 'dark') {
+      document.documentElement.dataset.theme = 'dark';
+      document.querySelector('meta[name=theme-color]').content = '#121214';
+    }
+  } catch(e) {}
+</script>
+</head>
+<body>
+<div class="doc">
+
+<header class="dhead">
+  <a class="wm" href="./">Sulsul <b>Travel</b></a>
+  <span class="wm2">술술트래블</span>
+  <h1>사용 가이드</h1>
+  <p class="sub">설레는 계획부터 100% 오프라인 현지 사용까지 완벽 정복 (v1.7.2)</p>
+</header>
+
+<div class="box warn">
+  <span class="bt">핵심 철학</span>
+  <p>술술트래블은 비행기 안, 통신이 두절된 사막이나 산악지대에서도 <b>100% 오프라인으로 완벽 동작</b>합니다.
+  모든 일정과 가계부, 메모는 이용자의 기기 안에만 안전하게 저장됩니다.</p>
+</div>
+
+<h2>1. 여정 등록 & 4대 상태 관리 (Sulsul-Diary 패턴)</h2>
+<p>메인 허브에서 <b>[+ 새 여행 만들기]</b>를 눌러 새 여정을 시작하세요. 날짜가 정해지지 않은 여행지는 <b>[버킷리스트]</b>로 두고, 출발일이 정해지면 날짜를 입력하여 <b>[예정]</b>으로 등록합니다.</p>
+<ul>
+  <li><b>진행 중 (초록)</b>: 여행 기간 중 자동으로 활성화되며, 하단 노란색 바로 오늘이 며칠째인지 직관적으로 표시됩니다.</li>
+  <li><b>예정 (파랑)</b>: 출발일까지 남은 D-day를 카운트다운합니다.</li>
+  <li><b>완료 (골드)</b>: 여정이 끝나면 100% 달성 골드 바로 아카이빙됩니다.</li>
+  <li><b>버킷리스트 (보라)</b>: 언젠가 떠날 꿈의 여행지를 테마별로 모아둡니다.</li>
+</ul>
+
+<h2>2. 30분 단위 스마트 타임라인 & 일정 재배치</h2>
+<p>워크스페이스의 <b>[오늘 동선]</b> 탭에서 각 스팟의 방문 순서와 시간을 30분 단위로 세밀하게 계획하세요. 현지에서 이동이 지연되었을 때는 <b>[일정 재배치]</b> 버튼 하나로 남은 일정을 지능적으로 재정렬할 수 있습니다.</p>
+
+<h2>3. 다통화 스마트 가계부 & MEP 현지 환율</h2>
+<p>USD, EUR, JPY는 물론 남미 현지의 특수 환율(아르헨티나 MEP 블루 환율, 페루 솔, 볼리비아노)까지 실시간 및 오프라인 고정 환율로 계산하여 원화(KRW)로 자동 합산합니다.</p>
+
+<h2>4. Gemini AI 여행 비서 연동</h2>
+<p>설정(⚙)에서 본인의 Google AI Studio API 키를 등록하면, 여행 목적지에 맞춘 최적 코스 자동 생성과 AI 맞춤 일정 컨설팅을 언제든지 이용할 수 있습니다.</p>
+
+<h2>5. 홈 화면 PWA 설치 요령</h2>
+<p>브라우저 주소창 메뉴에서 <b>[홈 화면에 추가]</b> 또는 <b>[앱 설치]</b>를 선택하면, 모바일 단말기에서 네이티브 앱과 동일하게 전체 화면으로 실행됩니다.</p>
+
+<footer class="dfoot" style="margin-top: 40px; padding-top: 20px; border-top: 1px solid var(--line); font-size: 13px; color: var(--ink3); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+  <div>
+    <a href="./" style="color: var(--accent); text-decoration: none; font-weight: bold;">← 술술트래블 홈으로</a> ·
+    <a href="./sync.html" style="color: var(--ink2); text-decoration: underline;">기기 간 동기화</a> ·
+    <a href="./privacy.html" style="color: var(--ink2); text-decoration: underline;">개인정보처리방침</a>
+  </div>
+  <div style="font-size: 11px;">Copyright © 2026 CoBa's Sulsul Travel. All rights reserved.</div>
+</footer>
+
+</div>
+</body>
+</html>

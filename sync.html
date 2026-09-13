@@ -1,0 +1,82 @@
+﻿<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>기기 간 동기화 가이드 — 술술트래블</title>
+<meta name="theme-color" content="#faf8f5">
+<meta name="description" content="술술트래블을 여러 기기(폰, 태블릿, PC)에서 사용하는 방법 — JSON 백업 복원 및 GitHub 동기화 안내.">
+<link rel="icon" href="./favicon.png?v=1.7.2">
+<link rel="stylesheet" href="./docs.css">
+<script>
+  try {
+    var t = localStorage.getItem('sulsul_travel_theme');
+    if (t === 'deepblack' || t === 'dark') {
+      document.documentElement.dataset.theme = 'dark';
+      document.querySelector('meta[name=theme-color]').content = '#121214';
+    }
+  } catch(e) {}
+</script>
+</head>
+<body>
+<div class="doc">
+
+<header class="dhead">
+  <a class="wm" href="./">Sulsul <b>Travel</b></a>
+  <span class="wm2">술술트래블</span>
+  <h1>기기 간 동기화 가이드</h1>
+  <p class="sub">폰과 태블릿, PC 에서 같은 여행 일정을 보는 방법 · 100% 무료 (v1.7.2)</p>
+</header>
+
+<div class="box warn">
+  <span class="bt">먼저 — 이 기능은 없어도 됩니다</span>
+  <p>술술트래블의 <b>기본 사용 방식은 기기 로컬 저장 + JSON 파일 백업</b>입니다.
+  한 대의 스마트폰에서만 쓴다면 별도 설정 없이 충분합니다.
+  설정(⚙) → <b>전체 백업 (JSON)</b> 을 여행 전후에 한 번씩 받아 두는 것으로 완벽합니다.</p>
+</div>
+
+<h2>1. 어떤 방식인가요?</h2>
+<p>제작자의 중앙 서버는 일절 없습니다. 대신 이용자가 직접 JSON 백업 파일을 다른 기기로 전달하거나,
+<b>이용자 본인의 GitHub 비공개(Private) 저장소</b>를 연결하여 안전하게 동기화합니다.</p>
+
+<div class="tw">
+<table>
+  <thead><tr><th></th><th>기본 (JSON 백업)</th><th>GitHub 동기화</th></tr></thead>
+  <tbody>
+    <tr><td><b>비용</b></td><td>없음 (완전 무료)</td><td>없음 (GitHub 무료 계정)</td></tr>
+    <tr><td><b>기기 간 반영</b></td><td>파일 전송 후 복원</td><td><b>버튼 하나로 동기화</b></td></tr>
+    <tr><td><b>준비 작업</b></td><td>없음 (즉시 사용)</td><td>GitHub 계정 및 토큰 발급</td></tr>
+    <tr><td><b>데이터를 보는 사람</b></td><td>나만 (내 기기)</td><td>나만 (비공개 저장소)</td></tr>
+    <tr><td><b>기기 분실 시</b></td><td>백업 파일로 복원</td><td>새 기기에서 토큰으로 복원</td></tr>
+  </tbody>
+</table>
+</div>
+
+<div class="box stop" style="border-left: 4px solid var(--danger); background: rgba(168, 66, 47, 0.08); padding: 14px 18px; border-radius: 12px; margin: 20px 0;">
+  <span class="bt" style="font-weight: bold; color: var(--danger); display: block; margin-bottom: 6px;">GitHub 저장소는 반드시 비공개(Private)로 만드세요</span>
+  <p style="margin: 0; font-size: 13.5px;">공개(Public)로 만들면 <b>여행 일정, 비행기 편명, 호텔 예약, 가계부 지출 내역이 인터넷에 전체 공개</b>됩니다.
+  저장소를 만들 때 반드시 <b>Private</b> 옵션을 체크하세요.</p>
+</div>
+
+<h2>2. 방법 1: 가장 추천하는 간편 JSON 백업 & 복원</h2>
+<ol class="steps" style="line-height: 1.8;">
+  <li><b>내보내기</b>: 상단 설정(⚙) → <b>[전체 백업 (JSON)]</b>을 누르면 <code>sulsul_travel_backup_....json</code> 파일이 다운로드됩니다.</li>
+  <li><b>전달하기</b>: 다운로드된 파일을 카카오톡(나에게 보내기), 이메일, 클라우드 등으로 새 기기에 보냅니다.</li>
+  <li><b>가져오기</b>: 새 기기에서 술술트래블을 열고 설정(⚙) → <b>[백업 파일 복원]</b>을 눌러 해당 파일을 선택하면 모든 여행이 완벽히 복원됩니다.</li>
+</ol>
+
+<h2>3. 스마트폰 변경 시 필수 체크리스트</h2>
+<p>기기 변경이나 브라우저 초기화 전에는 반드시 <b>JSON 전체 백업</b>을 받아 안전한 클라우드나 메일에 저장해 두세요.</p>
+
+<footer class="dfoot" style="margin-top: 40px; padding-top: 20px; border-top: 1px solid var(--line); font-size: 13px; color: var(--ink3); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+  <div>
+    <a href="./" style="color: var(--accent); text-decoration: none; font-weight: bold;">← 술술트래블 홈으로</a> ·
+    <a href="./guide.html" style="color: var(--ink2); text-decoration: underline;">사용 가이드</a> ·
+    <a href="./privacy.html" style="color: var(--ink2); text-decoration: underline;">개인정보처리방침</a>
+  </div>
+  <div style="font-size: 11px;">Copyright © 2026 CoBa's Sulsul Travel. All rights reserved.</div>
+</footer>
+
+</div>
+</body>
+</html>

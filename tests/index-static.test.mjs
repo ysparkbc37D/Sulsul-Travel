@@ -117,9 +117,9 @@ test('mobile travel notebook presentation is bundled and protected from CDN regr
   assert.match(companionCss, /min-height:44px/);
   assert.match(utilitiesCss, /\.flex/);
   for (const asset of [
-    'css/utilities.css?v=1.7.1',
-    'css/companion.css?v=1.7.1',
-    'js/presentation/companion-ui.js?v=1.7.1',
+    'css/utilities.css?v=1.7.2',
+    'css/companion.css?v=1.7.2',
+    'js/presentation/companion-ui.js?v=1.7.2',
     'vendor/fontawesome/css/all.min.css',
     'vendor/leaflet/leaflet.js',
     'vendor/leaflet/images/marker-icon-2x.png',
@@ -153,9 +153,9 @@ test('card touch swipe handlers and hidden drawers are purged for mobile stabili
 });
 
 test('pwa manifest and safe-zone icon assets are wired with cache-busting', () => {
-  assert.match(html, /<link rel="manifest" href="manifest\.webmanifest\?v=1\.7\.1">/);
-  assert.match(html, /icons\/icon-192-v115\.png\?v=1\.7\.1/);
-  assert.match(html, /favicon\.png\?v=1\.7\.1/);
+  assert.match(html, /<link rel="manifest" href="manifest\.webmanifest\?v=1\.7\.2">/);
+  assert.match(html, /icons\/icon-192-v115\.png\?v=1\.7\.2/);
+  assert.match(html, /favicon\.png\?v=1\.7\.2/);
 });
 
 test('modern theme yellow/amber text has high-contrast override and theme buttons have explicit active styles (v1.7.1)', () => {
@@ -170,12 +170,35 @@ test('modern theme yellow/amber text has high-contrast override and theme button
   assert.match(html, /#btn-theme-modern\.is-theme-active\s*\*\s*,\s*:root\[data-theme="modern"\]\s*#btn-theme-modern\s*\*\s*\{\s*color:\s*#ffffff\s*!important/);
 });
 
+test('sulsul-diary card status gradients and bottom progress bar are wired (v1.7.2)', () => {
+  assert.match(html, /\.trip-st-card/);
+  assert.match(html, /\.trip-st-ongoing/);
+  assert.match(html, /\.trip-st-planned/);
+  assert.match(html, /\.trip-st-completed/);
+  assert.match(html, /\.trip-st-bucket/);
+  assert.match(html, /\.trip-bottom-bar/);
+  assert.match(html, /class="trip-bottom-bar"/);
+});
+
+test('editorial footer, donation modal, guides, and copyright are complete (v1.7.2)', () => {
+  assert.match(html, /id=["']hub-sulsul-footer["']/);
+  assert.match(html, /Copyright © 2026 CoBa's Sulsul Travel\. All rights reserved\./);
+  assert.match(html, /id=["']modal-donation["']/);
+  assert.match(html, /id=["']modal-user-guide["']/);
+  assert.match(html, /id=["']modal-device-sync["']/);
+  assert.match(html, /id=["']modal-privacy["']/);
+  assert.match(html, /function openDonationModal\(/);
+  assert.match(html, /function copyDonationLink\(/);
+  assert.match(html, /function openDonationLink\(/);
+  assert.match(html, /https:\/\/blog\.naver\.com\/PostList\.naver\?blogId=ysparkbc37&from=postList&categoryNo=15/);
+});
+
 test('release version is synchronized', () => {
   const app = html.match(/const APP_VER\s*=\s*'([^']+)'/)?.[1];
   const worker = sw.match(/const V\s*=\s*'st-shell-v([^']+)'/)?.[1];
   const release = changelog.match(/## \[v([^\]]+)\]/)?.[1];
   const chronicleRelease = chronicle.match(/^### \[실록 \d+호\].*\(v([^\)]+)\)$/m)?.[1];
-  assert.equal(app, '1.7.1');
+  assert.equal(app, '1.7.2');
   assert.equal(worker, app);
   assert.equal(release, app);
   assert.equal(chronicleRelease, app);
