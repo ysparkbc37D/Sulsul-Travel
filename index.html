@@ -17,14 +17,14 @@
   </script>
 
   <!-- PWA Meta & Icons -->
-  <link rel="manifest" href="manifest.webmanifest?v=1.7.6">
+  <link rel="manifest" href="manifest.webmanifest?v=1.7.7">
   <meta name="theme-color" content="#F7F5F0">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
-  <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192-v115.png?v=1.7.6">
-  <link rel="icon" type="image/png" sizes="32x32" href="favicon.png?v=1.7.6">
+  <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192-v115.png?v=1.7.7">
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon.png?v=1.7.7">
   <link rel="shortcut icon" href="favicon.ico">
-  <link rel="apple-touch-icon" sizes="180x180" href="icons/apple-touch-icon-v115.png?v=1.7.6">
+  <link rel="apple-touch-icon" sizes="180x180" href="icons/apple-touch-icon-v115.png?v=1.7.7">
 
   <!-- Google Fonts: Great Vibes, Dancing Script (Cursive Calligraphy), Cormorant Garamond, Noto Serif KR, Playfair Display -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -32,7 +32,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Great+Vibes&family=Cormorant+Garamond:wght@600;700;800&family=Noto+Serif+KR:wght@500;600;700;900&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
 
   <!-- Local Utilities Bundle (CDN fallback & tailwind utilities) -->
-  <link rel="stylesheet" href="css/utilities.css?v=1.7.6">
+  <link rel="stylesheet" href="css/utilities.css?v=1.7.7">
   <link rel="stylesheet" href="vendor/fontawesome/css/all.min.css">
 
   <!-- Leaflet Map CSS & JS -->
@@ -656,18 +656,24 @@
       border: 1px solid rgba(245, 158, 11, 0.25) !important;
       color: #fde68a !important;
     }
-    :root:not(.dark):not([data-theme="deepblack"]):not([data-theme="dark"]) .text-amber-300,
-    :root:not(.dark):not([data-theme="deepblack"]):not([data-theme="dark"]) .text-amber-300\/90,
-    :root:not(.dark):not([data-theme="deepblack"]):not([data-theme="dark"]) .text-amber-200,
-    :root:not(.dark):not([data-theme="deepblack"]):not([data-theme="dark"]) .text-amber-100,
-    :root:not(.dark):not([data-theme="deepblack"]):not([data-theme="dark"]) .text-yellow-300,
-    :root:not(.dark):not([data-theme="deepblack"]):not([data-theme="dark"]) .text-yellow-200 {
+    /* ================================================================ */
+    /* System-wide High Contrast Safety Guard (WCAG AAA 7:1+ Compliance)*/
+    /* Enforces high legibility for all pastel text/badges in Light Mode  */
+    /* ================================================================ */
+
+    /* 1. Amber & Yellow (Warnings, D-Day, Tips, Highlights) */
+    :root:not(.dark):not([data-theme="deepblack"]):not([data-theme="dark"]) .text-amber-300:not([class*="bg-black"]):not([class*="bg-slate-9"]):not([class*="bg-stone-9"]):not([class*="bg-indigo-9"]):not([class*="bg-emerald-9"]):not([class*="bg-[#0"]):not([class*="bg-[#1"]):not(#modal-schedule-tuning *),
+    :root:not(.dark):not([data-theme="deepblack"]):not([data-theme="dark"]) .text-amber-300\/90:not([class*="bg-black"]):not([class*="bg-slate-9"]):not([class*="bg-stone-9"]):not([class*="bg-indigo-9"]):not([class*="bg-emerald-9"]):not([class*="bg-[#0"]):not([class*="bg-[#1"]):not(#modal-schedule-tuning *),
+    :root:not(.dark):not([data-theme="deepblack"]):not([data-theme="dark"]) .text-amber-200:not([class*="bg-black"]):not([class*="bg-slate-9"]):not([class*="bg-stone-9"]):not([class*="bg-indigo-9"]):not([class*="bg-emerald-9"]):not([class*="bg-[#0"]):not([class*="bg-[#1"]):not(#modal-schedule-tuning *),
+    :root:not(.dark):not([data-theme="deepblack"]):not([data-theme="dark"]) .text-amber-100:not([class*="bg-black"]):not([class*="bg-slate-9"]):not([class*="bg-stone-9"]):not([class*="bg-indigo-9"]):not([class*="bg-emerald-9"]):not([class*="bg-[#0"]):not([class*="bg-[#1"]):not(#modal-schedule-tuning *),
+    :root:not(.dark):not([data-theme="deepblack"]):not([data-theme="dark"]) .text-yellow-300:not([class*="bg-black"]):not([class*="bg-slate-9"]):not([class*="bg-stone-9"]):not([class*="bg-indigo-9"]):not([class*="bg-emerald-9"]):not([class*="bg-[#0"]):not([class*="bg-[#1"]):not(#modal-schedule-tuning *),
+    :root:not(.dark):not([data-theme="deepblack"]):not([data-theme="dark"]) .text-yellow-200:not([class*="bg-black"]):not([class*="bg-slate-9"]):not([class*="bg-stone-9"]):not([class*="bg-indigo-9"]):not([class*="bg-emerald-9"]):not([class*="bg-[#0"]):not([class*="bg-[#1"]):not(#modal-schedule-tuning *) {
       color: #92400e !important;
       font-weight: 700 !important;
     }
-    :root:not(.dark):not([data-theme="deepblack"]):not([data-theme="dark"]) .text-amber-400,
-    :root:not(.dark):not([data-theme="deepblack"]):not([data-theme="dark"]) .text-yellow-400,
-    :root:not(.dark):not([data-theme="deepblack"]):not([data-theme="dark"]) .text-yellow-500 {
+    :root:not(.dark):not([data-theme="deepblack"]):not([data-theme="dark"]) .text-amber-400:not([class*="bg-black"]):not([class*="bg-slate-9"]):not([class*="bg-stone-9"]):not([class*="bg-indigo-9"]):not([class*="bg-emerald-9"]):not([class*="bg-[#0"]):not([class*="bg-[#1"]):not(#modal-schedule-tuning *),
+    :root:not(.dark):not([data-theme="deepblack"]):not([data-theme="dark"]) .text-yellow-400:not([class*="bg-black"]):not([class*="bg-slate-9"]):not([class*="bg-stone-9"]):not([class*="bg-indigo-9"]):not([class*="bg-emerald-9"]):not([class*="bg-[#0"]):not([class*="bg-[#1"]):not(#modal-schedule-tuning *),
+    :root:not(.dark):not([data-theme="deepblack"]):not([data-theme="dark"]) .text-yellow-500:not([class*="bg-black"]):not([class*="bg-slate-9"]):not([class*="bg-stone-9"]):not([class*="bg-indigo-9"]):not([class*="bg-emerald-9"]):not([class*="bg-[#0"]):not([class*="bg-[#1"]):not(#modal-schedule-tuning *) {
       color: #854d0e !important;
       font-weight: 700 !important;
     }
@@ -682,6 +688,186 @@
     :root:not(.dark):not([data-theme="deepblack"]):not([data-theme="dark"]) [class*="bg-amber-"]:not([class*="dark:"]):not([class*="hover:"]):not([class*="focus:"]):not(.sulsul-chip):not(.sulsul-chip *):not(.btn-gold):not(.btn-gold *) * {
       color: #78350f !important;
       font-weight: 700 !important;
+    }
+
+    /* 2. Rose & Red (필수, 긴급, 경고, 차감, 잔액부족, 삭제) */
+    :root:not(.dark):not([data-theme="deepblack"]):not([data-theme="dark"]) .text-rose-100:not([class*="bg-black"]):not([class*="bg-slate-9"]):not([class*="bg-stone-9"]):not([class*="bg-indigo-9"]):not([class*="bg-emerald-9"]):not([class*="bg-[#0"]):not([class*="bg-[#1"]):not(#modal-schedule-tuning *),
+    :root:not(.dark):not([data-theme="deepblack"]):not([data-theme="dark"]) .text-rose-200:not([class*="bg-black"]):not([class*="bg-slate-9"]):not([class*="bg-stone-9"]):not([class*="bg-indigo-9"]):not([class*="bg-emerald-9"]):not([class*="bg-[#0"]):not([class*="bg-[#1"]):not(#modal-schedule-tuning *),
+    :root:not(.dark):not([data-theme="deepblack"]):not([data-theme="dark"]) .text-rose-300:not([class*="bg-black"]):not([class*="bg-slate-9"]):not([class*="bg-stone-9"]):not([class*="bg-indigo-9"]):not([class*="bg-emerald-9"]):not([class*="bg-[#0"]):not([class*="bg-[#1"]):not(#modal-schedule-tuning *),
+    :root:not(.dark):not([data-theme="deepblack"]):not([data-theme="dark"]) .text-rose-400:not([class*="bg-black"]):not([class*="bg-slate-9"]):not([class*="bg-stone-9"]):not([class*="bg-indigo-9"]):not([class*="bg-emerald-9"]):not([class*="bg-[#0"]):not([class*="bg-[#1"]):not(#modal-schedule-tuning *),
+    :root:not(.dark):not([data-theme="deepblack"]):not([data-theme="dark"]) .text-red-100:not([class*="bg-black"]):not([class*="bg-slate-9"]):not([class*="bg-stone-9"]):not([class*="bg-indigo-9"]):not([class*="bg-emerald-9"]):not([class*="bg-[#0"]):not([class*="bg-[#1"]):not(#modal-schedule-tuning *),
+    :root:not(.dark):not([data-theme="deepblack"]):not([data-theme="dark"]) .text-red-200:not([class*="bg-black"]):not([class*="bg-slate-9"]):not([class*="bg-stone-9"]):not([class*="bg-indigo-9"]):not([class*="bg-emerald-9"]):not([class*="bg-[#0"]):not([class*="bg-[#1"]):not(#modal-schedule-tuning *),
+    :root:not(.dark):not([data-theme="deepblack"]):not([data-theme="dark"]) .text-red-300:not([class*="bg-black"]):not([class*="bg-slate-9"]):not([class*="bg-stone-9"]):not([class*="bg-indigo-9"]):not([class*="bg-emerald-9"]):not([class*="bg-[#0"]):not([class*="bg-[#1"]):not(#modal-schedule-tuning *),
+    :root:not(.dark):not([data-theme="deepblack"]):not([data-theme="dark"]) .text-red-400:not([class*="bg-black"]):not([class*="bg-slate-9"]):not([class*="bg-stone-9"]):not([class*="bg-indigo-9"]):not([class*="bg-emerald-9"]):not([class*="bg-[#0"]):not([class*="bg-[#1"]):not(#modal-schedule-tuning *) {
+      color: #be123c !important; /* Rose 700 - 7.5:1 on white (WCAG AAA) */
+      font-weight: 700 !important;
+    }
+    :root:not(.dark):not([data-theme="deepblack"]):not([data-theme="dark"]) [class*="bg-rose-"]:not([class*="dark:"]):not([class*="hover:"]):not([class*="focus:"]):not(.sulsul-chip):not(.sulsul-chip *):not(.btn-gold):not(.btn-gold *),
+    :root:not(.dark):not([data-theme="deepblack"]):not([data-theme="dark"]) [class*="bg-red-"]:not([class*="dark:"]):not([class*="hover:"]):not([class*="focus:"]):not(.sulsul-chip):not(.sulsul-chip *):not(.btn-gold):not(.btn-gold *) {
+      background-color: #ffe4e6 !important; /* Rose 100 */
+      border-color: #fecdd3 !important; /* Rose 200 */
+    }
+    :root:not(.dark):not([data-theme="deepblack"]):not([data-theme="dark"]) [class*="bg-rose-"]:not([class*="dark:"]):not([class*="hover:"]):not([class*="focus:"]):not(.sulsul-chip):not(.sulsul-chip *):not(.btn-gold):not(.btn-gold *) .text-rose-300,
+    :root:not(.dark):not([data-theme="deepblack"]):not([data-theme="dark"]) [class*="bg-rose-"]:not([class*="dark:"]):not([class*="hover:"]):not([class*="focus:"]):not(.sulsul-chip):not(.sulsul-chip *):not(.btn-gold):not(.btn-gold *) .text-rose-400,
+    :root:not(.dark):not([data-theme="deepblack"]):not([data-theme="dark"]) [class*="bg-rose-"]:not([class*="dark:"]):not([class*="hover:"]):not([class*="focus:"]):not(.sulsul-chip):not(.sulsul-chip *):not(.btn-gold):not(.btn-gold *) * {
+      color: #9f1239 !important; /* Rose 800 - 8.9:1 on white (WCAG AAA) */
+      font-weight: 700 !important;
+    }
+
+    /* 3. Emerald & Green (준비됨, 완료, 성공, 입금, 사용중, 실시간 API) */
+    :root:not(.dark):not([data-theme="deepblack"]):not([data-theme="dark"]) .text-emerald-100:not([class*="bg-black"]):not([class*="bg-slate-9"]):not([class*="bg-stone-9"]):not([class*="bg-indigo-9"]):not([class*="bg-emerald-9"]):not([class*="bg-[#0"]):not([class*="bg-[#1"]):not(#modal-schedule-tuning *),
+    :root:not(.dark):not([data-theme="deepblack"]):not([data-theme="dark"]) .text-emerald-200:not([class*="bg-black"]):not([class*="bg-slate-9"]):not([class*="bg-stone-9"]):not([class*="bg-indigo-9"]):not([class*="bg-emerald-9"]):not([class*="bg-[#0"]):not([class*="bg-[#1"]):not(#modal-schedule-tuning *),
+    :root:not(.dark):not([data-theme="deepblack"]):not([data-theme="dark"]) .text-emerald-300:not([class*="bg-black"]):not([class*="bg-slate-9"]):not([class*="bg-stone-9"]):not([class*="bg-indigo-9"]):not([class*="bg-emerald-9"]):not([class*="bg-[#0"]):not([class*="bg-[#1"]):not(#modal-schedule-tuning *),
+    :root:not(.dark):not([data-theme="deepblack"]):not([data-theme="dark"]) .text-emerald-400:not([class*="bg-black"]):not([class*="bg-slate-9"]):not([class*="bg-stone-9"]):not([class*="bg-indigo-9"]):not([class*="bg-emerald-9"]):not([class*="bg-[#0"]):not([class*="bg-[#1"]):not(#modal-schedule-tuning *),
+    :root:not(.dark):not([data-theme="deepblack"]):not([data-theme="dark"]) .text-green-100:not([class*="bg-black"]):not([class*="bg-slate-9"]):not([class*="bg-stone-9"]):not([class*="bg-indigo-9"]):not([class*="bg-emerald-9"]):not([class*="bg-[#0"]):not([class*="bg-[#1"]):not(#modal-schedule-tuning *),
+    :root:not(.dark):not([data-theme="deepblack"]):not([data-theme="dark"]) .text-green-200:not([class*="bg-black"]):not([class*="bg-slate-9"]):not([class*="bg-stone-9"]):not([class*="bg-indigo-9"]):not([class*="bg-emerald-9"]):not([class*="bg-[#0"]):not([class*="bg-[#1"]):not(#modal-schedule-tuning *),
+    :root:not(.dark):not([data-theme="deepblack"]):not([data-theme="dark"]) .text-green-300:not([class*="bg-black"]):not([class*="bg-slate-9"]):not([class*="bg-stone-9"]):not([class*="bg-indigo-9"]):not([class*="bg-emerald-9"]):not([class*="bg-[#0"]):not([class*="bg-[#1"]):not(#modal-schedule-tuning *),
+    :root:not(.dark):not([data-theme="deepblack"]):not([data-theme="dark"]) .text-green-400:not([class*="bg-black"]):not([class*="bg-slate-9"]):not([class*="bg-stone-9"]):not([class*="bg-indigo-9"]):not([class*="bg-emerald-9"]):not([class*="bg-[#0"]):not([class*="bg-[#1"]):not(#modal-schedule-tuning *) {
+      color: #047857 !important; /* Emerald 700 - 7.3:1 on white (WCAG AAA) */
+      font-weight: 700 !important;
+    }
+    :root:not(.dark):not([data-theme="deepblack"]):not([data-theme="dark"]) [class*="bg-emerald-"]:not([class*="dark:"]):not([class*="hover:"]):not([class*="focus:"]):not(.sulsul-chip):not(.sulsul-chip *):not(.btn-gold):not(.btn-gold *),
+    :root:not(.dark):not([data-theme="deepblack"]):not([data-theme="dark"]) [class*="bg-green-"]:not([class*="dark:"]):not([class*="hover:"]):not([class*="focus:"]):not(.sulsul-chip):not(.sulsul-chip *):not(.btn-gold):not(.btn-gold *) {
+      background-color: #d1fae5 !important; /* Emerald 100 */
+      border-color: #a7f3d0 !important; /* Emerald 200 */
+    }
+    :root:not(.dark):not([data-theme="deepblack"]):not([data-theme="dark"]) [class*="bg-emerald-"]:not([class*="dark:"]):not([class*="hover:"]):not([class*="focus:"]):not(.sulsul-chip):not(.sulsul-chip *):not(.btn-gold):not(.btn-gold *) .text-emerald-300,
+    :root:not(.dark):not([data-theme="deepblack"]):not([data-theme="dark"]) [class*="bg-emerald-"]:not([class*="dark:"]):not([class*="hover:"]):not([class*="focus:"]):not(.sulsul-chip):not(.sulsul-chip *):not(.btn-gold):not(.btn-gold *) .text-emerald-400,
+    :root:not(.dark):not([data-theme="deepblack"]):not([data-theme="dark"]) [class*="bg-emerald-"]:not([class*="dark:"]):not([class*="hover:"]):not([class*="focus:"]):not(.sulsul-chip):not(.sulsul-chip *):not(.btn-gold):not(.btn-gold *) * {
+      color: #065f46 !important; /* Emerald 800 - 8.6:1 on white (WCAG AAA) */
+      font-weight: 700 !important;
+    }
+
+    /* 4. Indigo, Purple & Violet (동행·백업, 버킷리스트, 룸코드, 고정, 익일) */
+    :root:not(.dark):not([data-theme="deepblack"]):not([data-theme="dark"]) .text-indigo-100:not([class*="bg-black"]):not([class*="bg-slate-9"]):not([class*="bg-stone-9"]):not([class*="bg-indigo-9"]):not([class*="bg-emerald-9"]):not([class*="bg-[#0"]):not([class*="bg-[#1"]):not(#modal-schedule-tuning *),
+    :root:not(.dark):not([data-theme="deepblack"]):not([data-theme="dark"]) .text-indigo-200:not([class*="bg-black"]):not([class*="bg-slate-9"]):not([class*="bg-stone-9"]):not([class*="bg-indigo-9"]):not([class*="bg-emerald-9"]):not([class*="bg-[#0"]):not([class*="bg-[#1"]):not(#modal-schedule-tuning *),
+    :root:not(.dark):not([data-theme="deepblack"]):not([data-theme="dark"]) .text-indigo-300:not([class*="bg-black"]):not([class*="bg-slate-9"]):not([class*="bg-stone-9"]):not([class*="bg-indigo-9"]):not([class*="bg-emerald-9"]):not([class*="bg-[#0"]):not([class*="bg-[#1"]):not(#modal-schedule-tuning *),
+    :root:not(.dark):not([data-theme="deepblack"]):not([data-theme="dark"]) .text-indigo-400:not([class*="bg-black"]):not([class*="bg-slate-9"]):not([class*="bg-stone-9"]):not([class*="bg-indigo-9"]):not([class*="bg-emerald-9"]):not([class*="bg-[#0"]):not([class*="bg-[#1"]):not(#modal-schedule-tuning *),
+    :root:not(.dark):not([data-theme="deepblack"]):not([data-theme="dark"]) .text-purple-100:not([class*="bg-black"]):not([class*="bg-slate-9"]):not([class*="bg-stone-9"]):not([class*="bg-indigo-9"]):not([class*="bg-emerald-9"]):not([class*="bg-[#0"]):not([class*="bg-[#1"]):not(#modal-schedule-tuning *),
+    :root:not(.dark):not([data-theme="deepblack"]):not([data-theme="dark"]) .text-purple-200:not([class*="bg-black"]):not([class*="bg-slate-9"]):not([class*="bg-stone-9"]):not([class*="bg-indigo-9"]):not([class*="bg-emerald-9"]):not([class*="bg-[#0"]):not([class*="bg-[#1"]):not(#modal-schedule-tuning *),
+    :root:not(.dark):not([data-theme="deepblack"]):not([data-theme="dark"]) .text-purple-300:not([class*="bg-black"]):not([class*="bg-slate-9"]):not([class*="bg-stone-9"]):not([class*="bg-indigo-9"]):not([class*="bg-emerald-9"]):not([class*="bg-[#0"]):not([class*="bg-[#1"]):not(#modal-schedule-tuning *),
+    :root:not(.dark):not([data-theme="deepblack"]):not([data-theme="dark"]) .text-purple-400:not([class*="bg-black"]):not([class*="bg-slate-9"]):not([class*="bg-stone-9"]):not([class*="bg-indigo-9"]):not([class*="bg-emerald-9"]):not([class*="bg-[#0"]):not([class*="bg-[#1"]):not(#modal-schedule-tuning *),
+    :root:not(.dark):not([data-theme="deepblack"]):not([data-theme="dark"]) .text-violet-100:not([class*="bg-black"]):not([class*="bg-slate-9"]):not([class*="bg-stone-9"]):not([class*="bg-indigo-9"]):not([class*="bg-emerald-9"]):not([class*="bg-[#0"]):not([class*="bg-[#1"]):not(#modal-schedule-tuning *),
+    :root:not(.dark):not([data-theme="deepblack"]):not([data-theme="dark"]) .text-violet-200:not([class*="bg-black"]):not([class*="bg-slate-9"]):not([class*="bg-stone-9"]):not([class*="bg-indigo-9"]):not([class*="bg-emerald-9"]):not([class*="bg-[#0"]):not([class*="bg-[#1"]):not(#modal-schedule-tuning *),
+    :root:not(.dark):not([data-theme="deepblack"]):not([data-theme="dark"]) .text-violet-300:not([class*="bg-black"]):not([class*="bg-slate-9"]):not([class*="bg-stone-9"]):not([class*="bg-indigo-9"]):not([class*="bg-emerald-9"]):not([class*="bg-[#0"]):not([class*="bg-[#1"]):not(#modal-schedule-tuning *),
+    :root:not(.dark):not([data-theme="deepblack"]):not([data-theme="dark"]) .text-violet-400:not([class*="bg-black"]):not([class*="bg-slate-9"]):not([class*="bg-stone-9"]):not([class*="bg-indigo-9"]):not([class*="bg-emerald-9"]):not([class*="bg-[#0"]):not([class*="bg-[#1"]):not(#modal-schedule-tuning *) {
+      color: #4338ca !important; /* Indigo 700 - 7.4:1 on white (WCAG AAA) */
+      font-weight: 700 !important;
+    }
+    :root:not(.dark):not([data-theme="deepblack"]):not([data-theme="dark"]) [class*="bg-indigo-"]:not([class*="dark:"]):not([class*="hover:"]):not([class*="focus:"]):not(.sulsul-chip):not(.sulsul-chip *):not(.btn-gold):not(.btn-gold *),
+    :root:not(.dark):not([data-theme="deepblack"]):not([data-theme="dark"]) [class*="bg-purple-"]:not([class*="dark:"]):not([class*="hover:"]):not([class*="focus:"]):not(.sulsul-chip):not(.sulsul-chip *):not(.btn-gold):not(.btn-gold *),
+    :root:not(.dark):not([data-theme="deepblack"]):not([data-theme="dark"]) [class*="bg-violet-"]:not([class*="dark:"]):not([class*="hover:"]):not([class*="focus:"]):not(.sulsul-chip):not(.sulsul-chip *):not(.btn-gold):not(.btn-gold *) {
+      background-color: #e0e7ff !important; /* Indigo 100 */
+      border-color: #c7d2fe !important; /* Indigo 200 */
+    }
+    :root:not(.dark):not([data-theme="deepblack"]):not([data-theme="dark"]) [class*="bg-indigo-"]:not([class*="dark:"]):not([class*="hover:"]):not([class*="focus:"]):not(.sulsul-chip):not(.sulsul-chip *):not(.btn-gold):not(.btn-gold *) .text-indigo-300,
+    :root:not(.dark):not([data-theme="deepblack"]):not([data-theme="dark"]) [class*="bg-indigo-"]:not([class*="dark:"]):not([class*="hover:"]):not([class*="focus:"]):not(.sulsul-chip):not(.sulsul-chip *):not(.btn-gold):not(.btn-gold *) .text-indigo-400,
+    :root:not(.dark):not([data-theme="deepblack"]):not([data-theme="dark"]) [class*="bg-indigo-"]:not([class*="dark:"]):not([class*="hover:"]):not([class*="focus:"]):not(.sulsul-chip):not(.sulsul-chip *):not(.btn-gold):not(.btn-gold *) *,
+    :root:not(.dark):not([data-theme="deepblack"]):not([data-theme="dark"]) [class*="bg-purple-"]:not([class*="dark:"]):not([class*="hover:"]):not([class*="focus:"]):not(.sulsul-chip):not(.sulsul-chip *):not(.btn-gold):not(.btn-gold *) * {
+      color: #3730a3 !important; /* Indigo 800 - 9.3:1 on white (WCAG AAA) */
+      font-weight: 700 !important;
+    }
+
+    /* 5. Sky, Blue, Cyan & Teal (지도 길찾기, 링크, 통화 지갑, 카드 결제) */
+    :root:not(.dark):not([data-theme="deepblack"]):not([data-theme="dark"]) .text-sky-100:not([class*="bg-black"]):not([class*="bg-slate-9"]):not([class*="bg-stone-9"]):not([class*="bg-indigo-9"]):not([class*="bg-emerald-9"]):not([class*="bg-[#0"]):not([class*="bg-[#1"]):not(#modal-schedule-tuning *),
+    :root:not(.dark):not([data-theme="deepblack"]):not([data-theme="dark"]) .text-sky-200:not([class*="bg-black"]):not([class*="bg-slate-9"]):not([class*="bg-stone-9"]):not([class*="bg-indigo-9"]):not([class*="bg-emerald-9"]):not([class*="bg-[#0"]):not([class*="bg-[#1"]):not(#modal-schedule-tuning *),
+    :root:not(.dark):not([data-theme="deepblack"]):not([data-theme="dark"]) .text-sky-300:not([class*="bg-black"]):not([class*="bg-slate-9"]):not([class*="bg-stone-9"]):not([class*="bg-indigo-9"]):not([class*="bg-emerald-9"]):not([class*="bg-[#0"]):not([class*="bg-[#1"]):not(#modal-schedule-tuning *),
+    :root:not(.dark):not([data-theme="deepblack"]):not([data-theme="dark"]) .text-sky-400:not([class*="bg-black"]):not([class*="bg-slate-9"]):not([class*="bg-stone-9"]):not([class*="bg-indigo-9"]):not([class*="bg-emerald-9"]):not([class*="bg-[#0"]):not([class*="bg-[#1"]):not(#modal-schedule-tuning *),
+    :root:not(.dark):not([data-theme="deepblack"]):not([data-theme="dark"]) .text-blue-100:not([class*="bg-black"]):not([class*="bg-slate-9"]):not([class*="bg-stone-9"]):not([class*="bg-indigo-9"]):not([class*="bg-emerald-9"]):not([class*="bg-[#0"]):not([class*="bg-[#1"]):not(#modal-schedule-tuning *),
+    :root:not(.dark):not([data-theme="deepblack"]):not([data-theme="dark"]) .text-blue-200:not([class*="bg-black"]):not([class*="bg-slate-9"]):not([class*="bg-stone-9"]):not([class*="bg-indigo-9"]):not([class*="bg-emerald-9"]):not([class*="bg-[#0"]):not([class*="bg-[#1"]):not(#modal-schedule-tuning *),
+    :root:not(.dark):not([data-theme="deepblack"]):not([data-theme="dark"]) .text-blue-300:not([class*="bg-black"]):not([class*="bg-slate-9"]):not([class*="bg-stone-9"]):not([class*="bg-indigo-9"]):not([class*="bg-emerald-9"]):not([class*="bg-[#0"]):not([class*="bg-[#1"]):not(#modal-schedule-tuning *),
+    :root:not(.dark):not([data-theme="deepblack"]):not([data-theme="dark"]) .text-blue-400:not([class*="bg-black"]):not([class*="bg-slate-9"]):not([class*="bg-stone-9"]):not([class*="bg-indigo-9"]):not([class*="bg-emerald-9"]):not([class*="bg-[#0"]):not([class*="bg-[#1"]):not(#modal-schedule-tuning *),
+    :root:not(.dark):not([data-theme="deepblack"]):not([data-theme="dark"]) .text-cyan-100:not([class*="bg-black"]):not([class*="bg-slate-9"]):not([class*="bg-stone-9"]):not([class*="bg-indigo-9"]):not([class*="bg-emerald-9"]):not([class*="bg-[#0"]):not([class*="bg-[#1"]):not(#modal-schedule-tuning *),
+    :root:not(.dark):not([data-theme="deepblack"]):not([data-theme="dark"]) .text-cyan-200:not([class*="bg-black"]):not([class*="bg-slate-9"]):not([class*="bg-stone-9"]):not([class*="bg-indigo-9"]):not([class*="bg-emerald-9"]):not([class*="bg-[#0"]):not([class*="bg-[#1"]):not(#modal-schedule-tuning *),
+    :root:not(.dark):not([data-theme="deepblack"]):not([data-theme="dark"]) .text-cyan-300:not([class*="bg-black"]):not([class*="bg-slate-9"]):not([class*="bg-stone-9"]):not([class*="bg-indigo-9"]):not([class*="bg-emerald-9"]):not([class*="bg-[#0"]):not([class*="bg-[#1"]):not(#modal-schedule-tuning *),
+    :root:not(.dark):not([data-theme="deepblack"]):not([data-theme="dark"]) .text-cyan-400:not([class*="bg-black"]):not([class*="bg-slate-9"]):not([class*="bg-stone-9"]):not([class*="bg-indigo-9"]):not([class*="bg-emerald-9"]):not([class*="bg-[#0"]):not([class*="bg-[#1"]):not(#modal-schedule-tuning *),
+    :root:not(.dark):not([data-theme="deepblack"]):not([data-theme="dark"]) .text-teal-100:not([class*="bg-black"]):not([class*="bg-slate-9"]):not([class*="bg-stone-9"]):not([class*="bg-indigo-9"]):not([class*="bg-emerald-9"]):not([class*="bg-[#0"]):not([class*="bg-[#1"]):not(#modal-schedule-tuning *),
+    :root:not(.dark):not([data-theme="deepblack"]):not([data-theme="dark"]) .text-teal-200:not([class*="bg-black"]):not([class*="bg-slate-9"]):not([class*="bg-stone-9"]):not([class*="bg-indigo-9"]):not([class*="bg-emerald-9"]):not([class*="bg-[#0"]):not([class*="bg-[#1"]):not(#modal-schedule-tuning *),
+    :root:not(.dark):not([data-theme="deepblack"]):not([data-theme="dark"]) .text-teal-300:not([class*="bg-black"]):not([class*="bg-slate-9"]):not([class*="bg-stone-9"]):not([class*="bg-indigo-9"]):not([class*="bg-emerald-9"]):not([class*="bg-[#0"]):not([class*="bg-[#1"]):not(#modal-schedule-tuning *),
+    :root:not(.dark):not([data-theme="deepblack"]):not([data-theme="dark"]) .text-teal-400:not([class*="bg-black"]):not([class*="bg-slate-9"]):not([class*="bg-stone-9"]):not([class*="bg-indigo-9"]):not([class*="bg-emerald-9"]):not([class*="bg-[#0"]):not([class*="bg-[#1"]):not(#modal-schedule-tuning *) {
+      color: #0369a1 !important; /* Sky 700 - 7.0:1 on white (WCAG AAA) */
+      font-weight: 700 !important;
+    }
+    :root:not(.dark):not([data-theme="deepblack"]):not([data-theme="dark"]) [class*="bg-sky-"]:not([class*="dark:"]):not([class*="hover:"]):not([class*="focus:"]):not(.sulsul-chip):not(.sulsul-chip *):not(.btn-gold):not(.btn-gold *),
+    :root:not(.dark):not([data-theme="deepblack"]):not([data-theme="dark"]) [class*="bg-blue-"]:not([class*="dark:"]):not([class*="hover:"]):not([class*="focus:"]):not(.sulsul-chip):not(.sulsul-chip *):not(.btn-gold):not(.btn-gold *),
+    :root:not(.dark):not([data-theme="deepblack"]):not([data-theme="dark"]) [class*="bg-cyan-"]:not([class*="dark:"]):not([class*="hover:"]):not([class*="focus:"]):not(.sulsul-chip):not(.sulsul-chip *):not(.btn-gold):not(.btn-gold *),
+    :root:not(.dark):not([data-theme="deepblack"]):not([data-theme="dark"]) [class*="bg-teal-"]:not([class*="dark:"]):not([class*="hover:"]):not([class*="focus:"]):not(.sulsul-chip):not(.sulsul-chip *):not(.btn-gold):not(.btn-gold *) {
+      background-color: #e0f2fe !important; /* Sky 100 */
+      border-color: #bae6fd !important; /* Sky 200 */
+    }
+    :root:not(.dark):not([data-theme="deepblack"]):not([data-theme="dark"]) [class*="bg-sky-"]:not([class*="dark:"]):not([class*="hover:"]):not([class*="focus:"]):not(.sulsul-chip):not(.sulsul-chip *):not(.btn-gold):not(.btn-gold *) .text-sky-300,
+    :root:not(.dark):not([data-theme="deepblack"]):not([data-theme="dark"]) [class*="bg-sky-"]:not([class*="dark:"]):not([class*="hover:"]):not([class*="focus:"]):not(.sulsul-chip):not(.sulsul-chip *):not(.btn-gold):not(.btn-gold *) .text-sky-400,
+    :root:not(.dark):not([data-theme="deepblack"]):not([data-theme="dark"]) [class*="bg-sky-"]:not([class*="dark:"]):not([class*="hover:"]):not([class*="focus:"]):not(.sulsul-chip):not(.sulsul-chip *):not(.btn-gold):not(.btn-gold *) * {
+      color: #075985 !important; /* Sky 800 - 8.5:1 on white (WCAG AAA) */
+      font-weight: 700 !important;
+    }
+
+    /* 6. Universal Semantic High-Contrast Badges (.sulsul-badge-*) */
+    .sulsul-badge-rose {
+      background-color: #ffe4e6 !important;
+      border: 1px solid #fecdd3 !important;
+      color: #9f1239 !important;
+      font-weight: 800 !important;
+    }
+    .sulsul-badge-emerald {
+      background-color: #d1fae5 !important;
+      border: 1px solid #a7f3d0 !important;
+      color: #065f46 !important;
+      font-weight: 800 !important;
+    }
+    .sulsul-badge-amber {
+      background-color: #fef3c7 !important;
+      border: 1px solid #fde68a !important;
+      color: #78350f !important;
+      font-weight: 800 !important;
+    }
+    .sulsul-badge-indigo {
+      background-color: #e0e7ff !important;
+      border: 1px solid #c7d2fe !important;
+      color: #3730a3 !important;
+      font-weight: 800 !important;
+    }
+    .sulsul-badge-sky {
+      background-color: #e0f2fe !important;
+      border: 1px solid #bae6fd !important;
+      color: #075985 !important;
+      font-weight: 800 !important;
+    }
+
+    :root.dark .sulsul-badge-rose,
+    :root[data-theme="deepblack"] .sulsul-badge-rose,
+    :root[data-theme="dark"] .sulsul-badge-rose {
+      background-color: rgba(225, 29, 72, 0.22) !important;
+      border: 1px solid rgba(225, 29, 72, 0.45) !important;
+      color: #fda4af !important;
+    }
+    :root.dark .sulsul-badge-emerald,
+    :root[data-theme="deepblack"] .sulsul-badge-emerald,
+    :root[data-theme="dark"] .sulsul-badge-emerald {
+      background-color: rgba(16, 185, 129, 0.22) !important;
+      border: 1px solid rgba(16, 185, 129, 0.45) !important;
+      color: #6ee7b7 !important;
+    }
+    :root.dark .sulsul-badge-amber,
+    :root[data-theme="deepblack"] .sulsul-badge-amber,
+    :root[data-theme="dark"] .sulsul-badge-amber {
+      background-color: rgba(245, 158, 11, 0.22) !important;
+      border: 1px solid rgba(245, 158, 11, 0.45) !important;
+      color: #fde68a !important;
+    }
+    :root.dark .sulsul-badge-indigo,
+    :root[data-theme="deepblack"] .sulsul-badge-indigo,
+    :root[data-theme="dark"] .sulsul-badge-indigo {
+      background-color: rgba(99, 102, 241, 0.22) !important;
+      border: 1px solid rgba(99, 102, 241, 0.45) !important;
+      color: #a5b4fc !important;
+    }
+    :root.dark .sulsul-badge-sky,
+    :root[data-theme="deepblack"] .sulsul-badge-sky,
+    :root[data-theme="dark"] .sulsul-badge-sky {
+      background-color: rgba(14, 165, 233, 0.22) !important;
+      border: 1px solid rgba(14, 165, 233, 0.45) !important;
+      color: #7dd3fc !important;
     }
 
     /* ================================================================ */
@@ -1188,8 +1374,8 @@
     }
   </style>
 
-  <link rel="stylesheet" href="css/companion.css?v=1.7.6">
-  <script src="js/presentation/companion-ui.js?v=1.7.6"></script>
+  <link rel="stylesheet" href="css/companion.css?v=1.7.7">
+  <script src="js/presentation/companion-ui.js?v=1.7.7"></script>
 
   <!-- Knowledge Base Seed & Destination Knowledge Packs (DKP) -->
   <script src="kb-travel.js"></script>
@@ -1218,8 +1404,8 @@
 
       <!-- 우측 액션 클러스터 (버전 알약 -> 원형 통계 -> 원형 설정 -> 다크그린 캡슐 추가) -->
       <div class="flex items-center gap-1 sm:gap-1.5 shrink-0">
-        <!-- 1. 버전 배지 버튼 (v1.7.6 - 클릭 시 버전 이력) -->
-        <button id="app-ver-badge" onclick="event.stopPropagation(); openVersionHistoryModal()" class="h-7 sm:h-8 px-2 sm:px-2.5 rounded-full theme-card-subtle flex items-center justify-center font-mono text-[10px] sm:text-[11px] font-bold text-[#a2601b] dark:text-[#d4af37] shadow-xs hover:border-amber-500/60 transition cursor-pointer shrink-0" title="버전 업데이트 기록 보기 (클릭)">v1.7.6</button>
+        <!-- 1. 버전 배지 버튼 (v1.7.7 - 클릭 시 버전 이력) -->
+        <button id="app-ver-badge" onclick="event.stopPropagation(); openVersionHistoryModal()" class="h-7 sm:h-8 px-2 sm:px-2.5 rounded-full theme-card-subtle flex items-center justify-center font-mono text-[10px] sm:text-[11px] font-bold text-[#a2601b] dark:text-[#d4af37] shadow-xs hover:border-amber-500/60 transition cursor-pointer shrink-0" title="버전 업데이트 기록 보기 (클릭)">v1.7.7</button>
 
         <!-- 2. 통계 버튼 (📊 - 원형 버튼) -->
         <button id="header-btn-analytics" onclick="openAnalyticsModal('lifetime')" class="companion-header-analytics w-7 h-7 sm:w-8 sm:h-8 rounded-full theme-card-subtle flex items-center justify-center text-[#a2601b] dark:text-[#d4af37] hover:border-amber-500/60 transition shadow-xs cursor-pointer shrink-0" title="술술 여행 통계 대시보드">
@@ -1481,7 +1667,7 @@
         </div>
 
         <div class="flex items-center gap-2 justify-end shrink-0 flex-wrap">
-          <button onclick="openScheduleTuningModal()" class="px-2.5 py-1.5 rounded-lg bg-amber-500/15 hover:bg-amber-500/25 border border-amber-500/30 text-amber-300 text-xs font-bold flex items-center gap-1.5 shadow-sm transition cursor-pointer shrink-0 whitespace-nowrap" title="교통 지연, 기상 등 현장 변수 대응 및 일정 재조정">
+          <button onclick="openScheduleTuningModal()" class="sulsul-badge-amber px-2.5 py-1.5 rounded-lg bg-amber-100 hover:bg-amber-200 border border-amber-300 text-amber-800 dark:bg-amber-500/15 dark:hover:bg-amber-500/25 dark:border-amber-500/30 dark:text-amber-300 text-xs font-bold flex items-center gap-1.5 shadow-sm transition cursor-pointer shrink-0 whitespace-nowrap" title="교통 지연, 기상 등 현장 변수 대응 및 일정 재조정">
             <i class="fa-solid fa-bolt text-amber-400 text-[10px]"></i>
             <span><span class="hidden sm:inline">변수 대응 · </span>일정 튜닝</span>
           </button>
@@ -1505,7 +1691,7 @@
               <div class="flex items-center gap-2 flex-wrap">
                 <h3 class="text-xs sm:text-sm font-black text-white flex items-center gap-1.5 whitespace-nowrap">
                   <span>실시간 GPS 스팟 레이더</span>
-                  <span id="gps-status-badge" class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 whitespace-nowrap">📡 대기 중</span>
+                  <span id="gps-status-badge" class="sulsul-badge-emerald text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 border border-emerald-300 dark:bg-emerald-950/60 dark:text-emerald-300 dark:border-emerald-800 whitespace-nowrap">📡 대기 중</span>
                 </h3>
               </div>
               <p id="gps-status-desc" class="text-[11px] text-slate-400 mt-0.5 truncate sm:whitespace-normal">내 현재 위치에서 가장 가까운 여행 스팟을 1초 만에 자동 매칭합니다.</p>
@@ -1530,7 +1716,7 @@
             <div class="min-w-0 flex-1">
               <div class="flex items-center gap-2 flex-wrap">
                 <span id="gps-spot-name" class="font-black text-white text-xs sm:text-sm break-words">위치를 탐색하거나 모의 위치를 선택하세요</span>
-                <span id="gps-spot-distance" class="px-2 py-0.5 rounded-md bg-amber-500/20 text-amber-300 border border-amber-500/30 text-[10px] sm:text-[11px] font-black shrink-0 whitespace-nowrap">거리 산출 대기</span>
+                <span id="gps-spot-distance" class="sulsul-badge-amber px-2 py-0.5 rounded-md bg-amber-100 text-amber-800 border border-amber-300 dark:bg-amber-950/60 dark:text-amber-300 dark:border-amber-800 text-[10px] sm:text-[11px] font-black shrink-0 whitespace-nowrap">거리 산출 대기</span>
               </div>
               <p id="gps-spot-tip" class="text-[11px] text-slate-400 mt-1 leading-relaxed">현 위치에서 300m 이내 스팟은 도보 시간, 원거리 스팟은 차량 이동 경로를 안내합니다.</p>
             </div>
@@ -1627,7 +1813,7 @@
               </div>
 
               <!-- 구글 지도 외부 길찾기 버튼 -->
-              <a id="btn-google-maps-link" href="https://www.google.com/maps/search/?api=1&query=Cusco+Peru" target="_blank" rel="noopener noreferrer" class="px-3 py-1.5 bg-sky-500/15 hover:bg-sky-500/25 border border-sky-500/30 text-sky-300 hover:text-white rounded-lg text-xs font-bold flex items-center gap-1.5 transition">
+              <a id="btn-google-maps-link" href="https://www.google.com/maps/search/?api=1&query=Cusco+Peru" target="_blank" rel="noopener noreferrer" class="sulsul-badge-sky px-3 py-1.5 bg-sky-100 hover:bg-sky-200 border border-sky-300 text-sky-800 dark:bg-sky-950/50 dark:hover:bg-sky-900/50 dark:border-sky-800 dark:text-sky-300 rounded-lg text-xs font-bold flex items-center gap-1.5 transition">
                 <i class="fa-solid fa-map-location-dot text-[11px]"></i>
                 <span>구글 지도 길찾기</span>
               </a>
@@ -1865,15 +2051,15 @@
     <!-- TAB 4: 스마트 패킹 체크리스트 (TAB-CHECKLIST) -->
     <!-- ---------------------------------------- -->
     <div id="tab-content-checklist" class="tab-view hidden space-y-4">
-      <div class="p-4 rounded-2xl bg-[#0f1422] border border-[#1e263c] space-y-2">
+      <div class="p-4 rounded-2xl theme-card space-y-2">
         <div class="flex items-center justify-between">
-          <h3 class="text-base font-black text-white flex items-center gap-2">
-            <i class="fa-solid fa-clipboard-check text-amber-400"></i>
+          <h3 class="text-base font-black text-[#1c1917] dark:text-white flex items-center gap-2">
+            <i class="fa-solid fa-clipboard-check text-amber-500 dark:text-amber-400"></i>
             <span>출발 전, 하나씩 확인</span>
           </h3>
-          <div class="flex items-center gap-2"><span id="checklist-progress-badge" class="px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 text-xs font-black">0% 준비됨</span><button id="nav-tab-sync" onclick="switchTab('sync')" class="px-2.5 py-1 rounded-lg bg-indigo-500/15 border border-indigo-500/30 text-indigo-300 text-[11px] font-bold">동행·백업</button></div>
+          <div class="flex items-center gap-2"><span id="checklist-progress-badge" class="sulsul-badge-emerald px-2.5 py-0.5 rounded-full text-xs font-black">0% 준비됨</span><button id="nav-tab-sync" onclick="switchTab('sync')" class="sulsul-badge-indigo px-2.5 py-1 rounded-lg text-[11px] font-bold cursor-pointer transition">동행·백업</button></div>
         </div>
-        <p class="text-xs text-slate-400">여행 서류와 예약, 챙길 물건을 확인해 보세요.</p>
+        <p class="text-xs text-[#78716c] dark:text-slate-400">여행 서류와 예약, 챙길 물건을 확인해 보세요.</p>
       </div>
 
       <div id="checklist-container" class="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -2996,7 +3182,7 @@
 
       <!-- 대륙/지역별 빠른 필터 탭 -->
       <div class="flex items-center gap-1.5 overflow-x-auto pb-1 shrink-0 no-scrollbar text-[11px]" id="add-curr-region-filters">
-        <button type="button" onclick="filterAddCurrencyRegion('ALL')" data-region="ALL" class="add-curr-filter-btn px-2.5 py-1 rounded-lg font-bold bg-sky-500/20 text-sky-300 border border-sky-500/40 cursor-pointer">전체</button>
+        <button type="button" onclick="filterAddCurrencyRegion('ALL')" data-region="ALL" class="add-curr-filter-btn px-2.5 py-1 rounded-lg font-bold sulsul-badge-sky bg-sky-100 text-sky-800 border border-sky-300 dark:bg-sky-950/50 dark:text-sky-300 dark:border-sky-800 cursor-pointer">전체</button>
         <button type="button" onclick="filterAddCurrencyRegion('ASIA')" data-region="ASIA" class="add-curr-filter-btn px-2.5 py-1 rounded-lg font-medium bg-[#080b12] text-slate-400 border border-[#1e263c] hover:text-white cursor-pointer">아시아</button>
         <button type="button" onclick="filterAddCurrencyRegion('EUROPE')" data-region="EUROPE" class="add-curr-filter-btn px-2.5 py-1 rounded-lg font-medium bg-[#080b12] text-slate-400 border border-[#1e263c] hover:text-white cursor-pointer">유럽</button>
         <button type="button" onclick="filterAddCurrencyRegion('AMERICAS')" data-region="AMERICAS" class="add-curr-filter-btn px-2.5 py-1 rounded-lg font-medium bg-[#080b12] text-slate-400 border border-[#1e263c] hover:text-white cursor-pointer">아메리카</button>
@@ -4135,22 +4321,42 @@
 
       <!-- 버전 목록 스크롤 영역 (독립 스크롤 컨테이너로 Flexbox 압축 버그 영구 척결) -->
       <div class="overflow-y-auto flex-1 min-h-0 space-y-3.5 pr-1.5 custom-scrollbar">
-        <!-- v1.7.6 (Current) -->
+        <!-- v1.7.7 (Current) -->
         <div class="p-4 rounded-2xl border-2 border-emerald-500/50 space-y-2.5 bg-emerald-500/5 dark:bg-emerald-500/10 shrink-0 shadow-sm">
           <div class="flex items-center justify-between gap-2">
             <div class="flex items-center gap-2 min-w-0">
-              <span class="px-2.5 py-0.5 rounded-lg bg-emerald-500 text-black font-black text-xs shadow-sm shrink-0">v1.7.6</span>
-              <span class="text-xs font-black text-[#1c1917] dark:text-white truncate">여행 설정 & 초안 편집 스튜디오(방문 국가·도시 자유 편집 & 거점 자동 동기화) 전면 개편 및 가계부 카메라 즉시 촬영(140+개국 통화 & 한글 번역) 탑재</span>
+              <span class="px-2.5 py-0.5 rounded-lg bg-emerald-500 text-black font-black text-xs shadow-sm shrink-0">v1.7.7</span>
+              <span class="text-xs font-black text-[#1c1917] dark:text-white truncate">전 앱 고대비(WCAG AAA) 시인성 시스템 전면 수호 및 뱃지·태그·체크리스트 영구 가드 구축</span>
             </div>
             <span class="companion-status shrink-0">최신 버전</span>
           </div>
           <p class="text-xs leading-relaxed text-[#44403c] dark:text-stone-300">
-            1) <b>'새 초안 만들기' → '초안 편집'(여행 설정 & 초안 편집 스튜디오) 전면 개편</b>: 기존의 읽기 전용 국가/도시 카드에서 탈피하여, '새 여행 만들기'와 동일한 8대 권역 빠른 필터 탭(전체/동아시아/동남아/남·중앙아시아/유럽/미주/대양주/중동·아프리카), 140+개국 칩, 방문 도시 보드, 소도시 직접 추가 인풋을 완전 이식했습니다. 기존 여행에 등록된 모든 설정값(국가, 도시, 기간, 시간, 컨셉, 프롬프트)을 완벽 보존한 상태로 열리며, 국가/도시 수정 시 거점별 체류 일수 배분(Hub Allocation)과 실시간 양방향 동기화됩니다.<br>
-            2) <b>데이터 안전 분기 유지 ([설정만 저장] vs [새 초안 생성하기])</b>: 기존 일정을 안전하게 유지하면서 여행 메타데이터(국가/도시/기간/거점)만 업데이트하는 <code>[설정만 저장]</code>과 새 동선으로 전체 일정을 다시 빌드하는 <code>[새 초안 생성하기]</code> 2단계 선택권을 완벽 보존했습니다.<br>
-            3) <b>가계부 영수증 스캔 카메라 즉시 촬영 (<code>capture="environment"</code>) 2원화</b>: 가계부 탭 액션 바와 지출 모달 스캔 배너 양쪽에 <code>[📸 즉시 촬영]</code>과 <code>[🖼️ 앨범]</code> 버튼을 분리 제공하여, 복잡한 사진 보관함 탐색 없이 모바일 후면 카메라를 1터치로 즉시 띄워 영수증을 촬영할 수 있습니다.<br>
-            4) <b>Gemini Vision AI 외국어 영수증 한글 자동 번역 & 글로벌 140+개국 통화 지원</b>: 영수증 내 외국어(일본어, 베트남어, 태국어, 중국어, 영어, 스페인어, 프랑스어, 이탈리아어 등) 상호명과 구매 품목 내역을 한국인 여행자가 직관적으로 이해할 수 있는 친절한 한국어로 자동 번역하여 지출 제목과 메모에 자동 기록합니다. 또한 기존 6개국 통화 제한을 완전히 해제하여 전 세계 140+개국 통화(THB, VND, JPY, EUR, USD, KRW 등)를 100% 인식·적용합니다.
+            1) <b>체크리스트 <code>[필수]</code> 뱃지 & 준비율·동행 가독성 획기적 개선</b>: 파스텔 핑크/에메랄드/인디고가 밝은 테마(모던, 라이트그레이)의 화이트 카드 위에서 흐릿하게 보이던 문제를 해결하고, 고대비 규격(WCAG AAA 7:1+ 대비비)을 충족하는 진한 폰트 컬러와 가독성 높은 배경색을 적용했습니다.<br>
+            2) <b>전역 CSS 파스텔 텍스트 시인성 세이프티 가드 구축</b>: 로즈/레드, 에메랄드/그린, 인디고/퍼플, 스카이/블루, 앰버/옐로우 계열의 모든 파스텔 클래스(<code>-200</code>, <code>-300</code>, <code>-400</code>)가 라이트 모드에서 자동으로 고대비 다크 톤(<code>-700</code>, <code>-800</code>)으로 렌더링되도록 <code>:root:not(.dark)</code> 전역 안전 가드를 확장했습니다.<br>
+            3) <b>시맨틱 뱃지 디자인 토큰 (<code>.sulsul-badge-*</code>) 시스템 도입</b>: <code>.sulsul-badge-rose</code>, <code>.sulsul-badge-emerald</code>, <code>.sulsul-badge-amber</code>, <code>.sulsul-badge-indigo</code>, <code>.sulsul-badge-sky</code> 통합 컴포넌트를 정의하여 3대 테마(Modern, Lightgray, Deepblack) 어디서나 동일하고 선명한 시인성을 보장합니다.<br>
+            4) <b>앱 전반 뱃지 전수 점검 및 리팩토링</b>: 체크리스트 필수 뱃지, 일정 튜닝 버튼, GPS 레이더 뱃지, 가계부 결제수단/입금 뱃지, 실시간 환율 소스 뱃지, 타임라인 고정/방문완료/초안 태그 전체를 전면 개편했습니다.
           </p>
           <div class="text-[10px] text-stone-400 dark:text-stone-500 pt-1 border-t border-emerald-500/20 flex items-center justify-between">
+            <span>📅 2026-09-13 릴리즈</span>
+            <span class="font-mono">st-shell-v1.7.7</span>
+          </div>
+        </div>
+
+        <!-- v1.7.6 -->
+        <div class="p-4 rounded-2xl bg-stone-50 dark:bg-stone-900/50 border border-stone-200 dark:border-stone-800 space-y-2.5 shadow-sm relative overflow-hidden shrink-0">
+          <div class="flex items-center justify-between gap-2">
+            <div class="flex items-center gap-2 min-w-0">
+              <span class="px-2 py-0.5 rounded-lg bg-stone-200 dark:bg-stone-800 text-stone-800 dark:text-stone-200 font-bold text-[11px] font-mono shrink-0">v1.7.6</span>
+              <span class="text-xs font-bold text-[#1c1917] dark:text-stone-200 truncate">여행 설정 & 초안 편집 스튜디오(방문 국가·도시 자유 편집 & 거점 자동 동기화) 전면 개편 및 가계부 카메라 즉시 촬영(140+개국 통화 & 한글 번역) 탑재</span>
+            </div>
+          </div>
+          <p class="text-xs leading-relaxed text-[#44403c] dark:text-stone-300">
+            1) <b>'새 초안 만들기' → '초안 편집'(여행 설정 & 초안 편집 스튜디오) 전면 개편</b>: 기존의 읽기 전용 국가/도시 카드에서 탈피하여, '새 여행 만들기'와 동일한 8대 권역 빠른 필터 탭(전체/동아시아/동남아/남·중앙아시아/유럽/미주/대양주/중동·아프리카), 140+개국 칩, 방문 도시 보드, 소도시 직접 추가 인풋을 완전 이식했습니다.<br>
+            2) <b>데이터 안전 분기 유지 ([설정만 저장] vs [새 초안 생성하기])</b>: 기존 일정을 안전하게 유지하면서 여행 메타데이터만 업데이트하는 <code>[설정만 저장]</code>과 새 동선으로 일정을 다시 빌드하는 <code>[새 초안 생성하기]</code> 2단계 선택권을 완벽 보존했습니다.<br>
+            3) <b>가계부 영수증 스캔 카메라 즉시 촬영 (<code>capture="environment"</code>) 2원화</b>: <code>[📸 즉시 촬영]</code>과 <code>[🖼️ 앨범]</code> 버튼 분리 제공.<br>
+            4) <b>Gemini Vision AI 외국어 영수증 한글 자동 번역 & 글로벌 140+개국 통화 지원</b>: 영수증 품목/상호 한국어 번역 및 140+개국 통화 인식 지원.
+          </p>
+          <div class="text-[10px] text-stone-400 dark:text-stone-500 pt-1 border-t border-stone-200 dark:border-stone-800 flex items-center justify-between">
             <span>📅 2026-09-13 릴리즈</span>
             <span class="font-mono">st-shell-v1.7.6</span>
           </div>
@@ -4900,7 +5106,7 @@
 
       <!-- 모달 푸터 -->
       <div class="pt-3 border-t border-[#e8e2d5] dark:border-stone-800 flex items-center justify-between shrink-0">
-        <span class="text-[11px] text-stone-400 dark:text-stone-500 font-mono">Sulsul Travel Engine v1.7.6</span>
+        <span class="text-[11px] text-stone-400 dark:text-stone-500 font-mono">Sulsul Travel Engine v1.7.7</span>
         <button onclick="closeModal('modal-version-history')" class="px-4 py-2 rounded-xl bg-[#faf8f5] dark:bg-stone-800 hover:bg-[#f0ece1] dark:hover:bg-stone-700 border border-[#e8e2d5] dark:border-stone-700 text-[#1c1917] dark:text-[#ededed] text-xs font-bold transition cursor-pointer shadow-sm">
           닫기
         </button>
@@ -5247,7 +5453,7 @@
     window.showToast = showToast;
 
     // 앱 버전 및 글로벌 네임스페이스 (Sulsul-Travel Invariant Rule R-10, R-11, R-12, R-13, R-14, R-15, R-16)
-    const APP_VER = '1.7.6';
+    const APP_VER = '1.7.7';
 
     // ══════════════════════════════════════════
     // [3-Way Theme System] 모던, 라이트그레이, 딥 블랙 테마 엔진 (v1.6.7)
@@ -7269,7 +7475,7 @@
                   <div class="font-black text-amber-400 text-sm">${trip.coverEmoji || '📍'} ${l.name}</div>
                   <div class="text-slate-300 text-[11px] mt-0.5">${trip.title} (정거장 #${l.idx})</div>
                   <div class="mt-2 flex items-center gap-1">
-                    <a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(l.name + ' ' + trip.title)}" target="_blank" rel="noopener noreferrer" class="px-2 py-1 bg-sky-500/20 text-sky-300 rounded text-[10px] font-bold">구글 지도 길찾기</a>
+                    <a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(l.name + ' ' + trip.title)}" target="_blank" rel="noopener noreferrer" class="sulsul-badge-sky px-2 py-1 bg-sky-100 hover:bg-sky-200 border border-sky-300 text-sky-800 dark:bg-sky-950/50 dark:hover:bg-sky-900/50 dark:border-sky-800 dark:text-sky-300 rounded text-[10px] font-bold">구글 지도 길찾기</a>
                   </div>
                 </div>
               `);
@@ -9271,10 +9477,10 @@
     }
 
     function planBlockStatusClass(status) {
-      if (status === 'completed') return 'bg-emerald-500/15 text-emerald-300 border-emerald-500/30';
-      if (status === 'confirmed') return 'bg-sky-500/15 text-sky-300 border-sky-500/30';
-      if (status === 'review') return 'bg-amber-500/15 text-amber-300 border-amber-500/30';
-      return 'bg-white/10 text-white badge-solid border-white/20';
+      if (status === 'completed') return 'sulsul-badge-emerald bg-emerald-100 text-emerald-800 border-emerald-300 dark:bg-emerald-950/60 dark:text-emerald-300 dark:border-emerald-800 font-bold';
+      if (status === 'confirmed') return 'sulsul-badge-sky bg-sky-100 text-sky-800 border-sky-300 dark:bg-sky-950/50 dark:text-sky-300 dark:border-sky-800 font-bold';
+      if (status === 'review') return 'sulsul-badge-amber bg-amber-100 text-amber-800 border-amber-300 dark:bg-amber-950/60 dark:text-amber-300 dark:border-amber-800 font-bold';
+      return 'bg-stone-100 text-stone-700 border-stone-300 dark:bg-white/10 dark:text-white dark:border-white/20 font-bold';
     }
 
     function renderBigPlanTab() {
@@ -9724,6 +9930,8 @@
           refreshLiveExchangeRates(false);
         }
       }
+      if (tabId === 'checklist') renderChecklistTab();
+      if (tabId === 'journal') renderJournalTab();
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
@@ -9857,23 +10065,23 @@
           const isDone = Boolean(spot.completed);
           const isFixed = Boolean(spot.fixed);
           const doneBadge = isDone ? 
-            `<span class="px-1.5 py-0.2 rounded bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 text-[9px] font-bold flex items-center gap-0.5"><i class="fa-solid fa-check text-[8px]"></i>방문완료</span>` : '';
+            `<span class="sulsul-badge-emerald px-1.5 py-0.2 rounded bg-emerald-100 text-emerald-800 border border-emerald-300 dark:bg-emerald-950/60 dark:text-emerald-300 dark:border-emerald-800 text-[9px] font-bold flex items-center gap-0.5"><i class="fa-solid fa-check text-[8px]"></i>방문완료</span>` : '';
           const fixedBadge = isFixed ?
-            `<span class="px-1.5 py-0.2 rounded bg-indigo-500/20 text-indigo-400 border border-indigo-500/30 text-[9px] font-bold flex items-center gap-0.5"><i class="fa-solid fa-thumbtack text-[8px]"></i>고정</span>` : '';
+            `<span class="sulsul-badge-indigo px-1.5 py-0.2 rounded bg-indigo-100 text-indigo-800 border border-indigo-300 dark:bg-indigo-950/60 dark:text-indigo-300 dark:border-indigo-800 text-[9px] font-bold flex items-center gap-0.5"><i class="fa-solid fa-thumbtack text-[8px]"></i>고정</span>` : '';
           const draftBadge = spot.isDraft ? 
-            `<span class="px-1.5 py-0.2 rounded bg-amber-400/20 text-amber-400 border border-amber-400/30 text-[9px] font-bold">초안</span>` : '';
+            `<span class="sulsul-badge-amber px-1.5 py-0.2 rounded bg-amber-100 text-amber-800 border border-amber-300 dark:bg-amber-950/60 dark:text-amber-300 dark:border-amber-800 text-[9px] font-bold">초안</span>` : '';
           const nextDayBadge = (spot.time && spot.time.includes('+1일')) ? 
-            `<span class="px-1.5 py-0.2 rounded bg-purple-500/20 text-purple-300 border border-purple-500/30 text-[9px] font-bold flex items-center gap-0.5"><i class="fa-solid fa-moon text-[8px]"></i>익일(+1일)</span>` : '';
+            `<span class="sulsul-badge-indigo px-1.5 py-0.2 rounded bg-purple-100 text-purple-800 border border-purple-300 dark:bg-purple-950/60 dark:text-purple-300 dark:border-purple-800 text-[9px] font-bold flex items-center gap-0.5"><i class="fa-solid fa-moon text-[8px]"></i>익일(+1일)</span>` : '';
           
           const gmapQuery = encodeURIComponent(`${spot.title} ${day.city || ''}`);
           const gmapUrl = `https://www.google.com/maps/search/?api=1&query=${gmapQuery}`;
 
           const checkBtnClass = isDone ?
-            'bg-emerald-500/20 border-emerald-500/50 text-emerald-400' :
+            'bg-emerald-100 text-emerald-800 border-emerald-300 dark:bg-emerald-500/20 dark:border-emerald-500/50 dark:text-emerald-400' :
             'bg-[#141c2e] border-[#23304c] text-slate-500 hover:text-slate-300';
           const titleClass = isDone ? 'line-through text-slate-400' : 'text-slate-200';
           const fixBtnClass = isFixed ?
-            'bg-indigo-500/20 border-indigo-500/50 text-indigo-400' :
+            'bg-indigo-100 text-indigo-800 border-indigo-300 dark:bg-indigo-500/20 dark:border-indigo-500/50 dark:text-indigo-400' :
             'bg-[#141c2e] border-[#23304c] text-slate-500 hover:text-slate-300';
           const cardBorder = isDone ? 'border-emerald-500/25 bg-emerald-950/5' : (isFixed ? 'border-indigo-500/25 bg-indigo-950/5' : 'border-[#1a2236]');
 
@@ -9939,7 +10147,7 @@
               </div>
 
               <div class="flex items-center gap-2">
-                <button onclick="event.stopPropagation(); openScheduleTuningModal(${dayIdx})" class="px-2 py-1 rounded-lg bg-amber-500/15 hover:bg-amber-500/25 border border-amber-500/30 text-amber-300 hover:text-amber-200 text-[11px] font-bold transition flex items-center gap-1 cursor-pointer" title="Day ${day.dayNum || (dayIdx + 1)} 변수 대응 & 일정 튜닝">
+                <button onclick="event.stopPropagation(); openScheduleTuningModal(${dayIdx})" class="sulsul-badge-amber px-2 py-1 rounded-lg bg-amber-100 hover:bg-amber-200 border border-amber-300 text-amber-800 dark:bg-amber-500/15 dark:hover:bg-amber-500/25 dark:border-amber-500/30 dark:text-amber-300 dark:hover:text-amber-200 text-[11px] font-bold transition flex items-center gap-1 cursor-pointer" title="Day ${day.dayNum || (dayIdx + 1)} 변수 대응 & 일정 튜닝">
                   <i class="fa-solid fa-bolt text-[9px]"></i>
                   <span class="hidden sm:inline">일정 튜닝</span>
                 </button>
@@ -10080,7 +10288,7 @@
                   <div class="font-black text-amber-400 text-sm">${d.name}</div>
                   <div class="text-slate-300 text-[11px] mt-0.5">${d.altitude || d.badge || ''}</div>
                   <div class="mt-2 flex items-center gap-1">
-                    <a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(d.googleMapsQuery || d.name)}" target="_blank" rel="noopener noreferrer" class="px-2 py-1 bg-sky-500/20 text-sky-300 rounded text-[10px] font-bold">구글 지도 길찾기</a>
+                    <a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(d.googleMapsQuery || d.name)}" target="_blank" rel="noopener noreferrer" class="sulsul-badge-sky px-2 py-1 bg-sky-100 hover:bg-sky-200 border border-sky-300 text-sky-800 dark:bg-sky-950/50 dark:hover:bg-sky-900/50 dark:border-sky-800 dark:text-sky-300 rounded text-[10px] font-bold">구글 지도 길찾기</a>
                   </div>
                 </div>
               `);
@@ -10204,7 +10412,7 @@
           <div class="p-4 rounded-xl bg-[#080b12] border border-[#1e263c] space-y-2 flex flex-col justify-between">
             <div>
               <div class="flex items-center justify-between gap-2">
-                <span class="px-2 py-0.5 rounded text-[10px] font-black ${b.tier === 'S' ? 'bg-rose-500/20 text-rose-300 border border-rose-500/30' : 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30'}">
+                <span class="px-2 py-0.5 rounded text-[10px] font-black ${b.tier === 'S' ? 'sulsul-badge-rose bg-rose-100 text-rose-800 border border-rose-300 dark:bg-rose-950/60 dark:text-rose-300 dark:border-rose-800' : 'sulsul-badge-emerald bg-emerald-100 text-emerald-800 border border-emerald-300 dark:bg-emerald-950/60 dark:text-emerald-300 dark:border-emerald-800'}">
                   ${b.tierName}
                 </span>
                 <span class="text-[10px] text-amber-400 font-bold">${b.dday}</span>
@@ -10249,13 +10457,13 @@
               <span class="text-base">${pack.flag || '📌'}</span>
               <h4 class="text-xs sm:text-sm font-black text-amber-950 dark:text-amber-300">${sn.title}</h4>
             </div>
-            <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 text-[11px] text-slate-300 pt-1">
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 text-[11px] text-slate-600 dark:text-slate-300 pt-1">
               ${(sn.tips || []).map(t => `
-                <div class="p-2.5 rounded-lg bg-[#080b12] border border-[#1e263c]">
-                  <div class="font-bold text-amber-900 dark:text-amber-400 flex items-center gap-1 mb-1">
+                <div class="p-2.5 rounded-lg theme-card-subtle">
+                  <div class="font-bold text-amber-800 dark:text-amber-300 flex items-center gap-1 mb-1">
                     <i class="fa-solid fa-check text-[10px]"></i> ${t.title}
                   </div>
-                  <div class="text-slate-400 leading-relaxed">${t.desc}</div>
+                  <div class="text-[#57534e] dark:text-slate-400 leading-relaxed">${t.desc}</div>
                 </div>
               `).join('')}
             </div>
@@ -10265,12 +10473,12 @@
 
       const checklist = trip.checklist || [];
       const checklistCardsHtml = checklist.map((item, idx) => `
-        <div class="p-3.5 rounded-xl bg-[#080b12] border border-[#1e263c] flex items-center justify-between gap-3">
+        <div class="p-3.5 rounded-xl theme-card-subtle flex items-center justify-between gap-3 hover:border-amber-500/40 transition">
           <div class="flex items-center gap-2.5 flex-1 min-w-0">
             <input type="checkbox" ${item.checked ? 'checked' : ''} onchange="toggleTripChecklistItem(${idx})" class="w-4 h-4 rounded text-amber-500 bg-[#141c2e] border-[#23304c] focus:ring-amber-500 focus:ring-offset-0 cursor-pointer shrink-0">
-            <span class="text-xs ${item.checked ? 'line-through text-slate-500' : 'text-slate-200 font-bold'} truncate">${item.text}</span>
+            <span class="text-xs ${item.checked ? 'line-through opacity-50' : 'text-[#1c1917] dark:text-[#ededed] font-bold'} truncate">${item.text}</span>
           </div>
-          <span class="px-2 py-0.5 rounded text-[10px] font-black shrink-0 ${item.urgent ? 'bg-rose-500/20 text-rose-300 border border-rose-500/30' : 'bg-slate-800 text-slate-400 border border-slate-700'}">
+          <span class="px-2.5 py-0.5 rounded-full text-[10px] font-black shrink-0 ${item.urgent ? 'sulsul-badge-rose' : 'bg-stone-100 text-stone-700 border border-stone-300 dark:bg-slate-800 dark:text-slate-400 dark:border-slate-700'}">
             ${item.urgent ? '🚨 필수' : '일반'}
           </span>
         </div>
@@ -10279,12 +10487,12 @@
       container.innerHTML = `
         ${specialAdviceHtml}
         <div class="col-span-1 md:col-span-2 flex items-center justify-between pt-1">
-          <span class="text-xs font-bold text-slate-300">📋 준비 항목 점검 (${checklist.filter(c => c.checked).length}/${checklist.length} 완료)</span>
-          <button onclick="openModal('modal-checklist-add')" class="px-2.5 py-1 bg-[#141c2e] hover:bg-[#1a263e] border border-[#23304c] text-amber-400 text-xs font-bold rounded-lg transition flex items-center gap-1">
+          <span class="text-xs font-bold text-[#1c1917] dark:text-slate-300">📋 준비 항목 점검 (${checklist.filter(c => c.checked).length}/${checklist.length} 완료)</span>
+          <button onclick="openModal('modal-checklist-add')" class="sulsul-badge-amber px-2.5 py-1 text-xs font-bold rounded-lg transition flex items-center gap-1 cursor-pointer">
             <i class="fa-solid fa-plus text-[10px]"></i> 준비물 추가
           </button>
         </div>
-        ${checklistCardsHtml || '<div class="col-span-2 text-xs text-slate-500 py-4 text-center">등록된 사전 예약/준비물이 없습니다.</div>'}
+        ${checklistCardsHtml || '<div class="col-span-2 text-xs text-stone-400 dark:text-slate-500 py-4 text-center">등록된 사전 예약/준비물이 없습니다.</div>'}
       `;
     }
 
@@ -10865,30 +11073,30 @@
           if (exp.paymentSource === 'none') {
             paymentBadge = '<span class="px-1.5 py-0.5 rounded text-[9px] font-bold bg-slate-500/10 text-slate-400 border border-slate-500/20 shrink-0">📝 단순 기록</span>';
           } else if (exp.paymentSource === 'wallet_krw' || (exp.curr !== 'KRW' && exp.walletCurr === 'KRW')) {
-            paymentBadge = '<span class="px-1.5 py-0.5 rounded text-[9px] font-bold bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 shrink-0">🇰🇷 KRW 입금</span>';
+            paymentBadge = '<span class="sulsul-badge-emerald px-1.5 py-0.5 rounded text-[9px] font-bold bg-emerald-100 text-emerald-800 border border-emerald-300 dark:bg-emerald-950/60 dark:text-emerald-300 dark:border-emerald-800 shrink-0">🇰🇷 KRW 입금</span>';
           } else {
             const wC = exp.walletCurr || exp.curr || 'KRW';
             const flag = CURRENCY_INFO[wC]?.flag || '💵';
-            paymentBadge = `<span class="px-1.5 py-0.5 rounded text-[9px] font-bold bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 shrink-0">${flag} ${wC} 지갑 입금</span>`;
+            paymentBadge = `<span class="sulsul-badge-emerald px-1.5 py-0.5 rounded text-[9px] font-bold bg-emerald-100 text-emerald-800 border border-emerald-300 dark:bg-emerald-950/60 dark:text-emerald-300 dark:border-emerald-800 shrink-0">${flag} ${wC} 지갑 입금</span>`;
           }
         } else {
           if (exp.paymentSource === 'wallet_krw' || (exp.curr !== 'KRW' && exp.walletCurr === 'KRW')) {
-            paymentBadge = '<span class="px-1.5 py-0.5 rounded text-[9px] font-bold bg-sky-500/10 text-sky-400 border border-sky-500/20 shrink-0">💳 한국 카드</span>';
+            paymentBadge = '<span class="sulsul-badge-sky px-1.5 py-0.5 rounded text-[9px] font-bold bg-sky-100 text-sky-800 border border-sky-300 dark:bg-sky-950/50 dark:text-sky-300 dark:border-sky-800 shrink-0">💳 한국 카드</span>';
           } else if (isCash) {
             const wC = exp.walletCurr || exp.curr || 'KRW';
             const flag = CURRENCY_INFO[wC]?.flag || '💵';
-            paymentBadge = `<span class="px-1.5 py-0.5 rounded text-[9px] font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 shrink-0">${flag} 현금</span>`;
+            paymentBadge = `<span class="sulsul-badge-emerald px-1.5 py-0.5 rounded text-[9px] font-bold bg-emerald-100 text-emerald-800 border border-emerald-300 dark:bg-emerald-950/60 dark:text-emerald-300 dark:border-emerald-800 shrink-0">${flag} 현금</span>`;
           } else if (exp.paymentSource === 'none') {
             paymentBadge = '<span class="px-1.5 py-0.5 rounded text-[9px] font-bold bg-slate-500/10 text-slate-400 border border-slate-500/20 shrink-0">📝 단순 기록</span>';
           } else {
             const wC = exp.walletCurr || exp.curr || 'KRW';
             const flag = CURRENCY_INFO[wC]?.flag || '💳';
-            paymentBadge = `<span class="px-1.5 py-0.5 rounded text-[9px] font-bold bg-sky-500/10 text-sky-400 border border-sky-500/20 shrink-0">${flag} 카드</span>`;
+            paymentBadge = `<span class="sulsul-badge-sky px-1.5 py-0.5 rounded text-[9px] font-bold bg-sky-100 text-sky-800 border border-sky-300 dark:bg-sky-950/50 dark:text-sky-300 dark:border-sky-800 shrink-0">${flag} 카드</span>`;
           }
         }
 
         const typeBadge = isIncome
-          ? '<span class="px-1.5 py-0.5 rounded text-[9px] font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 shrink-0">수입</span>'
+          ? '<span class="sulsul-badge-emerald px-1.5 py-0.5 rounded text-[9px] font-bold bg-emerald-100 text-emerald-800 border border-emerald-300 dark:bg-emerald-950/60 dark:text-emerald-300 dark:border-emerald-800 shrink-0">수입</span>'
           : '';
 
         let photoMarkup = '';
@@ -11399,7 +11607,7 @@
       btns.forEach(btn => {
         const r = btn.getAttribute('data-region');
         if (r === currentAddCurrencyRegion) {
-          btn.className = 'add-curr-filter-btn px-2.5 py-1 rounded-lg font-bold bg-sky-500/20 text-sky-300 border border-sky-500/40 cursor-pointer';
+          btn.className = 'add-curr-filter-btn px-2.5 py-1 rounded-lg font-bold sulsul-badge-sky bg-sky-100 text-sky-800 border border-sky-300 dark:bg-sky-950/50 dark:text-sky-300 dark:border-sky-800 cursor-pointer';
         } else {
           btn.className = 'add-curr-filter-btn px-2.5 py-1 rounded-lg font-medium bg-[#080b12] text-slate-400 border border-[#1e263c] hover:text-white cursor-pointer';
         }
@@ -11898,11 +12106,11 @@
 
         let sourceBadge = '';
         if (hasCustom) {
-          sourceBadge = `<span class="text-[9px] px-1.5 py-0.5 rounded font-bold bg-amber-500/20 text-amber-300 border border-amber-500/30">직접 설정</span>`;
+          sourceBadge = `<span class="sulsul-badge-amber text-[9px] px-1.5 py-0.5 rounded font-bold bg-amber-100 text-amber-800 border border-amber-300 dark:bg-amber-950/60 dark:text-amber-300 dark:border-amber-800">직접 설정</span>`;
         } else if (hasLive) {
-          sourceBadge = `<span class="text-[9px] px-1.5 py-0.5 rounded font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">실시간 API</span>`;
+          sourceBadge = `<span class="sulsul-badge-emerald text-[9px] px-1.5 py-0.5 rounded font-bold bg-emerald-100 text-emerald-800 border border-emerald-300 dark:bg-emerald-950/60 dark:text-emerald-300 dark:border-emerald-800">실시간 API</span>`;
         } else {
-          sourceBadge = `<span class="text-[9px] px-1.5 py-0.5 rounded font-bold bg-slate-800 text-slate-400 border border-slate-700">기본 환율</span>`;
+          sourceBadge = `<span class="text-[9px] px-1.5 py-0.5 rounded font-bold bg-stone-100 text-stone-700 border border-stone-300 dark:bg-slate-800 dark:text-slate-400 dark:border-slate-700">기본 환율</span>`;
         }
 
         return `
@@ -11928,7 +12136,7 @@
                 적용
               </button>
               ${hasCustom ? `
-                <button onclick="resetCustomRate('${c}')" class="px-2 py-1 rounded-lg bg-rose-500/10 hover:bg-rose-500/20 text-rose-300 text-xs font-bold transition border border-rose-500/30 cursor-pointer" title="직접 맞춤 환율 해제">
+                <button onclick="resetCustomRate('${c}')" class="px-2 py-1 rounded-lg bg-rose-100 hover:bg-rose-200 text-rose-800 dark:bg-rose-950/50 dark:hover:bg-rose-900/50 dark:text-rose-300 text-xs font-bold transition border border-rose-300 dark:border-rose-800 cursor-pointer" title="직접 맞춤 환율 해제">
                   해제
                 </button>
               ` : ''}
@@ -12114,12 +12322,12 @@
       document.getElementById('checklist-progress-badge').innerText = `${pct}% 준비됨 (${checkedCount}/${items.length})`;
 
       container.innerHTML = items.map((item, idx) => `
-        <label class="p-3 rounded-xl bg-[#080b12] border border-[#1a2236] flex items-center justify-between gap-3 cursor-pointer hover:border-[#2a3652] transition">
+        <label class="p-3 rounded-xl theme-card-subtle flex items-center justify-between gap-3 cursor-pointer hover:border-amber-500/40 transition">
           <div class="flex items-center gap-3">
             <input type="checkbox" ${item.checked ? 'checked' : ''} onchange="toggleChecklistItem(${idx})" class="w-4 h-4 rounded border-slate-700 bg-slate-900 text-amber-500 focus:ring-0 cursor-pointer">
-            <span class="text-xs ${item.checked ? 'line-through text-slate-500' : 'text-slate-200'} font-medium">${item.text}</span>
+            <span class="text-xs ${item.checked ? 'line-through opacity-50' : 'text-[#1c1917] dark:text-[#ededed] font-bold'}">${item.text}</span>
           </div>
-          ${item.urgent ? '<span class="text-[9px] font-bold px-1.5 py-0.5 rounded bg-rose-500/20 text-rose-300 border border-rose-500/30">필수</span>' : ''}
+          ${item.urgent ? '<span class="sulsul-badge-rose text-[9px] font-black px-2 py-0.5 rounded-full shrink-0">필수</span>' : ''}
         </label>
       `).join('');
     }

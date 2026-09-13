@@ -117,9 +117,9 @@ test('mobile travel notebook presentation is bundled and protected from CDN regr
   assert.match(companionCss, /min-height:44px/);
   assert.match(utilitiesCss, /\.flex/);
   for (const asset of [
-    'css/utilities.css?v=1.7.6',
-    'css/companion.css?v=1.7.6',
-    'js/presentation/companion-ui.js?v=1.7.6',
+    'css/utilities.css?v=1.7.7',
+    'css/companion.css?v=1.7.7',
+    'js/presentation/companion-ui.js?v=1.7.7',
     'vendor/fontawesome/css/all.min.css',
     'vendor/leaflet/leaflet.js',
     'vendor/leaflet/images/marker-icon-2x.png',
@@ -282,12 +282,35 @@ test('draft studio destination editor & receipt camera capture supported (v1.7.6
   assert.match(companion, /초안 편집/);
 });
 
+test('semantic badges & high-contrast safeguards supported (v1.7.7)', () => {
+  // 1. Semantic badge classes defined in companion.css and index.html
+  assert.match(companionCss, /\.sulsul-badge-rose/);
+  assert.match(companionCss, /\.sulsul-badge-emerald/);
+  assert.match(companionCss, /\.sulsul-badge-amber/);
+  assert.match(companionCss, /\.sulsul-badge-indigo/);
+  assert.match(companionCss, /\.sulsul-badge-sky/);
+
+  assert.match(html, /\.sulsul-badge-rose/);
+  assert.match(html, /\.sulsul-badge-emerald/);
+  assert.match(html, /\.sulsul-badge-amber/);
+  assert.match(html, /\.sulsul-badge-indigo/);
+  assert.match(html, /\.sulsul-badge-sky/);
+
+  // 2. Checklist urgent [필수] badge uses high-contrast tokens
+  assert.match(html, /sulsul-badge-rose/);
+  assert.match(html, /checklist-progress-badge/);
+
+  // 3. CSS safety guard prevents pastel washed-out text in light mode
+  assert.match(html, /System-wide High Contrast Safety Guard/);
+  assert.match(html, /:root:not\(\.dark\):not\(\[data-theme="deepblack"\]\):not\(\[data-theme="dark"\]\)/);
+});
+
 test('release version is synchronized', () => {
   const app = html.match(/const APP_VER\s*=\s*'([^']+)'/)?.[1];
   const worker = sw.match(/const V\s*=\s*'st-shell-v([^']+)'/)?.[1];
   const release = changelog.match(/## \[v([^\]]+)\]/)?.[1];
   const chronicleRelease = chronicle.match(/^### \[실록 \d+호\].*\(v([^\)]+)\)$/m)?.[1];
-  assert.equal(app, '1.7.6');
+  assert.equal(app, '1.7.7');
   assert.equal(worker, app);
   assert.equal(release, app);
   assert.equal(chronicleRelease, app);

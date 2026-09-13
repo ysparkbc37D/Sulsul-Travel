@@ -1041,3 +1041,74 @@ button:focus-visible, summary:focus-visible, a:focus-visible { outline:3px solid
   border: 1px solid rgba(8, 11, 18, 0.8) !important;
 }
 
+/* ================================================================ */
+/* Sulsul Semantic Badges & High Contrast Safeguards (v1.7.7)        */
+/* ================================================================ */
+.sulsul-badge-rose {
+  background-color: #ffe4e6 !important;
+  border: 1px solid #fecdd3 !important;
+  color: #9f1239 !important;
+  font-weight: 800 !important;
+}
+.sulsul-badge-emerald {
+  background-color: #d1fae5 !important;
+  border: 1px solid #a7f3d0 !important;
+  color: #065f46 !important;
+  font-weight: 800 !important;
+}
+.sulsul-badge-amber {
+  background-color: #fef3c7 !important;
+  border: 1px solid #fde68a !important;
+  color: #78350f !important;
+  font-weight: 800 !important;
+}
+.sulsul-badge-indigo {
+  background-color: #e0e7ff !important;
+  border: 1px solid #c7d2fe !important;
+  color: #3730a3 !important;
+  font-weight: 800 !important;
+}
+.sulsul-badge-sky {
+  background-color: #e0f2fe !important;
+  border: 1px solid #bae6fd !important;
+  color: #075985 !important;
+  font-weight: 800 !important;
+}
+
+:root.dark .sulsul-badge-rose,
+:root[data-theme="deepblack"] .sulsul-badge-rose,
+:root[data-theme="dark"] .sulsul-badge-rose {
+  background-color: rgba(225, 29, 72, 0.22) !important;
+  border: 1px solid rgba(225, 29, 72, 0.45) !important;
+  color: #fda4af !important;
+}
+:root.dark .sulsul-badge-emerald,
+:root[data-theme="deepblack"] .sulsul-badge-emerald,
+:root[data-theme="dark"] .sulsul-badge-emerald {
+  background-color: rgba(16, 185, 129, 0.22) !important;
+  border: 1px solid rgba(16, 185, 129, 0.45) !important;
+  color: #6ee7b7 !important;
+}
+:root.dark .sulsul-badge-amber,
+:root[data-theme="deepblack"] .sulsul-badge-amber,
+:root[data-theme="dark"] .sulsul-badge-amber {
+  background-color: rgba(245, 158, 11, 0.22) !important;
+  border: 1px solid rgba(245, 158, 11, 0.45) !important;
+  color: #fde68a !important;
+}
+:root.dark .sulsul-badge-indigo,
+:root[data-theme="deepblack"] .sulsul-badge-indigo,
+:root[data-theme="dark"] .sulsul-badge-indigo {
+  background-color: rgba(99, 102, 241, 0.22) !important;
+  border: 1px solid rgba(99, 102, 241, 0.45) !important;
+  color: #a5b4fc !important;
+}
+:root.dark .sulsul-badge-sky,
+:root[data-theme="deepblack"] .sulsul-badge-sky,
+:root[data-theme="dark"] .sulsul-badge-sky {
+  background-color: rgba(14, 165, 233, 0.22) !important;
+  border: 1px solid rgba(14, 165, 233, 0.45) !important;
+  color: #7dd3fc !important;
+}
+
+
