@@ -32,7 +32,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Great+Vibes&family=Cormorant+Garamond:wght@600;700;800&family=Noto+Serif+KR:wght@500;600;700;900&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
 
   <!-- Local Utilities Bundle (CDN fallback & tailwind utilities) -->
-  <link rel="stylesheet" href="css/utilities.css?v=1.6.7">
+  <link rel="stylesheet" href="css/utilities.css?v=1.6.8">
   <link rel="stylesheet" href="vendor/fontawesome/css/all.min.css">
 
   <!-- Leaflet Map CSS & JS -->
@@ -780,8 +780,8 @@
     }
   </style>
 
-  <link rel="stylesheet" href="css/companion.css?v=1.6.7">
-  <script src="js/presentation/companion-ui.js?v=1.6.7"></script>
+  <link rel="stylesheet" href="css/companion.css?v=1.6.8">
+  <script src="js/presentation/companion-ui.js?v=1.6.8"></script>
 
   <!-- Knowledge Base Seed & Destination Knowledge Packs (DKP) -->
   <script src="kb-travel.js"></script>
@@ -810,8 +810,8 @@
 
       <!-- 우측 액션 클러스터 (버전 알약 -> 원형 통계 -> 원형 설정 -> 다크그린 캡슐 추가) -->
       <div class="flex items-center gap-1 sm:gap-1.5 shrink-0">
-        <!-- 1. 버전 배지 버튼 (v1.6.7 - 클릭 시 버전 이력) -->
-        <button id="app-ver-badge" onclick="event.stopPropagation(); openVersionHistoryModal()" class="h-7 sm:h-8 px-2 sm:px-2.5 rounded-full theme-card-subtle flex items-center justify-center font-mono text-[10px] sm:text-[11px] font-bold text-[#a2601b] dark:text-[#d4af37] shadow-xs hover:border-amber-500/60 transition cursor-pointer shrink-0" title="버전 업데이트 기록 보기 (클릭)">v1.6.7</button>
+        <!-- 1. 버전 배지 버튼 (v1.6.8 - 클릭 시 버전 이력) -->
+        <button id="app-ver-badge" onclick="event.stopPropagation(); openVersionHistoryModal()" class="h-7 sm:h-8 px-2 sm:px-2.5 rounded-full theme-card-subtle flex items-center justify-center font-mono text-[10px] sm:text-[11px] font-bold text-[#a2601b] dark:text-[#d4af37] shadow-xs hover:border-amber-500/60 transition cursor-pointer shrink-0" title="버전 업데이트 기록 보기 (클릭)">v1.6.8</button>
 
         <!-- 2. 통계 버튼 (📊 - 원형 버튼) -->
         <button id="header-btn-analytics" onclick="openAnalyticsModal('lifetime')" class="companion-header-analytics w-7 h-7 sm:w-8 sm:h-8 rounded-full theme-card-subtle flex items-center justify-center text-[#a2601b] dark:text-[#d4af37] hover:border-amber-500/60 transition shadow-xs cursor-pointer shrink-0" title="술술 여행 통계 대시보드">
@@ -900,18 +900,25 @@
         </button>
       </div>
 
-      <!-- 3. 드롭다운 2대 핵심 정밀 필터 (국가, 컨셉 - 1줄 2컬럼 50/50 최적화) -->
-      <div class="grid grid-cols-2 gap-1.5 sm:gap-2">
+      <!-- 3. 드롭다운 3대 핵심 정밀 필터 (국가, 도시, 컨셉 - 1줄 3컬럼 모바일 최적화) -->
+      <div class="grid grid-cols-3 gap-1.5 sm:gap-2">
         <!-- 1. 국가 필터 -->
         <div class="relative">
-          <select id="hub-filter-country" onchange="handleHubCountryChange()" class="w-full px-2.5 py-2 bg-[#faf8f5] dark:bg-[#0f1117] border border-[#e8e2d5] dark:border-stone-700 rounded-xl text-xs font-bold text-[#44403c] dark:text-stone-200 focus:outline-none focus:border-[#a2601b] cursor-pointer truncate shadow-sm">
+          <select id="hub-filter-country" onchange="handleHubCountryChange()" class="w-full px-2 py-2 bg-[#faf8f5] dark:bg-[#0f1117] border border-[#e8e2d5] dark:border-stone-700 rounded-xl text-xs font-bold text-[#44403c] dark:text-stone-200 focus:outline-none focus:border-[#a2601b] cursor-pointer truncate shadow-sm" title="국가 필터">
             <option value="all">국가</option>
           </select>
         </div>
 
-        <!-- 2. 컨셉 필터 -->
+        <!-- 2. 도시 필터 -->
         <div class="relative">
-          <select id="hub-filter-concept" onchange="handleHubFilterChange()" class="w-full px-2.5 py-2 bg-[#faf8f5] dark:bg-[#0f1117] border border-[#e8e2d5] dark:border-stone-700 rounded-xl text-xs font-bold text-[#44403c] dark:text-stone-200 focus:outline-none focus:border-[#a2601b] cursor-pointer truncate shadow-sm">
+          <select id="hub-filter-city" onchange="handleHubFilterChange()" class="w-full px-2 py-2 bg-[#faf8f5] dark:bg-[#0f1117] border border-[#e8e2d5] dark:border-stone-700 rounded-xl text-xs font-bold text-[#44403c] dark:text-stone-200 focus:outline-none focus:border-[#a2601b] cursor-pointer truncate shadow-sm" title="도시 필터">
+            <option value="all">도시</option>
+          </select>
+        </div>
+
+        <!-- 3. 컨셉 필터 -->
+        <div class="relative">
+          <select id="hub-filter-concept" onchange="handleHubFilterChange()" class="w-full px-2 py-2 bg-[#faf8f5] dark:bg-[#0f1117] border border-[#e8e2d5] dark:border-stone-700 rounded-xl text-xs font-bold text-[#44403c] dark:text-stone-200 focus:outline-none focus:border-[#a2601b] cursor-pointer truncate shadow-sm" title="컨셉 필터">
             <option value="all">컨셉</option>
             <option value="배낭">🎒 배낭여행</option>
             <option value="럭셔리">👑 럭셔리</option>
@@ -924,9 +931,6 @@
           </select>
         </div>
       </div>
-
-      <!-- 보조 셀렉트 (DOM 호환성 유지) -->
-      <select id="hub-filter-city" class="hidden"><option value="all">도시</option></select>
 
       <!-- 4. 활성 필터 요약 칩 컨테이너 (조건 선택 시 즉시 노출, 원클릭 개별/전체 해제) -->
       <div id="hub-active-chips" class="hidden flex items-center gap-1.5 flex-wrap pt-2 border-t border-[#f0ece1] dark:border-stone-800/80 text-xs">
@@ -3519,14 +3523,33 @@
 
       <!-- 버전 목록 스크롤 영역 (독립 스크롤 컨테이너로 Flexbox 압축 버그 영구 척결) -->
       <div class="overflow-y-auto flex-1 min-h-0 space-y-3.5 pr-1.5 custom-scrollbar">
-        <!-- v1.6.7 (Current) -->
+        <!-- v1.6.8 (Current) -->
         <div class="p-4 rounded-2xl border-2 border-emerald-500/50 space-y-2.5 bg-emerald-500/5 dark:bg-emerald-500/10 shrink-0 shadow-sm">
           <div class="flex items-center justify-between gap-2">
             <div class="flex items-center gap-2 min-w-0">
-              <span class="px-2.5 py-0.5 rounded-lg bg-emerald-500 text-black font-black text-xs shadow-sm shrink-0">v1.6.7</span>
-              <span class="text-xs font-black text-[#1c1917] dark:text-white truncate">3대 테마 시스템, 메인 타이틀 & 카드 캡슐 액션 개편, AI 일정 튜닝 분리 및 버전 기록 쇄신</span>
+              <span class="px-2.5 py-0.5 rounded-lg bg-emerald-500 text-black font-black text-xs shadow-sm shrink-0">v1.6.8</span>
+              <span class="text-xs font-black text-[#1c1917] dark:text-white truncate">모바일 360px 가로 터짐 0px 불변 린터(R-16), 3열 정밀 필터 및 4대 액션 정예화</span>
             </div>
             <span class="companion-status shrink-0">최신 버전</span>
+          </div>
+          <p class="text-xs leading-relaxed text-[#44403c] dark:text-stone-300">
+            1) <b>상단 정밀 필터 1줄 3열(국가·도시·컨셉) 통합</b>: 숨겨져 있던 도시 필터를 비은닉 복원하고 <code>[국가] [도시] [컨셉]</code> 3대 드롭다운을 모바일 360px 기준 단일 라인 3컬럼 그리드로 통합 배치하여 국가별 거점 도시 자동 캐스케이딩 갱신을 지원합니다.<br>
+            2) <b>여행 카드 4대 핵심 액션 정예화 & 모바일 완벽 방어</b>: 카드 클릭 시 워크스페이스가 바로 열리므로, 모바일에서 버튼 잘림과 화면 틀어짐을 유발하던 중복 <code>[열기 >]</code> 버튼과 미사용 <code>[📋 복제]</code> 버튼을 완전 척결하고 <code>[📷 사진] [🌐 지구본] [📄 PDF 여행에세이] [🗑️ 삭제]</code> 4개 원형 캡슐 버튼으로 정예화했습니다.<br>
+            3) <b>모바일 360px 가로 터짐 0px 불변 법칙(R-16) 신설 & 자동 린터 탑재</b>: 360px 모바일 뷰포트에서 가로 스크롤(오버플로)이나 요소 잘림이 발생하면 배포를 즉각 중단시키는 Headless Edge CDP 실측 검증기(Gate 5)를 수립했습니다.
+          </p>
+          <div class="text-[10px] text-stone-400 dark:text-stone-500 pt-1 border-t border-emerald-500/20 flex items-center justify-between">
+            <span>📅 2026-09-13 릴리즈</span>
+            <span class="font-mono">st-shell-v1.6.8</span>
+          </div>
+        </div>
+
+        <!-- v1.6.7 -->
+        <div class="p-4 rounded-2xl bg-stone-50 dark:bg-stone-900/50 border border-stone-200 dark:border-stone-800 space-y-2.5 shadow-sm relative overflow-hidden shrink-0">
+          <div class="flex items-center justify-between gap-2">
+            <div class="flex items-center gap-2 min-w-0">
+              <span class="px-2 py-0.5 rounded-lg bg-stone-200 dark:bg-stone-800 text-stone-800 dark:text-stone-200 font-bold text-[11px] font-mono shrink-0">v1.6.7</span>
+              <span class="text-xs font-bold text-[#1c1917] dark:text-stone-200 truncate">3대 테마 시스템, 메인 타이틀 & 카드 캡슐 액션 개편, AI 일정 튜닝 분리 및 버전 기록 쇄신</span>
+            </div>
           </div>
           <p class="text-xs leading-relaxed text-[#44403c] dark:text-stone-300">
             1) <b>3대 컬러 테마 시스템 도입</b>: 고풍스러운 양장본 고서 감성의 <b>'모던(빈티지 아카이벌)'</b>, 눈이 편안한 <b>'라이트그레이(클린 미니멀)'</b>, 야간 눈부심을 최소화한 <b>'딥 블랙(옵시디언 다크)'</b> 3대 테마를 완성하고 설정 모달에 3단 전환 셀렉터를 탑재했습니다.<br>
@@ -4105,7 +4128,7 @@
 
       <!-- 모달 푸터 -->
       <div class="pt-3 border-t border-[#e8e2d5] dark:border-stone-800 flex items-center justify-between shrink-0">
-        <span class="text-[11px] text-stone-400 dark:text-stone-500 font-mono">Sulsul Travel Engine v1.6.7</span>
+        <span class="text-[11px] text-stone-400 dark:text-stone-500 font-mono">Sulsul Travel Engine v1.6.8</span>
         <button onclick="closeModal('modal-version-history')" class="px-4 py-2 rounded-xl bg-[#faf8f5] dark:bg-stone-800 hover:bg-[#f0ece1] dark:hover:bg-stone-700 border border-[#e8e2d5] dark:border-stone-700 text-[#1c1917] dark:text-[#ededed] text-xs font-bold transition cursor-pointer shadow-sm">
           닫기
         </button>
@@ -4167,8 +4190,8 @@
     }
     window.showToast = showToast;
 
-    // 앱 버전 및 글로벌 네임스페이스 (Sulsul-Travel Invariant Rule R-10, R-11, R-12, R-13, R-14, R-15)
-    const APP_VER = '1.6.7';
+    // 앱 버전 및 글로벌 네임스페이스 (Sulsul-Travel Invariant Rule R-10, R-11, R-12, R-13, R-14, R-15, R-16)
+    const APP_VER = '1.6.8';
 
     // ══════════════════════════════════════════
     // [3-Way Theme System] 모던, 라이트그레이, 딥 블랙 테마 엔진 (v1.6.7)
@@ -7492,7 +7515,7 @@
             ${trip.isSample ? `<span class="px-2 py-0.5 rounded-full bg-black/60 backdrop-blur-md text-amber-300 border border-amber-500/40 text-[10px] font-bold">✨ 공식 가이드 예제</span>` : ''}
           </div>
 
-          <!-- 상단 우측: D-Day + [📷 대표사진] + [📋 복제] + [📄 PDF] + [🗑️ 삭제] -->
+          <!-- 상단 우측: D-Day + [📷 대표사진] + [📄 PDF] + [🗑️ 삭제] -->
           <div class="relative z-10 flex items-center gap-1.5">
             ${renderDDayBadge(trip, now)}
             <button onclick="triggerTripCoverUpload('${trip.id}', event)" class="px-2 py-1 rounded-lg bg-black/45 hover:bg-black/70 backdrop-blur-md text-white/90 hover:text-white border border-white/20 flex items-center gap-1 text-[11px] font-bold shadow-sm transition cursor-pointer" title="${photoBtnLabel}">
@@ -7500,10 +7523,7 @@
               <span class="hidden sm:inline">${photoBtnLabel}</span>
             </button>
             ${removeBtn}
-            <button onclick="duplicateTrip('${trip.id}', event)" class="w-7 h-7 rounded-lg bg-black/45 hover:bg-black/70 backdrop-blur-md text-white/90 hover:text-white border border-white/20 flex items-center justify-center text-xs shadow-sm transition cursor-pointer" title="여정 복제">
-              <i class="fa-solid fa-copy"></i>
-            </button>
-            <button onclick="openTripPdfReport('${trip.id}', event)" class="w-7 h-7 rounded-lg bg-black/45 hover:bg-black/70 backdrop-blur-md text-white/90 hover:text-white border border-white/20 flex items-center justify-center text-xs shadow-sm transition cursor-pointer" title="여행 보고서 & PDF">
+            <button onclick="openTripPdfReport('${trip.id}', event)" class="w-7 h-7 rounded-lg bg-black/45 hover:bg-black/70 backdrop-blur-md text-white/90 hover:text-white border border-white/20 flex items-center justify-center text-xs shadow-sm transition cursor-pointer" title="PDF 여행 에세이 리포트">
               <i class="fa-solid fa-file-pdf"></i>
             </button>
             <button onclick="requestDeleteTrip('${trip.id}', event)" class="w-7 h-7 rounded-lg bg-black/45 hover:bg-rose-700/80 backdrop-blur-md text-white/90 hover:text-white border border-white/20 flex items-center justify-center text-xs shadow-sm transition cursor-pointer" title="여행 삭제">
@@ -7817,10 +7837,7 @@
             <div class="relative overflow-hidden rounded-2xl trip-swipe-container shadow-xs" data-trip-id="${trip.id}">
               <!-- 모바일 스와이프 액션 서랍 (터치로 좌측 밀었을 때 노출) -->
               <div class="absolute inset-y-0 right-0 flex items-center gap-1.5 px-3 bg-[#f5f3ed] dark:bg-stone-900 border-l border-[#e8e2d5] dark:border-stone-800 z-0">
-                <button onclick="duplicateTrip('${trip.id}', event)" class="w-9 h-9 rounded-xl bg-transparent hover:bg-black/5 dark:hover:bg-white/10 text-stone-500 hover:text-[#1c1c1e] dark:hover:text-white border border-[#e6e2d8] dark:border-stone-800 flex items-center justify-center text-xs font-bold transition shadow-xs cursor-pointer" title="여정 복제">
-                  <i class="fa-solid fa-copy"></i>
-                </button>
-                <button onclick="openTripPdfReport('${trip.id}', event)" class="w-9 h-9 rounded-xl bg-transparent hover:bg-black/5 dark:hover:bg-white/10 text-stone-500 hover:text-[#1c1c1e] dark:hover:text-white border border-[#e6e2d8] dark:border-stone-800 flex items-center justify-center text-xs font-bold transition shadow-xs cursor-pointer" title="PDF 리포트">
+                <button onclick="openTripPdfReport('${trip.id}', event)" class="w-9 h-9 rounded-xl bg-transparent hover:bg-black/5 dark:hover:bg-white/10 text-stone-500 hover:text-[#1c1c1e] dark:hover:text-white border border-[#e6e2d8] dark:border-stone-800 flex items-center justify-center text-xs font-bold transition shadow-xs cursor-pointer" title="PDF 여행 에세이 리포트">
                   <i class="fa-solid fa-file-pdf"></i>
                 </button>
                 <button onclick="requestDeleteTrip('${trip.id}', event)" class="w-9 h-9 rounded-xl bg-transparent hover:bg-rose-50 dark:hover:bg-rose-950/30 text-stone-400 hover:text-rose-600 border border-[#e6e2d8] dark:border-stone-800 flex items-center justify-center text-xs font-bold transition shadow-xs cursor-pointer" title="여행 삭제">
@@ -7852,30 +7869,23 @@
                   </div>
                 </div>
 
-                <div class="flex items-center justify-between sm:justify-end gap-3 shrink-0 pt-2 sm:pt-0 border-t sm:border-t-0 border-[#f0ece1] dark:border-stone-800">
+                <div class="flex items-center justify-between sm:justify-end gap-2.5 shrink-0 pt-2 sm:pt-0 border-t sm:border-t-0 border-[#f0ece1] dark:border-stone-800">
                   <div class="text-right shrink-0">
                     <div class="text-[10px] text-[#78716c] dark:text-stone-400 font-bold">지출 / 예산 (${pct}%)</div>
                     <div class="text-xs font-bold text-[#1c1917] dark:text-stone-200">₩${(totalSpent/10000).toFixed(0)}만 <span class="text-stone-400 font-normal">/ ₩${(budget/10000).toFixed(0)}만</span></div>
                   </div>
-                  <div class="flex items-center gap-1.5" onclick="event.stopPropagation()">
-                    <button onclick="triggerTripCoverUpload('${trip.id}', event)" class="sulsul-capsule-btn" title="대표 사진 등록">
+                  <div class="flex items-center gap-1.5 shrink-0" onclick="event.stopPropagation()">
+                    <button onclick="triggerTripCoverUpload('${trip.id}', event)" class="sulsul-capsule-btn w-9 h-9 p-0 rounded-full" title="대표 사진 등록">
                       <i class="fa-solid fa-camera"></i>
                     </button>
-                    <button onclick="duplicateTrip('${trip.id}', event)" class="sulsul-capsule-btn" title="여정 복제">
-                      <i class="fa-solid fa-copy"></i>
-                    </button>
-                    <button onclick="openTripWorkspace('${trip.id}'); navigateToInteractiveMap(); event.stopPropagation();" class="sulsul-capsule-btn" title="${tripMapTitle}">
+                    <button onclick="openTripWorkspace('${trip.id}'); navigateToInteractiveMap(); event.stopPropagation();" class="sulsul-capsule-btn w-9 h-9 p-0 rounded-full" title="${tripMapTitle}">
                       <i class="${tripMapIcon}"></i>
                     </button>
-                    <button onclick="openTripPdfReport('${trip.id}', event)" class="sulsul-capsule-btn" title="PDF 리포트">
+                    <button onclick="openTripPdfReport('${trip.id}', event)" class="sulsul-capsule-btn w-9 h-9 p-0 rounded-full" title="PDF 여행 에세이 리포트">
                       <i class="fa-solid fa-file-pdf"></i>
                     </button>
-                    <button onclick="requestDeleteTrip('${trip.id}', event)" class="sulsul-capsule-btn hover:text-rose-600 dark:hover:text-rose-400 hover:border-rose-400/50" title="여행 삭제">
+                    <button onclick="requestDeleteTrip('${trip.id}', event)" class="sulsul-capsule-btn w-9 h-9 p-0 rounded-full hover:text-rose-600 dark:hover:text-rose-400 hover:border-rose-400/50" title="여행 삭제">
                       <i class="fa-regular fa-trash-can"></i>
-                    </button>
-                    <button onclick="openTripWorkspace('${trip.id}')" class="h-9 px-4 rounded-full btn-gold text-xs font-black shadow-sm transition flex items-center gap-1.5 cursor-pointer shrink-0">
-                      <span>열기</span>
-                      <i class="fa-solid fa-chevron-right text-[10px]"></i>
                     </button>
                   </div>
                 </div>

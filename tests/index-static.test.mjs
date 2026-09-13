@@ -117,9 +117,9 @@ test('mobile travel notebook presentation is bundled and protected from CDN regr
   assert.match(companionCss, /min-height:44px/);
   assert.match(utilitiesCss, /\.flex/);
   for (const asset of [
-    'css/utilities.css?v=1.6.7',
-    'css/companion.css?v=1.6.7',
-    'js/presentation/companion-ui.js?v=1.6.7',
+    'css/utilities.css?v=1.6.8',
+    'css/companion.css?v=1.6.8',
+    'js/presentation/companion-ui.js?v=1.6.8',
     'vendor/fontawesome/css/all.min.css',
     'vendor/leaflet/leaflet.js',
     'vendor/leaflet/images/marker-icon-2x.png',
@@ -127,12 +127,29 @@ test('mobile travel notebook presentation is bundled and protected from CDN regr
   ]) assert.match(sw, new RegExp(asset.replace(/[.?]/g, '\\$&')));
 });
 
+test('hub filter has 3-column single row and card actions are streamlined to 4 buttons (R-16)', () => {
+  // 3-column single row filter setup: country, city, concept
+  assert.match(html, /grid grid-cols-3 gap-1\.5 sm:gap-2/);
+  assert.match(html, /id=["']hub-filter-country["']/);
+  assert.match(html, /id=["']hub-filter-city["']/);
+  assert.match(html, /id=["']hub-filter-concept["']/);
+  assert.doesNotMatch(html, /id=["']hub-filter-city["'][^>]*class=["'][^"']*\bhidden\b/);
+
+  // Cards must NOT have duplicateTrip buttons in markup
+  assert.doesNotMatch(html, /onclick=["']duplicateTrip\(/);
+
+  // List card must feature the streamlined 4-button action cluster
+  assert.match(html, /title=["']대표 사진 등록["']/);
+  assert.match(html, /title=["']PDF 여행 에세이 리포트["']/);
+  assert.match(html, /title=["']여행 삭제["']/);
+});
+
 test('release version is synchronized', () => {
   const app = html.match(/const APP_VER\s*=\s*'([^']+)'/)?.[1];
   const worker = sw.match(/const V\s*=\s*'st-shell-v([^']+)'/)?.[1];
   const release = changelog.match(/## \[v([^\]]+)\]/)?.[1];
   const chronicleRelease = chronicle.match(/^### \[실록 \d+호\].*\(v([^\)]+)\)$/m)?.[1];
-  assert.equal(app, '1.6.7');
+  assert.equal(app, '1.6.8');
   assert.equal(worker, app);
   assert.equal(release, app);
   assert.equal(chronicleRelease, app);

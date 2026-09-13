@@ -49,10 +49,10 @@ function Report-Gate($name, $passed, $details) {
 }
 
 # ---------------------------------------------------------------
-# [Gate 1/4] Checking Essential Files
+# [Gate 1/5] Checking Essential Files
 # ---------------------------------------------------------------
 Write-Host ""
-Write-Host "[1/4] Checking Essential Repository, DKP Modules & PWA Asset Files..." -ForegroundColor Yellow
+Write-Host "[1/5] Checking Essential Repository, DKP Modules & PWA Asset Files..." -ForegroundColor Yellow
 
 $coreFiles = @(
     $indexHtmlPath, $swJsPath, $manifestPath, $kbPath, 
@@ -72,10 +72,10 @@ $sillokName = if ($sillokFile) { $sillokFile.Name } else { "술술트래블신�
 Report-Gate "All Core Repository, DKP Knowledge Packs & Icon Assets Exist" ($missingFiles.Count -eq 0) "Checked: $($coreFiles.Count) files (Chronicle: $sillokName) $(if($missingFiles){'| Missing: ' + ($missingFiles -join ', ')})"
 
 # ---------------------------------------------------------------
-# [Gate 2/4] Verifying Version Consistency Across Sources
+# [Gate 2/5] Verifying Version Consistency Across Sources
 # ---------------------------------------------------------------
 Write-Host ""
-Write-Host "[2/4] Verifying Version Synchronization Across Sources..." -ForegroundColor Yellow
+Write-Host "[2/5] Verifying Version Synchronization Across Sources..." -ForegroundColor Yellow
 
 $indexContent = if (Test-Path $indexHtmlPath) { Get-Content -Raw -Path $indexHtmlPath -Encoding UTF8 } else { "" }
 $swContent = if (Test-Path $swJsPath) { Get-Content -Raw -Path $swJsPath -Encoding UTF8 } else { "" }
@@ -102,10 +102,10 @@ $details = "App: v$appVer | Badge: v$badgeVer | SW: v$swVer | Changelog: v$clVer
 Report-Gate "Version Synchronization (v$appVer)" $verMatch $details
 
 # ---------------------------------------------------------------
-# [Gate 3/4] Selected Invariant Laws Validation
+# [Gate 3/5] Selected Invariant Laws Validation
 # ---------------------------------------------------------------
 Write-Host ""
-Write-Host "[3/4] Invariant Laws (DOM IDs, Fallback AI & Canvas Normalization)..." -ForegroundColor Yellow
+Write-Host "[3/5] Invariant Laws (DOM IDs, Fallback AI & Canvas Normalization)..." -ForegroundColor Yellow
 
 # R-10: Mandatory DOM IDs
 $mandatoryIds = @(
@@ -145,10 +145,10 @@ $hasNamespace = $indexContent -match "window\.SulsulTravel"
 Report-Gate "Global SulsulTravel Namespace Exposed" $hasNamespace "window.SulsulTravel accessible"
 
 # ---------------------------------------------------------------
-# [Gate 4/4] Headless Browser V8 Engine Parsing & Runtime Error Trap
+# [Gate 4/5] Headless Browser V8 Engine Parsing & Runtime Error Trap
 # ---------------------------------------------------------------
 Write-Host ""
-Write-Host "[4/4] Headless Microsoft Edge V8 Engine Parsing & Error Trap..." -ForegroundColor Yellow
+Write-Host "[4/5] Headless Microsoft Edge V8 Engine Parsing & Error Trap..." -ForegroundColor Yellow
 
 $edgePath = "C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe"
 if (-not (Test-Path $edgePath)) { $edgePath = "C:\Program Files\Microsoft\Edge\Application\msedge.exe" }
@@ -294,6 +294,110 @@ new Promise(function(resolve) {
         # finish. The injected gate itself proves DOMContentLoaded has fired.
         $v8Pass = ($gateResult.ready -ne "loading") -and $sulsulReady -and ($errCount -eq 0) -and ($v8Ver -eq $appVer)
         Report-Gate "Headless Edge V8 Engine Parsing & Zero Runtime Errors" $v8Pass "Ready: $($gateResult.ready) | SulsulTravel: $sulsulReady | V8 Ver: v$v8Ver | Runtime Errors: $errCount$errDetail"
+
+        # ---------------------------------------------------------------
+        # [Gate 5/5] Mobile 360px Viewport Zero-Horizontal-Overflow & UI Integrity (R-16)
+        # ---------------------------------------------------------------
+        Write-Host ""
+        Write-Host "[5/5] Mobile 360px Viewport Zero-Horizontal-Overflow & UI Integrity (R-16)..." -ForegroundColor Yellow
+
+        # Force Mobile 360px viewport simulation via CDP
+        $overrideParams = @{
+            width = 360
+            height = 780
+            deviceScaleFactor = 2
+            mobile = $true
+        }
+        [void](Invoke-CdpCommand -WebSocketUrl $pageSocketUrl -Method "Emulation.setDeviceMetricsOverride" -Params $overrideParams)
+
+        $mobileEval = @'
+new Promise(function(resolve) {
+  try {
+    // 1. Switch to list mode and force render
+    if (typeof State !== 'undefined') {
+      State.hubViewMode = 'list';
+      if (typeof renderTripCards === 'function') renderTripCards();
+    }
+    setTimeout(function() {
+      var winW = window.innerWidth;
+      var docW = document.documentElement.scrollWidth;
+      var listOverflow = docW > winW;
+
+      // Check 3-column filter row
+      var countrySelect = document.getElementById('hub-filter-country');
+      var citySelect = document.getElementById('hub-filter-city');
+      var conceptSelect = document.getElementById('hub-filter-concept');
+      var filterRow = countrySelect ? countrySelect.closest('.grid') : null;
+      var isGridCols3 = filterRow ? filterRow.classList.contains('grid-cols-3') : false;
+      var isCityVisible = citySelect ? (!citySelect.classList.contains('hidden') && citySelect.offsetParent !== null) : false;
+
+      // Check duplicate buttons presence (R-16 strict rule: must be 0)
+      var dupBtns = document.querySelectorAll('button[onclick*="duplicateTrip"], button[title*="복제"]');
+
+      // Check card clipping in list mode
+      var cards = document.querySelectorAll('#trip-cards-grid > div');
+      var overflowCards = 0;
+      var clippedBtns = 0;
+      var clippingDetails = [];
+
+      cards.forEach(function(card, idx) {
+        if (card.scrollWidth > card.clientWidth + 1) {
+          overflowCards++;
+          clippingDetails.push('Card#' + idx + ' overflow (' + card.scrollWidth + '>' + card.clientWidth + ')');
+        }
+        var btns = card.querySelectorAll('button');
+        btns.forEach(function(b) {
+          var r = b.getBoundingClientRect();
+          if (r.right > winW + 2) {
+            clippedBtns++;
+            clippingDetails.push('Btn[' + (b.title || b.innerText || 'btn') + '] clipped (right:' + Math.round(r.right) + '>' + winW + ')');
+          }
+        });
+      });
+
+      // 2. Also verify grid mode
+      if (typeof State !== 'undefined') {
+        State.hubViewMode = 'grid';
+        if (typeof renderTripCards === 'function') renderTripCards();
+      }
+      var gridDocW = document.documentElement.scrollWidth;
+      var gridOverflow = gridDocW > winW;
+
+      resolve(JSON.stringify({
+        winW: winW,
+        listDocW: docW,
+        gridDocW: gridDocW,
+        hasDocOverflow: (listOverflow || gridOverflow),
+        isGridCols3: isGridCols3,
+        isCityVisible: isCityVisible,
+        duplicateBtns: dupBtns.length,
+        overflowCards: overflowCards,
+        clippedBtns: clippedBtns,
+        clippingDetails: clippingDetails
+      }));
+    }, 450);
+  } catch (err) {
+    resolve(JSON.stringify({ error: err.message }));
+  }
+})
+'@
+        $mobileResponse = Invoke-CdpCommand -WebSocketUrl $pageSocketUrl -Method "Runtime.evaluate" -Params @{
+            expression = $mobileEval
+            awaitPromise = $true
+            returnByValue = $true
+        }
+        if ($mobileResponse.result.exceptionDetails) {
+            throw "Mobile 360px evaluation failed: $($mobileResponse.result.exceptionDetails.text)"
+        }
+        $mResult = $mobileResponse.result.result.value | ConvertFrom-Json
+        if ($mResult.error) { throw "Mobile evaluation script error: $($mResult.error)" }
+
+        $mPass = (-not $mResult.hasDocOverflow) -and ($mResult.overflowCards -eq 0) -and ($mResult.clippedBtns -eq 0) -and ($mResult.duplicateBtns -eq 0) -and $mResult.isGridCols3 -and $mResult.isCityVisible
+        $mDetails = "DocW: List $($mResult.listDocW)px, Grid $($mResult.gridDocW)px / WinW: $($mResult.winW)px | 3-Col Filter: $($mResult.isGridCols3) | City Visible: $($mResult.isCityVisible) | Duplicate Btns: $($mResult.duplicateBtns) | Clipped: $($mResult.clippedBtns)"
+        if ($mResult.clippingDetails -and $mResult.clippingDetails.Count -gt 0) {
+            $mDetails += " | Details: " + ($mResult.clippingDetails -join ", ")
+        }
+        Report-Gate "Mobile 360px Zero-Horizontal-Overflow & UI Integrity (R-16)" $mPass $mDetails
 
         if ($browserInfo.webSocketDebuggerUrl) {
             $browserSocketUrl = "$($browserInfo.webSocketDebuggerUrl)"
