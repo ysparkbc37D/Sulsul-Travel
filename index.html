@@ -17,14 +17,14 @@
   </script>
 
   <!-- PWA Meta & Icons -->
-  <link rel="manifest" href="manifest.webmanifest?v=1.7.4">
+  <link rel="manifest" href="manifest.webmanifest?v=1.7.5">
   <meta name="theme-color" content="#F7F5F0">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
-  <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192-v115.png?v=1.7.4">
-  <link rel="icon" type="image/png" sizes="32x32" href="favicon.png?v=1.7.4">
+  <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192-v115.png?v=1.7.5">
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon.png?v=1.7.5">
   <link rel="shortcut icon" href="favicon.ico">
-  <link rel="apple-touch-icon" sizes="180x180" href="icons/apple-touch-icon-v115.png?v=1.7.4">
+  <link rel="apple-touch-icon" sizes="180x180" href="icons/apple-touch-icon-v115.png?v=1.7.5">
 
   <!-- Google Fonts: Great Vibes, Dancing Script (Cursive Calligraphy), Cormorant Garamond, Noto Serif KR, Playfair Display -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -32,7 +32,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Great+Vibes&family=Cormorant+Garamond:wght@600;700;800&family=Noto+Serif+KR:wght@500;600;700;900&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
 
   <!-- Local Utilities Bundle (CDN fallback & tailwind utilities) -->
-  <link rel="stylesheet" href="css/utilities.css?v=1.7.4">
+  <link rel="stylesheet" href="css/utilities.css?v=1.7.5">
   <link rel="stylesheet" href="vendor/fontawesome/css/all.min.css">
 
   <!-- Leaflet Map CSS & JS -->
@@ -614,7 +614,7 @@
     }
 
     /* High Contrast Text Rules */
-    :root:not(.dark):not([data-theme="deepblack"]):not([data-theme="dark"]) .text-white:not(.keep-white):not(.btn-gold):not(.btn-gold *):not(.badge-solid):not(.badge-solid *):not(.tab-install-active):not(.hub-tab-active):not(.nav-tab-active):not([class*="bg-emerald-"]):not([class*="bg-amber-"]):not([class*="bg-rose-"]):not([class*="bg-indigo-"]):not([class*="bg-blue-"]):not([class*="bg-[#1c1917]"]):not([class*="bg-[#111827]"]):not([class*="bg-[#1d1d1f]"]):not([class*="bg-stone-9"]):not([class*="bg-slate-9"]):not([class*="bg-black"]):not([class*="bg-[#2C3A2E]"]):not(#btn-theme-modern):not(#btn-theme-modern *):not(#btn-theme-lightgray):not(#btn-theme-lightgray *):not(#btn-theme-deepblack):not(#btn-theme-deepblack *):not(#btn-theme-light):not(#btn-theme-light *) {
+    :root:not(.dark):not([data-theme="deepblack"]):not([data-theme="dark"]) .text-white:not(.keep-white):not(.btn-gold):not(.btn-gold *):not(.sulsul-chip):not(.sulsul-chip *):not(.badge-solid):not(.badge-solid *):not(.tab-install-active):not(.hub-tab-active):not(.nav-tab-active):not([class*="bg-emerald-"]):not([class*="bg-amber-"]):not([class*="bg-rose-"]):not([class*="bg-indigo-"]):not([class*="bg-blue-"]):not([class*="bg-[#1c1917]"]):not([class*="bg-[#111827]"]):not([class*="bg-[#1d1d1f]"]):not([class*="bg-stone-9"]):not([class*="bg-slate-9"]):not([class*="bg-black"]):not([class*="bg-[#2C3A2E]"]):not(#btn-theme-modern):not(#btn-theme-modern *):not(#btn-theme-lightgray):not(#btn-theme-lightgray *):not(#btn-theme-deepblack):not(#btn-theme-deepblack *):not(#btn-theme-light):not(#btn-theme-light *) {
       color: var(--ink) !important;
     }
     :root.dark .text-white,
@@ -671,17 +671,188 @@
       color: #854d0e !important;
       font-weight: 700 !important;
     }
-    :root:not(.dark):not([data-theme="deepblack"]):not([data-theme="dark"]) [class*="bg-amber-"],
-    :root:not(.dark):not([data-theme="deepblack"]):not([data-theme="dark"]) [class*="bg-yellow-"] {
+    :root:not(.dark):not([data-theme="deepblack"]):not([data-theme="dark"]) [class*="bg-amber-"]:not([class*="dark:"]):not([class*="hover:"]):not([class*="focus:"]):not(.sulsul-chip):not(.sulsul-chip *):not(.btn-gold):not(.btn-gold *),
+    :root:not(.dark):not([data-theme="deepblack"]):not([data-theme="dark"]) [class*="bg-yellow-"]:not([class*="dark:"]):not([class*="hover:"]):not([class*="focus:"]):not(.sulsul-chip):not(.sulsul-chip *):not(.btn-gold):not(.btn-gold *) {
       background-color: #fef3c7 !important;
       border-color: #fde68a !important;
     }
-    :root:not(.dark):not([data-theme="deepblack"]):not([data-theme="dark"]) [class*="bg-amber-"] .text-amber-300,
-    :root:not(.dark):not([data-theme="deepblack"]):not([data-theme="dark"]) [class*="bg-amber-"] .text-amber-300\/90,
-    :root:not(.dark):not([data-theme="deepblack"]):not([data-theme="dark"]) [class*="bg-amber-"] .text-amber-400,
-    :root:not(.dark):not([data-theme="deepblack"]):not([data-theme="dark"]) [class*="bg-amber-"] * {
+    :root:not(.dark):not([data-theme="deepblack"]):not([data-theme="dark"]) [class*="bg-amber-"]:not([class*="dark:"]):not([class*="hover:"]):not([class*="focus:"]):not(.sulsul-chip):not(.sulsul-chip *):not(.btn-gold):not(.btn-gold *) .text-amber-300,
+    :root:not(.dark):not([data-theme="deepblack"]):not([data-theme="dark"]) [class*="bg-amber-"]:not([class*="dark:"]):not([class*="hover:"]):not([class*="focus:"]):not(.sulsul-chip):not(.sulsul-chip *):not(.btn-gold):not(.btn-gold *) .text-amber-300\/90,
+    :root:not(.dark):not([data-theme="deepblack"]):not([data-theme="dark"]) [class*="bg-amber-"]:not([class*="dark:"]):not([class*="hover:"]):not([class*="focus:"]):not(.sulsul-chip):not(.sulsul-chip *):not(.btn-gold):not(.btn-gold *) .text-amber-400,
+    :root:not(.dark):not([data-theme="deepblack"]):not([data-theme="dark"]) [class*="bg-amber-"]:not([class*="dark:"]):not([class*="hover:"]):not([class*="focus:"]):not(.sulsul-chip):not(.sulsul-chip *):not(.btn-gold):not(.btn-gold *) * {
       color: #78350f !important;
       font-weight: 700 !important;
+    }
+
+    /* ================================================================ */
+    /* Sulsul Unified Selection Chip & Tab Design System (v1.7.5)       */
+    /* ================================================================ */
+    .sulsul-chip {
+      display: inline-flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      gap: 0.35rem !important;
+      border-radius: 0.5rem !important;
+      font-size: 0.75rem !important;
+      line-height: 1.25 !important;
+      padding: 0.35rem 0.65rem !important;
+      transition: background-color 0.16s ease, border-color 0.16s ease, color 0.16s ease, box-shadow 0.16s ease, transform 0.12s ease !important;
+      cursor: pointer !important;
+      user-select: none !important;
+      white-space: nowrap !important;
+      box-sizing: border-box !important;
+    }
+    .sulsul-chip:active {
+      transform: scale(0.97);
+    }
+
+    /* 1. Unselected (Inactive) State */
+    :root[data-theme="modern"] .sulsul-chip:not(.is-active),
+    :root[data-theme="light"] .sulsul-chip:not(.is-active),
+    :root:not([data-theme]) .sulsul-chip:not(.is-active) {
+      background: #FFFFFF !important;
+      color: #44403C !important;
+      border: 1px solid #E8E2D5 !important;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04) !important;
+      font-weight: 600 !important;
+    }
+    :root[data-theme="modern"] .sulsul-chip:not(.is-active) *,
+    :root[data-theme="light"] .sulsul-chip:not(.is-active) *,
+    :root:not([data-theme]) .sulsul-chip:not(.is-active) * {
+      color: #44403C !important;
+    }
+    :root[data-theme="modern"] .sulsul-chip:not(.is-active):hover,
+    :root[data-theme="light"] .sulsul-chip:not(.is-active):hover,
+    :root:not([data-theme]) .sulsul-chip:not(.is-active):hover {
+      background: #F7F3EA !important;
+      border-color: #C8A27A !important;
+      color: #1C1917 !important;
+    }
+    :root[data-theme="modern"] .sulsul-chip:not(.is-active):hover *,
+    :root[data-theme="light"] .sulsul-chip:not(.is-active):hover *,
+    :root:not([data-theme]) .sulsul-chip:not(.is-active):hover * {
+      color: #1C1917 !important;
+    }
+
+    :root[data-theme="lightgray"] .sulsul-chip:not(.is-active) {
+      background: #FFFFFF !important;
+      color: #334155 !important;
+      border: 1px solid #CBD5E1 !important;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04) !important;
+      font-weight: 600 !important;
+    }
+    :root[data-theme="lightgray"] .sulsul-chip:not(.is-active) * {
+      color: #334155 !important;
+    }
+    :root[data-theme="lightgray"] .sulsul-chip:not(.is-active):hover {
+      background: #F1F5F9 !important;
+      border-color: #94A3B8 !important;
+      color: #0F172A !important;
+    }
+    :root[data-theme="lightgray"] .sulsul-chip:not(.is-active):hover * {
+      color: #0F172A !important;
+    }
+
+    :root[data-theme="deepblack"] .sulsul-chip:not(.is-active),
+    :root[data-theme="dark"] .sulsul-chip:not(.is-active),
+    :root.dark .sulsul-chip:not(.is-active) {
+      background: #1A1D24 !important;
+      color: #D6D3D1 !important;
+      border: 1px solid #2E333D !important;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2) !important;
+      font-weight: 600 !important;
+    }
+    :root[data-theme="deepblack"] .sulsul-chip:not(.is-active) *,
+    :root[data-theme="dark"] .sulsul-chip:not(.is-active) *,
+    :root.dark .sulsul-chip:not(.is-active) * {
+      color: #D6D3D1 !important;
+    }
+    :root[data-theme="deepblack"] .sulsul-chip:not(.is-active):hover,
+    :root[data-theme="dark"] .sulsul-chip:not(.is-active):hover,
+    :root.dark .sulsul-chip:not(.is-active):hover {
+      background: #252933 !important;
+      border-color: #D4AF37 !important;
+      color: #FFFFFF !important;
+    }
+    :root[data-theme="deepblack"] .sulsul-chip:not(.is-active):hover *,
+    :root[data-theme="dark"] .sulsul-chip:not(.is-active):hover *,
+    :root.dark .sulsul-chip:not(.is-active):hover * {
+      color: #FFFFFF !important;
+    }
+
+    /* 2. Selected (Active) State */
+    :root[data-theme="modern"] .sulsul-chip.is-active,
+    :root[data-theme="light"] .sulsul-chip.is-active,
+    :root:not([data-theme]) .sulsul-chip.is-active {
+      background: #2C3A2E !important;
+      color: #FFFDF9 !important;
+      border: 1px solid rgba(200, 162, 122, 0.5) !important;
+      box-shadow: 0 2px 6px rgba(44, 58, 46, 0.25) !important;
+      font-weight: 700 !important;
+    }
+    :root[data-theme="modern"] .sulsul-chip.is-active *,
+    :root[data-theme="light"] .sulsul-chip.is-active *,
+    :root:not([data-theme]) .sulsul-chip.is-active * {
+      color: #FFFDF9 !important;
+    }
+
+    :root[data-theme="lightgray"] .sulsul-chip.is-active {
+      background: #1E293B !important;
+      color: #FFFFFF !important;
+      border: 1px solid #334155 !important;
+      box-shadow: 0 2px 6px rgba(30, 41, 59, 0.2) !important;
+      font-weight: 700 !important;
+    }
+    :root[data-theme="lightgray"] .sulsul-chip.is-active * {
+      color: #FFFFFF !important;
+    }
+
+    :root[data-theme="deepblack"] .sulsul-chip.is-active,
+    :root[data-theme="dark"] .sulsul-chip.is-active,
+    :root.dark .sulsul-chip.is-active {
+      background: linear-gradient(135deg, #D4AF37 0%, #B8860B 100%) !important;
+      color: #080B12 !important;
+      border: 1px solid rgba(212, 175, 55, 0.8) !important;
+      box-shadow: 0 2px 8px rgba(212, 175, 55, 0.3) !important;
+      font-weight: 800 !important;
+    }
+    :root[data-theme="deepblack"] .sulsul-chip.is-active *,
+    :root[data-theme="dark"] .sulsul-chip.is-active *,
+    :root.dark .sulsul-chip.is-active * {
+      color: #080B12 !important;
+      font-weight: 800 !important;
+    }
+
+    /* 3. Badge inside active chip (City ordering index pill 1, 2, 3...) */
+    .sulsul-chip .sulsul-chip-badge {
+      display: inline-flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      width: 1.05rem !important;
+      height: 1.05rem !important;
+      border-radius: 9999px !important;
+      font-size: 0.625rem !important;
+      font-weight: 800 !important;
+      margin-right: 0.15rem !important;
+      line-height: 1 !important;
+    }
+    :root[data-theme="modern"] .sulsul-chip.is-active .sulsul-chip-badge,
+    :root[data-theme="light"] .sulsul-chip.is-active .sulsul-chip-badge,
+    :root:not([data-theme]) .sulsul-chip.is-active .sulsul-chip-badge {
+      background: rgba(212, 175, 55, 0.35) !important;
+      color: #FDE68A !important;
+      border: 1px solid rgba(212, 175, 55, 0.5) !important;
+    }
+    :root[data-theme="lightgray"] .sulsul-chip.is-active .sulsul-chip-badge {
+      background: rgba(255, 255, 255, 0.25) !important;
+      color: #FFFFFF !important;
+    }
+    :root[data-theme="deepblack"] .sulsul-chip.is-active .sulsul-chip-badge,
+    :root[data-theme="dark"] .sulsul-chip.is-active .sulsul-chip-badge,
+    :root.dark .sulsul-chip.is-active .sulsul-chip-badge {
+      background: #080B12 !important;
+      color: #D4AF37 !important;
+      border: 1px solid rgba(8, 11, 18, 0.8) !important;
     }
     :root.dark .text-amber-300,
     :root.dark .text-amber-300\/90,
@@ -1017,8 +1188,8 @@
     }
   </style>
 
-  <link rel="stylesheet" href="css/companion.css?v=1.7.4">
-  <script src="js/presentation/companion-ui.js?v=1.7.4"></script>
+  <link rel="stylesheet" href="css/companion.css?v=1.7.5">
+  <script src="js/presentation/companion-ui.js?v=1.7.5"></script>
 
   <!-- Knowledge Base Seed & Destination Knowledge Packs (DKP) -->
   <script src="kb-travel.js"></script>
@@ -1047,8 +1218,8 @@
 
       <!-- 우측 액션 클러스터 (버전 알약 -> 원형 통계 -> 원형 설정 -> 다크그린 캡슐 추가) -->
       <div class="flex items-center gap-1 sm:gap-1.5 shrink-0">
-        <!-- 1. 버전 배지 버튼 (v1.7.4 - 클릭 시 버전 이력) -->
-        <button id="app-ver-badge" onclick="event.stopPropagation(); openVersionHistoryModal()" class="h-7 sm:h-8 px-2 sm:px-2.5 rounded-full theme-card-subtle flex items-center justify-center font-mono text-[10px] sm:text-[11px] font-bold text-[#a2601b] dark:text-[#d4af37] shadow-xs hover:border-amber-500/60 transition cursor-pointer shrink-0" title="버전 업데이트 기록 보기 (클릭)">v1.7.4</button>
+        <!-- 1. 버전 배지 버튼 (v1.7.5 - 클릭 시 버전 이력) -->
+        <button id="app-ver-badge" onclick="event.stopPropagation(); openVersionHistoryModal()" class="h-7 sm:h-8 px-2 sm:px-2.5 rounded-full theme-card-subtle flex items-center justify-center font-mono text-[10px] sm:text-[11px] font-bold text-[#a2601b] dark:text-[#d4af37] shadow-xs hover:border-amber-500/60 transition cursor-pointer shrink-0" title="버전 업데이트 기록 보기 (클릭)">v1.7.5</button>
 
         <!-- 2. 통계 버튼 (📊 - 원형 버튼) -->
         <button id="header-btn-analytics" onclick="openAnalyticsModal('lifetime')" class="companion-header-analytics w-7 h-7 sm:w-8 sm:h-8 rounded-full theme-card-subtle flex items-center justify-center text-[#a2601b] dark:text-[#d4af37] hover:border-amber-500/60 transition shadow-xs cursor-pointer shrink-0" title="술술 여행 통계 대시보드">
@@ -2082,14 +2253,14 @@
           <!-- 대륙 빠른 필터 탭 바 (독립 가로 스크롤 격리, 8대 권역 완비) -->
           <div class="w-full max-w-full overflow-hidden">
             <div class="flex items-center gap-1 overflow-x-auto pb-1 scrollbar-none text-[11px] w-full max-w-full">
-              <button type="button" onclick="setCreateTripRegionFilter('all')" id="tab-reg-all" class="px-2.5 py-1 rounded-lg font-bold transition whitespace-nowrap bg-[#1c1917] text-white dark:bg-amber-500 dark:text-black cursor-pointer shadow-sm shrink-0">전체</button>
-              <button type="button" onclick="setCreateTripRegionFilter('east_asia')" id="tab-reg-east_asia" class="px-2.5 py-1 rounded-lg font-medium transition whitespace-nowrap bg-white dark:bg-stone-800 text-stone-600 dark:text-stone-300 border border-stone-200 dark:border-stone-700 cursor-pointer shrink-0">동아시아</button>
-              <button type="button" onclick="setCreateTripRegionFilter('southeast_asia')" id="tab-reg-southeast_asia" class="px-2.5 py-1 rounded-lg font-medium transition whitespace-nowrap bg-white dark:bg-stone-800 text-stone-600 dark:text-stone-300 border border-stone-200 dark:border-stone-700 cursor-pointer shrink-0">동남아</button>
-              <button type="button" onclick="setCreateTripRegionFilter('south_central_asia')" id="tab-reg-south_central_asia" class="px-2.5 py-1 rounded-lg font-medium transition whitespace-nowrap bg-white dark:bg-stone-800 text-stone-600 dark:text-stone-300 border border-stone-200 dark:border-stone-700 cursor-pointer shrink-0">남·중앙아시아</button>
-              <button type="button" onclick="setCreateTripRegionFilter('europe')" id="tab-reg-europe" class="px-2.5 py-1 rounded-lg font-medium transition whitespace-nowrap bg-white dark:bg-stone-800 text-stone-600 dark:text-stone-300 border border-stone-200 dark:border-stone-700 cursor-pointer shrink-0">유럽</button>
-              <button type="button" onclick="setCreateTripRegionFilter('americas')" id="tab-reg-americas" class="px-2.5 py-1 rounded-lg font-medium transition whitespace-nowrap bg-white dark:bg-stone-800 text-stone-600 dark:text-stone-300 border border-stone-200 dark:border-stone-700 cursor-pointer shrink-0">미주</button>
-              <button type="button" onclick="setCreateTripRegionFilter('oceania')" id="tab-reg-oceania" class="px-2.5 py-1 rounded-lg font-medium transition whitespace-nowrap bg-white dark:bg-stone-800 text-stone-600 dark:text-stone-300 border border-stone-200 dark:border-stone-700 cursor-pointer shrink-0">대양주</button>
-              <button type="button" onclick="setCreateTripRegionFilter('mideast_africa')" id="tab-reg-mideast_africa" class="px-2.5 py-1 rounded-lg font-medium transition whitespace-nowrap bg-white dark:bg-stone-800 text-stone-600 dark:text-stone-300 border border-stone-200 dark:border-stone-700 cursor-pointer shrink-0">중동·아프리카</button>
+              <button type="button" onclick="setCreateTripRegionFilter('all')" id="tab-reg-all" class="sulsul-chip is-active shrink-0">전체</button>
+              <button type="button" onclick="setCreateTripRegionFilter('east_asia')" id="tab-reg-east_asia" class="sulsul-chip shrink-0">동아시아</button>
+              <button type="button" onclick="setCreateTripRegionFilter('southeast_asia')" id="tab-reg-southeast_asia" class="sulsul-chip shrink-0">동남아</button>
+              <button type="button" onclick="setCreateTripRegionFilter('south_central_asia')" id="tab-reg-south_central_asia" class="sulsul-chip shrink-0">남·중앙아시아</button>
+              <button type="button" onclick="setCreateTripRegionFilter('europe')" id="tab-reg-europe" class="sulsul-chip shrink-0">유럽</button>
+              <button type="button" onclick="setCreateTripRegionFilter('americas')" id="tab-reg-americas" class="sulsul-chip shrink-0">미주</button>
+              <button type="button" onclick="setCreateTripRegionFilter('oceania')" id="tab-reg-oceania" class="sulsul-chip shrink-0">대양주</button>
+              <button type="button" onclick="setCreateTripRegionFilter('mideast_africa')" id="tab-reg-mideast_africa" class="sulsul-chip shrink-0">중동·아프리카</button>
             </div>
           </div>
 
@@ -2156,10 +2327,10 @@
                 </label>
                 <input type="time" id="trip-form-arrival-time" value="14:00" class="w-full min-w-0 px-2 py-1.5 bg-[#faf8f5] dark:bg-stone-800 border border-[#e8e2d5] dark:border-stone-700 rounded-lg text-xs text-[#1c1917] dark:text-[#ededed] focus:outline-none focus:border-[#a2601b]">
                 <div class="grid grid-cols-2 gap-1 mt-1.5 w-full">
-                  <button type="button" onclick="document.getElementById('trip-form-arrival-time').value='10:00'" class="py-1 px-0.5 text-[10px] rounded bg-stone-100 dark:bg-stone-800 text-stone-600 dark:text-stone-300 hover:bg-amber-100 dark:hover:bg-amber-950/40 transition cursor-pointer truncate">오전 10:00</button>
-                  <button type="button" onclick="document.getElementById('trip-form-arrival-time').value='14:00'" class="py-1 px-0.5 text-[10px] rounded bg-stone-100 dark:bg-stone-800 text-stone-600 dark:text-stone-300 hover:bg-amber-100 dark:hover:bg-amber-950/40 transition cursor-pointer truncate">오후 14:00</button>
-                  <button type="button" onclick="document.getElementById('trip-form-arrival-time').value='19:00'" class="py-1 px-0.5 text-[10px] rounded bg-stone-100 dark:bg-stone-800 text-stone-600 dark:text-stone-300 hover:bg-amber-100 dark:hover:bg-amber-950/40 transition cursor-pointer truncate">저녁 19:00</button>
-                  <button type="button" onclick="document.getElementById('trip-form-arrival-time').value='22:00'" class="py-1 px-0.5 text-[10px] rounded bg-stone-100 dark:bg-stone-800 text-stone-600 dark:text-stone-300 hover:bg-amber-100 dark:hover:bg-amber-950/40 transition cursor-pointer truncate">심야 22:00</button>
+                  <button type="button" onclick="document.getElementById('trip-form-arrival-time').value='10:00'" class="py-1 px-0.5 text-[10px] rounded bg-stone-100 dark:bg-stone-800 text-stone-600 dark:text-stone-300 hover:bg-stone-200 dark:hover:bg-stone-700 transition cursor-pointer truncate">오전 10:00</button>
+                  <button type="button" onclick="document.getElementById('trip-form-arrival-time').value='14:00'" class="py-1 px-0.5 text-[10px] rounded bg-stone-100 dark:bg-stone-800 text-stone-600 dark:text-stone-300 hover:bg-stone-200 dark:hover:bg-stone-700 transition cursor-pointer truncate">오후 14:00</button>
+                  <button type="button" onclick="document.getElementById('trip-form-arrival-time').value='19:00'" class="py-1 px-0.5 text-[10px] rounded bg-stone-100 dark:bg-stone-800 text-stone-600 dark:text-stone-300 hover:bg-stone-200 dark:hover:bg-stone-700 transition cursor-pointer truncate">저녁 19:00</button>
+                  <button type="button" onclick="document.getElementById('trip-form-arrival-time').value='22:00'" class="py-1 px-0.5 text-[10px] rounded bg-stone-100 dark:bg-stone-800 text-stone-600 dark:text-stone-300 hover:bg-stone-200 dark:hover:bg-stone-700 transition cursor-pointer truncate">심야 22:00</button>
                 </div>
               </div>
 
@@ -2170,10 +2341,10 @@
                 </label>
                 <input type="time" id="trip-form-departure-time" value="17:00" class="w-full min-w-0 px-2 py-1.5 bg-[#faf8f5] dark:bg-stone-800 border border-[#e8e2d5] dark:border-stone-700 rounded-lg text-xs text-[#1c1917] dark:text-[#ededed] focus:outline-none focus:border-[#a2601b]">
                 <div class="grid grid-cols-2 gap-1 mt-1.5 w-full">
-                  <button type="button" onclick="document.getElementById('trip-form-departure-time').value='11:00'" class="py-1 px-0.5 text-[10px] rounded bg-stone-100 dark:bg-stone-800 text-stone-600 dark:text-stone-300 hover:bg-rose-100 dark:hover:bg-rose-950/40 transition cursor-pointer truncate">오전 11:00</button>
-                  <button type="button" onclick="document.getElementById('trip-form-departure-time').value='15:00'" class="py-1 px-0.5 text-[10px] rounded bg-stone-100 dark:bg-stone-800 text-stone-600 dark:text-stone-300 hover:bg-rose-100 dark:hover:bg-rose-950/40 transition cursor-pointer truncate">오후 15:00</button>
-                  <button type="button" onclick="document.getElementById('trip-form-departure-time').value='17:00'" class="py-1 px-0.5 text-[10px] rounded bg-stone-100 dark:bg-stone-800 text-stone-600 dark:text-stone-300 hover:bg-rose-100 dark:hover:bg-rose-950/40 transition cursor-pointer truncate">오후 17:00</button>
-                  <button type="button" onclick="document.getElementById('trip-form-departure-time').value='21:30'" class="py-1 px-0.5 text-[10px] rounded bg-stone-100 dark:bg-stone-800 text-stone-600 dark:text-stone-300 hover:bg-rose-100 dark:hover:bg-rose-950/40 transition cursor-pointer truncate">야간 21:30</button>
+                  <button type="button" onclick="document.getElementById('trip-form-departure-time').value='11:00'" class="py-1 px-0.5 text-[10px] rounded bg-stone-100 dark:bg-stone-800 text-stone-600 dark:text-stone-300 hover:bg-stone-200 dark:hover:bg-stone-700 transition cursor-pointer truncate">오전 11:00</button>
+                  <button type="button" onclick="document.getElementById('trip-form-departure-time').value='15:00'" class="py-1 px-0.5 text-[10px] rounded bg-stone-100 dark:bg-stone-800 text-stone-600 dark:text-stone-300 hover:bg-stone-200 dark:hover:bg-stone-700 transition cursor-pointer truncate">오후 15:00</button>
+                  <button type="button" onclick="document.getElementById('trip-form-departure-time').value='17:00'" class="py-1 px-0.5 text-[10px] rounded bg-stone-100 dark:bg-stone-800 text-stone-600 dark:text-stone-300 hover:bg-stone-200 dark:hover:bg-stone-700 transition cursor-pointer truncate">오후 17:00</button>
+                  <button type="button" onclick="document.getElementById('trip-form-departure-time').value='21:30'" class="py-1 px-0.5 text-[10px] rounded bg-stone-100 dark:bg-stone-800 text-stone-600 dark:text-stone-300 hover:bg-stone-200 dark:hover:bg-stone-700 transition cursor-pointer truncate">야간 21:30</button>
                 </div>
               </div>
             </div>
@@ -3911,14 +4082,37 @@
 
       <!-- 버전 목록 스크롤 영역 (독립 스크롤 컨테이너로 Flexbox 압축 버그 영구 척결) -->
       <div class="overflow-y-auto flex-1 min-h-0 space-y-3.5 pr-1.5 custom-scrollbar">
-        <!-- v1.7.4 (Current) -->
+        <!-- v1.7.5 (Current) -->
         <div class="p-4 rounded-2xl border-2 border-emerald-500/50 space-y-2.5 bg-emerald-500/5 dark:bg-emerald-500/10 shrink-0 shadow-sm">
           <div class="flex items-center justify-between gap-2">
             <div class="flex items-center gap-2 min-w-0">
-              <span class="px-2.5 py-0.5 rounded-lg bg-emerald-500 text-black font-black text-xs shadow-sm shrink-0">v1.7.4</span>
-              <span class="text-xs font-black text-[#1c1917] dark:text-white truncate">술술다이어리풍 푸터 가이드 간격 개선, 다국가 2단계 여정 생성 엔진 & '새 초안 만들기' 여행 설계 스튜디오 UI/UX 전면 개편</span>
+              <span class="px-2.5 py-0.5 rounded-lg bg-emerald-500 text-black font-black text-xs shadow-sm shrink-0">v1.7.5</span>
+              <span class="text-xs font-black text-[#1c1917] dark:text-white truncate">술술 통합 셀렉션 칩 & 탭 디자인 시스템 (.sulsul-chip) 도입 및 3대 테마(Modern/Lightgray/Deepblack) 고대비 가독성·시인성(WCAG AAA) 전면 확립</span>
             </div>
             <span class="companion-status shrink-0">최신 버전</span>
+          </div>
+          <p class="text-xs leading-relaxed text-[#44403c] dark:text-stone-300">
+            1) <b>권역 탭 흰색 글씨 시인성 저하 버그 원천 척결</b>: CSS <code>[class*="bg-amber-"]</code> 와일드카드 선택자가 <code>dark:bg-amber-500</code> 및 <code>hover:bg-amber-50</code>을 오인 매칭하여 라이트 모드에서 버튼 배경을 연노랑(<code>#fef3c7</code>)으로 강제 덮어쓰고 흰색 글씨(<code>text-white</code>)가 남아 발생하던 치명적 대비 붕괴 현상을 의사 클래스 격리 규칙(<code>:not([class*="dark:"]):not([class*="hover:"])</code>)과 <code>.sulsul-chip</code> 전용 고대비 규칙으로 완벽히 근절했습니다.<br>
+            2) <b>선택/미선택 칩·탭 통합 컴포넌트 시스템 구축 (.sulsul-chip, .is-active)</b>: 권역 빠른 필터 탭(8종), 국가 선택 칩(140+개국), 선택된 방문 도시 칩, 여행 생성 컨셉 멀티 칩, 새 초안 스튜디오 컨셉 칩 전체에 일관된 단일 디자인 토큰을 이식했습니다.<br>
+            3) <b>3대 컬러 모드별 완벽한 톤앤매너 & WCAG AAA (10:1 이상) 고대비 보장</b>:<br>
+            &nbsp;&nbsp;• <b>모던(Modern Archival)</b>: 비활성 시 깨끗한 오프화이트 카드(<code>#FFFFFF</code>/<code>#44403C</code>), 활성 시 술술 시그니처 딥 포레스트 그린(<code>#2C3A2E</code>) 배경에 아이보리 화이트(<code>#FFFDF9</code>) 텍스트 (대비비 12.8:1).<br>
+            &nbsp;&nbsp;• <b>라이트그레이(Light Gray)</b>: 비활성 시 슬레이트 보더(<code>#CBD5E1</code>), 활성 시 슬레이트 네이비(<code>#1E293B</code>) + 순백색(<code>#FFFFFF</code>) 텍스트 (대비비 13.5:1).<br>
+            &nbsp;&nbsp;• <b>딥 블랙(Deep Black)</b>: 비활성 시 흑요석 서피스(<code>#1A1D24</code>/<code>#D6D3D1</code>), 활성 시 샴페인 골드 그라디언트(<code>linear-gradient(135deg, #D4AF37, #B8860B)</code>) 배경에 칠흑 피치 블랙(<code>#080B12</code>) 텍스트 (대비비 10.5:1).<br>
+            4) <b>방문 도시 순서 뱃지(.sulsul-chip-badge) & 시간 프리셋 버튼 톤앤매너 정돈</b>: 방문 도시 칩 내 순서 뱃지(1, 2, 3...)에 테마별 일체형 원형 알약을 적용하고, 도착/종료 시간 프리셋 버튼의 무분별한 앰버/로즈 호버를 중립 스톤 서피스로 정돈하여 시각적 파편화를 종결했습니다.
+          </p>
+          <div class="text-[10px] text-stone-400 dark:text-stone-500 pt-1 border-t border-emerald-500/20 flex items-center justify-between">
+            <span>📅 2026-09-13 릴리즈</span>
+            <span class="font-mono">st-shell-v1.7.5</span>
+          </div>
+        </div>
+
+        <!-- v1.7.4 -->
+        <div class="p-4 rounded-2xl bg-stone-50 dark:bg-stone-900/50 border border-stone-200 dark:border-stone-800 space-y-2.5 shadow-sm relative overflow-hidden shrink-0">
+          <div class="flex items-center justify-between gap-2">
+            <div class="flex items-center gap-2 min-w-0">
+              <span class="px-2 py-0.5 rounded-lg bg-stone-200 dark:bg-stone-800 text-stone-800 dark:text-stone-200 font-bold text-[11px] font-mono shrink-0">v1.7.4</span>
+              <span class="text-xs font-bold text-[#1c1917] dark:text-stone-200 truncate">술술다이어리풍 푸터 가이드 간격 개선, 다국가 2단계 여정 생성 엔진 & '새 초안 만들기' 여행 설계 스튜디오 UI/UX 전면 개편</span>
+            </div>
           </div>
           <p class="text-xs leading-relaxed text-[#44403c] dark:text-stone-300">
             1) <b>술술다이어리 스타일 에디토리얼 푸터 가이드 링크 간격 최적화</b>: 술술다이어리 푸터 레이아웃을 계승하여 푸터 내 4개 정책/가이드 링크(<code>사용 가이드</code>, <code>기기 간 동기화</code>, <code>개인정보처리방침</code>, <code>변경 이력</code>)에 <code>gap: 8px 18px</code>의 넉넉한 간격과 터치 타겟(패딩 <code>4px 6px</code>), 텍스트 언더라인 오프셋을 부여해 글자가 붙어 보이던 시각적 답답함을 완벽히 해소했습니다.<br>
@@ -3926,7 +4120,7 @@
             3) <b>'새 초안 만들기' 여행 설계 스튜디오 전면 개편 (openTripDraftStudio)</b>: 기존의 단순 1줄 모달을 탈피하여, 여행 추가 시 설정된 모든 여행값(국가/도시 칩, 일정 기간, 거점별 일수 조절 <code>[-] N일 [+]</code> 인터랙티브 스테퍼 & 균등 배분 버튼, 여행 컨셉 칩, 엔진 선택)을 자유롭게 수정·설계할 수 있는 <b>종합 여행 설계 스튜디오</b>로 업그레이드했습니다.<br>
             4) <b>유연한 2단계 분기 (설정만 저장 vs 새 초안 생성)</b>: 기존 일정을 유지하면서 여행 메타데이터만 업데이트하는 <code>[설정만 저장]</code>과 새 일정으로 다시 빌드하는 <code>[새 초안 생성하기]</code>를 분리 지원하여 데이터 유실을 방지했습니다.
           </p>
-          <div class="text-[10px] text-stone-400 dark:text-stone-500 pt-1 border-t border-emerald-500/20 flex items-center justify-between">
+          <div class="text-[10px] text-stone-400 dark:text-stone-500 pt-1 border-t border-stone-200 dark:border-stone-800 flex items-center justify-between">
             <span>📅 2026-09-13 릴리즈</span>
             <span class="font-mono">st-shell-v1.7.4</span>
           </div>
@@ -4633,7 +4827,7 @@
 
       <!-- 모달 푸터 -->
       <div class="pt-3 border-t border-[#e8e2d5] dark:border-stone-800 flex items-center justify-between shrink-0">
-        <span class="text-[11px] text-stone-400 dark:text-stone-500 font-mono">Sulsul Travel Engine v1.7.4</span>
+        <span class="text-[11px] text-stone-400 dark:text-stone-500 font-mono">Sulsul Travel Engine v1.7.5</span>
         <button onclick="closeModal('modal-version-history')" class="px-4 py-2 rounded-xl bg-[#faf8f5] dark:bg-stone-800 hover:bg-[#f0ece1] dark:hover:bg-stone-700 border border-[#e8e2d5] dark:border-stone-700 text-[#1c1917] dark:text-[#ededed] text-xs font-bold transition cursor-pointer shadow-sm">
           닫기
         </button>
@@ -4980,7 +5174,7 @@
     window.showToast = showToast;
 
     // 앱 버전 및 글로벌 네임스페이스 (Sulsul-Travel Invariant Rule R-10, R-11, R-12, R-13, R-14, R-15, R-16)
-    const APP_VER = '1.7.4';
+    const APP_VER = '1.7.5';
 
     // ══════════════════════════════════════════
     // [3-Way Theme System] 모던, 라이트그레이, 딥 블랙 테마 엔진 (v1.6.7)
@@ -4996,6 +5190,7 @@
       localStorage.setItem('st_theme', theme);
       updateThemeUi(theme);
     }
+    window.setTheme = setTheme;
 
     function toggleTheme() {
       const current = document.documentElement.getAttribute('data-theme') || 'modern';
@@ -5017,6 +5212,7 @@
         showToast(labels[next] || '테마가 전환되었습니다.');
       }
     }
+    window.toggleTheme = toggleTheme;
 
     function updateThemeUi(theme) {
       const isDark = theme === 'deepblack' || theme === 'dark';
@@ -8200,8 +8396,9 @@
       if (!container) return;
       container.innerHTML = TRAVEL_CONCEPTS.map(c => {
         const isSelected = State.createTripSelectedConcepts.includes(c.id);
+        const activeClass = isSelected ? 'is-active' : '';
         return `
-          <button type="button" onclick="toggleConceptChip('${c.id}')" class="px-2.5 py-1 rounded-lg text-xs font-semibold transition cursor-pointer ${isSelected ? 'bg-[#1c1917] text-white shadow-sm' : 'bg-white border border-[#e8e2d5] text-[#57534e] hover:border-[#dfd7ca]'}">
+          <button type="button" onclick="toggleConceptChip('${c.id}')" class="sulsul-chip ${activeClass}">
             ${c.label}
           </button>
         `;
@@ -12445,14 +12642,15 @@
         const tab = document.getElementById(`tab-reg-${r}`);
         if (tab) {
           if (r === regionKey) {
-            tab.className = 'px-2.5 py-1 rounded-lg font-bold transition whitespace-nowrap bg-[#1c1917] text-white dark:bg-amber-500 dark:text-black cursor-pointer shadow-sm shrink-0';
+            tab.className = 'sulsul-chip is-active shrink-0';
           } else {
-            tab.className = 'px-2.5 py-1 rounded-lg font-medium transition whitespace-nowrap bg-white dark:bg-stone-800 text-stone-600 dark:text-stone-300 border border-stone-200 dark:border-stone-700 cursor-pointer shrink-0';
+            tab.className = 'sulsul-chip shrink-0';
           }
         }
       });
       renderCreateTripCountryChips();
     }
+    window.setCreateTripRegionFilter = setCreateTripRegionFilter;
 
     function handleCreateTripSearch(val) {
       State.createTripSearchQuery = (val || '').trim().toLowerCase();
@@ -12506,12 +12704,10 @@
 
       let chipsHtml = filtered.map(c => {
         const isSelected = State.createTripSelectedCountries.includes(c.code);
-        const activeClass = isSelected
-          ? 'btn-gold font-bold shadow-sm ring-1 ring-amber-600/40'
-          : 'bg-[#faf8f5] dark:bg-stone-800 text-[#1c1917] dark:text-stone-200 border border-[#e8e2d5] dark:border-stone-700 hover:bg-amber-50 dark:hover:bg-amber-950/30';
+        const activeClass = isSelected ? 'is-active' : '';
 
         return `
-          <button type="button" onclick="toggleCreateTripCountry('${c.code}')" class="px-2 py-1 rounded-lg text-xs flex items-center gap-1.5 transition cursor-pointer select-none ${activeClass}">
+          <button type="button" onclick="toggleCreateTripCountry('${c.code}')" class="sulsul-chip ${activeClass}">
             <span class="text-sm">${c.flag}</span>
             <span>${escapeHtml(c.name)}</span>
             <span class="text-[10px] opacity-70">${c.currency}</span>
@@ -12522,7 +12718,7 @@
 
       if (q) {
         chipsHtml += `
-          <button type="button" onclick="addCustomCreateTripCountry('${escapeHtml(q)}')" class="px-2 py-1 rounded-lg text-xs flex items-center gap-1 bg-amber-50 hover:bg-amber-100 dark:bg-amber-950/30 dark:hover:bg-amber-900/50 text-amber-800 dark:text-amber-200 border border-dashed border-amber-400 dark:border-amber-600 font-bold transition cursor-pointer shrink-0" title="직접 입력하여 새 여행지 추가">
+          <button type="button" onclick="addCustomCreateTripCountry('${escapeHtml(q)}')" class="sulsul-chip border-dashed font-bold shrink-0" title="직접 입력하여 새 여행지 추가">
             <span>🌐</span>
             <span>+ '${escapeHtml(q)}' 직접 추가</span>
           </button>
@@ -12667,13 +12863,11 @@
                   const isCitySelected = (cityIdx >= 0);
                   if (isCitySelected) globalCityOrder++;
 
-                  const chipClass = isCitySelected
-                    ? 'bg-emerald-600 hover:bg-emerald-700 text-white font-black shadow-sm ring-1 ring-emerald-500'
-                    : 'bg-[#faf8f5] dark:bg-stone-800 hover:bg-stone-100 dark:hover:bg-stone-700 text-stone-700 dark:text-stone-300 border border-stone-200 dark:border-stone-700 font-medium';
+                  const chipClass = isCitySelected ? 'is-active' : '';
 
                   return `
-                    <button type="button" data-city-chip="true" onclick="toggleCreateTripCity('${country.code}', '${escapeHtml(city)}')" class="px-2 py-1 rounded-lg text-xs flex items-center gap-1 transition cursor-pointer select-none ${chipClass}">
-                      ${isCitySelected ? `<span class="w-4 h-4 rounded-full bg-white/25 text-[10px] font-black flex items-center justify-center mr-0.5">${cityIdx + 1}</span>` : '<span class="text-stone-400 text-[10px]">+</span>'}
+                    <button type="button" data-city-chip="true" onclick="toggleCreateTripCity('${country.code}', '${escapeHtml(city)}')" class="sulsul-chip ${chipClass}">
+                      ${isCitySelected ? `<span class="sulsul-chip-badge">${cityIdx + 1}</span>` : '<span class="text-stone-400 text-[10px]">+</span>'}
                       <span>${escapeHtml(city)}</span>
                     </button>
                   `;
@@ -12686,7 +12880,7 @@
               <div class="relative flex-1 min-w-0">
                 <input type="text" id="input-custom-city-${country.code}" placeholder="목록 외 소도시/근교 (예: 론다)" class="w-full min-w-0 px-2.5 py-1.5 bg-[#faf8f5] dark:bg-stone-800 border border-[#e8e2d5] dark:border-stone-700 rounded-lg text-xs text-[#1c1917] dark:text-[#ededed] placeholder-stone-400 focus:outline-none focus:border-[#a2601b]" onkeydown="if(event.key==='Enter'){event.preventDefault(); addCustomCreateTripCity('${country.code}');}">
               </div>
-              <button type="button" onclick="addCustomCreateTripCity('${country.code}')" class="px-2.5 sm:px-3 py-1.5 rounded-lg bg-stone-100 dark:bg-stone-800 hover:bg-amber-100 dark:hover:bg-amber-950/40 text-stone-700 dark:text-stone-200 text-xs font-bold border border-stone-200 dark:border-stone-700 transition cursor-pointer shrink-0 whitespace-nowrap">
+              <button type="button" onclick="addCustomCreateTripCity('${country.code}')" class="px-2.5 sm:px-3 py-1.5 rounded-lg bg-stone-100 dark:bg-stone-800 hover:bg-stone-200 dark:hover:bg-stone-700 text-stone-700 dark:text-stone-200 text-xs font-bold border border-stone-200 dark:border-stone-700 transition cursor-pointer shrink-0 whitespace-nowrap">
                 + 도시 추가
               </button>
             </div>
@@ -12842,6 +13036,7 @@
       updateCreateTripTzBanner();
       openModal('modal-create-trip');
     }
+    window.openCreateTripModal = openCreateTripModal;
 
     function handleTripFormCountryInput() {
       const input = document.getElementById('trip-form-countries');
@@ -16258,12 +16453,9 @@ ${JSON.stringify(snapshotDays)}`;
 
       container.innerHTML = allConcepts.map(c => {
         const isSelected = draftStudioState.concepts.includes(c.id);
+        const activeClass = isSelected ? 'is-active' : '';
         return `
-          <button type="button" onclick="toggleDraftStudioConcept('${c.id}')" class="px-2 py-1 rounded-lg text-[10px] font-bold transition cursor-pointer ${
-            isSelected
-              ? 'bg-[#1c1917] text-white dark:bg-amber-500 dark:text-black shadow-sm'
-              : 'bg-white dark:bg-stone-800 text-stone-600 dark:text-stone-300 border border-stone-200 dark:border-stone-700 hover:bg-stone-100'
-          }">
+          <button type="button" onclick="toggleDraftStudioConcept('${c.id}')" class="sulsul-chip text-[11px] ${activeClass}">
             ${c.label}
           </button>
         `;
