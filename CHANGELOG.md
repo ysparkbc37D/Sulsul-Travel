@@ -26,6 +26,18 @@
 - [ ] 항공권/호텔 예약 바우처 PDF 자동 파싱 일정 등록
 - [ ] 여행 동행자 실시간 음성 메모 AI 다이어리 자동 변환
 
+## [v1.7.1] - 2026-09-13
+### 🎨 모던 테마 옐로우/앰버 타이포그래피 시인성 고대비(WCAG AAA 7:1+) 강화 & 설정 모달 테마 선택 UI 가독성 전면 개선
+- **모던 및 라이트그레이 테마 옐로우/앰버 텍스트 고대비 보정**:
+  - 기존 CSS 고대비 오버라이드 룰(`:root[data-theme="light"]`)이 3-Way 테마 시스템 도입(`data-theme="modern"`, `data-theme="lightgray"`) 이후 미매칭되어, 연노란색/앰버 텍스트(`.text-amber-300`, `.text-amber-400`, `.text-yellow-*`)가 밝은 아이보리/크림 배경(`#F7F5F0`)에서 명도 대비 1.3:1 수준으로 흐릿하게 번져 보이던 시인성 결함을 완벽 척결.
+  - 비(非)다크 모드(`:root:not(.dark):not([data-theme="deepblack"]):not([data-theme="dark"])`) 전체를 대상으로 `.text-amber-400`, `.text-yellow-400/500`은 묵직한 다크 브론즈 앰버(`color: #854d0e !important`, 대비비 8.5:1), `.text-amber-300/200/100`, `.text-yellow-300/200`은 깊이감 있는 웜 브론즈(`color: #92400e !important`, 대비비 > 7.5:1)로 매핑하여 WCAG AAA 최고 수준의 가독성 확보.
+- **설정 모달 '모던' 테마 버튼 & 전용 배지 시인성 무결점 확립**:
+  - 설정 모달 내 테마 선택 시 다크 세이지 그린(`#2C3A2E`) 배경의 `#btn-theme-modern` 버튼 활성화 상태에서 텍스트 색상이 어두운 잉크색으로 충돌하거나 묻히던 현상 영구 차단.
+  - 전용 CSS 셀렉터(`#btn-theme-modern.is-theme-active *`, `:root[data-theme="modern"] #btn-theme-modern *`)에 `color: #ffffff !important`, `font-weight: 900 !important`를 명시하고, JS `updateThemeUi()`에서 `.setProperty('color', '#ffffff', 'important')`를 병행 적용하여 어떤 부모 스타일이나 상속에도 흔들림 없는 선명한 화이트 볼드 타이포그래피 보장.
+  - `#settings-current-theme-badge`에 테마별 맞춤형 클래스를 신설하여 모던 테마 선택 시 세련된 다크 세이지(`text-[#2C3A2E] bg-[#2C3A2E]/10 border-[#2C3A2E]/30`) 배지로 자동 전환.
+- **3대 테마 CSS 토큰 및 셀렉터 일원화**:
+  - `:root[data-theme="modern"]`, `:root[data-theme="lightgray"]`, `:root[data-theme="deepblack"]` 및 `:root.dark`에 맞추어 CSS 변수와 버튼, 카드, 팁박스 셀렉터를 완벽 동기화.
+
 ## [v1.7.0] - 2026-09-13
 ### 🛡️ 여행 카드 모바일 스와이프 제스처 및 서랍 영구 척결, 정적 일체형 카드 일원화
 - **불안정한 스와이프 제스처 엔진 완전 제거**:

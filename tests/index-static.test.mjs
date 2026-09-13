@@ -117,9 +117,9 @@ test('mobile travel notebook presentation is bundled and protected from CDN regr
   assert.match(companionCss, /min-height:44px/);
   assert.match(utilitiesCss, /\.flex/);
   for (const asset of [
-    'css/utilities.css?v=1.7.0',
-    'css/companion.css?v=1.7.0',
-    'js/presentation/companion-ui.js?v=1.7.0',
+    'css/utilities.css?v=1.7.1',
+    'css/companion.css?v=1.7.1',
+    'js/presentation/companion-ui.js?v=1.7.1',
     'vendor/fontawesome/css/all.min.css',
     'vendor/leaflet/leaflet.js',
     'vendor/leaflet/images/marker-icon-2x.png',
@@ -153,9 +153,21 @@ test('card touch swipe handlers and hidden drawers are purged for mobile stabili
 });
 
 test('pwa manifest and safe-zone icon assets are wired with cache-busting', () => {
-  assert.match(html, /<link rel="manifest" href="manifest\.webmanifest\?v=1\.7\.0">/);
-  assert.match(html, /icons\/icon-192-v115\.png\?v=1\.7\.0/);
-  assert.match(html, /favicon\.png\?v=1\.7\.0/);
+  assert.match(html, /<link rel="manifest" href="manifest\.webmanifest\?v=1\.7\.1">/);
+  assert.match(html, /icons\/icon-192-v115\.png\?v=1\.7\.1/);
+  assert.match(html, /favicon\.png\?v=1\.7\.1/);
+});
+
+test('modern theme yellow/amber text has high-contrast override and theme buttons have explicit active styles (v1.7.1)', () => {
+  // WCAG AAA contrast overrides for non-dark / modern / light themes
+  assert.match(html, /:root:not\(\.dark\):not\(\[data-theme="deepblack"\]\):not\(\[data-theme="dark"\]\)\s*\.text-amber-400/);
+  assert.match(html, /color:\s*#854d0e\s*!important/);
+  assert.match(html, /color:\s*#92400e\s*!important/);
+
+  // Modern theme selection button active styling
+  assert.match(html, /#btn-theme-modern\.is-theme-active/);
+  assert.match(html, /:root\[data-theme="modern"\]\s*#btn-theme-modern/);
+  assert.match(html, /#btn-theme-modern\.is-theme-active\s*\*\s*,\s*:root\[data-theme="modern"\]\s*#btn-theme-modern\s*\*\s*\{\s*color:\s*#ffffff\s*!important/);
 });
 
 test('release version is synchronized', () => {
@@ -163,7 +175,7 @@ test('release version is synchronized', () => {
   const worker = sw.match(/const V\s*=\s*'st-shell-v([^']+)'/)?.[1];
   const release = changelog.match(/## \[v([^\]]+)\]/)?.[1];
   const chronicleRelease = chronicle.match(/^### \[실록 \d+호\].*\(v([^\)]+)\)$/m)?.[1];
-  assert.equal(app, '1.7.0');
+  assert.equal(app, '1.7.1');
   assert.equal(worker, app);
   assert.equal(release, app);
   assert.equal(chronicleRelease, app);

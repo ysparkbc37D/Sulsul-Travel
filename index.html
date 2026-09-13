@@ -17,14 +17,14 @@
   </script>
 
   <!-- PWA Meta & Icons -->
-  <link rel="manifest" href="manifest.webmanifest?v=1.7.0">
+  <link rel="manifest" href="manifest.webmanifest?v=1.7.1">
   <meta name="theme-color" content="#F7F5F0">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
-  <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192-v115.png?v=1.7.0">
-  <link rel="icon" type="image/png" sizes="32x32" href="favicon.png?v=1.7.0">
+  <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192-v115.png?v=1.7.1">
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon.png?v=1.7.1">
   <link rel="shortcut icon" href="favicon.ico">
-  <link rel="apple-touch-icon" sizes="180x180" href="icons/apple-touch-icon-v115.png?v=1.7.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="icons/apple-touch-icon-v115.png?v=1.7.1">
 
   <!-- Google Fonts: Great Vibes, Dancing Script (Cursive Calligraphy), Cormorant Garamond, Noto Serif KR, Playfair Display -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -32,7 +32,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Great+Vibes&family=Cormorant+Garamond:wght@600;700;800&family=Noto+Serif+KR:wght@500;600;700;900&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
 
   <!-- Local Utilities Bundle (CDN fallback & tailwind utilities) -->
-  <link rel="stylesheet" href="css/utilities.css?v=1.7.0">
+  <link rel="stylesheet" href="css/utilities.css?v=1.7.1">
   <link rel="stylesheet" href="vendor/fontawesome/css/all.min.css">
 
   <!-- Leaflet Map CSS & JS -->
@@ -47,7 +47,7 @@
     @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
     
     /* ══════════════ Sulsul Archival Journal Design System (v1.6.5) ══════════════ */
-    :root, :root[data-theme="light"] {
+    :root, :root[data-theme="light"], :root[data-theme="modern"] {
       color-scheme: light;
       --bg: #F7F5F0;            /* Warm Paper Cream */
       --surface: #FFFFFF;       /* Clean Ivory White */
@@ -81,7 +81,39 @@
       --safe-left: env(safe-area-inset-left, 0px);
     }
 
-    :root[data-theme="dark"] {
+    :root[data-theme="lightgray"] {
+      color-scheme: light;
+      --bg: #F3F4F6;            /* Clean Minimal Light Gray */
+      --surface: #FFFFFF;       /* Pure White */
+      --surface2: #E5E7EB;      /* Cool Gray Surface */
+      --surface3: #D1D5DB;
+      --line: #E5E7EB;          /* Neutral Border */
+      --line2: #D1D5DB;
+      --ink: #111827;           /* Slate 900 (High Contrast) */
+      --ink2: #4B5563;          /* Slate 600 */
+      --ink3: #6B7280;          /* Slate 500 */
+      --accent: #111827;        /* Clean Onyx Slate */
+      --accent2: #4B5563;       /* Muted Slate */
+      --accent-bg: #E5E7EB;
+      --accent-line: #D1D5DB;
+      --card-bg: #FFFFFF;
+      --card-border: #E5E7EB;
+      --header-bg: rgba(243, 244, 246, 0.94);
+      --header-border: #E5E7EB;
+      --tab-active-bg: #111827;
+      --tab-active-text: #FFFFFF;
+      --banner-bg: #E5E7EB;
+      --banner-border: #D1D5DB;
+      --banner-title: #111827;
+      --banner-sub: #4B5563;
+      --input-bg: #FFFFFF;
+      --input-border: #D1D5DB;
+      --serif: 'Noto Serif KR', 'Cormorant Garamond', 'Playfair Display', Nanum Myeongjo, Georgia, serif;
+    }
+
+    :root[data-theme="dark"],
+    :root[data-theme="deepblack"],
+    :root.dark {
       color-scheme: dark;
       --bg: #0F141C;            /* Midnight Ink Navy */
       --surface: #1C222D;       /* Deep Slate Card & Sheet Surface */
@@ -349,13 +381,17 @@
       color: #F7F5F0 !important;
       font-weight: 800 !important;
     }
-    :root[data-theme="dark"] .btn-gold {
+    :root[data-theme="dark"] .btn-gold,
+    :root[data-theme="deepblack"] .btn-gold,
+    :root.dark .btn-gold {
       background: linear-gradient(180deg, #D4AF37, #B8860B) !important;
       color: #0F141C !important;
       border: 1px solid rgba(212, 175, 55, 0.4) !important;
       box-shadow: 0 4px 14px rgba(212, 175, 55, 0.25) !important;
     }
-    :root[data-theme="dark"] .btn-gold * {
+    :root[data-theme="dark"] .btn-gold *,
+    :root[data-theme="deepblack"] .btn-gold *,
+    :root.dark .btn-gold * {
       color: #0F141C !important;
       font-weight: 800 !important;
     }
@@ -364,7 +400,9 @@
       background: #232E25 !important;
       transform: translateY(-1px);
     }
-    :root[data-theme="dark"] .btn-gold:hover {
+    :root[data-theme="dark"] .btn-gold:hover,
+    :root[data-theme="deepblack"] .btn-gold:hover,
+    :root.dark .btn-gold:hover {
       background: linear-gradient(180deg, #E5B654, #C9962F) !important;
       box-shadow: 0 6px 20px rgba(212, 175, 55, 0.4);
     }
@@ -397,12 +435,16 @@
       background: #e0f2fe !important;
       color: #0284c7 !important;
     }
-    :root[data-theme="dark"] .btn-funds-add {
+    :root[data-theme="dark"] .btn-funds-add,
+    :root[data-theme="deepblack"] .btn-funds-add,
+    :root.dark .btn-funds-add {
       background: rgba(14, 165, 233, 0.18) !important;
       border: 1px solid rgba(56, 189, 248, 0.4) !important;
       color: #7dd3fc !important;
     }
-    :root[data-theme="dark"] .btn-funds-add:hover {
+    :root[data-theme="dark"] .btn-funds-add:hover,
+    :root[data-theme="deepblack"] .btn-funds-add:hover,
+    :root.dark .btn-funds-add:hover {
       background: rgba(14, 165, 233, 0.28) !important;
       color: #bae6fd !important;
     }
@@ -419,12 +461,16 @@
       background: #ffe4e6 !important;
       color: #e11d48 !important;
     }
-    :root[data-theme="dark"] .btn-funds-del {
+    :root[data-theme="dark"] .btn-funds-del,
+    :root[data-theme="deepblack"] .btn-funds-del,
+    :root.dark .btn-funds-del {
       background: rgba(244, 63, 94, 0.18) !important;
       border: 1px solid rgba(251, 113, 133, 0.4) !important;
       color: #fda4af !important;
     }
-    :root[data-theme="dark"] .btn-funds-del:hover {
+    :root[data-theme="dark"] .btn-funds-del:hover,
+    :root[data-theme="deepblack"] .btn-funds-del:hover,
+    :root.dark .btn-funds-del:hover {
       background: rgba(244, 63, 94, 0.28) !important;
       color: #ffe4e6 !important;
     }
@@ -459,7 +505,9 @@
       box-shadow: 0 4px 20px -2px rgba(44, 58, 46, 0.05), 0 2px 6px -1px rgba(0, 0, 0, 0.03) !important;
       transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
     }
-    :root[data-theme="dark"] .theme-card {
+    :root[data-theme="dark"] .theme-card,
+    :root[data-theme="deepblack"] .theme-card,
+    :root.dark .theme-card {
       box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.4), 0 2px 6px -1px rgba(0, 0, 0, 0.2) !important;
     }
     .theme-card-subtle {
@@ -536,7 +584,9 @@
       color: var(--accent) !important;
       border: 1px solid var(--line) !important;
     }
-    :root[data-theme="dark"] .subtab-active {
+    :root[data-theme="dark"] .subtab-active,
+    :root[data-theme="deepblack"] .subtab-active,
+    :root.dark .subtab-active {
       border-color: var(--line2) !important;
     }
     .subtab-inactive {
@@ -564,18 +614,20 @@
     }
 
     /* High Contrast Text Rules */
-    :root[data-theme="light"] .text-white:not(.keep-white):not(.btn-gold):not(.btn-gold *):not(.badge-solid):not(.badge-solid *):not(.tab-install-active):not(.hub-tab-active):not(.nav-tab-active):not([class*="bg-emerald-"]):not([class*="bg-amber-"]):not([class*="bg-rose-"]):not([class*="bg-indigo-"]):not([class*="bg-blue-"]):not([class*="bg-[#1c1917]"]):not([class*="bg-[#111827]"]):not([class*="bg-[#1d1d1f]"]):not([class*="bg-stone-9"]):not([class*="bg-slate-9"]):not([class*="bg-black"]):not(#btn-theme-light):not(#btn-theme-light *) {
+    :root:not(.dark):not([data-theme="deepblack"]):not([data-theme="dark"]) .text-white:not(.keep-white):not(.btn-gold):not(.btn-gold *):not(.badge-solid):not(.badge-solid *):not(.tab-install-active):not(.hub-tab-active):not(.nav-tab-active):not([class*="bg-emerald-"]):not([class*="bg-amber-"]):not([class*="bg-rose-"]):not([class*="bg-indigo-"]):not([class*="bg-blue-"]):not([class*="bg-[#1c1917]"]):not([class*="bg-[#111827]"]):not([class*="bg-[#1d1d1f]"]):not([class*="bg-stone-9"]):not([class*="bg-slate-9"]):not([class*="bg-black"]):not([class*="bg-[#2C3A2E]"]):not(#btn-theme-modern):not(#btn-theme-modern *):not(#btn-theme-lightgray):not(#btn-theme-lightgray *):not(#btn-theme-deepblack):not(#btn-theme-deepblack *):not(#btn-theme-light):not(#btn-theme-light *) {
       color: var(--ink) !important;
     }
+    :root.dark .text-white,
+    :root[data-theme="deepblack"] .text-white,
     :root[data-theme="dark"] .text-white {
       color: var(--ink) !important;
     }
 
     /* Dark surface elements MUST have clear white text */
-    .bg-\[\#111827\], .bg-\[\#1d1d1f\], .bg-\[\#1c1917\], .bg-\[\#0b0c0e\], .bg-stone-900, .bg-slate-900, .bg-black {
+    .bg-\[\#111827\], .bg-\[\#1d1d1f\], .bg-\[\#1c1917\], .bg-\[\#0b0c0e\], .bg-\[\#2C3A2E\], .bg-stone-900, .bg-slate-900, .bg-black {
       color: #ffffff !important;
     }
-    .bg-\[\#111827\] *, .bg-\[\#1d1d1f\] *, .bg-\[\#1c1917\] *, .bg-\[\#0b0c0e\] *, .bg-stone-900 *, .bg-slate-900 *, .bg-black * {
+    .bg-\[\#111827\] *, .bg-\[\#1d1d1f\] *, .bg-\[\#1c1917\] *, .bg-\[\#0b0c0e\] *, .bg-\[\#2C3A2E\] *, .bg-stone-900 *, .bg-slate-900 *, .bg-black * {
       color: inherit !important;
     }
     .text-\[\#1c1917\], .text-\[\#292524\], .text-\[\#44403c\] {
@@ -588,7 +640,7 @@
       color: var(--ink) !important;
     }
 
-    /* High Contrast Amber Accent & Universal Tip Box (WCAG AAA 7:1+) */
+    /* High Contrast Amber & Yellow Accent Rules (WCAG AAA 7:1+ for Modern & Light Themes) */
     .tip-box {
       background-color: #fef3c7 !important;
       border: 1px solid #fde68a !important;
@@ -597,39 +649,98 @@
     .tip-box * {
       color: inherit !important;
     }
+    :root.dark .tip-box,
+    :root[data-theme="deepblack"] .tip-box,
     :root[data-theme="dark"] .tip-box {
       background-color: rgba(245, 158, 11, 0.12) !important;
       border: 1px solid rgba(245, 158, 11, 0.25) !important;
       color: #fde68a !important;
     }
-    :root[data-theme="light"] .text-amber-300,
-    :root[data-theme="light"] .text-amber-300\/90,
-    :root[data-theme="light"] .text-amber-200,
-    :root[data-theme="light"] .text-amber-100 {
+    :root:not(.dark):not([data-theme="deepblack"]):not([data-theme="dark"]) .text-amber-300,
+    :root:not(.dark):not([data-theme="deepblack"]):not([data-theme="dark"]) .text-amber-300\/90,
+    :root:not(.dark):not([data-theme="deepblack"]):not([data-theme="dark"]) .text-amber-200,
+    :root:not(.dark):not([data-theme="deepblack"]):not([data-theme="dark"]) .text-amber-100,
+    :root:not(.dark):not([data-theme="deepblack"]):not([data-theme="dark"]) .text-yellow-300,
+    :root:not(.dark):not([data-theme="deepblack"]):not([data-theme="dark"]) .text-yellow-200 {
       color: #92400e !important;
       font-weight: 700 !important;
     }
-    :root[data-theme="light"] .text-amber-400 {
-      color: #b45309 !important;
+    :root:not(.dark):not([data-theme="deepblack"]):not([data-theme="dark"]) .text-amber-400,
+    :root:not(.dark):not([data-theme="deepblack"]):not([data-theme="dark"]) .text-yellow-400,
+    :root:not(.dark):not([data-theme="deepblack"]):not([data-theme="dark"]) .text-yellow-500 {
+      color: #854d0e !important;
       font-weight: 700 !important;
     }
-    :root[data-theme="light"] [class*="bg-amber-"] {
+    :root:not(.dark):not([data-theme="deepblack"]):not([data-theme="dark"]) [class*="bg-amber-"],
+    :root:not(.dark):not([data-theme="deepblack"]):not([data-theme="dark"]) [class*="bg-yellow-"] {
       background-color: #fef3c7 !important;
       border-color: #fde68a !important;
     }
-    :root[data-theme="light"] [class*="bg-amber-"] .text-amber-300,
-    :root[data-theme="light"] [class*="bg-amber-"] .text-amber-300\/90,
-    :root[data-theme="light"] [class*="bg-amber-"] .text-amber-400 {
+    :root:not(.dark):not([data-theme="deepblack"]):not([data-theme="dark"]) [class*="bg-amber-"] .text-amber-300,
+    :root:not(.dark):not([data-theme="deepblack"]):not([data-theme="dark"]) [class*="bg-amber-"] .text-amber-300\/90,
+    :root:not(.dark):not([data-theme="deepblack"]):not([data-theme="dark"]) [class*="bg-amber-"] .text-amber-400,
+    :root:not(.dark):not([data-theme="deepblack"]):not([data-theme="dark"]) [class*="bg-amber-"] * {
       color: #78350f !important;
       font-weight: 700 !important;
     }
+    :root.dark .text-amber-300,
+    :root.dark .text-amber-300\/90,
+    :root.dark .text-amber-200,
+    :root[data-theme="deepblack"] .text-amber-300,
+    :root[data-theme="deepblack"] .text-amber-300\/90,
+    :root[data-theme="deepblack"] .text-amber-200,
     :root[data-theme="dark"] .text-amber-300,
     :root[data-theme="dark"] .text-amber-300\/90,
     :root[data-theme="dark"] .text-amber-200 {
       color: #fde68a !important;
     }
+    :root.dark .text-amber-400,
+    :root.dark .text-yellow-400,
+    :root.dark .text-yellow-300,
+    :root[data-theme="deepblack"] .text-amber-400,
+    :root[data-theme="deepblack"] .text-yellow-400,
+    :root[data-theme="deepblack"] .text-yellow-300,
     :root[data-theme="dark"] .text-amber-400 {
       color: #fbbf24 !important;
+    }
+
+    /* Theme Selector Buttons Active/Inactive Explicit Rules (v1.7.1) */
+    #btn-theme-modern.is-theme-active,
+    :root[data-theme="modern"] #btn-theme-modern {
+      background-color: #2C3A2E !important;
+      border-color: #2C3A2E !important;
+      color: #ffffff !important;
+    }
+    #btn-theme-modern.is-theme-active *,
+    :root[data-theme="modern"] #btn-theme-modern * {
+      color: #ffffff !important;
+      font-weight: 900 !important;
+    }
+
+    #btn-theme-lightgray.is-theme-active,
+    :root[data-theme="lightgray"] #btn-theme-lightgray {
+      background-color: #111827 !important;
+      border-color: #111827 !important;
+      color: #ffffff !important;
+    }
+    #btn-theme-lightgray.is-theme-active *,
+    :root[data-theme="lightgray"] #btn-theme-lightgray * {
+      color: #ffffff !important;
+      font-weight: 900 !important;
+    }
+
+    #btn-theme-deepblack.is-theme-active,
+    :root.dark #btn-theme-deepblack,
+    :root[data-theme="deepblack"] #btn-theme-deepblack {
+      background-color: #d4af37 !important;
+      border-color: #d4af37 !important;
+      color: #0b0c0e !important;
+    }
+    #btn-theme-deepblack.is-theme-active *,
+    :root.dark #btn-theme-deepblack *,
+    :root[data-theme="deepblack"] #btn-theme-deepblack * {
+      color: #0b0c0e !important;
+      font-weight: 900 !important;
     }
 
     /* Inputs & Form Controls */
@@ -780,8 +891,8 @@
     }
   </style>
 
-  <link rel="stylesheet" href="css/companion.css?v=1.7.0">
-  <script src="js/presentation/companion-ui.js?v=1.7.0"></script>
+  <link rel="stylesheet" href="css/companion.css?v=1.7.1">
+  <script src="js/presentation/companion-ui.js?v=1.7.1"></script>
 
   <!-- Knowledge Base Seed & Destination Knowledge Packs (DKP) -->
   <script src="kb-travel.js"></script>
@@ -810,8 +921,8 @@
 
       <!-- 우측 액션 클러스터 (버전 알약 -> 원형 통계 -> 원형 설정 -> 다크그린 캡슐 추가) -->
       <div class="flex items-center gap-1 sm:gap-1.5 shrink-0">
-        <!-- 1. 버전 배지 버튼 (v1.7.0 - 클릭 시 버전 이력) -->
-        <button id="app-ver-badge" onclick="event.stopPropagation(); openVersionHistoryModal()" class="h-7 sm:h-8 px-2 sm:px-2.5 rounded-full theme-card-subtle flex items-center justify-center font-mono text-[10px] sm:text-[11px] font-bold text-[#a2601b] dark:text-[#d4af37] shadow-xs hover:border-amber-500/60 transition cursor-pointer shrink-0" title="버전 업데이트 기록 보기 (클릭)">v1.7.0</button>
+        <!-- 1. 버전 배지 버튼 (v1.7.1 - 클릭 시 버전 이력) -->
+        <button id="app-ver-badge" onclick="event.stopPropagation(); openVersionHistoryModal()" class="h-7 sm:h-8 px-2 sm:px-2.5 rounded-full theme-card-subtle flex items-center justify-center font-mono text-[10px] sm:text-[11px] font-bold text-[#a2601b] dark:text-[#d4af37] shadow-xs hover:border-amber-500/60 transition cursor-pointer shrink-0" title="버전 업데이트 기록 보기 (클릭)">v1.7.1</button>
 
         <!-- 2. 통계 버튼 (📊 - 원형 버튼) -->
         <button id="header-btn-analytics" onclick="openAnalyticsModal('lifetime')" class="companion-header-analytics w-7 h-7 sm:w-8 sm:h-8 rounded-full theme-card-subtle flex items-center justify-center text-[#a2601b] dark:text-[#d4af37] hover:border-amber-500/60 transition shadow-xs cursor-pointer shrink-0" title="술술 여행 통계 대시보드">
@@ -2903,7 +3014,7 @@
                 <i class="fa-solid fa-circle-half-stroke text-[#a2601b] dark:text-[#d4af37]"></i>
                 <span>컬러 테마 모드</span>
               </span>
-              <span id="settings-current-theme-badge" class="text-[10px] font-black px-2.5 py-0.5 rounded-full bg-amber-100 dark:bg-amber-950/50 text-amber-950 dark:text-amber-300 border border-amber-300 dark:border-amber-700">모던</span>
+              <span id="settings-current-theme-badge" class="text-[10px] font-black px-2.5 py-0.5 rounded-full bg-[#2C3A2E]/10 text-[#2C3A2E] border border-[#2C3A2E]/30">모던 (Vintage Archival)</span>
             </div>
             <p class="text-[11px] leading-relaxed" style="color: var(--ink2);">
               고풍스러운 양장본 고서 감성의 <b>모던(빈티지 아카이벌)</b>, 단정하고 깔끔한 <b>라이트그레이</b>, 눈부심을 최소화한 <b>딥 블랙(옵시디언 다크)</b> 3대 테마를 자유롭게 선택할 수 있습니다.
@@ -3523,21 +3634,40 @@
 
       <!-- 버전 목록 스크롤 영역 (독립 스크롤 컨테이너로 Flexbox 압축 버그 영구 척결) -->
       <div class="overflow-y-auto flex-1 min-h-0 space-y-3.5 pr-1.5 custom-scrollbar">
-        <!-- v1.7.0 (Current) -->
+        <!-- v1.7.1 (Current) -->
         <div class="p-4 rounded-2xl border-2 border-emerald-500/50 space-y-2.5 bg-emerald-500/5 dark:bg-emerald-500/10 shrink-0 shadow-sm">
           <div class="flex items-center justify-between gap-2">
             <div class="flex items-center gap-2 min-w-0">
-              <span class="px-2.5 py-0.5 rounded-lg bg-emerald-500 text-black font-black text-xs shadow-sm shrink-0">v1.7.0</span>
-              <span class="text-xs font-black text-[#1c1917] dark:text-white truncate">여행 카드 모바일 스와이프 제스처 및 서랍 영구 척결, 정적 카드 일원화</span>
+              <span class="px-2.5 py-0.5 rounded-lg bg-emerald-500 text-black font-black text-xs shadow-sm shrink-0">v1.7.1</span>
+              <span class="text-xs font-black text-[#1c1917] dark:text-white truncate">모던 테마 옐로우/앰버 시인성 고대비(WCAG AAA) 강화 & 설정 모달 테마 선택 UI 가독성 전면 개선</span>
             </div>
             <span class="companion-status shrink-0">최신 버전</span>
+          </div>
+          <p class="text-xs leading-relaxed text-[#44403c] dark:text-stone-300">
+            1) <b>모던/라이트그레이 테마 옐로우·앰버 텍스트 고대비 보정</b>: 밝은 아이보리/크림 배경에서 시인성이 떨어지던 연노란색 및 앰버 계열 텍스트를 진한 브론즈/앰버(<code>#854d0e</code>, <code>#92400e</code>)로 매핑하여 WCAG AAA(7:1+) 초고대비를 완벽 구현했습니다.<br>
+            2) <b>설정 모달 '모던' 버튼 및 배지 가독성 혁신</b>: 모던 테마 선택 시 '모던' 텍스트가 묻히지 않도록 선명한 화이트 볼드 타이포그래피(<code>color: #ffffff !important</code>)와 다크 세이지 그린(<code>#2C3A2E</code>) 배경, 그리고 테마별 전용 고대비 배지 스타일을 완비했습니다.<br>
+            3) <b>3대 테마 CSS 토큰 및 셀렉터 일원화</b>: <code>data-theme="modern"</code>, <code>data-theme="lightgray"</code>, <code>data-theme="deepblack"</code>에 맞춘 CSS 토큰 체계를 완성하여 테마 전환 시 모든 텍스트와 UI의 시인성을 무결점으로 보장합니다.
+          </p>
+          <div class="text-[10px] text-stone-400 dark:text-stone-500 pt-1 border-t border-emerald-500/20 flex items-center justify-between">
+            <span>📅 2026-09-13 릴리즈</span>
+            <span class="font-mono">st-shell-v1.7.1</span>
+          </div>
+        </div>
+
+        <!-- v1.7.0 -->
+        <div class="p-4 rounded-2xl bg-stone-50 dark:bg-stone-900/50 border border-stone-200 dark:border-stone-800 space-y-2.5 shadow-sm relative overflow-hidden shrink-0">
+          <div class="flex items-center justify-between gap-2">
+            <div class="flex items-center gap-2 min-w-0">
+              <span class="px-2 py-0.5 rounded-lg bg-stone-200 dark:bg-stone-800 text-stone-800 dark:text-stone-200 font-bold text-[11px] font-mono shrink-0">v1.7.0</span>
+              <span class="text-xs font-bold text-[#1c1917] dark:text-stone-200 truncate">여행 카드 모바일 스와이프 제스처 및 서랍 영구 척결, 정적 카드 일원화</span>
+            </div>
           </div>
           <p class="text-xs leading-relaxed text-[#44403c] dark:text-stone-300">
             1) <b>불안정한 스와이프 제스처 엔진 완전 제거</b>: 모바일 화면에서 상하 스크롤 시 대각선 터치 입력으로 인해 카드가 좌측(-150px)으로 튕겨 나가며 깨진 것처럼 보이던 <code>ontouchstart/move/end</code> 스와이프 제스처 엔진을 완전 척결했습니다.<br>
             2) <b>중복 스와이프 서랍 제거 & 정적 카드 일원화</b>: 카드 전면에 이미 4대 액션 버튼(<code>[📷][🌐][📄][🗑️]</code>)이 노출되어 있으므로, 카드 뒤편에 숨겨져 화면을 어지럽히던 중복 서랍을 제거하고 흔들림 없는 일체형 정적 카드로 일원화했습니다.<br>
             3) <b>원터치 워크스페이스 직관 진입</b>: 카드 본체 터치 시 즉시 여행 워크스페이스가 열리며, 하단 4대 액션 버튼은 독립 터치 버블링 차단으로 오작동 없이 안전하게 실행됩니다.
           </p>
-          <div class="text-[10px] text-stone-400 dark:text-stone-500 pt-1 border-t border-emerald-500/20 flex items-center justify-between">
+          <div class="text-[10px] text-stone-400 dark:text-stone-500 pt-1 border-t border-stone-200 dark:border-stone-800 flex items-center justify-between">
             <span>📅 2026-09-13 릴리즈</span>
             <span class="font-mono">st-shell-v1.7.0</span>
           </div>
@@ -4166,7 +4296,7 @@
 
       <!-- 모달 푸터 -->
       <div class="pt-3 border-t border-[#e8e2d5] dark:border-stone-800 flex items-center justify-between shrink-0">
-        <span class="text-[11px] text-stone-400 dark:text-stone-500 font-mono">Sulsul Travel Engine v1.7.0</span>
+        <span class="text-[11px] text-stone-400 dark:text-stone-500 font-mono">Sulsul Travel Engine v1.7.1</span>
         <button onclick="closeModal('modal-version-history')" class="px-4 py-2 rounded-xl bg-[#faf8f5] dark:bg-stone-800 hover:bg-[#f0ece1] dark:hover:bg-stone-700 border border-[#e8e2d5] dark:border-stone-700 text-[#1c1917] dark:text-[#ededed] text-xs font-bold transition cursor-pointer shadow-sm">
           닫기
         </button>
@@ -4229,7 +4359,7 @@
     window.showToast = showToast;
 
     // 앱 버전 및 글로벌 네임스페이스 (Sulsul-Travel Invariant Rule R-10, R-11, R-12, R-13, R-14, R-15, R-16)
-    const APP_VER = '1.7.0';
+    const APP_VER = '1.7.1';
 
     // ══════════════════════════════════════════
     // [3-Way Theme System] 모던, 라이트그레이, 딥 블랙 테마 엔진 (v1.6.7)
@@ -4285,7 +4415,16 @@
       // 2. 설정 모달 테마 뱃지 및 3단 버튼 활성 상태
       const badge = document.getElementById('settings-current-theme-badge');
       if (badge) {
-        badge.innerText = isModern ? '모던 (Vintage Archival)' : (isLightgray ? '라이트그레이 (Clean Minimal)' : '딥 블랙 (Deep Obsidian)');
+        if (isModern) {
+          badge.innerText = '모던 (Vintage Archival)';
+          badge.className = 'text-[10px] font-black px-2.5 py-0.5 rounded-full bg-[#2C3A2E]/10 text-[#2C3A2E] border border-[#2C3A2E]/30';
+        } else if (isLightgray) {
+          badge.innerText = '라이트그레이 (Clean Minimal)';
+          badge.className = 'text-[10px] font-black px-2.5 py-0.5 rounded-full bg-slate-100 text-slate-800 border border-slate-300';
+        } else {
+          badge.innerText = '딥 블랙 (Deep Obsidian)';
+          badge.className = 'text-[10px] font-black px-2.5 py-0.5 rounded-full bg-amber-500/20 text-[#d4af37] border border-amber-500/40';
+        }
       }
       const btnModern = document.getElementById('btn-theme-modern');
       const btnLightgray = document.getElementById('btn-theme-lightgray');
@@ -4294,22 +4433,34 @@
       const btnLightgrayTxt = document.getElementById('btn-theme-lightgray-txt');
       const btnDeepblackTxt = document.getElementById('btn-theme-deepblack-txt');
 
-      const activeClassModern = "py-2.5 px-2 rounded-xl bg-[#2C3A2E] text-white border border-[#2C3A2E] font-black text-[11px] flex flex-col items-center justify-center gap-1 shadow-sm transition ring-2 ring-[#2C3A2E]/40 cursor-pointer";
-      const activeClassLightgray = "py-2.5 px-2 rounded-xl bg-[#111827] text-white border border-[#111827] font-black text-[11px] flex flex-col items-center justify-center gap-1 shadow-sm transition ring-2 ring-stone-900/30 cursor-pointer";
-      const activeClassDeepblack = "py-2.5 px-2 rounded-xl bg-[#d4af37] text-[#0b0c0e] border border-[#d4af37] font-black text-[11px] flex flex-col items-center justify-center gap-1 shadow-sm transition ring-2 ring-amber-400/40 cursor-pointer";
+      const activeClassModern = "py-2.5 px-2 rounded-xl bg-[#2C3A2E] text-white border border-[#2C3A2E] font-black text-[11px] flex flex-col items-center justify-center gap-1 shadow-sm transition ring-2 ring-[#2C3A2E]/40 cursor-pointer is-theme-active";
+      const activeClassLightgray = "py-2.5 px-2 rounded-xl bg-[#111827] text-white border border-[#111827] font-black text-[11px] flex flex-col items-center justify-center gap-1 shadow-sm transition ring-2 ring-stone-900/30 cursor-pointer is-theme-active";
+      const activeClassDeepblack = "py-2.5 px-2 rounded-xl bg-[#d4af37] text-[#0b0c0e] border border-[#d4af37] font-black text-[11px] flex flex-col items-center justify-center gap-1 shadow-sm transition ring-2 ring-amber-400/40 cursor-pointer is-theme-active";
       const inactiveClass = "py-2.5 px-2 rounded-xl bg-[var(--surface2)] text-[var(--ink)] border border-[var(--line)] font-bold text-[11px] flex flex-col items-center justify-center gap-1 transition cursor-pointer hover:border-[var(--accent)]";
 
       if (btnModern) {
         btnModern.className = isModern ? activeClassModern : inactiveClass;
-        if (btnModernTxt) { btnModernTxt.style.color = isModern ? '#ffffff' : 'var(--ink)'; btnModernTxt.style.fontWeight = isModern ? '900' : '700'; }
+        btnModern.classList.toggle('is-theme-active', isModern);
+        if (btnModernTxt) {
+          btnModernTxt.style.setProperty('color', isModern ? '#ffffff' : 'var(--ink)', 'important');
+          btnModernTxt.style.fontWeight = isModern ? '900' : '700';
+        }
       }
       if (btnLightgray) {
         btnLightgray.className = isLightgray ? activeClassLightgray : inactiveClass;
-        if (btnLightgrayTxt) { btnLightgrayTxt.style.color = isLightgray ? '#ffffff' : 'var(--ink)'; btnLightgrayTxt.style.fontWeight = isLightgray ? '900' : '700'; }
+        btnLightgray.classList.toggle('is-theme-active', isLightgray);
+        if (btnLightgrayTxt) {
+          btnLightgrayTxt.style.setProperty('color', isLightgray ? '#ffffff' : 'var(--ink)', 'important');
+          btnLightgrayTxt.style.fontWeight = isLightgray ? '900' : '700';
+        }
       }
       if (btnDeepblack) {
         btnDeepblack.className = isDark ? activeClassDeepblack : inactiveClass;
-        if (btnDeepblackTxt) { btnDeepblackTxt.style.color = isDark ? '#0b0c0e' : 'var(--ink)'; btnDeepblackTxt.style.fontWeight = isDark ? '900' : '700'; }
+        btnDeepblack.classList.toggle('is-theme-active', isDark);
+        if (btnDeepblackTxt) {
+          btnDeepblackTxt.style.setProperty('color', isDark ? '#0b0c0e' : 'var(--ink)', 'important');
+          btnDeepblackTxt.style.fontWeight = isDark ? '900' : '700';
+        }
       }
 
       // 하위 호환용 2개 버튼 상태 동기화 (오류 방지)
@@ -6208,6 +6359,10 @@
     }
 
     function openSettingsModal(defaultTab = 'theme') {
+      const currentTheme = document.documentElement.getAttribute('data-theme') || 'modern';
+      if (typeof updateThemeUi === 'function') {
+        updateThemeUi(currentTheme);
+      }
       if (typeof updateGeminiKeyUi === 'function') {
         updateGeminiKeyUi();
       } else {
