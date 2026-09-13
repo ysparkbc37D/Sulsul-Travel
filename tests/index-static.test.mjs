@@ -305,12 +305,33 @@ test('semantic badges & high-contrast safeguards supported (v1.7.7)', () => {
   assert.match(html, /:root:not\(\.dark\):not\(\[data-theme="deepblack"\]\):not\(\[data-theme="dark"\]\)/);
 });
 
+test('global geocoding engine and Spain Toledo precision mapping are supported (v1.7.8)', () => {
+  const dkpDefault = readFileSync(new URL('../js/destinations/pack-default.js', import.meta.url), 'utf8');
+
+  // 1. Pack default contains global country and city databases with Toledo coordinates
+  assert.match(dkpDefault, /const GLOBAL_COUNTRY_DATA =/);
+  assert.match(dkpDefault, /const GLOBAL_CITY_DATA =/);
+  assert.match(dkpDefault, /톨레도/);
+  assert.match(dkpDefault, /39\.8628/);
+  assert.match(dkpDefault, /-4\.0273/);
+  assert.match(dkpDefault, /window\.SulsulGeo/);
+
+  // 2. Safe Google Maps query helper and fitBounds in index.html
+  assert.match(html, /function getSafeGoogleMapsQuery\(dest, trip\)/);
+  assert.match(html, /State\.map\.fitBounds\(L\.latLngBounds\(validCoords\)/);
+  assert.match(html, /State\.map\.flyToBounds\(L\.latLngBounds\(validCoords\)/);
+
+  // 3. Spain Toledo and Seville registered in index.html CITY_GEO_COORDS
+  assert.match(html, /'톨레도': \[39\.8628, -4\.0273\]/);
+  assert.match(html, /'세비야': \[37\.3891, -5\.9845\]/);
+});
+
 test('release version is synchronized', () => {
   const app = html.match(/const APP_VER\s*=\s*'([^']+)'/)?.[1];
   const worker = sw.match(/const V\s*=\s*'st-shell-v([^']+)'/)?.[1];
   const release = changelog.match(/## \[v([^\]]+)\]/)?.[1];
   const chronicleRelease = chronicle.match(/^### \[실록 \d+호\].*\(v([^\)]+)\)$/m)?.[1];
-  assert.equal(app, '1.7.7');
+  assert.equal(app, '1.7.8');
   assert.equal(worker, app);
   assert.equal(release, app);
   assert.equal(chronicleRelease, app);

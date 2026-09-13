@@ -17,14 +17,14 @@
   </script>
 
   <!-- PWA Meta & Icons -->
-  <link rel="manifest" href="manifest.webmanifest?v=1.7.7">
+  <link rel="manifest" href="manifest.webmanifest?v=1.7.8">
   <meta name="theme-color" content="#F7F5F0">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
-  <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192-v115.png?v=1.7.7">
-  <link rel="icon" type="image/png" sizes="32x32" href="favicon.png?v=1.7.7">
+  <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192-v115.png?v=1.7.8">
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon.png?v=1.7.8">
   <link rel="shortcut icon" href="favicon.ico">
-  <link rel="apple-touch-icon" sizes="180x180" href="icons/apple-touch-icon-v115.png?v=1.7.7">
+  <link rel="apple-touch-icon" sizes="180x180" href="icons/apple-touch-icon-v115.png?v=1.7.8">
 
   <!-- Google Fonts: Great Vibes, Dancing Script (Cursive Calligraphy), Cormorant Garamond, Noto Serif KR, Playfair Display -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -32,7 +32,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Great+Vibes&family=Cormorant+Garamond:wght@600;700;800&family=Noto+Serif+KR:wght@500;600;700;900&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
 
   <!-- Local Utilities Bundle (CDN fallback & tailwind utilities) -->
-  <link rel="stylesheet" href="css/utilities.css?v=1.7.7">
+  <link rel="stylesheet" href="css/utilities.css?v=1.7.8">
   <link rel="stylesheet" href="vendor/fontawesome/css/all.min.css">
 
   <!-- Leaflet Map CSS & JS -->
@@ -1374,8 +1374,8 @@
     }
   </style>
 
-  <link rel="stylesheet" href="css/companion.css?v=1.7.7">
-  <script src="js/presentation/companion-ui.js?v=1.7.7"></script>
+  <link rel="stylesheet" href="css/companion.css?v=1.7.8">
+  <script src="js/presentation/companion-ui.js?v=1.7.8"></script>
 
   <!-- Knowledge Base Seed & Destination Knowledge Packs (DKP) -->
   <script src="kb-travel.js"></script>
@@ -1404,8 +1404,8 @@
 
       <!-- 우측 액션 클러스터 (버전 알약 -> 원형 통계 -> 원형 설정 -> 다크그린 캡슐 추가) -->
       <div class="flex items-center gap-1 sm:gap-1.5 shrink-0">
-        <!-- 1. 버전 배지 버튼 (v1.7.7 - 클릭 시 버전 이력) -->
-        <button id="app-ver-badge" onclick="event.stopPropagation(); openVersionHistoryModal()" class="h-7 sm:h-8 px-2 sm:px-2.5 rounded-full theme-card-subtle flex items-center justify-center font-mono text-[10px] sm:text-[11px] font-bold text-[#a2601b] dark:text-[#d4af37] shadow-xs hover:border-amber-500/60 transition cursor-pointer shrink-0" title="버전 업데이트 기록 보기 (클릭)">v1.7.7</button>
+        <!-- 1. 버전 배지 버튼 (v1.7.8 - 클릭 시 버전 이력) -->
+        <button id="app-ver-badge" onclick="event.stopPropagation(); openVersionHistoryModal()" class="h-7 sm:h-8 px-2 sm:px-2.5 rounded-full theme-card-subtle flex items-center justify-center font-mono text-[10px] sm:text-[11px] font-bold text-[#a2601b] dark:text-[#d4af37] shadow-xs hover:border-amber-500/60 transition cursor-pointer shrink-0" title="버전 업데이트 기록 보기 (클릭)">v1.7.8</button>
 
         <!-- 2. 통계 버튼 (📊 - 원형 버튼) -->
         <button id="header-btn-analytics" onclick="openAnalyticsModal('lifetime')" class="companion-header-analytics w-7 h-7 sm:w-8 sm:h-8 rounded-full theme-card-subtle flex items-center justify-center text-[#a2601b] dark:text-[#d4af37] hover:border-amber-500/60 transition shadow-xs cursor-pointer shrink-0" title="술술 여행 통계 대시보드">
@@ -4321,22 +4321,44 @@
 
       <!-- 버전 목록 스크롤 영역 (독립 스크롤 컨테이너로 Flexbox 압축 버그 영구 척결) -->
       <div class="overflow-y-auto flex-1 min-h-0 space-y-3.5 pr-1.5 custom-scrollbar">
-        <!-- v1.7.7 (Current) -->
+        <!-- v1.7.8 (Current) -->
         <div class="p-4 rounded-2xl border-2 border-emerald-500/50 space-y-2.5 bg-emerald-500/5 dark:bg-emerald-500/10 shrink-0 shadow-sm">
           <div class="flex items-center justify-between gap-2">
             <div class="flex items-center gap-2 min-w-0">
-              <span class="px-2.5 py-0.5 rounded-lg bg-emerald-500 text-black font-black text-xs shadow-sm shrink-0">v1.7.7</span>
-              <span class="text-xs font-black text-[#1c1917] dark:text-white truncate">전 앱 고대비(WCAG AAA) 시인성 시스템 전면 수호 및 뱃지·태그·체크리스트 영구 가드 구축</span>
+              <span class="px-2.5 py-0.5 rounded-lg bg-emerald-500 text-black font-black text-xs shadow-sm shrink-0">v1.7.8</span>
+              <span class="text-xs font-black text-[#1c1917] dark:text-white truncate">글로벌 지오코딩 엔진 탑재 & 인터랙티브 지도(Leaflet) 전 세계 국가·도시 정밀 연동 및 스페인 톨레도 쇄신</span>
             </div>
             <span class="companion-status shrink-0">최신 버전</span>
           </div>
           <p class="text-xs leading-relaxed text-[#44403c] dark:text-stone-300">
-            1) <b>체크리스트 <code>[필수]</code> 뱃지 & 준비율·동행 가독성 획기적 개선</b>: 파스텔 핑크/에메랄드/인디고가 밝은 테마(모던, 라이트그레이)의 화이트 카드 위에서 흐릿하게 보이던 문제를 해결하고, 고대비 규격(WCAG AAA 7:1+ 대비비)을 충족하는 진한 폰트 컬러와 가독성 높은 배경색을 적용했습니다.<br>
-            2) <b>전역 CSS 파스텔 텍스트 시인성 세이프티 가드 구축</b>: 로즈/레드, 에메랄드/그린, 인디고/퍼플, 스카이/블루, 앰버/옐로우 계열의 모든 파스텔 클래스(<code>-200</code>, <code>-300</code>, <code>-400</code>)가 라이트 모드에서 자동으로 고대비 다크 톤(<code>-700</code>, <code>-800</code>)으로 렌더링되도록 <code>:root:not(.dark)</code> 전역 안전 가드를 확장했습니다.<br>
-            3) <b>시맨틱 뱃지 디자인 토큰 (<code>.sulsul-badge-*</code>) 시스템 도입</b>: <code>.sulsul-badge-rose</code>, <code>.sulsul-badge-emerald</code>, <code>.sulsul-badge-amber</code>, <code>.sulsul-badge-indigo</code>, <code>.sulsul-badge-sky</code> 통합 컴포넌트를 정의하여 3대 테마(Modern, Lightgray, Deepblack) 어디서나 동일하고 선명한 시인성을 보장합니다.<br>
-            4) <b>앱 전반 뱃지 전수 점검 및 리팩토링</b>: 체크리스트 필수 뱃지, 일정 튜닝 버튼, GPS 레이더 뱃지, 가계부 결제수단/입금 뱃지, 실시간 환율 소스 뱃지, 타임라인 고정/방문완료/초안 태그 전체를 전면 개편했습니다.
+            1) <b>전 세계 140+개국 & 300+ 주요 도시 정밀 지오코딩 엔진 구축</b>: 스페인 전역(마드리드, 톨레도/톨레토, 바르셀로나, 세비야, 그라나다, 론다, 발렌시아 등) 및 전 세계 주요 도시의 실제 위경도·국기·통화 사전을 구축하여, 커스텀 여행 시 지도가 아프리카 해상(<code>20, 0</code>)으로 떨어지던 문제를 100% 원천 해결했습니다.<br>
+            2) <b>구글 지도 길찾기 국가 한정 연동 (<code>"${city}, ${country}"</code>)</b>: 국내 IP 환경에서 스페인 톨레도 검색 시 한국 내 식당이 검색되던 결함을 완벽 차단하고, 항상 영문/국문 국가명을 결합한 정밀 쿼리로 현지 해외 명소를 직접 연결합니다.<br>
+            3) <b>인터랙티브 지도 자동 영역 맞춤 (<code>fitBounds</code>)</b>: 여정에 포함된 모든 도시가 최적 앵글로 한눈에 포커싱되도록 카메라를 자동 이동하고, 전체 뷰 리셋 시에도 해당 여행 영역으로 자동 복귀하도록 개선했습니다.<br>
+            4) <b>도시 간 비행/이동 궤적 폴리라인 (<code>flightRoutes</code>) 자동 생성</b>: 커스텀 여정에서도 방문 도시 순서에 따른 아름다운 점선 이동 궤적선이 지도 위에 자동 렌더링됩니다.<br>
+            5) <b>해외 공식 통화 및 현지 모의 GPS 프리셋 자동 연동</b>: 스페인 등 해외 여행 시 기본 <code>KRW</code> 대신 해당 국가의 공식 통화(<code>EUR</code> 등)가 자동 표시되며, 모의 GPS 프리셋 역시 서울시청이 아닌 현지 거점 좌표로 정확히 순간 이동합니다.<br>
+            6) <b>도시명 오타 및 별칭 자동 자가 치유(Self-Healing)</b>: <code>톨레토</code> ↔ <code>톨레도</code>, <code>세비아</code> ↔ <code>세비야</code> 등 대표적 오타 및 별칭을 자동 매핑합니다.
           </p>
           <div class="text-[10px] text-stone-400 dark:text-stone-500 pt-1 border-t border-emerald-500/20 flex items-center justify-between">
+            <span>📅 2026-09-13 릴리즈</span>
+            <span class="font-mono">st-shell-v1.7.8</span>
+          </div>
+        </div>
+
+        <!-- v1.7.7 -->
+        <div class="p-4 rounded-2xl bg-stone-50 dark:bg-stone-900/50 border border-stone-200 dark:border-stone-800 space-y-2.5 shadow-sm relative overflow-hidden shrink-0">
+          <div class="flex items-center justify-between gap-2">
+            <div class="flex items-center gap-2 min-w-0">
+              <span class="px-2 py-0.5 rounded-lg bg-stone-200 dark:bg-stone-800 text-stone-800 dark:text-stone-200 font-bold text-[11px] font-mono shrink-0">v1.7.7</span>
+              <span class="text-xs font-bold text-[#1c1917] dark:text-stone-200 truncate">전 앱 고대비(WCAG AAA) 시인성 시스템 전면 수호 및 뱃지·태그·체크리스트 영구 가드 구축</span>
+            </div>
+          </div>
+          <p class="text-xs leading-relaxed text-[#44403c] dark:text-stone-300">
+            1) <b>체크리스트 <code>[필수]</code> 뱃지 & 준비율·동행 가독성 획기적 개선</b>: 파스텔 핑크/에메랄드/인디고가 밝은 테마(모던, 라이트그레이)의 화이트 카드 위에서 흐릿하게 보이던 문제를 해결하고, 고대비 규격(WCAG AAA 7:1+ 대비비)을 충족하는 진한 폰트 컬러와 가독성 높은 배경색을 적용했습니다.<br>
+            2) <b>전역 CSS 파스텔 텍스트 시인성 세이프티 가드 구축</b>: 로즈/레드, 에메랄드/그린, 인디고/퍼플, 스카이/블루, 앰버/옐로우 계열의 모든 파스텔 클래스가 라이트 모드에서 자동으로 고대비 다크 톤으로 렌더링되도록 <code>:root:not(.dark)</code> 전역 안전 가드를 확장했습니다.<br>
+            3) <b>시맨틱 뱃지 디자인 토큰 (<code>.sulsul-badge-*</code>) 시스템 도입</b>: <code>.sulsul-badge-rose</code>, <code>.sulsul-badge-emerald</code>, <code>.sulsul-badge-amber</code>, <code>.sulsul-badge-indigo</code>, <code>.sulsul-badge-sky</code> 통합 컴포넌트를 정의했습니다.<br>
+            4) <b>앱 전반 뱃지 전수 점검 및 리팩토링</b>: 체크리스트 필수 뱃지, 일정 튜닝 버튼, GPS 레이더 뱃지, 가계부 결제수단/입금 뱃지, 실시간 환율 소스 뱃지, 타임라인 고정/방문완료/초안 태그 전체를 전면 개편했습니다.
+          </p>
+          <div class="text-[10px] text-stone-400 dark:text-stone-500 pt-1 border-t border-stone-200 dark:border-stone-800 flex items-center justify-between">
             <span>📅 2026-09-13 릴리즈</span>
             <span class="font-mono">st-shell-v1.7.7</span>
           </div>
@@ -5106,7 +5128,7 @@
 
       <!-- 모달 푸터 -->
       <div class="pt-3 border-t border-[#e8e2d5] dark:border-stone-800 flex items-center justify-between shrink-0">
-        <span class="text-[11px] text-stone-400 dark:text-stone-500 font-mono">Sulsul Travel Engine v1.7.7</span>
+        <span class="text-[11px] text-stone-400 dark:text-stone-500 font-mono">Sulsul Travel Engine v1.7.8</span>
         <button onclick="closeModal('modal-version-history')" class="px-4 py-2 rounded-xl bg-[#faf8f5] dark:bg-stone-800 hover:bg-[#f0ece1] dark:hover:bg-stone-700 border border-[#e8e2d5] dark:border-stone-700 text-[#1c1917] dark:text-[#ededed] text-xs font-bold transition cursor-pointer shadow-sm">
           닫기
         </button>
@@ -5453,7 +5475,7 @@
     window.showToast = showToast;
 
     // 앱 버전 및 글로벌 네임스페이스 (Sulsul-Travel Invariant Rule R-10, R-11, R-12, R-13, R-14, R-15, R-16)
-    const APP_VER = '1.7.7';
+    const APP_VER = '1.7.8';
 
     // ══════════════════════════════════════════
     // [3-Way Theme System] 모던, 라이트그레이, 딥 블랙 테마 엔진 (v1.6.7)
@@ -5625,7 +5647,7 @@
       { name: '아제르바이잔', code: 'AZ', flag: '🇦🇿', currency: 'AZN', currName: '마나트', symbol: '₼', region: 'south_central_asia', popularCities: ['바쿠', '셰키', '고부스탄', '가발라'], aliases: ['azerbaijan', 'baku'] },
 
       // 4. 유럽 (europe)
-      { name: '스페인', code: 'ES', flag: '🇪🇸', currency: 'EUR', currName: '유로', symbol: '€', region: 'europe', popularCities: ['바르셀로나', '마드리드', '세비야', '그라나다', '론다', '톨레도', '발렌시아', '말라가', '산세바스티안', '이비자', '마요르카', '세고비아', '코르도바'], aliases: ['spain', 'barcelona', 'madrid'] },
+      { name: '스페인', code: 'ES', flag: '🇪🇸', currency: 'EUR', currName: '유로', symbol: '€', region: 'europe', popularCities: ['바르셀로나', '마드리드', '세비야', '그라나다', '론다', '톨레도', '톨레토', '발렌시아', '말라가', '산세바스티안', '이비자', '마요르카', '세고비아', '코르도바'], aliases: ['spain', 'barcelona', 'madrid', 'toledo'] },
       { name: '포르투갈', code: 'PT', flag: '🇵🇹', currency: 'EUR', currName: '유로', symbol: '€', region: 'europe', popularCities: ['리스본', '포르투', '신트라', '라고스', '카스카이스', '코임브라'], aliases: ['portugal', 'lisbon', 'porto'] },
       { name: '프랑스', code: 'FR', flag: '🇫🇷', currency: 'EUR', currName: '유로', symbol: '€', region: 'europe', popularCities: ['파리', '니스', '리옹', '마르세유', '스트라스부르', '보르도', '몽생미셸', '아비뇽', '칸', '에즈'], aliases: ['france', 'paris'] },
       { name: '이탈리아', code: 'IT', flag: '🇮🇹', currency: 'EUR', currName: '유로', symbol: '€', region: 'europe', popularCities: ['로마', '피렌체', '베네치아', '밀라노', '나폴리', '아말피', '포지타노', '베로나', '친퀘테레', '베니스', '피사', '시칠리아'], aliases: ['italy', 'rome', '이태리', 'italia'] },
@@ -6459,6 +6481,21 @@
       '로마': [41.9028, 12.4964],
       '바르셀로나': [41.3851, 2.1734],
       '마드리드': [40.4168, -3.7038],
+      '톨레도': [39.8628, -4.0273],
+      '톨레토': [39.8628, -4.0273],
+      '세비야': [37.3891, -5.9845],
+      '세비아': [37.3891, -5.9845],
+      '그라나다': [37.1773, -3.5986],
+      '론다': [36.7462, -5.1612],
+      '발렌시아': [39.4699, -0.3763],
+      '말라가': [36.7213, -4.4214],
+      '코르도바': [37.8882, -4.7794],
+      '산세바스티안': [43.3183, -1.9812],
+      '세고비아': [40.9429, -4.1088],
+      '이비자': [38.9067, 1.4206],
+      '마요르카': [39.6953, 3.0176],
+      '포르투': [41.1579, -8.6291],
+      '리스본': [38.7223, -9.1393],
       '프라하': [50.0755, 14.4378],
       '비엔나': [48.2082, 16.3738],
       '인터라켄': [46.6863, 7.8632],
@@ -6500,6 +6537,12 @@
             Object.keys(CITY_GEO_COORDS).forEach(k => {
               if (c.includes(k) || k.includes(c)) coord = CITY_GEO_COORDS[k];
             });
+          }
+          if (!coord && window.SulsulGeo && typeof window.SulsulGeo.resolveDestinationGeo === 'function') {
+            const geoResolved = window.SulsulGeo.resolveDestinationGeo(c, (trip.countries && trip.countries[0]) || null);
+            if (geoResolved && typeof geoResolved.lat === 'number' && !(geoResolved.lat === 20.0 && geoResolved.lng === 0.0)) {
+              coord = [geoResolved.lat, geoResolved.lng];
+            }
           }
           if (coord) {
             latlngs.push({ name: c, latlng: coord, idx: idx + 1 });
@@ -10199,8 +10242,18 @@
     }
 
     // ==========================================
-    // [2] Leaflet 인터랙티브 지도 엔진 (World & Drill-Down) (v1.1.7)
+    // [2] Leaflet 인터랙티브 지도 엔진 (World & Drill-Down) (v1.7.8)
     // ==========================================
+    function getSafeGoogleMapsQuery(dest, trip) {
+      if (dest && dest.googleMapsQuery) return dest.googleMapsQuery;
+      const cName = (dest && (dest.nameKo || dest.name)) || (trip && trip.cities && trip.cities[0]) || (trip && trip.title) || '';
+      const country = (dest && dest.country) || (trip && trip.countries && trip.countries[0]) || '';
+      if (country && cName && !cName.includes(country)) {
+        return `${cName}, ${country}`;
+      }
+      return cName;
+    }
+
     function initOrUpdateLeafletMap() {
       const mapContainer = document.getElementById('leaflet-route-map');
       if (!mapContainer) return;
@@ -10208,7 +10261,7 @@
       const trip = getActiveTrip();
       const pack = resolveTripPack(trip);
 
-      // 지도 뷰 헤더 타이틀 및 설명 동적 갱신 (v1.2.2)
+      // 지도 뷰 헤더 타이틀 및 설명 동적 갱신 (v1.7.8)
       const mapHFlag = document.getElementById('map-view-header-flag');
       const mapHTitle = document.getElementById('map-view-header-title');
       const mapHDesc = document.getElementById('map-view-header-desc');
@@ -10277,8 +10330,11 @@
         // 마커 생성
         const pinColor = (pack.id && pack.id.includes('yunnan')) ? '#10b981' : '#f59e0b';
         const pinBorder = (pack.id && pack.id.includes('yunnan')) ? '#34d399' : '#fbbf24';
+        const validCoords = [];
         dests.forEach((d, idx) => {
-          if (d.lat && d.lng) {
+          if (typeof d.lat === 'number' && typeof d.lng === 'number' && !(d.lat === 20.0 && d.lng === 0.0)) {
+            validCoords.push([d.lat, d.lng]);
+            const gQuery = getSafeGoogleMapsQuery(d, trip);
             const iconHtml = `<div class="gold-marker-pin" style="background:${pinColor};border-color:${pinBorder};">${idx + 1}</div>`;
             const customIcon = L.divIcon({ html: iconHtml, className: 'custom-gold-pin', iconSize: [32, 32], iconAnchor: [16, 16] });
             const marker = L.marker([d.lat, d.lng], { icon: customIcon })
@@ -10288,7 +10344,7 @@
                   <div class="font-black text-amber-400 text-sm">${d.name}</div>
                   <div class="text-slate-300 text-[11px] mt-0.5">${d.altitude || d.badge || ''}</div>
                   <div class="mt-2 flex items-center gap-1">
-                    <a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(d.googleMapsQuery || d.name)}" target="_blank" rel="noopener noreferrer" class="sulsul-badge-sky px-2 py-1 bg-sky-100 hover:bg-sky-200 border border-sky-300 text-sky-800 dark:bg-sky-950/50 dark:hover:bg-sky-900/50 dark:border-sky-800 dark:text-sky-300 rounded text-[10px] font-bold">구글 지도 길찾기</a>
+                    <a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(gQuery)}" target="_blank" rel="noopener noreferrer" class="sulsul-badge-sky px-2 py-1 bg-sky-100 hover:bg-sky-200 border border-sky-300 text-sky-800 dark:bg-sky-950/50 dark:hover:bg-sky-900/50 dark:border-sky-800 dark:text-sky-300 rounded text-[10px] font-bold">구글 지도 길찾기</a>
                   </div>
                 </div>
               `);
@@ -10296,6 +10352,15 @@
             State.mapMarkers.push(marker);
           }
         });
+
+        // ★ [핵심] 목적지 거점들이 한 화면에 모두 보이도록 자동 영역 맞춤 (fitBounds)
+        if (validCoords.length > 1) {
+          State.map.fitBounds(L.latLngBounds(validCoords), { padding: [40, 40], maxZoom: 12 });
+        } else if (validCoords.length === 1) {
+          State.map.setView(validCoords[0], dests[0].zoom || 11);
+        } else {
+          State.map.setView(centerCoord, initialZoom);
+        }
 
         const initialFocus = pack.geo.initialFocusCity || dests[0].id;
         focusCityOnMap(initialFocus);
@@ -10314,17 +10379,20 @@
         const tipsEl = document.getElementById('map-city-tips');
         const gmapBtn = document.getElementById('btn-google-maps-link');
 
-        if (flagEl) flagEl.innerText = trip.coverEmoji || '📍';
+        if (flagEl) flagEl.innerText = (pack && pack.flag) || trip.coverEmoji || '📍';
         if (nameEl) nameEl.innerText = (trip.cities && trip.cities[0]) || trip.title || '여행 거점';
         if (altEl) altEl.innerText = '맞춤 여정';
-        if (currEl) currEl.innerText = trip.currency ? `통화: ${trip.currency}` : '';
+        if (currEl) currEl.innerText = (pack && pack.currency) ? `통화: ${pack.currency}` : (trip.currency ? `통화: ${trip.currency}` : '');
         if (spotsList) {
           const firstSpots = (trip.days && trip.days[0] && trip.days[0].spots) ? trip.days[0].spots : [];
           spotsList.innerHTML = firstSpots.length > 0 ? firstSpots.slice(0, 4).map(s => `<li>• ${s.title}</li>`).join('') : '<li>• 자유 일정 등록 중</li>';
         }
         if (foodsList) foodsList.innerText = '현지 로컬 미식 및 랜드마크 탐방';
         if (tipsEl) tipsEl.innerText = '현지 치안 및 필수 준비물을 사전에 점검하세요.';
-        if (gmapBtn) gmapBtn.href = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent((trip.cities && trip.cities[0]) || trip.title || '')}`;
+        if (gmapBtn) {
+          const fallbackQ = getSafeGoogleMapsQuery(null, trip);
+          gmapBtn.href = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(fallbackQ)}`;
+        }
       }
 
       // 지도 리사이징 강제 갱신
@@ -10349,7 +10417,7 @@
       }
       if (!d) return;
 
-      if (State.map && d.lat && d.lng) {
+      if (State.map && d.lat && d.lng && !(d.lat === 20.0 && d.lng === 0.0)) {
         State.map.flyTo([d.lat, d.lng], d.zoom || 12, {
           animate: true,
           duration: 1.2
@@ -10369,7 +10437,7 @@
       if (flagEl) flagEl.innerText = d.flag || pack.flag || '📍';
       if (nameEl) nameEl.innerText = d.name;
       if (altEl) altEl.innerText = d.altitude || d.badge || '';
-      if (currEl) currEl.innerText = d.currency ? `통화: ${d.currency}` : (pack.currency ? `통화: ${pack.currency}` : '');
+      if (currEl) currEl.innerText = d.currency ? `통화: ${d.currency}` : (pack.currency ? `통화: ${pack.currency}` : (trip.currency ? `통화: ${trip.currency}` : ''));
       
       const highlights = d.highlights || (d.intro ? [d.intro] : []);
       if (spotsList) spotsList.innerHTML = highlights.map(h => `<li>• ${h}</li>`).join('');
@@ -10378,13 +10446,23 @@
       if (foodsList) foodsList.innerText = foodsStr;
       
       if (tipsEl) tipsEl.innerText = d.tips || d.caution || '안전 수칙을 준수하세요.';
-      if (gmapBtn) gmapBtn.href = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(d.googleMapsQuery || d.name)}`;
+      if (gmapBtn) {
+        const safeQ = getSafeGoogleMapsQuery(d, trip);
+        gmapBtn.href = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(safeQ)}`;
+      }
     }
 
     function resetMapToWorldView() {
       if (!State.map) return;
       const trip = getActiveTrip();
       const pack = resolveTripPack(trip);
+      const dests = (pack && pack.geo && pack.geo.destinations) ? 
+        (Array.isArray(pack.geo.destinations) ? pack.geo.destinations : Object.values(pack.geo.destinations)) : [];
+      const validCoords = dests.filter(d => typeof d.lat === 'number' && typeof d.lng === 'number' && !(d.lat === 20.0 && d.lng === 0.0)).map(d => [d.lat, d.lng]);
+      if (validCoords.length > 1) {
+        State.map.flyToBounds(L.latLngBounds(validCoords), { padding: [40, 40], duration: 1.2, maxZoom: 12 });
+        return;
+      }
       const center = (pack && pack.geo && pack.geo.centerCoord) ? pack.geo.centerCoord : [20.0, 0.0];
       const zoom = (pack && pack.geo && pack.geo.defaultZoom) ? pack.geo.defaultZoom : 2;
       State.map.flyTo(center, zoom, { animate: true, duration: 1.2 });
