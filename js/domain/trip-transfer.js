@@ -34,6 +34,9 @@
     for (const [id,record] of Object.entries(trip.activityRecords || {})) {
       if (!record || record.id !== id || !record.context || typeof record.context !== 'object' || typeof record.context.title !== 'string' || !Array.isArray(record.photos) || record.photos.length > 8 || !Number.isInteger(record.coverIndex) || record.coverIndex < 0 || record.coverIndex >= Math.max(1,record.photos.length)) throw new Error('일정 기록 형식이 올바르지 않습니다.');
     }
+    for (const expense of trip.expenses || []) {
+      if (!expense || typeof expense !== 'object' || (expense.photos != null && (!Array.isArray(expense.photos) || expense.photos.some(p=>!safePhoto(p))))) throw new Error('지출 사진 형식이 올바르지 않습니다.');
+    }
     for (const journal of [...Object.values(trip.journals || {}),...Object.values(trip.activityRecords || {})]) {
       if (!journal || typeof journal !== 'object' || (journal.text != null && typeof journal.text !== 'string') || (journal.photos != null && !Array.isArray(journal.photos))) throw new Error('일기 형식이 올바르지 않습니다.');
       if ((journal.photos || []).some(p => !safePhoto(p))) throw new Error('지원하지 않는 사진 주소가 있습니다.');

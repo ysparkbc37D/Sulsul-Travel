@@ -17,14 +17,14 @@
   </script>
 
   <!-- PWA Meta & Icons -->
-  <link rel="manifest" href="manifest.webmanifest?v=1.8.0">
+  <link rel="manifest" href="manifest.webmanifest?v=1.8.1">
   <meta name="theme-color" content="#F7F5F0">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
-  <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192-v115.png?v=1.8.0">
-  <link rel="icon" type="image/png" sizes="32x32" href="favicon.png?v=1.8.0">
+  <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192-v115.png?v=1.8.1">
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon.png?v=1.8.1">
   <link rel="shortcut icon" href="favicon.ico">
-  <link rel="apple-touch-icon" sizes="180x180" href="icons/apple-touch-icon-v115.png?v=1.8.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="icons/apple-touch-icon-v115.png?v=1.8.1">
 
   <!-- Google Fonts: Great Vibes, Dancing Script (Cursive Calligraphy), Cormorant Garamond, Noto Serif KR, Playfair Display -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -32,7 +32,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Great+Vibes&family=Cormorant+Garamond:wght@600;700;800&family=Noto+Serif+KR:wght@500;600;700;900&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
 
   <!-- Local Utilities Bundle (CDN fallback & tailwind utilities) -->
-  <link rel="stylesheet" href="css/utilities.css?v=1.8.0">
+  <link rel="stylesheet" href="css/utilities.css?v=1.8.1">
   <link rel="stylesheet" href="vendor/fontawesome/css/all.min.css">
 
   <!-- Leaflet Map CSS & JS -->
@@ -1374,11 +1374,12 @@
     }
   </style>
 
-  <link rel="stylesheet" href="css/companion.css?v=1.8.0">
-  <script src="js/presentation/companion-ui.js?v=1.8.0"></script>
-  <script src="js/domain/trip-transfer.js?v=1.8.0"></script>
-  <script src="js/presentation/trip-transfer-ui.js?v=1.8.0"></script>
-  <script src="js/presentation/activity-journal.js?v=1.8.0"></script>
+  <link rel="stylesheet" href="css/companion.css?v=1.8.1">
+  <script src="js/presentation/companion-ui.js?v=1.8.1"></script>
+  <script src="js/domain/trip-transfer.js?v=1.8.1"></script>
+  <script src="js/presentation/trip-transfer-ui.js?v=1.8.1"></script>
+  <script src="js/presentation/activity-journal.js?v=1.8.1"></script>
+  <script src="js/presentation/expense-editor.js?v=1.8.1"></script>
 
   <!-- Knowledge Base Seed & Destination Knowledge Packs (DKP) -->
   <script src="kb-travel.js"></script>
@@ -1408,7 +1409,7 @@
       <!-- 우측 액션 클러스터 (버전 알약 -> 원형 통계 -> 원형 설정 -> 다크그린 캡슐 추가) -->
       <div class="flex items-center gap-1 sm:gap-1.5 shrink-0">
         <!-- 1. 버전 배지 버튼 (v1.7.8 - 클릭 시 버전 이력) -->
-        <button id="app-ver-badge" onclick="event.stopPropagation(); openVersionHistoryModal()" class="h-7 sm:h-8 px-2 sm:px-2.5 rounded-full theme-card-subtle flex items-center justify-center font-mono text-[10px] sm:text-[11px] font-bold text-[#a2601b] dark:text-[#d4af37] shadow-xs hover:border-amber-500/60 transition cursor-pointer shrink-0" title="버전 업데이트 기록 보기 (클릭)">v1.8.0</button>
+        <button id="app-ver-badge" onclick="event.stopPropagation(); openVersionHistoryModal()" class="h-7 sm:h-8 px-2 sm:px-2.5 rounded-full theme-card-subtle flex items-center justify-center font-mono text-[10px] sm:text-[11px] font-bold text-[#a2601b] dark:text-[#d4af37] shadow-xs hover:border-amber-500/60 transition cursor-pointer shrink-0" title="버전 업데이트 기록 보기 (클릭)">v1.8.1</button>
 
         <!-- 2. 통계 버튼 (📊 - 원형 버튼) -->
         <button id="header-btn-analytics" onclick="openAnalyticsModal('lifetime')" class="companion-header-analytics w-7 h-7 sm:w-8 sm:h-8 rounded-full theme-card-subtle flex items-center justify-center text-[#a2601b] dark:text-[#d4af37] hover:border-amber-500/60 transition shadow-xs cursor-pointer shrink-0" title="술술 여행 통계 대시보드">
@@ -1968,29 +1969,14 @@
             <span class="inline-block w-2 h-2 rounded-full bg-emerald-500"></span>
             <span>지출 시 지갑 잔액 또는 한국 카드를 선택해 차감할 수 있습니다.</span>
           </div>
-          <div class="flex items-center gap-2">
-            <button onclick="openExpenseAnalyticsModal()" class="px-3.5 py-2 bg-[#141c2e] hover:bg-[#1c273e] border border-[#23304c] hover:border-sky-400/40 text-sky-400 font-bold rounded-xl text-xs flex items-center gap-1.5 shadow-sm transition cursor-pointer" title="사용내역 통계">
-              <i class="fa-solid fa-chart-pie text-[11px]"></i>
-              <span>사용내역 통계</span>
-            </button>
-            <!-- 영수증 AI 스캔 2원화: 📸 즉시 촬영 & 🖼️ 앨범 선택 -->
-            <div class="inline-flex items-center rounded-xl bg-gradient-to-r from-emerald-500 to-teal-600 p-0.5 shadow-md shrink-0">
-              <label class="px-2.5 sm:px-3 py-1.5 text-slate-950 font-black text-xs flex items-center gap-1 cursor-pointer hover:bg-white/20 rounded-lg transition" title="카메라로 영수증 즉시 촬영">
-                <i class="fa-solid fa-camera text-[11px]"></i>
-                <span class="whitespace-nowrap">즉시 촬영</span>
-                <input type="file" id="exp-tab-receipt-camera" accept="image/*" capture="environment" class="hidden" onchange="handleReceiptScan(event)">
-              </label>
-              <span class="w-px h-3.5 bg-slate-950/25"></span>
-              <label class="px-2 sm:px-2.5 py-1.5 text-slate-950 font-bold text-xs flex items-center gap-1 cursor-pointer hover:bg-white/20 rounded-lg transition" title="사진 보관함/파일에서 영수증 선택">
-                <i class="fa-regular fa-image text-[11px]"></i>
-                <span class="whitespace-nowrap">앨범</span>
-                <input type="file" id="exp-tab-receipt-file" accept="image/*" class="hidden" onchange="handleReceiptScan(event)">
-              </label>
-            </div>
-            <button onclick="openAddExpenseModal()" class="px-4 py-2 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-slate-950 font-black rounded-xl text-xs flex items-center gap-1.5 shadow-md transition cursor-pointer">
-              <i class="fa-solid fa-plus text-[10px]"></i> 새 지출 기록
-            </button>
+          <div class="expense-toolbar" aria-label="가계부 도구">
+            <button onclick="openExpenseAnalyticsModal()"><i class="fa-solid fa-chart-pie" aria-hidden="true"></i> 통계</button>
+            <button onclick="document.getElementById('exp-tab-receipt-camera').click()" title="영수증 촬영 후 AI 판독"><i class="fa-solid fa-camera" aria-hidden="true"></i> 촬영</button>
+            <button onclick="document.getElementById('exp-tab-receipt-file').click()" title="앨범에서 영수증 선택 후 AI 판독"><i class="fa-regular fa-image" aria-hidden="true"></i> 앨범</button>
+            <button onclick="openAddExpenseModal()" class="expense-add-action"><i class="fa-solid fa-plus" aria-hidden="true"></i> 기록</button>
           </div>
+          <input type="file" id="exp-tab-receipt-camera" accept="image/*" capture="environment" hidden onchange="handleReceiptScan(event)">
+          <input type="file" id="exp-tab-receipt-file" accept="image/*" hidden onchange="handleReceiptScan(event)">
         </div>
       </div>
 
@@ -2889,19 +2875,22 @@
           <textarea id="exp-form-memo" rows="2" placeholder="주문한 메뉴, 현장 팁, 함께한 사람 등 기록..." class="exp-input resize-none"></textarea>
         </div>
 
+
+      </div>
+
         <!-- 사진 첨부 및 대표 사진 지정 영역 -->
         <div>
           <div class="flex items-center justify-between mb-1.5">
-            <label class="font-bold exp-heading">영수증 및 현장 사진</label>
-            <span class="text-[10px] exp-subtext">사진을 탭하면 대표 사진으로 지정됩니다</span>
+            <label class="font-bold exp-heading">물건·영수증 사진</label>
+            <span class="text-[10px] exp-subtext">사진을 눌러 확대 · 대표사진 선택</span>
           </div>
-          <div id="exp-photos-list" class="flex items-center gap-2 overflow-x-auto py-1">
+          <div id="exp-photos-list" class="expense-photo-grid">
             <!-- 동적 썸네일 박스 렌더링 -->
           </div>
           <input type="file" id="exp-photo-file-input" accept="image/*" multiple class="hidden" onchange="handleExpensePhotosUpload(event)">
         </div>
-      </div>
-
+      <p id="expense-editor-feedback" role="status" aria-live="polite"></p>
+      <div id="expense-photo-viewer" hidden><button class="companion-button" onclick="closeExpensePhotoViewer()">사진 닫기</button><img id="expense-full-photo" alt="선택한 지출 사진 크게 보기"></div>
       <div class="flex items-center gap-3 pt-2">
         <button onclick="closeModal('modal-expense')" class="flex-1 py-2.5 exp-btn-cancel text-xs">취소</button>
         <button id="exp-form-submit-btn" onclick="submitAddExpense()" class="flex-1 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 text-slate-950 font-black text-xs shadow-md hover:from-amber-600 hover:to-amber-700 transition">지출 저장</button>
@@ -4348,7 +4337,9 @@
 
       <!-- 버전 목록 스크롤 영역 (독립 스크롤 컨테이너로 Flexbox 압축 버그 영구 척결) -->
       <div class="overflow-y-auto flex-1 min-h-0 space-y-3.5 pr-1.5 custom-scrollbar">
-        <!-- v1.8.0 (Current) -->
+        <!-- v1.8.1 (Current) -->
+        <section class="companion-context"><h3 class="font-bold">v1.8.1 · 지출 사진과 편집</h3><p class="text-xs">물건 사진 추가 · 대표 썸네일 · 지출·수입 편집 · 통계/촬영/앨범/+ 기록 버튼 통일</p><p class="text-xs">2026-09-14 · st-shell-v1.8.1</p></section>
+        <!-- v1.8.0 -->
         <section class="companion-context">
           <h3 class="font-bold">v1.8.0 · 일정마다 남기는 사진과 에세이</h3>
           <p class="text-xs">완료 전후 기록 · AI로 다듬기 · 대표사진 썸네일 · 기록 보존과 PDF 연결</p>
@@ -5167,7 +5158,7 @@
 
       <!-- 모달 푸터 -->
       <div class="pt-3 border-t border-[#e8e2d5] dark:border-stone-800 flex items-center justify-between shrink-0">
-        <span class="text-[11px] text-stone-400 dark:text-stone-500 font-mono">Sulsul Travel Engine v1.8.0</span>
+        <span class="text-[11px] text-stone-400 dark:text-stone-500 font-mono">Sulsul Travel Engine v1.8.1</span>
         <button onclick="closeModal('modal-version-history')" class="px-4 py-2 rounded-xl bg-[#faf8f5] dark:bg-stone-800 hover:bg-[#f0ece1] dark:hover:bg-stone-700 border border-[#e8e2d5] dark:border-stone-700 text-[#1c1917] dark:text-[#ededed] text-xs font-bold transition cursor-pointer shadow-sm">
           닫기
         </button>
@@ -5514,7 +5505,7 @@
     window.showToast = showToast;
 
     // 앱 버전 및 글로벌 네임스페이스 (Sulsul-Travel Invariant Rule R-10, R-11, R-12, R-13, R-14, R-15, R-16)
-    const APP_VER = '1.8.0';
+    const APP_VER = '1.8.1';
 
     // ══════════════════════════════════════════
     // [3-Way Theme System] 모던, 라이트그레이, 딥 블랙 테마 엔진 (v1.6.7)
@@ -10994,7 +10985,7 @@
 
           // 데이터 자동 치유: 외화 수입(예: USD 100)인데 과거 기본값 버그로 wallet_krw(한국 카드)로 저장된 경우
           // 사용자가 의도한 외화 지갑(wallet_curr)으로 즉시 정상화
-          if (isIncome && exp.curr && exp.curr !== 'KRW' && (pSource === 'wallet_krw' || !wCurr)) {
+          if (isIncome && exp.curr && exp.curr !== 'KRW' && !pSource && !wCurr) {
             pSource = 'wallet_curr';
             wCurr = exp.curr;
             exp.paymentSource = 'wallet_curr';
@@ -11220,17 +11211,17 @@
         let photoMarkup = '';
         if (Array.isArray(exp.photos) && exp.photos.length > 0) {
           const pIdx = exp.primaryPhotoIndex >= 0 && exp.primaryPhotoIndex < exp.photos.length ? exp.primaryPhotoIndex : 0;
-          const primarySrc = exp.photos[pIdx];
+          const primarySrc = SulsulTravel.TripTransfer.safePhoto(exp.photos[pIdx]);
           photoMarkup = `
-            <div class="relative w-12 h-12 shrink-0 rounded-xl overflow-hidden border border-[#2a3650] bg-[#080b12] shadow-sm">
-              <img src="${primarySrc}" class="w-full h-full object-cover" alt="대표사진">
+            <div class="expense-entry-thumb">
+              <img src="${escapeHtml(primarySrc)}" class="w-full h-full object-cover" alt="대표사진">
               <span class="absolute bottom-0 right-0 w-4 h-4 rounded-tl-md bg-[#080b12]/90 flex items-center justify-center text-[9px]">${getCategoryIcon(exp.cat)}</span>
               ${exp.photos.length > 1 ? `<span class="absolute top-0.5 right-0.5 px-1 rounded bg-black/75 text-[8px] font-bold text-white">+${exp.photos.length}</span>` : ''}
             </div>
           `;
         } else {
           photoMarkup = `
-            <span class="w-10 h-10 rounded-xl bg-[#080b12] flex items-center justify-center text-base border border-[#1a2236] shrink-0">${getCategoryIcon(exp.cat)}</span>
+            <span class="expense-entry-thumb expense-entry-default">${getCategoryIcon(exp.cat)}</span>
           `;
         }
 
@@ -11238,29 +11229,14 @@
         const memoMarkup = exp.memo ? `<div class="text-[10px] text-slate-400 truncate mt-0.5 flex items-center gap-1"><i class="fa-regular fa-comment-dots text-[9px] text-slate-500 shrink-0"></i><span class="truncate">${escapeHtml(exp.memo)}</span></div>` : '';
 
         return `
-          <div class="p-3.5 bg-[#0f1422] rounded-xl border border-[#1e263c] flex items-center justify-between gap-3 hover:border-[#2a3650] transition">
-            <div class="flex items-center gap-3 min-w-0">
+          <article class="expense-entry">
+            <button class="expense-entry-open" onclick="openEditExpenseModal(${expIdx},event)" aria-label="${escapeHtml(exp.title)} 편집 및 사진 보기">
               ${photoMarkup}
-              <div class="min-w-0">
-                <div class="font-bold text-white text-xs truncate flex items-center gap-1.5">
-                  <span class="truncate">${escapeHtml(exp.title)}</span>
-                  ${typeBadge}
-                  ${paymentBadge}
-                </div>
-                <div class="text-[10px] text-slate-400 mt-0.5">${dateTimeStr} · ${exp.curr} ${(exp.amount || 0).toLocaleString()}</div>
-                ${memoMarkup}
-              </div>
-            </div>
-            <div class="flex items-center gap-3 shrink-0">
-              <div class="text-right">
-                <div class="font-black ${isIncome ? 'text-emerald-400' : 'text-amber-400'} text-xs">${isIncome ? '+' : ''}₩${(exp.krw || 0).toLocaleString()}</div>
-                <div class="text-[9px] text-slate-500">원화 환산</div>
-              </div>
-              <button onclick="requestDeleteExpense(${expIdx}, event)" class="w-7 h-7 rounded-lg bg-[#080b12] hover:bg-rose-500/20 border border-[#1a2236] hover:border-rose-500/30 text-slate-400 hover:text-rose-400 flex items-center justify-center text-xs transition cursor-pointer" title="지출 삭제">
-                <i class="fa-regular fa-trash-can text-[11px]"></i>
-              </button>
-            </div>
-          </div>
+              <span class="expense-entry-copy"><strong>${escapeHtml(exp.title)}</strong><span class="expense-entry-badges">${typeBadge}${paymentBadge}</span><small>${escapeHtml(dateTimeStr)} · ${escapeHtml(exp.curr)} ${(exp.amount || 0).toLocaleString()}</small>${memoMarkup}</span>
+              <span class="expense-entry-amount"><strong>${isIncome ? '+' : ''}₩${(exp.krw || 0).toLocaleString()}</strong><small>원화 환산</small></span>
+            </button>
+            <div class="expense-entry-actions"><button onclick="openEditExpenseModal(${expIdx},event)" aria-label="${escapeHtml(exp.title)} 편집"><i class="fa-solid fa-pen" aria-hidden="true"></i></button><button onclick="requestDeleteExpense(${expIdx},event)" aria-label="${escapeHtml(exp.title)} 삭제"><i class="fa-regular fa-trash-can" aria-hidden="true"></i></button></div>
+          </article>
         `;
       }).join('');
     }
@@ -15186,86 +15162,18 @@ ${JSON.stringify(snapshotDays)}`;
       }
 
       const rate = getCurrencyRate(curr);
-      const krw = Math.round(amt * rate);
+      const krw = expensePreviewKrw(curr,amt);
       const sign = ExpenseFormState.type === 'income' ? '+' : '';
       preview.textContent = `≈ ${sign}₩${krw.toLocaleString()}`;
     }
     window.updateExpenseInlineKrwPreview = updateExpenseInlineKrwPreview;
 
-    function handleExpensePhotosUpload(event) {
-      const files = event.target.files;
-      if (!files || files.length === 0) return;
+    function handleExpensePhotosUpload(event) { return uploadExpensePhotos(event); }
 
-      const fileArr = Array.from(files);
-      let loadedCount = 0;
-
-      fileArr.forEach(file => {
-        const reader = new FileReader();
-        reader.onload = (e) => {
-          const img = new Image();
-          img.onload = () => {
-            const canvas = document.createElement('canvas');
-            const maxDim = 800;
-            let w = img.width;
-            let h = img.height;
-            if (w > maxDim || h > maxDim) {
-              if (w > h) {
-                h = Math.round(h * (maxDim / w));
-                w = maxDim;
-              } else {
-                w = Math.round(w * (maxDim / h));
-                h = maxDim;
-              }
-            }
-            canvas.width = w;
-            canvas.height = h;
-            const ctx = canvas.getContext('2d');
-            ctx.drawImage(img, 0, 0, w, h);
-            const compressed = canvas.toDataURL('image/jpeg', 0.85);
-
-            ExpenseFormState.photos.push(compressed);
-            loadedCount++;
-            if (loadedCount === fileArr.length) {
-              if (ExpenseFormState.photos.length === fileArr.length) {
-                ExpenseFormState.primaryPhotoIndex = 0;
-              }
-              renderExpensePhotos();
-              showToast(`📸 사진 ${fileArr.length}장이 첨부되었습니다.`);
-            }
-          };
-          img.src = e.target.result;
-        };
-        reader.readAsDataURL(file);
-      });
-      event.target.value = '';
-    }
     window.handleExpensePhotosUpload = handleExpensePhotosUpload;
 
-    function renderExpensePhotos() {
-      const list = document.getElementById('exp-photos-list');
-      if (!list) return;
+    function renderExpensePhotos() { return renderExpensePhotoEditor(); }
 
-      const photosMarkup = ExpenseFormState.photos.map((src, idx) => {
-        const isPrimary = idx === ExpenseFormState.primaryPhotoIndex;
-        return `
-          <div onclick="setPrimaryExpensePhoto(${idx})" class="exp-photo-box ${isPrimary ? 'is-primary' : ''} cursor-pointer" title="탭하여 대표 사진으로 지정">
-            <img src="${src}" class="exp-photo-thumb" alt="첨부 사진 ${idx + 1}">
-            ${isPrimary ? '<div class="exp-primary-badge">대표사진</div>' : ''}
-            <button type="button" onclick="removeExpensePhoto(${idx}, event)" class="exp-photo-del-btn" title="사진 삭제">✕</button>
-          </div>
-        `;
-      }).join('');
-
-      const addBtnMarkup = `
-        <label class="exp-photo-box flex flex-col items-center justify-center cursor-pointer border-dashed border-[#2a3650] hover:border-amber-400 text-slate-400 hover:text-amber-400 transition shrink-0" title="사진 추가 (영수증, 음식, 장소)">
-          <i class="fa-solid fa-camera text-base"></i>
-          <span class="text-[9px] mt-1 font-bold">사진 추가</span>
-          <input type="file" accept="image/*" multiple class="hidden" onchange="handleExpensePhotosUpload(event)">
-        </label>
-      `;
-
-      list.innerHTML = photosMarkup + addBtnMarkup;
-    }
     window.renderExpensePhotos = renderExpensePhotos;
 
     function setPrimaryExpensePhoto(idx) {
@@ -15277,17 +15185,12 @@ ${JSON.stringify(snapshotDays)}`;
     }
     window.setPrimaryExpensePhoto = setPrimaryExpensePhoto;
 
-    function removeExpensePhoto(idx, event) {
-      if (event) event.stopPropagation();
-      ExpenseFormState.photos.splice(idx, 1);
-      if (ExpenseFormState.primaryPhotoIndex >= ExpenseFormState.photos.length) {
-        ExpenseFormState.primaryPhotoIndex = Math.max(0, ExpenseFormState.photos.length - 1);
-      }
-      renderExpensePhotos();
-    }
+    function removeExpensePhoto(idx,event) { return deleteExpenseFormPhoto(idx,event); }
+
     window.removeExpensePhoto = removeExpensePhoto;
 
     function openAddExpenseModal() {
+      resetExpenseEditor();
       const titleInput = document.getElementById('exp-form-title');
       if (titleInput) titleInput.value = '';
       const amountInput = document.getElementById('exp-form-amount');
@@ -15335,6 +15238,7 @@ ${JSON.stringify(snapshotDays)}`;
       updateExpenseInlineKrwPreview();
       updateExpensePaymentSourceOptions();
       openModal('modal-expense');
+      ExpenseFormState.baseline = expenseFormSnapshot();
     }
     window.openAddExpenseModal = openAddExpenseModal;
 
@@ -15421,7 +15325,7 @@ ${JSON.stringify(snapshotDays)}`;
       const sourceSelect = document.getElementById('exp-form-payment-source');
       if (!currSelect || !sourceSelect) return;
 
-      const trip = getActiveTrip();
+      const trip = expensePreviewTrip();
       const curr = currSelect.value;
       const isIncome = (ExpenseFormState.type === 'income');
       const walletData = calculateTripWallets(trip);
@@ -15563,7 +15467,7 @@ ${JSON.stringify(snapshotDays)}`;
       // Smart Default: 수입이고 외화인 경우 무조건 해당 외화 지갑(wallet_curr)을 기본값으로 추천
       let defaultVal;
       if (isIncome && curr !== 'KRW') {
-        defaultVal = (prevVal === 'wallet_curr' || prevVal === 'wallet_krw' || !options.some(o => o.value === prevVal)) ? 'wallet_curr' : prevVal;
+        defaultVal = options.some(o => o.value === prevVal) ? prevVal : 'wallet_curr';
       } else {
         defaultVal = (prevVal && options.some(o => o.value === prevVal)) ? prevVal : options[0].value;
       }
@@ -15619,7 +15523,7 @@ ${JSON.stringify(snapshotDays)}`;
       const hint = document.getElementById('exp-form-wallet-hint');
       if (!sourceSelect || !hint) return;
 
-      const trip = getActiveTrip();
+      const trip = expensePreviewTrip();
       const curr = currSelect ? currSelect.value : 'KRW';
       const isIncome = (ExpenseFormState.type === 'income');
       const walletData = calculateTripWallets(trip);
@@ -15631,7 +15535,7 @@ ${JSON.stringify(snapshotDays)}`;
       } else if (val === 'wallet_krw') {
         const krwW = walletData.wallets['KRW'];
         const rate = getCurrencyRate(curr);
-        const krwAmt = (curr === 'KRW') ? amount : Math.round(amount * rate);
+        const krwAmt = expensePreviewKrw(curr,amount);
         const curBal = krwW ? krwW.balance : 0;
         if (isIncome) {
           const afterBal = curBal + krwAmt;
@@ -15666,70 +15570,8 @@ ${JSON.stringify(snapshotDays)}`;
     }
     window.onExpensePaymentSourceChange = onExpensePaymentSourceChange;
 
-    function submitAddExpense() {
-      const title = document.getElementById('exp-form-title').value.trim();
-      const curr = document.getElementById('exp-form-curr').value;
-      const amount = parseFloat(document.getElementById('exp-form-amount').value);
-      const cat = ExpenseFormState.selectedCat || document.getElementById('exp-form-cat')?.value || 'meal';
-      const date = document.getElementById('exp-form-date').value;
-      const time = document.getElementById('exp-form-time')?.value || '';
-      const memo = document.getElementById('exp-form-memo')?.value.trim() || '';
-      const paymentSource = document.getElementById('exp-form-payment-source')?.value || 'wallet_curr';
-      const payMethod = ExpenseFormState.payMethod || 'card';
-      const transType = ExpenseFormState.type || 'expense';
+    function submitAddExpense() { return saveExpenseRecord(); }
 
-      if (!title || isNaN(amount) || amount <= 0) {
-        alert('항목명과 올바른 결제 금액을 입력하세요.');
-        return;
-      }
-
-      const rate = getCurrencyRate(curr);
-      let krw = Math.round(amount * rate);
-
-      let walletCurr = curr;
-      if (paymentSource === 'wallet_krw') walletCurr = 'KRW';
-      else if (paymentSource === 'none') walletCurr = null;
-      else if (paymentSource.startsWith('wallet_') && paymentSource !== 'wallet_curr') walletCurr = paymentSource.replace('wallet_', '');
-
-      const trip = getActiveTrip();
-      if (!trip.expenses) trip.expenses = [];
-      trip.expenses.unshift({
-        id: 'exp_' + Date.now(),
-        title: title,
-        curr: curr,
-        amount: amount,
-        krw: krw,
-        cat: cat,
-        date: date,
-        time: time,
-        memo: memo,
-        payMethod: payMethod,
-        type: transType,
-        photos: [...ExpenseFormState.photos],
-        primaryPhotoIndex: ExpenseFormState.primaryPhotoIndex || 0,
-        paymentSource: paymentSource,
-        walletCurr: walletCurr
-      });
-
-      if (!Array.isArray(trip.activeCurrencies)) trip.activeCurrencies = ['KRW'];
-      if (curr !== 'KRW' && !trip.activeCurrencies.includes(curr)) trip.activeCurrencies.push(curr);
-
-      saveTrips();
-      closeModal('modal-expense', true);
-      renderActiveTripWorkspace();
-
-      let debitInfo = '';
-      if (transType === 'income') {
-        if (paymentSource === 'wallet_krw') debitInfo = ` (🇰🇷 KRW 지갑 ₩${krw.toLocaleString()} 입금)`;
-        else if (paymentSource === 'wallet_curr') debitInfo = ` (${CURRENCY_INFO[curr]?.flag || ''} ${curr} 지갑 +${amount.toLocaleString()} 입금)`;
-      } else {
-        if (paymentSource === 'wallet_krw') debitInfo = ` (💳 한국 카드 KRW ₩${krw.toLocaleString()} 차감)`;
-        else if (paymentSource === 'wallet_curr') debitInfo = ` (${CURRENCY_INFO[curr]?.flag || ''} ${curr} 지갑 차감)`;
-      }
-
-      const verb = transType === 'income' ? '수입이' : '지출이';
-      showToast(`💳 [${escapeHtml(title)}] ₩${krw.toLocaleString()} ${verb} 등록되었습니다.${debitInfo}`);
-    }
     window.submitAddExpense = submitAddExpense;
 
     // ==========================================
@@ -16435,6 +16277,8 @@ ${JSON.stringify(snapshotDays)}`;
     async function applyAiDraftPayload(job) {
       if (job.kind === 'activity-journal') return applyActivityAiDraft(job);
       if (job.kind === 'receipt') {
+        if (job.input.expenseSession && job.input.expenseSession !== ExpenseFormState.sessionId) return 'conflict';
+        if (job.input.expenseSnapshot && job.input.expenseSnapshot !== expenseFormSnapshot()) return 'conflict';
         const trip = State.trips.find(item => item.id === job.tripId);
         if (!trip || trip.id !== State.activeTripId || trip.revision !== job.baseRevision) return 'conflict';
         const receipt = job.draft.receipt;
@@ -17908,10 +17752,7 @@ JSON 배열만 출력하세요. 각 day는 dayNum, title, city, date, spots를 �
                (cost && cost.value.trim().length > 0);
       }
       if (modalId === 'modal-expense') {
-        const title = document.getElementById('exp-form-title');
-        const amount = document.getElementById('exp-form-amount');
-        return (title && title.value.trim().length > 0) ||
-               (amount && amount.value.trim().length > 0);
+        return ExpenseFormState.photosLoading || (ExpenseFormState.baseline != null && expenseFormSnapshot() !== ExpenseFormState.baseline);
       }
       if (modalId === 'modal-exchange') {
         const fromAmt = document.getElementById('exch-form-from-amount');
@@ -17957,6 +17798,7 @@ JSON 배열만 출력하세요. 각 day는 dayNum, title, city, date, spots를 �
       const m = document.getElementById(modalId);
       if (m) {
         m.classList.add('sheet-closed');
+        if (modalId === 'modal-expense') ExpenseFormState.sessionId = null;
         if (modalId === 'modal-activity-record') {
           State.activityRecordEditor = null;
           if (!State.handlingActivityPop && history.state?.stActivitySheet) history.back();
@@ -18410,7 +18252,9 @@ JSON 배열만 출력하세요. 각 day는 dayNum, title, city, date, spots를 �
       if (!file) return;
       if (event.target) event.target.value = '';
 
-      openModal('modal-expense');
+      if (event.target?.id?.startsWith('exp-tab-') || !ExpenseFormState.sessionId) openAddExpenseModal();
+      else openModal('modal-expense');
+      const receiptSession = ExpenseFormState.sessionId;
       const loader = document.getElementById('receipt-scan-loading');
       if (loader) loader.classList.remove('hidden');
 
@@ -18439,7 +18283,9 @@ JSON 배열만 출력하세요. 각 day는 dayNum, title, city, date, spots를 �
           const compressedBase64 = canvas.toDataURL('image/jpeg', 0.85);
 
           // 영수증 사진을 가계부 대표 사진으로 자동 등록 & 상세입력 모드 전환
-          ExpenseFormState.photos = [compressedBase64];
+          if (ExpenseFormState.sessionId !== receiptSession) return;
+          if (ExpenseFormState.photos.length >= 8) { if (loader) loader.classList.add('hidden'); showToast('사진은 최대 8장까지 첨부할 수 있습니다.'); return; }
+          ExpenseFormState.photos.push(compressedBase64);
           ExpenseFormState.primaryPhotoIndex = 0;
           switchExpenseModalMode('detailed');
           renderExpensePhotos();
@@ -18464,7 +18310,7 @@ JSON 배열만 출력하세요. 각 day는 dayNum, title, city, date, spots를 �
               targetId: 'expense-form',
               kind: 'receipt',
               baseRevision: trip.revision || 0,
-              input: { prompt: visionPrompt, base64: compressedBase64, mimeType: 'image/jpeg' }
+              input: { prompt: visionPrompt, base64: compressedBase64, mimeType: 'image/jpeg', expenseSession: receiptSession, expenseSnapshot: expenseFormSnapshot() }
             });
           } catch (err) {
             console.warn('[Vision AI] OCR draft failed:', err?.message);
@@ -18737,6 +18583,9 @@ JSON 배열만 출력하세요. 각 day는 dayNum, title, city, date, spots를 �
     window.addEventListener('keydown', (e) => {
       // 1) 모달 닫기 (Escape): 최상단 모달부터 데이터 보호 검사 후 안전하게 닫기
       if (e.key === 'Escape') {
+        if (!document.getElementById('expense-photo-viewer').hidden && !document.getElementById('modal-expense').classList.contains('sheet-closed')) {
+          closeExpensePhotoViewer(); return;
+        }
         if (!document.getElementById('activity-record-viewer').hidden && !document.getElementById('modal-activity-record').classList.contains('sheet-closed')) {
           document.getElementById('activity-record-viewer').hidden = true; return;
         }

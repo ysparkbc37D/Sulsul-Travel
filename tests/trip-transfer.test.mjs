@@ -39,3 +39,9 @@ test('일정 기록은 동의한 공유에만 포함되고 잘못된 대표사�
  trip.activityRecords.r.coverIndex=4;assert.throws(()=>transfer.validateTrip(trip));
  trip.activityRecords.r.coverIndex=0;trip.activityRecords.r.photos=['javascript:alert(1)'];assert.throws(()=>transfer.validateTrip(trip));
 });
+test('지출 사진은 금융 공유 선택에 따라 보존되고 잘못된 주소는 거부한다',()=>{
+ const trip=fixture();trip.expenses[0].photos=['data:image/jpeg;base64,YQ=='];trip.expenses[0].primaryPhotoIndex=0;
+ assert.deepEqual(transfer.create(trip).trip.expenses,[]);
+ assert.deepEqual(transfer.parse(JSON.stringify(transfer.create(trip,{finances:true}))).trip.expenses,trip.expenses);
+ trip.expenses[0].photos=['javascript:alert(1)'];assert.throws(()=>transfer.validateTrip(trip));
+});
