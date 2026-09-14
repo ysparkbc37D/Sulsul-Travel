@@ -54,7 +54,7 @@ test('new trip creation passes major cities into the AI itinerary flow', () => {
   assert.match(html, /void generateAiItinerary\(\)/);
   assert.match(html, /우선 방문할 주요 도시\/거점/);
   assert.match(html, /requestedCities\.join\(', '\)/);
-  assert.match(html, /const provisionalCity = requestedCities\[cityIndex\]/);
+  assert.match(html, /const calculatedHubs = allocateTripHubs\(countries, requestedCities, durationDays\)/);
   assert.match(html, /planSource: shouldGenerateAi \? 'ai_pending'/);
 });
 
@@ -65,8 +65,8 @@ test('AI itinerary approval updates day identity, rebuilds initial plan blocks, 
   assert.match(html, /trip\.days\.forEach\(day => delete day\.planBlockId\)/);
   assert.match(html, /dayNum !== dayIndex \+ 1/);
   assert.match(html, /day\.spots\.length < minimum/);
-  assert.match(html, /minSpotsPerDay: 6/);
-  assert.match(html, /8~12개 일정을 만듭니다/);
+  assert.match(html, /minSpotsPerDay: isLongTrip \? 3 : 4/);
+  assert.match(html, /const spotDensityRule = isLongTrip/);
   assert.match(html, /:00 또는 :30으로 시작/);
   assert.match(html, /result\.errorCode === 'INVALID_OUTPUT'/);
 });
@@ -103,9 +103,9 @@ test('Gemini uses current models and header based API key transport', () => {
 });
 
 test('mobile travel notebook presentation is bundled and protected from CDN regressions', () => {
-  assert.match(html, /css\/utilities\.css\?v=1\.4\./);
-  assert.match(html, /css\/companion\.css\?v=1\.4\./);
-  assert.match(html, /js\/presentation\/companion-ui\.js\?v=1\.4\./);
+  assert.match(html, /css\/utilities\.css\?v=1\.7\.9/);
+  assert.match(html, /css\/companion\.css\?v=1\.7\.9/);
+  assert.match(html, /js\/presentation\/companion-ui\.js\?v=1\.7\.9/);
   assert.match(html, /id=["']companion-main-nav["']/);
   assert.match(html, /id=["']companion-plan-nav["']/);
   assert.doesNotMatch(html, /cdn\.tailwindcss\.com/);
@@ -117,9 +117,9 @@ test('mobile travel notebook presentation is bundled and protected from CDN regr
   assert.match(companionCss, /min-height:44px/);
   assert.match(utilitiesCss, /\.flex/);
   for (const asset of [
-    'css/utilities.css?v=1.7.7',
-    'css/companion.css?v=1.7.7',
-    'js/presentation/companion-ui.js?v=1.7.7',
+    'css/utilities.css?v=1.7.9',
+    'css/companion.css?v=1.7.9',
+    'js/presentation/companion-ui.js?v=1.7.9',
     'vendor/fontawesome/css/all.min.css',
     'vendor/leaflet/leaflet.js',
     'vendor/leaflet/images/marker-icon-2x.png',
@@ -153,9 +153,9 @@ test('card touch swipe handlers and hidden drawers are purged for mobile stabili
 });
 
 test('pwa manifest and safe-zone icon assets are wired with cache-busting', () => {
-  assert.match(html, /<link rel="manifest" href="manifest\.webmanifest\?v=1\.7\.3">/);
-  assert.match(html, /icons\/icon-192-v115\.png\?v=1\.7\.3/);
-  assert.match(html, /favicon\.png\?v=1\.7\.3/);
+  assert.match(html, /<link rel="manifest" href="manifest\.webmanifest\?v=1\.7\.9">/);
+  assert.match(html, /icons\/icon-192-v115\.png\?v=1\.7\.9/);
+  assert.match(html, /favicon\.png\?v=1\.7\.9/);
 });
 
 test('modern theme yellow/amber text has high-contrast override and theme buttons have explicit active styles (v1.7.1)', () => {
@@ -331,7 +331,7 @@ test('release version is synchronized', () => {
   const worker = sw.match(/const V\s*=\s*'st-shell-v([^']+)'/)?.[1];
   const release = changelog.match(/## \[v([^\]]+)\]/)?.[1];
   const chronicleRelease = chronicle.match(/^### \[실록 \d+호\].*\(v([^\)]+)\)$/m)?.[1];
-  assert.equal(app, '1.7.8');
+  assert.equal(app, '1.7.9');
   assert.equal(worker, app);
   assert.equal(release, app);
   assert.equal(chronicleRelease, app);

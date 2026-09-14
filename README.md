@@ -1,5 +1,9 @@
 # ✈️ 술술트래블 (Sulsul-Travel) - AI 여행 어시스턴트 & 데일리 다이어리
 
+> **v1.7.9 / 2026-09-14**: 저장 실패 처리·여행 사본 파일 공유·밝은 테마의 여행 상태 대비·PDF 사실 표시를 개선했습니다. [구현 및 검증 범위](docs/implementation-v1.7.9.md). 공동편집과 복수 기록은 후속 단계입니다.
+
+> **2026-09-13 / v1.7.8 통합 검토**: [현재 구현 진단과 개선 아키텍처](docs/review-v1.7.8-2026-09-13.md). 밝은 테마 대비, 공유 사본의 누락/길이, 저장 실패, 복수·일정별 기록, 동행 공동편집과 PDF 원문 추적을 실제 코드와 합성 브라우저로 점검했습니다. 이 문서는 후속 구현 계획이며 개선 배포 완료를 뜻하지 않습니다.
+
 > **v1.3.8 업데이트 (2026-09-11)**: 하단 고정 메뉴, 도시별 여정, 날짜 선택형 상세, 다음 일정 중심의 오늘 화면으로 모바일 경험을 개편했습니다. 기본 CSS와 아이콘을 앱에 포함해 외부 CDN 장애에도 핵심 화면을 유지합니다. [모바일 개편 조사와 구현](docs/design-2026-09/mobile-ui-v1.3.8.md) · [AI 오케스트레이션](docs/orchestration.md). 계약 테스트: `node --test tests/*.test.mjs`.
 
 [![PWA Ready](https://img.shields.io/badge/PWA-Ready-22c55e.svg?style=flat-square&logo=pwa)](https://github.com/ysparkbc37D/Sulsul-Travel)

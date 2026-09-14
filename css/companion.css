@@ -1111,4 +1111,31 @@ button:focus-visible, summary:focus-visible, a:focus-visible { outline:3px solid
   color: #7dd3fc !important;
 }
 
+/* A state owns both foreground and background; legacy color-name guards cannot split them. */
+.travel-status {
+  display:inline-flex; align-items:center; padding:4px 9px; border-radius:999px;
+  font:700 12px/1.5 system-ui,sans-serif; white-space:nowrap;
+  color:#243746; background:#e3edf5; border:1px solid #9db3c3;
+}
+.travel-status[data-status="ongoing"] {color:#064e3b;background:#d1fae5;border-color:#78bba0;}
+.travel-status[data-status="completed"] {color:#513a20;background:#f5e7ce;border-color:#c5ab80;}
+.travel-status[data-status="bucket"] {color:#492278;background:#eee4fa;border-color:#b6a1cf;}
+:root[data-theme="deepblack"] .travel-status {color:#dfedfa;background:#263f54;border-color:#6685a0;}
+:root[data-theme="deepblack"] .travel-status[data-status="ongoing"] {color:#d1fae5;background:#064e3b;border-color:#4d997e;}
+:root[data-theme="deepblack"] .travel-status[data-status="completed"] {color:#fff0d5;background:#513a20;border-color:#92794e;}
+:root[data-theme="deepblack"] .travel-status[data-status="bucket"] {color:#eee4fa;background:#492278;border-color:#9778bd;}
+.transfer-options {display:grid;gap:8px;border:1px solid var(--line);border-radius:12px;padding:12px;color:var(--ink);}
+.transfer-options legend {font-size:14px;font-weight:700;}
+.transfer-options p,.transfer-feedback {font-size:13px;line-height:1.6;color:var(--ink2);}
+.transfer-options label {display:flex;align-items:center;gap:10px;min-height:44px;font-size:14px;}
+.transfer-options input {width:20px;height:20px;accent-color:var(--accent);}
+.transfer-feedback:empty {display:none;}
+.transfer-feedback:not(:empty) {padding:12px;background:var(--surface2);border-radius:10px;}
+@media print {
+  body > :not(#modal-pdf-report) {display:none !important;}
+  #modal-pdf-report {transform:none !important;height:auto !important;overflow:visible !important;}
+  #modal-pdf-report .sheet-box {height:auto !important;overflow:visible !important;}
+  #pdf-report-content * {color:#17251e !important;background-color:transparent !important;box-shadow:none !important;}
+  #pdf-report-content img {max-width:100%;break-inside:avoid;}
+}
 

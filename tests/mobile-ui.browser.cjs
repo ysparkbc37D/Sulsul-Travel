@@ -70,7 +70,7 @@ const server = http.createServer((req, res) => {
     assert.equal(await page.evaluate(()=>State.activeTodayDayIndex),3,'manual date stays selected after completion');
     await page.screenshot({path:path.join(output,'mobile-today.png'),fullPage:true});
     await page.evaluate(()=>setTheme('dark'));
-    await page.waitForFunction(()=>getComputedStyle(document.body).backgroundColor==='rgb(16, 27, 23)');
+    await page.waitForFunction(()=>document.documentElement.dataset.theme==='deepblack');
     await page.waitForTimeout(400);
     console.log('dark colors', await page.evaluate(()=>['.companion-next h3','.companion-next .companion-eyebrow','.companion-next > p:not(.companion-eyebrow)','.companion-spot > p','.companion-button'].map(selector=>{const el=document.querySelector('#today-overview-container '+selector);const s=getComputedStyle(el);return {selector,color:s.color,background:s.backgroundColor,opacity:s.opacity}})));
     await page.screenshot({path:path.join(output,'mobile-dark.png'),fullPage:true});
@@ -80,7 +80,7 @@ const server = http.createServer((req, res) => {
     assert.equal(await page.locator('#big-plan-container').isVisible(),false);
     await page.locator('#nav-tab-journal').click();
     await page.evaluate(()=>setTheme('light'));
-    await page.waitForFunction(()=>getComputedStyle(document.body).backgroundColor==='rgb(244, 246, 245)');
+    await page.waitForFunction(()=>document.documentElement.dataset.theme==='modern');
     await page.waitForTimeout(400);
     assert.equal(await page.locator('#tab-content-journal').isVisible(),true);
     await page.screenshot({path:path.join(output,'mobile-journal.png'),fullPage:true});
