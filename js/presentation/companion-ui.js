@@ -84,6 +84,7 @@ function companionSpot(spot, dayIndex, spotIndex, {today = false} = {}) {
     <h4>${escapeHtml(spot.title || '새 일정')}</h4>
     ${spot.desc || spot.memo ? `<p>${escapeHtml(spot.desc || spot.memo)}</p>` : ''}
     ${spot.tip ? `<details class="companion-tip"><summary>여행 팁 보기</summary><p>${escapeHtml(spot.tip)}</p></details>` : ''}
+    ${activityCardHtml(spot, dayIndex, spotIndex)}
     <div class="companion-spot-actions">
       <button onclick="${today ? 'completeTodaySpot' : 'toggleSpotCompleted'}(${dayIndex},${spotIndex},event)" aria-pressed="${!!spot.completed}"><i class="fa-solid fa-check" aria-hidden="true"></i> ${spot.completed ? '완료 취소' : '다녀왔어요'}</button>
       <button onclick="openEditSpotModal(${dayIndex},${spotIndex},event)"><i class="fa-solid fa-pen" aria-hidden="true"></i> 편집</button>
@@ -176,5 +177,4 @@ function confirmResetAiDraft() {
   }
 }
 window.confirmResetAiDraft = confirmResetAiDraft;
-
 

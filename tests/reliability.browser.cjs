@@ -1,7 +1,7 @@
 /* 합성 데이터 통합 검사: 사용자 프로필, 인증 정보, 클라우드 쓰기 및 AI 호출 없음. */
 const {chromium}=require(process.env.PLAYWRIGHT_MODULE || 'playwright');
 const fs=require('node:fs'),path=require('node:path'),http=require('node:http'),assert=require('node:assert/strict');
-const root=path.resolve(__dirname,'..'),output=path.join(root,'.local-review','v1.7.9');
+const root=path.resolve(__dirname,'..'),output=path.join(root,'.local-review','v1.8.0');
 const server=http.createServer((req,res)=>{
  const file=path.resolve(root,'.'+new URL(req.url,'http://localhost').pathname.replace(/\/$/,'/index.html'));
  if(!file.startsWith(root+path.sep)){res.writeHead(403).end();return;}
@@ -92,9 +92,9 @@ const server=http.createServer((req,res)=>{
   await offlinePage.waitForFunction(()=>!!navigator.serviceWorker.controller);
   const cachedModules=await offlinePage.evaluate(async()=>{
    const cache=await caches.open('st-shell-v'+APP_VER);
-   return Promise.all(['js/domain/trip-transfer.js','js/presentation/trip-transfer-ui.js'].map(async p=>!!await cache.match('./'+p+'?v='+APP_VER)));
+   return Promise.all(['js/domain/trip-transfer.js','js/presentation/trip-transfer-ui.js','js/presentation/activity-journal.js'].map(async p=>!!await cache.match('./'+p+'?v='+APP_VER)));
   });
-  assert.deepEqual(cachedModules,[true,true]);
+  assert.deepEqual(cachedModules,[true,true,true]);
   await offlinePage.evaluate(()=>{
    State.trips=[{id:'offline',title:'오프라인 보존 검사',days:[{dayNum:1,date:'2026-09-14',city:'서울',title:'첫날',spots:[]}],journals:{0:{text:'보존할 여행 기록',photos:[]}},expenses:[]}];
    TripRepository.saveAll(State.trips);

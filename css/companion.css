@@ -1125,6 +1125,48 @@ button:focus-visible, summary:focus-visible, a:focus-visible { outline:3px solid
 :root[data-theme="deepblack"] .travel-status[data-status="completed"] {color:#fff0d5;background:#513a20;border-color:#92794e;}
 :root[data-theme="deepblack"] .travel-status[data-status="bucket"] {color:#eee4fa;background:#492278;border-color:#9778bd;}
 .transfer-options {display:grid;gap:8px;border:1px solid var(--line);border-radius:12px;padding:12px;color:var(--ink);}
+/* 일정 썸네일과 기록창은 이미지 원본 크기에 영향을 받지 않는다. */
+.activity-timeline-spot {display:grid!important;grid-template-columns:24px 20px minmax(0,1fr);}
+.activity-timeline-spot>div:last-child {grid-column:3;flex-wrap:wrap;}
+.activity-timeline-spot>div:last-child button,.activity-timeline-spot>div:last-child a {min-width:40px;min-height:40px;}
+.activity-record-card {display:flex;align-items:center;gap:10px;width:100%;min-width:0;max-width:100%;overflow:hidden;margin-top:12px;padding:10px;border:1px solid var(--line);border-radius:12px;background:var(--surface2);color:var(--ink);text-align:left;}
+.activity-record-card .activity-cover {display:block;width:60px!important;height:80px!important;min-width:60px;max-width:60px!important;flex:0 0 60px;object-fit:cover;border-radius:8px;}
+.activity-record-copy {display:grid;gap:4px;min-width:0;flex:1;overflow:hidden;font-size:13px;line-height:1.5;}
+.activity-record-copy>span {display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;overflow-wrap:anywhere;color:var(--ink2);}
+.activity-record-copy strong,.activity-record-copy small {overflow-wrap:anywhere;}
+.activity-record-copy small {color:var(--ink2);font-size:11px;}
+.activity-record-icon {flex:0 0 28px;text-align:center;}
+.activity-sheet {display:flex!important;flex-direction:column;position:relative;padding:0!important;max-height:min(90dvh,var(--companion-viewport-height,90dvh))!important;overflow:hidden!important;color:var(--ink);}
+.activity-sheet-header,.activity-sheet-footer {display:flex;align-items:center;justify-content:space-between;gap:12px;padding:16px 20px;flex-shrink:0;background:var(--surface);}
+.activity-sheet-header {border-bottom:1px solid var(--line);}
+.activity-sheet-header>div {min-width:0;}
+.activity-sheet-header h3 {font-size:18px;font-weight:800;overflow-wrap:anywhere;}
+.activity-sheet-header p {font-size:12px;color:var(--ink2);margin:4px 0;}
+.activity-sheet-body {padding:20px;overflow-y:auto;min-height:0;overscroll-behavior:contain;}
+.activity-field-heading {display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px;margin:0 0 12px;font-size:14px;font-weight:700;}
+.activity-field-heading p {font-size:12px;font-weight:400;color:var(--ink2);margin-top:4px;}
+#activity-record-text {display:block;width:100%;min-height:150px;padding:14px;border:1px solid var(--line);border-radius:12px;background:var(--surface2);color:var(--ink);font-size:16px;line-height:1.7;margin-bottom:20px;resize:vertical;}
+#activity-record-photos {display:grid;grid-template-columns:repeat(auto-fill,minmax(76px,1fr));gap:12px;}
+.activity-photo-tile {position:relative;min-width:0;max-width:120px;}
+.activity-photo-tile>button:first-child {display:block;width:100%;aspect-ratio:3/4;overflow:hidden;border-radius:10px;}
+.activity-photo-tile img {width:100%;height:100%;object-fit:cover;}
+.activity-cover-choice {font-size:11px;min-height:44px;width:100%;color:var(--ink2);}
+.activity-cover-choice[aria-pressed="true"] {font-weight:800;color:var(--ink);text-decoration:underline;}
+.activity-remove-photo {position:absolute;right:0;top:0;width:44px;height:44px;background:#17251edb;color:#fff;border-radius:0 10px 0 10px;}
+#activity-record-feedback {font-size:13px;line-height:1.7;margin-top:16px;color:var(--ink2);overflow-wrap:anywhere;}
+.activity-sheet-footer {border-top:1px solid var(--line);padding-bottom:max(16px,env(safe-area-inset-bottom));}
+.activity-sheet-footer button {flex:1;min-height:48px;}
+#activity-record-viewer:not([hidden]) {position:absolute;inset:0;z-index:2;background:var(--surface);display:flex;flex-direction:column;align-items:center;gap:12px;padding:20px;}
+#activity-record-full-photo {min-height:0;max-height:100%;max-width:100%;flex:1;object-fit:contain;}
+#activity-record-original-wrap {font-size:13px;margin:0 0 20px;}
+#activity-record-original {white-space:pre-wrap;overflow-wrap:anywhere;}
+.activity-archive {margin-top:24px;}.activity-archive h3 {font-size:16px;font-weight:800;}
+.activity-report h2,.activity-report h3 {font-weight:800;margin:12px 0;}
+.activity-report article {margin:16px 0;padding:16px;border:1px solid var(--line);border-radius:12px;}
+.activity-report-text {white-space:pre-wrap;overflow-wrap:anywhere;font-size:13px;line-height:1.8;}
+.activity-report-photos {display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:12px;}
+.activity-report-photos img {width:100%;aspect-ratio:3/4;object-fit:cover;}
+@media(max-width:480px){.activity-record-card {flex-wrap:wrap;}.activity-record-card .activity-record-copy{flex-basis:calc(100% - 80px);}.activity-record-card>i{display:none;}}
 .transfer-options legend {font-size:14px;font-weight:700;}
 .transfer-options p,.transfer-feedback {font-size:13px;line-height:1.6;color:var(--ink2);}
 .transfer-options label {display:flex;align-items:center;gap:10px;min-height:44px;font-size:14px;}
@@ -1138,4 +1180,3 @@ button:focus-visible, summary:focus-visible, a:focus-visible { outline:3px solid
   #pdf-report-content * {color:#17251e !important;background-color:transparent !important;box-shadow:none !important;}
   #pdf-report-content img {max-width:100%;break-inside:avoid;}
 }
-

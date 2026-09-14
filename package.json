@@ -1,13 +1,14 @@
 {
   "name": "sulsul-travel",
   "private": true,
-  "version": "1.7.9",
+  "version": "1.8.0",
   "scripts": {
     "build:assets": "node tools/build-assets.cjs",
     "build:css": "tailwindcss -c tailwind.config.cjs -i css/utilities.input.css -o css/utilities.css --minify",
     "test": "node --test tests/*.test.mjs",
     "test:mobile": "node tests/mobile-ui.browser.cjs",
-    "test:reliability": "node tests/reliability.browser.cjs"
+    "test:reliability": "node tests/reliability.browser.cjs",
+    "test:activity": "node tests/activity-journal.browser.cjs"
   },
   "devDependencies": {
     "@fortawesome/fontawesome-free": "6.5.1",

@@ -29,3 +29,13 @@ test('photos reject executable URLs and accept raster data',()=>{
  assert.equal(transfer.safePhoto('https://example.com/"x.png'),'https://example.com/%22x.png');
  assert.equal(transfer.safePhoto('data:image/jpeg;base64,YQ=='),'data:image/jpeg;base64,YQ==');
 });
+test('일정 기록은 동의한 공유에만 포함되고 잘못된 대표사진은 거부한다',()=>{
+ const trip=fixture();trip.days[0].spots[0].recordId='r';
+ trip.activityRecords={r:{id:'r',text:'도착한 순간',originalText:'도착',photos:['data:image/jpeg;base64,YQ=='],coverIndex:0,context:{title:'공항',date:'2026-09-14',time:'14:00'}}};
+ assert.equal(transfer.create(trip).trip.activityRecords,undefined);
+ const shared=transfer.parse(JSON.stringify(transfer.create(trip,{journals:true})));
+ assert.deepEqual(shared.trip.activityRecords,trip.activityRecords);
+ assert.equal(shared.trip.days[0].spots[0].recordId,'r');
+ trip.activityRecords.r.coverIndex=4;assert.throws(()=>transfer.validateTrip(trip));
+ trip.activityRecords.r.coverIndex=0;trip.activityRecords.r.photos=['javascript:alert(1)'];assert.throws(()=>transfer.validateTrip(trip));
+});

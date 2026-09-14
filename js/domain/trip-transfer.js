@@ -28,10 +28,13 @@
     for (const key of ['countries','cities','concepts','checklist','expenses','exchanges','activeCurrencies']) {
       if (trip[key] != null && !Array.isArray(trip[key])) throw new Error(`${key} 형식이 올바르지 않습니다.`);
     }
-    for (const key of ['journals','planBlockMeta','initialBalances']) {
+    for (const key of ['journals','activityRecords','planBlockMeta','initialBalances']) {
       if (trip[key] != null && (typeof trip[key] !== 'object' || Array.isArray(trip[key]))) throw new Error(`${key} 형식이 올바르지 않습니다.`);
     }
-    for (const journal of Object.values(trip.journals || {})) {
+    for (const [id,record] of Object.entries(trip.activityRecords || {})) {
+      if (!record || record.id !== id || !record.context || typeof record.context !== 'object' || typeof record.context.title !== 'string' || !Array.isArray(record.photos) || record.photos.length > 8 || !Number.isInteger(record.coverIndex) || record.coverIndex < 0 || record.coverIndex >= Math.max(1,record.photos.length)) throw new Error('일정 기록 형식이 올바르지 않습니다.');
+    }
+    for (const journal of [...Object.values(trip.journals || {}),...Object.values(trip.activityRecords || {})]) {
       if (!journal || typeof journal !== 'object' || (journal.text != null && typeof journal.text !== 'string') || (journal.photos != null && !Array.isArray(journal.photos))) throw new Error('일기 형식이 올바르지 않습니다.');
       if ((journal.photos || []).some(p => !safePhoto(p))) throw new Error('지원하지 않는 사진 주소가 있습니다.');
     }
@@ -39,7 +42,7 @@
   }
   function snapshot(trip, {journals = false, finances = false} = {}) {
     validateTrip(trip);
-    const fields = [...PLAN_FIELDS, ...(journals ? ['journals'] : []), ...(finances ? MONEY_FIELDS : [])];
+    const fields = [...PLAN_FIELDS, ...(journals ? ['journals','activityRecords'] : []), ...(finances ? MONEY_FIELDS : [])];
     const result = {};
     fields.forEach(key => { if (trip[key] !== undefined) result[key] = clone(trip[key]); });
     result.journals = journals ? result.journals || {} : {};
