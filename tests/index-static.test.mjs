@@ -326,12 +326,30 @@ test('global geocoding engine and Spain Toledo precision mapping are supported (
   assert.match(html, /'세비야': \[37\.3891, -5\.9845\]/);
 });
 
+test('iOS Safari PWA installation guide and standalone crash guards are wired (v1.8.2)', () => {
+  // 1. Meta tags for Apple WebClip & PWA
+  assert.match(html, /<meta name="apple-mobile-web-app-capable" content="yes">/);
+  assert.match(html, /<meta name="apple-mobile-web-app-title" content="술술트래블">/);
+  assert.match(html, /<link rel="apple-touch-icon" sizes="180x180"/);
+
+  // 2. Share button location clarity (top-right or bottom)
+  assert.match(html, /오른쪽 상단/);
+  assert.match(html, /하단 중앙/);
+
+  // 3. Service Worker controllerchange reload guard prevents WebClip white screen
+  assert.match(html, /const hadController = !!navigator\.serviceWorker\.controller;/);
+  assert.match(html, /if \(!hadController \|\| refreshing\) return;/);
+
+  // 4. Boot watchdog guard against hanging/crashed screens
+  assert.match(html, /sulsul-boot-watchdog/);
+});
+
 test('release version is synchronized', () => {
   const app = html.match(/const APP_VER\s*=\s*'([^']+)'/)?.[1];
   const worker = sw.match(/const V\s*=\s*'st-shell-v([^']+)'/)?.[1];
   const release = changelog.match(/## \[v([^\]]+)\]/)?.[1];
   const chronicleRelease = chronicle.match(/^### \[실록 \d+호\].*\(v([^\)]+)\)$/m)?.[1];
-  assert.equal(app, '1.8.1');
+  assert.equal(app, '1.8.2');
   assert.equal(worker, app);
   assert.equal(release, app);
   assert.equal(chronicleRelease, app);

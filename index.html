@@ -8,23 +8,59 @@
   <!-- 3-Way Theme FOUC Prevention Script (v1.6.7) -->
   <script>
     (function() {
-      var savedTheme = localStorage.getItem('st_theme') || 'modern';
-      if (savedTheme === 'light') savedTheme = 'modern';
-      if (savedTheme === 'dark') savedTheme = 'deepblack';
-      document.documentElement.setAttribute('data-theme', savedTheme);
-      if (savedTheme === 'deepblack') document.documentElement.classList.add('dark');
+      try {
+        var savedTheme = localStorage.getItem('st_theme') || 'modern';
+        if (savedTheme === 'light') savedTheme = 'modern';
+        if (savedTheme === 'dark') savedTheme = 'deepblack';
+        document.documentElement.setAttribute('data-theme', savedTheme);
+        if (savedTheme === 'deepblack') document.documentElement.classList.add('dark');
+      } catch(e) {
+        document.documentElement.setAttribute('data-theme', 'modern');
+      }
+    })();
+  </script>
+
+  <!-- iOS Standalone Boot Watchdog & Error Guard (v1.8.2) -->
+  <script>
+    (function() {
+      window.__bootErrors = [];
+      window.addEventListener('error', function(e) {
+        window.__bootErrors.push(e.message || 'Script error');
+      });
+      window.addEventListener('unhandledrejection', function(e) {
+        window.__bootErrors.push(e.reason ? (e.reason.message || String(e.reason)) : 'Unhandled rejection');
+      });
+      // If main app UI is not visible after 4 seconds, show gentle emergency recovery bar
+      window.__bootWatchdogTimer = setTimeout(function() {
+        var hub = document.getElementById('view-hub');
+        var ws = document.getElementById('view-workspace');
+        var isLoaded = (hub && !hub.classList.contains('hidden')) || (ws && !ws.classList.contains('hidden'));
+        if (!isLoaded) {
+          var bar = document.getElementById('sulsul-boot-watchdog');
+          if (!bar) {
+            bar = document.createElement('div');
+            bar.id = 'sulsul-boot-watchdog';
+            bar.style.cssText = 'position:fixed;top:16px;left:50%;transform:translateX(-50%);z-index:99999;background:#1E2B24;color:#F7F5F0;padding:12px 20px;border-radius:16px;box-shadow:0 8px 30px rgba(0,0,0,0.3);font-family:sans-serif;font-size:12px;font-weight:bold;display:flex;align-items:center;gap:10px;border:1px solid rgba(212,175,55,0.4);max-width:90vw;';
+            bar.innerHTML = '<span>⚡ 앱 로딩이 지연되고 있습니다.</span><button onclick="localStorage.removeItem(\'st_theme\');location.reload();" style="background:#d4af37;color:#1E2B24;border:none;padding:6px 12px;border-radius:8px;font-weight:900;font-size:11px;cursor:pointer;">새로고침</button>';
+            document.body.appendChild(bar);
+          }
+        }
+      }, 4000);
     })();
   </script>
 
   <!-- PWA Meta & Icons -->
-  <link rel="manifest" href="manifest.webmanifest?v=1.8.1">
+  <link rel="manifest" href="manifest.webmanifest?v=1.8.2">
   <meta name="theme-color" content="#F7F5F0">
+  <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
-  <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192-v115.png?v=1.8.1">
-  <link rel="icon" type="image/png" sizes="32x32" href="favicon.png?v=1.8.1">
+  <meta name="apple-mobile-web-app-title" content="술술트래블">
+  <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192-v115.png?v=1.8.2">
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon.png?v=1.8.2">
   <link rel="shortcut icon" href="favicon.ico">
-  <link rel="apple-touch-icon" sizes="180x180" href="icons/apple-touch-icon-v115.png?v=1.8.1">
+  <link rel="apple-touch-icon" sizes="180x180" href="icons/apple-touch-icon-v115.png?v=1.8.2">
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon-v115.png?v=1.8.2">
 
   <!-- Google Fonts: Great Vibes, Dancing Script (Cursive Calligraphy), Cormorant Garamond, Noto Serif KR, Playfair Display -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -32,7 +68,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Great+Vibes&family=Cormorant+Garamond:wght@600;700;800&family=Noto+Serif+KR:wght@500;600;700;900&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
 
   <!-- Local Utilities Bundle (CDN fallback & tailwind utilities) -->
-  <link rel="stylesheet" href="css/utilities.css?v=1.8.1">
+  <link rel="stylesheet" href="css/utilities.css?v=1.8.2">
   <link rel="stylesheet" href="vendor/fontawesome/css/all.min.css">
 
   <!-- Leaflet Map CSS & JS -->
@@ -1374,12 +1410,12 @@
     }
   </style>
 
-  <link rel="stylesheet" href="css/companion.css?v=1.8.1">
-  <script src="js/presentation/companion-ui.js?v=1.8.1"></script>
-  <script src="js/domain/trip-transfer.js?v=1.8.1"></script>
-  <script src="js/presentation/trip-transfer-ui.js?v=1.8.1"></script>
-  <script src="js/presentation/activity-journal.js?v=1.8.1"></script>
-  <script src="js/presentation/expense-editor.js?v=1.8.1"></script>
+  <link rel="stylesheet" href="css/companion.css?v=1.8.2">
+  <script src="js/presentation/companion-ui.js?v=1.8.2"></script>
+  <script src="js/domain/trip-transfer.js?v=1.8.2"></script>
+  <script src="js/presentation/trip-transfer-ui.js?v=1.8.2"></script>
+  <script src="js/presentation/activity-journal.js?v=1.8.2"></script>
+  <script src="js/presentation/expense-editor.js?v=1.8.2"></script>
 
   <!-- Knowledge Base Seed & Destination Knowledge Packs (DKP) -->
   <script src="kb-travel.js"></script>
@@ -1409,7 +1445,7 @@
       <!-- 우측 액션 클러스터 (버전 알약 -> 원형 통계 -> 원형 설정 -> 다크그린 캡슐 추가) -->
       <div class="flex items-center gap-1 sm:gap-1.5 shrink-0">
         <!-- 1. 버전 배지 버튼 (v1.7.8 - 클릭 시 버전 이력) -->
-        <button id="app-ver-badge" onclick="event.stopPropagation(); openVersionHistoryModal()" class="h-7 sm:h-8 px-2 sm:px-2.5 rounded-full theme-card-subtle flex items-center justify-center font-mono text-[10px] sm:text-[11px] font-bold text-[#a2601b] dark:text-[#d4af37] shadow-xs hover:border-amber-500/60 transition cursor-pointer shrink-0" title="버전 업데이트 기록 보기 (클릭)">v1.8.1</button>
+        <button id="app-ver-badge" onclick="event.stopPropagation(); openVersionHistoryModal()" class="h-7 sm:h-8 px-2 sm:px-2.5 rounded-full theme-card-subtle flex items-center justify-center font-mono text-[10px] sm:text-[11px] font-bold text-[#a2601b] dark:text-[#d4af37] shadow-xs hover:border-amber-500/60 transition cursor-pointer shrink-0" title="버전 업데이트 기록 보기 (클릭)">v1.8.2</button>
 
         <!-- 2. 통계 버튼 (📊 - 원형 버튼) -->
         <button id="header-btn-analytics" onclick="openAnalyticsModal('lifetime')" class="companion-header-analytics w-7 h-7 sm:w-8 sm:h-8 rounded-full theme-card-subtle flex items-center justify-center text-[#a2601b] dark:text-[#d4af37] hover:border-amber-500/60 transition shadow-xs cursor-pointer shrink-0" title="술술 여행 통계 대시보드">
@@ -2270,7 +2306,7 @@
           </div>
           <div class="flex items-start gap-2.5">
             <span class="w-5 h-5 rounded-full bg-amber-500 text-slate-950 font-black flex items-center justify-center text-[10px] shrink-0 mt-0.5">1</span>
-            <div>사파리(Safari) 화면 하단 중앙의 <b>공유 버튼 ( <svg class="inline-block w-3.5 h-3.5 align-middle text-[#a2601b] dark:text-[#d4af37]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 15V4"/><path d="m8 8 4-4 4 4"/><path d="M5 13v6a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-6"/></svg> )</b>을 터치합니다.</div>
+            <div>사파리(Safari)의 <b>공유 버튼 ( <svg class="inline-block w-3.5 h-3.5 align-middle text-[#a2601b] dark:text-[#d4af37]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 15V4"/><path d="m8 8 4-4 4 4"/><path d="M5 13v6a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-6"/></svg> )</b>을 터치합니다.<br><span class="text-[11px] text-[#a2601b] dark:text-[#d4af37] font-bold">※ 주소창 위치 설정에 따라 <u>화면 오른쪽 상단</u> 또는 <u>하단 중앙</u>에 위치합니다.</span></div>
           </div>
           <div class="flex items-start gap-2.5">
             <span class="w-5 h-5 rounded-full bg-amber-500 text-slate-950 font-black flex items-center justify-center text-[10px] shrink-0 mt-0.5">2</span>
@@ -4337,7 +4373,13 @@
 
       <!-- 버전 목록 스크롤 영역 (독립 스크롤 컨테이너로 Flexbox 압축 버그 영구 척결) -->
       <div class="overflow-y-auto flex-1 min-h-0 space-y-3.5 pr-1.5 custom-scrollbar">
-        <!-- v1.8.1 (Current) -->
+        <!-- v1.8.2 (Current) -->
+        <section class="companion-context">
+          <h3 class="font-bold">v1.8.2 · 아이폰 PWA 설치 &amp; 실행 안정화</h3>
+          <p class="text-xs">사파리 공유 버튼 위치(우측 상단/하단) 가이드 개편 · 홈 화면 실행 시 흰 화면(White Screen) 크래시 완치 · 서비스 워커 내결함성 강화 · 4초 부팅 가드 구축</p>
+          <p class="text-xs">2026-09-21 · st-shell-v1.8.2</p>
+        </section>
+        <!-- v1.8.1 -->
         <section class="companion-context"><h3 class="font-bold">v1.8.1 · 지출 사진과 편집</h3><p class="text-xs">물건 사진 추가 · 대표 썸네일 · 지출·수입 편집 · 통계/촬영/앨범/+ 기록 버튼 통일</p><p class="text-xs">2026-09-14 · st-shell-v1.8.1</p></section>
         <!-- v1.8.0 -->
         <section class="companion-context">
@@ -5158,7 +5200,7 @@
 
       <!-- 모달 푸터 -->
       <div class="pt-3 border-t border-[#e8e2d5] dark:border-stone-800 flex items-center justify-between shrink-0">
-        <span class="text-[11px] text-stone-400 dark:text-stone-500 font-mono">Sulsul Travel Engine v1.8.1</span>
+        <span class="text-[11px] text-stone-400 dark:text-stone-500 font-mono">Sulsul Travel Engine v1.8.2</span>
         <button onclick="closeModal('modal-version-history')" class="px-4 py-2 rounded-xl bg-[#faf8f5] dark:bg-stone-800 hover:bg-[#f0ece1] dark:hover:bg-stone-700 border border-[#e8e2d5] dark:border-stone-700 text-[#1c1917] dark:text-[#ededed] text-xs font-bold transition cursor-pointer shadow-sm">
           닫기
         </button>
@@ -5278,7 +5320,7 @@
             <span>홈 화면에 앱(PWA)으로 설치하기</span>
           </div>
           <p class="text-stone-600 dark:text-stone-400 leading-relaxed text-xs">
-            <b>아이폰(Safari)</b>: 하단 공유 버튼 &rarr; <b>[홈 화면에 추가]</b><br>
+            <b>아이폰·아이패드(Safari)</b>: 공유 버튼(우측 상단 또는 하단) &rarr; <b>[홈 화면에 추가]</b><br>
             <b>안드로이드(Chrome/삼성인터넷)</b>: 상단 메뉴 &rarr; <b>[앱 설치]</b> 또는 <b>[홈 화면에 추가]</b><br>
             설치하시면 인터넷 연결 없이도 진짜 네이티브 앱처럼 독립 창에서 빠르고 쾌적하게 실행됩니다.
           </p>
@@ -5505,7 +5547,7 @@
     window.showToast = showToast;
 
     // 앱 버전 및 글로벌 네임스페이스 (Sulsul-Travel Invariant Rule R-10, R-11, R-12, R-13, R-14, R-15, R-16)
-    const APP_VER = '1.8.1';
+    const APP_VER = '1.8.2';
 
     // ══════════════════════════════════════════
     // [3-Way Theme System] 모던, 라이트그레이, 딥 블랙 테마 엔진 (v1.6.7)
@@ -12676,7 +12718,7 @@
         showToast(`⚠️ ${app} 내부에서는 직접 설치가 불가능합니다. Chrome이나 Safari로 열어주세요.`);
         openInstallGuideModal();
       } else if (isIOS()) {
-        showToast('🍎 아이폰은 하단 공유(⬆) 버튼을 눌러 [홈 화면에 추가]를 선택해주세요.');
+        showToast('🍎 사파리 공유(우측 상단 또는 하단 ⬆) 버튼을 눌러 [홈 화면에 추가]를 선택해주세요.', 3500);
         openInstallGuideModal('ios');
       } else {
         showToast('💡 브라우저 우측 상단 메뉴(⋮)에서 [앱 설치] 또는 [홈 화면에 추가]를 눌러주세요.');
@@ -12831,6 +12873,27 @@
               <button onclick="copyCurrentUrl()" class="btn-surface w-full py-2 rounded-xl text-xs font-semibold text-slate-300 hover:text-white cursor-pointer">
                 <i class="fa-solid fa-copy mr-1 text-[11px]"></i> 주소 복사하기
               </button>
+            </div>
+          `;
+        } else if (isIOS()) {
+          dynamicBox.innerHTML = `
+            <div class="p-4 theme-card rounded-2xl border-2 border-amber-500/40 space-y-3 shadow-sm">
+              <div class="flex items-center gap-2 text-sm font-black text-[#a2601b] dark:text-[#d4af37]">
+                <span class="text-lg">🍎</span>
+                <span>아이폰·아이패드 사파리(Safari) 간편 설치 안내</span>
+              </div>
+              <div class="text-xs font-medium text-[#1c1917] dark:text-stone-200 leading-relaxed">
+                아이폰에서는 사파리 브라우저의 <b>공유 버튼 ( 📤 )</b>을 누르고 <b>[홈 화면에 추가]</b>를 선택하시면 1초 만에 앱으로 설치됩니다.
+              </div>
+              <div class="p-3 rounded-xl bg-amber-500/10 dark:bg-amber-500/15 border border-amber-500/30 text-xs text-[#78350f] dark:text-amber-200 space-y-1">
+                <div class="font-bold flex items-center gap-1.5">
+                  <i class="fa-solid fa-circle-info text-amber-600 dark:text-amber-400"></i>
+                  <span>공유 버튼 위치 안내:</span>
+                </div>
+                <div class="text-[11px] leading-relaxed pl-5 font-semibold text-[#92400e] dark:text-amber-300">
+                  사파리 주소창 설정에 따라 <u>화면 오른쪽 상단</u> 또는 <u>하단 중앙</u>에 위치합니다.
+                </div>
+              </div>
             </div>
           `;
         } else {
@@ -18644,6 +18707,7 @@ JSON 배열만 출력하세요. 각 day는 dayNum, title, city, date, spots를 �
 
     function registerServiceWorker() {
       if ('serviceWorker' in navigator) {
+        const hadController = !!navigator.serviceWorker.controller;
         navigator.serviceWorker.register('./sw.js')
           .then(reg => {
             console.log('[PWA] Service Worker registered:', reg.scope);
@@ -18653,10 +18717,10 @@ JSON 배열만 출력하세요. 각 day는 dayNum, title, city, date, spots를 �
 
         let refreshing = false;
         navigator.serviceWorker.addEventListener('controllerchange', () => {
-          if (!refreshing) {
-            refreshing = true;
-            window.location.reload();
-          }
+          // Prevent white screen crash on iOS WebClip: Never reload on cold boot when there was no previous controller!
+          if (!hadController || refreshing) return;
+          refreshing = true;
+          window.location.reload();
         });
       }
     }

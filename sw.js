@@ -1,18 +1,18 @@
 // Sulsul-Travel Service Worker
-const V = 'st-shell-v1.8.1';
+const V = 'st-shell-v1.8.2';
 const CACHE_NAME = V;
 const CACHE_PREFIX = 'st-shell-';
 
 const PRECACHE_ASSETS = [
   './',
   './index.html',
-  './css/utilities.css?v=1.8.1',
-  './css/companion.css?v=1.8.1',
-  './js/presentation/companion-ui.js?v=1.8.1',
-  './js/domain/trip-transfer.js?v=1.8.1',
-  './js/presentation/trip-transfer-ui.js?v=1.8.1',
-  './js/presentation/activity-journal.js?v=1.8.1',
-  './js/presentation/expense-editor.js?v=1.8.1',
+  './css/utilities.css?v=1.8.2',
+  './css/companion.css?v=1.8.2',
+  './js/presentation/companion-ui.js?v=1.8.2',
+  './js/domain/trip-transfer.js?v=1.8.2',
+  './js/presentation/trip-transfer-ui.js?v=1.8.2',
+  './js/presentation/activity-journal.js?v=1.8.2',
+  './js/presentation/expense-editor.js?v=1.8.2',
   './donate-qr.png',
   './vendor/fontawesome/css/all.min.css',
   './vendor/fontawesome/webfonts/fa-solid-900.woff2',
@@ -55,9 +55,14 @@ const PRECACHE_ASSETS = [
 self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
-      return cache.addAll(PRECACHE_ASSETS).catch((err) => {
-        console.warn('[SW] Precache asset failure (will be cached dynamically):', err);
-      });
+      // Use Promise.allSettled so one failed asset never aborts the whole precache
+      return Promise.allSettled(
+        PRECACHE_ASSETS.map((asset) =>
+          cache.add(asset).catch((err) => {
+            console.warn('[SW] Precache asset individual failure (will cache dynamically):', asset, err);
+          })
+        )
+      );
     }).then(() => self.skipWaiting())
   );
 });
@@ -85,9 +90,37 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
-  // Stale-While-Revalidate for app shell and assets
+  // 1. Navigation requests (req.mode === 'navigate') -> Network-First with guaranteed AppShell fallback
+  if (req.mode === 'navigate') {
+    event.respondWith(
+      fetch(req)
+        .then((networkResponse) => {
+          if (networkResponse && networkResponse.status === 200) {
+            const resClone = networkResponse.clone();
+            caches.open(CACHE_NAME).then((cache) => cache.put(req, resClone));
+          }
+          return networkResponse;
+        })
+        .catch(async () => {
+          // Offline or network error: return cached app shell
+          const cachedDirect = await caches.match(req);
+          if (cachedDirect) return cachedDirect;
+          const cachedIndex = await caches.match('./index.html') || await caches.match('./');
+          if (cachedIndex) return cachedIndex;
+
+          // Fail-safe offline response to prevent iOS WebKit blank white screens
+          return new Response(
+            '<!DOCTYPE html><html lang="ko"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>술술트래블</title><style>body{font-family:system-ui,-apple-system,sans-serif;background:#F7F5F0;color:#1E2B24;display:flex;flex-direction:column;align-items:center;justify-content:center;height:100vh;margin:0;padding:20px;box-sizing:border-box;text-align:center;}h1{font-size:20px;margin-bottom:8px;}p{font-size:13px;color:#6B5E51;margin-bottom:24px;}button{padding:12px 28px;border-radius:16px;background:#a2601b;color:#fff;border:none;font-weight:bold;font-size:14px;cursor:pointer;box-shadow:0 4px 12px rgba(162,96,27,0.3);}</style></head><body><h1>술술트래블 오프라인 연결</h1><p>저장된 여행 데이터를 불러오기 위해 앱을 다시 시작합니다.</p><button onclick="location.reload()">새로고침</button></body></html>',
+            { headers: { 'Content-Type': 'text/html; charset=utf-8' } }
+          );
+        })
+    );
+    return;
+  }
+
+  // 2. Static assets (scripts, styles, images, fonts) -> Stale-While-Revalidate with ignoreSearch matching
   event.respondWith(
-    caches.match(req).then((cachedResponse) => {
+    caches.match(req, { ignoreSearch: true }).then((cachedResponse) => {
       const fetchPromise = fetch(req).then((networkResponse) => {
         if (networkResponse && networkResponse.status === 200) {
           const resClone = networkResponse.clone();
@@ -95,11 +128,8 @@ self.addEventListener('fetch', (event) => {
         }
         return networkResponse;
       }).catch(() => {
-        // Offline and no network
         if (cachedResponse) return cachedResponse;
-        if (req.mode === 'navigate') {
-          return caches.match('./index.html');
-        }
+        return new Response('', { status: 408, statusText: 'Offline' });
       });
 
       return cachedResponse || fetchPromise;

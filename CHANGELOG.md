@@ -26,6 +26,24 @@
 - [ ] 항공권/호텔 예약 바우처 PDF 자동 파싱 일정 등록
 - [ ] 여행 동행자 실시간 음성 메모 AI 다이어리 자동 변환
 
+## [v1.8.2] - 2026-09-21
+
+### Fixed
+- **아이폰(iOS Safari) PWA 설치 가이드 개편**:
+  - 사파리 단일 탭(상단 주소창 설정), 아이패드, 가로 모드 등에서 공유 버튼이 **오른쪽 상단**에 위치하는 사용자 환경을 반영하여 "오른쪽 상단 또는 화면 하단 중앙"으로 안내 문구 전면 개정.
+  - iOS 접속 시 동작하지 않는 자동 설치 버튼 대신 iOS 전용 3단계 시각적 설치 안내 카드 표시.
+  - 시작 가이드 및 설치 토스트 안내 문구 보정.
+- **홈 화면 실행 시 흰 화면(White Screen) 크래시 완치**:
+  - `registerServiceWorker()`에 `hadController` 가드를 도입하여 WebClip 최초 부팅 시 불필요한 `window.location.reload()` 호출로 인한 WebKit 렌더링 중단 차단.
+  - `sw.js`의 `req.mode === 'navigate'` 처리를 Network-First + AppShell 캐시 폴백으로 재설계하고, 오프라인 시에도 절대 `undefined`를 반환하지 않는 안전 복구 HTML 응답 보장.
+  - 선제 캐싱(`install` 이벤트)에 `Promise.allSettled`를 적용하여 개별 자산 실패 시에도 전체 캐시가 무효화되는 결함 해결.
+  - 정적 자산 매칭에 `{ ignoreSearch: true }` 적용으로 쿼리스트링 차이로 인한 캐시 미스 방지.
+- **PWA 메타 태그 및 부팅 보호 워치독**:
+  - `<meta name="apple-mobile-web-app-title" content="술술트래블">` 추가로 홈 화면 아이콘명 정규화.
+  - `<meta name="mobile-web-app-capable" content="yes">` 및 터치 아이콘 추가.
+  - `manifest.webmanifest` 테마 및 배경색을 모던 웜 크림(`#F7F5F0`)으로 일치시켜 부팅 플래시 방지.
+  - 4초 부팅 타임아웃 워치독(`sulsul-boot-watchdog`)을 신설하여 예기치 못한 로딩 지연 시 수동 새로고침 복구 바 제공.
+
 ## [v1.8.1] - 2026-09-14
 
 - 지출·수입 카드 편집: 금액/결제수단/사진 변경과 지갑 재계산, 저장 실패·동시수정 방어.
