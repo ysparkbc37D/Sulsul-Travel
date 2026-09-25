@@ -9,6 +9,8 @@ const chronicle = readFileSync(new URL('../술술트래블신록.md', import.met
 const companion = readFileSync(new URL('../js/presentation/companion-ui.js', import.meta.url), 'utf8');
 const companionCss = readFileSync(new URL('../css/companion.css', import.meta.url), 'utf8');
 const utilitiesCss = readFileSync(new URL('../css/utilities.css', import.meta.url), 'utf8');
+const kbTravel = readFileSync(new URL('../kb-travel.js', import.meta.url), 'utf8');
+const packSa = readFileSync(new URL('../js/destinations/pack-south-america.js', import.meta.url), 'utf8');
 
 test('all classic inline scripts parse', () => {
   const scripts = [...html.matchAll(/<script(?![^>]*\bsrc=)(?![^>]*\btype=["']module["'])[^>]*>([\s\S]*?)<\/script>/gi)];
@@ -344,12 +346,23 @@ test('iOS Safari PWA installation guide and standalone crash guards are wired (v
   assert.match(html, /sulsul-boot-watchdog/);
 });
 
+test('2026 South America 22-day master plan v9 is registered and validated (v1.8.3)', () => {
+  assert.match(kbTravel, /아르헨티나 최적화 & 엘찰텐 1박 v9/);
+  assert.match(kbTravel, /9,467,000/);
+  assert.match(kbTravel, /Fitz Roy Laguna Capri/);
+  assert.match(packSa, /El Chaltén/);
+  assert.match(packSa, /Laguna Capri/);
+  assert.match(packSa, /Mirador Las Torres/);
+  assert.match(html, /v1\.8\.3/);
+  assert.match(sw, /st-shell-v1\.8\.3/);
+});
+
 test('release version is synchronized', () => {
   const app = html.match(/const APP_VER\s*=\s*'([^']+)'/)?.[1];
   const worker = sw.match(/const V\s*=\s*'st-shell-v([^']+)'/)?.[1];
   const release = changelog.match(/## \[v([^\]]+)\]/)?.[1];
   const chronicleRelease = chronicle.match(/^### \[실록 \d+호\].*\(v([^\)]+)\)$/m)?.[1];
-  assert.equal(app, '1.8.2');
+  assert.equal(app, '1.8.3');
   assert.equal(worker, app);
   assert.equal(release, app);
   assert.equal(chronicleRelease, app);

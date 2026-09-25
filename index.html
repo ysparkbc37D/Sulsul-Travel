@@ -20,7 +20,7 @@
     })();
   </script>
 
-  <!-- iOS Standalone Boot Watchdog & Error Guard (v1.8.2) -->
+  <!-- iOS Standalone Boot Watchdog & Error Guard (v1.8.3) -->
   <script>
     (function() {
       window.__bootErrors = [];
@@ -50,17 +50,17 @@
   </script>
 
   <!-- PWA Meta & Icons -->
-  <link rel="manifest" href="manifest.webmanifest?v=1.8.2">
+  <link rel="manifest" href="manifest.webmanifest?v=1.8.3">
   <meta name="theme-color" content="#F7F5F0">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <meta name="apple-mobile-web-app-title" content="술술트래블">
-  <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192-v115.png?v=1.8.2">
-  <link rel="icon" type="image/png" sizes="32x32" href="favicon.png?v=1.8.2">
+  <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192-v115.png?v=1.8.3">
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon.png?v=1.8.3">
   <link rel="shortcut icon" href="favicon.ico">
-  <link rel="apple-touch-icon" sizes="180x180" href="icons/apple-touch-icon-v115.png?v=1.8.2">
-  <link rel="apple-touch-icon" href="icons/apple-touch-icon-v115.png?v=1.8.2">
+  <link rel="apple-touch-icon" sizes="180x180" href="icons/apple-touch-icon-v115.png?v=1.8.3">
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon-v115.png?v=1.8.3">
 
   <!-- Google Fonts: Great Vibes, Dancing Script (Cursive Calligraphy), Cormorant Garamond, Noto Serif KR, Playfair Display -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -68,7 +68,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Great+Vibes&family=Cormorant+Garamond:wght@600;700;800&family=Noto+Serif+KR:wght@500;600;700;900&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
 
   <!-- Local Utilities Bundle (CDN fallback & tailwind utilities) -->
-  <link rel="stylesheet" href="css/utilities.css?v=1.8.2">
+  <link rel="stylesheet" href="css/utilities.css?v=1.8.3">
   <link rel="stylesheet" href="vendor/fontawesome/css/all.min.css">
 
   <!-- Leaflet Map CSS & JS -->
@@ -1410,12 +1410,12 @@
     }
   </style>
 
-  <link rel="stylesheet" href="css/companion.css?v=1.8.2">
-  <script src="js/presentation/companion-ui.js?v=1.8.2"></script>
-  <script src="js/domain/trip-transfer.js?v=1.8.2"></script>
-  <script src="js/presentation/trip-transfer-ui.js?v=1.8.2"></script>
-  <script src="js/presentation/activity-journal.js?v=1.8.2"></script>
-  <script src="js/presentation/expense-editor.js?v=1.8.2"></script>
+  <link rel="stylesheet" href="css/companion.css?v=1.8.3">
+  <script src="js/presentation/companion-ui.js?v=1.8.3"></script>
+  <script src="js/domain/trip-transfer.js?v=1.8.3"></script>
+  <script src="js/presentation/trip-transfer-ui.js?v=1.8.3"></script>
+  <script src="js/presentation/activity-journal.js?v=1.8.3"></script>
+  <script src="js/presentation/expense-editor.js?v=1.8.3"></script>
 
   <!-- Knowledge Base Seed & Destination Knowledge Packs (DKP) -->
   <script src="kb-travel.js"></script>
@@ -1445,7 +1445,7 @@
       <!-- 우측 액션 클러스터 (버전 알약 -> 원형 통계 -> 원형 설정 -> 다크그린 캡슐 추가) -->
       <div class="flex items-center gap-1 sm:gap-1.5 shrink-0">
         <!-- 1. 버전 배지 버튼 (v1.7.8 - 클릭 시 버전 이력) -->
-        <button id="app-ver-badge" onclick="event.stopPropagation(); openVersionHistoryModal()" class="h-7 sm:h-8 px-2 sm:px-2.5 rounded-full theme-card-subtle flex items-center justify-center font-mono text-[10px] sm:text-[11px] font-bold text-[#a2601b] dark:text-[#d4af37] shadow-xs hover:border-amber-500/60 transition cursor-pointer shrink-0" title="버전 업데이트 기록 보기 (클릭)">v1.8.2</button>
+        <button id="app-ver-badge" onclick="event.stopPropagation(); openVersionHistoryModal()" class="h-7 sm:h-8 px-2 sm:px-2.5 rounded-full theme-card-subtle flex items-center justify-center font-mono text-[10px] sm:text-[11px] font-bold text-[#a2601b] dark:text-[#d4af37] shadow-xs hover:border-amber-500/60 transition cursor-pointer shrink-0" title="버전 업데이트 기록 보기 (클릭)">v1.8.3</button>
 
         <!-- 2. 통계 버튼 (📊 - 원형 버튼) -->
         <button id="header-btn-analytics" onclick="openAnalyticsModal('lifetime')" class="companion-header-analytics w-7 h-7 sm:w-8 sm:h-8 rounded-full theme-card-subtle flex items-center justify-center text-[#a2601b] dark:text-[#d4af37] hover:border-amber-500/60 transition shadow-xs cursor-pointer shrink-0" title="술술 여행 통계 대시보드">
@@ -4373,7 +4373,13 @@
 
       <!-- 버전 목록 스크롤 영역 (독립 스크롤 컨테이너로 Flexbox 압축 버그 영구 척결) -->
       <div class="overflow-y-auto flex-1 min-h-0 space-y-3.5 pr-1.5 custom-scrollbar">
-        <!-- v1.8.2 (Current) -->
+        <!-- v1.8.3 (Current) -->
+        <section class="companion-context">
+          <h3 class="font-bold">v1.8.3 · 2026 남미 22일 가성비 마스터플랜(v9) 정규 탑재</h3>
+          <p class="text-xs">아르헨티나(부에노스·파타고니아·엘찰텐 1박) · 칠레(토레스델파이네·아타카마 사막) · 페루(쿠스코·마추픽추·우만타이·리마) · 밴쿠버 22일 정규 여정 탑재 · 33대 미준비 실행대장 및 수하물 23kg 통제 체크리스트 · 10대 거점 지오코딩 및 항공 궤적 완비</p>
+          <p class="text-xs">2026-09-25 · st-shell-v1.8.3</p>
+        </section>
+        <!-- v1.8.2 -->
         <section class="companion-context">
           <h3 class="font-bold">v1.8.2 · 아이폰 PWA 설치 &amp; 실행 안정화</h3>
           <p class="text-xs">사파리 공유 버튼 위치(우측 상단/하단) 가이드 개편 · 홈 화면 실행 시 흰 화면(White Screen) 크래시 완치 · 서비스 워커 내결함성 강화 · 4초 부팅 가드 구축</p>
@@ -5200,7 +5206,7 @@
 
       <!-- 모달 푸터 -->
       <div class="pt-3 border-t border-[#e8e2d5] dark:border-stone-800 flex items-center justify-between shrink-0">
-        <span class="text-[11px] text-stone-400 dark:text-stone-500 font-mono">Sulsul Travel Engine v1.8.2</span>
+        <span class="text-[11px] text-stone-400 dark:text-stone-500 font-mono">Sulsul Travel Engine v1.8.3</span>
         <button onclick="closeModal('modal-version-history')" class="px-4 py-2 rounded-xl bg-[#faf8f5] dark:bg-stone-800 hover:bg-[#f0ece1] dark:hover:bg-stone-700 border border-[#e8e2d5] dark:border-stone-700 text-[#1c1917] dark:text-[#ededed] text-xs font-bold transition cursor-pointer shadow-sm">
           닫기
         </button>
@@ -5547,7 +5553,7 @@
     window.showToast = showToast;
 
     // 앱 버전 및 글로벌 네임스페이스 (Sulsul-Travel Invariant Rule R-10, R-11, R-12, R-13, R-14, R-15, R-16)
-    const APP_VER = '1.8.2';
+    const APP_VER = '1.8.3';
 
     // ══════════════════════════════════════════
     // [3-Way Theme System] 모던, 라이트그레이, 딥 블랙 테마 엔진 (v1.6.7)
@@ -6175,9 +6181,22 @@
         seedTpl.isSample = true;
         State.trips.unshift(seedTpl);
       } else if (exists) {
-        // Self-heal: If existing showcase trip has empty days or missing spots due to past initialization bug
+        // Self-heal: If existing showcase trip has empty days, missing spots, or older pre-v9 plan (lacks El Chalten v9)
+        const isOldVersion = exists.isSample && (!exists.title || !exists.title.includes('엘찰텐') || (exists.days && exists.days.length > 0 && !exists.days[0].spots[0]?.time));
         const hasSpots = exists.days && exists.days.length > 0 && exists.days.some(d => d.spots && d.spots.length > 0);
-        if (!hasSpots && fullDays.length > 0) {
+        if ((!hasSpots || isOldVersion) && fullDays.length > 0) {
+          if (window.KB_TRAVEL && window.KB_TRAVEL.templates && window.KB_TRAVEL.templates.south_america_22d) {
+            const seedTpl = JSON.parse(JSON.stringify(window.KB_TRAVEL.templates.south_america_22d));
+            exists.title = seedTpl.title;
+            exists.subtitle = seedTpl.subtitle;
+            exists.totalBudget = seedTpl.totalBudget;
+            exists.cities = seedTpl.cities;
+            exists.countries = seedTpl.countries;
+            exists.budget = seedTpl.budget;
+            exists.expenses = window.KB_TRAVEL.seedExpenses ? JSON.parse(JSON.stringify(window.KB_TRAVEL.seedExpenses)) : (seedTpl.expenses || exists.expenses);
+            exists.checklist = window.KB_TRAVEL.defaultChecklist ? JSON.parse(JSON.stringify(window.KB_TRAVEL.defaultChecklist)) : (seedTpl.checklist || exists.checklist);
+            exists.packingChecklist = seedTpl.packingChecklist || exists.packingChecklist;
+          }
           exists.days = fullDays;
           exists.durationDays = fullDays.length;
           saveTrips();
@@ -6187,12 +6206,12 @@
 
     function deleteSouthAmericaSample() {
       const targetId = 'trip_sa_showcase_22d';
-      const idx = State.trips.findIndex(t => t.id === targetId || (t.title && t.title.includes('남미 4개국')));
+      const idx = State.trips.findIndex(t => t.id === targetId || (t.title && (t.title.includes('남미') || t.title.includes('아르헨티나 최적화'))));
       if (idx === -1) {
         showToast('ℹ️ 현재 등록된 남미 22일 가이드 예제가 없습니다.');
         return;
       }
-      if (confirm('초기 탑재된 [2026 남미 4개국 22일 가이드 예제]를 삭제하시겠습니까?\n\n(설정창에서 언제든 다시 복원할 수 있습니다)')) {
+      if (confirm('초기 탑재된 [2026 남미 22일 완벽 가이드 (아르헨티나 최적화 & 엘찰텐 1박 v9)]를 삭제하시겠습니까?\n\n(설정창에서 언제든 다시 복원할 수 있습니다)')) {
         State.trips.splice(idx, 1);
         localStorage.setItem('st_sa_sample_deleted', 'true');
         if (State.activeTripId === targetId) {
@@ -6212,7 +6231,7 @@
     function restoreSouthAmericaSample(forceVariant = 22) {
       localStorage.removeItem('st_sa_sample_deleted');
       const targetId = 'trip_sa_showcase_22d';
-      const idx = State.trips.findIndex(t => t.id === targetId || (t.title && t.title.includes('남미 4개국')));
+      const idx = State.trips.findIndex(t => t.id === targetId || (t.title && (t.title.includes('남미') || t.title.includes('아르헨티나 최적화'))));
       if (idx !== -1) {
         State.trips.splice(idx, 1);
       }
@@ -6224,7 +6243,7 @@
         renderActiveTripWorkspace();
       }
       closeModal('modal-settings');
-      showToast('✨ 남미 4개국 22일 가이드 예제가 성공적으로 복원되었습니다!');
+      showToast('✨ 2026 남미 22일 완벽 가이드(v9) 예제가 성공적으로 복원되었습니다!');
     }
 
     function saveTrips({ bump = true } = {}) {
