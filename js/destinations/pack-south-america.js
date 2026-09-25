@@ -71,6 +71,206 @@
     { id: 'yvr_stanley', name: '스탠리 파크 해안 산책로 (Stanley Park Seawall)', city: '밴쿠버', country: '캐나다', flag: '🇨🇦', cat: 'tour', lat: 49.3017, lng: -123.1442, tip: '도심 속 원시림 공원, 토템폴 공원과 라이온스게이트 브리지 조망' }
   ];
 
+  const SA_DESTINATIONS = [
+    {
+      id: 'bue',
+      name: '부에노스아이레스',
+      nameEn: 'Buenos Aires',
+      country: '아르헨티나',
+      countryEn: 'Argentina',
+      flag: '🇦🇷',
+      lat: -34.6037,
+      lng: -58.3816,
+      zoom: 13,
+      currency: 'ARS',
+      altitude: '25m (평지)',
+      emergency: '911',
+      embassy: '+54-11-4805-8291',
+      highlights: ['5월 광장 & 카사 로사다', '돈 훌리오 꽃등심 아사도', '엘 아테네오 서점', '라 벤타나 탱고쇼'],
+      foods: ['꽃등심 아사도(Ojo de Bife)', '엠파나다', '추로스 & 초콜릿 Submarino', '말벡 와인'],
+      tips: 'MEP 신용카드 결제로 공식 환율 대비 40% 이상 자동 할인 절감.'
+    },
+    {
+      id: 'fte',
+      name: '엘 칼라파테',
+      nameEn: 'El Calafate',
+      country: '아르헨티나',
+      countryEn: 'Argentina',
+      flag: '🇦🇷',
+      lat: -50.3379,
+      lng: -72.2648,
+      zoom: 12,
+      currency: 'ARS',
+      altitude: '200m (평지)',
+      emergency: '101',
+      embassy: '+54-11-4805-8291',
+      highlights: ['페리토 모레노 거대 빙하', '사파리 나우티코 보트 투어', 'La Tablita 양고기 통구이'],
+      foods: ['파타고니아 어린 양고기(Cordero)', '칼라파테 베리 잼', '알파호르'],
+      tips: '국립공원 입장권은 사전 온라인 결제 필수. 빙하 트레킹 시 장갑/방풍의 필수.'
+    },
+    {
+      id: 'cha',
+      name: '엘 찰텐',
+      nameEn: 'El Chaltén',
+      country: '아르헨티나',
+      countryEn: 'Argentina',
+      flag: '🇦🇷',
+      lat: -49.3315,
+      lng: -72.8864,
+      zoom: 13,
+      currency: 'ARS',
+      altitude: '400m',
+      emergency: '101',
+      embassy: '+54-11-4805-8291',
+      highlights: ['피츠로이 카프리 호수(Laguna Capri)', '로스 콘도레스 일출 전망대', '수제 맥주 브루어리'],
+      foods: ['파타고니아 수제 생맥주', '트레커 버거', '핫스튜(Guiso)'],
+      tips: '엘 칼라파테 숙소에 큰 캐리어를 무료 보관하고 1박 배낭만 챙겨 가볍게 이동!'
+    },
+    {
+      id: 'pnt',
+      name: '토레스 델 파이네',
+      nameEn: 'Torres del Paine / Puerto Natales',
+      country: '칠레',
+      countryEn: 'Chile',
+      flag: '🇨🇱',
+      lat: -51.2532,
+      lng: -72.8814,
+      zoom: 10,
+      currency: 'CLP',
+      altitude: '100m ~ 1,000m',
+      emergency: '133',
+      embassy: '+56-2-2228-4214',
+      highlights: ['미라도르 라스 토레스 20km', '살토 그란데 폭포', '그레이 호수 유빙', 'Santolla 킹크랩'],
+      foods: ['마가야네스 킹크랩(Centolla)', '연어 스테이크', '칼라파테 사워'],
+      tips: '칠레 입국 시 과일/육류/견과류 농축산물 엄격 검역! 미신고 적발 시 막대한 벌금.'
+    },
+    {
+      id: 'ata',
+      name: '산페드로데아타카마',
+      nameEn: 'San Pedro de Atacama',
+      country: '칠레',
+      countryEn: 'Chile',
+      flag: '🇨🇱',
+      lat: -22.9087,
+      lng: -68.1997,
+      zoom: 12,
+      currency: 'CLP',
+      altitude: '2,400m ~ 4,300m',
+      emergency: '133',
+      embassy: '+56-2-2228-4214',
+      highlights: ['달의 계곡 황혼', '엘 타티오 간헐천(4,300m)', '발티나체 히든 라군 부유체험', '별빛 투어'],
+      foods: ['화덕 소고기 엠파나다', '라마 스테이크', '피스코 사워'],
+      tips: '엘 타티오 간헐천은 새벽 영하 5도 이하로 급랭. 방한모자/핫팩/경량패딩 3중 착용.'
+    },
+    {
+      id: 'scl',
+      name: '산티아고',
+      nameEn: 'Santiago',
+      country: '칠레',
+      countryEn: 'Chile',
+      flag: '🇨🇱',
+      lat: -33.4489,
+      lng: -70.6693,
+      zoom: 12,
+      currency: 'CLP',
+      altitude: '570m',
+      emergency: '133',
+      embassy: '+56-2-2228-4214',
+      highlights: ['산 크리스토발 케이블카', '스카이 코스타네라 300m 전망대', '아르마스 광장'],
+      foods: ['파일라 마리나(해산물 탕)', '바베큐 로모(Lomo)', '모테 콘 우에시요'],
+      tips: '대중교통 이용 시 Bip! 교통카드 이용. 지하철망이 매우 쾌적하고 편리함.'
+    },
+    {
+      id: 'cuz',
+      name: '쿠스코',
+      nameEn: 'Cusco',
+      country: '페루',
+      countryEn: 'Peru',
+      flag: '🇵🇪',
+      lat: -13.5319,
+      lng: -71.9675,
+      zoom: 13,
+      currency: 'PEN',
+      altitude: '3,400m (고산 지대)',
+      emergency: '105',
+      embassy: '+51-1-632-5000',
+      highlights: ['아르마스 광장 & 12각의 돌', '살리네라스 마라스 염전', '모라이 테라스', '우만타이 호수(4,200m)'],
+      foods: ['로모 살타도(소고기 감자볶음)', '안데스 송어(Trucha)', '코카차(고산차)', '치차 모라다'],
+      tips: '도착 당일은 절대 무리한 운동 금지! 이뇨작용 고산병약 복용 및 코카차 수시 음용.'
+    },
+    {
+      id: 'mp',
+      name: '마추픽추',
+      nameEn: 'Machu Picchu',
+      country: '페루',
+      countryEn: 'Peru',
+      flag: '🇵🇪',
+      lat: -13.1631,
+      lng: -72.5450,
+      zoom: 14,
+      currency: 'PEN',
+      altitude: '2,430m (쿠스코보다 낮음)',
+      emergency: '105',
+      embassy: '+51-1-632-5000',
+      highlights: ['서킷 2 클래식 망지기의 집 엽서 뷰', '태양의 신전', '아구아스 칼리엔테스 온천'],
+      foods: ['안데스 송어 버터구이', '퀴노아 수프', '피스코 사워'],
+      tips: '서킷 2 입장권 및 잉카레일/페루레일 열차는 3~4개월 전 타임어택 예약 필수!'
+    },
+    {
+      id: 'lim',
+      name: '리마',
+      nameEn: 'Lima',
+      country: '페루',
+      countryEn: 'Peru',
+      flag: '🇵🇪',
+      lat: -12.0464,
+      lng: -77.0428,
+      zoom: 12,
+      currency: 'PEN',
+      altitude: '100m (평지 해안)',
+      emergency: '105',
+      embassy: '+51-1-632-5000',
+      highlights: ['미라플로레스 사랑의 공원', '라르코마르 절벽 쇼핑몰', '바랑코 예술가 거리', '정통 세비체'],
+      foods: ['세비체(Ceviche)', '안티쿠초(소심장 꼬치)', '피스코 사워', '잉카 콜라'],
+      tips: '미라플로레스와 바랑코는 안전하나 구도심 센트로는 해 진 뒤 소매치기 각별 주의.'
+    },
+    {
+      id: 'yvr',
+      name: '밴쿠버',
+      nameEn: 'Vancouver',
+      country: '캐나다',
+      countryEn: 'Canada',
+      flag: '🇨🇦',
+      lat: 49.2827,
+      lng: -123.1207,
+      zoom: 13,
+      currency: 'CAD',
+      altitude: '0m (평지)',
+      emergency: '911',
+      embassy: '+1-604-681-9581',
+      highlights: ['개스타운 증기시계', '플라이오버 캐나다 4D', '스탠리 파크 해안 산책로'],
+      foods: ['밴쿠버 연어 요리', '푸틴(Poutine)', '팀호튼 커피 & 도넛'],
+      tips: '귀국 경유 시 캐나다 eTA 필수. 캐나다플레이스 주변은 도보 관광에 최적화.'
+    }
+  ];
+
+  const SA_BOOKING_GUIDES = [
+    { id: "sa_bg_01", title: "인천 ➔ 밴쿠버 ➔ 부에노스아이레스 다구간 국제선 항공권", target: "에어캐나다 공홈 / 스카이스캐너", dDay: "D-180", cost: "약 3,600,000원 (2인)", status: "urgent", tip: "밴쿠버/토론토 경유 수하물 자동 연결 여부 확인", url: "https://www.aircanada.com" },
+    { id: "sa_bg_02", title: "마추픽추 서킷 2 (Circuit 2) 클래식 입장권", target: "페루 문화부 공식 홈페이지 (tuboleto.cultura.pe)", dDay: "D-120", cost: "약 110,000원 (2인)", status: "urgent", tip: "가장 인기 높은 코스로 오픈 당일 매진되므로 즉시 예약", url: "https://tuboleto.cultura.pe" },
+    { id: "sa_bg_03", title: "오얀타이탐보 ↔ 마추픽추 잉카레일/페루레일 왕복 기차표", target: "Inca Rail / PeruRail 공홈", dDay: "D-90", cost: "약 360,000원 (2인)", status: "urgent", tip: "마추픽추 입장 시간과 맞물려 2~3시간 전 도착 편 예약", url: "https://incarail.com" },
+    { id: "sa_bg_04", title: "부에노스(AEP) ➔ 칼라파테(FTE) 아르헨티나 항공 국내선", target: "Aerolineas Argentinas 공홈", dDay: "D-90", cost: "약 480,000원 (2인)", status: "urgent", tip: "MEP 환율 적용 신용카드로 결제 시 큰 폭 할인", url: "https://www.aerolineas.com.ar" },
+    { id: "sa_bg_05", title: "푼타아레나스(PUQ) ➔ 산티아고(SCL) ➔ 칼라마(CJC) LATAM", target: "LATAM 항공 공홈", dDay: "D-90", cost: "약 560,000원 (2인)", status: "urgent", tip: "칠레 국내선 묶음 결제 시 프로모션 운임 적용", url: "https://www.latamairlines.com" },
+    { id: "sa_bg_06", title: "산티아고(SCL) ➔ 리마(LIM) ➔ 쿠스코(CUZ) LATAM 항공", target: "LATAM 항공 공홈", dDay: "D-90", cost: "약 620,000원 (2인)", status: "urgent", tip: "국제선+페루 국내선 연계 발권", url: "https://www.latamairlines.com" },
+    { id: "sa_bg_07", title: "엘 칼라파테 ↔ 엘 찰텐 왕복 버스 (Chalten Travel)", target: "Platform 10 또는 Chalten Travel 공홈", dDay: "D-60", cost: "약 96,000원 (2인)", status: "recommended", tip: "08:00 출발 18:00 복귀 골든 슬롯 확보", url: "https://www.plataforma10.com.ar" },
+    { id: "sa_bg_08", title: "엘 칼라파테 ➔ 푸에르토나탈레스 국경 통과 국제버스", target: "Bus-Sur 또는 Cootra", dDay: "D-60", cost: "약 120,000원 (2인)", status: "recommended", tip: "아르헨티나 ➔ 칠레 국경 심사 소요 시간 감안", url: "https://www.bussur.com" },
+    { id: "sa_bg_09", title: "푸에르토나탈레스 ➔ 푼타아레나스 버스 (Bus-Sur)", target: "Bus-Sur 공홈", dDay: "D-45", cost: "약 40,000원 (2인)", status: "recommended", tip: "오후 16:30 출발편 추천", url: "https://www.bussur.com" },
+    { id: "sa_bg_10", title: "페리토 모레노 빙하 국립공원 입장권 및 사파리 나우티코 보트", target: "아르헨티나 국립공원 공홈", dDay: "D-30", cost: "약 180,000원 (2인)", status: "recommended", tip: "국립공원 온라인 결제 QR 코드 오프라인 저장", url: "https://www.argentina.gob.ar/parquesnacionales/glaciares" },
+    { id: "sa_bg_11", title: "아타카마 천문대 별빛 투어 (Stargazing)", target: "현지 전문 천문대 투어사", dDay: "D-30", cost: "약 110,000원 (2인)", status: "recommended", tip: "보름달 전후 3일은 달빛으로 은하수 관측 불가하므로 음력 체크", url: "https://www.sanpedroatacama.com" },
+    { id: "sa_bg_12", title: "부에노스아이레스 라 벤타나(La Ventana) 탱고 디너쇼", target: "La Ventana 공홈 / 클룩", dDay: "D-30", cost: "약 240,000원 (2인)", status: "recommended", tip: "산텔모 지역 호텔 픽업 포함 여부 확인", url: "https://www.laventanaweb.com" },
+    { id: "sa_bg_13", title: "캐나다 전자여행허가 (eTA)", target: "캐나다 이민국 공식 웹사이트", dDay: "D-30", cost: "약 14,000원 (2인)", status: "urgent", tip: "건당 7 CAD, 사칭 대행 사이트 주의!", url: "https://www.canada.ca/en/immigration-refugees-citizenship/services/visit-canada/eta.html" },
+    { id: "sa_bg_14", title: "남미 4개국 데이터 통합 eSIM", target: "Airalo / 유심사", dDay: "D-7", cost: "약 80,000원 (2인)", status: "urgent", tip: "아르헨티나, 칠레, 페루, 캐나다 4개국 커버리지 확인", url: "https://www.airalo.com" }
+  ];
+
   const destinationPackSouthAmerica = {
     id: 'pack_south_america_22d',
     name: '2026 남미 22일 가성비 마스터플랜 (아르헨티나 최적화 & 엘찰텐 1박 v9)',
@@ -81,6 +281,14 @@
     currencies: ['ARS', 'CLP', 'PEN', 'CAD', 'USD', 'KRW'],
     duration: 22,
     defaultRoomCode: 'SA-2026',
+    flag: '🌎',
+
+    match(trip) {
+      if (!trip) return false;
+      if (trip.id === 'trip_sa_showcase_22d' || trip.id === 'trip_sa_showcase_21d') return true;
+      const text = ((trip.title || '') + ' ' + (trip.destination || '') + ' ' + (trip.countries || []).join(' ') + ' ' + (trip.cities || []).join(' ')).toLowerCase();
+      return /남미|아르헨티나|칠레|페루|파타고니아|부에노스|칼라파테|엘찰텐|토레스|아타카마|산티아고|쿠스코|마추픽추|리마|south\s*america/i.test(text);
+    },
     
     geo: {
       center: [-25.0, -68.0],
@@ -89,168 +297,7 @@
         [-55.5, -82.0], // 파타고니아 남단
         [10.0, -50.0]   // 남미 북단
       ],
-      destinations: [
-        {
-          id: 'bue',
-          name: '부에노스아이레스',
-          nameEn: 'Buenos Aires',
-          country: '아르헨티나',
-          countryEn: 'Argentina',
-          flag: '🇦🇷',
-          lat: -34.6037,
-          lng: -58.3816,
-          zoom: 13,
-          currency: 'ARS',
-          altitude: '25m (평지)',
-          highlights: ['5월 광장 & 카사 로사다', '돈 훌리오 꽃등심 아사도', '엘 아테네오 서점', '라 벤타나 탱고쇼'],
-          foods: ['꽃등심 아사도(Ojo de Bife)', '엠파나다', '추로스 & 초콜릿 Submarino', '말벡 와인'],
-          tips: 'MEP 신용카드 결제로 공식 환율 대비 40% 이상 자동 할인 절감.'
-        },
-        {
-          id: 'fte',
-          name: '엘 칼라파테',
-          nameEn: 'El Calafate',
-          country: '아르헨티나',
-          countryEn: 'Argentina',
-          flag: '🇦🇷',
-          lat: -50.3379,
-          lng: -72.2648,
-          zoom: 12,
-          currency: 'ARS',
-          altitude: '200m (평지)',
-          highlights: ['페리토 모레노 거대 빙하', '사파리 나우티코 보트 투어', 'La Tablita 양고기 통구이'],
-          foods: ['파타고니아 어린 양고기(Cordero)', '칼라파테 베리 잼', '알파호르'],
-          tips: '국립공원 입장권은 사전 온라인 결제 필수. 빙하 트레킹 시 장갑/방풍의 필수.'
-        },
-        {
-          id: 'cha',
-          name: '엘 찰텐',
-          nameEn: 'El Chaltén',
-          country: '아르헨티나',
-          countryEn: 'Argentina',
-          flag: '🇦🇷',
-          lat: -49.3315,
-          lng: -72.8864,
-          zoom: 13,
-          currency: 'ARS',
-          altitude: '400m',
-          highlights: ['피츠로이 카프리 호수(Laguna Capri)', '로스 콘도레스 일출 전망대', '수제 맥주 브루어리'],
-          foods: ['파타고니아 수제 생맥주', '트레커 버거', '핫스튜(Guiso)'],
-          tips: '엘 칼라파테 숙소에 큰 캐리어를 무료 보관하고 1박 배낭만 챙겨 가볍게 이동!'
-        },
-        {
-          id: 'pnt',
-          name: '토레스 델 파이네',
-          nameEn: 'Torres del Paine / Puerto Natales',
-          country: '칠레',
-          countryEn: 'Chile',
-          flag: '🇨🇱',
-          lat: -51.2532,
-          lng: -72.8814,
-          zoom: 10,
-          currency: 'CLP',
-          altitude: '100m ~ 1,000m',
-          highlights: ['미라도르 라스 토레스 20km', '살토 그란데 폭포', '그레이 호수 유빙', 'Santolla 킹크랩'],
-          foods: ['마가야네스 킹크랩(Centolla)', '연어 스테이크', '칼라파테 사워'],
-          tips: '칠레 입국 시 과일/육류/견과류 농축산물 엄격 검역! 미신고 적발 시 막대한 벌금.'
-        },
-        {
-          id: 'ata',
-          name: '산페드로데아타카마',
-          nameEn: 'San Pedro de Atacama',
-          country: '칠레',
-          countryEn: 'Chile',
-          flag: '🇨🇱',
-          lat: -22.9087,
-          lng: -68.1997,
-          zoom: 12,
-          currency: 'CLP',
-          altitude: '2,400m ~ 4,300m',
-          highlights: ['달의 계곡 황혼', '엘 타티오 간헐천(4,300m)', '발티나체 히든 라군 부유체험', '별빛 투어'],
-          foods: ['화덕 소고기 엠파나다', '라마 스테이크', '피스코 사워'],
-          tips: '엘 타티오 간헐천은 새벽 영하 5도 이하로 급랭. 방한모자/핫팩/경량패딩 3중 착용.'
-        },
-        {
-          id: 'scl',
-          name: '산티아고',
-          nameEn: 'Santiago',
-          country: '칠레',
-          countryEn: 'Chile',
-          flag: '🇨🇱',
-          lat: -33.4489,
-          lng: -70.6693,
-          zoom: 12,
-          currency: 'CLP',
-          altitude: '570m',
-          highlights: ['산 크리스토발 케이블카', '스카이 코스타네라 300m 전망대', '아르마스 광장'],
-          foods: ['파일라 마리나(해산물 탕)', '바베큐 로모(Lomo)', '모테 콘 우에시요'],
-          tips: '대중교통 이용 시 Bip! 교통카드 이용. 지하철망이 매우 쾌적하고 편리함.'
-        },
-        {
-          id: 'cuz',
-          name: '쿠스코',
-          nameEn: 'Cusco',
-          country: '페루',
-          countryEn: 'Peru',
-          flag: '🇵🇪',
-          lat: -13.5319,
-          lng: -71.9675,
-          zoom: 13,
-          currency: 'PEN',
-          altitude: '3,400m (고산 지대)',
-          highlights: ['아르마스 광장 & 12각의 돌', '살리네라스 마라스 염전', '모라이 테라스', '우만타이 호수(4,200m)'],
-          foods: ['로모 살타도(소고기 감자볶음)', '안데스 송어(Trucha)', '코카차(고산차)', '치차 모라다'],
-          tips: '도착 당일은 절대 무리한 운동 금지! 이뇨작용 고산병약 복용 및 코카차 수시 음용.'
-        },
-        {
-          id: 'mp',
-          name: '마추픽추',
-          nameEn: 'Machu Picchu',
-          country: '페루',
-          countryEn: 'Peru',
-          flag: '🇵🇪',
-          lat: -13.1631,
-          lng: -72.5450,
-          zoom: 14,
-          currency: 'PEN',
-          altitude: '2,430m (쿠스코보다 낮음)',
-          highlights: ['서킷 2 클래식 망지기의 집 엽서 뷰', '태양의 신전', '아구아스 칼리엔테스 온천'],
-          foods: ['안데스 송어 버터구이', '퀴노아 수프', '피스코 사워'],
-          tips: '서킷 2 입장권 및 잉카레일/페루레일 열차는 3~4개월 전 타임어택 예약 필수!'
-        },
-        {
-          id: 'lim',
-          name: '리마',
-          nameEn: 'Lima',
-          country: '페루',
-          countryEn: 'Peru',
-          flag: '🇵🇪',
-          lat: -12.0464,
-          lng: -77.0428,
-          zoom: 12,
-          currency: 'PEN',
-          altitude: '100m (평지 해안)',
-          highlights: ['미라플로레스 사랑의 공원', '라르코마르 절벽 쇼핑몰', '바랑코 예술가 거리', '정통 세비체'],
-          foods: ['세비체(Ceviche)', '안티쿠초(소심장 꼬치)', '피스코 사워', '잉카 콜라'],
-          tips: '미라플로레스와 바랑코는 안전하나 구도심 센트로는 해 진 뒤 소매치기 각별 주의.'
-        },
-        {
-          id: 'yvr',
-          name: '밴쿠버',
-          nameEn: 'Vancouver',
-          country: '캐나다',
-          countryEn: 'Canada',
-          flag: '🇨🇦',
-          lat: 49.2827,
-          lng: -123.1207,
-          zoom: 13,
-          currency: 'CAD',
-          altitude: '0m (평지)',
-          highlights: ['개스타운 증기시계', '플라이오버 캐나다 4D', '스탠리 파크 해안 산책로'],
-          foods: ['밴쿠버 연어 요리', '푸틴(Poutine)', '팀호튼 커피 & 도넛'],
-          tips: '귀국 경유 시 캐나다 eTA 필수. 캐나다플레이스 주변은 도보 관광에 최적화.'
-        }
-      ],
+      destinations: SA_DESTINATIONS,
       flightRoutes: [
         { from: [37.4602, 126.4407], to: [49.1967, -123.1815], label: 'ICN ➔ YVR (에어캐나다 AC062)' },
         { from: [49.1967, -123.1815], to: [43.6777, -79.6248], label: 'YVR ➔ YYZ (에어캐나다)' },
@@ -283,13 +330,41 @@
       ]
     },
 
+    bookings: {
+      subtabTitle: '14대 필수 예약',
+      subtabIcon: 'fa-ticket',
+      headerTitle: '남미 22일 14대 핵심 사전 예약 타임어택 대시보드',
+      headerDesc: '마추픽추 입장권, 파노라마 열차, 국립공원 등 매진되기 전 공식 사이트에서 직접 예약해야 하는 필수 리스트입니다.',
+      items: SA_BOOKING_GUIDES,
+      specialNotice: {
+        title: '✈️ 남미 22일 황금 코스 실전 3대 불변 수칙 & 사전 예약 가이드',
+        tips: [
+          { title: 'MEP 블루달러 환율 40% 절감', desc: '아르헨티나 국내선 항공, 특급 호텔, 돈 훌리오 스테이크 등은 트래블로그/트래블월렛 Visa/Master 카드로 결제 시 공식 환율 대비 40% 이상 자동 할인 절감.' },
+          { title: '고산병(소로체) 3단계 적응', desc: '아타카마(2,400m) ➔ 쿠스코(3,400m) 단계적 상승. 다이아목스는 입성 24시간 전 반 알씩 복용, 입성 첫날 무리한 도보 절대 금지 및 코카차 수시 음용.' },
+          { title: '23kg 수하물 무게 3원칙', desc: '초반(아르헨/칠레) 무거운 액체류 구매 절대 금지(국내선 5회 오버차지 방지). 쿠스코는 150g 베이비 알파카 목도리, 리마 출국 전 피스코/잼 집중 구매 후 위탁 수하물 패킹.' }
+        ]
+      }
+    },
+
+    cities: {
+      subtabTitle: '10대 거점 도시 가이드',
+      subtabIcon: 'fa-city',
+      headerTitle: '남미 10대 거점 도시 완벽 가이드',
+      headerDesc: '남미 4개국 10대 거점 도시별 주요 랜드마크, 현지 필수 미식, 고산병/안전 수칙 및 긴급 연락망을 안내합니다.',
+      items: SA_DESTINATIONS
+    },
+
     spots: SA_KNOWN_SPOTS
   };
 
   if (typeof window !== 'undefined') {
+    window.destinationPackSouthAmerica = destinationPackSouthAmerica;
     window.SulsulDestinationPacks = window.SulsulDestinationPacks || {};
     window.SulsulDestinationPacks['pack_south_america_22d'] = destinationPackSouthAmerica;
 
+    if (window.DestinationRegistry) {
+      window.DestinationRegistry.register(destinationPackSouthAmerica);
+    }
     if (window.SulsulDestinationRegistry && typeof window.SulsulDestinationRegistry.registerPack === 'function') {
       window.SulsulDestinationRegistry.registerPack(destinationPackSouthAmerica);
     }

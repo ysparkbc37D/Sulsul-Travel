@@ -353,6 +353,11 @@ test('2026 South America 22-day master plan v9 is registered and validated (v1.8
   assert.match(packSa, /El Chaltén/);
   assert.match(packSa, /Laguna Capri/);
   assert.match(packSa, /Mirador Las Torres/);
+  assert.match(packSa, /subtabTitle:\s*'10대 거점 도시 가이드'/);
+  assert.match(packSa, /subtabTitle:\s*'14대 필수 예약'/);
+  assert.match(packSa, /DestinationRegistry\.register/);
+  assert.match(html, /10대 거점 도시 가이드/);
+  assert.match(html, /수하물 23kg 통제/);
 });
 
 test('v1.8.4 6 key UI/UX convenience features are implemented and validated', () => {

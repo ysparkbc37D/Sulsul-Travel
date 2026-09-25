@@ -1706,7 +1706,7 @@
           </button>
           <button id="btn-subtab-cityguide" onclick="switchPlanSubTab('cityguide')" class="px-3 py-1.5 rounded-lg text-xs font-bold subtab-inactive flex items-center gap-1.5 shrink-0 whitespace-nowrap cursor-pointer">
             <i id="icon-subtab-cityguide" class="fa-solid fa-city text-[11px]"></i>
-            <span id="label-subtab-cityguide">8대 도시 가이드</span>
+            <span id="label-subtab-cityguide">10대 도시 가이드</span>
           </button>
         </div>
 
@@ -11179,41 +11179,120 @@
       if (!container) return;
 
       if (isSA) {
-        if (headerTitle) headerTitle.innerText = '8대 거점 도시 가이드';
-        if (headerDesc) headerDesc.innerText = '남미 거점 도시별 주요 랜드마크, 현지 필수 미식 및 고산병/안전 실전 팁을 안내합니다.';
+        if (headerTitle) headerTitle.innerText = '10대 거점 도시 가이드';
+        if (headerDesc) headerDesc.innerText = '남미 4개국 10대 거점 도시별 주요 랜드마크, 대표 미식, 고산병/안전 수칙 및 긴급 연락망을 안내합니다.';
         if (headerIcon) headerIcon.className = 'fa-solid fa-city text-amber-400';
 
-        const dests = (window.KB_TRAVEL && window.KB_TRAVEL.destinations) ? window.KB_TRAVEL.destinations : {};
-        container.innerHTML = Object.keys(dests).map(k => {
-          const d = dests[k];
-          return `
-            <div class="p-4 rounded-xl bg-[#080b12] border border-[#1e263c] space-y-2">
-              <div class="flex items-center justify-between">
-                <div class="flex items-center gap-2">
-                  <span class="text-xl">${d.flag || '🌎'}</span>
-                  <h4 class="text-xs sm:text-sm font-black text-white">${d.name}</h4>
-                </div>
-                <span class="text-[10px] font-bold text-purple-950 dark:text-purple-300 px-2 py-0.5 rounded bg-purple-100 dark:bg-purple-950/70 border border-purple-300 dark:border-purple-800">${d.altitude}</span>
-              </div>
+        const destList = (pack && pack.cities && Array.isArray(pack.cities.items) && pack.cities.items.length > 0)
+          ? pack.cities.items
+          : ((pack && pack.geo && Array.isArray(pack.geo.destinations) && pack.geo.destinations.length > 0)
+            ? pack.geo.destinations
+            : Object.values(window.KB_TRAVEL?.destinations || {}));
 
-              <div class="text-xs text-slate-300 space-y-1">
-                <div class="text-amber-400 text-[11px] font-bold">🎯 핵심 랜드마크</div>
-                <ul class="text-[11px] text-slate-400 pl-2">
-                  ${(d.highlights || []).slice(0, 3).map(h => `<li>• ${h}</li>`).join('')}
-                </ul>
-                <div class="text-emerald-400 text-[11px] font-bold pt-1">🍽️ 대표 먹거리</div>
-                <div class="text-[11px] text-slate-400">${(d.foods || []).join(', ')}</div>
+        const rulesBannerHtml = `
+          <div class="col-span-1 md:col-span-2 p-4 rounded-xl bg-gradient-to-r from-amber-500/10 via-emerald-500/10 to-sky-500/10 border border-amber-500/30 space-y-2.5 mb-2">
+            <div class="flex items-center gap-2">
+              <span class="text-base sm:text-lg">🎒</span>
+              <h4 class="text-xs sm:text-sm font-black text-amber-950 dark:text-amber-300">수하물 23kg 통제 & 여행 경비 수호 3대 골든룰</h4>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5 text-[11px]">
+              <div class="p-3 rounded-lg theme-card-subtle space-y-1">
+                <div class="font-bold text-rose-700 dark:text-rose-400 flex items-center gap-1">
+                  <i class="fa-solid fa-ban text-[10px]"></i> 제 1원칙 (초반 구매 금지)
+                </div>
+                <div class="text-[#57534e] dark:text-slate-400 leading-relaxed">
+                  10/13~10/24 아르헨/칠레 여정 중 무거운 와인·잼 대량 구매 절대 금지 (국내선 5회 23kg 초과 요금 수십만 원 폭탄 방지).
+                </div>
+              </div>
+              <div class="p-3 rounded-lg theme-card-subtle space-y-1">
+                <div class="font-bold text-emerald-700 dark:text-emerald-400 flex items-center gap-1">
+                  <i class="fa-solid fa-feather text-[10px]"></i> 제 2원칙 (쿠스코 경량 의류)
+                </div>
+                <div class="text-[#57534e] dark:text-slate-400 leading-relaxed">
+                  10/28~29 페루 쿠스코 산페드로 시장에서 장당 150g 베이비 알파카 목도리 구매 (5장 사도 0.75kg, 배낭 쏙 수납).
+                </div>
+              </div>
+              <div class="p-3 rounded-lg theme-card-subtle space-y-1">
+                <div class="font-bold text-sky-700 dark:text-sky-400 flex items-center gap-1">
+                  <i class="fa-solid fa-wine-bottle text-[10px]"></i> 제 3원칙 (리마 액체류 올인)
+                </div>
+                <div class="text-[#57534e] dark:text-slate-400 leading-relaxed">
+                  귀국 전날(10/29) 리마 대형마트(Metro/Wong)에서 피스코·잼·과자 몰아 구매 후 국제선(1인 23kg 무료) 위탁 패킹!
+                </div>
+              </div>
+            </div>
+          </div>
+        `;
+
+        const cardsHtml = destList.map(d => {
+          const kbDest = (window.KB_TRAVEL && window.KB_TRAVEL.destinations && window.KB_TRAVEL.destinations[d.id])
+            ? window.KB_TRAVEL.destinations[d.id]
+            : {};
+          const emergencyNum = d.emergency || kbDest.emergency;
+          const embassyNum = d.embassy || kbDest.embassy;
+          const altitudeText = d.altitude || '해발 정보';
+          const isHighAltitude = /2,[4-9]\d\d|3,\d\d\d|4,\d\d\d|[2-4]\d{3}\s*m/.test(altitudeText);
+
+          return `
+            <div class="p-4 rounded-xl bg-[#080b12] border border-[#1e263c] space-y-3 flex flex-col justify-between hover:border-amber-500/40 transition">
+              <div class="space-y-2.5">
+                <div class="flex items-center justify-between gap-2">
+                  <div class="flex items-center gap-2 min-w-0">
+                    <span class="text-xl shrink-0">${d.flag || '🌎'}</span>
+                    <div class="min-w-0">
+                      <h4 class="text-xs sm:text-sm font-black text-white truncate">${d.name}</h4>
+                      ${d.nameEn ? `<div class="text-[10px] text-slate-400 truncate">${d.nameEn} · ${d.country || ''}</div>` : ''}
+                    </div>
+                  </div>
+                  <div class="flex items-center gap-1.5 shrink-0">
+                    <span class="text-[10px] font-bold px-2 py-0.5 rounded ${isHighAltitude ? 'bg-rose-500/20 text-rose-300 border border-rose-500/40' : 'bg-purple-500/20 text-purple-300 border border-purple-500/40'}">${altitudeText}</span>
+                  </div>
+                </div>
+
+                <div class="text-xs text-slate-300 space-y-2">
+                  <div>
+                    <div class="text-amber-400 text-[11px] font-bold flex items-center gap-1 mb-1">
+                      <i class="fa-solid fa-location-dot text-[10px]"></i> 핵심 랜드마크 & 명소
+                    </div>
+                    <ul class="text-[11px] text-slate-300 pl-2 space-y-0.5 leading-relaxed">
+                      ${(d.highlights || []).slice(0, 4).map(h => `<li>• ${h}</li>`).join('')}
+                    </ul>
+                  </div>
+
+                  <div>
+                    <div class="text-emerald-400 text-[11px] font-bold flex items-center gap-1 mb-0.5">
+                      <i class="fa-solid fa-utensils text-[10px]"></i> 대표 시그니처 미식
+                    </div>
+                    <div class="text-[11px] text-slate-300 pl-2 leading-relaxed">${(d.foods || []).join(', ')}</div>
+                  </div>
+
+                  ${d.tips ? `
+                    <div class="tip-box text-[10px] text-amber-900 dark:text-amber-300 bg-amber-100 dark:bg-amber-500/10 p-2.5 rounded-lg border border-amber-300 dark:border-amber-500/20 font-medium leading-relaxed">
+                      💡 ${d.tips}
+                    </div>
+                  ` : ''}
+
+                  ${(emergencyNum || embassyNum) ? `
+                    <div class="flex items-center justify-between text-[10px] text-slate-400 px-2 py-1 rounded bg-[#101626] border border-[#1b243b]">
+                      ${emergencyNum ? `<span class="text-rose-400 font-bold"><i class="fa-solid fa-phone-volume text-[9px]"></i> 긴급 ${emergencyNum}</span>` : ''}
+                      ${embassyNum ? `<span class="text-sky-300 font-bold"><i class="fa-solid fa-building-columns text-[9px]"></i> 대사관 ${embassyNum}</span>` : ''}
+                    </div>
+                  ` : ''}
+                </div>
               </div>
 
               <div class="pt-2">
-                <a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(d.googleMapsQuery || d.name)}" target="_blank" rel="noopener noreferrer" class="w-full py-1.5 bg-[#141c2e] hover:bg-[#1e2a44] border border-[#23304c] text-sky-400 rounded-lg text-xs font-bold flex items-center justify-center gap-1.5 transition">
+                <a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(d.googleMapsQuery || (d.name + ' ' + (d.country || '')))}" target="_blank" rel="noopener noreferrer" class="w-full py-2 bg-[#141c2e] hover:bg-[#1e2a44] border border-[#23304c] hover:border-amber-500/40 text-amber-400 rounded-lg text-xs font-bold flex items-center justify-center gap-1.5 transition">
                   <i class="fa-solid fa-map-location-dot text-[10px]"></i>
                   <span>구글 지도에서 ${d.name.split(' ')[0]} 보기</span>
+                  <i class="fa-solid fa-arrow-up-right-from-square text-[9px] text-stone-400"></i>
                 </a>
               </div>
             </div>
           `;
         }).join('');
+
+        container.innerHTML = rulesBannerHtml + cardsHtml;
       } else if (isYN && pack) {
         if (headerTitle) headerTitle.innerText = pack.cities.headerTitle;
         if (headerDesc) headerDesc.innerText = pack.cities.headerDesc;
