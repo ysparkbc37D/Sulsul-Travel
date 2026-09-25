@@ -20,7 +20,7 @@
     })();
   </script>
 
-  <!-- iOS Standalone Boot Watchdog & Error Guard (v1.8.3) -->
+  <!-- iOS Standalone Boot Watchdog & Error Guard (v1.8.4) -->
   <script>
     (function() {
       window.__bootErrors = [];
@@ -50,17 +50,17 @@
   </script>
 
   <!-- PWA Meta & Icons -->
-  <link rel="manifest" href="manifest.webmanifest?v=1.8.3">
+  <link rel="manifest" href="manifest.webmanifest?v=1.8.4">
   <meta name="theme-color" content="#F7F5F0">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <meta name="apple-mobile-web-app-title" content="술술트래블">
-  <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192-v115.png?v=1.8.3">
-  <link rel="icon" type="image/png" sizes="32x32" href="favicon.png?v=1.8.3">
+  <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192-v115.png?v=1.8.4">
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon.png?v=1.8.4">
   <link rel="shortcut icon" href="favicon.ico">
-  <link rel="apple-touch-icon" sizes="180x180" href="icons/apple-touch-icon-v115.png?v=1.8.3">
-  <link rel="apple-touch-icon" href="icons/apple-touch-icon-v115.png?v=1.8.3">
+  <link rel="apple-touch-icon" sizes="180x180" href="icons/apple-touch-icon-v115.png?v=1.8.4">
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon-v115.png?v=1.8.4">
 
   <!-- Google Fonts: Great Vibes, Dancing Script (Cursive Calligraphy), Cormorant Garamond, Noto Serif KR, Playfair Display -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -68,7 +68,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Great+Vibes&family=Cormorant+Garamond:wght@600;700;800&family=Noto+Serif+KR:wght@500;600;700;900&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
 
   <!-- Local Utilities Bundle (CDN fallback & tailwind utilities) -->
-  <link rel="stylesheet" href="css/utilities.css?v=1.8.3">
+  <link rel="stylesheet" href="css/utilities.css?v=1.8.4">
   <link rel="stylesheet" href="vendor/fontawesome/css/all.min.css">
 
   <!-- Leaflet Map CSS & JS -->
@@ -1410,12 +1410,12 @@
     }
   </style>
 
-  <link rel="stylesheet" href="css/companion.css?v=1.8.3">
-  <script src="js/presentation/companion-ui.js?v=1.8.3"></script>
-  <script src="js/domain/trip-transfer.js?v=1.8.3"></script>
-  <script src="js/presentation/trip-transfer-ui.js?v=1.8.3"></script>
-  <script src="js/presentation/activity-journal.js?v=1.8.3"></script>
-  <script src="js/presentation/expense-editor.js?v=1.8.3"></script>
+  <link rel="stylesheet" href="css/companion.css?v=1.8.4">
+  <script src="js/presentation/companion-ui.js?v=1.8.4"></script>
+  <script src="js/domain/trip-transfer.js?v=1.8.4"></script>
+  <script src="js/presentation/trip-transfer-ui.js?v=1.8.4"></script>
+  <script src="js/presentation/activity-journal.js?v=1.8.4"></script>
+  <script src="js/presentation/expense-editor.js?v=1.8.4"></script>
 
   <!-- Knowledge Base Seed & Destination Knowledge Packs (DKP) -->
   <script src="kb-travel.js"></script>
@@ -1445,7 +1445,7 @@
       <!-- 우측 액션 클러스터 (버전 알약 -> 원형 통계 -> 원형 설정 -> 다크그린 캡슐 추가) -->
       <div class="flex items-center gap-1 sm:gap-1.5 shrink-0">
         <!-- 1. 버전 배지 버튼 (v1.7.8 - 클릭 시 버전 이력) -->
-        <button id="app-ver-badge" onclick="event.stopPropagation(); openVersionHistoryModal()" class="h-7 sm:h-8 px-2 sm:px-2.5 rounded-full theme-card-subtle flex items-center justify-center font-mono text-[10px] sm:text-[11px] font-bold text-[#a2601b] dark:text-[#d4af37] shadow-xs hover:border-amber-500/60 transition cursor-pointer shrink-0" title="버전 업데이트 기록 보기 (클릭)">v1.8.3</button>
+        <button id="app-ver-badge" onclick="event.stopPropagation(); openVersionHistoryModal()" class="h-7 sm:h-8 px-2 sm:px-2.5 rounded-full theme-card-subtle flex items-center justify-center font-mono text-[10px] sm:text-[11px] font-bold text-[#a2601b] dark:text-[#d4af37] shadow-xs hover:border-amber-500/60 transition cursor-pointer shrink-0" title="버전 업데이트 기록 보기 (클릭)">v1.8.4</button>
 
         <!-- 2. 통계 버튼 (📊 - 원형 버튼) -->
         <button id="header-btn-analytics" onclick="openAnalyticsModal('lifetime')" class="companion-header-analytics w-7 h-7 sm:w-8 sm:h-8 rounded-full theme-card-subtle flex items-center justify-center text-[#a2601b] dark:text-[#d4af37] hover:border-amber-500/60 transition shadow-xs cursor-pointer shrink-0" title="술술 여행 통계 대시보드">
@@ -1635,16 +1635,20 @@
         </div>
       </div>
 
-      <!-- 우측 빠른 액션: 통계 모달 열기 + 동행 공유 (v1.6.6) -->
+      <!-- 우측 빠른 액션: 통계 모달 열기 + 빠른 환율기 + 동행 공유 (v1.8.4) -->
       <div class="flex items-center gap-1.5 shrink-0">
-        <button onclick="openAnalyticsModal('workspace')" class="px-3 py-1.5 rounded-xl theme-card-subtle text-xs font-bold flex items-center gap-1.5 shadow-sm transition cursor-pointer" title="여정 정밀 통계 열람">
+        <button onclick="openAnalyticsModal('workspace')" class="px-2.5 sm:px-3 py-1.5 rounded-xl theme-card-subtle text-xs font-bold flex items-center gap-1.5 shadow-sm transition cursor-pointer" title="여정 정밀 통계 열람">
           <i class="fa-solid fa-chart-pie text-amber-500 text-[12px]"></i>
           <span>통계</span>
+        </button>
+        <button onclick="openQuickCurrencyCalc()" class="px-2.5 sm:px-3 py-1.5 rounded-xl theme-card-subtle text-xs font-bold flex items-center gap-1.5 shadow-sm transition cursor-pointer text-amber-600 dark:text-amber-400 hover:border-amber-500/40" title="현지 통화 빠른 환율 계산기">
+          <i class="fa-solid fa-calculator text-[12px]"></i>
+          <span>환율</span>
         </button>
         <button id="ws-btn-header-map" onclick="navigateToInteractiveMap()" class="hidden" title="인터랙티브 지도 보기">
           <i id="ws-icon-header-map" class="fa-solid fa-map-location-dot text-sky-500 text-[11px]"></i>
         </button>
-        <button onclick="openShareModal()" class="px-3 py-1.5 rounded-xl theme-card-subtle text-xs font-bold flex items-center gap-1.5 shadow-sm transition cursor-pointer" title="동행자 공유 링크 복사">
+        <button onclick="openShareModal()" class="px-2.5 sm:px-3 py-1.5 rounded-xl theme-card-subtle text-xs font-bold flex items-center gap-1.5 shadow-sm transition cursor-pointer" title="동행자 공유 링크 복사">
           <i class="fa-solid fa-share-nodes text-emerald-600 dark:text-emerald-400 text-[12px]"></i>
           <span>공유</span>
         </button>
@@ -1698,7 +1702,7 @@
           </button>
           <button id="btn-subtab-booking" onclick="switchPlanSubTab('booking')" class="px-3 py-1.5 rounded-lg text-xs font-bold subtab-inactive flex items-center gap-1.5 shrink-0 whitespace-nowrap cursor-pointer">
             <i id="icon-subtab-booking" class="fa-solid fa-ticket text-[11px]"></i>
-            <span id="label-subtab-booking">12대 필수 예약</span>
+            <span id="label-subtab-booking">14대 필수 예약</span>
           </button>
           <button id="btn-subtab-cityguide" onclick="switchPlanSubTab('cityguide')" class="px-3 py-1.5 rounded-lg text-xs font-bold subtab-inactive flex items-center gap-1.5 shrink-0 whitespace-nowrap cursor-pointer">
             <i id="icon-subtab-cityguide" class="fa-solid fa-city text-[11px]"></i>
@@ -1885,14 +1889,35 @@
         </div>
       </div>
 
-      <!-- [SUBTAB 3] 12대 필수 공식 예약 가이드 뷰 (또는 여행 필수 체크/예약) -->
+      <!-- [SUBTAB 3] 14대 필수 공식 예약 가이드 뷰 (또는 여행 필수 체크/예약) (v1.8.4) -->
       <div id="subtab-view-booking" class="hidden space-y-3">
-        <div class="p-4 rounded-2xl bg-[#0f1422] border border-[#1e263c]">
-          <h3 class="text-sm font-black text-white flex items-center gap-2 mb-1">
-            <i id="booking-header-icon" class="fa-solid fa-ticket text-amber-400"></i>
-            <span id="booking-header-title">남미 여행 12대 필수 사전 예약 공식 가이드</span>
-          </h3>
-          <p id="booking-header-desc" class="text-xs text-slate-400">마추픽추 입장권, 파노라마 열차, 국립공원 등 매진되기 전 공식 사이트에서 직접 예약해야 하는 필수 리스트입니다.</p>
+        <div id="booking-timeline-dashboard" class="p-4 rounded-2xl bg-[#0f1422] border border-[#1e263c] space-y-3">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
+            <div>
+              <h3 class="text-sm font-black text-white flex items-center gap-2">
+                <i id="booking-header-icon" class="fa-solid fa-ticket text-amber-400"></i>
+                <span id="booking-header-title">14대 핵심 사전 예약 타임어택 대시보드</span>
+                <span id="booking-progress-badge" class="sulsul-badge-emerald px-2 py-0.5 rounded-full text-[10px] font-black">0/14 완료 (0%)</span>
+              </h3>
+              <p id="booking-header-desc" class="text-xs text-slate-400 mt-0.5">마추픽추 입장권, 파노라마 열차, 국립공원 등 매진되기 전 공식 사이트에서 직접 예약해야 하는 필수 리스트입니다.</p>
+            </div>
+            <div id="booking-dday-badge-container" class="shrink-0 flex items-center gap-1.5">
+              <span class="px-2.5 py-1 rounded-xl bg-amber-500/20 text-amber-300 border border-amber-500/30 text-xs font-black" id="booking-dday-badge">D-Day 계산 중</span>
+            </div>
+          </div>
+
+          <div class="space-y-1">
+            <div class="w-full h-2 rounded-full bg-slate-800 overflow-hidden">
+              <div id="booking-progress-bar" class="h-full bg-gradient-to-r from-amber-500 to-emerald-500 rounded-full transition-all duration-300" style="width: 0%;"></div>
+            </div>
+          </div>
+
+          <div class="flex items-center gap-1.5 overflow-x-auto no-scrollbar pt-1">
+            <button id="btn-booking-filter-all" onclick="setBookingGuideFilter('all')" class="sulsul-chip is-active text-xs">전체 (14)</button>
+            <button id="btn-booking-filter-urgent" onclick="setBookingGuideFilter('urgent')" class="sulsul-chip text-xs">🚨 긴급 타임어택</button>
+            <button id="btn-booking-filter-scheduled" onclick="setBookingGuideFilter('scheduled')" class="sulsul-chip text-xs">📅 오픈 예정</button>
+            <button id="btn-booking-filter-completed" onclick="setBookingGuideFilter('completed')" class="sulsul-chip text-xs">✅ 완료됨</button>
+          </div>
         </div>
         <div id="booking-cards-container" class="grid grid-cols-1 md:grid-cols-2 gap-3">
           <!-- 동적 렌더링 -->
@@ -2073,18 +2098,55 @@
     </div>
 
     <!-- ---------------------------------------- -->
-    <!-- TAB 4: 스마트 패킹 체크리스트 (TAB-CHECKLIST) -->
+    <!-- TAB 4: 스마트 패킹 체크리스트 (TAB-CHECKLIST) (v1.8.4) -->
     <!-- ---------------------------------------- -->
     <div id="tab-content-checklist" class="tab-view hidden space-y-4">
-      <div class="p-4 rounded-2xl theme-card space-y-2">
+      <div class="p-4 rounded-2xl theme-card space-y-3">
         <div class="flex items-center justify-between">
           <h3 class="text-base font-black text-[#1c1917] dark:text-white flex items-center gap-2">
             <i class="fa-solid fa-clipboard-check text-amber-500 dark:text-amber-400"></i>
-            <span>출발 전, 하나씩 확인</span>
+            <span>스마트 패킹 & 사전 준비 매트릭스</span>
           </h3>
-          <div class="flex items-center gap-2"><span id="checklist-progress-badge" class="sulsul-badge-emerald px-2.5 py-0.5 rounded-full text-xs font-black">0% 준비됨</span><button id="nav-tab-sync" onclick="switchTab('sync')" class="sulsul-badge-indigo px-2.5 py-1 rounded-lg text-[11px] font-bold cursor-pointer transition">동행·백업</button></div>
+          <div class="flex items-center gap-2">
+            <span id="checklist-progress-badge" class="sulsul-badge-emerald px-2.5 py-0.5 rounded-full text-xs font-black">0% 준비됨</span>
+            <button id="nav-tab-sync" onclick="switchTab('sync')" class="sulsul-badge-indigo px-2.5 py-1 rounded-lg text-[11px] font-bold cursor-pointer transition">동행·백업</button>
+          </div>
         </div>
-        <p class="text-xs text-[#78716c] dark:text-slate-400">여행 서류와 예약, 챙길 물건을 확인해 보세요.</p>
+        <p class="text-xs text-[#78716c] dark:text-slate-400">여행 서류, 고산병 의약품, 방한의류, 금융/환전 등 시점별·카테고리별로 꼼꼼하게 점검하세요.</p>
+
+        <!-- 진행률 프로그레스 바 -->
+        <div class="w-full h-2 rounded-full bg-slate-200 dark:bg-slate-800 overflow-hidden">
+          <div id="checklist-progress-bar" class="h-full bg-gradient-to-r from-amber-500 to-emerald-500 rounded-full transition-all duration-300" style="width: 0%;"></div>
+        </div>
+
+        <!-- 보기 모드 & 도구 바 -->
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pt-1 border-t border-[#e8e2d5] dark:border-stone-800/80">
+          <!-- 보기 모드 토글 (카테고리별 vs D-Day 시점별) -->
+          <div class="flex items-center p-1 rounded-xl bg-stone-100 dark:bg-[#0f1422] border border-stone-200 dark:border-[#1e263c] gap-1 shrink-0">
+            <button id="btn-chk-mode-cat" onclick="setChecklistViewMode('category')" class="px-2.5 py-1 rounded-lg text-xs font-bold subtab-active cursor-pointer">
+              <i class="fa-solid fa-tags text-[10px]"></i> 카테고리별
+            </button>
+            <button id="btn-chk-mode-dday" onclick="setChecklistViewMode('dday')" class="px-2.5 py-1 rounded-lg text-xs font-bold subtab-inactive cursor-pointer">
+              <i class="fa-solid fa-clock-rotate-left text-[10px]"></i> D-Day 시점별
+            </button>
+          </div>
+
+          <!-- 미완료 토글 & 빠른 체크 버튼 -->
+          <div class="flex items-center gap-1.5 flex-wrap">
+            <button onclick="toggleChecklistOnlyUnchecked()" id="btn-chk-uncompleted" class="px-2.5 py-1 rounded-lg theme-card-subtle text-[11px] font-bold flex items-center gap-1 transition cursor-pointer">
+              <i class="fa-regular fa-square"></i>
+              <span>미완료만 보기</span>
+            </button>
+            <button onclick="checkAllChecklistItems(true)" class="px-2.5 py-1 rounded-lg theme-card-subtle text-[11px] font-bold text-emerald-600 dark:text-emerald-400 hover:bg-emerald-500/10 transition cursor-pointer">
+              전체 완료
+            </button>
+          </div>
+        </div>
+
+        <!-- 카테고리 칩 필터 바 -->
+        <div id="checklist-category-chips" class="flex items-center gap-1.5 overflow-x-auto no-scrollbar pt-1">
+          <!-- 동적 렌더링 -->
+        </div>
       </div>
 
       <div id="checklist-container" class="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -4373,7 +4435,13 @@
 
       <!-- 버전 목록 스크롤 영역 (독립 스크롤 컨테이너로 Flexbox 압축 버그 영구 척결) -->
       <div class="overflow-y-auto flex-1 min-h-0 space-y-3.5 pr-1.5 custom-scrollbar">
-        <!-- v1.8.3 (Current) -->
+        <!-- v1.8.4 (Current) -->
+        <section class="companion-context">
+          <h3 class="font-bold">v1.8.4 · 6대 핵심 실전 UI/UX 편의 기능 탑재</h3>
+          <p class="text-xs">D-Day 타임어택 예약 관리 바 & 진척도 게이지 · 안데스 해발 고도 프로필 & 고산병(Soroche) 안심 케어 카드 · 도시/활동별 날씨 & 3단 레이어드 복장 가이드 배지 · 현지 통화 빠른 환율 플로팅 계산기(MEP/CLP/PEN/CAD 즉시 원화 환산) · 이동 구간 원클릭 길찾기 내비게이션 교통 세그먼트 카드 · 체크리스트 D-Day 연동 & 스마트 패킹 매트릭스</p>
+          <p class="text-xs">2026-09-25 · st-shell-v1.8.4</p>
+        </section>
+        <!-- v1.8.3 -->
         <section class="companion-context">
           <h3 class="font-bold">v1.8.3 · 2026 남미 22일 가성비 마스터플랜(v9) 정규 탑재</h3>
           <p class="text-xs">아르헨티나(부에노스·파타고니아·엘찰텐 1박) · 칠레(토레스델파이네·아타카마 사막) · 페루(쿠스코·마추픽추·우만타이·리마) · 밴쿠버 22일 정규 여정 탑재 · 33대 미준비 실행대장 및 수하물 23kg 통제 체크리스트 · 10대 거점 지오코딩 및 항공 궤적 완비</p>
@@ -5206,7 +5274,7 @@
 
       <!-- 모달 푸터 -->
       <div class="pt-3 border-t border-[#e8e2d5] dark:border-stone-800 flex items-center justify-between shrink-0">
-        <span class="text-[11px] text-stone-400 dark:text-stone-500 font-mono">Sulsul Travel Engine v1.8.3</span>
+        <span class="text-[11px] text-stone-400 dark:text-stone-500 font-mono">Sulsul Travel Engine v1.8.4</span>
         <button onclick="closeModal('modal-version-history')" class="px-4 py-2 rounded-xl bg-[#faf8f5] dark:bg-stone-800 hover:bg-[#f0ece1] dark:hover:bg-stone-700 border border-[#e8e2d5] dark:border-stone-700 text-[#1c1917] dark:text-[#ededed] text-xs font-bold transition cursor-pointer shadow-sm">
           닫기
         </button>
@@ -5245,6 +5313,93 @@
         <button type="button" onclick="openDonationLink()" class="w-full py-2.5 px-3 rounded-xl bg-[#c58b2b] hover:bg-[#b07823] text-white text-xs sm:text-sm font-bold transition shadow-md cursor-pointer">
           링크 열기
         </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================== -->
+  <!-- 7.12.1 현지 통화 빠른 환율 플로팅 버튼 & 모달 (v1.8.4) -->
+  <!-- ========================================== -->
+  <button id="btn-floating-quick-calc" onclick="openQuickCurrencyCalc()" class="fixed bottom-20 right-4 sm:bottom-6 sm:right-6 z-40 w-11 h-11 sm:w-12 sm:h-12 rounded-full bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-slate-950 font-black shadow-xl flex items-center justify-center text-base sm:text-lg transition-transform active:scale-95 cursor-pointer border-2 border-white/20" title="현지 통화 빠른 환율 계산기 (MEP/CLP/PEN/CAD)">
+    <i class="fa-solid fa-calculator"></i>
+  </button>
+
+  <div id="modal-quick-currency" class="sheet-container sheet-closed">
+    <div class="sheet-scrim" onclick="closeModal('modal-quick-currency')"></div>
+    <div class="sheet-box sheet-lg max-w-sm sm:max-w-md mx-auto p-4 sm:p-5 space-y-4 bg-white dark:bg-[#16181d] text-[#1c1917] dark:text-[#ededed] rounded-t-3xl sm:rounded-3xl shadow-2xl">
+      <div class="sheet-handle sm:hidden"></div>
+      <div class="flex items-center justify-between border-b border-[#e8e2d5] dark:border-stone-800 pb-3">
+        <div class="flex items-center gap-2">
+          <span class="w-8 h-8 rounded-xl bg-amber-500/20 text-amber-500 flex items-center justify-center text-sm font-bold">
+            <i class="fa-solid fa-calculator"></i>
+          </span>
+          <div>
+            <h3 class="text-sm sm:text-base font-extrabold text-[#1E2B24] dark:text-white flex items-center gap-1.5">
+              <span>현지 통화 빠른 환율기</span>
+              <span id="quick-calc-currency-badge" class="sulsul-badge-amber text-[10px] font-bold px-1.5 py-0.5 rounded">ARS</span>
+            </h3>
+            <p class="text-[10px] text-[#78716c] dark:text-stone-400">1초 만에 원화(KRW) 및 달러(USD) 즉시 환산</p>
+          </div>
+        </div>
+        <button onclick="closeModal('modal-quick-currency')" class="w-7 h-7 rounded-lg bg-[#faf8f5] dark:bg-stone-800 hover:bg-[#f0ece1] dark:hover:bg-stone-700 text-stone-500 dark:text-stone-300 flex items-center justify-center text-sm transition cursor-pointer" title="닫기">✕</button>
+      </div>
+
+      <!-- 통화 선택 칩 바 -->
+      <div id="quick-calc-currency-chips" class="flex items-center gap-1.5 overflow-x-auto no-scrollbar pb-1">
+        <!-- 동적 생성: ARS, CLP, PEN, CAD, USD, EUR -->
+      </div>
+
+      <!-- 아르헨티나 페소 전용 MEP 환율 토글 카드 (조건부 노출) -->
+      <div id="quick-calc-mep-bar" class="p-2.5 rounded-xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-between gap-2">
+        <div class="flex items-center gap-2 min-w-0">
+          <span class="text-xs">🇦🇷</span>
+          <div class="text-[11px] leading-tight">
+            <span class="font-bold text-amber-800 dark:text-amber-300">MEP 카드 환율 적용 (40% 절감)</span>
+            <p class="text-[10px] text-amber-700 dark:text-amber-400/80">공식 1$ = 980 ARS | MEP 1$ = 1,200 ARS</p>
+          </div>
+        </div>
+        <label class="relative inline-flex items-center cursor-pointer shrink-0">
+          <input type="checkbox" id="quick-calc-chk-mep" checked onchange="toggleQuickCalcMep()" class="sr-only peer">
+          <div class="w-9 h-5 bg-stone-300 peer-focus:outline-none rounded-full peer dark:bg-stone-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-stone-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-amber-500"></div>
+        </label>
+      </div>
+
+      <!-- 입력 금액 필드 & 결과 디스플레이 -->
+      <div class="space-y-3">
+        <div class="p-3.5 rounded-2xl bg-[#0f1422] border border-[#1e263c] space-y-2">
+          <div class="flex items-center justify-between text-[11px] text-slate-400">
+            <span id="quick-calc-input-label">현지 통화 금액</span>
+            <span id="quick-calc-rate-info" class="font-mono text-amber-400">1 USD = 1,200 ARS</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <input type="text" inputmode="numeric" id="quick-calc-input-amount" value="50000" oninput="handleQuickCalcInput(this.value)" class="w-full bg-transparent text-white font-mono font-black text-2xl sm:text-3xl focus:outline-none placeholder-slate-600" placeholder="0">
+            <button onclick="clearQuickCalcInput()" class="text-xs px-2.5 py-1.5 rounded-lg bg-stone-800 hover:bg-stone-700 text-stone-300 shrink-0 font-bold">C</button>
+          </div>
+        </div>
+
+        <!-- 환산 결과 카드 -->
+        <div class="grid grid-cols-2 gap-2">
+          <div class="p-3 rounded-2xl bg-[#0f1422] border border-amber-500/30 space-y-1">
+            <div class="text-[10px] text-slate-400 font-bold flex items-center gap-1">
+              <span>🇰🇷 원화 환산 (KRW)</span>
+            </div>
+            <div id="quick-calc-result-krw" class="text-lg sm:text-xl font-mono font-black text-amber-400">약 57,500 원</div>
+          </div>
+          <div class="p-3 rounded-2xl bg-[#0f1422] border border-sky-500/30 space-y-1">
+            <div class="text-[10px] text-slate-400 font-bold flex items-center gap-1">
+              <span>🇺🇸 달러 환산 (USD)</span>
+            </div>
+            <div id="quick-calc-result-usd" class="text-lg sm:text-xl font-mono font-black text-sky-400">약 $41.67</div>
+          </div>
+        </div>
+
+        <!-- 빠른 금액 더하기 버튼 -->
+        <div class="grid grid-cols-4 gap-1.5 pt-1">
+          <button onclick="addQuickCalcAmount(1000)" class="py-2 rounded-xl theme-card-subtle text-xs font-bold hover:border-amber-500/40 transition cursor-pointer">+1천</button>
+          <button onclick="addQuickCalcAmount(10000)" class="py-2 rounded-xl theme-card-subtle text-xs font-bold hover:border-amber-500/40 transition cursor-pointer">+1만</button>
+          <button onclick="addQuickCalcAmount(50000)" class="py-2 rounded-xl theme-card-subtle text-xs font-bold hover:border-amber-500/40 transition cursor-pointer">+5만</button>
+          <button onclick="addQuickCalcAmount(100000)" class="py-2 rounded-xl theme-card-subtle text-xs font-bold hover:border-amber-500/40 transition cursor-pointer">+10만</button>
+        </div>
       </div>
     </div>
   </div>
@@ -5553,7 +5708,7 @@
     window.showToast = showToast;
 
     // 앱 버전 및 글로벌 네임스페이스 (Sulsul-Travel Invariant Rule R-10, R-11, R-12, R-13, R-14, R-15, R-16)
-    const APP_VER = '1.8.3';
+    const APP_VER = '1.8.4';
 
     // ══════════════════════════════════════════
     // [3-Way Theme System] 모던, 라이트그레이, 딥 블랙 테마 엔진 (v1.6.7)
@@ -6015,6 +6170,14 @@
       allTimelinesExpanded: false,
       geminiKey: cleanApiKey(localStorage.getItem('st_gemini_key') || ''),
       aiFallbackActive: false, // 3-Tier Fallback 감지 플래그
+
+      // v1.8.4 UI/UX 6대 편의 기능 상태
+      bookingGuideFilter: 'all', // 'all' | 'urgent' | 'scheduled' | 'completed'
+      checklistCategoryFilter: '전체',
+      checklistViewMode: 'category', // 'category' | 'dday'
+      checklistOnlyUnchecked: false,
+      quickCalcCurrency: 'ARS',
+      quickCalcAmount: 50000,
 
       // 실시간 환율 및 커스텀 환율 관리 상태 (v1.4.9)
       liveRates: JSON.parse(localStorage.getItem('st_live_rates') || '{}'),
@@ -10095,6 +10258,85 @@
     }
 
     // ==========================================
+    // [1.1] 일차별 고도 & 복장 & 기후 가이드 헬퍼 (v1.8.4)
+    // ==========================================
+    function getDayAltitudeAndOutfitInfo(day, trip) {
+      const combined = `${day.title || ''} ${day.city || ''} ${day.route || ''} ${(day.spots || []).map(s => s.title).join(' ')}`.toLowerCase();
+
+      let altitude = '해발 0~50m (평지)';
+      let altBadgeClass = 'bg-stone-800 text-stone-300 border border-stone-700';
+      let isCareNeeded = false;
+
+      if (combined.includes('엘 타티오') || combined.includes('el tatio')) {
+        altitude = '해발 4,320m (초고산 ⚠️)';
+        altBadgeClass = 'sulsul-badge-rose bg-rose-500/20 text-rose-300 border border-rose-500/40';
+        isCareNeeded = true;
+      } else if (combined.includes('우만타이') || combined.includes('humantay')) {
+        altitude = '해발 4,200m (초고산 ⚠️)';
+        altBadgeClass = 'sulsul-badge-rose bg-rose-500/20 text-rose-300 border border-rose-500/40';
+        isCareNeeded = true;
+      } else if (combined.includes('쿠스코') || combined.includes('cusco') || combined.includes('cuzco')) {
+        altitude = '해발 3,400m (고산 ⚠️)';
+        altBadgeClass = 'sulsul-badge-rose bg-rose-500/20 text-rose-300 border border-rose-500/40';
+        isCareNeeded = true;
+      } else if (combined.includes('마라스') || combined.includes('모라이') || combined.includes('성스러운 계곡') || combined.includes('친체로')) {
+        altitude = '해발 3,000m (고산 ⚠️)';
+        altBadgeClass = 'sulsul-badge-amber bg-amber-500/20 text-amber-300 border border-amber-500/40';
+        isCareNeeded = true;
+      } else if (combined.includes('마추픽추') || combined.includes('machu picchu') || combined.includes('아과스칼리엔테스')) {
+        altitude = '해발 2,430m (주의)';
+        altBadgeClass = 'sulsul-badge-amber bg-amber-500/20 text-amber-300 border border-amber-500/40';
+        isCareNeeded = false;
+      } else if (combined.includes('아타카마') || combined.includes('atacama') || combined.includes('달의 계곡')) {
+        altitude = '해발 2,400m (주의)';
+        altBadgeClass = 'sulsul-badge-amber bg-amber-500/20 text-amber-300 border border-amber-500/40';
+        isCareNeeded = false;
+      } else if (combined.includes('토레스') || combined.includes('피츠로이') || combined.includes('찰텐') || combined.includes('칼라파테')) {
+        altitude = '해발 200~1,000m';
+        altBadgeClass = 'sulsul-badge-emerald bg-emerald-500/20 text-emerald-300 border border-emerald-500/40';
+        isCareNeeded = false;
+      } else if (combined.includes('산티아고') || combined.includes('santiago')) {
+        altitude = '해발 570m';
+        altBadgeClass = 'bg-stone-800 text-stone-300 border border-stone-700';
+        isCareNeeded = false;
+      }
+
+      let weatherBadge = '🌤️ 쾌청 18~24°C';
+      let weatherDetail = '도심 여행에 최적인 온화하고 쾌적한 기후';
+      let outfitSummary = '👕 어반 캐주얼';
+      let outfitDetail = '반팔 티셔츠 + 가벼운 셔츠/가디건 레이어링 + 편안한 도심 스니커즈';
+
+      if (combined.includes('엘 타티오') || combined.includes('간헐천')) {
+        weatherBadge = '❄️ 새벽 -5°C 급랭';
+        weatherDetail = '새벽 영하 5°C ~ 낮 18°C 극한 일교차';
+        outfitSummary = '🧥 극한 방한 무장 (롱패딩+비니+핫팩)';
+        outfitDetail = '헤비 다운 패딩 + 방한 비니 + 방풍 장갑 + 핫팩 2개 + 넥워머 (낮에는 겉옷 탈착)';
+      } else if (combined.includes('빙하') || combined.includes('모레노') || combined.includes('피츠로이') || combined.includes('찰텐') || combined.includes('토레스') || combined.includes('파타고니아')) {
+        weatherBadge = '💨 체감 0~8°C 돌풍';
+        weatherDetail = '시속 60km 돌풍 및 변덕스러운 소나기 가능성';
+        outfitSummary = '🧥 3단 레이어드 (하드쉘+경량패딩+흡한속건)';
+        outfitDetail = '고어텍스 방풍/방수 하드쉘 + 보온용 경량패딩/플리스 + 기능성 흡한속건 내의 + 방풍 장갑';
+      } else if (combined.includes('아타카마') || combined.includes('달의 계곡') || combined.includes('발티나체')) {
+        weatherBadge = '🏜️ 일교차 20°C 건조';
+        weatherDetail = '낮 25°C 강한 자외선 ➔ 밤 5°C 쌀쌀';
+        outfitSummary = '☀️ 낮 자외선차단 ➔ 🌙 밤 패딩';
+        outfitDetail = '낮: 선글라스+선크림+통풍 긴소매 / 밤(별빛투어): 경량패딩+바람막이';
+      } else if (combined.includes('쿠스코') || combined.includes('우만타이') || combined.includes('성스러운 계곡') || combined.includes('마추픽추')) {
+        weatherBadge = '🌦️ 아침 5°C / 낮 20°C';
+        weatherDetail = '아침저녁 쌀쌀 + 낮 온화 + 산악지대 급작스러운 스콜 대비';
+        outfitSummary = '🧥 탈착식 윈드브레이커 + 방수 판초';
+        outfitDetail = '방풍 자켓 + 가벼운 니트/플리스 + 배낭 속 휴대용 판초우의/우산';
+      } else if (combined.includes('밴쿠버') || combined.includes('vancouver')) {
+        weatherBadge = '🍁 가을 10~15°C';
+        weatherDetail = '선선한 가을 날씨, 약한 비 가능성';
+        outfitSummary = '🧥 트렌치/자켓 + 접이식 우산';
+        outfitDetail = '가을 자켓/가디건 + 편안한 도심 워킹화 + 접이식 우산';
+      }
+
+      return { altitude, altBadgeClass, isCareNeeded, weatherBadge, weatherDetail, outfitSummary, outfitDetail };
+    }
+
+    // ==========================================
     // [1] 일정 타임라인 렌더링 (30분 단위)
     // ==========================================
     function renderTimelineTab() {
@@ -10194,7 +10436,9 @@
         }
       }
       trip.days.forEach((day, dayIdx) => {
+        const altInfo = getDayAltitudeAndOutfitInfo(day, trip);
         let spotsHtml = '';
+
         (day.spots || []).forEach((spot, spotIdx) => {
           const isDone = Boolean(spot.completed);
           const isFixed = Boolean(spot.fixed);
@@ -10218,6 +10462,104 @@
             'bg-indigo-100 text-indigo-800 border-indigo-300 dark:bg-indigo-500/20 dark:border-indigo-500/50 dark:text-indigo-400' :
             'bg-[#141c2e] border-[#23304c] text-slate-500 hover:text-slate-300';
           const cardBorder = isDone ? 'border-emerald-500/25 bg-emerald-950/5' : (isFixed ? 'border-indigo-500/25 bg-indigo-950/5' : 'border-[#1a2236]');
+
+          // [포인트 5] 교통 이동 구간 (Transit Segment) 카드 감지
+          const titleStr = spot.title || '';
+          const hasArrow = titleStr.includes('➔') || titleStr.includes('→');
+          const isTransit = spot.cat === 'transit' || (hasArrow && (titleStr.includes('항공') || titleStr.includes('버스') || titleStr.includes('기차') || titleStr.includes('이동') || titleStr.includes('공항') || titleStr.includes('셔틀') || titleStr.includes('투어') || (spot.typeIcon && (spot.typeIcon.includes('plane') || spot.typeIcon.includes('bus') || spot.typeIcon.includes('train')))));
+
+          if (isTransit && hasArrow) {
+            const parts = titleStr.split(/[➔→]/).map(s => s.trim());
+            const origin = parts[0] || '출발지';
+            const destination = parts[parts.length - 1] || '도착지';
+            const waypoints = parts.slice(1, -1);
+
+            let vehicleIcon = '✈️';
+            let vehicleName = '항공 이동';
+            let badgeClass = 'sulsul-badge-sky bg-sky-500/20 text-sky-300 border border-sky-500/40';
+
+            const checkLower = (titleStr + ' ' + (spot.desc || '')).toLowerCase();
+            if (checkLower.includes('버스') || checkLower.includes('bus') || checkLower.includes('셔틀')) {
+              vehicleIcon = '🚌';
+              vehicleName = '고속/직행버스';
+              badgeClass = 'sulsul-badge-amber bg-amber-500/20 text-amber-300 border border-amber-500/40';
+            } else if (checkLower.includes('열차') || checkLower.includes('기차') || checkLower.includes('레일') || checkLower.includes('rail')) {
+              vehicleIcon = '🚆';
+              vehicleName = '파노라마 열차';
+              badgeClass = 'sulsul-badge-emerald bg-emerald-500/20 text-emerald-300 border border-emerald-500/40';
+            } else if (checkLower.includes('보트') || checkLower.includes('유람선') || checkLower.includes('페리') || checkLower.includes('boat')) {
+              vehicleIcon = '🚢';
+              vehicleName = '보트 투어';
+              badgeClass = 'sulsul-badge-indigo bg-indigo-500/20 text-indigo-300 border border-indigo-500/40';
+            } else if (!checkLower.includes('항공') && !checkLower.includes('비행') && !checkLower.includes('flight') && !checkLower.includes('latam') && !checkLower.includes('ac')) {
+              vehicleIcon = '🚗';
+              vehicleName = '이동 구간';
+              badgeClass = 'bg-stone-800 text-stone-300 border border-stone-700';
+            }
+
+            const gdirUrl = `https://www.google.com/maps/dir/?api=1&origin=${encodeURIComponent(origin + ' ' + (day.city || ''))}&destination=${encodeURIComponent(destination + ' ' + (day.city || ''))}`;
+
+            spotsHtml += `
+              <div class="activity-timeline-spot group p-3.5 bg-gradient-to-r from-[#0c1220] via-[#0f172a] to-[#0c1220] rounded-xl border border-sky-500/30 hover:border-sky-500/50 transition space-y-2.5">
+                <div class="flex items-center justify-between gap-2">
+                  <div class="flex items-center gap-1.5 flex-wrap">
+                    <span class="font-mono text-xs text-amber-400 font-bold">${spot.time}</span>
+                    <span class="px-2 py-0.5 rounded text-[10px] font-bold ${badgeClass}">
+                      ${vehicleIcon} ${vehicleName}
+                    </span>
+                    ${doneBadge}
+                    ${fixedBadge}
+                    ${draftBadge}
+                    ${nextDayBadge}
+                  </div>
+                  <div class="shrink-0 flex items-center gap-1">
+                    ${spot.cost ? `<span class="text-[10px] text-emerald-400 font-semibold font-mono hidden sm:inline mr-1">${typeof spot.cost === 'number' ? spot.cost.toLocaleString() + '원' : spot.cost}</span>` : ''}
+                    <button onclick="toggleSpotCompleted(${dayIdx}, ${spotIdx}, event)" class="w-6 h-6 rounded-lg border ${checkBtnClass} flex items-center justify-center text-xs transition cursor-pointer" title="${isDone ? '방문 완료 취소' : '방문 완료 체크'}">
+                      <i class="fa-solid fa-check text-[10px]"></i>
+                    </button>
+                    <button onclick="toggleSpotFixed(${dayIdx}, ${spotIdx}, event)" class="w-6 h-6 rounded-lg border ${fixBtnClass} flex items-center justify-center text-[10px] transition cursor-pointer" title="일정 고정">
+                      <i class="fa-solid fa-thumbtack"></i>
+                    </button>
+                    <button onclick="openEditSpotModal(${dayIdx}, ${spotIdx}, event)" class="w-6 h-6 rounded-lg bg-[#141c2e] hover:bg-amber-500/20 border border-[#23304c] text-slate-400 hover:text-amber-400 flex items-center justify-center text-[10px] transition cursor-pointer" title="스팟 편집">
+                      <i class="fa-solid fa-pen-to-square"></i>
+                    </button>
+                    <button onclick="requestDeleteSpot(${dayIdx}, ${spotIdx}, event)" class="w-6 h-6 rounded-lg bg-[#141c2e] hover:bg-rose-500/20 border border-[#23304c] text-slate-400 hover:text-rose-400 flex items-center justify-center text-[10px] transition cursor-pointer" title="스팟 삭제">
+                      <i class="fa-regular fa-trash-can"></i>
+                    </button>
+                  </div>
+                </div>
+
+                <!-- 출발지 - 경유지 - 도착지 시각화 바 & 구글 지도 길찾기 버튼 -->
+                <div class="p-2.5 rounded-lg bg-[#070a12] border border-[#1e263c] flex items-center justify-between gap-2">
+                  <div class="flex items-center gap-2 min-w-0 flex-1">
+                    <div class="text-left shrink-0">
+                      <span class="text-[9px] text-slate-400 block font-medium">출발</span>
+                      <span class="text-xs font-bold text-white truncate max-w-[90px] sm:max-w-none block">${origin}</span>
+                    </div>
+                    <div class="flex-1 flex items-center justify-center gap-1 min-w-[50px] px-1">
+                      <div class="h-[1px] bg-slate-700 flex-1"></div>
+                      <span class="text-[10px] text-sky-400 font-bold px-1 whitespace-nowrap">${vehicleIcon} ${waypoints.length > 0 ? waypoints.join(' ➔ ') : ''}</span>
+                      <i class="fa-solid fa-arrow-right text-[10px] text-sky-400"></i>
+                    </div>
+                    <div class="text-right shrink-0">
+                      <span class="text-[9px] text-slate-400 block font-medium">도착</span>
+                      <span class="text-xs font-bold text-amber-400 truncate max-w-[90px] sm:max-w-none block">${destination}</span>
+                    </div>
+                  </div>
+                  <a href="${gdirUrl}" target="_blank" rel="noopener noreferrer" class="px-2 py-1 sm:px-2.5 sm:py-1.5 rounded-lg bg-sky-500/20 hover:bg-sky-500/30 border border-sky-500/40 text-sky-300 text-[11px] font-bold flex items-center gap-1 shrink-0 transition" title="구글 지도 길찾기 경로 바로 열기">
+                    <i class="fa-solid fa-diamond-turn-right text-[10px]"></i>
+                    <span class="hidden sm:inline">길찾기</span>
+                  </a>
+                </div>
+
+                ${spot.desc ? `<p class="text-[11px] text-slate-400 leading-relaxed">${spot.desc}</p>` : ''}
+                ${spot.memo && !spot.desc ? `<p class="text-[11px] text-slate-400 leading-relaxed">${spot.memo}</p>` : ''}
+                ${spot.tip ? `<div class="tip-box text-[10px] text-amber-900 dark:text-amber-300 bg-amber-100 dark:bg-amber-500/10 px-2.5 py-1.5 rounded-lg border border-amber-300 dark:border-amber-500/20 font-medium leading-relaxed">💡 ${spot.tip}</div>` : ''}
+                ${activityCardHtml(spot, dayIdx, spotIdx)}
+              </div>
+            `;
+            return;
+          }
 
           spotsHtml += `
             <div class="activity-timeline-spot group flex items-start gap-2.5 sm:gap-3 p-3 bg-[#080b12] rounded-xl border ${cardBorder} hover:border-[#2a3652] transition">
@@ -10273,9 +10615,12 @@
                   D${day.dayNum || (dayIdx + 1)}
                 </span>
                 <div>
-                  <div class="flex items-center gap-2 flex-wrap">
+                  <div class="flex items-center gap-1.5 sm:gap-2 flex-wrap">
                     <h4 class="text-sm font-black text-white">${day.title}</h4>
                     <span class="text-xs text-slate-400 font-medium">${day.date}</span>
+                    <span class="px-2 py-0.5 rounded text-[10px] font-bold ${altInfo.altBadgeClass} flex items-center gap-1"><i class="fa-solid fa-mountain"></i> ${altInfo.altitude}</span>
+                    <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-amber-500/15 text-amber-300 border border-amber-500/30 flex items-center gap-1"><i class="fa-solid fa-cloud-sun"></i> ${altInfo.weatherBadge}</span>
+                    <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-sky-500/15 text-sky-300 border border-sky-500/30 hidden sm:inline-flex items-center gap-1"><i class="fa-solid fa-shirt"></i> ${altInfo.outfitSummary}</span>
                   </div>
                   <p class="text-[11px] text-slate-400 mt-0.5 truncate max-w-xs sm:max-w-md">${day.route || day.city || ''}</p>
                 </div>
@@ -10298,7 +10643,35 @@
 
             <!-- Day 상세 스팟 타임라인 (아코디언 바디) -->
             <div id="day-body-${dayIdx}" class="${isExpanded ? '' : 'hidden'} p-4 pt-0 border-t border-[#1a2236] space-y-2 mt-2">
-              <div class="pt-2 flex items-center justify-between text-[11px] text-slate-400 pb-1">
+              <!-- [포인트 2] 고산병 안심 케어 카드 (해발 2,500m+ 진입 시 자동 노출) -->
+              ${altInfo.isCareNeeded ? `
+                <div class="p-3 sm:p-3.5 rounded-xl bg-gradient-to-r from-purple-500/15 via-rose-500/10 to-amber-500/15 border border-purple-500/30 space-y-2 my-2">
+                  <div class="flex items-center justify-between">
+                    <div class="flex items-center gap-1.5 font-bold text-xs sm:text-sm text-purple-200">
+                      <i class="fa-solid fa-heart-pulse text-rose-400"></i>
+                      <span>안데스 고산병(Soroche) 안심 케어 수칙 (${altInfo.altitude})</span>
+                    </div>
+                    <span class="text-[10px] font-black px-2 py-0.5 rounded-full bg-purple-500/30 text-purple-300 border border-purple-500/40">해발 2,500m+ 케어</span>
+                  </div>
+                  <div class="grid grid-cols-1 sm:grid-cols-2 gap-1.5 text-[11px] text-slate-300">
+                    <div class="flex items-start gap-1.5"><span class="text-amber-400">☕</span><span><strong>코카차(Mate de Coca)</strong> 수시 음용 (호텔 로비 상시 구비)</span></div>
+                    <div class="flex items-start gap-1.5"><span class="text-rose-400">💊</span><span><strong>다이아목스</strong> 아침/저녁 반알(125mg) 복용 & 타이레놀 지참</span></div>
+                    <div class="flex items-start gap-1.5"><span class="text-sky-400">💧</span><span><strong>수분 2L+ 섭취</strong> & 무리한 보행/점프 금지 (첫날 금주 필수)</span></div>
+                    <div class="flex items-start gap-1.5"><span class="text-emerald-400">🫁</span><span>심한 두통/호흡 곤란 시 호텔 프론트에 <strong>산소(Oxígeno)</strong> 즉시 요청</span></div>
+                  </div>
+                </div>
+              ` : ''}
+
+              <!-- [포인트 3] 일차별 추천 복장 & 기후 가이드 바 -->
+              <div class="p-2.5 rounded-xl bg-stone-900/60 border border-stone-800 flex flex-col sm:flex-row sm:items-center justify-between gap-1.5 my-2 text-xs">
+                <div class="flex items-center gap-1.5 flex-wrap">
+                  <span class="text-[10px] font-bold text-amber-300 flex items-center gap-1 shrink-0"><i class="fa-solid fa-vest"></i> 추천 복장:</span>
+                  <span class="text-[11px] text-slate-200 font-medium">${altInfo.outfitDetail}</span>
+                </div>
+                <span class="text-[10px] text-slate-400 font-medium shrink-0 flex items-center gap-1"><i class="fa-solid fa-temperature-half text-amber-400"></i> ${altInfo.weatherDetail}</span>
+              </div>
+
+              <div class="pt-1 flex items-center justify-between text-[11px] text-slate-400 pb-1">
                 <span>🕒 30분~1시간 단위 상세 시간표</span>
                 <span>총 ${(day.spots || []).length}개 스팟</span>
               </div>
@@ -10561,8 +10934,56 @@
     }
 
     // ==========================================
-    // [3] 예약 가이드 및 체크리스트 렌더링 (v1.1.7)
+    // [3] 14대 핵심 사전 예약 타임어택 대시보드 및 가이드 렌더링 (v1.8.4)
     // ==========================================
+    function setBookingGuideFilter(filter) {
+      State.bookingGuideFilter = filter || 'all';
+      const btns = [
+        { id: 'btn-booking-filter-all', key: 'all' },
+        { id: 'btn-booking-filter-urgent', key: 'urgent' },
+        { id: 'btn-booking-filter-scheduled', key: 'scheduled' },
+        { id: 'btn-booking-filter-completed', key: 'completed' }
+      ];
+      btns.forEach(b => {
+        const el = document.getElementById(b.id);
+        if (el) {
+          if (b.key === State.bookingGuideFilter) {
+            el.className = 'sulsul-chip is-active text-xs cursor-pointer';
+          } else {
+            el.className = 'sulsul-chip text-xs cursor-pointer';
+          }
+        }
+      });
+      renderBookingGuides();
+    }
+
+    function toggleBookingGuideCompleted(guideId) {
+      const trip = getActiveTrip();
+      if (!trip) return;
+      trip.bookingStatuses = trip.bookingStatuses || {};
+      trip.bookingStatuses[guideId] = !trip.bookingStatuses[guideId];
+      saveTrips();
+      renderBookingGuides();
+    }
+
+    function getBookingGuideUrl(b) {
+      if (b.url) return b.url;
+      const t = (b.target || b.title || '').toLowerCase();
+      if (t.includes('aircanada') || t.includes('에어캐나다')) return 'https://www.aircanada.com';
+      if (t.includes('tuboleto') || t.includes('cultura.pe') || t.includes('마추픽추')) return 'https://tuboleto.cultura.pe';
+      if (t.includes('incarail') || t.includes('잉카레일')) return 'https://incarail.com';
+      if (t.includes('aerolineas') || t.includes('아르헨티나 항공')) return 'https://www.aerolineas.com.ar';
+      if (t.includes('latam') || t.includes('라탐')) return 'https://www.latamairlines.com';
+      if (t.includes('chalten') || t.includes('plataforma10')) return 'https://www.plataforma10.com.ar';
+      if (t.includes('bus-sur') || t.includes('bussur')) return 'https://www.bussur.com';
+      if (t.includes('parquesnacionales') || t.includes('국립공원')) return 'https://www.argentina.gob.ar/parquesnacionales/glaciares';
+      if (t.includes('별빛') || t.includes('stargazing')) return 'https://www.sanpedroatacama.com';
+      if (t.includes('ventana') || t.includes('탱고')) return 'https://www.laventanaweb.com';
+      if (t.includes('eta') || t.includes('캐나다')) return 'https://www.canada.ca/en/immigration-refugees-citizenship/services/visit-canada/eta.html';
+      if (t.includes('esim') || t.includes('airalo')) return 'https://www.airalo.com';
+      return `https://www.google.com/search?q=${encodeURIComponent(b.target || b.title)}`;
+    }
+
     function renderBookingGuides() {
       const trip = getActiveTrip();
       const isSA = isSouthAmericaTrip(trip);
@@ -10570,37 +10991,114 @@
       const headerDesc = document.getElementById('booking-header-desc');
       const headerIcon = document.getElementById('booking-header-icon');
       const container = document.getElementById('booking-cards-container');
+      const ddayBadge = document.getElementById('booking-dday-badge');
+      const progressBadge = document.getElementById('booking-progress-badge');
+      const progressBar = document.getElementById('booking-progress-bar');
       if (!container) return;
 
       if (isSA) {
-        if (headerTitle) headerTitle.innerText = '남미 여행 12대 필수 사전 예약 공식 가이드';
+        if (headerTitle) headerTitle.innerText = '14대 핵심 사전 예약 타임어택 대시보드';
         if (headerDesc) headerDesc.innerText = '마추픽추 입장권, 파노라마 열차, 국립공원 등 매진되기 전 공식 사이트에서 직접 예약해야 하는 필수 리스트입니다.';
         if (headerIcon) headerIcon.className = 'fa-solid fa-ticket text-amber-400';
 
-        const guides = (window.KB_TRAVEL && window.KB_TRAVEL.bookingGuides) ? window.KB_TRAVEL.bookingGuides : [];
-        container.innerHTML = guides.map(b => `
-          <div class="p-4 rounded-xl bg-[#080b12] border border-[#1e263c] space-y-2 flex flex-col justify-between">
-            <div>
-              <div class="flex items-center justify-between gap-2">
-                <span class="px-2 py-0.5 rounded text-[10px] font-black ${b.tier === 'S' ? 'sulsul-badge-rose bg-rose-100 text-rose-800 border border-rose-300 dark:bg-rose-950/60 dark:text-rose-300 dark:border-rose-800' : 'sulsul-badge-emerald bg-emerald-100 text-emerald-800 border border-emerald-300 dark:bg-emerald-950/60 dark:text-emerald-300 dark:border-emerald-800'}">
-                  ${b.tierName}
-                </span>
-                <span class="text-[10px] text-amber-400 font-bold">${b.dday}</span>
-              </div>
-              <h4 class="text-xs font-black text-white mt-1.5">${b.title}</h4>
-              <p class="text-[11px] text-slate-400 mt-1 leading-relaxed">${b.desc}</p>
-              <div class="text-[10px] text-slate-500 mt-1">예상 비용: <span class="text-slate-300 font-semibold">${b.cost}</span></div>
-              <div class="tip-box text-[10px] text-amber-900 dark:text-amber-300 bg-amber-100 dark:bg-amber-500/10 p-2 rounded-lg border border-amber-300 dark:border-amber-500/20 mt-1.5 font-medium leading-relaxed">💡 ${b.tip}</div>
-            </div>
+        const rawGuides = (window.KB_TRAVEL && window.KB_TRAVEL.bookingGuides) ? window.KB_TRAVEL.bookingGuides : [];
+        trip.bookingStatuses = trip.bookingStatuses || {};
 
-            <div class="pt-2">
-              <a href="${b.url}" target="_blank" rel="noopener noreferrer" class="w-full py-1.5 bg-[#141c2e] hover:bg-[#1e2a44] border border-[#23304c] text-amber-400 rounded-lg text-xs font-bold flex items-center justify-center gap-1.5 transition">
-                <span>공식 포털 바로가기</span>
-                <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i>
-              </a>
+        // 오늘 기준 D-Day 계산
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        let tripStart = trip.startDate ? new Date(trip.startDate) : new Date('2026-10-11');
+        if (isNaN(tripStart.getTime())) tripStart = new Date('2026-10-11');
+        tripStart.setHours(0, 0, 0, 0);
+        const diffDays = Math.ceil((tripStart.getTime() - today.getTime()) / (1000 * 60 * 60 * 24));
+
+        if (ddayBadge) {
+          ddayBadge.innerText = diffDays > 0 ? `출발 D-${diffDays}일` : (diffDays === 0 ? '오늘 출발 (D-Day)!' : `출발 D+${Math.abs(diffDays)}일`);
+        }
+
+        const totalCount = rawGuides.length;
+        const completedCount = rawGuides.filter((b, idx) => {
+          const id = b.id || `bg_${idx}`;
+          return Boolean(trip.bookingStatuses[id]);
+        }).length;
+        const pct = totalCount > 0 ? Math.round((completedCount / totalCount) * 100) : 0;
+
+        if (progressBadge) progressBadge.innerText = `${completedCount}/${totalCount} 완료 (${pct}%)`;
+        if (progressBar) progressBar.style.width = `${pct}%`;
+
+        // 필터링 적용
+        const activeFilter = State.bookingGuideFilter || 'all';
+        const filtered = rawGuides.map((b, idx) => {
+          const id = b.id || `bg_${idx}`;
+          const isCompleted = Boolean(trip.bookingStatuses[id]);
+          const dNum = parseInt((b.dDay || 'D-30').replace(/\D/g, ''), 10) || 30;
+          const isUrgent = !isCompleted && (b.status === 'urgent' || diffDays <= dNum);
+          const isScheduled = !isCompleted && !isUrgent;
+          return { ...b, id, isCompleted, dNum, isUrgent, isScheduled };
+        }).filter(item => {
+          if (activeFilter === 'urgent') return item.isUrgent;
+          if (activeFilter === 'scheduled') return item.isScheduled;
+          if (activeFilter === 'completed') return item.isCompleted;
+          return true;
+        });
+
+        // 필터 탭 버튼 건수 갱신
+        const btnAll = document.getElementById('btn-booking-filter-all');
+        if (btnAll) btnAll.innerText = `전체 (${totalCount})`;
+
+        if (filtered.length === 0) {
+          container.innerHTML = `
+            <div class="col-span-1 md:col-span-2 text-center py-8 text-xs text-slate-400 theme-card-subtle rounded-xl">
+              선택한 필터 조건에 해당하는 예약 항목이 없습니다.
             </div>
-          </div>
-        `).join('');
+          `;
+          return;
+        }
+
+        container.innerHTML = filtered.map(b => {
+          const statusBadge = b.isCompleted
+            ? `<span class="sulsul-badge-emerald px-2 py-0.5 rounded text-[10px] font-black flex items-center gap-1"><i class="fa-solid fa-check"></i> 예약 완료</span>`
+            : (b.isUrgent
+              ? `<span class="sulsul-badge-rose px-2 py-0.5 rounded text-[10px] font-black animate-pulse flex items-center gap-1"><i class="fa-solid fa-triangle-exclamation"></i> 지금 즉시 예약 (타임어택)</span>`
+              : `<span class="sulsul-badge-indigo px-2 py-0.5 rounded text-[10px] font-black flex items-center gap-1"><i class="fa-solid fa-clock"></i> D-${b.dNum} 오픈 예정</span>`);
+
+          const portalUrl = getBookingGuideUrl(b);
+
+          return `
+            <div class="p-4 rounded-xl ${b.isCompleted ? 'bg-[#080b12]/60 border-emerald-500/30' : 'bg-[#080b12] border-[#1e263c]'} border space-y-3 flex flex-col justify-between hover:border-amber-500/40 transition">
+              <div class="space-y-2">
+                <div class="flex items-center justify-between gap-2 flex-wrap">
+                  <div class="flex items-center gap-2">
+                    <label class="flex items-center gap-1.5 cursor-pointer">
+                      <input type="checkbox" ${b.isCompleted ? 'checked' : ''} onchange="toggleBookingGuideCompleted('${b.id}')" class="w-4 h-4 rounded text-amber-500 bg-[#141c2e] border-[#23304c] focus:ring-amber-500 cursor-pointer">
+                      <span class="text-[10px] font-bold ${b.isCompleted ? 'text-emerald-400' : 'text-slate-400'}">완료 체크</span>
+                    </label>
+                    ${statusBadge}
+                  </div>
+                  <span class="text-xs font-mono font-black text-amber-400 px-2 py-0.5 rounded bg-amber-500/10 border border-amber-500/20">${b.dDay}</span>
+                </div>
+
+                <h4 class="text-xs sm:text-sm font-black ${b.isCompleted ? 'line-through text-slate-500' : 'text-white'} leading-snug">${b.title}</h4>
+                <div class="text-[11px] text-amber-300 font-medium">
+                  <i class="fa-solid fa-compass text-[10px]"></i> 예약처: <span class="text-slate-200">${b.target || '공식 사이트'}</span>
+                </div>
+                <div class="text-[10px] text-slate-400">
+                  예상 비용: <span class="text-emerald-400 font-mono font-bold">${b.cost}</span>
+                </div>
+                <div class="tip-box text-[10px] text-amber-900 dark:text-amber-300 bg-amber-100 dark:bg-amber-500/10 p-2.5 rounded-lg border border-amber-300 dark:border-amber-500/20 font-medium leading-relaxed">
+                  💡 ${b.tip}
+                </div>
+              </div>
+
+              <div class="pt-2">
+                <a href="${portalUrl}" target="_blank" rel="noopener noreferrer" class="w-full py-2 bg-[#141c2e] hover:bg-[#1e2a44] border border-[#23304c] hover:border-amber-500/40 text-amber-400 rounded-lg text-xs font-bold flex items-center justify-center gap-1.5 transition">
+                  <span>공식 포털 바로가기</span>
+                  <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i>
+                </a>
+              </div>
+            </div>
+          `;
+        }).join('');
       } else {
         renderDynamicTripBookings(trip);
       }
@@ -12500,26 +12998,211 @@
     }
 
     // ==========================================
-    // [7] 체크리스트 렌더링
+    // [7] 체크리스트 & 스마트 패킹 매트릭스 렌더링 (v1.8.4)
     // ==========================================
+    const CHECKLIST_CATEGORIES = ['전체', '🚨 필수', '📄 서류', '💳 금융', '🧥 의류/방한', '🥾 트레킹', '💊 의약품', '🔌 전자기기', '위생', '보안', '잡화'];
+
+    const DDAY_BUCKETS = [
+      { id: 'd30', name: 'D-30 이전', desc: '여권 · eTA · 핵심 바우처 · 등산화 길들이기', icon: 'fa-solid fa-calendar-check' },
+      { id: 'd7', name: 'D-7', desc: '달러 신권 · 트래블카드 · eSIM · 고산병약', icon: 'fa-solid fa-clock-rotate-left' },
+      { id: 'd1', name: 'D-1', desc: '방한복 · 고어텍스 · 배터리 · 보안용품 패킹', icon: 'fa-solid fa-box-archive' },
+      { id: 'local', name: '현지 휴대', desc: '1박용 서브 배낭 · 행동식 · 수시 소지품', icon: 'fa-solid fa-person-hiking' }
+    ];
+
+    function getItemDDayBucket(item) {
+      const t = (item.text || '').toLowerCase();
+      if (t.includes('여권') || t.includes('eta') || t.includes('황열병') || t.includes('입장권') || t.includes('바우처') || t.includes('보험') || t.includes('중등산화')) {
+        return 'd30';
+      }
+      if (t.includes('달러') || t.includes('신권') || t.includes('트래블') || t.includes('esim') || t.includes('다이아목스') || t.includes('상비약') || t.includes('어댑터') || t.includes('플러그')) {
+        return 'd7';
+      }
+      if (t.includes('방한') || t.includes('고어텍스') || t.includes('패딩') || t.includes('보조배터리') || t.includes('핫팩') || t.includes('복대') || t.includes('와이어') || t.includes('스트랩') || t.includes('샤워기') || t.includes('비타민')) {
+        return 'd1';
+      }
+      return 'local';
+    }
+
+    function isItemMatchingCategory(item, catFilter) {
+      if (!catFilter || catFilter === '전체') return true;
+      if (catFilter === '🚨 필수') return Boolean(item.urgent || item.cat === '필수');
+      const cleanCat = catFilter.replace(/^[^\w가-힣]+/, '').trim();
+      if (item.cat && item.cat.includes(cleanCat)) return true;
+      const t = (item.text || '').toLowerCase();
+      if (cleanCat.includes('서류') && (t.includes('여권') || t.includes('eta') || t.includes('바우처') || t.includes('보험') || t.includes('증명서'))) return true;
+      if (cleanCat.includes('금융') && (t.includes('달러') || t.includes('카드') || t.includes('환전') || t.includes('페소') || t.includes('트래블'))) return true;
+      if (cleanCat.includes('의류') && (t.includes('의류') || t.includes('패딩') || t.includes('자켓') || t.includes('플리스') || t.includes('비니') || t.includes('모자') || t.includes('장갑') || t.includes('핫팩') || t.includes('수영복'))) return true;
+      if (cleanCat.includes('트레킹') && (t.includes('등산') || t.includes('스틱') || t.includes('하이킹'))) return true;
+      if (cleanCat.includes('의약품') && (t.includes('약') || t.includes('다이아목스') || t.includes('황열병') || t.includes('비타민'))) return true;
+      if (cleanCat.includes('전자기기') && (t.includes('배터리') || t.includes('어댑터') || t.includes('충전') || t.includes('케이블'))) return true;
+      if (cleanCat.includes('위생') && (t.includes('선크림') || t.includes('티슈') || t.includes('샤워') || t.includes('립밤') || t.includes('인공눈물') || t.includes('선글라스'))) return true;
+      if (cleanCat.includes('보안') && (t.includes('복대') || t.includes('자물쇠') || t.includes('스트랩'))) return true;
+      return false;
+    }
+
+    function switchChecklistViewMode(mode) {
+      State.checklistViewMode = mode || 'category';
+      const btnCat = document.getElementById('btn-chk-mode-cat');
+      const btnDday = document.getElementById('btn-chk-mode-dday');
+      if (btnCat && btnDday) {
+        if (State.checklistViewMode === 'category') {
+          btnCat.className = 'px-2.5 py-1 rounded-lg text-[11px] font-bold sulsul-chip is-active cursor-pointer';
+          btnDday.className = 'px-2.5 py-1 rounded-lg text-[11px] font-bold theme-card-subtle text-slate-400 hover:text-white cursor-pointer';
+        } else {
+          btnCat.className = 'px-2.5 py-1 rounded-lg text-[11px] font-bold theme-card-subtle text-slate-400 hover:text-white cursor-pointer';
+          btnDday.className = 'px-2.5 py-1 rounded-lg text-[11px] font-bold sulsul-chip is-active cursor-pointer';
+        }
+      }
+      renderChecklistTab();
+    }
+
+    function toggleChecklistOnlyUnchecked() {
+      State.checklistOnlyUnchecked = !State.checklistOnlyUnchecked;
+      const btn = document.getElementById('btn-chk-uncompleted');
+      if (btn) {
+        if (State.checklistOnlyUnchecked) {
+          btn.className = 'px-2.5 py-1 rounded-lg bg-amber-500 text-slate-950 text-[11px] font-black flex items-center gap-1 transition cursor-pointer shadow-xs';
+          btn.innerHTML = '<i class="fa-solid fa-square-check"></i> <span>미완료만 보는 중</span>';
+        } else {
+          btn.className = 'px-2.5 py-1 rounded-lg theme-card-subtle text-[11px] font-bold flex items-center gap-1 transition cursor-pointer';
+          btn.innerHTML = '<i class="fa-regular fa-square"></i> <span>미완료만 보기</span>';
+        }
+      }
+      renderChecklistTab();
+    }
+
+    function setChecklistCategoryFilter(cat) {
+      State.checklistCategoryFilter = cat || '전체';
+      renderChecklistTab();
+    }
+
+    function checkAllChecklistItems(isComplete) {
+      const trip = getActiveTrip();
+      if (!trip || !trip.checklist) return;
+      trip.checklist.forEach(item => {
+        item.checked = isComplete;
+      });
+      saveTrips();
+      renderChecklistTab();
+    }
+
     function renderChecklistTab() {
       const trip = getActiveTrip();
       const container = document.getElementById('checklist-container');
+      const chipsContainer = document.getElementById('checklist-category-chips');
+      const progressBadge = document.getElementById('checklist-progress-badge');
+      const progressBar = document.getElementById('checklist-progress-bar');
       const items = trip.checklist || [];
+      if (!container) return;
 
-      let checkedCount = items.filter(i => i.checked).length;
+      const checkedCount = items.filter(i => i.checked).length;
       const pct = items.length > 0 ? Math.round((checkedCount / items.length) * 100) : 0;
-      document.getElementById('checklist-progress-badge').innerText = `${pct}% 준비됨 (${checkedCount}/${items.length})`;
+      if (progressBadge) progressBadge.innerText = `${pct}% 준비됨 (${checkedCount}/${items.length})`;
+      if (progressBar) progressBar.style.width = `${pct}%`;
 
-      container.innerHTML = items.map((item, idx) => `
-        <label class="p-3 rounded-xl theme-card-subtle flex items-center justify-between gap-3 cursor-pointer hover:border-amber-500/40 transition">
-          <div class="flex items-center gap-3">
-            <input type="checkbox" ${item.checked ? 'checked' : ''} onchange="toggleChecklistItem(${idx})" class="w-4 h-4 rounded border-slate-700 bg-slate-900 text-amber-500 focus:ring-0 cursor-pointer">
-            <span class="text-xs ${item.checked ? 'line-through opacity-50' : 'text-[#1c1917] dark:text-[#ededed] font-bold'}">${item.text}</span>
+      // 1. 카테고리 칩 바 렌더링
+      if (chipsContainer) {
+        const activeCat = State.checklistCategoryFilter || '전체';
+        chipsContainer.innerHTML = CHECKLIST_CATEGORIES.map(c => {
+          const isActive = activeCat === c;
+          return `
+            <button onclick="setChecklistCategoryFilter('${c}')" class="px-2.5 py-1 rounded-xl text-xs font-bold shrink-0 whitespace-nowrap transition cursor-pointer ${isActive ? 'bg-amber-500 text-slate-950 font-black shadow-xs' : 'theme-card-subtle text-slate-300 hover:text-white'}">
+              ${c}
+            </button>
+          `;
+        }).join('');
+      }
+
+      // 2. 필터링된 항목 리스트 추출
+      const activeCat = State.checklistCategoryFilter || '전체';
+      const onlyUnchecked = Boolean(State.checklistOnlyUnchecked);
+
+      const filteredItems = items.map((item, idx) => ({ ...item, originalIdx: idx })).filter(item => {
+        if (onlyUnchecked && item.checked) return false;
+        return isItemMatchingCategory(item, activeCat);
+      });
+
+      if (filteredItems.length === 0) {
+        container.innerHTML = `
+          <div class="col-span-1 sm:col-span-2 text-center py-10 text-xs text-slate-400 theme-card-subtle rounded-2xl space-y-1">
+            <span class="text-2xl block mb-1">📋</span>
+            <div class="font-bold text-slate-300">해당 조건에 맞는 준비물이 없습니다.</div>
+            <p class="text-[11px] text-slate-500">카테고리 필터나 '미완료만 보기' 설정을 변경해 보세요.</p>
           </div>
-          ${item.urgent ? '<span class="sulsul-badge-rose text-[9px] font-black px-2 py-0.5 rounded-full shrink-0">필수</span>' : ''}
-        </label>
-      `).join('');
+        `;
+        return;
+      }
+
+      // 3. 뷰 모드에 따른 렌더링
+      const viewMode = State.checklistViewMode || 'category';
+
+      if (viewMode === 'dday') {
+        // D-Day 시점별 그룹핑 렌더링
+        let ddayHtml = '';
+        DDAY_BUCKETS.forEach(bucket => {
+          const bucketItems = filteredItems.filter(item => getItemDDayBucket(item) === bucket.id);
+          if (bucketItems.length === 0) return;
+
+          const bucketDone = bucketItems.filter(i => i.checked).length;
+          const bucketPct = Math.round((bucketDone / bucketItems.length) * 100);
+
+          ddayHtml += `
+            <div class="col-span-1 sm:col-span-2 p-3.5 sm:p-4 rounded-2xl bg-[#090d17] border border-[#1e263c] space-y-3">
+              <div class="flex items-center justify-between border-b border-[#1b2336] pb-2.5">
+                <div class="flex items-center gap-2">
+                  <span class="w-7 h-7 rounded-lg bg-amber-500/20 text-amber-400 flex items-center justify-center text-xs">
+                    <i class="${bucket.icon}"></i>
+                  </span>
+                  <div>
+                    <h4 class="text-xs sm:text-sm font-black text-white flex items-center gap-2">
+                      <span>${bucket.name}</span>
+                      <span class="text-[10px] text-slate-400 font-medium">${bucket.desc}</span>
+                    </h4>
+                  </div>
+                </div>
+                <span class="px-2 py-0.5 rounded-full text-[10px] font-black ${bucketPct === 100 ? 'sulsul-badge-emerald' : 'sulsul-badge-amber'}">
+                  ${bucketDone}/${bucketItems.length} (${bucketPct}%)
+                </span>
+              </div>
+
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                ${bucketItems.map(item => `
+                  <label class="p-3 rounded-xl theme-card-subtle flex items-center justify-between gap-3 cursor-pointer hover:border-amber-500/40 transition">
+                    <div class="flex items-center gap-2.5 min-w-0 flex-1">
+                      <input type="checkbox" ${item.checked ? 'checked' : ''} onchange="toggleChecklistItem(${item.originalIdx})" class="w-4 h-4 rounded text-amber-500 bg-[#141c2e] border-[#23304c] focus:ring-0 cursor-pointer shrink-0">
+                      <span class="text-xs ${item.checked ? 'line-through opacity-50 text-slate-400' : 'text-[#1c1917] dark:text-[#ededed] font-bold'} truncate">${item.text}</span>
+                    </div>
+                    <div class="flex items-center gap-1 shrink-0">
+                      ${item.cat ? `<span class="px-1.5 py-0.5 rounded text-[9px] font-bold bg-stone-800 text-stone-300 border border-stone-700">${item.cat}</span>` : ''}
+                      ${item.urgent ? '<span class="sulsul-badge-rose text-[9px] font-black px-1.5 py-0.5 rounded">필수</span>' : ''}
+                    </div>
+                  </label>
+                `).join('')}
+              </div>
+            </div>
+          `;
+        });
+
+        container.innerHTML = ddayHtml || `
+          <div class="col-span-1 sm:col-span-2 text-center py-10 text-xs text-slate-400 theme-card-subtle rounded-2xl">
+            표시할 준비물이 없습니다.
+          </div>
+        `;
+      } else {
+        // 일반 카테고리 그리드 뷰
+        container.innerHTML = filteredItems.map(item => `
+          <label class="p-3.5 rounded-xl theme-card-subtle flex items-center justify-between gap-3 cursor-pointer hover:border-amber-500/40 transition">
+            <div class="flex items-center gap-2.5 min-w-0 flex-1">
+              <input type="checkbox" ${item.checked ? 'checked' : ''} onchange="toggleChecklistItem(${item.originalIdx})" class="w-4 h-4 rounded text-amber-500 bg-[#141c2e] border-[#23304c] focus:ring-0 cursor-pointer shrink-0">
+              <span class="text-xs ${item.checked ? 'line-through opacity-50 text-slate-400' : 'text-[#1c1917] dark:text-[#ededed] font-bold'} truncate">${item.text}</span>
+            </div>
+            <div class="flex items-center gap-1.5 shrink-0">
+              ${item.cat ? `<span class="px-2 py-0.5 rounded text-[9px] font-bold bg-stone-800 text-stone-300 border border-stone-700">${item.cat}</span>` : ''}
+              ${item.urgent ? '<span class="sulsul-badge-rose text-[9px] font-black px-2 py-0.5 rounded">필수</span>' : ''}
+            </div>
+          </label>
+        `).join('');
+      }
     }
 
     function toggleChecklistItem(idx) {
@@ -18744,6 +19427,147 @@ JSON 배열만 출력하세요. 각 day는 dayNum, title, city, date, spots를 �
       }
     }
 
+    // ==========================================
+    // [16] 현지 통화 빠른 환율 플로팅 계산기 엔진 (v1.8.4)
+    // ==========================================
+    const QUICK_CURRENCIES = [
+      { code: 'ARS', flag: '🇦🇷', name: '아르헨 페소', defaultAmt: 50000 },
+      { code: 'CLP', flag: '🇨🇱', name: '칠레 페소', defaultAmt: 30000 },
+      { code: 'PEN', flag: '🇵🇪', name: '페루 솔', defaultAmt: 100 },
+      { code: 'CAD', flag: '🇨🇦', name: '캐나다 달러', defaultAmt: 50 },
+      { code: 'USD', flag: '🇺🇸', name: '미국 달러', defaultAmt: 100 },
+      { code: 'EUR', flag: '🇪🇺', name: '유로', defaultAmt: 50 }
+    ];
+
+    function openQuickCurrencyCalc() {
+      State.quickCalcCurrency = State.quickCalcCurrency || 'ARS';
+      if (typeof State.quickCalcAmount !== 'number') State.quickCalcAmount = 50000;
+      renderQuickCalcCurrencyChips();
+      const input = document.getElementById('quick-calc-input-amount');
+      if (input) input.value = State.quickCalcAmount.toLocaleString();
+      updateQuickCalcUI();
+      openModal('modal-quick-currency');
+    }
+
+    function renderQuickCalcCurrencyChips() {
+      const container = document.getElementById('quick-calc-currency-chips');
+      if (!container) return;
+      container.innerHTML = QUICK_CURRENCIES.map(c => {
+        const isActive = (State.quickCalcCurrency || 'ARS') === c.code;
+        return `
+          <button onclick="setQuickCalcCurrency('${c.code}')" class="px-2.5 py-1 rounded-xl text-xs font-bold flex items-center gap-1 shrink-0 whitespace-nowrap transition cursor-pointer ${isActive ? 'bg-amber-500 text-slate-950 font-black shadow-xs' : 'theme-card-subtle text-slate-300 hover:text-white'}">
+            <span>${c.flag}</span>
+            <span>${c.code}</span>
+          </button>
+        `;
+      }).join('');
+    }
+
+    function setQuickCalcCurrency(code) {
+      State.quickCalcCurrency = code;
+      const found = QUICK_CURRENCIES.find(c => c.code === code);
+      if (found) {
+        State.quickCalcAmount = found.defaultAmt;
+        const input = document.getElementById('quick-calc-input-amount');
+        if (input) input.value = State.quickCalcAmount.toLocaleString();
+      }
+      renderQuickCalcCurrencyChips();
+      updateQuickCalcUI();
+    }
+
+    function toggleQuickCalcMep() {
+      const chk = document.getElementById('quick-calc-chk-mep');
+      if (chk) {
+        State.isMepEnabled = chk.checked;
+        const globalChk = document.getElementById('chk-mep-rate');
+        if (globalChk) globalChk.checked = chk.checked;
+      }
+      updateQuickCalcUI();
+    }
+
+    function handleQuickCalcInput(val) {
+      const num = parseFloat(String(val).replace(/,/g, '')) || 0;
+      State.quickCalcAmount = num;
+      updateQuickCalcUI();
+    }
+
+    function clearQuickCalcInput() {
+      State.quickCalcAmount = 0;
+      const input = document.getElementById('quick-calc-input-amount');
+      if (input) input.value = '0';
+      updateQuickCalcUI();
+    }
+
+    function addQuickCalcAmount(delta) {
+      State.quickCalcAmount = (State.quickCalcAmount || 0) + delta;
+      const input = document.getElementById('quick-calc-input-amount');
+      if (input) input.value = State.quickCalcAmount.toLocaleString();
+      updateQuickCalcUI();
+    }
+
+    function updateQuickCalcUI() {
+      const curr = State.quickCalcCurrency || 'ARS';
+      const amt = State.quickCalcAmount || 0;
+      const mepBar = document.getElementById('quick-calc-mep-bar');
+      const badge = document.getElementById('quick-calc-currency-badge');
+      const rateInfo = document.getElementById('quick-calc-rate-info');
+      const resultKrw = document.getElementById('quick-calc-result-krw');
+      const resultUsd = document.getElementById('quick-calc-result-usd');
+      const inputLabel = document.getElementById('quick-calc-input-label');
+
+      if (badge) badge.innerText = curr;
+      if (mepBar) {
+        if (curr === 'ARS') mepBar.classList.remove('hidden');
+        else mepBar.classList.add('hidden');
+      }
+      if (inputLabel) {
+        const found = QUICK_CURRENCIES.find(c => c.code === curr);
+        inputLabel.innerText = `${found ? found.name : curr} 금액 입력`;
+      }
+
+      // 환율 계수 계산 (USD 및 KRW 기준)
+      // 기준 환율: 1 USD = 1,380 KRW
+      const USD_KRW = 1380;
+      let usdVal = 0;
+      let krwVal = 0;
+      let rateDesc = '';
+
+      if (curr === 'ARS') {
+        const isMep = State.isMepEnabled !== false;
+        const ratePerUsd = isMep ? 1200 : 980; // 1 USD = 1,200 ARS (MEP) or 980 ARS (Official)
+        usdVal = amt / ratePerUsd;
+        krwVal = usdVal * USD_KRW;
+        rateDesc = isMep ? '1 USD = 1,200 ARS (MEP 환율)' : '1 USD = 980 ARS (공식 환율)';
+      } else if (curr === 'CLP') {
+        const ratePerUsd = 940; // 1 USD = 940 CLP
+        usdVal = amt / ratePerUsd;
+        krwVal = usdVal * USD_KRW;
+        rateDesc = '1 USD = 940 CLP';
+      } else if (curr === 'PEN') {
+        const ratePerUsd = 3.75; // 1 USD = 3.75 PEN
+        usdVal = amt / ratePerUsd;
+        krwVal = usdVal * USD_KRW;
+        rateDesc = '1 USD = 3.75 PEN';
+      } else if (curr === 'CAD') {
+        usdVal = amt * 0.74; // 1 CAD = 0.74 USD
+        krwVal = amt * 1020;
+        rateDesc = '1 CAD = 약 1,020 KRW';
+      } else if (curr === 'EUR') {
+        usdVal = amt * 1.08;
+        krwVal = amt * 1500;
+        rateDesc = '1 EUR = 약 1,500 KRW';
+      } else {
+        // USD
+        usdVal = amt;
+        krwVal = amt * USD_KRW;
+        rateDesc = '1 USD = 1,380 KRW';
+      }
+
+      if (rateInfo) rateInfo.innerText = rateDesc;
+      if (resultKrw) resultKrw.innerText = `약 ${Math.round(krwVal).toLocaleString()} 원`;
+      if (resultUsd) resultUsd.innerText = `약 $${usdVal.toFixed(2)}`;
+    }
+
     // 글로벌 네임스페이스 노출
     window.SulsulTravel = {
       ...window.SulsulTravel,
@@ -18754,6 +19578,19 @@ JSON 배열만 출력하세요. 각 day는 dayNum, title, city, date, spots를 �
       openTripWorkspace: openTripWorkspace,
       switchTab: switchTab,
       switchPlanSubTab: switchPlanSubTab,
+      openQuickCurrencyCalc: openQuickCurrencyCalc,
+      setQuickCalcCurrency: setQuickCalcCurrency,
+      toggleQuickCalcMep: toggleQuickCalcMep,
+      handleQuickCalcInput: handleQuickCalcInput,
+      clearQuickCalcInput: clearQuickCalcInput,
+      addQuickCalcAmount: addQuickCalcAmount,
+      setBookingGuideFilter: setBookingGuideFilter,
+      toggleBookingGuideCompleted: toggleBookingGuideCompleted,
+      switchChecklistViewMode: switchChecklistViewMode,
+      toggleChecklistOnlyUnchecked: toggleChecklistOnlyUnchecked,
+      setChecklistCategoryFilter: setChecklistCategoryFilter,
+      checkAllChecklistItems: checkAllChecklistItems,
+      getDayAltitudeAndOutfitInfo: getDayAltitudeAndOutfitInfo,
       showConfirmDelete: showConfirmDelete,
       requestCurrentGpsLocation: requestCurrentGpsLocation,
       simulateGpsLocation: simulateGpsLocation,

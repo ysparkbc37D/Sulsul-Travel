@@ -1,5 +1,5 @@
 /**
- * Sulsul-Travel South America Destination Pack (pack-south-america.js) v1.8.3
+ * Sulsul-Travel South America Destination Pack (pack-south-america.js) v1.8.4
  * 2026 22-Day South America Grand Nature & Budget Master Tour (아르헨티나 최적화 & 엘찰텐 1박 v9).
  */
 (function() {
@@ -74,7 +74,7 @@
   const destinationPackSouthAmerica = {
     id: 'pack_south_america_22d',
     name: '2026 남미 22일 가성비 마스터플랜 (아르헨티나 최적화 & 엘찰텐 1박 v9)',
-    version: '1.8.3',
+    version: '1.8.4',
     author: "CoBa's Sulsul Travel Engine",
     description: '2026.10.11 ~ 11.01(22일간 2인 예산 946.7만원) 아르헨티나, 칠레, 페루, 캐나다 4개국 10대 거점 완벽 수록',
     countries: ['아르헨티나', '칠레', '페루', '캐나다'],

@@ -1,5 +1,5 @@
 /**
- * Sulsul-Travel Built-in Knowledge Base (kb-travel.js) v1.8.3
+ * Sulsul-Travel Built-in Knowledge Base (kb-travel.js) v1.8.4
  * 100% Offline-First domain data for global travel, South America 22-Day Master Plan v9,
  * multi-currency rates (including Argentina MEP rate), and packing checklists.
  */
@@ -367,7 +367,7 @@ const saDays21 = saDays.slice(0, 21);
 
 // 2. Comprehensive Global & South America Travel Knowledge Engine
 const KB_TRAVEL = {
-  version: "1.8.3",
+  version: "1.8.4",
   saDays: saDays,
   
   templates: {

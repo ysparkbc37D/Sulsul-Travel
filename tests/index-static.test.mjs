@@ -353,8 +353,38 @@ test('2026 South America 22-day master plan v9 is registered and validated (v1.8
   assert.match(packSa, /El Chaltén/);
   assert.match(packSa, /Laguna Capri/);
   assert.match(packSa, /Mirador Las Torres/);
-  assert.match(html, /v1\.8\.3/);
-  assert.match(sw, /st-shell-v1\.8\.3/);
+});
+
+test('v1.8.4 6 key UI/UX convenience features are implemented and validated', () => {
+  // 1. D-Day time-attack booking dashboard
+  assert.match(html, /booking-timeline-dashboard/);
+  assert.match(html, /booking-progress-badge/);
+  assert.match(html, /toggleBookingGuideCompleted/);
+  assert.match(html, /setBookingGuideFilter/);
+
+  // 2. High-altitude profile & care card
+  assert.match(html, /getDayAltitudeAndOutfitInfo/);
+  assert.match(html, /안데스 고산병\(Soroche\) 안심 케어 수칙/);
+
+  // 3. Weather & 3-tier layered outfit guide badge
+  assert.match(html, /추천 복장/);
+  assert.match(html, /3단 레이어드/);
+
+  // 4. Quick currency floating calculator
+  assert.match(html, /btn-floating-quick-calc/);
+  assert.match(html, /modal-quick-currency/);
+  assert.match(html, /openQuickCurrencyCalc/);
+  assert.match(html, /quick-calc-chk-mep/);
+
+  // 5. Transit segment card & Google Maps directions
+  assert.match(html, /activity-timeline-spot/);
+  assert.match(html, /google\.com\/maps\/dir/);
+
+  // 6. Checklist D-Day & smart packing matrix
+  assert.match(html, /checklist-category-chips/);
+  assert.match(html, /switchChecklistViewMode/);
+  assert.match(html, /toggleChecklistOnlyUnchecked/);
+  assert.match(html, /getItemDDayBucket/);
 });
 
 test('release version is synchronized', () => {
@@ -362,8 +392,9 @@ test('release version is synchronized', () => {
   const worker = sw.match(/const V\s*=\s*'st-shell-v([^']+)'/)?.[1];
   const release = changelog.match(/## \[v([^\]]+)\]/)?.[1];
   const chronicleRelease = chronicle.match(/^### \[실록 \d+호\].*\(v([^\)]+)\)$/m)?.[1];
-  assert.equal(app, '1.8.3');
+  assert.equal(app, '1.8.4');
   assert.equal(worker, app);
   assert.equal(release, app);
   assert.equal(chronicleRelease, app);
 });
+
