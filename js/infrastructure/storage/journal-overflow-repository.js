@@ -46,27 +46,75 @@
         },
         updatedAt: new Date().toISOString()
       };
-      await new Promise((resolve, reject) => {
-        const tx = db.transaction(STORE_NAME, 'readwrite');
-        tx.objectStore(STORE_NAME).put(value);
-        tx.oncomplete = resolve;
-        tx.onerror = () => reject(tx.error || new Error('INDEXEDDB_WRITE_FAILED'));
-        tx.onabort = () => reject(tx.error || new Error('INDEXEDDB_WRITE_ABORTED'));
-      });
-      db.close();
+      try {
+        await new Promise((resolve, reject) => {
+          const tx = db.transaction(STORE_NAME, 'readwrite');
+          tx.objectStore(STORE_NAME).put(value);
+          tx.oncomplete = resolve;
+          tx.onerror = () => reject(tx.error || new Error('INDEXEDDB_WRITE_FAILED'));
+          tx.onabort = () => reject(tx.error || new Error('INDEXEDDB_WRITE_ABORTED'));
+        });
+      } finally {
+        db.close();
+      }
       return value;
     }
 
     async loadAll() {
       const db = await this.open();
-      const values = await new Promise((resolve, reject) => {
-        const tx = db.transaction(STORE_NAME, 'readonly');
-        const request = tx.objectStore(STORE_NAME).getAll();
-        request.onsuccess = () => resolve(Array.isArray(request.result) ? request.result : []);
-        request.onerror = () => reject(request.error || new Error('INDEXEDDB_READ_FAILED'));
-      });
-      db.close();
-      return values;
+      try {
+        return await new Promise((resolve, reject) => {
+          const tx = db.transaction(STORE_NAME, 'readonly');
+          const request = tx.objectStore(STORE_NAME).getAll();
+          request.onsuccess = () => resolve(Array.isArray(request.result) ? request.result : []);
+          request.onerror = () => reject(request.error || new Error('INDEXEDDB_READ_FAILED'));
+        });
+      } finally {
+        db.close();
+      }
+    }
+
+    async deleteTrip(tripId) {
+      if (typeof tripId !== 'string' || !tripId) throw new TypeError('INVALID_TRIP_ID');
+      const db = await this.open();
+      try {
+        return await new Promise((resolve, reject) => {
+          const tx = db.transaction(STORE_NAME, 'readwrite');
+          const store = tx.objectStore(STORE_NAME);
+          const prefix = `${tripId}:`;
+          let deleted = 0;
+          const request = store.getAllKeys();
+          request.onsuccess = () => {
+            for (const key of request.result || []) {
+              if (typeof key === 'string' && key.startsWith(prefix)) {
+                store.delete(key);
+                deleted += 1;
+              }
+            }
+          };
+          request.onerror = () => reject(request.error || new Error('INDEXEDDB_READ_FAILED'));
+          tx.oncomplete = () => resolve(deleted);
+          tx.onerror = () => reject(tx.error || new Error('INDEXEDDB_DELETE_FAILED'));
+          tx.onabort = () => reject(tx.error || new Error('INDEXEDDB_DELETE_ABORTED'));
+        });
+      } finally {
+        db.close();
+      }
+    }
+
+    async clearAll() {
+      const db = await this.open();
+      try {
+        return await new Promise((resolve, reject) => {
+          const tx = db.transaction(STORE_NAME, 'readwrite');
+          tx.objectStore(STORE_NAME).clear();
+          tx.oncomplete = resolve;
+          tx.onerror = () => reject(tx.error || new Error('INDEXEDDB_CLEAR_FAILED'));
+          tx.onabort = () => reject(tx.error || new Error('INDEXEDDB_CLEAR_ABORTED'));
+        });
+      } finally {
+        db.close();
+      }
     }
   }
 

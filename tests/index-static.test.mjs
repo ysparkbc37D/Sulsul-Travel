@@ -11,6 +11,8 @@ const companionCss = readFileSync(new URL('../css/companion.css', import.meta.ur
 const utilitiesCss = readFileSync(new URL('../css/utilities.css', import.meta.url), 'utf8');
 const kbTravel = readFileSync(new URL('../kb-travel.js', import.meta.url), 'utf8');
 const packSa = readFileSync(new URL('../js/destinations/pack-south-america.js', import.meta.url), 'utf8');
+const packageMetadata = JSON.parse(readFileSync(new URL('../package.json', import.meta.url), 'utf8'));
+const appVersion = html.match(/const APP_VER\s*=\s*'([^']+)'/)?.[1];
 
 test('all classic inline scripts parse', () => {
   const scripts = [...html.matchAll(/<script(?![^>]*\bsrc=)(?![^>]*\btype=["']module["'])[^>]*>([\s\S]*?)<\/script>/gi)];
@@ -98,16 +100,18 @@ test('journal approval has an IndexedDB overflow path for full localStorage', ()
 
 test('Gemini uses current models and header based API key transport', () => {
   assert.match(html, /const AI_MODELS = \['gemini-3\.1-flash-lite', 'gemini-3\.5-flash-lite', 'gemini-3\.5-flash'\]/);
-  assert.match(html, /models\/\$\{AI_MODELS\[0\]\}:generateContent/);
-  assert.match(html, /'x-goog-api-key': candidateKey/);
+  assert.match(html, /for \(const model of AI_MODELS\)/);
+  assert.match(html, /models\/\$\{model\}:generateContent/);
+  assert.match(html, /quotaFailureCount \+= 1/);
   assert.match(html, /'x-goog-api-key': key/);
   assert.doesNotMatch(html, /models\/gemini-2\.0-flash:generateContent\?key=/);
 });
 
 test('mobile travel notebook presentation is bundled and protected from CDN regressions', () => {
-  assert.match(html, /css\/utilities\.css\?v=1\.8\.1/);
-  assert.match(html, /css\/companion\.css\?v=1\.8\.1/);
-  assert.match(html, /js\/presentation\/companion-ui\.js\?v=1\.8\.1/);
+  assert.ok(appVersion);
+  assert.match(html, new RegExp(`css/utilities\\.css\\?v=${appVersion}`));
+  assert.match(html, new RegExp(`css/companion\\.css\\?v=${appVersion}`));
+  assert.match(html, new RegExp(`js/presentation/companion-ui\\.js\\?v=${appVersion}`));
   assert.match(html, /id=["']companion-main-nav["']/);
   assert.match(html, /id=["']companion-plan-nav["']/);
   assert.doesNotMatch(html, /cdn\.tailwindcss\.com/);
@@ -119,9 +123,9 @@ test('mobile travel notebook presentation is bundled and protected from CDN regr
   assert.match(companionCss, /min-height:44px/);
   assert.match(utilitiesCss, /\.flex/);
   for (const asset of [
-    'css/utilities.css?v=1.8.1',
-    'css/companion.css?v=1.8.1',
-    'js/presentation/companion-ui.js?v=1.8.1',
+    `css/utilities.css?v=${appVersion}`,
+    `css/companion.css?v=${appVersion}`,
+    `js/presentation/companion-ui.js?v=${appVersion}`,
     'vendor/fontawesome/css/all.min.css',
     'vendor/leaflet/leaflet.js',
     'vendor/leaflet/images/marker-icon-2x.png',
@@ -155,9 +159,9 @@ test('card touch swipe handlers and hidden drawers are purged for mobile stabili
 });
 
 test('pwa manifest and safe-zone icon assets are wired with cache-busting', () => {
-  assert.match(html, /<link rel="manifest" href="manifest\.webmanifest\?v=1\.8\.1">/);
-  assert.match(html, /icons\/icon-192-v115\.png\?v=1\.8\.1/);
-  assert.match(html, /favicon\.png\?v=1\.8\.1/);
+  assert.match(html, new RegExp(`<link rel="manifest" href="manifest\\.webmanifest\\?v=${appVersion}">`));
+  assert.match(html, new RegExp(`icons/icon-192-v115\\.png\\?v=${appVersion}`));
+  assert.match(html, new RegExp(`favicon\\.png\\?v=${appVersion}`));
 });
 
 test('modern theme yellow/amber text has high-contrast override and theme buttons have explicit active styles (v1.7.1)', () => {
@@ -349,10 +353,11 @@ test('iOS Safari PWA installation guide and standalone crash guards are wired (v
 test('2026 South America 22-day master plan v9 is registered and validated (v1.8.3)', () => {
   assert.match(kbTravel, /아르헨티나 최적화 & 엘찰텐 1박 v9/);
   assert.match(kbTravel, /9,467,000/);
-  assert.match(kbTravel, /Fitz Roy Laguna Capri/);
+  assert.match(kbTravel, /mapQuery:\s*"Laguna\+Capri\+El\+Chalten"/);
   assert.match(packSa, /El Chaltén/);
   assert.match(packSa, /Laguna Capri/);
-  assert.match(packSa, /Mirador Las Torres/);
+  assert.match(kbTravel, /Mirador Las Torres/);
+  assert.match(packSa, /nameEn:\s*'Torres del Paine \/ Puerto Natales'/);
   assert.match(packSa, /subtabTitle:\s*'10대 거점 도시 가이드'/);
   assert.match(packSa, /subtabTitle:\s*'14대 필수 예약'/);
   assert.match(packSa, /DestinationRegistry\.register/);
@@ -360,7 +365,7 @@ test('2026 South America 22-day master plan v9 is registered and validated (v1.8
   assert.match(html, /수하물 23kg 통제/);
 });
 
-test('v1.8.4 6 key UI/UX convenience features are implemented and validated', () => {
+test('v1.8.4 6 key UI/UX convenience features remain available', () => {
   // 1. D-Day time-attack booking dashboard
   assert.match(html, /booking-timeline-dashboard/);
   assert.match(html, /booking-progress-badge/);
@@ -375,8 +380,9 @@ test('v1.8.4 6 key UI/UX convenience features are implemented and validated', ()
   assert.match(html, /추천 복장/);
   assert.match(html, /3단 레이어드/);
 
-  // 4. Quick currency floating calculator
-  assert.match(html, /btn-floating-quick-calc/);
+  // 4. Quick currency calculator remains available from the workspace action
+  assert.match(html, /onclick="openQuickCurrencyCalc\(\)"[\s\S]{0,500}<i class="fa-solid fa-calculator/);
+  assert.doesNotMatch(html, /btn-floating-quick-calc/);
   assert.match(html, /modal-quick-currency/);
   assert.match(html, /openQuickCurrencyCalc/);
   assert.match(html, /quick-calc-chk-mep/);
@@ -394,12 +400,52 @@ test('v1.8.4 6 key UI/UX convenience features are implemented and validated', ()
 
 test('release version is synchronized', () => {
   const app = html.match(/const APP_VER\s*=\s*'([^']+)'/)?.[1];
+  const badge = html.match(/id="app-ver-badge"[^>]*>v([^<]+)/)?.[1];
   const worker = sw.match(/const V\s*=\s*'st-shell-v([^']+)'/)?.[1];
   const release = changelog.match(/## \[v([^\]]+)\]/)?.[1];
   const chronicleRelease = chronicle.match(/^### \[실록 \d+호\].*\(v([^\)]+)\)$/m)?.[1];
-  assert.equal(app, '1.8.4');
+  assert.ok(app);
+  assert.equal(badge, app);
   assert.equal(worker, app);
   assert.equal(release, app);
   assert.equal(chronicleRelease, app);
+  assert.equal(packageMetadata.version, app);
 });
 
+test('privacy notice matches the current local storage and optional network flows', () => {
+  assert.match(html, /localStorage: st_trips_v2/);
+  assert.match(html, /IndexedDB: sulsul-travel-overflow-v1/);
+  assert.match(html, /st_gemini_key/);
+  assert.match(html, /st_github_pat/);
+  assert.match(html, /st_github_last_sync/);
+  assert.match(html, /st_live_rates \/ st_custom_rates \/ st_rates_last_updated/);
+  assert.match(html, /영수증 사진이 브라우저에서 Google API로 전송/);
+  assert.match(html, /OpenStreetMap 타일/);
+  assert.match(html, /open\.er-api\.com/);
+  assert.match(html, /실시간 공동편집은 아닙니다/);
+  assert.doesNotMatch(html, /sulsul_travel_trips|sulsul_travel_theme|sulsul_gemini_api_key/);
+  assert.doesNotMatch(html, /100% 오프라인 동작|100% 무료|무제한 사용|기기 보안 저장소 보관 중|Gemini 3\.1 Flash-Lite 연동됨/);
+  assert.match(html, /키 등록됨 · 입력 가림/);
+  assert.match(html, /브라우저 저장소에는 암호화되지 않습니다/);
+  assert.match(html, /기기 간 백업·이동 안내/);
+  assert.match(html, /여행 사본입니다\. 각자 수정한 내용은 자동으로 합쳐지지 않습니다/);
+});
+
+test('Gemini connection test uses the same fallback chain as AI generation', () => {
+  const start = html.indexOf('async function testGeminiApiKey()');
+  const end = html.indexOf('// ==========================================', start + 20);
+  const body = html.slice(start, end);
+  assert.match(body, /callGeminiApiWithFallback\('Reply with only OK\.'/);
+  assert.doesNotMatch(body, /AI_MODELS\[0\]/);
+});
+
+test('full backup restores clear old overflow journals only after the trip document is written', () => {
+  const jsonStart = html.indexOf('function importDataFromJson');
+  const jsonEnd = html.indexOf('// GitHub Gist is a personal snapshot backup', jsonStart);
+  const jsonRestore = html.slice(jsonStart, jsonEnd);
+  const gistStart = html.indexOf('async function syncFromGist()');
+  const gistEnd = html.indexOf('function saveGeminiKey()', gistStart);
+  const gistRestore = html.slice(gistStart, gistEnd);
+  assert.match(jsonRestore, /TripRepository\.saveAll\(imported\.trips\)[\s\S]*?await JournalOverflowRepository\.clearAll\(\)/);
+  assert.match(gistRestore, /TripRepository\.saveAll\(imported\.trips\)[\s\S]*?await JournalOverflowRepository\.clearAll\(\)/);
+});

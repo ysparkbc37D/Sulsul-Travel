@@ -1,7 +1,7 @@
 /* 합성 데이터 통합 검사: 사용자 프로필, 인증 정보, 클라우드 쓰기 및 AI 호출 없음. */
 const {chromium}=require(process.env.PLAYWRIGHT_MODULE || 'playwright');
 const fs=require('node:fs'),path=require('node:path'),http=require('node:http'),assert=require('node:assert/strict');
-const root=path.resolve(__dirname,'..'),output=path.join(root,'.local-review','v1.8.1');
+const root=path.resolve(__dirname,'..'),output=path.join(root,'.local-review','v1.8.6');
 const server=http.createServer((req,res)=>{
  const file=path.resolve(root,'.'+new URL(req.url,'http://localhost').pathname.replace(/\/$/,'/index.html'));
  if(!file.startsWith(root+path.sep)){res.writeHead(403).end();return;}
@@ -42,13 +42,58 @@ const server=http.createServer((req,res)=>{
    const reportSafe=!report.querySelector('[data-probe]'),reportText=report.textContent;
    await copyTravelSnapshotLink();const localhostWarning=document.getElementById('share-feedback').textContent.includes('내 컴퓨터');
    history.replaceState(null,'',location.pathname);State.activeTripId=t.id;switchView('hub');
+   const priorTestTrips=State.trips,priorTestActiveId=State.activeTripId;
+   const priorSampleFlag=localStorage.getItem('st_sa_sample_deleted');localStorage.setItem('st_sa_sample_deleted','true');
+   const deletionTrip={id:'delete-transaction-audit',title:'삭제 저장 검증',days:[{date:'2026-09-14',spots:[]}],journals:{}};
+   State.trips=TripRepository.saveAll([deletionTrip]);State.activeTripId=deletionTrip.id;
+   await JournalOverflowRepository.save({tripId:deletionTrip.id,dayIndex:0,journal:{text:'삭제 대상 임시 기록'},revision:0});
+   const originalSetItem=Storage.prototype.setItem;Storage.prototype.setItem=function(key,value){if(key==='st_trips_v2')throw new DOMException('test quota','QuotaExceededError');return originalSetItem.call(this,key,value);};
+   requestDeleteTrip(deletionTrip.id);await new Promise(resolve=>setTimeout(resolve,400));document.getElementById('confirm-delete-btn').click();
+   const failedDeleteRetained=State.trips.some(item=>item.id===deletionTrip.id),failedDeleteDialogRetained=!document.getElementById('modal-confirm-delete').classList.contains('sheet-closed');
+   Storage.prototype.setItem=originalSetItem;await new Promise(resolve=>setTimeout(resolve,400));document.getElementById('confirm-delete-btn').click();
+   for(let i=0;i<20;i++){if(!(await JournalOverflowRepository.loadAll()).some(item=>item.tripId===deletionTrip.id))break;await new Promise(resolve=>setTimeout(resolve,20));}
+   const deletionOverflowCleaned=!(await JournalOverflowRepository.loadAll()).some(item=>item.tripId===deletionTrip.id);
+   const deletionPersists=JSON.parse(localStorage.getItem('st_trips_v2')).every(item=>item.id!==deletionTrip.id);
+   const lastTripDeletionSafe=State.trips.length===0&&State.activeTripId===null;
+   if(priorSampleFlag==null)localStorage.removeItem('st_sa_sample_deleted');else localStorage.setItem('st_sa_sample_deleted',priorSampleFlag);
+   State.trips=priorTestTrips;State.activeTripId=priorTestActiveId;
    const host=document.createElement('div');host.id='status-test';host.innerHTML=renderDDayBadge(t,new Date('2026-09-14T12:00:00Z'));document.body.appendChild(host);
-   return {failed,persistedOnFail,memoryOnFail,draftRetained,retry,saved,completedOnFailure,before,failedImport,hashRetained,countOnFail,successfulImport,after,duplicateCount,metadata,fileImported,reportSafe,reportText,localhostWarning};
+   return {failed,persistedOnFail,memoryOnFail,draftRetained,retry,saved,completedOnFailure,before,failedImport,hashRetained,countOnFail,successfulImport,after,duplicateCount,metadata,fileImported,reportSafe,reportText,localhostWarning,failedDeleteRetained,failedDeleteDialogRetained,deletionOverflowCleaned,deletionPersists,lastTripDeletionSafe};
   });
   assert.equal(result.failed,false);assert.equal(result.persistedOnFail,'원문');assert.equal(result.memoryOnFail,'원문');assert.equal(result.draftRetained,'새 원문');assert.equal(result.retry,true);assert.equal(result.saved,'새 원문');assert.equal(result.completedOnFailure,false);
   assert.equal(result.failedImport,false);assert.equal(result.hashRetained,true);assert.equal(result.countOnFail,result.before);assert.equal(result.successfulImport,true);assert.equal(result.after,result.before+1);assert.equal(result.duplicateCount,result.after);assert.equal(result.metadata,'예약 메모');assert.equal(result.fileImported,true);
   assert.equal(result.reportSafe,true);for(const text of ['방문 완료','건너뜀','예정','09:00','작품 감상'])assert.ok(result.reportText.includes(text),text);
   assert.ok(!result.reportText.includes('맑음'));assert.ok(!result.reportText.includes('감동'));assert.equal(result.localhostWarning,true);
+  assert.equal(result.failedDeleteRetained,true);assert.equal(result.failedDeleteDialogRetained,true);assert.equal(result.deletionOverflowCleaned,true);assert.equal(result.deletionPersists,true);assert.equal(result.lastTripDeletionSafe,true);
+  const overflowReplacement=await page.evaluate(async()=>{
+   const trip=JSON.parse(JSON.stringify(State.trips.find(item=>item.id==='test-spain')));trip.journals[0]={text:'JSON 백업의 기록',photos:[]};trip.revision=0;
+   await JournalOverflowRepository.save({tripId:trip.id,dayIndex:0,journal:{text:'복원되면 안 되는 이전 초과 기록'},revision:500});
+   const file=new File([JSON.stringify({version:APP_VER,trips:[trip]})],'backup.json',{type:'application/json'});
+   importDataFromJson({target:{files:[file],value:'backup.json'}});
+   for(let i=0;i<50;i++){if(State.trips[0]?.journals?.[0]?.text==='JSON 백업의 기록'&&!(await JournalOverflowRepository.loadAll()).length)break;await new Promise(resolve=>setTimeout(resolve,20));}
+   await restoreJournalOverflowEntries();
+   return {text:State.trips[0]?.journals?.[0]?.text,overflow:(await JournalOverflowRepository.loadAll()).length};
+  });
+  assert.deepEqual(overflowReplacement,{text:'JSON 백업의 기록',overflow:0});
+  const aiFallbackTest=await page.evaluate(async()=>{
+   const priorKey=State.geminiKey,priorStoredKey=localStorage.getItem('st_gemini_key'),priorFallback=State.aiFallbackActive,oldFetch=window.fetch,models=[],quotaModels=[];
+   State.geminiKey='synthetic-gemini-key';localStorage.setItem('st_gemini_key',State.geminiKey);State.aiFallbackActive=false;
+   window.fetch=async url=>{
+    const model=new URL(url).pathname.split('/models/')[1].split(':')[0];models.push(model);
+    if(models.length===1)return new Response(JSON.stringify({error:{message:'synthetic model unavailable'}}),{status:404,headers:{'Content-Type':'application/json'}});
+    return new Response(JSON.stringify({candidates:[{content:{parts:[{text:'OK'}]}}]}),{status:200,headers:{'Content-Type':'application/json'}});
+   };
+   try{
+    await testGeminiApiKey();const button=document.getElementById('btn-test-gemini-key').textContent,activeFallback=State.aiFallbackActive,chatStatus=document.getElementById('ai-chat-status-pill')?.textContent||'';
+    window.fetch=async url=>{quotaModels.push(new URL(url).pathname.split('/models/')[1].split(':')[0]);if(quotaModels.length===1)return new Response(JSON.stringify({error:{message:'synthetic quota'}}),{status:429,headers:{'Content-Type':'application/json'}});return new Response(JSON.stringify({candidates:[{content:{parts:[{text:'OK'}]}}]}),{status:200,headers:{'Content-Type':'application/json'}});};
+    State.aiFallbackActive=false;const quotaFallback=await callGeminiApiWithFallback('Reply with only OK.',{timeoutMs:8000});
+    window.fetch=async()=>new Response(JSON.stringify({error:{message:'synthetic quota'}}),{status:429,headers:{'Content-Type':'application/json'}});
+    let allQuotaError='';try{await callGeminiApiWithFallback('Reply with only OK.',{timeoutMs:8000});}catch(error){allQuotaError=error.code;}
+    return {models,button,activeFallback,chatStatus,quotaModels,quotaFallback,allQuotaError};
+   }
+   finally{window.fetch=oldFetch;State.geminiKey=priorKey;State.aiFallbackActive=priorFallback;if(priorStoredKey==null)localStorage.removeItem('st_gemini_key');else localStorage.setItem('st_gemini_key',priorStoredKey);updateGeminiKeyUi();}
+  });
+  assert.deepEqual(aiFallbackTest.models,['gemini-3.1-flash-lite','gemini-3.5-flash-lite']);assert.ok(aiFallbackTest.button.includes('정상 작동'));assert.equal(aiFallbackTest.activeFallback,true);assert.ok(aiFallbackTest.chatStatus.includes('대체 모델 사용'));assert.deepEqual(aiFallbackTest.quotaModels,['gemini-3.1-flash-lite','gemini-3.5-flash-lite']);assert.equal(aiFallbackTest.quotaFallback,'OK');assert.equal(aiFallbackTest.allQuotaError,'QUOTA_EXCEEDED');
   const contrast={};
   for(const theme of ['modern','lightgray','deepblack']){
    await page.evaluate(t=>setTheme(t),theme);await page.waitForTimeout(300);
@@ -105,6 +150,6 @@ const server=http.createServer((req,res)=>{
   const offlineResult=await offlinePage.evaluate(()=>({text:State.trips.find(t=>t.id==='offline').journals[0].text,share:typeof sendTripSnapshotFile}));
   assert.deepEqual(offlineResult,{text:'보존할 여행 기록',share:'function'});
   await offlineContext.close();
-  assert.deepEqual(errors,[]);console.log(JSON.stringify({passed:true,contrast,runtimeErrors:errors,checks:'journal failure/retry, completion rollback, import failure/retry/dedup, file upload/download roundtrip, metadata, PDF facts/escaping, localhost, short/long links, theme contrast, mobile widths'}));
+  assert.deepEqual(errors,[]);console.log(JSON.stringify({passed:true,contrast,runtimeErrors:errors,checks:'journal failure/retry, completion rollback, import failure/retry/dedup, delete rollback/IndexedDB cleanup/last trip, full backup overflow cleanup, Gemini model/quota fallback, file upload/download roundtrip, metadata, PDF facts/escaping, localhost, short/long links, theme contrast, mobile widths'}));
  }finally{await browser.close();}
 })().catch(e=>{console.error(e);process.exitCode=1;}).finally(()=>server.close());

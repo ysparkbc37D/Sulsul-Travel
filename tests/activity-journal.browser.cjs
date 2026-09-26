@@ -98,9 +98,9 @@ const server=http.createServer((req,res)=>{
   await page.evaluate(()=>{setTheme('deepblack');openActivityJournal(0,0);});await page.screenshot({path:path.join(output,'editor-dark.png')});
   const moved=await page.evaluate(()=>{saveActivityRecord();const trip=getActiveTrip();trip.days[1].spots.push(trip.days[0].spots.shift());saveTrips();return activityLocation(getActiveTrip(),testRecordId).day.date;});assert.equal(moved,'2026-09-10');
   const archived=await page.evaluate(()=>{getActiveTrip().days[1].spots=[];saveTrips();refreshActivitySurfaces();renderPdfReport(getActiveTrip());return {text:document.getElementById('pdf-report-content').textContent,record:getActiveTrip().activityRecords[testRecordId].text,archive:document.querySelector('.activity-archive').textContent};});
-  assert.ok(archived.text.includes(archived.record));assert.ok(archived.text.includes('일정 변경 전 기록'));assert.ok(archived.archive.includes(archived.record));
+  assert.ok(archived.text.includes(archived.record));assert.ok(archived.text.includes('일정 변경 전 기록'));assert.ok(archived.text.includes('일정별 여행 기록 · 1편'));assert.ok(archived.text.includes('감성 여행 일기 & 포토북 컬렉션 (1편 / 2장)'));assert.ok(archived.archive.includes(archived.record));
   await page.evaluate(()=>{closeModal('modal-activity-record',true);});await page.waitForTimeout(150);await page.reload({waitUntil:'networkidle'});
   assert.equal(await page.evaluate(()=>activityEntries(State.trips.find(t=>t.id==='activity-test'))[0].text),archived.record);
-  assert.deepEqual(errors,[]);console.log(JSON.stringify({passed:true,checks:'완료 전 저장, 사진 압축/대표 선택/확대, 공유 개인정보 선택, 실패/재시도, AI 승인/충돌/실패, 이탈 방어, 320~430px 썸네일, 작은 화면 푸터, 이동/삭제 후 보존, PDF, 재시작',errors}));
+  assert.deepEqual(errors,[]);console.log(JSON.stringify({passed:true,checks:'완료 전 저장, 사진 압축/대표 선택/확대, 공유 개인정보 선택, 실패/재시도, AI 승인/충돌/실패, 이탈 방어, 320~430px 썸네일, 작은 화면 푸터, 이동/삭제 후 보존, PDF 일정별 기록 및 통계, 재시작',errors}));
  }finally{await browser.close();}
 })().catch(e=>{console.error(e);process.exitCode=1;}).finally(()=>server.close());

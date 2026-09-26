@@ -14,7 +14,6 @@ function shareFeedback(message) {
   showToast(message, 5000);
 }
 function showTravelFileAlternative(message) {
-  document.getElementById('modal-share-code-display').textContent = getActiveTrip()?.roomCode || '내 여행';
   openModal('modal-share-room');
   shareFeedback(message);
 }
