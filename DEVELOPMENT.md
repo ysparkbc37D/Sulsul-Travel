@@ -38,6 +38,10 @@
 
 브라우저에서 `http://localhost:8080/`을 엽니다. 서비스워커와 설치 동작은 HTTPS 또는 localhost에서 확인합니다. 정적 화면만 볼 때도 같은 주소를 사용하면 경로와 캐시가 배포 환경에 더 가깝습니다.
 
+## 운영 배포
+
+운영 사이트는 [sulsul-travel.vercel.app](https://sulsul-travel.vercel.app/)이며, GitHub 저장소의 `main` 브랜치와 연결된 Vercel 배포를 사용합니다. GitHub Pages는 현재 설정되어 있지 않습니다. 2026-09-27에 커밋 `1ee2b67`이 `main`에 반영된 뒤 운영 사이트에서 앱 버전 `v1.8.6`을 확인했습니다.
+
 ## 검증
 
 Node.js 18 이상과 Playwright/Chromium을 사용할 수 있는 환경에서 실행합니다.

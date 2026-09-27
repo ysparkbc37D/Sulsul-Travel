@@ -64,4 +64,4 @@ node tests/mobile-ui.browser.cjs
 
 ## 배포와 버전
 
-정적 파일 배포는 저장소의 GitHub Pages 설정을 사용합니다. 새 버전에서는 `index.html`의 `APP_VER`·화면 배지·정적 자산 캐시 쿼리, `sw.js` 캐시 이름, `package.json`, `CHANGELOG.md`, `술술트래블신록.md`를 함께 갱신하고 사전 검증을 실행합니다. 최신 변경은 [CHANGELOG](CHANGELOG.md)에 기록합니다.
+운영 앱은 저장소에 연결된 Vercel 프로젝트가 `main` 브랜치의 변경을 배포하며 주소는 [sulsul-travel.vercel.app](https://sulsul-travel.vercel.app/)입니다. GitHub Pages는 현재 호스팅 대상으로 설정되어 있지 않습니다. 새 버전에서는 `index.html`의 `APP_VER`·화면 배지·정적 자산 캐시 쿼리, `sw.js` 캐시 이름, `package.json`, `CHANGELOG.md`, `술술트래블신록.md`를 함께 갱신하고 사전 검증을 실행합니다. 최신 변경은 [CHANGELOG](CHANGELOG.md)에 기록합니다.
