@@ -1,7 +1,7 @@
 {
   "name": "sulsul-travel",
   "private": true,
-  "version": "1.8.6",
+  "version": "1.8.7",
   "scripts": {
     "build:assets": "node tools/build-assets.cjs",
     "build:css": "tailwindcss -c tailwind.config.cjs -i css/utilities.input.css -o css/utilities.css --minify",

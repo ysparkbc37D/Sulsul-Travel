@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
@@ -50,17 +50,17 @@
   </script>
 
   <!-- PWA Meta & Icons -->
-  <link rel="manifest" href="manifest.webmanifest?v=1.8.6">
+  <link rel="manifest" href="manifest.webmanifest?v=1.8.7">
   <meta name="theme-color" content="#F7F5F0">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <meta name="apple-mobile-web-app-title" content="술술트래블">
-  <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192-v115.png?v=1.8.6">
-  <link rel="icon" type="image/png" sizes="32x32" href="favicon.png?v=1.8.6">
+  <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192-v115.png?v=1.8.7">
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon.png?v=1.8.7">
   <link rel="shortcut icon" href="favicon.ico">
-  <link rel="apple-touch-icon" sizes="180x180" href="icons/apple-touch-icon-v115.png?v=1.8.6">
-  <link rel="apple-touch-icon" href="icons/apple-touch-icon-v115.png?v=1.8.6">
+  <link rel="apple-touch-icon" sizes="180x180" href="icons/apple-touch-icon-v115.png?v=1.8.7">
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon-v115.png?v=1.8.7">
 
   <!-- Google Fonts: Great Vibes, Dancing Script (Cursive Calligraphy), Cormorant Garamond, Noto Serif KR, Playfair Display -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -68,7 +68,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Great+Vibes&family=Cormorant+Garamond:wght@600;700;800&family=Noto+Serif+KR:wght@500;600;700;900&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
 
   <!-- Local Utilities Bundle (CDN fallback & tailwind utilities) -->
-  <link rel="stylesheet" href="css/utilities.css?v=1.8.6">
+  <link rel="stylesheet" href="css/utilities.css?v=1.8.7">
   <link rel="stylesheet" href="vendor/fontawesome/css/all.min.css">
 
   <!-- Leaflet Map CSS & JS -->
@@ -1445,7 +1445,7 @@
       <!-- 우측 액션 클러스터 (버전 알약 -> 원형 통계 -> 원형 설정 -> 다크그린 캡슐 추가) -->
       <div class="flex items-center gap-1 sm:gap-1.5 shrink-0">
         <!-- 1. 버전 배지 버튼 (v1.7.8 - 클릭 시 버전 이력) -->
-        <button id="app-ver-badge" onclick="event.stopPropagation(); openVersionHistoryModal()" class="h-7 sm:h-8 px-2 sm:px-2.5 rounded-full theme-card-subtle flex items-center justify-center font-mono text-[10px] sm:text-[11px] font-bold text-[#a2601b] dark:text-[#d4af37] shadow-xs hover:border-amber-500/60 transition cursor-pointer shrink-0" title="버전 업데이트 기록 보기 (클릭)">v1.8.6</button>
+        <button id="app-ver-badge" onclick="event.stopPropagation(); openVersionHistoryModal()" class="h-7 sm:h-8 px-2 sm:px-2.5 rounded-full theme-card-subtle flex items-center justify-center font-mono text-[10px] sm:text-[11px] font-bold text-[#a2601b] dark:text-[#d4af37] shadow-xs hover:border-amber-500/60 transition cursor-pointer shrink-0" title="버전 업데이트 기록 보기 (클릭)">v1.8.7</button>
 
         <!-- 2. 통계 버튼 (📊 - 원형 버튼) -->
         <button id="header-btn-analytics" onclick="openAnalyticsModal('lifetime')" class="companion-header-analytics w-7 h-7 sm:w-8 sm:h-8 rounded-full theme-card-subtle flex items-center justify-center text-[#a2601b] dark:text-[#d4af37] hover:border-amber-500/60 transition shadow-xs cursor-pointer shrink-0" title="술술 여행 통계 대시보드">
@@ -1644,6 +1644,10 @@
         <button onclick="openQuickCurrencyCalc()" class="px-2.5 sm:px-3 py-1.5 rounded-xl theme-card-subtle text-xs font-bold flex items-center gap-1.5 shadow-sm transition cursor-pointer text-amber-600 dark:text-amber-400 hover:border-amber-500/40" title="현지 통화 빠른 환율 계산기">
           <i class="fa-solid fa-calculator text-[12px]"></i>
           <span>환율</span>
+        </button>
+        <button id="btn-survival-spanish" onclick="openSurvivalSpanishModal()" class="px-2.5 sm:px-3 py-1.5 rounded-xl theme-card-subtle text-xs font-bold flex items-center gap-1.5 shadow-sm transition cursor-pointer text-indigo-600 dark:text-indigo-400 hover:border-indigo-500/40" title="현지 직통 서바이벌 스페인어 필수 10문장">
+          <i class="fa-solid fa-language text-[12px]"></i>
+          <span>회화</span>
         </button>
         <button id="ws-btn-header-map" onclick="navigateToInteractiveMap()" class="hidden" title="인터랙티브 지도 보기">
           <i id="ws-icon-header-map" class="fa-solid fa-map-location-dot text-sky-500 text-[11px]"></i>
@@ -4433,7 +4437,13 @@
 
       <!-- 버전 목록 스크롤 영역 (독립 스크롤 컨테이너로 Flexbox 압축 버그 영구 척결) -->
       <div class="overflow-y-auto flex-1 min-h-0 space-y-3.5 pr-1.5 custom-scrollbar">
-        <!-- v1.8.6 (Current) -->
+        <!-- v1.8.7 (Current) -->
+        <section class="companion-context">
+          <h3 class="font-bold">v1.8.7 · 2026 남미 22일 가성비 마스터플랜(v14) & 서바이벌 스페인어 모달 탑재</h3>
+          <p class="text-xs">실제 확정 항공권(10/20 PNT ➔ SCL 15:38, 10/23 SCL ➔ ARI 05:00, 10/29 CUZ ➔ LIM 14:30) 및 칠레-페루 원스톱 국경 육로 아레키파(해발 2,325m 고산 순응 거점, 산타 카탈리나 수녀원, 미스티 화산) ➔ 쿠스코 크루즈 델 수르 1등석 160도 침대 야간버스 여정 정규 반영 · 18박 숙소 마스터(밴쿠버 워터프런트 1박 공항 노숙 방지) & 2인 865만 원 예산 최적화 동기화 · 현지 직통 서바이벌 스페인어 필수 10문장 모달(원터치 클립보드 복사 및 플래시카드) 신설.</p>
+          <p class="text-xs">2026-10-05 · st-shell-v1.8.7</p>
+        </section>
+        <!-- v1.8.6 -->
         <section class="companion-context">
           <h3 class="font-bold">v1.8.6 · 저장·삭제 신뢰성 및 개인정보 안내 개선</h3>
           <p class="text-xs">여행 삭제는 기기 저장에 성공한 뒤에만 완료되고, 보조 일기 저장소도 함께 정리됩니다. Gemini 연결 테스트는 실제 모델 폴백을 사용하며 API 키 등록과 연결 성공을 구분합니다. 개인정보·오프라인·Gist·공유 안내를 구현에 맞춰 정리하고 PDF의 일정별 기록 통계를 바로잡았습니다.</p>
@@ -5411,6 +5421,174 @@
   </div>
 
   <!-- ========================================== -->
+  <!-- 7.12.2 현지 직통 서바이벌 스페인어 필수 10문장 모달 (v1.8.7) -->
+  <!-- ========================================== -->
+  <div id="modal-survival-spanish" class="sheet-container sheet-closed">
+    <div class="sheet-scrim" onclick="closeModal('modal-survival-spanish')"></div>
+    <div class="sheet-box sheet-lg max-w-sm sm:max-w-lg mx-auto p-4 sm:p-5 space-y-4 bg-white dark:bg-[#16181d] text-[#1c1917] dark:text-[#ededed] rounded-t-3xl sm:rounded-3xl shadow-2xl max-h-[85vh] flex flex-col">
+      <div class="sheet-handle sm:hidden shrink-0"></div>
+      <div class="flex items-center justify-between border-b border-[#e8e2d5] dark:border-stone-800 pb-3 shrink-0">
+        <div class="flex items-center gap-2">
+          <span class="w-8 h-8 rounded-xl bg-indigo-500/20 text-indigo-500 flex items-center justify-center text-sm font-bold">
+            <i class="fa-solid fa-language"></i>
+          </span>
+          <div>
+            <h3 class="text-sm sm:text-base font-extrabold text-[#1E2B24] dark:text-white flex items-center gap-1.5">
+              <span>서바이벌 스페인어 필수 10문장</span>
+              <span class="sulsul-badge-indigo text-[10px] font-bold px-1.5 py-0.5 rounded">100% 오프라인</span>
+            </h3>
+            <p class="text-[10px] text-[#78716c] dark:text-stone-400">약국·식당·결제·길찾기 현지 직통 플래시카드 & 원터치 복사</p>
+          </div>
+        </div>
+        <button onclick="closeModal('modal-survival-spanish')" class="w-7 h-7 rounded-lg bg-[#faf8f5] dark:bg-stone-800 hover:bg-[#f0ece1] dark:hover:bg-stone-700 text-stone-500 dark:text-stone-300 flex items-center justify-center text-sm transition cursor-pointer" title="닫기">✕</button>
+      </div>
+
+      <!-- 플래시카드 목록 컨테이너 -->
+      <div id="survival-spanish-cards" class="flex-1 overflow-y-auto space-y-2.5 pr-1 text-xs custom-scrollbar">
+        <div class="p-3 rounded-2xl bg-[#faf8f5] dark:bg-[#1e2028] border border-[#e8e2d5] dark:border-stone-800 space-y-1.5">
+          <div class="flex items-center justify-between">
+            <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-rose-500/15 text-rose-600 dark:text-rose-400">약국 / 건강</span>
+            <button onclick="copySpanishText('¿Tiene pastillas para el soroche?', this)" class="text-[11px] text-stone-500 hover:text-indigo-600 dark:hover:text-indigo-400 font-bold flex items-center gap-1 cursor-pointer">
+              <i class="fa-regular fa-copy"></i> 복사
+            </button>
+          </div>
+          <div class="text-sm font-extrabold text-indigo-600 dark:text-indigo-300 tracking-wide font-sans select-all">¿Tiene pastillas para el soroche?</div>
+          <div class="text-xs font-semibold text-stone-700 dark:text-stone-300">띠에네 빠스띠야스 빠라 엘 소로체?</div>
+          <div class="text-[11px] text-stone-500 dark:text-stone-400 flex items-center gap-1">
+            <span class="font-bold text-[#1c1917] dark:text-white">의미:</span> 고산병약(소로체) 있나요? · <span class="text-amber-600 dark:text-amber-400">Tip: 다이아목스 처방약 부족 시 현지 약국 구매</span>
+          </div>
+        </div>
+
+        <div class="p-3 rounded-2xl bg-[#faf8f5] dark:bg-[#1e2028] border border-[#e8e2d5] dark:border-stone-800 space-y-1.5">
+          <div class="flex items-center justify-between">
+            <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-500/15 text-amber-600 dark:text-amber-400">식당 / 미식</span>
+            <button onclick="copySpanishText('Sin culantro, por favor', this)" class="text-[11px] text-stone-500 hover:text-indigo-600 dark:hover:text-indigo-400 font-bold flex items-center gap-1 cursor-pointer">
+              <i class="fa-regular fa-copy"></i> 복사
+            </button>
+          </div>
+          <div class="text-sm font-extrabold text-indigo-600 dark:text-indigo-300 tracking-wide font-sans select-all">Sin culantro, por favor (o sin cilantro)</div>
+          <div class="text-xs font-semibold text-stone-700 dark:text-stone-300">씬 꿀란뜨로, 뽀르 파보르</div>
+          <div class="text-[11px] text-stone-500 dark:text-stone-400 flex items-center gap-1">
+            <span class="font-bold text-[#1c1917] dark:text-white">의미:</span> 고수(실란트로) 빼주세요 · <span class="text-amber-600 dark:text-amber-400">Tip: 페루/칠레 수프나 세비체 주문 시 필수 발화</span>
+          </div>
+        </div>
+
+        <div class="p-3 rounded-2xl bg-[#faf8f5] dark:bg-[#1e2028] border border-[#e8e2d5] dark:border-stone-800 space-y-1.5">
+          <div class="flex items-center justify-between">
+            <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-500/15 text-emerald-600 dark:text-emerald-400">결제 / 계산</span>
+            <button onclick="copySpanishText('La cuenta, por favor', this)" class="text-[11px] text-stone-500 hover:text-indigo-600 dark:hover:text-indigo-400 font-bold flex items-center gap-1 cursor-pointer">
+              <i class="fa-regular fa-copy"></i> 복사
+            </button>
+          </div>
+          <div class="text-sm font-extrabold text-indigo-600 dark:text-indigo-300 tracking-wide font-sans select-all">La cuenta, por favor</div>
+          <div class="text-xs font-semibold text-stone-700 dark:text-stone-300">라 꾸엔따, 뽀르 파보르</div>
+          <div class="text-[11px] text-stone-500 dark:text-stone-400 flex items-center gap-1">
+            <span class="font-bold text-[#1c1917] dark:text-white">의미:</span> 계산서(영수증) 주세요 · <span class="text-amber-600 dark:text-amber-400">Tip: 자리에서 손가락 사인 모션 취하며 요청</span>
+          </div>
+        </div>
+
+        <div class="p-3 rounded-2xl bg-[#faf8f5] dark:bg-[#1e2028] border border-[#e8e2d5] dark:border-stone-800 space-y-1.5">
+          <div class="flex items-center justify-between">
+            <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-blue-500/15 text-blue-600 dark:text-blue-400">결제 / 환율</span>
+            <button onclick="copySpanishText('¿Acepta tarjeta de crédito?', this)" class="text-[11px] text-stone-500 hover:text-indigo-600 dark:hover:text-indigo-400 font-bold flex items-center gap-1 cursor-pointer">
+              <i class="fa-regular fa-copy"></i> 복사
+            </button>
+          </div>
+          <div class="text-sm font-extrabold text-indigo-600 dark:text-indigo-300 tracking-wide font-sans select-all">¿Acepta tarjeta de crédito?</div>
+          <div class="text-xs font-semibold text-stone-700 dark:text-stone-300">아셉따 따르헤따 데 끄레디또?</div>
+          <div class="text-[11px] text-stone-500 dark:text-stone-400 flex items-center gap-1">
+            <span class="font-bold text-[#1c1917] dark:text-white">의미:</span> 신용카드 결제 되나요? · <span class="text-amber-600 dark:text-amber-400">Tip: 아르헨티나 MEP 25% 카드 우대 결제 전 확인</span>
+          </div>
+        </div>
+
+        <div class="p-3 rounded-2xl bg-[#faf8f5] dark:bg-[#1e2028] border border-[#e8e2d5] dark:border-stone-800 space-y-1.5">
+          <div class="flex items-center justify-between">
+            <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-purple-500/15 text-purple-600 dark:text-purple-400">쇼핑 / 시장</span>
+            <button onclick="copySpanishText('¿Cuánto cuesta? ¿Hay descuento?', this)" class="text-[11px] text-stone-500 hover:text-indigo-600 dark:hover:text-indigo-400 font-bold flex items-center gap-1 cursor-pointer">
+              <i class="fa-regular fa-copy"></i> 복사
+            </button>
+          </div>
+          <div class="text-sm font-extrabold text-indigo-600 dark:text-indigo-300 tracking-wide font-sans select-all">¿Cuánto cuesta? (¿Hay descuento?)</div>
+          <div class="text-xs font-semibold text-stone-700 dark:text-stone-300">꽌또 꾸에스따? (아이 데스꾸엔또?)</div>
+          <div class="text-[11px] text-stone-500 dark:text-stone-400 flex items-center gap-1">
+            <span class="font-bold text-[#1c1917] dark:text-white">의미:</span> 얼마인가요? (할인되나요?) · <span class="text-amber-600 dark:text-amber-400">Tip: 쿠스코 산페드로 시장 알파카 목도리 흥정 시</span>
+          </div>
+        </div>
+
+        <div class="p-3 rounded-2xl bg-[#faf8f5] dark:bg-[#1e2028] border border-[#e8e2d5] dark:border-stone-800 space-y-1.5">
+          <div class="flex items-center justify-between">
+            <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-cyan-500/15 text-cyan-600 dark:text-cyan-400">식당 / 생수</span>
+            <button onclick="copySpanishText('Agua sin gas, por favor', this)" class="text-[11px] text-stone-500 hover:text-indigo-600 dark:hover:text-indigo-400 font-bold flex items-center gap-1 cursor-pointer">
+              <i class="fa-regular fa-copy"></i> 복사
+            </button>
+          </div>
+          <div class="text-sm font-extrabold text-indigo-600 dark:text-indigo-300 tracking-wide font-sans select-all">Agua sin gas, por favor</div>
+          <div class="text-xs font-semibold text-stone-700 dark:text-stone-300">아구아 씬 가스, 뽀르 파보르</div>
+          <div class="text-[11px] text-stone-500 dark:text-stone-400 flex items-center gap-1">
+            <span class="font-bold text-[#1c1917] dark:text-white">의미:</span> 가스 없는 일반 생수 주세요 · <span class="text-amber-600 dark:text-amber-400">Tip: 그냥 Agua 주문 시 탄산수(con gas)가 나오므로 명시</span>
+          </div>
+        </div>
+
+        <div class="p-3 rounded-2xl bg-[#faf8f5] dark:bg-[#1e2028] border border-[#e8e2d5] dark:border-stone-800 space-y-1.5">
+          <div class="flex items-center justify-between">
+            <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-teal-500/15 text-teal-600 dark:text-teal-400">길찾기 / 위생</span>
+            <button onclick="copySpanishText('¿Dónde está el baño?', this)" class="text-[11px] text-stone-500 hover:text-indigo-600 dark:hover:text-indigo-400 font-bold flex items-center gap-1 cursor-pointer">
+              <i class="fa-regular fa-copy"></i> 복사
+            </button>
+          </div>
+          <div class="text-sm font-extrabold text-indigo-600 dark:text-indigo-300 tracking-wide font-sans select-all">¿Dónde está el baño?</div>
+          <div class="text-xs font-semibold text-stone-700 dark:text-stone-300">돈데 에스따 엘 바뇨?</div>
+          <div class="text-[11px] text-stone-500 dark:text-stone-400 flex items-center gap-1">
+            <span class="font-bold text-[#1c1917] dark:text-white">의미:</span> 화장실이 어디인가요? · <span class="text-amber-600 dark:text-amber-400">Tip: 터미널/식당에서 화장실 위치 문의</span>
+          </div>
+        </div>
+
+        <div class="p-3 rounded-2xl bg-[#faf8f5] dark:bg-[#1e2028] border border-[#e8e2d5] dark:border-stone-800 space-y-1.5">
+          <div class="flex items-center justify-between">
+            <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-sky-500/15 text-sky-600 dark:text-sky-400">교통 / 이동</span>
+            <button onclick="copySpanishText('Al aeropuerto, por favor', this)" class="text-[11px] text-stone-500 hover:text-indigo-600 dark:hover:text-indigo-400 font-bold flex items-center gap-1 cursor-pointer">
+              <i class="fa-regular fa-copy"></i> 복사
+            </button>
+          </div>
+          <div class="text-sm font-extrabold text-indigo-600 dark:text-indigo-300 tracking-wide font-sans select-all">Al aeropuerto (terminal), por favor</div>
+          <div class="text-xs font-semibold text-stone-700 dark:text-stone-300">알 아에로뿌에르또 (떼르미날), 뽀르 파보르</div>
+          <div class="text-[11px] text-stone-500 dark:text-stone-400 flex items-center gap-1">
+            <span class="font-bold text-[#1c1917] dark:text-white">의미:</span> 공항(터미널)으로 가주세요 · <span class="text-amber-600 dark:text-amber-400">Tip: 택시 기사에게 목적지 명확 전달</span>
+          </div>
+        </div>
+
+        <div class="p-3 rounded-2xl bg-[#faf8f5] dark:bg-[#1e2028] border border-[#e8e2d5] dark:border-stone-800 space-y-1.5">
+          <div class="flex items-center justify-between">
+            <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-indigo-500/15 text-indigo-600 dark:text-indigo-400">예약 / 체크인</span>
+            <button onclick="copySpanishText('Tengo una reserva', this)" class="text-[11px] text-stone-500 hover:text-indigo-600 dark:hover:text-indigo-400 font-bold flex items-center gap-1 cursor-pointer">
+              <i class="fa-regular fa-copy"></i> 복사
+            </button>
+          </div>
+          <div class="text-sm font-extrabold text-indigo-600 dark:text-indigo-300 tracking-wide font-sans select-all">Tengo una reserva</div>
+          <div class="text-xs font-semibold text-stone-700 dark:text-stone-300">땡고 우나 레세르바</div>
+          <div class="text-[11px] text-stone-500 dark:text-stone-400 flex items-center gap-1">
+            <span class="font-bold text-[#1c1917] dark:text-white">의미:</span> 예약했습니다 (여권 제시) · <span class="text-amber-600 dark:text-amber-400">Tip: 호텔 체크인 및 투어 픽업 시 바우처와 함께 제시</span>
+          </div>
+        </div>
+
+        <div class="p-3 rounded-2xl bg-[#faf8f5] dark:bg-[#1e2028] border border-[#e8e2d5] dark:border-stone-800 space-y-1.5">
+          <div class="flex items-center justify-between">
+            <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-stone-500/15 text-stone-600 dark:text-stone-400">인사 / 에티켓</span>
+            <button onclick="copySpanishText('Muchas gracias / Disculpe', this)" class="text-[11px] text-stone-500 hover:text-indigo-600 dark:hover:text-indigo-400 font-bold flex items-center gap-1 cursor-pointer">
+              <i class="fa-regular fa-copy"></i> 복사
+            </button>
+          </div>
+          <div class="text-sm font-extrabold text-indigo-600 dark:text-indigo-300 tracking-wide font-sans select-all">Muchas gracias / Disculpe (Permiso)</div>
+          <div class="text-xs font-semibold text-stone-700 dark:text-stone-300">무차스 그라시아스 / 디스꿀뻬 (뻬르미소)</div>
+          <div class="text-[11px] text-stone-500 dark:text-stone-400 flex items-center gap-1">
+            <span class="font-bold text-[#1c1917] dark:text-white">의미:</span> 감사합니다 / 실례합니다 · <span class="text-amber-600 dark:text-amber-400">Tip: 현지인과 대화 시 가장 따뜻하고 친절한 반응 유도</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================== -->
   <!-- 7.13 술술트래블 사용 가이드 모달 (MODAL-USER-GUIDE) -->
   <!-- ========================================== -->
   <div id="modal-user-guide" class="sheet-container sheet-closed">
@@ -5723,7 +5901,7 @@
     window.showToast = showToast;
 
     // 앱 버전 및 글로벌 네임스페이스 (Sulsul-Travel Invariant Rule R-10, R-11, R-12, R-13, R-14, R-15, R-16)
-    const APP_VER = '1.8.6';
+    const APP_VER = '1.8.7';
 
     // ══════════════════════════════════════════
     // [3-Way Theme System] 모던, 라이트그레이, 딥 블랙 테마 엔진 (v1.6.7)
@@ -6360,7 +6538,7 @@
         State.trips.unshift(seedTpl);
       } else if (exists) {
         // Self-heal: If existing showcase trip has empty days, missing spots, or older pre-v9 plan (lacks El Chalten v9)
-        const isOldVersion = exists.isSample && (!exists.title || !exists.title.includes('엘찰텐') || (exists.days && exists.days.length > 0 && !exists.days[0].spots[0]?.time));
+        const isOldVersion = exists.isSample && (!exists.title || !exists.title.includes('v14') || (exists.days && exists.days.length > 0 && !exists.days[0].spots[0]?.time));
         const hasSpots = exists.days && exists.days.length > 0 && exists.days.some(d => d.spots && d.spots.length > 0);
         if ((!hasSpots || isOldVersion) && fullDays.length > 0) {
           if (window.KB_TRAVEL && window.KB_TRAVEL.templates && window.KB_TRAVEL.templates.south_america_22d) {
@@ -6389,7 +6567,7 @@
         showToast('ℹ️ 현재 등록된 남미 22일 가이드 예제가 없습니다.');
         return;
       }
-      if (confirm('초기 탑재된 [2026 남미 22일 완벽 가이드 (아르헨티나 최적화 & 엘찰텐 1박 v9)]를 삭제하시겠습니까?\n\n(설정창에서 언제든 다시 복원할 수 있습니다)')) {
+      if (confirm('초기 탑재된 [2026 남미 22일 완벽 가이드 (실제 항공권 & 아레키파 육로이동 완전 리플랜 v14)]를 삭제하시겠습니까?\n\n(설정창에서 언제든 다시 복원할 수 있습니다)')) {
         const sampleTrip = State.trips[idx];
         const previousTrips = State.trips;
         const previousActiveTripId = State.activeTripId;
@@ -6452,7 +6630,7 @@
         renderActiveTripWorkspace();
       }
       closeModal('modal-settings');
-      showToast('✨ 2026 남미 22일 완벽 가이드(v9) 예제가 성공적으로 복원되었습니다!');
+      showToast('✨ 2026 남미 22일 완벽 가이드(v14 실제 항공권 & 아레키파 리플랜) 예제가 성공적으로 복원되었습니다!');
     }
 
     function saveTrips({ bump = true } = {}) {
@@ -19576,6 +19754,40 @@ JSON 배열만 출력하세요. 각 day는 dayNum, title, city, date, spots를 �
       { code: 'EUR', flag: '🇪🇺', name: '유로', defaultAmt: 50 }
     ];
 
+    function openSurvivalSpanishModal() {
+      openModal('modal-survival-spanish');
+    }
+
+    function copySpanishText(text, btnEl) {
+      if (!text) return;
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(() => {
+          showToast('📋 복사 완료: ' + text);
+        }).catch(() => {
+          fallbackCopyText(text);
+        });
+      } else {
+        fallbackCopyText(text);
+      }
+    }
+
+    function fallbackCopyText(text) {
+      const ta = document.createElement('textarea');
+      ta.value = text;
+      ta.style.position = 'fixed';
+      ta.style.opacity = '0';
+      document.body.appendChild(ta);
+      ta.focus();
+      ta.select();
+      try {
+        document.execCommand('copy');
+        showToast('📋 복사 완료: ' + text);
+      } catch (e) {
+        showToast(text);
+      }
+      document.body.removeChild(ta);
+    }
+
     function openQuickCurrencyCalc() {
       State.quickCalcCurrency = State.quickCalcCurrency || 'ARS';
       if (typeof State.quickCalcAmount !== 'number') State.quickCalcAmount = 50000;
@@ -19716,6 +19928,7 @@ JSON 배열만 출력하세요. 각 day는 dayNum, title, city, date, spots를 �
       switchTab: switchTab,
       switchPlanSubTab: switchPlanSubTab,
       openQuickCurrencyCalc: openQuickCurrencyCalc,
+      openSurvivalSpanishModal: openSurvivalSpanishModal,
       setQuickCalcCurrency: setQuickCalcCurrency,
       toggleQuickCalcMep: toggleQuickCalcMep,
       handleQuickCalcInput: handleQuickCalcInput,

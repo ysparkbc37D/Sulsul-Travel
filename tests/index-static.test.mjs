@@ -350,13 +350,14 @@ test('iOS Safari PWA installation guide and standalone crash guards are wired (v
   assert.match(html, /sulsul-boot-watchdog/);
 });
 
-test('2026 South America 22-day master plan v9 is registered and validated (v1.8.3)', () => {
-  assert.match(kbTravel, /아르헨티나 최적화 & 엘찰텐 1박 v9/);
-  assert.match(kbTravel, /9,467,000/);
-  assert.match(kbTravel, /mapQuery:\s*"Laguna\+Capri\+El\+Chalten"/);
+test('2026 South America 22-day master plan v14 is registered and validated (v1.8.7)', () => {
+  assert.match(kbTravel, /실제 항공권 & 아레키파 육로이동 완전 리플랜 v14/);
+  assert.match(kbTravel, /8,650,000/);
+  assert.match(kbTravel, /Laguna Capri/);
   assert.match(packSa, /El Chaltén/);
   assert.match(packSa, /Laguna Capri/);
-  assert.match(kbTravel, /Mirador Las Torres/);
+  assert.match(packSa, /Arequipa/);
+  assert.match(kbTravel, /아레키파/);
   assert.match(packSa, /nameEn:\s*'Torres del Paine \/ Puerto Natales'/);
   assert.match(packSa, /subtabTitle:\s*'10대 거점 도시 가이드'/);
   assert.match(packSa, /subtabTitle:\s*'14대 필수 예약'/);
