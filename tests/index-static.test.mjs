@@ -450,3 +450,12 @@ test('full backup restores clear old overflow journals only after the trip docum
   assert.match(jsonRestore, /TripRepository\.saveAll\(imported\.trips\)[\s\S]*?await JournalOverflowRepository\.clearAll\(\)/);
   assert.match(gistRestore, /TripRepository\.saveAll\(imported\.trips\)[\s\S]*?await JournalOverflowRepository\.clearAll\(\)/);
 });
+
+test('latest travel itinerary is placed at the top and compareTripsLatestFirst works (v1.8.8)', () => {
+  assert.match(html, /function compareTripsLatestFirst\(a, b\)/);
+  assert.match(html, /State\.trips\.sort\(compareTripsLatestFirst\)/);
+  assert.match(html, /filtered\.sort\(compareTripsLatestFirst\)/);
+  assert.match(html, /compareTripsLatestFirst: compareTripsLatestFirst/);
+  assert.match(html, /filtered\.unshift\(heroItem\)/);
+});
+

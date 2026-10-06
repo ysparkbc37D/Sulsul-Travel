@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
@@ -50,17 +50,17 @@
   </script>
 
   <!-- PWA Meta & Icons -->
-  <link rel="manifest" href="manifest.webmanifest?v=1.8.7">
+  <link rel="manifest" href="manifest.webmanifest?v=1.8.8">
   <meta name="theme-color" content="#F7F5F0">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <meta name="apple-mobile-web-app-title" content="술술트래블">
-  <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192-v115.png?v=1.8.7">
-  <link rel="icon" type="image/png" sizes="32x32" href="favicon.png?v=1.8.7">
+  <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192-v115.png?v=1.8.8">
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon.png?v=1.8.8">
   <link rel="shortcut icon" href="favicon.ico">
-  <link rel="apple-touch-icon" sizes="180x180" href="icons/apple-touch-icon-v115.png?v=1.8.7">
-  <link rel="apple-touch-icon" href="icons/apple-touch-icon-v115.png?v=1.8.7">
+  <link rel="apple-touch-icon" sizes="180x180" href="icons/apple-touch-icon-v115.png?v=1.8.8">
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon-v115.png?v=1.8.8">
 
   <!-- Google Fonts: Great Vibes, Dancing Script (Cursive Calligraphy), Cormorant Garamond, Noto Serif KR, Playfair Display -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -68,7 +68,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Great+Vibes&family=Cormorant+Garamond:wght@600;700;800&family=Noto+Serif+KR:wght@500;600;700;900&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
 
   <!-- Local Utilities Bundle (CDN fallback & tailwind utilities) -->
-  <link rel="stylesheet" href="css/utilities.css?v=1.8.7">
+  <link rel="stylesheet" href="css/utilities.css?v=1.8.8">
   <link rel="stylesheet" href="vendor/fontawesome/css/all.min.css">
 
   <!-- Leaflet Map CSS & JS -->
@@ -1410,12 +1410,12 @@
     }
   </style>
 
-  <link rel="stylesheet" href="css/companion.css?v=1.8.6">
-  <script src="js/presentation/companion-ui.js?v=1.8.6"></script>
-  <script src="js/domain/trip-transfer.js?v=1.8.6"></script>
-  <script src="js/presentation/trip-transfer-ui.js?v=1.8.6"></script>
-  <script src="js/presentation/activity-journal.js?v=1.8.6"></script>
-  <script src="js/presentation/expense-editor.js?v=1.8.6"></script>
+  <link rel="stylesheet" href="css/companion.css?v=1.8.8">
+  <script src="js/presentation/companion-ui.js?v=1.8.8"></script>
+  <script src="js/domain/trip-transfer.js?v=1.8.8"></script>
+  <script src="js/presentation/trip-transfer-ui.js?v=1.8.8"></script>
+  <script src="js/presentation/activity-journal.js?v=1.8.8"></script>
+  <script src="js/presentation/expense-editor.js?v=1.8.8"></script>
 
   <!-- Knowledge Base Seed & Destination Knowledge Packs (DKP) -->
   <script src="kb-travel.js"></script>
@@ -1445,7 +1445,7 @@
       <!-- 우측 액션 클러스터 (버전 알약 -> 원형 통계 -> 원형 설정 -> 다크그린 캡슐 추가) -->
       <div class="flex items-center gap-1 sm:gap-1.5 shrink-0">
         <!-- 1. 버전 배지 버튼 (v1.7.8 - 클릭 시 버전 이력) -->
-        <button id="app-ver-badge" onclick="event.stopPropagation(); openVersionHistoryModal()" class="h-7 sm:h-8 px-2 sm:px-2.5 rounded-full theme-card-subtle flex items-center justify-center font-mono text-[10px] sm:text-[11px] font-bold text-[#a2601b] dark:text-[#d4af37] shadow-xs hover:border-amber-500/60 transition cursor-pointer shrink-0" title="버전 업데이트 기록 보기 (클릭)">v1.8.7</button>
+        <button id="app-ver-badge" onclick="event.stopPropagation(); openVersionHistoryModal()" class="h-7 sm:h-8 px-2 sm:px-2.5 rounded-full theme-card-subtle flex items-center justify-center font-mono text-[10px] sm:text-[11px] font-bold text-[#a2601b] dark:text-[#d4af37] shadow-xs hover:border-amber-500/60 transition cursor-pointer shrink-0" title="버전 업데이트 기록 보기 (클릭)">v1.8.8</button>
 
         <!-- 2. 통계 버튼 (📊 - 원형 버튼) -->
         <button id="header-btn-analytics" onclick="openAnalyticsModal('lifetime')" class="companion-header-analytics w-7 h-7 sm:w-8 sm:h-8 rounded-full theme-card-subtle flex items-center justify-center text-[#a2601b] dark:text-[#d4af37] hover:border-amber-500/60 transition shadow-xs cursor-pointer shrink-0" title="술술 여행 통계 대시보드">
@@ -4437,7 +4437,13 @@
 
       <!-- 버전 목록 스크롤 영역 (독립 스크롤 컨테이너로 Flexbox 압축 버그 영구 척결) -->
       <div class="overflow-y-auto flex-1 min-h-0 space-y-3.5 pr-1.5 custom-scrollbar">
-        <!-- v1.8.7 (Current) -->
+        <!-- v1.8.8 (Current) -->
+        <section class="companion-context">
+          <h3 class="font-bold">v1.8.8 · 최신 여행 일정 상단 배치 및 허브 정렬 엔진 고도화</h3>
+          <p class="text-xs">허브(Hub) 및 여행 전체 목록에서 최신 출발일(startDate DESC) 및 최근 등록/수정된 여행 일정이 최상단에 자동 우선 배치되도록 정렬 엔진 전면 고도화 · 허브 그리드/리스트 모드 및 라이프타임 분석 테이블 전반의 최신순 정렬 정합성 완비 · 히어로 대표 카드 최상단 렌더링 무결성 보장.</p>
+          <p class="text-xs">2026-10-06 · st-shell-v1.8.8</p>
+        </section>
+        <!-- v1.8.7 -->
         <section class="companion-context">
           <h3 class="font-bold">v1.8.7 · 2026 남미 22일 가성비 마스터플랜(v14) & 서바이벌 스페인어 모달 탑재</h3>
           <p class="text-xs">실제 확정 항공권(10/20 PNT ➔ SCL 15:38, 10/23 SCL ➔ ARI 05:00, 10/29 CUZ ➔ LIM 14:30) 및 칠레-페루 원스톱 국경 육로 아레키파(해발 2,325m 고산 순응 거점, 산타 카탈리나 수녀원, 미스티 화산) ➔ 쿠스코 크루즈 델 수르 1등석 160도 침대 야간버스 여정 정규 반영 · 18박 숙소 마스터(밴쿠버 워터프런트 1박 공항 노숙 방지) & 2인 865만 원 예산 최적화 동기화 · 현지 직통 서바이벌 스페인어 필수 10문장 모달(원터치 클립보드 복사 및 플래시카드) 신설.</p>
@@ -5901,7 +5907,7 @@
     window.showToast = showToast;
 
     // 앱 버전 및 글로벌 네임스페이스 (Sulsul-Travel Invariant Rule R-10, R-11, R-12, R-13, R-14, R-15, R-16)
-    const APP_VER = '1.8.7';
+    const APP_VER = '1.8.8';
 
     // ══════════════════════════════════════════
     // [3-Way Theme System] 모던, 라이트그레이, 딥 블랙 테마 엔진 (v1.6.7)
@@ -6428,6 +6434,41 @@
     // ==========================================
     // 앱 초기화 및 시드 로드
     // ==========================================
+    function compareTripsLatestFirst(a, b) {
+      if (!a && !b) return 0;
+      if (!a) return 1;
+      if (!b) return -1;
+
+      // 1. 여행 시작일(startDate) 기준 최신순 (내림차순 DESC)
+      if (a.startDate && b.startDate) {
+        const cmp = b.startDate.localeCompare(a.startDate);
+        if (cmp !== 0) return cmp;
+        if (a.endDate && b.endDate) {
+          const cmpEnd = b.endDate.localeCompare(a.endDate);
+          if (cmpEnd !== 0) return cmpEnd;
+        }
+      } else if (a.startDate && !b.startDate) {
+        return -1; // 확정 날짜가 있는 일정이 날짜 미정(버킷리스트)보다 상단에 우선 배치
+      } else if (!a.startDate && b.startDate) {
+        return 1;
+      }
+
+      // 2. 날짜가 동일하거나 미정인 경우: 최근 수정/생성 타임스탬프 기준 최신순
+      const getTs = t => {
+        if (t.updatedAt) {
+          const ms = new Date(t.updatedAt).getTime();
+          if (!isNaN(ms)) return ms;
+        }
+        if (t.createdAt) {
+          const ms = new Date(t.createdAt).getTime();
+          if (!isNaN(ms)) return ms;
+        }
+        const num = parseInt(String(t.id || '').replace(/\D/g, ''), 10);
+        return isNaN(num) ? 0 : num;
+      };
+      return getTs(b) - getTs(a);
+    }
+
     document.addEventListener('DOMContentLoaded', () => {
       initApp();
       setupPwaInstallPrompt();
@@ -6479,7 +6520,12 @@
         }
       }
 
-      // 기본 활성 여행 선택
+      // 6. [v1.8.8] 최신 여행 일정 상단 우선 배치 정렬 (startDate 최신순 -> 최근 등록/수정순)
+      if (Array.isArray(State.trips)) {
+        State.trips.sort(compareTripsLatestFirst);
+      }
+
+      // 기본 활성 여행 선택 (최신 여행 일정이 기본값)
       if (!State.activeTripId && State.trips.length > 0) {
         State.activeTripId = State.trips[0].id;
       }
@@ -8485,7 +8531,8 @@
         if (trips.length === 0) {
           tripsTbody.innerHTML = '<tr><td colspan="5" class="py-4 text-center text-stone-400">등록된 여행이 없습니다.</td></tr>';
         } else {
-          tripsTbody.innerHTML = trips.map(t => {
+          const sortedTrips = [...trips].sort(compareTripsLatestFirst);
+          tripsTbody.innerHTML = sortedTrips.map(t => {
             const days = t.durationDays || (t.days ? t.days.length : 0);
             const dates = (t.startDate && t.endDate) ? `${t.startDate.slice(5)} ~ ${t.endDate.slice(5)}` : (t.startDate ? `${t.startDate.slice(5)}~` : '-');
             const place = (t.countries && t.countries.length > 0) ? t.countries.join(', ') : (t.country || '-');
@@ -8616,7 +8663,8 @@
         if (trips.length === 0) {
           html = '<div class="text-xs text-stone-400 py-3 text-center">등록된 여정이 없습니다.</div>';
         } else {
-          html = trips.map((t, idx) => {
+          const sortedTrips = [...trips].sort(compareTripsLatestFirst);
+          html = sortedTrips.map((t, idx) => {
             const days = t.durationDays || (t.days ? t.days.length : 0);
             const dates = (t.startDate && t.endDate) ? `${t.startDate} ~ ${t.endDate}` : (t.startDate || '일정 미정');
             const countries = (t.countries && t.countries.length > 0) ? t.countries.join(', ') : (t.country || '-');
@@ -9544,8 +9592,10 @@
         return true;
       });
 
-      // 정렬 적용
-      if (State.hubFilters.sort === 'date-asc') {
+      // 정렬 적용 (기본값 latest: 최신 여행 일정 최상단 배치)
+      if (State.hubFilters.sort === 'latest' || !State.hubFilters.sort) {
+        filtered.sort(compareTripsLatestFirst);
+      } else if (State.hubFilters.sort === 'date-asc') {
         filtered.sort((a, b) => (a.startDate || '9999').localeCompare(b.startDate || '9999'));
       } else if (State.hubFilters.sort === 'budget-desc') {
         filtered.sort((a, b) => (b.budget || 0) - (a.budget || 0));
@@ -9604,6 +9654,15 @@
           } else if (filtered.length > 0) {
             heroTripId = filtered[0].id;
           }
+        }
+      }
+
+      // [v1.8.8] 히어로 대표 카드가 선정된 경우 그리드 최상단(filtered[0])으로 재배치하여 상단 노출 무결성 보장
+      if (heroTripId) {
+        const heroIdx = filtered.findIndex(t => t.id === heroTripId);
+        if (heroIdx > 0) {
+          const [heroItem] = filtered.splice(heroIdx, 1);
+          filtered.unshift(heroItem);
         }
       }
 
@@ -19923,6 +19982,7 @@ JSON 배열만 출력하세요. 각 day는 dayNum, title, city, date, spots를 �
       version: APP_VER,
       State: State,
       initApp: initApp,
+      compareTripsLatestFirst: compareTripsLatestFirst,
       switchView: switchView,
       openTripWorkspace: openTripWorkspace,
       switchTab: switchTab,
