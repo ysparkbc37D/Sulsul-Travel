@@ -137,9 +137,9 @@ const server=http.createServer((req,res)=>{
   await offlinePage.waitForFunction(()=>!!navigator.serviceWorker.controller);
   const cachedModules=await offlinePage.evaluate(async()=>{
    const cache=await caches.open('st-shell-v'+APP_VER);
-   return Promise.all(['js/domain/trip-transfer.js','js/presentation/trip-transfer-ui.js','js/presentation/activity-journal.js','js/presentation/expense-editor.js'].map(async p=>!!await cache.match('./'+p+'?v='+APP_VER)));
+   return Promise.all(['js/domain/trip-adapter.js','js/domain/travel-story.js','js/infrastructure/storage/media-repository.js','js/presentation/moment-journal.js','js/presentation/travel-story-ui.js','js/domain/trip-transfer.js','js/presentation/trip-transfer-ui.js','js/presentation/activity-journal.js','js/presentation/expense-editor.js','css/companion-refresh.css','css/moment-journal.css'].map(async p=>!!await cache.match('./'+p+'?v='+APP_VER)));
   });
-  assert.deepEqual(cachedModules,[true,true,true,true]);
+  assert.equal(cachedModules.length,11);assert.ok(cachedModules.every(Boolean),'새 데이터·순간·사진·출력 모듈과 CSS도 오프라인 앱 셸에 있어야 한다.');
   await offlinePage.evaluate(()=>{
    State.trips=[{id:'offline',title:'오프라인 보존 검사',days:[{dayNum:1,date:'2026-09-14',city:'서울',title:'첫날',spots:[]}],journals:{0:{text:'보존할 여행 기록',photos:[]}},expenses:[]}];
    TripRepository.saveAll(State.trips);

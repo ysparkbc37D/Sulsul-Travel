@@ -50,17 +50,17 @@
   </script>
 
   <!-- PWA Meta & Icons -->
-  <link rel="manifest" href="manifest.webmanifest?v=1.8.8">
+  <link rel="manifest" href="manifest.webmanifest?v=1.8.9">
   <meta name="theme-color" content="#F7F5F0">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <meta name="apple-mobile-web-app-title" content="술술트래블">
-  <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192-v115.png?v=1.8.8">
-  <link rel="icon" type="image/png" sizes="32x32" href="favicon.png?v=1.8.8">
+  <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192-v115.png?v=1.8.9">
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon.png?v=1.8.9">
   <link rel="shortcut icon" href="favicon.ico">
-  <link rel="apple-touch-icon" sizes="180x180" href="icons/apple-touch-icon-v115.png?v=1.8.8">
-  <link rel="apple-touch-icon" href="icons/apple-touch-icon-v115.png?v=1.8.8">
+  <link rel="apple-touch-icon" sizes="180x180" href="icons/apple-touch-icon-v115.png?v=1.8.9">
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon-v115.png?v=1.8.9">
 
   <!-- Google Fonts: Great Vibes, Dancing Script (Cursive Calligraphy), Cormorant Garamond, Noto Serif KR, Playfair Display -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -68,7 +68,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Great+Vibes&family=Cormorant+Garamond:wght@600;700;800&family=Noto+Serif+KR:wght@500;600;700;900&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
 
   <!-- Local Utilities Bundle (CDN fallback & tailwind utilities) -->
-  <link rel="stylesheet" href="css/utilities.css?v=1.8.8">
+  <link rel="stylesheet" href="css/utilities.css?v=1.8.9">
   <link rel="stylesheet" href="vendor/fontawesome/css/all.min.css">
 
   <!-- Leaflet Map CSS & JS -->
@@ -1410,12 +1410,23 @@
     }
   </style>
 
-  <link rel="stylesheet" href="css/companion.css?v=1.8.8">
-  <script src="js/presentation/companion-ui.js?v=1.8.8"></script>
-  <script src="js/domain/trip-transfer.js?v=1.8.8"></script>
-  <script src="js/presentation/trip-transfer-ui.js?v=1.8.8"></script>
-  <script src="js/presentation/activity-journal.js?v=1.8.8"></script>
-  <script src="js/presentation/expense-editor.js?v=1.8.8"></script>
+  <link rel="stylesheet" href="css/companion.css?v=1.8.9">
+  <link rel="stylesheet" href="css/companion-refresh.css?v=1.8.9">
+  <link rel="stylesheet" href="css/moment-journal.css?v=1.8.9">
+  <script src="js/domain/trip-adapter.js?v=1.8.9"></script>
+  <script src="js/domain/travel-story.js?v=1.8.9"></script>
+  <script src="js/infrastructure/storage/media-repository.js?v=1.8.9"></script>
+  <script src="js/presentation/companion-ui.js?v=1.8.9"></script>
+  <script src="js/domain/trip-transfer.js?v=1.8.9"></script>
+  <script src="js/presentation/trip-transfer-ui.js?v=1.8.9"></script>
+  <script src="js/presentation/activity-journal.js?v=1.8.9"></script>
+  <script src="js/presentation/moment-journal.js?v=1.8.9"></script>
+  <script src="js/presentation/travel-story-ui.js?v=1.8.9"></script>
+  <script src="js/config/collaboration-config.js?v=1.8.9"></script>
+  <script src="js/infrastructure/collaboration/supabase-travel-service.js?v=1.8.9"></script>
+  <script src="js/presentation/collaboration-ui.js?v=1.8.9"></script>
+  <script src="js/presentation/collaboration-review.js?v=1.8.9"></script>
+  <script src="js/presentation/expense-editor.js?v=1.8.9"></script>
 
   <!-- Knowledge Base Seed & Destination Knowledge Packs (DKP) -->
   <script src="kb-travel.js"></script>
@@ -1431,7 +1442,7 @@
   <!-- ========================================== -->
   <!-- 1. 앱 헤더 (APP-HEADER) -->
   <!-- ========================================== -->
-  <header class="sticky top-0 z-40 bg-[#faf8f5]/90 dark:bg-[#121316]/90 backdrop-blur-md border-b border-[#e8e2d5] dark:border-stone-800 transition-colors">
+  <header class="companion-app-header sticky top-0 z-40 bg-[#faf8f5]/90 dark:bg-[#121316]/90 backdrop-blur-md border-b border-[#e8e2d5] dark:border-stone-800 transition-colors">
     <div class="max-w-6xl mx-auto px-3 sm:px-4 h-14 flex items-center justify-between gap-1.5 sm:gap-2">
       <!-- 좌측 브랜드 로고 & 워크스페이스 타이틀 (새로 만든 빈티지 베어 마스코트 + 필기체 영문 로고 + A Deep Life Essay) -->
       <div class="flex items-center gap-2 sm:gap-2.5 min-w-0 cursor-pointer select-none" onclick="switchView('hub')">
@@ -1445,7 +1456,7 @@
       <!-- 우측 액션 클러스터 (버전 알약 -> 원형 통계 -> 원형 설정 -> 다크그린 캡슐 추가) -->
       <div class="flex items-center gap-1 sm:gap-1.5 shrink-0">
         <!-- 1. 버전 배지 버튼 (v1.7.8 - 클릭 시 버전 이력) -->
-        <button id="app-ver-badge" onclick="event.stopPropagation(); openVersionHistoryModal()" class="h-7 sm:h-8 px-2 sm:px-2.5 rounded-full theme-card-subtle flex items-center justify-center font-mono text-[10px] sm:text-[11px] font-bold text-[#a2601b] dark:text-[#d4af37] shadow-xs hover:border-amber-500/60 transition cursor-pointer shrink-0" title="버전 업데이트 기록 보기 (클릭)">v1.8.8</button>
+        <button id="app-ver-badge" onclick="event.stopPropagation(); openVersionHistoryModal()" class="h-7 sm:h-8 px-2 sm:px-2.5 rounded-full theme-card-subtle flex items-center justify-center font-mono text-[10px] sm:text-[11px] font-bold text-[#a2601b] dark:text-[#d4af37] shadow-xs hover:border-amber-500/60 transition cursor-pointer shrink-0" title="버전 업데이트 기록 보기 (클릭)">v1.8.9</button>
 
         <!-- 2. 통계 버튼 (📊 - 원형 버튼) -->
         <button id="header-btn-analytics" onclick="openAnalyticsModal('lifetime')" class="companion-header-analytics w-7 h-7 sm:w-8 sm:h-8 rounded-full theme-card-subtle flex items-center justify-center text-[#a2601b] dark:text-[#d4af37] hover:border-amber-500/60 transition shadow-xs cursor-pointer shrink-0" title="술술 여행 통계 대시보드">
@@ -1635,8 +1646,10 @@
         </div>
       </div>
 
-      <!-- 우측 빠른 액션: 통계 모달 열기 + 빠른 환율기 + 동행 공유 (v1.8.4) -->
-      <div class="flex items-center gap-1.5 shrink-0">
+      <!-- 상황별 도구는 펼쳐서 사용하고 일정·기록을 먼저 보여준다. -->
+      <details class="travel-tools">
+        <summary>여행 도구 <i class="fa-solid fa-ellipsis" aria-hidden="true"></i></summary>
+        <div>
         <button onclick="openAnalyticsModal('workspace')" class="px-2.5 sm:px-3 py-1.5 rounded-xl theme-card-subtle text-xs font-bold flex items-center gap-1.5 shadow-sm transition cursor-pointer" title="여정 정밀 통계 열람">
           <i class="fa-solid fa-chart-pie text-amber-500 text-[12px]"></i>
           <span>통계</span>
@@ -1656,14 +1669,17 @@
           <i class="fa-solid fa-share-nodes text-emerald-600 dark:text-emerald-400 text-[12px]"></i>
           <span>공유</span>
         </button>
-      </div>
+        <button onclick="switchTab('checklist');this.closest('details').open=false"><i class="fa-solid fa-list-check" aria-hidden="true"></i> 준비</button>
+        <button onclick="openVersionHistoryModal()"><i class="fa-solid fa-clock-rotate-left" aria-hidden="true"></i> 변경 이력</button>
+        </div>
+      </details>
     </div>
 
     <!-- 여행 단계 중심 5대 탭 네비게이션 -->
     <nav id="companion-main-nav" aria-label="여행 주요 메뉴" class="flex items-center gap-1 sm:gap-1.5 p-1 bg-[#0f1422] rounded-xl border border-[#1e263c] overflow-x-auto no-scrollbar">
       <button id="nav-tab-plan" onclick="switchTab('plan')" class="flex-1 min-w-[50px] sm:min-w-[70px] py-2 px-1.5 sm:px-2.5 rounded-lg text-xs font-bold flex items-center justify-center gap-1.5 transition nav-tab-active shadow-sm whitespace-nowrap shrink-0 cursor-pointer">
         <i class="fa-solid fa-layer-group text-xs shrink-0"></i>
-        <span>큰 계획</span>
+        <span>일정</span>
       </button>
       <button id="nav-tab-today" onclick="switchTab('today')" class="flex-1 min-w-[45px] sm:min-w-[65px] py-2 px-1.5 sm:px-2.5 rounded-lg text-xs font-bold flex items-center justify-center gap-1.5 transition nav-tab-inactive whitespace-nowrap shrink-0 cursor-pointer">
         <i class="fa-solid fa-location-arrow text-xs shrink-0"></i>
@@ -1671,7 +1687,7 @@
       </button>
       <button id="nav-tab-expenses" onclick="switchTab('expenses')" class="flex-1 min-w-[50px] sm:min-w-[70px] py-2 px-1.5 sm:px-2.5 rounded-lg text-xs font-bold flex items-center justify-center gap-1.5 transition nav-tab-inactive whitespace-nowrap shrink-0 cursor-pointer">
         <i class="fa-solid fa-wallet text-xs shrink-0"></i>
-        <span>가계부</span>
+        <span>지출</span>
       </button>
       <button id="nav-tab-journal" onclick="switchTab('journal')" class="flex-1 min-w-[45px] sm:min-w-[65px] py-2 px-1.5 sm:px-2.5 rounded-lg text-xs font-bold flex items-center justify-center gap-1.5 transition nav-tab-inactive whitespace-nowrap shrink-0 cursor-pointer">
         <i class="fa-solid fa-book-open text-xs shrink-0"></i>
@@ -2439,13 +2455,13 @@
       </div>
 
       <details class="companion-context"><summary>공유 방식 안내</summary>
-        <p class="companion-muted">앱은 룸코드 초대나 실시간 공동편집을 제공하지 않습니다. 링크와 파일은 현재 시점의 여행 사본이며, 받은 사람은 자기 기기에 가져와 별도로 수정합니다.</p>
+        <p class="companion-muted">링크와 파일은 현재 시점의 여행 사본이며 실시간 공동편집은 아닙니다. 같은 계획을 함께 수정하려면 아래 공동 여행 서버 연결을 사용합니다.</p>
       </details>
 
       <fieldset class="transfer-options">
         <legend>함께 보낼 내용</legend>
         <p>일정·큰 계획·숙소와 준비 목록이 포함됩니다.</p>
-        <label><input id="share-include-journals" type="checkbox"> 개인 일기와 사진도 포함</label>
+        <label><input id="share-include-journals" type="checkbox"> 나만 보기 기록을 포함한 개인 일기와 사진도 전달</label>
         <label><input id="share-include-finances" type="checkbox"> 지출·환전·지갑 내역도 포함</label>
       </fieldset>
       <p id="share-feedback" class="transfer-feedback" role="status" aria-live="polite"></p>
@@ -2461,6 +2477,7 @@
         <input id="trip-share-file" type="file" accept=".json,application/json" class="hidden" onchange="importTravelSnapshotFile(event)">
         <button class="companion-button w-full" onclick="checkUrlShareImportOnStartup()">받은 링크 다시 가져오기</button>
       </div>
+      <details class="companion-context"><summary>동행 초대 · 공동 계획 연결</summary><div id="travel-collaboration"></div></details>
 
       <div class="pt-3 border-t border-[#1e263c]">
         <p class="text-[11px] leading-relaxed text-slate-400">받은 파일은 이 화면의 여행 파일 가져오기에서 열 수 있습니다. 각자 수정한 내용은 서로 자동 반영되지 않습니다.</p>
@@ -2475,8 +2492,8 @@
     <div class="sheet-scrim" onclick="closeModal('modal-pdf-report')"></div>
     <div class="sheet-box max-w-4xl max-h-[92vh] flex flex-col p-0 overflow-hidden bg-[#0c101d] border border-[#23304c] shadow-2xl">
       <!-- 모달 상단 액션 바 -->
-      <div class="px-5 py-3.5 border-b border-[#1e263c] flex items-center justify-between bg-[#0f1422] shrink-0 no-print">
-        <div class="flex items-center gap-2.5">
+      <div class="px-5 py-3.5 border-b border-[#1e263c] flex items-center justify-between gap-3 flex-wrap bg-[#0f1422] shrink-0 no-print">
+        <div class="flex items-center gap-2.5 min-w-0 flex-1 basis-full sm:basis-auto">
           <span class="w-8 h-8 rounded-lg bg-amber-500/20 text-amber-400 flex items-center justify-center text-sm shrink-0">
             <i class="fa-solid fa-file-pdf text-rose-400"></i>
           </span>
@@ -2497,6 +2514,8 @@
           <button onclick="closeModal('modal-pdf-report')" class="w-8 h-8 rounded-lg bg-[#141c2e] hover:bg-[#1a263e] border border-[#23304c] text-slate-400 hover:text-white flex items-center justify-center text-sm transition">✕</button>
         </div>
       </div>
+
+      <div id="pdf-story-controls" class="px-5 py-3 border-b border-[#1e263c] bg-[#0f1422] shrink-0 no-print"></div>
 
       <!-- 리포트 본문 렌더링 영역 (인쇄 시 이 영역만 A4 고해상도로 전환) -->
       <div id="pdf-report-content" class="flex-1 overflow-y-auto p-5 sm:p-8 space-y-8 bg-[#0c101d] text-slate-200">
@@ -4437,7 +4456,18 @@
 
       <!-- 버전 목록 스크롤 영역 (독립 스크롤 컨테이너로 Flexbox 압축 버그 영구 척결) -->
       <div class="overflow-y-auto flex-1 min-h-0 space-y-3.5 pr-1.5 custom-scrollbar">
-        <!-- v1.8.8 (Current) -->
+        <!-- v1.8.9 (Current) -->
+        <div class="version-card version-card-current">
+          <h3 class="font-bold">v1.8.9 · 현장의 순간을 이어 쓰는 여행 동반자</h3>
+          <p class="text-xs">2026-10-07 · st-shell-v1.8.9</p>
+          <ul class="list-disc pl-5 text-xs space-y-1 mt-2">
+            <li>다음 일정 길찾기·기록·완료, 날씨·지연·휴식에 맞는 일정 조정, 모바일 도구와 날짜 선택 개선</li>
+            <li>하루 여러 순간 기록과 일정별 사진·글, 원문을 보존하는 AI 다듬기</li>
+            <li>사진 비율 유지, 별도 썸네일과 기기 사진 보관, 날짜별 여행기 PDF·Markdown·텍스트 출력</li>
+            <li>구버전·샘플·공유 일정의 이름과 도시·분류 통일, 현지 날짜와 여행 상태 일치</li>
+          </ul>
+        </div>
+        <!-- v1.8.8 -->
         <section class="companion-context">
           <h3 class="font-bold">v1.8.8 · 최신 여행 일정 상단 배치 및 허브 정렬 엔진 고도화</h3>
           <p class="text-xs">허브(Hub) 및 여행 전체 목록에서 최신 출발일(startDate DESC) 및 최근 등록/수정된 여행 일정이 최상단에 자동 우선 배치되도록 정렬 엔진 전면 고도화 · 허브 그리드/리스트 모드 및 라이프타임 분석 테이블 전반의 최신순 정렬 정합성 완비 · 히어로 대표 카드 최상단 렌더링 무결성 보장.</p>
@@ -5300,7 +5330,7 @@
 
       <!-- 모달 푸터 -->
       <div class="pt-3 border-t border-[#e8e2d5] dark:border-stone-800 flex items-center justify-between shrink-0">
-        <span class="text-[11px] text-stone-400 dark:text-stone-500 font-mono">Sulsul Travel Engine v1.8.6</span>
+        <span class="text-[11px] text-stone-400 dark:text-stone-500 font-mono">Sulsul Travel Engine v1.8.9</span>
         <button onclick="closeModal('modal-version-history')" class="px-4 py-2 rounded-xl bg-[#faf8f5] dark:bg-stone-800 hover:bg-[#f0ece1] dark:hover:bg-stone-700 border border-[#e8e2d5] dark:border-stone-700 text-[#1c1917] dark:text-[#ededed] text-xs font-bold transition cursor-pointer shadow-sm">
           닫기
         </button>
@@ -5813,6 +5843,9 @@
               <tbody class="divide-y divide-stone-200 dark:divide-stone-800 text-stone-600 dark:text-stone-400">
                 <tr><td class="p-2 font-mono">localStorage: st_trips_v2</td><td class="p-2">전체 여행·일정·기록·지출·첨부 사진</td></tr>
                 <tr><td class="p-2 font-mono">IndexedDB: sulsul-travel-overflow-v1</td><td class="p-2">저장 공간 초과 시 보관하는 하루 일기 텍스트</td></tr>
+                <tr><td class="p-2 font-mono">IndexedDB: sulsul-travel-media-v1</td><td class="p-2">사진 보관본 Blob·썸네일. JSON 보관본도 유지합니다.</td></tr>
+                <tr><td class="p-2 font-mono">st_collaboration_config_v1 / st_collaboration_session_v1</td><td class="p-2">선택한 서버 주소·공개 키·암호화되지 않은 임시 로그인 세션</td></tr>
+                <tr><td class="p-2 font-mono">st_collaboration_links_v1 / st_collaboration_outbox_v1</td><td class="p-2">공동 계획 연결·확인 버전·전송 대기 변경</td></tr>
                 <tr><td class="p-2 font-mono">st_theme</td><td class="p-2">선택한 UI 테마</td></tr>
                 <tr><td class="p-2 font-mono">st_gemini_key</td><td class="p-2">사용자가 입력한 Gemini API 키</td></tr>
                 <tr><td class="p-2 font-mono">st_github_pat / st_github_gist</td><td class="p-2">선택형 GitHub Gist 백업 연결 정보</td></tr>
@@ -5833,13 +5866,14 @@
             <li><b>Gemini AI</b>: 사용자가 AI 기능을 실행할 때 해당 요청에 필요한 여행 설명·일정·일기 문장 또는 영수증 사진이 브라우저에서 Google API로 전송됩니다. API 키도 요청 인증에 사용됩니다.</li>
             <li><b>GitHub Gist</b>: 사용자가 백업/복원을 실행할 때 여행 전체와 입력한 PAT가 GitHub API로 전송됩니다. Secret Gist는 링크를 아는 사람에게 공개될 수 있습니다.</li>
             <li><b>여행 공유</b>: 링크·파일에는 선택한 일정, 기록, 금융 정보가 포함될 수 있습니다. 링크를 받은 사람은 링크에 들어 있는 내용을 볼 수 있으며 실시간 공동편집은 아닙니다.</li>
+            <li><b>선택형 공동 계획</b>: 사용자가 연결·게시·참가·확인·전송을 누르면 설정한 Supabase 서버로 로그인 정보·초대 토큰·공동 계획을 요청/전송합니다. 개인 글·사진·지출은 보내지 않으며 여행 목표 예산·일정 메모는 계획에 포함됩니다. 설정 저장만으로 여행을 전송하지 않습니다.</li>
           </ul>
         </div>
 
         <div class="space-y-1.5">
           <h4 class="font-bold text-stone-900 dark:text-stone-100 text-sm">4. 데이터의 파기 및 주권</h4>
           <p class="text-stone-600 dark:text-stone-400 leading-relaxed text-xs">
-            여행 카드의 삭제 기능으로 해당 여행을 이 브라우저에서 삭제할 수 있습니다. 중요한 데이터를 지우기 전 JSON 백업을 권장하며, 브라우저 저장소를 비우면 남은 로컬 데이터도 삭제됩니다. GitHub Gist에 만든 백업은 별도로 관리·삭제해야 합니다. API 키와 GitHub PAT는 브라우저 저장소에 암호화되지 않은 상태로 보관되므로 공유 기기에서 사용하지 마세요.
+            여행 카드의 삭제 기능으로 해당 여행을 이 브라우저에서 삭제할 수 있습니다. 중요한 데이터를 지우기 전 JSON 백업을 권장하며, 브라우저 저장소를 비우면 남은 로컬 데이터도 삭제됩니다. GitHub Gist와 공동 서버에 게시한 계획은 별도로 관리·삭제해야 합니다. API 키·GitHub PAT·공동 서버 임시 로그인은 브라우저 저장소에 암호화되지 않은 상태로 보관되므로 공유 기기에서 사용하지 마세요.
           </p>
         </div>
       </div>
@@ -5907,7 +5941,7 @@
     window.showToast = showToast;
 
     // 앱 버전 및 글로벌 네임스페이스 (Sulsul-Travel Invariant Rule R-10, R-11, R-12, R-13, R-14, R-15, R-16)
-    const APP_VER = '1.8.8';
+    const APP_VER = '1.8.9';
 
     // ══════════════════════════════════════════
     // [3-Way Theme System] 모던, 라이트그레이, 딥 블랙 테마 엔진 (v1.6.7)
@@ -6261,15 +6295,7 @@
 
     // 도시명 문자열 정제 (Day 번호, 계획/투어, 괄호, 화살표 등 제거)
     function cleanCityName(rawCity) {
-      if (!rawCity || typeof rawCity !== 'string') return '';
-      let c = rawCity.replace(/Day\s*\d+/gi, '')
-        .replace(/계획|일정|투어|탐방|코스/g, '')
-        .replace(/\(.*?\)/g, '')
-        .replace(/\[.*?\]/g, '')
-        .replace(/[➔→⇄\-]/g, ' ')
-        .trim();
-      if (c.includes(' ')) c = c.split(/\s+/)[0];
-      return c.trim();
+      return SulsulTravel.TripAdapter.normalizeCityName(rawCity);
     }
 
     // [v1.4.4] 여행 데이터 자동 자가 치유 (Self-Healing Migration): 국가 및 도시 표준 분리·정규화
@@ -6426,7 +6452,7 @@
       handlingPopState: false
     };
 
-    const TripRepository = new window.SulsulTravel.LegacyTripRepository(localStorage);
+    const TripRepository = new window.SulsulTravel.LegacyTripRepository(localStorage,{beforeWrite:guardSharedTravelWrite});
     const JournalOverflowRepository = new window.SulsulTravel.JournalOverflowRepository();
     let aiOrchestratorPromise = null;
     let replanDomainPromise = null;
@@ -6473,6 +6499,7 @@
       initApp();
       setupPwaInstallPrompt();
       checkUrlParamsForSharedRoom();
+      if(SulsulTravel.CollaborationUI.checkInviteOnStartup()){openShareModal();document.getElementById('travel-collaboration').closest('details').open=true;}
       registerServiceWorker();
     });
 
@@ -6686,6 +6713,10 @@
         });
         return true;
       } catch (err) {
+        if(err?.code==='READ_ONLY_TRIP') {
+          State.trips=TripRepository.loadAll().trips;
+          showToast(err.message,6000);return false;
+        }
         console.error('[Storage] QuotaExceededError or write failed:', err);
         showToast('⚠️ 로컬 저장 공간이 부족합니다. 오래된 사진이나 데이터를 정리해주세요.');
         return false;
@@ -6813,6 +6844,7 @@
     // 뷰 전환 (Hub <-> Workspace)
     // ==========================================
     function switchView(viewName) {
+      if(State.currentView==='workspace' && viewName==='hub') rememberTravelWorkspace();
       State.currentView = viewName;
       const vHub = document.getElementById('view-hub');
       const vWs = document.getElementById('view-workspace');
@@ -6838,7 +6870,7 @@
         const headerTripName = document.getElementById('header-trip-name');
         if (headerTripName) {
           const trip = getActiveTrip();
-          const today = new Date().toISOString().slice(0, 10);
+          const today = SulsulTravel.TripAdapter.localDateKey(new Date(),trip?.timeZone);
           const start = trip?.startDate || '';
           const end = trip?.endDate || '';
           headerTripName.innerText = start && today < start
@@ -6849,12 +6881,35 @@
         }
         renderActiveTripWorkspace();
       }
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+      window.scrollTo({ top: 0, behavior: 'instant' });
+    }
+
+    function rememberTravelWorkspace() {
+      if(State.currentView!=='workspace'||!State.activeTripId)return;
+      State.travelWorkspaceViews=State.travelWorkspaceViews || {};
+      State.travelWorkspaceViews[State.activeTripId]={tab:State.activeTab,journalDay:State.activeJournalDay,planMode:document.getElementById('tab-content-plan').dataset.presentation || 'overview',todaySelection:State.companionTodaySelection};
+      State.travelTabPositions=State.travelTabPositions || {};
+      State.travelTabPositions[State.activeTripId]=State.travelTabPositions[State.activeTripId] || {};
+      State.travelTabPositions[State.activeTripId][State.activeTab]=scrollY;
     }
 
     function openTripWorkspace(tripId) {
+      rememberTravelWorkspace();
       State.activeTripId = tripId;
+      const previousView=State.travelWorkspaceViews?.[tripId];
+      if (previousView) {
+        State.activeTab=previousView.tab;
+        State.activeJournalDay=previousView.journalDay;
+        State.companionTodaySelection=previousView.todaySelection;
+        setPlanPresentation(previousView.planMode);
+      } else {
+        const stage = SulsulTravel.TripAdapter.resolveTripStage(getActiveTrip());
+        State.activeTab = stage === 'ongoing' ? 'today' : stage === 'completed' ? 'journal' : 'plan';
+        State.activeJournalDay = 0;
+        setPlanPresentation('overview');
+      }
       switchView('workspace');
+      switchTab(State.activeTab);
     }
 
     // ==========================================
@@ -8430,7 +8485,7 @@
           conceptsMap[cp] = (conceptsMap[cp] || 0) + 1;
         });
 
-        const st = t.status || 'planned';
+        const st = SulsulTravel.TripAdapter.resolveTripStage(t);
         if (statusCounts[st] !== undefined) statusCounts[st]++;
         else statusCounts.planned++;
 
@@ -8447,6 +8502,7 @@
           totalDiaries += t.diaries.length;
         }
         totalDiaries += activityEntries(t).length;
+        totalDiaries += (t.momentEntries || []).length;
       });
 
       const ltTripsEl = document.getElementById('stat-lt-trips');
@@ -9401,14 +9457,10 @@
     }
 
     function renderDDayBadge(trip, now) {
-      let state = 'bucket', label = '버킷리스트';
-      if (trip.startDate) {
-        const diffDays = Math.ceil((new Date(trip.startDate) - now) / 86400000);
-        const dur = trip.durationDays || trip.days?.length || 22;
-        if (diffDays > 0) { state = 'planned'; label = `D-${diffDays}`; }
-        else if (diffDays >= -dur) { state = 'ongoing'; label = '여행 중 ✈️'; }
-        else { state = 'completed'; label = '완료'; }
-      }
+      const stage=SulsulTravel.TripAdapter.resolveTripStage(trip,now);
+      const state=stage==='bucketlist'?'bucket':stage;
+      const diff=Math.round((Date.parse(trip.startDate)-Date.parse(SulsulTravel.TripAdapter.localDateKey(now,trip.timeZone)))/86400000);
+      const label=stage==='planned'?`D-${diff}`:stage==='ongoing'?'여행 중 ✈️':stage==='completed'?'완료':'버킷리스트';
       return `<span class="travel-status" data-status="${state}">${label}</span>`;
     }
 
@@ -9500,23 +9552,11 @@
       const now = new Date();
 
       State.trips.forEach(trip => {
-        if (trip.startDate) {
-          const start = new Date(trip.startDate);
-          const diffDays = Math.ceil((start - now) / (1000 * 60 * 60 * 24));
-          const dur = trip.durationDays || (trip.days ? trip.days.length : 22);
-          if (diffDays > 0) {
-            countPlanned++;
-          } else if (diffDays >= -dur) {
-            countOngoing++;
-          } else {
-            countCompleted++;
-          }
-        } else {
-          countBucketlist++;
-        }
-        if (trip.isBucketlist) {
-          countBucketlist++;
-        }
+        const stage = SulsulTravel.TripAdapter.resolveTripStage(trip, now);
+        if (stage === 'ongoing') countOngoing++;
+        else if (stage === 'planned') countPlanned++;
+        else if (stage === 'completed') countCompleted++;
+        else countBucketlist++;
       });
 
       const elAll = document.getElementById('count-filter-all');
@@ -9533,18 +9573,7 @@
       // 필터링 적용
       let filtered = State.trips.filter(trip => {
         if (State.hubFilters.status !== 'all') {
-          if (State.hubFilters.status === 'bucketlist') {
-            if (!trip.isBucketlist && trip.startDate && trip.endDate) return false;
-          } else if (trip.startDate) {
-            const start = new Date(trip.startDate);
-            const diffDays = Math.ceil((start - now) / (1000 * 60 * 60 * 24));
-            const dur = trip.durationDays || (trip.days ? trip.days.length : 22);
-            if (State.hubFilters.status === 'ongoing' && !(diffDays <= 0 && diffDays >= -dur)) return false;
-            if (State.hubFilters.status === 'planned' && !(diffDays > 0)) return false;
-            if (State.hubFilters.status === 'completed' && !(diffDays < -dur)) return false;
-          } else {
-            return false;
-          }
+          if (SulsulTravel.TripAdapter.resolveTripStage(trip, now) !== State.hubFilters.status) return false;
         }
 
         if (State.hubFilters.search) {
@@ -9630,20 +9659,15 @@
       // 히어로 대표 카드 선정 (1순위 진행 중, 2순위 가장 임박한 예정, 3순위 첫 번째 여행)
       let heroTripId = null;
       if (State.hubViewMode !== 'list' && (State.hubFilters.status === 'all' || State.hubFilters.status === 'ongoing' || State.hubFilters.status === 'planned')) {
-        const ongoingTrip = filtered.find(t => {
-          if (!t.startDate) return false;
-          const diffDays = Math.ceil((new Date(t.startDate) - now) / (1000 * 60 * 60 * 24));
-          const dur = t.durationDays || (t.days ? t.days.length : 22);
-          return (diffDays <= 0 && diffDays >= -dur);
-        });
+        const ongoingTrip = filtered.find(t => SulsulTravel.TripAdapter.resolveTripStage(t,now)==='ongoing');
         if (ongoingTrip) {
           heroTripId = ongoingTrip.id;
         } else {
           let minPlannedDiff = Infinity;
           let closestPlanned = null;
           filtered.forEach(t => {
-            if (!t.startDate) return;
-            const diff = Math.ceil((new Date(t.startDate) - now) / (1000 * 60 * 60 * 24));
+            if (SulsulTravel.TripAdapter.resolveTripStage(t,now)!=='planned') return;
+            const diff = Math.round((Date.parse(t.startDate)-Date.parse(SulsulTravel.TripAdapter.localDateKey(now,t.timeZone)))/86400000);
             if (diff > 0 && diff < minPlannedDiff) {
               minPlannedDiff = diff;
               closestPlanned = t;
@@ -9683,7 +9707,8 @@
         let statusDesc = '';
         let barPct = 0;
 
-        if (trip.isBucketlist || (!trip.startDate && !trip.endDate)) {
+        const resolvedStage=SulsulTravel.TripAdapter.resolveTripStage(trip,now);
+        if (resolvedStage==='bucketlist') {
           tripStatus = 'bucket';
           statusCls = 'trip-st-bucket';
           statusLabel = '버킷';
@@ -9691,10 +9716,9 @@
           barPct = plannedDays ? Math.min(100, plannedDays * 12) : 15;
           statusDesc = `버킷리스트 여정 (${plannedDays}개 일정 계획 중)`;
         } else if (trip.startDate) {
-          const start = new Date(trip.startDate);
-          const diffDays = Math.ceil((start - now) / (1000 * 60 * 60 * 24));
+          const diffDays = Math.round((Date.parse(trip.startDate)-Date.parse(SulsulTravel.TripAdapter.localDateKey(now,trip.timeZone)))/86400000);
           const dur = trip.durationDays || (trip.days ? trip.days.length : 22);
-          if (diffDays <= 0 && diffDays >= -dur) {
+          if (resolvedStage==='ongoing') {
             tripStatus = 'ongoing';
             statusCls = 'trip-st-ongoing';
             statusLabel = '진행 중';
@@ -9702,7 +9726,7 @@
             const remainingDays = Math.max(0, dur - dayNumber);
             barPct = Math.min(100, Math.max(8, Math.round((dayNumber / dur) * 100)));
             statusDesc = `여행 진행 중 ${barPct}% (${dayNumber}/${dur}일차, 남은 일정 ${remainingDays}일)`;
-          } else if (diffDays > 0) {
+          } else if (resolvedStage==='planned') {
             tripStatus = 'planned';
             statusCls = 'trip-st-planned';
             statusLabel = '예정';
@@ -10110,6 +10134,7 @@
     }
 
     function openPlanBlockEditByIndex(blockIndex) {
+      if(!requireSharedPlanEdit())return;
       const block = buildPlanBlocks(getActiveTrip())[blockIndex];
       if (!block) return;
       State.planBlockReturnY = window.scrollY;
@@ -10138,6 +10163,7 @@
     window.setPlanBlockStatus = setPlanBlockStatus;
 
     function openPlanBlockEdit(block) {
+      if(!requireSharedPlanEdit())return;
       document.getElementById('plan-block-edit-id').value = block.id;
       document.getElementById('plan-block-edit-title').value = block.title || '';
       document.getElementById('plan-block-edit-place').value = block.place || '';
@@ -10249,6 +10275,7 @@
     }
 
     function regeneratePlanBlockByIndex(blockIndex) {
+      if(!requireSharedPlanEdit())return;
       const block = buildPlanBlocks(getActiveTrip())[blockIndex];
       if (!block) return;
       State.planBlockReturnY = window.scrollY;
@@ -10269,11 +10296,7 @@
     }
 
     function resolveTodayDayIndex(trip) {
-      const today = new Date().toISOString().slice(0, 10);
-      const exact = (trip.days || []).findIndex(day => String(day.date || '').replaceAll('.', '-').startsWith(today));
-      if (exact >= 0) return exact;
-      const unfinished = (trip.days || []).findIndex(day => (day.spots || []).some(spot => !spot.completed && !spot.skipped));
-      return unfinished >= 0 ? unfinished : Math.max(0, Math.min(State.activeTodayDayIndex, (trip.days || []).length - 1));
+      return SulsulTravel.TripAdapter.resolveTodayDayIndex(trip);
     }
 
     function renderTodayTab() {
@@ -10282,6 +10305,7 @@
 
     function completeTodaySpot(dayIndex, spotIndex, event) { toggleSpotCompleted(dayIndex, spotIndex, event); renderTodayTab(); }
     function skipTodaySpot(dayIndex, spotIndex, event) {
+      if(!requireSharedPlanEdit())return;
       event?.stopPropagation();
       const trip = getActiveTrip(), spot = trip?.days?.[dayIndex]?.spots?.[spotIndex];
       if (!spot || spot.completed) return;
@@ -10312,22 +10336,10 @@
       document.getElementById('ws-trip-dates').innerText = dateStr;
       if (subDates) subDates.innerText = dateStr;
 
-      // D-Day 실시간 계산
-      let ddayText = 'D-Day';
-      if (trip.startDate) {
-        const start = new Date(trip.startDate);
-        const diffDays = Math.ceil((start - new Date()) / (1000 * 60 * 60 * 24));
-        const dur = trip.durationDays || (trip.days ? trip.days.length : 22);
-        if (diffDays > 0) {
-          ddayText = `D-${diffDays}`;
-        } else if (diffDays >= -dur) {
-          ddayText = '여행 중 ✈️';
-        } else {
-          ddayText = '완료';
-        }
-      } else {
-        ddayText = '버킷리스트';
-      }
+      // 여행 현지 날짜와 완료 상태를 허브와 동일한 기준으로 계산한다.
+      const ddayStage=SulsulTravel.TripAdapter.resolveTripStage(trip);
+      const diffDays=Math.round((Date.parse(trip.startDate)-Date.parse(SulsulTravel.TripAdapter.localDateKey(new Date(),trip.timeZone)))/86400000);
+      const ddayText=ddayStage==='planned'?`D-${diffDays}`:ddayStage==='ongoing'?'여행 중 ✈️':ddayStage==='completed'?'완료':'버킷리스트';
       if (wsDDay) wsDDay.innerText = ddayText;
       if (subDDay) subDDay.innerText = ddayText;
       [wsDDay, subDDay].filter(Boolean).forEach(el => {
@@ -10335,11 +10347,12 @@
         el.dataset.status = ddayText.startsWith('여행 중') ? 'ongoing' : ddayText === '완료' ? 'completed' : ddayText === '버킷리스트' ? 'bucket' : 'planned';
       });
 
-      // 공유 상태는 서버 연결이 아니므로 여행 코드를 초대 상태처럼 표시하지 않습니다.
+      // 실제 연결한 공동 계획만 마지막 확인 버전과 권한을 표시한다.
       const shareBadge = document.getElementById('ws-share-badge');
       const syncRoomCode = document.getElementById('sync-active-room-code');
-      if (shareBadge) shareBadge.classList.add('hidden');
-      if (syncRoomCode) syncRoomCode.innerText = '이 브라우저';
+      const sharedLink=SulsulTravel.CollaborationUI.roomForTrip(trip);
+      if (shareBadge) {shareBadge.classList.toggle('hidden',!sharedLink);if(sharedLink)shareBadge.innerText=`동행 · ${sharedLink.role==='viewer'?'보기 전용':sharedLink.role==='owner'?'관리자':'편집'} · 확인 v${sharedLink.revision}`;}
+      if (syncRoomCode) syncRoomCode.innerText = sharedLink ? `확인한 공동 계획 v${sharedLink.revision}` : '이 브라우저';
 
       // 통계 계산
       let totalSpentKrw = 0;
@@ -10377,7 +10390,8 @@
       const allJournalEntries = [...dailyJournalEntries, ...activityJournalEntries];
       const diaryCount = allJournalEntries.length;
       const photoCount = allJournalEntries.reduce((sum, entry) => sum + (Array.isArray(entry.photos) ? entry.photos.length : 0), 0);
-      document.getElementById('stat-ws-diaries').innerText = `${diaryCount + activityEntries(trip).length}편 / ${photoCount + activityEntries(trip).reduce((sum,r)=>sum+r.photos.length,0)}장`;
+      const moments = trip.momentEntries || [];
+      document.getElementById('stat-ws-diaries').innerText = `${diaryCount + moments.length}편 / ${photoCount + moments.reduce((sum,r)=>sum+(r.photos || []).length,0)}장`;
 
       document.getElementById('stat-ws-progress-bar').style.width = `${pct}%`;
       document.getElementById('stat-ws-progress-text').innerText = `${pct}%`;
@@ -10472,8 +10486,12 @@
     // 탭 전환 핸들러
     // ==========================================
     function switchTab(tabId) {
+      const trip = getActiveTrip();
+      State.travelTabPositions = State.travelTabPositions || {};
+      const positions = State.travelTabPositions[trip?.id || 'none'] ||= {};
+      if (State.currentView === 'workspace' && State.activeTab !== tabId) positions[State.activeTab] = window.scrollY;
       State.activeTab = tabId;
-      if (tabId === 'plan') setPlanPresentation('overview');
+      if (tabId === 'plan') setPlanPresentation(document.getElementById('tab-content-plan')?.dataset.presentation || 'overview');
       const tabs = ['plan', 'today', 'expenses', 'journal', 'checklist', 'sync'];
       tabs.forEach(t => {
         const btn = document.getElementById(`nav-tab-${t}`);
@@ -10497,7 +10515,8 @@
       }
       if (tabId === 'checklist') renderChecklistTab();
       if (tabId === 'journal') renderJournalTab();
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+      document.querySelector('.travel-tools')?.removeAttribute('open');
+      requestAnimationFrame(() => window.scrollTo({ top: positions[tabId] || 0, behavior: 'instant' }));
     }
 
     function switchPlanSubTab(subTabId) {
@@ -12791,7 +12810,7 @@
       if (fromAmtInput) fromAmtInput.value = '';
       if (toAmtInput) toAmtInput.value = '';
       if (memoInput) memoInput.value = '';
-      if (dateInput) dateInput.value = new Date().toISOString().split('T')[0];
+      if (dateInput) dateInput.value = SulsulTravel.TripAdapter.localDateKey(new Date(),getActiveTrip()?.timeZone);
 
       updateExchangeRateAndBanner();
       openModal('modal-exchange');
@@ -12916,7 +12935,7 @@
       const toAmt = parseFloat(document.getElementById('exch-form-to-amount')?.value);
       const rate = parseFloat(document.getElementById('exch-form-rate')?.value);
       const memo = document.getElementById('exch-form-memo')?.value.trim();
-      const date = document.getElementById('exch-form-date')?.value || new Date().toISOString().split('T')[0];
+      const date = document.getElementById('exch-form-date')?.value || SulsulTravel.TripAdapter.localDateKey(new Date(),getActiveTrip()?.timeZone);
 
       if (!fromCurr || !toCurr || fromCurr === toCurr) {
         alert('서로 다른 출금 통화와 입금 통화를 선택하세요.');
@@ -13199,7 +13218,7 @@
     window.syncExchangeModalWithLiveRate = syncExchangeModalWithLiveRate;
 
     // ==========================================
-    // [6] 포토 다이어리 렌더링 (3:4 Canvas 정규화)
+    // [6] 날짜별 순간 기록과 하루 회고
     // ==========================================
     function renderJournalTab() {
       const trip = getActiveTrip();
@@ -13219,8 +13238,11 @@
       const journals = trip.journals || {};
       const journalEntry = journals[State.activeJournalDay] || { text: '', photos: [] };
       const visibleText = State.journalTextDrafts?.[`${trip.id}:${State.activeJournalDay}`] ?? journalEntry.text ?? '';
+      const pendingPhotos=State.journalPhotoDrafts?.[`${trip.id}:${State.activeJournalDay}`]?.photos || [];
 
       cardContainer.innerHTML = `
+        <div id="journal-moments-feed" class="journal-moments-mount"></div>
+        <h4 class="journal-reflection-label">하루 회고</h4>
         <div class="flex items-center justify-between border-b border-[#1a2236] pb-3">
           <div>
             <div class="flex items-center gap-2">
@@ -13237,20 +13259,21 @@
           </label>
         </div>
 
-        <!-- 사진 갤러리 그리드 (3:4 규격) -->
+        <!-- 썸네일은 카드 안에 고정하고 크게 볼 때 보관본 비율을 유지한다. -->
         <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
           ${(journalEntry.photos || []).map((p, pIdx) => `
             <div class="relative rounded-xl overflow-hidden aspect-[3/4] bg-[#080b12] border border-[#1a2236] group">
-              <img src="${escapeHtml(SulsulTravel.TripTransfer.safePhoto(p))}" class="w-full h-full object-cover">
-              <button onclick="requestDeleteJournalPhoto(${State.activeJournalDay}, ${pIdx})" class="absolute top-1.5 right-1.5 w-6 h-6 rounded-full bg-black/70 hover:bg-rose-600 text-white text-[10px] flex items-center justify-center opacity-0 group-hover:opacity-100 transition">✕</button>
+              <button class="w-full h-full" onclick="viewJournalPhoto(${State.activeJournalDay},${pIdx})" aria-label="회고 사진 ${pIdx+1} 크게 보기"><img src="${escapeHtml(SulsulTravel.MediaRepository.photoSource(journalEntry,pIdx,{thumbnail:true}))}" class="w-full h-full object-cover" alt="회고 사진 ${pIdx+1}" loading="lazy"></button>
+              <button onclick="requestDeleteJournalPhoto(${State.activeJournalDay}, ${pIdx})" class="absolute top-1.5 right-1.5 min-w-[44px] min-h-[44px] rounded-full bg-black/70 hover:bg-rose-600 text-white text-[10px] flex items-center justify-center transition" aria-label="회고 사진 ${pIdx+1} 삭제">✕</button>
             </div>
           `).join('')}
         </div>
 
         <!-- 감성 일기 텍스트 에어리어 -->
+        ${pendingPhotos.length ? `<div class="journal-photo-pending" role="status"><p>사진 ${pendingPhotos.length}장 저장 대기 · 아직 기기에 확정되지 않았어요.</p><div>${pendingPhotos.map(photo=>`<img src="${escapeHtml(photo.thumbnail)}" alt="저장 대기 사진">`).join('')}</div><button class="companion-button" data-trip-id="${escapeHtml(trip.id)}" onclick="saveJournalPhotoDraft(this.dataset.tripId,${State.activeJournalDay})">사진 다시 저장</button><button class="companion-button" onclick="downloadJournalPhotoDraft()">사진 초안 파일 보관</button></div>`:''}
         <div class="space-y-2 pt-2">
           <label class="text-xs font-bold text-slate-300 flex items-center justify-between">
-            <span>오늘의 여행 일기</span>
+            <span>하루를 돌아보는 글</span>
             <button onclick="generateAiJournalEssay()" class="text-amber-400 hover:text-amber-300 font-bold text-[11px] flex items-center gap-1">
               <i class="fa-solid fa-wand-magic-sparkles text-[10px]"></i> AI로 다듬기
             </button>
@@ -13263,8 +13286,10 @@
             </button>
           </div>
         </div>
+        <details class="journal-story-export"><summary>전체 여행기 PDF · 블로그 파일</summary><button class="companion-button" onclick="openPdfReportModal()">날짜별 여행기 · PDF 미리보기</button><div id="journal-story-tools"></div></details>
       `;
-      cardContainer.innerHTML += activityArchiveHtml(trip);
+      mountMomentJournalFeed('journal-moments-feed', State.activeJournalDay);
+      SulsulTravel.TravelStoryUI.mountControls(document.getElementById('journal-story-tools'), getActiveTrip, {textMode:'original'});
     }
 
     function selectJournalDay(idx) {
@@ -13304,44 +13329,62 @@
       if (input) downloadTravelFile(input.value, '여행기-작성중.txt', 'text/plain;charset=utf-8');
     }
 
-    function handleJournalPhotoUpload(event) {
+    async function handleJournalPhotoUpload(event) {
       const file = event.target.files[0];
+      event.target.value='';
       if (!file) return;
       const sourceTrip = getActiveTrip();
       const sourceTripId = sourceTrip?.id, sourceDayIndex = State.activeJournalDay;
       const sourceDate = sourceTrip?.days?.[sourceDayIndex]?.date;
       rememberJournalDraft();
 
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        const img = new Image();
-        img.onload = () => {
-          // 3:4 캔버스 자동 리사이징 & 압축 (Sulsul-Travel Invariant Rule R-4)
-          const canvas = document.createElement('canvas');
-          canvas.width = 336;
-          canvas.height = 448;
-          const ctx = canvas.getContext('2d');
-          ctx.drawImage(img, 0, 0, 336, 448);
-          const compressedDataUrl = canvas.toDataURL('image/jpeg', 0.8);
+      try {
+          const prepared=await SulsulTravel.mediaRepository.prepare(file,{tripId:sourceTripId});
+          State.journalPhotoDrafts=State.journalPhotoDrafts || {};
+          const key=`${sourceTripId}:${sourceDayIndex}`;
+          const pending=State.journalPhotoDrafts[key] || {date:sourceDate,photos:[]};
+          pending.photos.push(prepared);State.journalPhotoDrafts[key]=pending;
+          saveJournalPhotoDraft(sourceTripId,sourceDayIndex);
+      } catch(error) {showToast('사진을 준비하지 못했습니다. 작성 중인 글은 보존됩니다. '+(error.message || ''),6000);}
+    }
 
+    function saveJournalPhotoDraft(sourceTripId,sourceDayIndex) {
+      const key=`${sourceTripId}:${sourceDayIndex}`,pending=State.journalPhotoDrafts?.[key];if(!pending?.photos.length)return false;
+      if(getActiveTrip()?.id===sourceTripId&&State.activeJournalDay===sourceDayIndex)rememberJournalDraft();
+      try {
           const next = JSON.parse(JSON.stringify(State.trips));
           const trip = next.find(item => item.id === sourceTripId);
-          if (!trip || trip.days?.[sourceDayIndex]?.date !== sourceDate) {
-            showToast('사진을 읽는 동안 여행 날짜가 바뀌었습니다. 날짜를 확인하고 다시 추가해 주세요.'); return;
-          }
+          if (!trip || trip.days?.[sourceDayIndex]?.date !== pending.date) throw new Error('사진을 선택한 여행 날짜가 변경되었습니다. 초안을 파일로 먼저 보관해 주세요.');
           trip.journals = trip.journals || {};
           trip.journals[sourceDayIndex] = trip.journals[sourceDayIndex] || { text:'', photos:[] };
           trip.journals[sourceDayIndex].photos = trip.journals[sourceDayIndex].photos || [];
-          trip.journals[sourceDayIndex].photos.push(compressedDataUrl);
-          try { State.trips = TripRepository.saveAll(next,{bumpTripId:sourceTripId}); }
-          catch (_) { showToast('사진을 저장하지 못했습니다. 공간 확보 후 사진을 다시 선택해 주세요.',5000); return; }
+          const record=trip.journals[sourceDayIndex];
+          record.photoThumbnails=record.photoThumbnails || [];record.mediaIds=record.mediaIds || [];
+          while(record.photoThumbnails.length<record.photos.length)record.photoThumbnails.push(null);
+          while(record.mediaIds.length<record.photos.length)record.mediaIds.push(null);
+          record.photos.push(...pending.photos.map(photo=>photo.source));record.photoThumbnails.push(...pending.photos.map(photo=>photo.thumbnail));record.mediaIds.push(...pending.photos.map(photo=>photo.mediaId));
+          if(State.journalTextDrafts?.[key]!=null)record.text=State.journalTextDrafts[key];
+          State.trips = TripRepository.saveAll(next,{bumpTripId:sourceTripId});
+          delete State.journalPhotoDrafts[key];delete (State.journalTextDrafts || {})[key];
           if (getActiveTrip()?.id === sourceTripId && State.activeJournalDay === sourceDayIndex) renderJournalTab();
           showToast('사진을 선택했던 날짜에 저장했습니다.');
-        };
-        img.onerror = () => showToast('사진을 읽지 못했습니다. 다른 사진을 선택해 주세요.');
-        img.src = e.target.result;
-      };
-      reader.readAsDataURL(file);
+          return true;
+      } catch(error) {
+        if(getActiveTrip()?.id===sourceTripId&&State.activeJournalDay===sourceDayIndex)renderJournalTab();
+        showToast('사진을 저장하지 못했습니다. 글과 사진 초안은 화면에 남아 있습니다. 다시 저장하거나 초안 파일을 보관해 주세요. '+(error.message || ''),6000);return false;
+      }
+    }
+    function downloadJournalPhotoDraft() {
+      const trip=getActiveTrip(),key=`${trip?.id}:${State.activeJournalDay}`,pending=State.journalPhotoDrafts?.[key];if(!pending)return;
+      downloadTravelFile(JSON.stringify({format:'sulsul-journal-draft',tripId:trip.id,date:pending.date,text:State.journalTextDrafts?.[key] || '',photos:pending.photos.map(p=>p.source)},null,2),'회고-사진-작성중.json');
+    }
+
+    function viewJournalPhoto(dayIndex,index) {
+      const record=getActiveTrip()?.journals?.[dayIndex];
+      const source=SulsulTravel.MediaRepository.photoSource(record,index);if(!source)return;
+      let modal=document.getElementById('modal-journal-photo');
+      if(!modal){modal=document.createElement('div');modal.id='modal-journal-photo';modal.className='sheet-container sheet-closed';modal.innerHTML='<div class="sheet-scrim" onclick="closeModal(\'modal-journal-photo\')"></div><section class="sheet-box activity-sheet" role="dialog" aria-modal="true" aria-label="회고 사진 크게 보기"><header class="activity-sheet-header"><h3>회고 사진</h3><button class="companion-button" onclick="closeModal(\'modal-journal-photo\')">닫기</button></header><img id="journal-full-photo" style="max-width:100%;max-height:75dvh;object-fit:contain;align-self:center" alt="선택한 회고 사진"></section>';document.body.append(modal);}
+      document.getElementById('journal-full-photo').src=source;openModal('modal-journal-photo');
     }
 
     // ==========================================
@@ -13591,7 +13634,7 @@
       showConfirmDelete(
         '여행 다이어리를 삭제하시겠습니까?',
         trip.title,
-        '해당 여행의 모든 30분 일정표, 가계부 지출 내역, 포토 일기 및 체크리스트가 영구히 제거됩니다.',
+        '이 기기의 여행 일정, 지출, 사진과 기록을 삭제합니다. 다른 사본이 사용하는 사진은 보존하며, 공유 서버와 외부 백업의 여행은 따로 관리해야 합니다.',
         () => {
           const previousTrips = State.trips;
           const previousActiveTripId = State.activeTripId;
@@ -13617,6 +13660,10 @@
           JournalOverflowRepository.deleteTrip(tripId).catch(error => {
             console.warn('[Storage] Deleted trip overflow cleanup failed:', error?.message || error);
             showToast('여행은 삭제했지만 보조 일기 데이터 정리에 실패했습니다. 브라우저 저장소를 확인해 주세요.', 5000);
+          });
+          SulsulTravel.mediaRepository.prune(State.trips, { tripId }).catch(error => {
+            console.warn('[Storage] Deleted trip photo cleanup failed:', error?.message || error);
+            showToast('여행은 삭제했지만 보조 사진 정리에 실패했습니다. 브라우저 저장소를 확인해 주세요.', 5000);
           });
           updateHubFilterDropdowns();
           renderHub();
@@ -13660,6 +13707,7 @@
     window.duplicateTrip = duplicateTrip;
 
     function requestDeleteSpot(dayIdx, spotIdx, event) {
+      if(!requireSharedPlanEdit())return;
       if (event) event.stopPropagation();
       const trip = getActiveTrip();
       const spot = trip.days[dayIdx].spots[spotIdx];
@@ -13704,6 +13752,8 @@
           const trip = getActiveTrip();
           if (trip.journals && trip.journals[dayIdx] && trip.journals[dayIdx].photos) {
             trip.journals[dayIdx].photos.splice(photoIdx, 1);
+            trip.journals[dayIdx].photoThumbnails?.splice(photoIdx,1);
+            trip.journals[dayIdx].mediaIds?.splice(photoIdx,1);
             saveTrips();
             renderJournalTab();
           }
@@ -14020,6 +14070,7 @@
       document.getElementById('share-include-journals').checked = false;
       document.getElementById('share-include-finances').checked = false;
       document.getElementById('share-feedback').textContent = '';
+      mountTravelCollaboration();
       openModal('modal-share-room');
     }
 
@@ -14448,7 +14499,7 @@
 
     function openCreateTripModal() {
       populateCreateTripCurrencyOptions();
-      const today = new Date().toISOString().split('T')[0];
+      const today = SulsulTravel.TripAdapter.localDateKey(new Date(),getActiveTrip()?.timeZone);
       const titleInput = document.getElementById('trip-form-title');
       if (titleInput) titleInput.value = '';
       const countriesInput = document.getElementById('trip-form-countries');
@@ -14754,7 +14805,7 @@
       let hubs = [];
       if (rawCountries.length > 0) {
         hubs = rawCountries.map(cName => {
-          const cClean = String(cName).replace(/[()[\]]/g, ' ').trim().split(/\s+/)[0];
+          const cClean = cleanCityName(cName);
           const dbObj = (typeof COUNTRY_DATABASE !== 'undefined')
             ? COUNTRY_DATABASE.find(c => c.name === cClean || c.code === cClean || (c.aliases || []).includes(cClean))
             : null;
@@ -15382,7 +15433,7 @@
         const requestedCities = [...Array.from(normalizedCitiesSet), ...inferredCities].filter((city, index, list) => city && list.indexOf(city) === index);
         let primaryDest = requestedCities[0] || countries[0] || '여행지';
         primaryDest = primaryDest.replace(/[()[\]]/g, ' ').trim();
-        if (primaryDest.includes(' ')) primaryDest = primaryDest.split(/\s+/)[0];
+        primaryDest = cleanCityName(primaryDest);
 
         const calculatedHubs = allocateTripHubs(countries, requestedCities, durationDays);
 
@@ -15599,11 +15650,13 @@
     }
 
     function openAddSpotToDay(dayIdx) {
+      if(!requireSharedPlanEdit())return;
       openAddSpotModal();
       document.getElementById('spot-form-day').value = dayIdx;
     }
 
     function openEditSpotModal(dayIdx, spotIdx, evt) {
+      if(!requireSharedPlanEdit())return;
       if (evt && typeof evt.stopPropagation === 'function') evt.stopPropagation();
       const trip = getActiveTrip();
       if (!trip || !trip.days || !trip.days[dayIdx] || !trip.days[dayIdx].spots || !trip.days[dayIdx].spots[spotIdx]) return;
@@ -15751,6 +15804,7 @@
 
     // 스팟 방문 완료 상태 토글 (불변 보호 마킹)
     function toggleSpotCompleted(dayIdx, spotIdx, evt) {
+      if(!requireSharedPlanEdit())return;
       if (evt && typeof evt.stopPropagation === 'function') evt.stopPropagation();
       const trip = getActiveTrip();
       if (!trip || !trip.days || !trip.days[dayIdx] || !trip.days[dayIdx].spots || !trip.days[dayIdx].spots[spotIdx]) return;
@@ -15780,6 +15834,7 @@
     }
 
     function openScheduleTuningModal(dayIdx = null, rangeEndIdx = null) {
+      if(!requireSharedPlanEdit())return;
       const trip = getActiveTrip();
       if (!trip || !trip.days || trip.days.length === 0) {
         showToast('일정이 포함된 여행을 먼저 선택해 주세요.');
@@ -16326,11 +16381,11 @@ ${JSON.stringify(snapshotDays)}`;
       const amountInput = document.getElementById('exp-form-amount');
       if (amountInput) amountInput.value = '';
       const dateInput = document.getElementById('exp-form-date');
-      if (dateInput) dateInput.value = new Date().toISOString().split('T')[0];
+      if (dateInput) dateInput.value = SulsulTravel.TripAdapter.localDateKey(new Date(),getActiveTrip()?.timeZone);
       const timeInput = document.getElementById('exp-form-time');
       if (timeInput) {
         const now = new Date();
-        timeInput.value = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
+        timeInput.value = SulsulTravel.TripAdapter.localTimeKey(now,getActiveTrip()?.timeZone);
       }
       const memoInput = document.getElementById('exp-form-memo');
       if (memoInput) memoInput.value = '';
@@ -17122,6 +17177,7 @@ ${JSON.stringify(snapshotDays)}`;
 
     function normalizeAiDraftDays(days, job) {
       if (!Array.isArray(days)) return days;
+      days = SulsulTravel.TripAdapter.normalizeTrip({id:job?.tripId || 'ai-draft',title:'AI 검토 초안',days}).days;
       return days.map((day, dayIndex) => {
         const dayNum = Number(day.dayNum) || (dayIndex + 1);
         const spots = Array.isArray(day.spots) ? day.spots.map(spot => {
@@ -17246,7 +17302,7 @@ ${JSON.stringify(snapshotDays)}`;
         const fallbackDays = createSmartLocalItinerary(trip, job.input);
         return { days: fallbackDays, source: 'smart_local_engine' };
       }
-      if (job.kind === 'journal' || job.kind === 'activity-journal') {
+      if (job.kind === 'journal' || job.kind === 'activity-journal' || job.kind === 'moment-journal') {
         const text = await callGeminiApiWithFallback(job.input.prompt, { signal });
         return { text: String(text || '').trim(), source: 'gemini' };
       }
@@ -17260,7 +17316,7 @@ ${JSON.stringify(snapshotDays)}`;
     }
 
     function validateAiDraftPayload(payload, job) {
-      if (job.kind === 'journal' || job.kind === 'activity-journal') return typeof payload?.text === 'string' && payload.text.length > 0 && payload.text.length <= 20000;
+      if (job.kind === 'journal' || job.kind === 'activity-journal' || job.kind === 'moment-journal') return typeof payload?.text === 'string' && payload.text.length > 0 && payload.text.length <= 20000;
       if (job.kind === 'receipt') {
         const receipt = payload?.receipt;
         return receipt && typeof receipt.merchant === 'string' && receipt.merchant.trim() && receipt.merchant.length <= 200 &&
@@ -17374,7 +17430,7 @@ ${JSON.stringify(snapshotDays)}`;
     }
 
     function validateAiDraftPayload(payload, job) {
-      if (job.kind === 'journal' || job.kind === 'activity-journal') return typeof payload?.text === 'string' && payload.text.length > 0 && payload.text.length <= 20000;
+      if (job.kind === 'journal' || job.kind === 'activity-journal' || job.kind === 'moment-journal') return typeof payload?.text === 'string' && payload.text.length > 0 && payload.text.length <= 20000;
       if (job.kind === 'receipt') {
         const receipt = payload?.receipt;
         return receipt && typeof receipt.merchant === 'string' && receipt.merchant.trim() && receipt.merchant.length <= 200 &&
@@ -17408,6 +17464,7 @@ ${JSON.stringify(snapshotDays)}`;
     }
 
     async function applyAiDraftPayload(job) {
+      if (job.kind === 'moment-journal') return applyMomentAiDraft(job);
       if (job.kind === 'activity-journal') return applyActivityAiDraft(job);
       if (job.kind === 'receipt') {
         if (job.input.expenseSession && job.input.expenseSession !== ExpenseFormState.sessionId) return 'conflict';
@@ -17532,7 +17589,7 @@ ${JSON.stringify(snapshotDays)}`;
       const proposal = document.getElementById('ai-draft-review-proposal');
       const status = document.getElementById('ai-draft-review-status');
       State.aiDraftKind = job.kind;
-      title.textContent = job.kind === 'replan' ? 'AI RePlan 제안 검토' : job.kind === 'itinerary' ? 'AI 일정 제안 검토' : job.kind === 'activity-journal' ? 'AI 일정 기록 다듬기' : job.kind === 'journal' ? 'AI 여행기 초안 검토' : '영수증 판독 결과 검토';
+      title.textContent = job.kind === 'replan' ? 'AI RePlan 제안 검토' : job.kind === 'itinerary' ? 'AI 일정 제안 검토' : job.kind === 'moment-journal' ? 'AI 순간 기록 다듬기' : job.kind === 'activity-journal' ? 'AI 일정 기록 다듬기' : job.kind === 'journal' ? 'AI 여행기 초안 검토' : '영수증 판독 결과 검토';
       subtitle.textContent = `${trip?.title || '여행'} · 승인 전에는 원본이 바뀌지 않습니다.`;
       if (job.kind === 'itinerary' || job.kind === 'replan') {
         original.textContent = describeItinerary(trip?.days || []);
@@ -17543,7 +17600,7 @@ ${JSON.stringify(snapshotDays)}`;
         } else {
           status.textContent = job.kind === 'replan' ? '완료·고정 일정 보존을 검증했습니다. 승인 시점에 계획 버전이 달라지면 적용하지 않습니다.' : '기존 일정은 유지하고, 같은 시간·제목이 아닌 제안만 추가합니다.';
         }
-      } else if (job.kind === 'journal' || job.kind === 'activity-journal') {
+      } else if (job.kind === 'journal' || job.kind === 'activity-journal' || job.kind === 'moment-journal') {
         original.textContent = job.input.sourceText;
         proposal.textContent = job.draft.text;
         status.textContent = '원문은 따로 보존하고 검토 후 승인한 문장만 기록에 적용합니다.';
@@ -17607,7 +17664,7 @@ ${JSON.stringify(snapshotDays)}`;
           }
         }
         showToast(result.kind === 'replan' ? '✅ AI RePlan을 적용했습니다. 완료·고정 일정은 유지됩니다.' : result.kind === 'itinerary' ? '✅ 기존 일정을 보존하고 AI 제안을 추가했습니다.' :
-          (result.kind === 'journal' || result.kind === 'activity-journal') ? '✅ 원문을 보존하고 여행기 초안을 적용했습니다.' : '✅ 판독값을 입력 폼에 적용했습니다.');
+          (result.kind === 'journal' || result.kind === 'activity-journal' || result.kind === 'moment-journal') ? '✅ 원문을 보존하고 여행기 초안을 적용했습니다.' : '✅ 판독값을 입력 폼에 적용했습니다.');
       } else if (result.state === 'conflict') {
         document.getElementById('ai-draft-review-status').textContent = '초안 생성 후 원본이 변경되었습니다. 현재 내용을 보호하기 위해 적용을 중단했습니다. 새로 생성해 주세요.';
         showToast('⚠️ 원본 변경이 감지되어 AI 초안을 적용하지 않았습니다.', 4500);
@@ -17673,7 +17730,7 @@ ${JSON.stringify(snapshotDays)}`;
       const rawCountries = Array.isArray(trip.countries) ? trip.countries : (trip.countries ? [trip.countries] : []);
       rawCountries.forEach(item => {
         if (!item || typeof item !== 'string') return;
-        const clean = item.replace(/[()[\]]/g, ' ').trim().split(/\s+/)[0];
+        const clean = cleanCityName(item);
         let country = (typeof COUNTRY_DATABASE !== 'undefined')
           ? COUNTRY_DATABASE.find(c => c.name === clean || c.name === item || c.code === clean || c.code === item || (c.aliases || []).includes(clean.toLowerCase()) || (c.aliases || []).includes(item.toLowerCase()))
           : null;
@@ -18639,8 +18696,10 @@ JSON 배열만 출력하세요. 각 day는 dayNum, title, city, date, spots를 �
           let overflowCleared = true;
           try { await JournalOverflowRepository.clearAll(); }
           catch (error) { overflowCleared = false; console.warn('[Storage] old journal overflow cleanup after JSON restore failed:', error?.message || error); }
+          try { await SulsulTravel.mediaRepository.prune(next); }
+          catch (error) { overflowCleared = false; console.warn('[Storage] old photo cleanup after JSON restore failed:', error?.message || error); }
           updateHubFilterDropdowns(); switchView('hub');
-          showToast(overflowCleared ? '백업을 이 기기에 복원했습니다.' : '백업은 복원했지만 이전 보조 일기 정리를 마치지 못했습니다. 저장 상태를 확인해 주세요.', 6000);
+          showToast(overflowCleared ? '백업을 이 기기에 복원했습니다.' : '백업은 복원했지만 이전 보조 기록·사진 정리를 마치지 못했습니다. 저장 상태를 확인해 주세요.', 6000);
         } catch (error) { showToast('복원하지 못했습니다. 기존 여행은 유지됩니다. ' + error.message, 6000); }
         finally { event.target.value = ''; }
       };
@@ -18831,6 +18890,8 @@ JSON 배열만 출력하세요. 각 day는 dayNum, title, city, date, spots를 �
           let overflowCleared = true;
           try { await JournalOverflowRepository.clearAll(); }
           catch (error) { overflowCleared = false; console.warn('[Storage] old journal overflow cleanup after Gist restore failed:', error?.message || error); }
+          try { await SulsulTravel.mediaRepository.prune(next); }
+          catch (error) { overflowCleared = false; console.warn('[Storage] old photo cleanup after Gist restore failed:', error?.message || error); }
           const nowStr = new Date().toLocaleString('ko-KR');
           localStorage.setItem('st_github_last_sync', `${nowStr} (복원)`);
           updateGithubSyncUi();
@@ -18838,8 +18899,8 @@ JSON 배열만 출력하세요. 각 day는 dayNum, title, city, date, spots를 �
           if (State.currentView === 'workspace') {
             renderActiveTripWorkspace();
           }
-          showToast(overflowCleared ? `📥 GitHub Gist 복원 완료! 총 ${State.trips.length}개 여정` : 'Gist는 복원했지만 이전 보조 일기 정리를 마치지 못했습니다. 저장 상태를 확인해 주세요.', 6000);
-          alert(`[📥 GitHub Gist 백업 복원 완료]\n\n여행 ${State.trips.length}개를 이 브라우저에 복원했습니다.${overflowCleared ? '' : '\n\n이전 보조 일기 정리에 실패했습니다. 화면에 저장된 여행을 확인해 주세요.'}`);
+          showToast(overflowCleared ? `📥 GitHub Gist 복원 완료! 총 ${State.trips.length}개 여정` : 'Gist는 복원했지만 이전 보조 기록·사진 정리를 마치지 못했습니다. 저장 상태를 확인해 주세요.', 6000);
+          alert(`[📥 GitHub Gist 백업 복원 완료]\n\n여행 ${State.trips.length}개를 이 브라우저에 복원했습니다.${overflowCleared ? '' : '\n\n이전 보조 기록·사진 정리에 실패했습니다. 화면에 저장된 여행을 확인해 주세요.'}`);
         } else {
           throw new Error('올바른 술술트래블 데이터 구조가 아닙니다.');
         }
@@ -18922,6 +18983,7 @@ JSON 배열만 출력하세요. 각 day는 dayNum, title, city, date, spots를 �
     }
 
     function closeModal(modalId, force = false) {
+      if (modalId === 'modal-moment-record') return closeMomentJournal(force);
       const now = Date.now();
       // Scrim 터치 연타 및 미세 클릭 오차 방지 (350ms 쓰로틀 가드, force인 경우 즉시 통과)
       if (!force && (now - lastModalActionTime < 350)) {
@@ -18937,9 +18999,12 @@ JSON 배열만 출력하세요. 각 day는 dayNum, title, city, date, spots를 �
       lastModalActionTime = now;
       const m = document.getElementById(modalId);
       if (m) {
+        if(modalId==='modal-collaboration-review')cancelRemoteTravelReview();
+        if(modalId==='modal-collaboration-review' && !State.handlingCollaborationPop && history.state?.stCollaborationReview)history.back();
         m.classList.add('sheet-closed');
         if (modalId === 'modal-expense') ExpenseFormState.sessionId = null;
         if (modalId === 'modal-activity-record') {
+          closeActivityPhotoViewer();
           State.activityRecordEditor = null;
           if (!State.handlingActivityPop && history.state?.stActivitySheet) history.back();
         }
@@ -19010,10 +19075,12 @@ JSON 배열만 출력하세요. 각 day는 dayNum, title, city, date, spots를 �
     }
 
     window.addEventListener('popstate', async event => {
+      const sharedReview=document.getElementById('modal-collaboration-review');
+      if(sharedReview && !sharedReview.classList.contains('sheet-closed') && !event.state?.stCollaborationReview){State.handlingCollaborationPop=true;closeModal('modal-collaboration-review',true);State.handlingCollaborationPop=false;return;}
       const activitySheet = document.getElementById('modal-activity-record');
       if (activitySheet && !activitySheet.classList.contains('sheet-closed')) {
         if (!document.getElementById('activity-record-viewer').hidden) {
-          document.getElementById('activity-record-viewer').hidden = true;
+          closeActivityPhotoViewer();
           history.pushState({...history.state,stActivitySheet:true},''); return;
         }
         if (!document.getElementById('modal-ai-draft-review').classList.contains('sheet-closed')) {
@@ -19482,21 +19549,26 @@ JSON 배열만 출력하세요. 각 day는 dayNum, title, city, date, spots를 �
       openPdfReportModal(tripId);
     }
 
-    function renderPdfReport(trip) {
+    function renderPdfReport(trip, selection = {}) {
       const container = document.getElementById('pdf-report-content');
       if (!container) return;
 
+      const previousSelection = State.pdfReportTripId === trip.id ? State.pdfReportSelection : null;
+      const selected = {textMode:'original',includePhotos:true,...previousSelection,...selection};
+      const photoSource = SulsulTravel.MediaRepository?.photoSource;
+      const storyModel = SulsulTravel.TravelStory.build(trip, {...selected,photoSource});
+      State.pdfReportTripId = trip.id;
+      State.pdfReportSelection = storyModel.selection;
+      State.pdfReportManifest = storyModel.manifest;
+
       // 예산 & 지출 통계
-      let totalSpentKrw = 0;
+      const expenseSummary = storyModel.expenses;
+      const totalSpentKrw = expenseSummary.totalSpentKrw;
       let mepSavingsKrw = 0;
-      const catTotals = { food: 0, tour: 0, lodging: 0, flight: 0, shopping: 0, etc: 0 };
+      const catTotals = {...expenseSummary.categoryTotals,food:expenseSummary.categoryTotals.meal,flight:expenseSummary.categoryTotals.transport};
 
       (trip.expenses || []).forEach(e => {
         if (e.type === 'income') return;
-        const krw = e.krw || 0;
-        totalSpentKrw += krw;
-        if (catTotals[e.cat] !== undefined) catTotals[e.cat] += krw;
-        else catTotals.etc += krw;
 
         // MEP 환율 절감액 산출 (공식 환율 대비 약 31% 차액)
         if (e.curr === 'ARS') {
@@ -19506,11 +19578,8 @@ JSON 배열만 출력하세요. 각 day는 dayNum, title, city, date, spots를 �
 
       const budget = Number(trip.budget) || 0;
       const remain = Math.max(0, budget - totalSpentKrw);
-      const dailyJournalEntries = Object.values(trip.journals || {}).filter(Boolean);
-      const activityJournalEntries = activityEntries(trip);
-      const allJournalEntries = [...dailyJournalEntries, ...activityJournalEntries];
-      const diaryCount = allJournalEntries.length;
-      const photoCount = allJournalEntries.reduce((sum, entry) => sum + (Array.isArray(entry.photos) ? entry.photos.length : 0), 0);
+      const diaryCount = storyModel.stats.recordCount;
+      const photoCount = storyModel.stats.includedPhotoCount;
 
       // 1. 표지 (Cover)
       let html = `
@@ -19588,78 +19657,12 @@ JSON 배열만 출력하세요. 각 day는 dayNum, title, city, date, spots를 �
           </div>
         </div>
 
-        <!-- 3. 일차별 핵심 타임라인 (Day Highlights) -->
-        <div class="space-y-3">
-          <h2 class="text-sm font-black text-amber-400 flex items-center gap-2">
-            <i class="fa-solid fa-timeline"></i> 여정 타임라인 요약
-          </h2>
-          <div class="space-y-2 text-xs">
-            ${(trip.days || []).map(d => {
-              const spotTitles = (d.spots || []).map(s => `[${s.completed ? '방문 완료' : s.skipped ? '건너뜀' : '예정'}] ${s.time || '시간 미정'} ${s.title || ''}${s.desc ? ' — ' + s.desc : ''}`).join('\n');
-              return `
-                <div class="p-2.5 rounded-lg bg-[#080b12] border border-[#1e263c] flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-                  <div class="flex items-center gap-2">
-                    <span class="px-2 py-0.5 rounded bg-amber-500/20 text-amber-400 font-mono font-black text-[10px]">Day ${d.dayNum || 1}</span>
-                    <span class="font-bold text-white">${escapeHtml(d.title || "")}</span>
-                    <span class="text-slate-400 text-[11px]">(${escapeHtml(d.city || "")})</span>
-                  </div>
-                  <div class="text-slate-400 text-[11px] whitespace-pre-wrap">${escapeHtml(spotTitles || '일정 없음')}</div>
-                </div>
-              `;
-            }).join('')}
-          </div>
-        </div>
-
-        ${activityReportHtml(trip)}
-        <!-- 4. 감성 다이어리 & 3:4 포토북 갤러리 -->
+        <!-- 3. 같은 날짜의 계획과 실제 경험, 순간 및 하루 회고 -->
         <div class="space-y-4">
           <h2 class="text-sm font-black text-amber-400 flex items-center gap-2">
-            <i class="fa-solid fa-camera-retro"></i> 감성 여행 일기 & 포토북 컬렉션 (${diaryCount}편 / ${photoCount}장)
+            <i class="fa-solid fa-camera-retro"></i> 날짜별 여행 이야기 (${diaryCount}편 / ${photoCount}장)
           </h2>
-      `;
-
-      if (diaryCount === 0 && photoCount === 0) {
-        html += `
-          <div class="p-6 text-center text-xs text-slate-500 bg-[#080b12] rounded-xl border border-[#1e263c]">
-            작성된 포토 다이어리가 없습니다. 워크스페이스에서 사진과 일기를 등록해 보세요.
-          </div>
-        `;
-      } else {
-        html += `<div class="space-y-4">`;
-        if (trip.journals) {
-          Object.keys(trip.journals).forEach(dayKey => {
-            const j = trip.journals[dayKey];
-            if (!j) return;
-            const dayNum = parseInt(dayKey) + 1;
-            const photosHtml = (j.photos || []).map((pUrl, pIdx) => `
-              <div class="rounded-xl overflow-hidden border border-[#23304c] bg-[#080b12] shadow-md">
-                <img src="${escapeHtml(SulsulTravel.TripTransfer.safePhoto(pUrl))}" class="w-full h-48 object-cover" alt="Day ${dayNum} Photo ${pIdx+1}">
-                <div class="p-2 text-[10px] text-slate-400 text-center font-mono">Day ${dayNum} 캡처컷 #${pIdx+1}</div>
-              </div>
-            `).join('');
-
-            html += `
-              <div class="p-4 rounded-xl bg-[#080b12] border border-[#1e263c] space-y-3">
-                <div class="flex items-center justify-between border-b border-[#1a2236] pb-2">
-                  <div class="font-black text-white text-xs flex items-center gap-2">
-                    <span class="w-2 h-2 rounded-full bg-amber-400"></span>
-                    <span>Day ${dayNum}의 기록</span>
-                  </div>
-                  <div class="text-[11px] text-slate-400 flex items-center gap-2">
-                    <span>${escapeHtml(j.weather || '')}</span>
-                    <span>${escapeHtml(j.mood || '')}</span>
-                  </div>
-                </div>
-                ${j.text ? `<p class="text-xs text-slate-300 leading-relaxed whitespace-pre-wrap">${escapeHtml(j.text)}</p>` : ''}
-                ${photosHtml ? `<div class="grid grid-cols-2 sm:grid-cols-3 gap-3 pt-2">${photosHtml}</div>` : ''}
-              </div>
-            `;
-          });
-        }
-        html += `</div>`;
-      }
-
-      html += `
+          ${SulsulTravel.TravelStory.renderHtml(storyModel,{includeCover:false})}
         </div>
         <div class="pt-6 border-t border-[#1a2236] text-center text-[10px] text-slate-500 font-mono">
           GENERATED BY SULSUL-TRAVEL (술술트래블) · LIFETIME MEMOIR ENGINE · ALL RIGHTS RESERVED
@@ -19667,6 +19670,10 @@ JSON 배열만 출력하세요. 각 day는 dayNum, title, city, date, spots를 �
       `;
 
       container.innerHTML = html;
+      SulsulTravel.TravelStoryUI.mountControls(document.getElementById('pdf-story-controls'), () => State.trips.find(item => item.id === State.pdfReportTripId) || trip, {
+        ...storyModel.selection,photoSource,
+        onChange: (_model, nextSelection) => renderPdfReport(State.trips.find(item => item.id === State.pdfReportTripId) || trip,nextSelection)
+      });
     }
 
     function triggerPrintReport() {
@@ -19674,7 +19681,8 @@ JSON 배열만 출력하세요. 각 day는 dayNum, title, city, date, spots를 �
     }
 
     function downloadReportAsHtml() {
-      const trip = getActiveTrip();
+      const trip = State.trips.find(item => item.id === State.pdfReportTripId) || getActiveTrip();
+      if (!trip) return;
       const content = document.getElementById('pdf-report-content').innerHTML;
       const hTag = '<' + 'head>';
       const hClose = '</' + 'head>';
@@ -19712,11 +19720,13 @@ JSON 배열만 출력하세요. 각 day는 dayNum, title, city, date, spots를 �
 
       const blob = new Blob([fullHtml], { type: 'text/html;charset=utf-8' });
       const a = document.createElement('a');
-      a.href = URL.createObjectURL(blob);
-      a.download = `${trip.title}_완주보고서_포토북.html`;
+      const url = URL.createObjectURL(blob);
+      a.href = url;
+      a.download = `${trip.title.replace(/[<>:"/\\|?*\u0000-\u001f]/g,'_')}_완주보고서_포토북.html`;
       document.body.appendChild(a);
       a.click();
       a.remove();
+      setTimeout(() => URL.revokeObjectURL(url),1000);
     }
 
     window.addEventListener('keydown', (e) => {
@@ -19726,7 +19736,7 @@ JSON 배열만 출력하세요. 각 day는 dayNum, title, city, date, spots를 �
           closeExpensePhotoViewer(); return;
         }
         if (!document.getElementById('activity-record-viewer').hidden && !document.getElementById('modal-activity-record').classList.contains('sheet-closed')) {
-          document.getElementById('activity-record-viewer').hidden = true; return;
+          closeActivityPhotoViewer(); return;
         }
         const openContainers = Array.from(document.querySelectorAll('.sheet-container:not(.sheet-closed)'));
         if (openContainers.length > 0) {

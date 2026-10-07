@@ -1,4 +1,4 @@
-# ================================================================
+﻿# ================================================================
 # Sulsul-Travel Automated Pre-flight Gatekeeper & Linter (tools-verify.ps1)
 # ================================================================
 $ErrorActionPreference = "Continue"
@@ -19,6 +19,7 @@ $devPath = Join-Path $baseDir "DEVELOPMENT.md"
 $readmePath = Join-Path $baseDir "README.md"
 $servePath = Join-Path $baseDir "tools-serve.ps1"
 $mapImgPath = Join-Path $baseDir "south_america_illustrated_map.jpg"
+$mediaPath = Join-Path $baseDir "js\infrastructure\storage\media-repository.js"
 
 # Detect Sulsul Chronicle (술술트래블신록.md) regardless of console encoding
 $sillokFile = Get-ChildItem -Path $baseDir -Filter "*.md" | Where-Object { $_.Name -notmatch "^(CHANGELOG|DEVELOPMENT|README)" } | Select-Object -First 1
@@ -59,7 +60,7 @@ $coreFiles = @(
     $changelogPath, $sillokPath, $devPath, $readmePath, 
     $servePath, $mapImgPath, $icon192, $icon512, $iconApple, 
     $iconMask192, $iconMask512,
-    $dkpRegistry, $dkpDefault, $dkpSouthAmerica, $dkpYunnan
+    $dkpRegistry, $dkpDefault, $dkpSouthAmerica, $dkpYunnan, $mediaPath
 )
 
 $missingFiles = @()
@@ -81,6 +82,7 @@ $indexContent = if (Test-Path $indexHtmlPath) { Get-Content -Raw -Path $indexHtm
 $swContent = if (Test-Path $swJsPath) { Get-Content -Raw -Path $swJsPath -Encoding UTF8 } else { "" }
 $clContent = if (Test-Path $changelogPath) { Get-Content -Raw -Path $changelogPath -Encoding UTF8 } else { "" }
 $sillokContent = if (Test-Path $sillokPath) { Get-Content -Raw -Path $sillokPath -Encoding UTF8 } else { "" }
+$mediaContent = if (Test-Path $mediaPath) { Get-Content -Raw -Path $mediaPath -Encoding UTF8 } else { "" }
 
 $mIndex = [regex]::Match($indexContent, "const APP_VER\s*=\s*'([^']+)'")
 $appVer = if ($mIndex.Success) { $mIndex.Groups[1].Value } else { "UNKNOWN" }
@@ -105,7 +107,7 @@ Report-Gate "Version Synchronization (v$appVer)" $verMatch $details
 # [Gate 3/5] Selected Invariant Laws Validation
 # ---------------------------------------------------------------
 Write-Host ""
-Write-Host "[3/5] Invariant Laws (DOM IDs, Fallback AI & Canvas Normalization)..." -ForegroundColor Yellow
+Write-Host "[3/5] Invariant Laws (DOM IDs, Fallback AI & Aspect-Preserving Media)..." -ForegroundColor Yellow
 
 # R-10: Mandatory DOM IDs
 $mandatoryIds = @(
@@ -132,9 +134,10 @@ $hasGemini35Flash = $indexContent -match "gemini-3.5-flash"
 $has3TierFallback = $hasGemini31Lite -and $hasGemini35Lite -and $hasGemini35Flash
 Report-Gate "Gemini Free-Tier 3-Tier Multi-Model Fallback Chain (R-5)" $has3TierFallback "3.1-flash-lite: $hasGemini31Lite | 3.5-flash-lite: $hasGemini35Lite | 3.5-flash: $hasGemini35Flash"
 
-# R-4: 3:4 Canvas Photo Normalization
-$hasCanvasCrop = ($indexContent -match "canvas\.width\s*=\s*336") -and ($indexContent -match "canvas\.height\s*=\s*448")
-Report-Gate "3:4 Canvas Photo Normalization Pipeline (R-4)" $hasCanvasCrop "Canvas dimension: 336x448 (3:4 aspect ratio) detected"
+# R-4: Keep the archival aspect ratio; generate thumbnails separately.
+# Gate 4 exercises real landscape/portrait uploads rather than requiring a crop.
+$hasMediaPolicy = ($indexContent -match "js/infrastructure/storage/media-repository\.js") -and ($mediaContent -match "maxDimension\s*=\s*1600") -and ($mediaContent -match "render\(448\)") -and ($mediaContent -match "original, thumbnail")
+Report-Gate "Archival Photo / Separate Thumbnail Pipeline (R-4)" $hasMediaPolicy "Archival max edge: 1600px | Thumbnail max edge: 448px | IndexedDB Blob + JSON fallback"
 
 # R-6: MEP Exchange Rate Switch
 $hasMepSwitch = $indexContent -match "chk-mep-rate"
@@ -212,6 +215,9 @@ if (Test-Path $edgePath) {
         }
         $pageSocketUrl = "$($pageTarget.webSocketDebuggerUrl)"
 
+        # Emulation overrides belong to a CDP session. Reconnecting for each
+        # command resets the 360px viewport before Runtime.evaluate reads it.
+        $cdpSockets = @{}
         function Invoke-CdpCommand {
             param(
                 [Parameter(Mandatory=$true)][string]$WebSocketUrl,
@@ -219,15 +225,20 @@ if (Test-Path $edgePath) {
                 [hashtable]$Params = @{}
             )
 
-            $socket = [System.Net.WebSockets.ClientWebSocket]::new()
-            # Do not route loopback CDP traffic through a corporate/system proxy.
-            $socket.Options.Proxy = [System.Net.GlobalProxySelection]::GetEmptyWebProxy()
+            $socket = $cdpSockets[$WebSocketUrl]
             $timeout = [System.Threading.CancellationTokenSource]::new()
             $timeout.CancelAfter(8000)
             try {
-                $socketUri = [System.Uri]::new($WebSocketUrl, [System.UriKind]::Absolute)
-                if (-not $socketUri.IsAbsoluteUri) { throw "DevTools returned an invalid websocket URL: $WebSocketUrl" }
-                $socket.ConnectAsync($socketUri, $timeout.Token).GetAwaiter().GetResult()
+                if (-not $socket -or $socket.State -ne [System.Net.WebSockets.WebSocketState]::Open) {
+                    if ($socket) { $socket.Dispose() }
+                    $socket = [System.Net.WebSockets.ClientWebSocket]::new()
+                    # Do not route loopback CDP traffic through a system proxy.
+                    $socket.Options.Proxy = [System.Net.GlobalProxySelection]::GetEmptyWebProxy()
+                    $socketUri = [System.Uri]::new($WebSocketUrl, [System.UriKind]::Absolute)
+                    if (-not $socketUri.IsAbsoluteUri) { throw "DevTools returned an invalid websocket URL: $WebSocketUrl" }
+                    $socket.ConnectAsync($socketUri, $timeout.Token).GetAwaiter().GetResult()
+                    $cdpSockets[$WebSocketUrl] = $socket
+                }
                 $request = @{ id = 1; method = $Method; params = $Params }
                 $requestBytes = [System.Text.Encoding]::UTF8.GetBytes(($request | ConvertTo-Json -Compress -Depth 12))
                 $requestSegment = [System.ArraySegment[byte]]::new($requestBytes)
@@ -247,10 +258,16 @@ if (Test-Path $edgePath) {
 
                     $message = [System.Text.Encoding]::UTF8.GetString($stream.ToArray()) | ConvertFrom-Json
                     $stream.Dispose()
-                    if ($message.id -eq 1) { return $message }
+                    if ($message.id -eq 1) {
+                        if ($message.error) { throw "CDP $Method failed: $($message.error.message)" }
+                        return $message
+                    }
                 }
+            } catch {
+                if ($socket) { $socket.Dispose() }
+                [void]$cdpSockets.Remove($WebSocketUrl)
+                throw
             } finally {
-                $socket.Dispose()
                 $timeout.Dispose()
             }
         }
@@ -295,6 +312,31 @@ new Promise(function(resolve) {
         $v8Pass = ($gateResult.ready -ne "loading") -and $sulsulReady -and ($errCount -eq 0) -and ($v8Ver -eq $appVer)
         Report-Gate "Headless Edge V8 Engine Parsing & Zero Runtime Errors" $v8Pass "Ready: $($gateResult.ready) | SulsulTravel: $sulsulReady | V8 Ver: v$v8Ver | Runtime Errors: $errCount$errDetail"
 
+        $photoEvaluation = @'
+(async function () {
+  var api = window.SulsulTravel && window.SulsulTravel.MediaRepository;
+  var repo = window.SulsulTravel && window.SulsulTravel.mediaRepository;
+  if (!api || !repo) return JSON.stringify({ error: 'MediaRepository unavailable' });
+  var result = [];
+  for (var size of [[3200, 1800], [1800, 3200]]) {
+    var canvas = document.createElement('canvas'); canvas.width = size[0]; canvas.height = size[1];
+    var ctx = canvas.getContext('2d'); ctx.fillStyle = '#527b6c'; ctx.fillRect(0, 0, canvas.width, canvas.height);
+    var blob = await new Promise(function (resolve) { canvas.toBlob(resolve, 'image/png'); });
+    var prepared = await repo.prepare(new File([blob], 'gate-photo.png', { type: 'image/png' }), { store: false });
+    var full = new Image(), thumb = new Image(); full.src = prepared.source; thumb.src = prepared.thumbnail;
+    await Promise.all([full.decode(), thumb.decode()]);
+    result.push({ full: [full.naturalWidth, full.naturalHeight], thumb: [thumb.naturalWidth, thumb.naturalHeight],
+      compatible: api.photoSource({ photos: [prepared.source] }) === prepared.source });
+  }
+  return JSON.stringify(result);
+})()
+'@
+        $photoResponse = Invoke-CdpCommand -WebSocketUrl $pageSocketUrl -Method "Runtime.evaluate" -Params @{ expression = $photoEvaluation; awaitPromise = $true; returnByValue = $true }
+        if ($photoResponse.result.exceptionDetails) { throw "R-4 photo evaluation failed: $($photoResponse.result.exceptionDetails.text)" }
+        $photoResult = $photoResponse.result.result.value | ConvertFrom-Json
+        $photoPass = ($photoResult.Count -eq 2) -and ($photoResult[0].full[0] -eq 1600) -and ($photoResult[0].full[1] -eq 900) -and ($photoResult[1].full[0] -eq 900) -and ($photoResult[1].full[1] -eq 1600) -and ($photoResult[0].thumb[0] -eq 448) -and ($photoResult[0].thumb[1] -eq 252) -and ($photoResult[1].thumb[0] -eq 252) -and ($photoResult[1].thumb[1] -eq 448) -and $photoResult[0].compatible -and $photoResult[1].compatible
+        Report-Gate "Landscape/Portrait Aspect Ratio & JSON Photo Compatibility (R-4)" $photoPass ($photoResponse.result.result.value)
+
         # ---------------------------------------------------------------
         # [Gate 5/5] Mobile 360px Viewport Zero-Horizontal-Overflow & UI Integrity (R-16)
         # ---------------------------------------------------------------
@@ -323,13 +365,17 @@ new Promise(function(resolve) {
       var docW = document.documentElement.scrollWidth;
       var listOverflow = docW > winW;
 
-      // Check 3-column filter row
+      // Verify useful filter controls, including an optional disclosure.
       var countrySelect = document.getElementById('hub-filter-country');
       var citySelect = document.getElementById('hub-filter-city');
       var conceptSelect = document.getElementById('hub-filter-concept');
-      var filterRow = countrySelect ? countrySelect.closest('.grid') : null;
-      var isGridCols3 = filterRow ? filterRow.classList.contains('grid-cols-3') : false;
-      var isCityVisible = citySelect ? (!citySelect.classList.contains('hidden') && citySelect.offsetParent !== null) : false;
+      var filterDetails = countrySelect ? countrySelect.closest('details') : null;
+      if (filterDetails) filterDetails.open = true;
+      var filtersFit = [countrySelect, citySelect, conceptSelect].every(function(control) {
+        if (!control || control.offsetParent === null) return false;
+        var rect = control.getBoundingClientRect();
+        return rect.left >= -1 && rect.right <= winW + 1 && rect.height >= 44;
+      });
 
       // Check duplicate buttons presence (R-16 strict rule: must be 0)
       var dupBtns = document.querySelectorAll('button[onclick*="duplicateTrip"], button[title*="복제"]');
@@ -368,8 +414,7 @@ new Promise(function(resolve) {
         listDocW: docW,
         gridDocW: gridDocW,
         hasDocOverflow: (listOverflow || gridOverflow),
-        isGridCols3: isGridCols3,
-        isCityVisible: isCityVisible,
+        filtersFit: filtersFit,
         duplicateBtns: dupBtns.length,
         overflowCards: overflowCards,
         clippedBtns: clippedBtns,
@@ -392,8 +437,8 @@ new Promise(function(resolve) {
         $mResult = $mobileResponse.result.result.value | ConvertFrom-Json
         if ($mResult.error) { throw "Mobile evaluation script error: $($mResult.error)" }
 
-        $mPass = (-not $mResult.hasDocOverflow) -and ($mResult.overflowCards -eq 0) -and ($mResult.clippedBtns -eq 0) -and ($mResult.duplicateBtns -eq 0) -and $mResult.isGridCols3 -and $mResult.isCityVisible
-        $mDetails = "DocW: List $($mResult.listDocW)px, Grid $($mResult.gridDocW)px / WinW: $($mResult.winW)px | 3-Col Filter: $($mResult.isGridCols3) | City Visible: $($mResult.isCityVisible) | Duplicate Btns: $($mResult.duplicateBtns) | Clipped: $($mResult.clippedBtns)"
+        $mPass = ([Math]::Abs($mResult.winW - 360) -le 1) -and (-not $mResult.hasDocOverflow) -and ($mResult.overflowCards -eq 0) -and ($mResult.clippedBtns -eq 0) -and ($mResult.duplicateBtns -eq 0) -and $mResult.filtersFit
+        $mDetails = "DocW: List $($mResult.listDocW)px, Grid $($mResult.gridDocW)px / WinW: $($mResult.winW)px (must be 360px) | Filter controls visible/contained/44px: $($mResult.filtersFit) | Duplicate Btns: $($mResult.duplicateBtns) | Clipped: $($mResult.clippedBtns)"
         if ($mResult.clippingDetails -and $mResult.clippingDetails.Count -gt 0) {
             $mDetails += " | Details: " + ($mResult.clippingDetails -join ", ")
         }
@@ -406,6 +451,7 @@ new Promise(function(resolve) {
     } catch {
         Report-Gate "Headless Edge V8 Execution" $false $_.Exception.Message
     } finally {
+        if ($cdpSockets) { foreach ($socket in $cdpSockets.Values) { $socket.Dispose() } }
         if ($proc -and -not $proc.HasExited) {
             try { $proc.Kill($true) } catch { try { $proc.Kill() } catch {} }
             try { [void]$proc.WaitForExit(3000) } catch {}
@@ -432,7 +478,7 @@ new Promise(function(resolve) {
 Write-Host ""
 Write-Host "================================================================" -ForegroundColor Cyan
 if ($allPassed) {
-    Write-Host " [PASS-ALL] ALL GATES PASSED: Sulsul-Travel v$appVer is 100% Validated!" -ForegroundColor Green
+    Write-Host " [PASS-ALL] ALL GATES PASSED: Sulsul-Travel v$appVer passed all configured gates." -ForegroundColor Green
 } else {
     Write-Host " [FAIL-WARN] GATE CHECKS FAILED: Please resolve the issues above before releasing." -ForegroundColor Red
 }

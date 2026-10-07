@@ -1,7 +1,7 @@
 {
   "name": "sulsul-travel",
   "private": true,
-  "version": "1.8.8",
+  "version": "1.8.9",
   "scripts": {
     "build:assets": "node tools/build-assets.cjs",
     "build:css": "tailwindcss -c tailwind.config.cjs -i css/utilities.input.css -o css/utilities.css --minify",
@@ -9,7 +9,11 @@
     "test:mobile": "node tests/mobile-ui.browser.cjs",
     "test:reliability": "node tests/reliability.browser.cjs",
     "test:activity": "node tests/activity-journal.browser.cjs",
-    "test:expense": "node tests/expense-editor.browser.cjs"
+    "test:expense": "node tests/expense-editor.browser.cjs",
+    "test:moment": "node tests/moment-journal.browser.cjs",
+    "test:story": "node tests/travel-story.browser.cjs",
+    "test:companion": "node tests/companion-refresh.browser.cjs",
+    "test:collaboration": "node tests/collaboration-review.browser.cjs"
   },
   "devDependencies": {
     "@fortawesome/fontawesome-free": "6.5.1",

@@ -13,6 +13,7 @@
       this.storage = storage;
       this.key = options.key || 'st_trips_v2';
       this.now = options.now || (() => new Date().toISOString());
+      this.beforeWrite = options.beforeWrite || (() => {});
     }
 
     clone(value) {
@@ -25,8 +26,9 @@
         if (!trip || typeof trip !== 'object' || typeof trip.id !== 'string' || !trip.id) {
           throw new TypeError('INVALID_TRIP');
         }
+        const canonical = root.SulsulTravel?.TripAdapter?.normalizeTrip(trip) || trip;
         return {
-          ...trip,
+          ...canonical,
           revision: Number.isInteger(trip.revision) && trip.revision >= 0 ? trip.revision : 0,
           appliedAiJobIds: Array.isArray(trip.appliedAiJobIds) ? trip.appliedAiJobIds.slice(-50) : []
         };
@@ -46,7 +48,7 @@
       }
     }
 
-    saveAll(trips, { bumpTripId = null } = {}) {
+    saveAll(trips, { bumpTripId = null, approvedRemoteTripId = null } = {}) {
       const next = this.normalize(this.clone(trips));
       if (bumpTripId) {
         const trip = next.find((item) => item.id === bumpTripId);
@@ -55,6 +57,7 @@
           trip.updatedAt = this.now();
         }
       }
+      this.beforeWrite({next,storedRaw:this.storage.getItem(this.key),approvedRemoteTripId});
       this.storage.setItem(this.key, JSON.stringify(next));
       return next;
     }
@@ -72,6 +75,7 @@
       trip.revision += 1;
       trip.updatedAt = this.now();
       trip.appliedAiJobIds = [...trip.appliedAiJobIds, jobId].slice(-50);
+      this.beforeWrite({next,storedRaw:this.storage.getItem(this.key),approvedRemoteTripId:null});
       this.storage.setItem(this.key, JSON.stringify(next));
       return { status: 'applied', trips: next, duplicate: false };
     }

@@ -5,6 +5,7 @@
   const PLAN_FIELDS = ['id','title','subtitle','style','startDate','endDate','durationDays','arrivalTime','departureTime','currency','budget','countries','cities','coverEmoji','concepts','wishlist','hubAllocations','planSource','isBucketlist','status','days','planBlockMeta','checklist','timeZone'];
   const MONEY_FIELDS = ['expenses','exchanges','activeCurrencies','initialBalances','wallets'];
   const clone = value => JSON.parse(JSON.stringify(value));
+  const canonicalTrip = trip => root.SulsulTravel?.TripAdapter?.normalizeTrip(trip) || trip;
   function safePhoto(value) {
     if (typeof value !== 'string') return '';
     if (/^data:image\/(jpeg|png|webp);base64,[A-Za-z0-9+/=\s]+$/.test(value)) return value;
@@ -23,9 +24,9 @@
     walk(trip);
     for (const day of trip.days) {
       if (!day || typeof day !== 'object' || !Array.isArray(day.spots) || day.spots.length > 500) throw new Error('일별 일정 형식이 올바르지 않습니다.');
-      if (day.spots.some(s => !s || typeof s !== 'object' || typeof s.title !== 'string')) throw new Error('장소 이름을 확인해 주세요.');
+      if (day.spots.some(s => !s || typeof s !== 'object' || Array.isArray(s) || (typeof s.title !== 'string' && typeof s.name !== 'string'))) throw new Error('장소 이름을 확인해 주세요.');
     }
-    for (const key of ['countries','cities','concepts','checklist','expenses','exchanges','activeCurrencies']) {
+    for (const key of ['countries','cities','concepts','checklist','expenses','exchanges','activeCurrencies','momentEntries']) {
       if (trip[key] != null && !Array.isArray(trip[key])) throw new Error(`${key} 형식이 올바르지 않습니다.`);
     }
     for (const key of ['journals','activityRecords','planBlockMeta','initialBalances']) {
@@ -34,21 +35,31 @@
     for (const [id,record] of Object.entries(trip.activityRecords || {})) {
       if (!record || record.id !== id || !record.context || typeof record.context !== 'object' || typeof record.context.title !== 'string' || !Array.isArray(record.photos) || record.photos.length > 8 || !Number.isInteger(record.coverIndex) || record.coverIndex < 0 || record.coverIndex >= Math.max(1,record.photos.length)) throw new Error('일정 기록 형식이 올바르지 않습니다.');
     }
+    const momentIds = new Set();
+    for (const record of trip.momentEntries || []) {
+      if (!record || typeof record !== 'object' || typeof record.id !== 'string' || !record.id || momentIds.has(record.id) || !/^\d{4}-\d{2}-\d{2}$/.test(record.date || '') || !/^\d{2}:\d{2}$/.test(record.time || '') || !Array.isArray(record.photos) || record.photos.length > 8 || !Number.isInteger(record.coverIndex) || record.coverIndex < 0 || record.coverIndex >= Math.max(1,record.photos.length)) throw new Error('순간 기록 형식이 올바르지 않습니다.');
+      momentIds.add(record.id);
+      if(record.visibility != null && !['private','shared'].includes(record.visibility)) throw new Error('순간 기록 공개 범위를 확인해 주세요.');
+    }
     for (const expense of trip.expenses || []) {
       if (!expense || typeof expense !== 'object' || (expense.photos != null && (!Array.isArray(expense.photos) || expense.photos.some(p=>!safePhoto(p))))) throw new Error('지출 사진 형식이 올바르지 않습니다.');
     }
-    for (const journal of [...Object.values(trip.journals || {}),...Object.values(trip.activityRecords || {})]) {
+    for (const journal of [...Object.values(trip.journals || {}),...Object.values(trip.activityRecords || {}),...(trip.momentEntries || [])]) {
       if (!journal || typeof journal !== 'object' || (journal.text != null && typeof journal.text !== 'string') || (journal.photos != null && !Array.isArray(journal.photos))) throw new Error('일기 형식이 올바르지 않습니다.');
       if ((journal.photos || []).some(p => !safePhoto(p))) throw new Error('지원하지 않는 사진 주소가 있습니다.');
+      if (journal.photoThumbnails != null && (!Array.isArray(journal.photoThumbnails) || journal.photoThumbnails.some(p => p != null && !safePhoto(p)))) throw new Error('사진 썸네일 형식이 올바르지 않습니다.');
+      if (journal.mediaIds != null && (!Array.isArray(journal.mediaIds) || journal.mediaIds.some(id => id != null && typeof id !== 'string'))) throw new Error('사진 참조 형식이 올바르지 않습니다.');
     }
     return trip;
   }
   function snapshot(trip, {journals = false, finances = false} = {}) {
     validateTrip(trip);
-    const fields = [...PLAN_FIELDS, ...(journals ? ['journals','activityRecords'] : []), ...(finances ? MONEY_FIELDS : [])];
+    trip = canonicalTrip(trip);
+    const fields = [...PLAN_FIELDS, ...(journals ? ['journals','activityRecords','momentEntries'] : []), ...(finances ? MONEY_FIELDS : [])];
     const result = {};
     fields.forEach(key => { if (trip[key] !== undefined) result[key] = clone(trip[key]); });
     result.journals = journals ? result.journals || {} : {};
+    result.momentEntries = journals ? result.momentEntries || [] : [];
     result.expenses = finances ? result.expenses || [] : [];
     result.exchanges = finances ? result.exchanges || [] : [];
     // 적용된 AI 작업, 인증 정보 및 서버 멤버십은 내보내지 않는다.

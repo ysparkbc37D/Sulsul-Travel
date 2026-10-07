@@ -10,11 +10,14 @@ function activityLocation(trip, recordId) {
 function activityContext(day, spot) {
   return {title:spot.title || '일정', date:day.date || '', city:day.city || '', time:spot.time || ''};
 }
+function activityPhotoSource(record, index, thumbnail = false) {
+  return SulsulTravel.MediaRepository ? SulsulTravel.MediaRepository.photoSource(record,index,{thumbnail}) : SulsulTravel.TripTransfer.safePhoto(record?.photos?.[index]);
+}
 function activityCardHtml(spot, dayIndex, spotIndex) {
   const record = getActiveTrip()?.activityRecords?.[spot.recordId];
   const photo = record?.photos?.[record.coverIndex || 0];
   return `<button class="activity-record-card" onclick="openActivityJournal(${dayIndex},${spotIndex},event)" aria-label="${escapeHtml(spot.title || '일정')} 기록 ${record ? '보기' : '남기기'}">
-    ${photo ? `<img class="activity-cover" src="${escapeHtml(SulsulTravel.TripTransfer.safePhoto(photo))}" alt="일정 대표사진" loading="lazy">` : '<span class="activity-record-icon"><i class="fa-solid fa-book-open" aria-hidden="true"></i></span>'}
+    ${photo ? `<img class="activity-cover" src="${escapeHtml(activityPhotoSource(record,record.coverIndex || 0,true))}" alt="일정 대표사진" loading="lazy">` : '<span class="activity-record-icon"><i class="fa-solid fa-book-open" aria-hidden="true"></i></span>'}
     <span class="activity-record-copy"><strong>${record ? '이 순간의 기록' : '사진 · 짧은 글 남기기'}</strong><span>${escapeHtml(record?.text || (record?.photos?.length ? '사진으로 남긴 순간' : '완료 전에도 기록할 수 있어요'))}</span>${record?.photos?.length ? `<small>사진 ${record.photos.length}장 · 기록 열기</small>` : ''}</span>
     <i class="fa-solid fa-chevron-right" aria-hidden="true"></i></button>`;
 }
@@ -46,16 +49,22 @@ function openActivityRecordEditor(trip, recordId, location) {
     if (!confirm('저장하지 않은 일정 기록이 있습니다. 다른 기록을 열까요?')) return;
   }
   const record = trip.activityRecords?.[recordId];
-  const draft = {text:record?.text || '',photos:[...(record?.photos || [])],coverIndex:record?.coverIndex || 0};
+  const draft = {text:record?.text || '',photos:[...(record?.photos || [])],photoThumbnails:[...(record?.photoThumbnails || [])],mediaIds:[...(record?.mediaIds || [])],coverIndex:record?.coverIndex || 0};
   State.activityRecordEditor = {tripId:trip.id,recordId,draft,savedDraft:JSON.stringify(draft),baseRecord:JSON.stringify(record || null),
-    context:location ? activityContext(location.day,location.spot) : record.context,
+    context:location ? activityContext(location.day,location.spot) : record?.context || {title:'일정 기록'},
     sourceSpot:location?.spot,sourceIdentity:location ? JSON.stringify(location.spot) : null,loading:false};
   document.getElementById('activity-record-title').textContent = State.activityRecordEditor.context.title;
   document.getElementById('activity-record-meta').textContent = [State.activityRecordEditor.context.date,State.activityRecordEditor.context.time,State.activityRecordEditor.context.city].filter(Boolean).join(' · ');
   document.getElementById('activity-record-text').value = draft.text;
   document.getElementById('activity-record-original').textContent = record?.originalText || '';
   document.getElementById('activity-record-original-wrap').hidden = !record?.originalText;
-  document.getElementById('activity-record-viewer').hidden = true;
+  closeActivityPhotoViewer();
+  const viewerClose=document.querySelector('#activity-record-viewer button');if(viewerClose)viewerClose.onclick=closeActivityPhotoViewer;
+  const footer=document.querySelector('.activity-sheet-footer');
+  if(footer && !document.getElementById('activity-record-delete')) {
+    const button=document.createElement('button');button.id='activity-record-delete';button.className='companion-button';button.textContent='기록 삭제';button.onclick=deleteActivityRecord;footer.prepend(button);
+  }
+  if(document.getElementById('activity-record-delete'))document.getElementById('activity-record-delete').hidden=!record;
   setActivityFeedback(record ? '저장된 기록입니다. 수정 후 저장해 주세요.' : '사진만, 글만 남겨도 좋아요. 일정 완료 여부는 바뀌지 않습니다.');
   renderActivityPhotos(); openModal('modal-activity-record');
   if (!history.state?.stActivitySheet) history.pushState({...history.state,stActivitySheet:true},'');
@@ -63,45 +72,37 @@ function openActivityRecordEditor(trip, recordId, location) {
 function renderActivityPhotos() {
   const editor = State.activityRecordEditor; if (!editor) return;
   document.getElementById('activity-record-photos').innerHTML = editor.draft.photos.map((p,index)=>`<div class="activity-photo-tile">
-    <button onclick="viewActivityPhoto(${index})" aria-label="사진 ${index+1} 크게 보기"><img src="${escapeHtml(SulsulTravel.TripTransfer.safePhoto(p))}" alt="사진 ${index+1}"></button>
+    <button onclick="viewActivityPhoto(${index})" aria-label="사진 ${index+1} 크게 보기"><img src="${escapeHtml(activityPhotoSource(editor.draft,index,true))}" alt="사진 ${index+1}"></button>
     <button class="activity-cover-choice" onclick="setActivityCover(${index})" aria-pressed="${index===editor.draft.coverIndex}">${index===editor.draft.coverIndex?'대표사진':'대표로 선택'}</button>
     <button class="activity-remove-photo" onclick="removeActivityPhoto(${index})" aria-label="사진 ${index+1} 삭제"><i class="fa-solid fa-trash-can" aria-hidden="true"></i></button></div>`).join('');
   document.getElementById('activity-photo-add').disabled = editor.loading;
   document.getElementById('activity-record-save').disabled = editor.loading;
 }
 function setActivityCover(index) { State.activityRecordEditor.draft.coverIndex=index; renderActivityPhotos(); }
-function viewActivityPhoto(index) {
+function closeActivityPhotoViewer() {
+  const viewer=document.getElementById('activity-record-viewer');if(viewer)viewer.hidden=true;
+  State.activityPhotoRequest=(State.activityPhotoRequest || 0)+1;
+  if(State.activityPhotoUrl)SulsulTravel.mediaRepository?.release(State.activityPhotoUrl);State.activityPhotoUrl=null;
+}
+async function viewActivityPhoto(index) {
+  const editor=State.activityRecordEditor;
   const source=State.activityRecordEditor?.draft.photos[index]; if (!source) return;
-  document.getElementById('activity-record-full-photo').src=SulsulTravel.TripTransfer.safePhoto(source);
+  closeActivityPhotoViewer();
+  const request=State.activityPhotoRequest=(State.activityPhotoRequest || 0)+1;
+  document.getElementById('activity-record-full-photo').src=activityPhotoSource(editor.draft,index);
   document.getElementById('activity-record-viewer').hidden=false;
+  if(SulsulTravel.mediaRepository){const url=await SulsulTravel.mediaRepository.resolve(editor.draft,index);if(State.activityPhotoRequest===request&&State.activityRecordEditor===editor&&!document.getElementById('activity-record-viewer').hidden){State.activityPhotoUrl=url;document.getElementById('activity-record-full-photo').src=url;}else SulsulTravel.mediaRepository.release(url);}
 }
 function removeActivityPhoto(index) {
   if (!confirm('이 사진을 기록에서 제외할까요? 저장하면 반영됩니다.')) return;
   const draft=State.activityRecordEditor.draft;
   draft.photos.splice(index,1);
+  draft.photoThumbnails.splice(index,1);draft.mediaIds.splice(index,1);
   draft.coverIndex=index===draft.coverIndex?0:Math.max(0,draft.coverIndex-(index<draft.coverIndex?1:0));
-  document.getElementById('activity-record-viewer').hidden=true;
+  closeActivityPhotoViewer();
   renderActivityPhotos();
 }
-function compressActivityPhoto(file) {
-  return new Promise((resolve,reject)=>{
-    if (file.size>20*1024*1024) { reject(new Error('사진 한 장은 20MB 이하로 선택해 주세요.')); return; }
-    const url=URL.createObjectURL(file),img=new Image();
-    const fail=()=>{URL.revokeObjectURL(url);reject(new Error('사진을 읽지 못했습니다. JPEG 또는 PNG 사진으로 다시 선택해 주세요.'));};
-    img.onerror=fail;
-    img.onload=()=>{
-      try {
-        const canvas=document.createElement('canvas');canvas.width=336;canvas.height=448;
-        const ctx=canvas.getContext('2d'),scale=Math.max(336/img.width,448/img.height);
-        ctx.fillStyle='#ffffff';ctx.fillRect(0,0,336,448);
-        ctx.drawImage(img,(336-img.width*scale)/2,(448-img.height*scale)/2,img.width*scale,img.height*scale);
-        resolve(canvas.toDataURL('image/jpeg',.8));
-      } catch (_) { reject(new Error('사진을 처리하지 못했습니다. 다른 사진을 선택해 주세요.')); }
-      finally { URL.revokeObjectURL(url); }
-    };
-    img.src=url;
-  });
-}
+async function compressActivityPhoto(file) { return (await SulsulTravel.mediaRepository.prepare(file,{store:false})).source; }
 async function addActivityPhotos(event) {
   const editor=State.activityRecordEditor,files=Array.from(event.target.files || []);event.target.value='';
   if (!editor || editor.loading || !files.length) return;
@@ -109,8 +110,10 @@ async function addActivityPhotos(event) {
   editor.loading=true;renderActivityPhotos();setActivityFeedback('사진을 준비하고 있습니다…');
   try {
     const photos=[];
-    for (const file of files) photos.push(await compressActivityPhoto(file));
-    editor.draft.photos.push(...photos);
+    for (const file of files) photos.push(await SulsulTravel.mediaRepository.prepare(file,{tripId:editor.tripId}));
+    while(editor.draft.photoThumbnails.length<editor.draft.photos.length)editor.draft.photoThumbnails.push(null);
+    while(editor.draft.mediaIds.length<editor.draft.photos.length)editor.draft.mediaIds.push(null);
+    editor.draft.photos.push(...photos.map(p=>p.source));editor.draft.photoThumbnails.push(...photos.map(p=>p.thumbnail));editor.draft.mediaIds.push(...photos.map(p=>p.mediaId));
     if (State.activityRecordEditor===editor) setActivityFeedback('사진이 준비되었습니다. 기록 저장을 눌러 보관하세요.');
   } catch (error) {if(State.activityRecordEditor===editor)setActivityFeedback(error.message);}
   finally {editor.loading=false;if(State.activityRecordEditor===editor)renderActivityPhotos();}
@@ -141,11 +144,25 @@ function saveActivityRecord({quiet=false}={}) {
     State.trips=TripRepository.saveAll(next,{bumpTripId:trip.id});
     editor.baseRecord=JSON.stringify(State.trips.find(t=>t.id===trip.id).activityRecords[editor.recordId]);
     editor.savedDraft=JSON.stringify(editor.draft);editor.context=context;
+    if(document.getElementById('activity-record-delete'))document.getElementById('activity-record-delete').hidden=false;
     refreshActivitySurfaces();
     setActivityFeedback('기록을 저장했습니다. 일정 완료 여부는 그대로입니다.');
     if(!quiet)showToast('사진과 글을 일정 기록에 저장했습니다.');
     return true;
   } catch(error) {setActivityFeedback(isStorageWriteFailure(error)?'저장 공간이 부족합니다. 초안은 이 창에 남아 있습니다. 글 파일로 보관하거나 공간 확보 후 다시 저장해 주세요.':error.message);return false;}
+}
+function deleteActivityRecord() {
+  const editor=State.activityRecordEditor;if(!editor||editor.loading)return false;
+  rememberActivityText();
+  if(!confirm('이 일정 기록의 글과 사진을 삭제할까요? 일정 완료 여부는 그대로이며 되돌릴 수 없습니다.'))return false;
+  try {
+    const trip=State.trips.find(t=>t.id===editor.tripId);
+    if(!trip||JSON.stringify(trip.activityRecords?.[editor.recordId]||null)!==editor.baseRecord)throw new Error('기록이 변경되었습니다. 다시 열어 확인한 뒤 삭제해 주세요.');
+    const next=JSON.parse(JSON.stringify(State.trips)),copy=next.find(t=>t.id===trip.id);
+    delete (copy.activityRecords||{})[editor.recordId];
+    (copy.days||[]).forEach(day=>(day.spots||[]).forEach(spot=>{if(spot.recordId===editor.recordId)delete spot.recordId;}));
+    State.trips=TripRepository.saveAll(next,{bumpTripId:trip.id});closeModal('modal-activity-record',true);refreshActivitySurfaces();showToast('일정 기록을 삭제했습니다.');return true;
+  }catch(error){setActivityFeedback('삭제하지 못했습니다. 기존 기록과 작성 중인 글은 그대로입니다. '+(error.message||''));return false;}
 }
 function downloadActivityText() {
   rememberActivityText();const editor=State.activityRecordEditor;if(!editor)return;
@@ -156,7 +173,7 @@ function refreshActivitySurfaces() {
   renderTimelineTab();renderBigPlanTab();renderTodayTab();
   if(State.activePlanBlockId)renderPlanBlockDetail();
   renderJournalTab();
-  const trip=getActiveTrip(),entries=[...Object.values(trip.journals || {}),...activityEntries(trip)];
+  const trip=getActiveTrip(),entries=[...Object.values(trip.journals || {}),...activityEntries(trip),...(trip.momentEntries || [])];
   document.getElementById('stat-ws-diaries').textContent=`${entries.length}편 / ${entries.reduce((sum,r)=>sum+(r.photos?.length || 0),0)}장`;
   renderLifetimeAnalytics();
 }
@@ -192,7 +209,7 @@ function activityArchiveHtml(trip) {
   return `<section class="activity-archive"><h3>일정마다 남긴 순간 <span>${records.length}</span></h3>${records.map((record,index)=>{
     const location=activityLocation(trip,record.id),context=location?activityContext(location.day,location.spot):record.context;
     const photo=record.photos?.[record.coverIndex || 0];
-    return `<button class="activity-record-card" onclick="openArchivedActivityRecord(${index})">${photo?`<img class="activity-cover" src="${escapeHtml(SulsulTravel.TripTransfer.safePhoto(photo))}" alt="일정 대표사진" loading="lazy">`:''}<span class="activity-record-copy"><small>${escapeHtml(context.date)} · ${escapeHtml(context.time)}${location?'':' · 일정 변경 전 기록'}</small><strong>${escapeHtml(context.title)}</strong><span>${escapeHtml(record.text || '사진으로 남긴 순간')}</span></span></button>`;
+    return `<button class="activity-record-card" onclick="openArchivedActivityRecord(${index})">${photo?`<img class="activity-cover" src="${escapeHtml(activityPhotoSource(record,record.coverIndex || 0,true))}" alt="일정 대표사진" loading="lazy">`:''}<span class="activity-record-copy"><small>${escapeHtml(context.date)} · ${escapeHtml(context.time)}${location?'':' · 일정 변경 전 기록'}</small><strong>${escapeHtml(context.title)}</strong><span>${escapeHtml(record.text || '사진으로 남긴 순간')}</span></span></button>`;
   }).join('')}</section>`;
 }
 function activityReportHtml(trip) {

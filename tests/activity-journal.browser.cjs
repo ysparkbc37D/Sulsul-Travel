@@ -31,7 +31,7 @@ const server=http.createServer((req,res)=>{
    const img=new Image();img.src=record.photos[0];await img.decode();
    return {ok,completed:getActiveTrip().days[0].spots[0].completed,photos:record.photos.length,cover:record.coverIndex,w:img.width,h:img.height,stat:document.getElementById('stat-ws-diaries').textContent};
   });
-  assert.deepEqual(saved,{ok:true,completed:false,photos:2,cover:1,w:336,h:448,stat:'1편 / 2장'});
+  assert.deepEqual(saved,{ok:true,completed:false,photos:2,cover:1,w:1600,h:900,stat:'1편 / 2장'});
   const privacy=await page.evaluate(()=>{
    const trip=getActiveTrip(),api=SulsulTravel.TripTransfer;
    return {private:api.create(trip).trip.activityRecords,roundtrip:api.parse(JSON.stringify(api.create(trip,{journals:true}))).trip.activityRecords[testRecordId].photos.length};
@@ -97,8 +97,8 @@ const server=http.createServer((req,res)=>{
   await page.setViewportSize({width:390,height:844});await page.screenshot({path:path.join(output,'timeline-modern.png'),fullPage:true});
   await page.evaluate(()=>{setTheme('deepblack');openActivityJournal(0,0);});await page.screenshot({path:path.join(output,'editor-dark.png')});
   const moved=await page.evaluate(()=>{saveActivityRecord();const trip=getActiveTrip();trip.days[1].spots.push(trip.days[0].spots.shift());saveTrips();return activityLocation(getActiveTrip(),testRecordId).day.date;});assert.equal(moved,'2026-09-10');
-  const archived=await page.evaluate(()=>{getActiveTrip().days[1].spots=[];saveTrips();refreshActivitySurfaces();renderPdfReport(getActiveTrip());return {text:document.getElementById('pdf-report-content').textContent,record:getActiveTrip().activityRecords[testRecordId].text,archive:document.querySelector('.activity-archive').textContent};});
-  assert.ok(archived.text.includes(archived.record));assert.ok(archived.text.includes('일정 변경 전 기록'));assert.ok(archived.text.includes('일정별 여행 기록 · 1편'));assert.ok(archived.text.includes('감성 여행 일기 & 포토북 컬렉션 (1편 / 2장)'));assert.ok(archived.archive.includes(archived.record));
+  const archived=await page.evaluate(()=>{getActiveTrip().days[1].spots=[];saveTrips();State.activeJournalDay=0;refreshActivitySurfaces();renderPdfReport(getActiveTrip(),{textMode:'original'});const originalReport=document.getElementById('pdf-report-content').textContent;renderPdfReport(getActiveTrip(),{textMode:'approved'});return {text:document.getElementById('pdf-report-content').textContent,originalReport,original:getActiveTrip().activityRecords[testRecordId].originalText,record:getActiveTrip().activityRecords[testRecordId].text,archive:document.querySelector('.moment-feed').textContent};});
+  assert.ok(archived.originalReport.includes(archived.original));assert.ok(archived.text.includes(archived.record));assert.ok(archived.text.includes('일정 변경 전 기록'));assert.equal(await page.locator('#pdf-report-content .travel-story-activity').count(),1);assert.ok(archived.text.includes('날짜별 여행 이야기 (1편 / 2장)'));assert.ok(archived.archive.includes(archived.record));
   await page.evaluate(()=>{closeModal('modal-activity-record',true);});await page.waitForTimeout(150);await page.reload({waitUntil:'networkidle'});
   assert.equal(await page.evaluate(()=>activityEntries(State.trips.find(t=>t.id==='activity-test'))[0].text),archived.record);
   assert.deepEqual(errors,[]);console.log(JSON.stringify({passed:true,checks:'완료 전 저장, 사진 압축/대표 선택/확대, 공유 개인정보 선택, 실패/재시도, AI 승인/충돌/실패, 이탈 방어, 320~430px 썸네일, 작은 화면 푸터, 이동/삭제 후 보존, PDF 일정별 기록 및 통계, 재시작',errors}));

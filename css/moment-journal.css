@@ -1,0 +1,48 @@
+/* 순간 피드와 편집 시트: 보관 사진은 자르지 않고 카드에서만 고정 썸네일을 쓴다. */
+.moment-feed { min-width:0; padding:18px; border:1px solid var(--line); border-radius:16px; background:var(--surface); color:var(--ink); }
+.moment-feed-heading { display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:14px; }
+.moment-feed-heading>div { min-width:0; }
+.moment-feed-heading h3 { font-size:17px; font-weight:800; line-height:1.5; }
+.moment-feed-heading h3 span { font-size:14px; color:var(--ink2); }
+.moment-feed-heading p,.moment-feed-empty { margin-top:4px; font-size:14px; line-height:1.65; color:var(--ink2); overflow-wrap:anywhere; }
+.moment-feed-heading>button { flex-shrink:0; min-height:44px; padding:10px 12px; }
+.moment-feed-list { display:grid; gap:10px; min-width:0; }
+.moment-feed-card { width:100%; min-width:0; max-width:100%; text-align:left; }
+.moment-feed-card .activity-cover { flex:0 0 60px; width:60px; height:80px; object-fit:cover; border-radius:10px; }
+.moment-feed-card .activity-record-copy { flex:1; min-width:0; }
+.moment-feed-card .activity-record-copy small { font-size:13px; }
+.moment-sheet .activity-sheet-header,.moment-sheet .activity-sheet-footer { gap:8px; padding-left:16px; padding-right:16px; }
+.moment-sheet .activity-sheet-header p { font-size:14px; line-height:1.5; }
+.moment-sheet .activity-sheet-body { padding:16px; }
+.moment-sheet .companion-button { min-width:44px; min-height:44px; font-size:14px; line-height:1.5; }
+.moment-sheet .activity-field-heading { gap:10px; }
+.moment-sheet .activity-field-heading p { font-size:13px; line-height:1.65; }
+.moment-sheet [hidden] { display:none!important; }
+.moment-date-fields { display:grid; grid-template-columns:minmax(0,1.2fr) minmax(0,1fr); gap:10px; margin-bottom:14px; }
+.moment-date-fields label,.moment-link-label { display:block; min-width:0; font-size:14px; font-weight:700; line-height:1.6; }
+.moment-date-fields input,#moment-record-link,#moment-record-visibility { display:block; box-sizing:border-box; width:100%; min-width:0; max-width:100%; min-height:44px; padding:10px; border:1px solid var(--line); border-radius:10px; background:var(--surface2); color:var(--ink); font-size:16px; }
+.moment-date-fields input { margin-top:5px; }
+#moment-record-link { margin:5px 0 18px; text-overflow:ellipsis; }
+#moment-record-visibility { margin-top:5px; }
+.moment-visibility-field { margin-bottom:18px; }
+.moment-visibility-field p { margin-top:6px; font-size:13px; line-height:1.65; color:var(--ink2); }
+#moment-record-text { display:block; box-sizing:border-box; width:100%; min-height:130px; padding:14px; border:1px solid var(--line); border-radius:12px; background:var(--surface2); color:var(--ink); font-size:16px; line-height:1.7; margin-bottom:18px; resize:vertical; }
+#moment-record-text::placeholder { color:var(--ink2); opacity:1; }
+#moment-record-original-wrap { margin-bottom:18px; font-size:14px; line-height:1.7; }
+#moment-record-original-wrap summary { cursor:pointer; min-height:44px; padding:10px 0; }
+#moment-record-original { white-space:pre-wrap; overflow-wrap:anywhere; color:var(--ink2); }
+#moment-record-photos { display:grid; grid-template-columns:repeat(auto-fill,minmax(80px,1fr)); gap:12px; margin-bottom:16px; }
+#moment-record-photos .activity-photo-tile { max-width:120px; }
+#moment-record-feedback { min-height:22px; font-size:14px; line-height:1.65; color:var(--ink2); overflow-wrap:anywhere; }
+.moment-sheet-footer button { min-width:0!important; padding:10px 6px; }
+.moment-sheet-footer #moment-record-delete { flex:0 0 48px; }
+#moment-record-viewer:not([hidden]) { position:absolute; inset:0; z-index:2; display:flex; flex-direction:column; align-items:center; gap:12px; padding:16px; background:var(--surface); }
+#moment-record-viewer>button { flex-shrink:0; }
+#moment-record-full-photo { display:block; flex:1; min-height:0; width:100%; height:100%; object-fit:contain; }
+.moment-sheet button:disabled { opacity:.6; cursor:wait; }
+@media (max-width:360px) {
+  .moment-feed { padding:14px; }
+  .moment-feed-heading { gap:8px; }
+  .moment-feed-heading h3 { font-size:16px; }
+  .moment-feed-heading p { font-size:13px; }
+}

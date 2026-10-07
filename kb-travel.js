@@ -389,35 +389,42 @@ const scheduleOct11Data = [
 ];
 
 
-function transformRawScheduleToDays(rawList) {
+function transformRawScheduleToDays(rawList, startDate = '2026-10-11') {
   return rawList.map((item, idx) => {
     let city = "기타";
     let country = "대한민국";
     let flag = "🇰🇷";
     let curr = "KRW";
 
-    if (item.loc.includes("부에노스아이레스")) {
+    // 이동일은 마지막 목적지를 거점으로 쓰며 출발·경유 원문은 route에 보존한다.
+    const routeParts = String(item.loc || '').split(/[➔→/]/).map(part => part.trim());
+    const destination = [...routeParts].reverse().find(part => /부에노스아이레스|칼라파테|찰텐|푸에르토나탈레스|토레스|푼타아레나스|아레키파|아리카|타크나|산티아고|쿠스코|마추픽추|아구아스|리마|밴쿠버|토론토|인천/.test(part)) || String(item.loc || '');
+    if (destination.includes("부에노스아이레스")) {
       city = "부에노스아이레스"; country = "아르헨티나"; flag = "🇦🇷"; curr = "ARS";
-    } else if (item.loc.includes("칼라파테")) {
+    } else if (destination.includes("칼라파테")) {
       city = "엘 칼라파테"; country = "아르헨티나"; flag = "🇦🇷"; curr = "ARS";
-    } else if (item.loc.includes("엘 찰텐") || item.loc.includes("찰텐")) {
+    } else if (destination.includes("엘 찰텐") || destination.includes("찰텐")) {
       city = "엘 찰텐"; country = "아르헨티나"; flag = "🇦🇷"; curr = "ARS";
-    } else if (item.loc.includes("푸에르토나탈레스") || item.loc.includes("토레스")) {
+    } else if (destination.includes("푸에르토나탈레스") || destination.includes("토레스")) {
       city = "토레스 델 파이네"; country = "칠레"; flag = "🇨🇱"; curr = "CLP";
-    } else if (item.loc.includes("푼타아레나스")) {
+    } else if (destination.includes("푼타아레나스")) {
       city = "푼타아레나스"; country = "칠레"; flag = "🇨🇱"; curr = "CLP";
-    } else if (item.loc.includes("아레키파") || item.loc.includes("아리카") || item.loc.includes("타크나")) {
+    } else if (destination.includes("아레키파") || destination.includes("아리카") || destination.includes("타크나")) {
       city = "아레키파"; country = "페루"; flag = "🇵🇪"; curr = "PEN";
-    } else if (item.loc.includes("산티아고")) {
+    } else if (destination.includes("산티아고")) {
       city = "산티아고"; country = "칠레"; flag = "🇨🇱"; curr = "CLP";
-    } else if (item.loc.includes("쿠스코")) {
+    } else if (destination.includes("쿠스코")) {
       city = "쿠스코"; country = "페루"; flag = "🇵🇪"; curr = "PEN";
-    } else if (item.loc.includes("마추픽추") || item.loc.includes("아구아스")) {
+    } else if (destination.includes("마추픽추") || destination.includes("아구아스")) {
       city = "마추픽추"; country = "페루"; flag = "🇵🇪"; curr = "PEN";
-    } else if (item.loc.includes("리마")) {
+    } else if (destination.includes("리마")) {
       city = "리마"; country = "페루"; flag = "🇵🇪"; curr = "PEN";
-    } else if (item.loc.includes("밴쿠버") || item.loc.includes("토론토")) {
+    } else if (destination.includes("토론토")) {
+      city = "토론토"; country = "캐나다"; flag = "🇨🇦"; curr = "CAD";
+    } else if (destination.includes("밴쿠버")) {
       city = "밴쿠버"; country = "캐나다"; flag = "🇨🇦"; curr = "CAD";
+    } else if (destination.includes("인천")) {
+      city = "인천"; country = "대한민국"; flag = "🇰🇷"; curr = "KRW";
     }
 
     const spots = (item.timeline || []).map((tl, sIdx) => {
@@ -430,12 +437,14 @@ function transformRawScheduleToDays(rawList) {
 
       return {
         id: "sa_d" + (idx + 1) + "_s" + (sIdx + 1),
-        time: tl.time.split(" ")[0] || "09:00",
+        time: tl.time || "09:00",
+        title: tl.title,
         name: tl.title,
         desc: tl.desc,
         cost: 0,
         currency: curr,
         category: cat,
+        cat: cat === 'stay' ? 'lodging' : cat === 'transit' ? 'flight' : cat,
         completed: false,
         tip: tl.tip,
         mapQuery: tl.mapQuery,
@@ -443,14 +452,22 @@ function transformRawScheduleToDays(rawList) {
       };
     });
 
+    const date = new Date(`${startDate}T00:00:00Z`);
+    date.setUTCDate(date.getUTCDate() + idx);
+    const isoDate = `${date.getUTCFullYear()}-${String(date.getUTCMonth() + 1).padStart(2, '0')}-${String(date.getUTCDate()).padStart(2, '0')}`;
     return {
+      id: 'sa_day_' + (idx + 1),
+      dayNum: idx + 1,
       day: idx + 1,
-      date: item.date,
+      date: isoDate,
+      sourceDate: item.date,
       title: item.title,
       desc: item.desc,
       city: city,
       country: country,
       flag: flag,
+      route: item.loc,
+      flight: item.flight,
       spots: spots
     };
   });

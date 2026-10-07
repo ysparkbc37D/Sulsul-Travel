@@ -1,26 +1,34 @@
 # 술술트래블 개발 가이드
 
-이 문서는 현재 앱 구조와 검증 방식을 설명합니다. 이전 구조를 기술한 문서는 상단에 역사 자료 또는 목표 설계라고 표시합니다. 현재 앱 버전은 `1.8.6`입니다.
+이 문서는 현재 앱 구조와 검증 방식을 설명합니다. 이전 구조를 기술한 문서는 상단에 역사 자료 또는 목표 설계라고 표시합니다. 현재 앱 버전은 `1.8.9`입니다.
 
 ## 실행 구조
 
-- 정적 PWA: `index.html`, CSS, 로컬 JavaScript 모듈을 브라우저에서 실행합니다. 앱 런타임에 애플리케이션 서버는 없습니다.
+- 정적 PWA: `index.html`, CSS, 로컬 JavaScript 모듈을 브라우저에서 실행합니다. 개인 사용은 서버 없이 가능하며 공동 계획만 선택형 Supabase REST 서버를 사용합니다.
 - 앱 셸: `index.html`에 기존 화면과 전역 상태가 남아 있고, 저장·AI 오케스트레이션·RePlan·기록 편집·지출 편집·공유는 독립 파일로 분리되고 있습니다.
-- 저장: 여행 컬렉션은 `localStorage['st_trips_v2']`에 저장합니다. 하루 일기 텍스트에 한해 저장 공간 초과를 IndexedDB로 보완합니다. 사진 전체 저장소 이전은 완료되지 않았습니다.
+- 저장: 여행 컬렉션은 `localStorage['st_trips_v2']`에 저장합니다. 일기 초과 보관과 사진 Blob/썸네일은 IndexedDB를 사용합니다. 사진 JSON fallback도 남으므로 사진 전체 저장소 이전은 완료되지 않았습니다.
 - AI: 브라우저가 사용자가 제공한 Gemini 키로 Google API를 호출합니다. AI 결과는 초안이며 승인이 있어야 적용됩니다.
-- 공유: 링크와 JSON 파일은 여행 사본입니다. GitHub Gist는 사용자가 실행하는 개인 백업이며 실시간 동기화나 동행 공동편집이 아닙니다.
+- 공유: 링크/파일은 사본, Gist는 개인 백업, 서버 초대는 공동 계획 연결입니다. 서버 변경은 명시 확인/전송·비교/승인·revision 충돌 방어로 반영하며 자동 병합을 하지 않습니다.
 
 ## 주요 파일
 
 | 파일 | 책임 |
 | --- | --- |
 | `index.html` | 앱 셸, 주요 화면, 전역 상태, 일부 레거시 기능 |
+| `js/domain/trip-adapter.js` | 시드/구버전/공유/AI 입력 계약, 도시명, 현지 날짜, 여행 단계 |
+| `js/domain/travel-story.js` | 날짜별 일정/실제 기록/원문·승인문과 출처 모델, 공통 비용 집계 |
 | `js/domain/replan.mjs` | 보호 일정과 날짜/범위 RePlan 규칙 |
 | `js/application/orchestration.mjs` | AI 작업 큐, 취소·재시도·승인 흐름 |
 | `js/infrastructure/storage/legacy-trip-repository.js` | `st_trips_v2` 문서 저장과 revision 경계 |
 | `js/infrastructure/storage/journal-overflow-repository.js` | 용량 초과 하루 일기 임시 보관 |
+| `js/infrastructure/storage/media-repository.js` | 비율 유지 보관본, 썸네일, IndexedDB Blob과 JSON fallback |
 | `js/domain/trip-transfer.js` | 버전 있는 여행 사본 검증·내보내기 계약 |
 | `js/presentation/activity-journal.js` | 일정별 기록 편집, 사진, AI 윤문 승인 |
+| `js/presentation/moment-journal.js` | 복수 순간 기록과 날짜별 피드, 저장/충돌/이탈 보호 |
+| `js/presentation/travel-story-ui.js` | 공통 이야기 선택·Markdown/텍스트 내보내기 |
+| `js/infrastructure/collaboration/` | 공개 키 REST 연결, 계획 전송·초대·권한·대기 변경 |
+| `js/presentation/collaboration-*.js` | 공동 계획 연결·비교·승인·보기 전용 저장 경계 |
+| `backend/supabase-travel.sql` | RLS 읽기와 권한 검증 RPC, 초대·변경 이력 |
 | `js/presentation/expense-editor.js` | 지출 거래 편집, 사진과 지갑 반영 |
 | `js/presentation/trip-transfer-ui.js` | 사본 링크·파일 공유와 가져오기 |
 | `js/destinations/` | 국가/도시 목적지 지식 팩과 레지스트리 |
@@ -53,6 +61,10 @@ node .\tests\activity-journal.browser.cjs
 node .\tests\expense-editor.browser.cjs
 node .\tests\reliability.browser.cjs
 node .\tests\mobile-ui.browser.cjs
+node .\tests\moment-journal.browser.cjs
+node .\tests\travel-story.browser.cjs
+node .\tests\companion-refresh.browser.cjs
+node .\tests\collaboration-review.browser.cjs
 .\tools-verify.ps1
 ```
 
