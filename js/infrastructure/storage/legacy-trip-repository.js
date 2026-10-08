@@ -48,7 +48,7 @@
       }
     }
 
-    saveAll(trips, { bumpTripId = null, approvedRemoteTripId = null } = {}) {
+    saveAll(trips, { bumpTripId = null, approvedRemoteTripId = null, approvedRecoveryRaw = null } = {}) {
       const next = this.normalize(this.clone(trips));
       if (bumpTripId) {
         const trip = next.find((item) => item.id === bumpTripId);
@@ -57,7 +57,7 @@
           trip.updatedAt = this.now();
         }
       }
-      this.beforeWrite({next,storedRaw:this.storage.getItem(this.key),approvedRemoteTripId});
+      this.beforeWrite({next,storedRaw:this.storage.getItem(this.key),approvedRemoteTripId,approvedRecoveryRaw});
       this.storage.setItem(this.key, JSON.stringify(next));
       return next;
     }
@@ -75,7 +75,7 @@
       trip.revision += 1;
       trip.updatedAt = this.now();
       trip.appliedAiJobIds = [...trip.appliedAiJobIds, jobId].slice(-50);
-      this.beforeWrite({next,storedRaw:this.storage.getItem(this.key),approvedRemoteTripId:null});
+      this.beforeWrite({next,storedRaw:this.storage.getItem(this.key),approvedRemoteTripId:null,approvedRecoveryRaw:null});
       this.storage.setItem(this.key, JSON.stringify(next));
       return { status: 'applied', trips: next, duplicate: false };
     }

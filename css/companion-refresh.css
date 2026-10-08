@@ -117,4 +117,14 @@
 .demo-workspace-notice button { min-height:44px; white-space:normal; }
 .legacy-demo-row { padding:12px 0; border-top:1px solid var(--line,#dce5df); }
 .legacy-demo-row strong { display:block; margin-bottom:8px; overflow-wrap:anywhere; }
+#modal-travel-backup [hidden] { display:none !important; }
+#modal-travel-backup .companion-context { padding:16px; margin-bottom:16px; overflow-wrap:anywhere; display:flex; flex-direction:column; gap:12px; }
+#modal-travel-backup[data-mode="backup"] #backup-restore-panel,#modal-travel-backup[data-mode="restore"] #backup-create-panel { display:none; }
+#modal-travel-backup h4 { font-size:16px; font-weight:800; }
+#modal-travel-backup p,#modal-travel-backup small { white-space:pre-wrap; line-height:1.65; margin:0; }
+#modal-travel-backup small { display:block; color:var(--ink3); font-size:12px; }
+#modal-travel-backup button,#modal-travel-backup a { min-height:44px; white-space:normal; align-self:flex-start; }
+#modal-travel-backup .demo-actions { width:100%; }
+#modal-travel-backup .demo-actions>* { flex:1; text-align:center; }
+#modal-travel-backup button:disabled { opacity:.5; cursor:default; }
 @media(max-width:480px) { .demo-onboarding { padding:18px; } .demo-actions button { flex:1 1 100%; } }

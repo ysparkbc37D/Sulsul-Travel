@@ -12,6 +12,7 @@ const utilitiesCss = readFileSync(new URL('../css/utilities.css', import.meta.ur
 const kbTravel = readFileSync(new URL('../kb-travel.js', import.meta.url), 'utf8');
 const packSa = readFileSync(new URL('../js/destinations/pack-south-america.js', import.meta.url), 'utf8');
 const packageMetadata = JSON.parse(readFileSync(new URL('../package.json', import.meta.url), 'utf8'));
+const backupUi = readFileSync(new URL('../js/presentation/travel-backup-ui.js', import.meta.url), 'utf8');
 const appVersion = html.match(/const APP_VER\s*=\s*'([^']+)'/)?.[1];
 
 test('all classic inline scripts parse', () => {
@@ -446,13 +447,11 @@ test('Gemini connection test uses the same fallback chain as AI generation', () 
 });
 
 test('full backup restores clear old overflow journals only after the trip document is written', () => {
-  const jsonStart = html.indexOf('function importDataFromJson');
-  const jsonEnd = html.indexOf('// GitHub Gist is a personal snapshot backup', jsonStart);
-  const jsonRestore = html.slice(jsonStart, jsonEnd);
+  const jsonRestore = backupUi.slice(backupUi.indexOf('async function applyTravelBackupRestore()'));
   const gistStart = html.indexOf('async function syncFromGist()');
   const gistEnd = html.indexOf('function saveGeminiKey()', gistStart);
   const gistRestore = html.slice(gistStart, gistEnd);
-  assert.match(jsonRestore, /TripRepository\.saveAll\(imported\.trips\)[\s\S]*?await JournalOverflowRepository\.clearAll\(\)/);
+  assert.match(jsonRestore, /TripRepository\.saveAll\(replacement,\{approvedRecoveryRaw:recoveryRaw\}\)[\s\S]*?await JournalOverflowRepository\.clearAll\(\)/);
   assert.match(gistRestore, /TripRepository\.saveAll\(imported\.trips\)[\s\S]*?await JournalOverflowRepository\.clearAll\(\)/);
 });
 

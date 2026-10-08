@@ -69,7 +69,8 @@ const server=http.createServer((req,res)=>{
    const trip=JSON.parse(JSON.stringify(State.trips.find(item=>item.id==='test-spain')));trip.journals[0]={text:'JSON 백업의 기록',photos:[]};trip.revision=0;
    await JournalOverflowRepository.save({tripId:trip.id,dayIndex:0,journal:{text:'복원되면 안 되는 이전 초과 기록'},revision:500});
    const file=new File([JSON.stringify({version:APP_VER,trips:[trip]})],'backup.json',{type:'application/json'});
-   importDataFromJson({target:{files:[file],value:'backup.json'}});
+   await importDataFromJson({target:{files:[file],value:'backup.json'}});
+   await applyTravelBackupRestore();
    for(let i=0;i<50;i++){if(State.trips[0]?.journals?.[0]?.text==='JSON 백업의 기록'&&!(await JournalOverflowRepository.loadAll()).length)break;await new Promise(resolve=>setTimeout(resolve,20));}
    await restoreJournalOverflowEntries();
    return {text:State.trips[0]?.journals?.[0]?.text,overflow:(await JournalOverflowRepository.loadAll()).length};

@@ -1,7 +1,19 @@
 /* 공동 계획은 비교와 사용자 승인, 로컬 저장 성공을 거친 뒤에만 연결한다. */
-function guardSharedTravelWrite({next,storedRaw,approvedRemoteTripId}) {
-  if(!SulsulTravel.CollaborationUI || !storedRaw)return;
-  const previous=JSON.parse(storedRaw);
+function guardSharedTravelWrite({next,storedRaw,approvedRemoteTripId,approvedRecoveryRaw=null}) {
+  if(storedRaw==null)return;
+  let previous;
+  try {
+    previous=JSON.parse(storedRaw);
+    if(!Array.isArray(previous))throw new Error('TRIPS_NOT_ARRAY');
+    if(previous.some(trip=>!trip||typeof trip!=='object'||Array.isArray(trip)||typeof trip.id!=='string'||!trip.id))throw new Error('INVALID_TRIP');
+    SulsulTravel.TripAdapter?.normalizeTrips(previous);
+  } catch (_) {
+    // 복원 화면이 보존·확인한 손상 원문과 현재 원문이 정확히 같을 때만 교체한다.
+    if(typeof approvedRecoveryRaw==='string' && approvedRecoveryRaw===storedRaw)return;
+    const error=new Error('기존 여행 저장 문서가 손상되었습니다. 원문을 보존하고 백업 복원을 명시적으로 승인해 주세요.');
+    error.code='RECOVERY_APPROVAL_REQUIRED';throw error;
+  }
+  if(!SulsulTravel.CollaborationUI)return;
   for(const trip of next) {
     if(trip.id===approvedRemoteTripId || SulsulTravel.CollaborationUI.canEditSharedTrip(trip))continue;
     const old=previous.find(item=>item.id===trip.id);if(!old)continue;
