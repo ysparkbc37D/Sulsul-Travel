@@ -131,22 +131,20 @@ test('여행 단계와 오늘은 종료일을 포함하고 미리보기·회고 
   assert.equal(adapter.resolveTripStage({...trip,status:'completed'},new Date('2026-12-30T00:00:00Z')),'completed');
 });
 
-test('최신 v14 시드는 모든 화면용 제목·날짜·거점을 갖고 개인정보 선택 공유를 왕복한다', () => {
+test('가상 5일 예제는 화면용 제목·날짜·거점을 갖고 선택 공유를 왕복한다', () => {
   const sandbox={window:{}};vm.createContext(sandbox);
   vm.runInContext(readFileSync(new URL('../kb-travel.js',import.meta.url),'utf8'),sandbox);
   const kb=sandbox.window.KB_TRAVEL;
-  const seed=adapter.normalizeTrip({...kb.templates.south_america_22d,expenses:kb.seedExpenses,journals:kb.seedJournals});
-  assert.equal(seed.days.length,22);
-  assert.equal(seed.days[0].date,'2026-10-11');
-  assert.equal(seed.days.at(-1).date,'2026-11-01');
-  assert.equal(seed.days[0].spots[0].title,'인천공항 제1여객터미널 도착 및 출국 준비');
+  const seed=adapter.normalizeTrip(kb.templates.demo_travel_5d);
+  assert.equal(seed.days.length,5);
+  assert.equal(seed.days[0].date,'2030-04-01');
+  assert.equal(seed.days.at(-1).date,'2030-04-05');
+  assert.equal(seed.days[0].spots[0].title,'도착 후 다음 동선 확인');
   assert.equal(seed.days[0].spots[0].time,'14:00 - 14:30');
-  assert.equal(seed.days[4].city,'엘 칼라파테');
-  assert.equal(seed.days[5].city,'엘 찰텐');
-  assert.equal(seed.days[9].city,'산티아고');
-  assert.equal(seed.days[12].city,'아레키파');
-  assert.equal(seed.days[15].city,'마추픽추');
-  assert.equal(seed.days.at(-1).city,'인천');
+  assert.equal(seed.days[0].city,'타이베이');
+  assert.equal(seed.days[2].city,'타이중');
+  assert.equal(seed.days.at(-1).city,'타이베이');
+  assert.doesNotMatch(JSON.stringify(seed),/AC062|AC194|LA2024|실제 항공권|8,650,000/);
   assert.ok(seed.days.every((day,index)=>day.dayNum===index+1 && day.id && day.spots.every(spot=>spot.title && spot.cat && spot.id)));
   const roundtrip=transfer.parse(JSON.stringify(transfer.create(seed,{journals:true,finances:true},'test'))).trip;
   for (const key of ['days','journals','expenses','cities']) assert.deepEqual(roundtrip[key],seed[key]);

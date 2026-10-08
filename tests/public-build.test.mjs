@@ -1,0 +1,20 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {createRequire} from 'node:module';
+import {readFileSync,existsSync} from 'node:fs';
+import path from 'node:path';
+import {fileURLToPath} from 'node:url';
+const require=createRequire(import.meta.url),{buildPublic}=require('../tools/build-public.cjs');
+const root=fileURLToPath(new URL('..',import.meta.url));
+test('공개 배포 결과는 앱만 포함하고 개인 계획·개발 문서·첨부·검사 파일을 제외한다',()=>{
+  const output=path.join(root,'.local-review',`public-${Date.now()}-${Math.random().toString(36).slice(2)}`);
+  buildPublic(output);
+  for(const file of ['index.html','kb-travel.js','sw.js','guide.html','privacy.html','sync.html','js/destinations/pack-south-america.js'])assert.equal(existsSync(path.join(output,file)),true,file);
+  for(const file of ['docs','tests','tools','backend','.git','.codex-remote-attachments','.local-review','CHANGELOG.md','술술트래블신록.md','south_america_illustrated_map.jpg','package.json'])assert.equal(existsSync(path.join(output,file)),false,file);
+  const worker=readFileSync(path.join(output,'sw.js'),'utf8');
+  const assets=[...worker.matchAll(/'\.\/([^']*)'/g)].map(match=>match[1].split('?')[0]||'index.html');
+  for(const asset of assets)assert.equal(existsSync(path.join(output,asset)),true,asset);
+  for(const file of ['kb-travel.js','index.html','js/destinations/pack-south-america.js'])assert.doesNotMatch(readFileSync(path.join(output,file),'utf8'),/AC062|AC194|AR1870|LA2024|8,650,000|2026\.10\.11/);
+  assert.throws(()=>buildPublic(output),/PUBLIC_OUTPUT_NOT_EMPTY/);
+  assert.throws(()=>buildPublic(root),/INVALID_PUBLIC_OUTPUT/);
+});

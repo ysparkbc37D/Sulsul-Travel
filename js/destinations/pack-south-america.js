@@ -1,6 +1,6 @@
 ﻿/**
  * Sulsul-Travel South America Destination Pack (pack-south-america.js) v1.8.7
- * 2026 22-Day South America Grand Nature & Budget Master Tour (v14 실제 항공권 & 아레키파 육로이동 완전 리플랜).
+ * General destination knowledge and booking preparation for South America.
  */
 (function() {
   'use strict';
@@ -255,37 +255,34 @@
   ];
 
   const SA_BOOKING_GUIDES = [
-    { id: "sa_bg_01", title: "인천 ➔ 밴쿠버 ➔ 부에노스아이레스 다구간 국제선 항공권", target: "에어캐나다 공홈 / 스카이스캐너", dDay: "D-180", cost: "2,050,000원 (2인)", status: "urgent", tip: "AC062 / AC194 밴쿠버/토론토 경유 수하물 자동 연결 여부 확인", url: "https://www.aircanada.com" },
-    { id: "sa_bg_02", title: "마추픽추 서킷 2 (Circuit 2) 클래식 입장권", target: "페루 문화부 공식 홈페이지 (tuboleto.cultura.pe)", dDay: "D-120", cost: "약 110,000원 (2인)", status: "urgent", tip: "가장 인기 높은 코스로 오픈 당일 매진되므로 즉시 예약", url: "https://tuboleto.cultura.pe" },
-    { id: "sa_bg_03", title: "올란타이탐보 ↔ 마추픽추 페루레일/잉카레일 왕복 기차표", target: "PeruRail / Inca Rail 공홈", dDay: "D-90", cost: "약 340,000원 (2인)", status: "urgent", tip: "17:20 갈때 / 14:30 올때 최저가 슬롯 선점으로 1인  절약", url: "https://www.perurail.com" },
-    { id: "sa_bg_04", title: "부에노스(AEP) ➔ 칼라파테(FTE) 아에로리네아스 아르헨티나", target: "Aerolineas Argentinas 공홈", dDay: "D-90", cost: "약 220,000원 (2인)", status: "urgent", tip: "AR1870 (07:30발) 2인 캐리어 1개 쉐어링 위탁으로 4~5만원 절감", url: "https://www.aerolineas.com.ar" },
-    { id: "sa_bg_05", title: "푸에르토나탈레스(PNT) ➔ 산티아고(SCL) Sky Airline / LATAM", target: "Sky Airline / LATAM 공홈", dDay: "D-90", cost: "약 260,000원 (2인)", status: "urgent", tip: "★ [실제 항공권] 15:38 PNT 이륙 ➔ 20:01 SCL 도착 확정", url: "https://www.latamairlines.com" },
-    { id: "sa_bg_06", title: "산티아고(SCL) ➔ 아리카(ARI) Sky Airline / LATAM", target: "Sky Airline / LATAM 공홈", dDay: "D-90", cost: "약 240,000원 (2인)", status: "urgent", tip: "★ [실제 항공권] 05:00 SCL 출발 ➔ 07:40 ARI 착륙 확정", url: "https://www.latamairlines.com" },
-    { id: "sa_bg_07", title: "아레키파 ➔ 쿠스코 크루즈 델 수르(Cruz del Sur) 1등석 침대 야간버스", target: "Cruz del Sur 공홈", dDay: "D-60", cost: "약 90,000원 (2인)", status: "urgent", tip: "Cruzero VIP 160도 침대 좌석 선점, 숙박비 1박 절감 & 06:30 쿠스코 도착", url: "https://www.cruzdelsur.com.pe" },
-    { id: "sa_bg_08", title: "쿠스코(CUZ) ➔ 리마(LIM) LATAM 항공편", target: "LATAM 항공 공홈", dDay: "D-60", cost: "약 120,000원 (2인)", status: "urgent", tip: "★ [실제 항공권] LA2024 14:30 출발 ➔ 16:00 리마 도착 확정", url: "https://www.latamairlines.com" },
-    { id: "sa_bg_09", title: "엘 칼라파테 ↔ 엘 찰텐 왕복 버스 (Chaltén Travel)", target: "Platform 10 또는 Chalten Travel 공홈", dDay: "D-60", cost: "약 60,000원 (2인)", status: "recommended", tip: "08:00 출발 17:30 복귀 버스로 하산 후 온수 샤워 시간 넉넉히 확보", url: "https://www.plataforma10.com.ar" },
-    { id: "sa_bg_10", title: "엘 칼라파테 ➔ 푸에르토나탈레스 국경 통과 국제버스", target: "Bus-Sur 또는 Turismo Zaahj", dDay: "D-60", cost: "약 154,000원 (2인)", status: "recommended", tip: "08:00 출발편, 칠레 SAG 농축산물 검역 대비 생과일/육포 미지참", url: "https://www.bussur.com" },
-    { id: "sa_bg_11", title: "페리토 모레노 빙하 국립공원 입장권 및 사파리 나우티코 보트", target: "아르헨티나 국립공원 공홈", dDay: "D-30", cost: "약 150,000원 (2인)", status: "recommended", tip: "국립공원 온라인 결제 QR 코드 오프라인 저장 및 보트 탑승", url: "https://www.argentina.gob.ar/parquesnacionales/glaciares" },
-    { id: "sa_bg_12", title: "부에노스아이레스 라 벤타나(La Ventana) 탱고 디너쇼", target: "La Ventana 공홈 / 클룩", dDay: "D-30", cost: "약 148,000원 (2인)", status: "recommended", tip: "산텔모 지역 호텔 픽업 포함 여부 확인, 3코스 디너 & 와인", url: "https://www.laventanaweb.com" },
-    { id: "sa_bg_13", title: "캐나다 전자여행허가 (eTA)", target: "캐나다 이민국 공식 웹사이트", dDay: "D-30", cost: "약 14,000원 (2인)", status: "urgent", tip: "건당 7 CAD, 사칭 사이트 주의! 밴쿠버 환승 및 다운타운 1박 필수", url: "https://www.canada.ca/en/immigration-refugees-citizenship/services/visit-canada/eta.html" },
-    { id: "sa_bg_14", title: "남미 4개국 데이터 통합 eSIM", target: "Airalo / 유심사", dDay: "D-7", cost: "약 80,000원 (2인)", status: "urgent", tip: "아르헨티나, 칠레, 페루, 캐나다 4개국 커버리지 확인", url: "https://www.airalo.com" }
+    {"id":"sa_bg_01","title":"국제선 항공권","target":"항공사 또는 선택한 예약처","dDay":"예약 전 확인","cost":"예약처에서 확인","status":"pending","tip":"예매 여부를 확인하고 여행 일정에 맞는 출발·도착 편을 선택하세요.","url":"#"},
+    {"id":"sa_bg_02","title":"도시 간 항공편","target":"항공사 또는 선택한 예약처","dDay":"예약 전 확인","cost":"예약처에서 확인","status":"pending","tip":"이동하는 날짜와 도시를 정한 후 해당 일정에 맞는 항공편을 확인하세요.","url":"#"},
+    {"id":"sa_bg_03","title":"도시 간 버스","target":"운송사 또는 선택한 예약처","dDay":"예약 전 확인","cost":"예약처에서 확인","status":"pending","tip":"사용자가 정한 이동 구간의 운행 여부와 출발·도착 장소를 확인하세요.","url":"#"},
+    {"id":"sa_bg_04","title":"숙박 예약","target":"숙소 또는 선택한 예약처","dDay":"예약 전 확인","cost":"예약처에서 확인","status":"pending","tip":"숙박 날짜와 인원, 체크인 조건 및 취소 조건을 확인하세요.","url":"#"},
+    {"id":"sa_bg_05","title":"국립공원 입장","target":"방문할 공원의 공식 예약처","dDay":"예약 전 확인","cost":"예약처에서 확인","status":"pending","tip":"방문 날짜와 필요한 입장권의 예약 여부를 확인하세요.","url":"#"},
+    {"id":"sa_bg_06","title":"트레킹 준비","target":"방문할 공원 또는 운영사","dDay":"예약 전 확인","cost":"예약처에서 확인","status":"pending","tip":"선택한 코스의 이용 조건과 필요한 예약을 확인하세요.","url":"#"},
+    {"id":"sa_bg_07","title":"관광지 입장권","target":"방문할 관광지의 공식 예약처","dDay":"예약 전 확인","cost":"예약처에서 확인","status":"pending","tip":"개인 일정에 맞는 입장 날짜와 시간대를 선택하세요.","url":"#"},
+    {"id":"sa_bg_08","title":"현지 투어","target":"선택한 투어 운영사","dDay":"예약 전 확인","cost":"예약처에서 확인","status":"pending","tip":"여행 일정에 맞는 상품과 집결 장소, 취소 조건을 확인하세요.","url":"#"},
+    {"id":"sa_bg_09","title":"철도 예약","target":"선택한 철도 운영사","dDay":"예약 전 확인","cost":"예약처에서 확인","status":"pending","tip":"사용자가 선택한 이동 구간과 날짜에 맞는 열차를 확인하세요.","url":"#"},
+    {"id":"sa_bg_10","title":"공항 이동","target":"선택한 이동 서비스","dDay":"예약 전 확인","cost":"예약처에서 확인","status":"pending","tip":"개인 항공 일정에 맞는 이동 시간과 탑승 장소를 확인하세요.","url":"#"},
+    {"id":"sa_bg_11","title":"여행자 보험","target":"선택한 보험사","dDay":"예약 전 확인","cost":"예약처에서 확인","status":"pending","tip":"여행 기간과 활동에 맞는 보장 및 가입 여부를 확인하세요.","url":"#"},
+    {"id":"sa_bg_12","title":"여권·입국 요건","target":"방문 국가의 공식 안내처","dDay":"예약 전 확인","cost":"예약처에서 확인","status":"pending","tip":"사용자의 여권과 방문 국가에 적용되는 입국 요건을 확인하세요.","url":"#"},
+    {"id":"sa_bg_13","title":"예약 변경·취소 조건","target":"각 예약처","dDay":"예약 전 확인","cost":"예약처에서 확인","status":"pending","tip":"예약 내용의 변경 가능 여부와 취소 조건을 확인하세요.","url":"#"},
+    {"id":"sa_bg_14","title":"수하물 조건","target":"선택한 항공사 또는 운송사","dDay":"예약 전 확인","cost":"예약처에서 확인","status":"pending","tip":"실제 예약한 운임의 수하물 허용량과 추가 비용을 확인하세요.","url":"#"}
   ];
 
   const destinationPackSouthAmerica = {
-    id: 'pack_south_america_22d',
-    name: '2026 남미 22일 가성비 마스터플랜 (v14 실제 항공권 & 아레키파 육로이동 완전 리플랜)',
+    id: 'pack_south_america',
+    name: '남미 여행지 안내',
     version: '1.8.7',
-    author: "CoBa's Sulsul Travel Engine",
-    description: '2026.10.11 ~ 11.01(22일간 2인 예산 865만 원) 아르헨티나, 칠레, 페루, 캐나다 4개국 10대 거점 완벽 수록',
+    author: 'Sulsul Travel',
+    description: '남미의 도시와 관광지, 여행 준비를 위한 일반 안내입니다. 일정과 예약은 사용자 여행에서 관리합니다.',
     countries: ['아르헨티나', '칠레', '페루', '캐나다'],
     currencies: ['ARS', 'CLP', 'PEN', 'CAD', 'USD', 'KRW'],
-    duration: 22,
-    defaultRoomCode: 'SA-2026',
     flag: '🌎',
 
     match(trip) {
       if (!trip) return false;
-      if (trip.id === 'trip_sa_showcase_22d' || trip.id === 'trip_sa_showcase_21d') return true;
       const text = ((trip.title || '') + ' ' + (trip.destination || '') + ' ' + (trip.countries || []).join(' ') + ' ' + (trip.cities || []).join(' ')).toLowerCase();
       return /남미|아르헨티나|칠레|페루|파타고니아|부에노스|칼라파테|엘찰텐|토레스|아레키파|산티아고|쿠스코|마추픽추|리마|south\s*america/i.test(text);
     },
@@ -298,22 +295,7 @@
         [10.0, -50.0]   // 남미 북단
       ],
       destinations: SA_DESTINATIONS,
-      flightRoutes: [
-        { from: [37.4602, 126.4407], to: [49.1967, -123.1815], label: 'ICN ➔ YVR (에어캐나다 AC062)' },
-        { from: [49.1967, -123.1815], to: [43.6777, -79.6248], label: 'YVR ➔ YYZ (에어캐나다)' },
-        { from: [43.6777, -79.6248], to: [-34.8127, -58.5398], label: 'YYZ ➔ EZE (에어캐나다 야간비행)' },
-        { from: [-34.5580, -58.4170], to: [-50.2800, -72.0531], label: 'AEP ➔ FTE (아에로라인 아르헨티나스 AR1870)' },
-        { from: [-50.3379, -72.2648], to: [-49.3315, -72.8864], label: '칼라파테 ➔ 엘찰텐 (치텐 버스 3시간)' },
-        { from: [-49.3315, -72.8864], to: [-50.3379, -72.2648], label: '엘찰텐 ➔ 칼라파테 (버스 복귀)' },
-        { from: [-50.3379, -72.2648], to: [-51.7268, -72.5065], label: '칼라파테 ➔ 나탈레스 (국경 버스 Bus-Sur)' },
-        { from: [-51.6917, -72.5317], to: [-33.3930, -70.7858], label: 'PNT ➔ SCL (15:38발 실제 항공권 확정)' },
-        { from: [-33.3930, -70.7858], to: [-18.3486, -70.3386], label: 'SCL ➔ ARI (05:00발 실제 항공권 확정)' },
-        { from: [-18.3486, -70.3386], to: [-16.4090, -71.5375], label: '아리카 ➔ 타크나 국경 ➔ 아레키파 (육로 우등버스)' },
-        { from: [-16.4090, -71.5375], to: [-13.5357, -71.9388], label: '아레키파 ➔ 쿠스코 (Cruz del Sur 1등석 침대 야간버스)' },
-        { from: [-13.5357, -71.9388], to: [-12.0219, -77.1143], label: 'CUZ ➔ LIM (LA2024 14:30발 실제 항공권 확정)' },
-        { from: [-12.0219, -77.1143], to: [49.1967, -123.1815], label: 'LIM ➔ YVR (에어캐나다 AC194 06:55발)' },
-        { from: [49.1967, -123.1815], to: [37.4602, 126.4407], label: 'YVR ➔ ICN (11/01 13:00발 에어캐나다 귀국)' }
-      ],
+      flightRoutes: [],
       simPresets: [
         { label: '인천 ➔ 부에노스아이레스 대륙간 출국', center: [-34.6037, -58.3816], zoom: 12 },
         { label: '부에노스아이레스 도심 & 아사도 미식', center: [-34.5878, -58.4239], zoom: 13 },
@@ -330,17 +312,17 @@
     },
 
     bookings: {
-      subtabTitle: '14대 필수 예약',
+      subtabTitle: '여행 예약 체크리스트',
       subtabIcon: 'fa-ticket',
-      headerTitle: '남미 22일 14대 핵심 사전 예약 타임어택 대시보드',
-      headerDesc: '마추픽추 입장권, 파노라마 열차, 국립공원 등 매진되기 전 공식 사이트에서 직접 예약해야 하는 필수 리스트입니다.',
+      headerTitle: '남미 여행 예약 체크리스트',
+      headerDesc: '예약 여부와 여행 일정에 맞는 교통·숙박·입장 항목을 확인하세요. 금액과 조건은 예약처에서 확인합니다.',
       items: SA_BOOKING_GUIDES,
       specialNotice: {
-        title: '✈️ 남미 22일 황금 코스 실전 3대 불변 수칙 & 사전 예약 가이드',
+        title: '예약 내용은 내 여행에서 확인하세요',
         tips: [
-          { title: 'MEP 블루달러 환율 25% 절감', desc: '아르헨티나 국내선 항공, 특급 호텔, 돈 훌리오 스테이크 등은 트래블로그/트래블월렛 Visa/Master 카드로 결제 시 공식 환율 대비 25% 이상 자동 할인 절감.' },
-          { title: '고산병(소로체) 3단계 적응', desc: '아레키파(2,325m) ➔ 쿠스코(3,400m) 단계적 상승으로 고산병 90% 예방. 다이아목스는 입성 24시간 전 반 알씩 복용, 입성 첫날 무리한 도보 절대 금지 및 코카차 수시 음용.' },
-          { title: '23kg 수하물 무게 3원칙', desc: '초반(아르헨/칠레) 무거운 액체류 구매 절대 금지(국내선 5회 오버차지 방지). 쿠스코는 150g 베이비 알파카 목도리, 리마 출국 전 피스코/잼 집중 구매 후 위탁 수하물 패킹.' }
+          { title: '예약 여부 확인', desc: '항공권·숙소·교통·입장권의 예약 여부를 직접 확인하세요.' },
+          { title: '일정에 맞는 편 선택', desc: '출발·도착 날짜와 이동 시간을 개인 일정에 맞춰 선택하세요.' },
+          { title: '금액·조건 확인', desc: '최종 금액, 수하물, 변경·취소 조건은 예약처에서 확인하세요.' }
         ]
       }
     },
@@ -359,7 +341,7 @@
   if (typeof window !== 'undefined') {
     window.destinationPackSouthAmerica = destinationPackSouthAmerica;
     window.SulsulDestinationPacks = window.SulsulDestinationPacks || {};
-    window.SulsulDestinationPacks['pack_south_america_22d'] = destinationPackSouthAmerica;
+    window.SulsulDestinationPacks['pack_south_america'] = destinationPackSouthAmerica;
 
     if (window.DestinationRegistry) {
       window.DestinationRegistry.register(destinationPackSouthAmerica);

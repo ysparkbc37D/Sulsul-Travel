@@ -1,8 +1,10 @@
 {
   "name": "sulsul-travel",
   "private": true,
-  "version": "1.8.9",
+  "version": "1.9.0",
   "scripts": {
+    "build:public": "node tools/build-public.cjs",
+    "test:demo": "node tests/demo-onboarding.browser.cjs",
     "build:assets": "node tools/build-assets.cjs",
     "build:css": "tailwindcss -c tailwind.config.cjs -i css/utilities.input.css -o css/utilities.css --minify",
     "test": "node --test tests/*.test.mjs",

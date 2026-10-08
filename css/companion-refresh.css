@@ -102,3 +102,15 @@
   .companion-section-title .companion-button { padding:8px; }
 }
 @media print { .story-controls,.travel-story-controls,.travel-tools,.moment-card button { display:none !important; } }
+
+/* 최초 방문 제안은 개인 여행 카드와 분리하고, 가상 자료임을 계속 표시한다. */
+.demo-onboarding,.demo-workspace-notice { background:var(--surface,#fff); color:var(--ink,#263a30); border:1px solid var(--line,#dce5df); border-radius:20px; padding:22px; margin-bottom:18px; overflow-wrap:anywhere; }
+.demo-onboarding[hidden],.demo-workspace-notice[hidden] { display:none !important; }
+.demo-onboarding h2 { font-size:clamp(20px,4vw,26px); font-weight:800; line-height:1.4; margin:8px 0; }
+.demo-onboarding p { font-size:14px; line-height:1.7; margin-bottom:16px; max-width:650px; }
+.demo-onboarding small { display:block; font-size:12px; line-height:1.6; margin-top:12px; color:var(--ink3,#6F5E4E); }
+.demo-label { display:inline-block; font-size:12px; font-weight:700; color:var(--accent,#17644d); }
+.demo-actions { display:flex; flex-wrap:wrap; gap:8px; }
+.demo-actions button { min-height:44px; white-space:normal; }
+.demo-workspace-notice { padding:12px 16px; font-size:12px; line-height:1.6; }
+@media(max-width:480px) { .demo-onboarding { padding:18px; } .demo-actions button { flex:1 1 100%; } }

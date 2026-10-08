@@ -1,5 +1,6 @@
 .DS_Store
 node_modules/
+public/
 .local-review/
 .codex-remote-attachments/
 Thumbs.db

@@ -350,20 +350,25 @@ test('iOS Safari PWA installation guide and standalone crash guards are wired (v
   assert.match(html, /sulsul-boot-watchdog/);
 });
 
-test('2026 South America 22-day master plan v14 is registered and validated (v1.8.7)', () => {
-  assert.match(kbTravel, /실제 항공권 & 아레키파 육로이동 완전 리플랜 v14/);
-  assert.match(kbTravel, /8,650,000/);
-  assert.match(kbTravel, /Laguna Capri/);
+test('public travel examples omit personal plan markers and preserve destination knowledge', () => {
+  const pack = new Function('window', packSa + '; return window.destinationPackSouthAmerica;')({});
+  assert.equal(pack.id, 'pack_south_america');
+  assert.equal(pack.name, '남미 여행지 안내');
+  assert.equal(pack.duration, undefined);
+  assert.equal(pack.defaultRoomCode, undefined);
+  assert.deepEqual(pack.geo.flightRoutes, []);
+  assert.ok(pack.spots.length >= 40, 'public points of interest remain available');
+  assert.ok(pack.cities.items.length >= 10, 'public city guides remain available');
+  assert.ok(pack.spots.every(spot => Number.isFinite(spot.lat) && Number.isFinite(spot.lng)));
   assert.match(packSa, /El Chaltén/);
   assert.match(packSa, /Laguna Capri/);
   assert.match(packSa, /Arequipa/);
-  assert.match(kbTravel, /아레키파/);
   assert.match(packSa, /nameEn:\s*'Torres del Paine \/ Puerto Natales'/);
-  assert.match(packSa, /subtabTitle:\s*'10대 거점 도시 가이드'/);
-  assert.match(packSa, /subtabTitle:\s*'14대 필수 예약'/);
   assert.match(packSa, /DestinationRegistry\.register/);
-  assert.match(html, /10대 거점 도시 가이드/);
-  assert.match(html, /수하물 23kg 통제/);
+  assert.equal(pack.bookings.items.length, 14);
+  assert.ok(pack.bookings.items.every(item => item.cost === '예약처에서 확인' && item.status === 'pending'));
+  assert.doesNotMatch(packSa + kbTravel, /v14|실제 항공권|마스터\s*(?:투어|플랜)|Grand Nature.*Budget/i);
+  assert.doesNotMatch(JSON.stringify(pack.bookings), /\b(?:KE|OZ|LA|AA|DL|UA|AF|KL|LH|IB|AR|H2|JA)\s?\d{2,4}\b|20\d{2}[-./]\d{1,2}[-./]\d{1,2}|\b\d{1,2}:\d{2}\b/);
 });
 
 test('v1.8.4 6 key UI/UX convenience features remain available', () => {

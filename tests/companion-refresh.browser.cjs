@@ -20,15 +20,49 @@ const server=http.createServer((req,res) => {
     await page.goto(`http://127.0.0.1:${server.address().port}/`,{waitUntil:'networkidle'});
     await page.addStyleTag({content:'*,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}'});
     const settle=() => page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(() => requestAnimationFrame(resolve)))));
-    await check('실제 v14 기본 시드의 전체 제목·날짜·식별자와 사본 왕복',async() => {
+    await check('첫 진입은 빈 여행이며 선택한 가상 5일 예제와 공유 범위가 왕복 유지',async() => {
+      const initial=await page.evaluate(() => ({trips:State.trips.length,offerHidden:document.getElementById('demo-onboarding-offer').hidden,choice:getDemoChoice()}));
+      assert.equal(initial.trips,0,'예제는 첫 진입에 자동 등록되지 않는다.');assert.equal(initial.offerHidden,false);assert.equal(initial.choice,'');
       const result=await page.evaluate(() => {
-        const trip=State.trips.find(item => item.id==='trip_sa_showcase_22d');
-        if(!trip)throw new Error('v14 시드가 없습니다.');
-        const before=JSON.stringify(trip),copy=JSON.parse(before);copy.days[0].spots[0].completed=true;copy.days[1].spots[0].skipped=true;copy.journals={0:{text:'시드 왕복 검증 기록',photos:[]}};
-        const imported=SulsulTravel.TripTransfer.parse(JSON.stringify(SulsulTravel.TripTransfer.create(copy,{journals:true,finances:true},APP_VER))).trip;
-        return {title:trip.title,days:trip.days.length,spots:trip.days.flatMap(day => day.spots).length,invalid:trip.days.flatMap(day => day.spots).filter(spot => !spot.title?.trim() || spot.title==='새 일정').length,dates:trip.days.every(day => /^\d{4}-\d{2}-\d{2}$/.test(day.date)),same:JSON.stringify(imported.days)===JSON.stringify(copy.days),journal:imported.journals[0].text,completed:imported.days[0].spots[0].completed,skipped:imported.days[1].spots[0].skipped,notMutated:before===JSON.stringify(trip),cities:imported.cities};
+        if(!addDemoTrip())throw new Error('선택한 가상 예제를 추가하지 못했습니다.');
+        const trip=State.trips.find(isDemoTrip);
+        if(!trip)throw new Error('선택한 가상 예제가 없습니다.');
+        const before=JSON.stringify(trip),copy=JSON.parse(before);
+        copy.days[0].spots[0].completed=true;copy.days[1].spots[0].skipped=true;
+        const transfer=SulsulTravel.TripTransfer,defaultPayload=transfer.create(copy,{},APP_VER);
+        const publicCopy=transfer.parse(JSON.stringify(defaultPayload)).trip;
+        const optIn=transfer.create(copy,{journals:true,finances:true},APP_VER);
+        const imported=transfer.parse(JSON.stringify(optIn)).trip;
+        const privateKeys=['journals','momentEntries','activityRecords','expenses','exchanges','initialBalances','wallets','activeCurrencies'];
+        return {
+          title:trip.title,isSample:trip.isSample,demoTemplateId:trip.demoTemplateId,tripCount:State.trips.length,
+          days:trip.days.length,spots:trip.days.flatMap(day => day.spots).length,
+          invalid:trip.days.flatMap(day => day.spots).filter(spot => !spot.title?.trim() || spot.title==='새 일정').length,
+          dates:trip.days.map(day => day.date),cities:trip.cities,dayCities:trip.days.map(day => day.city),
+          same:JSON.stringify(imported.days)===JSON.stringify(copy.days),notMutated:before===JSON.stringify(trip),
+          completed:imported.days[0].spots[0].completed,skipped:imported.days[1].spots[0].skipped,
+          defaultScope:defaultPayload.scope,optInScope:optIn.scope,
+          defaultRecords:{journals:Object.keys(publicCopy.journals||{}).length,moments:publicCopy.momentEntries.length,activities:Object.keys(publicCopy.activityRecords||{}).length,expenses:publicCopy.expenses.length,exchanges:publicCopy.exchanges.length},
+          sourceRecords:{journals:Object.keys(copy.journals||{}).length,moments:copy.momentEntries.length,activities:Object.keys(copy.activityRecords||{}).length,expenses:copy.expenses.length},
+          privateRoundTrip:privateKeys.every(key => JSON.stringify(imported[key])===JSON.stringify(optIn.trip[key])),
+          journal:imported.journals[0].text,moment:imported.momentEntries[0].text,activity:Object.values(imported.activityRecords)[0].text,
+          expense:{title:imported.expenses[0].title,amount:imported.expenses[0].amount,currency:imported.expenses[0].currency,krw:imported.expenses[0].krw},
+          publicPlanSame:JSON.stringify(publicCopy.days)===JSON.stringify(copy.days),sourceTextsAbsent:![copy.journals[0].text,copy.momentEntries[0].text,Object.values(copy.activityRecords)[0].text,copy.expenses[0].title].some(text => JSON.stringify(defaultPayload).includes(text))
+        };
       });
-      assert.match(result.title,/v14/);assert.equal(result.days,22);assert.ok(result.spots>50);assert.equal(result.invalid,0);assert.equal(result.dates,true);assert.equal(result.same,true);assert.equal(result.completed,true);assert.equal(result.skipped,true);assert.equal(result.notMutated,true);assert.equal(result.journal,'시드 왕복 검증 기록');assert.ok(result.cities.includes('엘 칼라파테'));assert.ok(result.cities.includes('엘 찰텐'));assert.ok(result.cities.includes('토레스 델 파이네'));return result;
+      assert.match(result.title,/가상 예제/);assert.equal(result.isSample,true);assert.equal(result.demoTemplateId,'demo_taiwan_5d_v1');assert.equal(result.tripCount,1);
+      assert.equal(result.days,5);assert.equal(result.spots,40);assert.equal(result.invalid,0);assert.deepEqual(result.dates,['2030-04-01','2030-04-02','2030-04-03','2030-04-04','2030-04-05']);
+      assert.deepEqual(result.cities,['타이베이','타이중']);assert.deepEqual(result.dayCities,['타이베이','타이베이','타이중','타이중','타이베이']);
+      assert.equal(result.same,true);assert.equal(result.publicPlanSame,true);assert.equal(result.completed,true);assert.equal(result.skipped,true);assert.equal(result.notMutated,true);
+      assert.deepEqual(result.defaultScope,{journals:false,finances:false});assert.deepEqual(result.optInScope,{journals:true,finances:true});
+      assert.deepEqual(result.defaultRecords,{journals:0,moments:0,activities:0,expenses:0,exchanges:0});assert.deepEqual(result.sourceRecords,{journals:1,moments:1,activities:1,expenses:1});assert.equal(result.sourceTextsAbsent,true);assert.equal(result.privateRoundTrip,true);
+      assert.match(result.journal,/가상 하루 회고/);assert.match(result.moment,/가상 순간 기록/);assert.match(result.activity,/가상 일정 기록/);assert.deepEqual(result.expense,{title:'[가상 지출] 카페',amount:100,currency:'TWD',krw:4000});
+      await page.evaluate(() => openShareModal());await settle();
+      assert.equal(await page.locator('#share-include-journals').isChecked(),false);assert.equal(await page.locator('#share-include-finances').isChecked(),false);
+      await page.locator('#share-include-journals').check();await page.locator('#share-include-finances').check();
+      assert.deepEqual(await page.evaluate(() => tripShareOptions()),{journals:true,finances:true});
+      await page.evaluate(() => closeModal('modal-share-room',true));await settle();
+      return {initial,...result};
     });
     await check('구 별칭 자료는 repository load에서 변환하고 기록·공백 지명을 보존',async() => {
       const result=await page.evaluate(() => {
