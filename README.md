@@ -1,6 +1,6 @@
 # 술술트래블 (Sulsul Travel)
 
-> 현재 작업 버전: **v1.9.0** · 함께 계획하고 현장의 순간을 이어 쓰는 오프라인 우선 여행 다이어리.
+> 현재 작업 버전: **v1.9.1** · 함께 계획하고 현장의 순간을 이어 쓰는 오프라인 우선 여행 다이어리.
 
 술술트래블은 개인 브라우저에 여행 데이터를 저장하는 정적 웹 앱입니다. Gemini AI는 사용자가 요청할 때 계획·기록 초안을 돕고, 최종 일정과 기록은 사용자가 검토하고 저장합니다.
 
@@ -72,4 +72,4 @@ node tests/collaboration-review.browser.cjs
 
 ## 배포와 버전
 
-운영 앱은 저장소에 연결된 Vercel 프로젝트가 `main` 브랜치의 변경을 배포하며 주소는 [sulsul-travel.vercel.app](https://sulsul-travel.vercel.app/)입니다. `vercel.json`은 `node tools/build-public.cjs`로 생성한 `public`만 제공하도록 지정합니다. Node 기본 모듈로 공개 앱 파일만 복사하며 런타임 의존성을 추가하지 않습니다. 개발 문서·첨부·검사·참고 이미지는 배포 산출물에서 제외합니다. 기존 산출물이 있으면 임의 삭제·덮어쓰기 없이 빌드를 중단하므로 로컬 재검증은 `.local-review`의 새 출력 경로를 사용하세요. GitHub Pages는 호스팅 대상이 아닙니다. 새 버전에서는 `index.html`·`sw.js`·`package.json`·변경 기록을 함께 갱신합니다. 최신 수정은 [v1.9.0 개인정보 경계 기록](docs/privacy-demo-v1.9.0.md)을 참고하세요.
+운영 앱은 저장소에 연결된 Vercel 프로젝트가 `main` 브랜치의 변경을 배포하며 주소는 [sulsul-travel.vercel.app](https://sulsul-travel.vercel.app/)입니다. `vercel.json`은 `node tools/build-public.cjs`로 생성한 `public`만 제공하도록 지정합니다. Node 기본 모듈로 공개 앱 파일만 복사하며 런타임 의존성을 추가하지 않습니다. 개발 문서·첨부·검사·참고 이미지는 배포 산출물에서 제외합니다. 기존 산출물이 있으면 임의 삭제·덮어쓰기 없이 빌드를 중단하므로 로컬 재검증은 `.local-review`의 새 출력 경로를 사용하세요. GitHub Pages는 호스팅 대상이 아닙니다. 새 버전에서는 `index.html`·`sw.js`·`package.json`·변경 기록을 함께 갱신합니다. 공개 자료 수정은 [v1.9.0 개인정보 경계 기록](docs/privacy-demo-v1.9.0.md), 기존 기기의 초안 정리는 [v1.9.1 후속 기록](docs/privacy-existing-v1.9.1.md)을 참고하세요.

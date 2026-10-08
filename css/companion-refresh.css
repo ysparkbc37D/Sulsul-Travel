@@ -113,4 +113,8 @@
 .demo-actions { display:flex; flex-wrap:wrap; gap:8px; }
 .demo-actions button { min-height:44px; white-space:normal; }
 .demo-workspace-notice { padding:12px 16px; font-size:12px; line-height:1.6; }
+.demo-workspace-notice p { margin:8px 0 12px; }
+.demo-workspace-notice button { min-height:44px; white-space:normal; }
+.legacy-demo-row { padding:12px 0; border-top:1px solid var(--line,#dce5df); }
+.legacy-demo-row strong { display:block; margin-bottom:8px; overflow-wrap:anywhere; }
 @media(max-width:480px) { .demo-onboarding { padding:18px; } .demo-actions button { flex:1 1 100%; } }

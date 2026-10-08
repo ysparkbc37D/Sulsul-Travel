@@ -1,7 +1,7 @@
 {
   "name": "sulsul-travel",
   "private": true,
-  "version": "1.9.0",
+  "version": "1.9.1",
   "scripts": {
     "build:public": "node tools/build-public.cjs",
     "test:demo": "node tests/demo-onboarding.browser.cjs",
