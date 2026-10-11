@@ -61,16 +61,19 @@ async function hydrateTravelBackupPhotos(trips){
   return trips;
 }
 function travelBackupSummaryText(trips){const s=SulsulTravel.TravelBackup.summary(trips);return `여행 ${s.trips}개 · 일정 ${s.days}일 · 글 ${s.records}편 · 사진 ${s.photos}장 · 지출 ${s.expenses}건`;}
+async function collectTravelBackup(){
+  if(State.storageRecovery)throw new Error('손상된 저장 문서를 정상 여행 백업으로 내보낼 수 없습니다. 기존 JSON 백업을 불러와 복구해 주세요. 손상 원문은 기기의 복구 보관본으로 유지됩니다.');
+  const snapshot=JSON.parse(JSON.stringify(State.trips)),entries=await loadTravelBackupOverflow();
+  const trips=await hydrateTravelBackupPhotos(SulsulTravel.TravelBackup.mergeOverflow(snapshot,entries));
+  return SulsulTravel.TravelBackup.create(trips,[],APP_VER);
+}
 async function prepareTravelBackup(){
   ensureTravelBackupModal().dataset.mode='backup';openModal('modal-travel-backup');
   const token=++TravelBackupUI.token;
   const save=document.getElementById('backup-file-save'),share=document.getElementById('backup-file-share');save.hidden=true;share.hidden=true;
   travelBackupFeedback('backup-file-feedback','글·사진과 보조 저장 기록을 모아 백업을 준비하고 있습니다…');document.getElementById('backup-file-summary').textContent='';
   try{
-    if(State.storageRecovery)throw new Error('손상된 저장 문서를 정상 여행 백업으로 내보낼 수 없습니다. 기존 JSON 백업을 불러와 복구해 주세요. 손상 원문은 기기의 복구 보관본으로 유지됩니다.');
-    const snapshot=JSON.parse(JSON.stringify(State.trips)),entries=await loadTravelBackupOverflow();
-    const trips=await hydrateTravelBackupPhotos(SulsulTravel.TravelBackup.mergeOverflow(snapshot,entries));
-    const result=SulsulTravel.TravelBackup.create(trips,[],APP_VER);
+    const result=await collectTravelBackup();
     if(token!==TravelBackupUI.token)return false;
     const stamp=new Date(),pad=n=>String(n).padStart(2,'0');
     const filename=`sulsul_travel_backup_v${APP_VER}_${stamp.getFullYear()}${pad(stamp.getMonth()+1)}${pad(stamp.getDate())}_${pad(stamp.getHours())}${pad(stamp.getMinutes())}${pad(stamp.getSeconds())}.json`;
@@ -92,21 +95,29 @@ async function readTravelBackupFile(event){
   ensureTravelBackupModal().dataset.mode='restore';openModal('modal-travel-backup');
   const token=++TravelBackupUI.token;TravelBackupUI.pending=null;document.getElementById('backup-restore-apply').disabled=true;document.getElementById('backup-restore-summary').replaceChildren();
   travelBackupFeedback('backup-restore-feedback','파일을 읽고 복원할 내용을 확인하고 있습니다…');
+  const baseRaw=localStorage.getItem('st_trips_v2'),baseState=JSON.stringify(State.trips);
   try{
     if(file.size>SulsulTravel.TravelBackup.MAX_BYTES)throw new Error('전체 백업은 50MB 이하의 JSON 파일을 선택해 주세요.');
     const text=await readTravelBackupText(file);
     if(token!==TravelBackupUI.token)return false;
     let raw;try{raw=JSON.parse(text.replace(/^\uFEFF/,''));}catch(_){}
     if(raw?.trip){const applied=acceptTravelSnapshot(raw);if(applied)closeModal('modal-travel-backup',true);else travelBackupFeedback('backup-restore-feedback','여행 사본 가져오기를 취소했거나 적용하지 못했습니다. 기존 여행은 유지됩니다.');return applied;}
-    const imported=SulsulTravel.TravelBackup.parse(text);
-    TravelBackupUI.pending={imported,baseRaw:localStorage.getItem('st_trips_v2'),baseState:JSON.stringify(State.trips),filename:file.name};
-    const summary=document.getElementById('backup-restore-summary'),count=document.createElement('p');count.textContent=travelBackupSummaryText(imported.trips);summary.append(count);
-    for(const trip of imported.trips.slice(0,6)){const row=document.createElement('p');row.textContent=`${trip.title} · ${trip.days.length}일`;summary.append(row);}
-    if(imported.trips.length>6){const more=document.createElement('p');more.textContent=`외 ${imported.trips.length-6}개 여행`;summary.append(more);}
-    travelBackupFeedback('backup-restore-feedback',`${file.name||'백업 파일'}을 읽었습니다. 현재 여행 ${State.trips.length}개는 아직 바뀌지 않았습니다. 내용을 확인하고 복원을 적용하세요.`);
-    document.getElementById('backup-restore-apply').disabled=false;return true;
+    return previewTravelBackupText(text,{filename:file.name,baseRaw,baseState});
   }catch(error){if(token===TravelBackupUI.token)travelBackupFeedback('backup-restore-feedback',`불러오지 못했습니다. 기존 여행은 유지됩니다. ${error.message||'파일을 확인해 주세요.'}`);return false;}
   finally{if(input)input.value='';}
+}
+function previewTravelBackupText(text,{filename='백업 파일',baseRaw=localStorage.getItem('st_trips_v2'),baseState=JSON.stringify(State.trips),source='file'}={}){
+  ensureTravelBackupModal().dataset.mode='restore';openModal('modal-travel-backup');
+  TravelBackupUI.pending=null;document.getElementById('backup-restore-apply').disabled=true;
+  if(localStorage.getItem('st_trips_v2')!==baseRaw||JSON.stringify(State.trips)!==baseState)throw new Error('백업을 읽는 동안 여행이 변경됐습니다. 백업을 다시 불러와 주세요.');
+  const imported=SulsulTravel.TravelBackup.parse(text);
+  TravelBackupUI.pending={imported,baseRaw,baseState,filename,source};
+  const summary=document.getElementById('backup-restore-summary');summary.replaceChildren();
+  const count=document.createElement('p');count.textContent=travelBackupSummaryText(imported.trips);summary.append(count);
+  for(const trip of imported.trips.slice(0,6)){const row=document.createElement('p');row.textContent=`${trip.title} · ${trip.days.length}일`;summary.append(row);}
+  if(imported.trips.length>6){const more=document.createElement('p');more.textContent=`외 ${imported.trips.length-6}개 여행`;summary.append(more);}
+  travelBackupFeedback('backup-restore-feedback',`${filename}을 읽었습니다. 현재 여행 ${State.trips.length}개는 아직 바뀌지 않았습니다. 내용을 확인하고 복원을 적용하세요.`);
+  document.getElementById('backup-restore-apply').disabled=false;return true;
 }
 async function applyTravelBackupRestore(){
   const pending=TravelBackupUI.pending;if(!pending||TravelBackupUI.busy)return false;
@@ -130,8 +141,11 @@ async function applyTravelBackupRestore(){
       const current=State.trips.find(item=>item.id===trip.id),old=overflow.filter(entry=>entry.tripId===trip.id).map(entry=>Number.isInteger(entry.revision)?entry.revision:0);
       return {...trip,revision:Math.max(trip.revision||0,current?.revision||0,...old)+1};
     });
-    const next=TripRepository.saveAll(replacement,{approvedRecoveryRaw:recoveryRaw});
+    const next=TripRepository.saveAll(replacement,{approvedRecoveryRaw:recoveryRaw,expectedRaw:pending.baseRaw});
     committed=true;State.trips=next;State.activeTripId=next[0]?.id||null;State.storageRecovery=null;TravelBackupUI.pending=null;
+    if(pending.source==='gist'){
+      try{localStorage.setItem('st_github_last_sync',`${new Date().toLocaleString('ko-KR')} (복원)`);updateGithubSyncUi();}catch(_){}
+    }
     let cleaned=true;
     try{await JournalOverflowRepository.clearAll();}catch(_){cleaned=false;}
     try{await SulsulTravel.mediaRepository.prune(next);}catch(_){cleaned=false;}

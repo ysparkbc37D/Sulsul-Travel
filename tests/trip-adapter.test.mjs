@@ -39,9 +39,47 @@ test('구버전 별칭과 사진·기록·완료·고정 관계를 원본 변경
   assert.equal(result.days[0].spots[1].skipped,true);
   assert.equal(result.days[0].planBlockId,'block-fixed');
   assert.deepEqual(result.activityRecords,original.activityRecords);
-  assert.deepEqual(result.journals,original.journals);
+  assert.equal(result.journals[0].text,original.journals[0].text);
+  assert.equal(result.journals[0].originalText,original.journals[0].originalText);
+  assert.deepEqual(result.journals[0].photos,original.journals[0].photos);
+  assert.equal(result.journals[0].dayId,result.days[0].id);
+  assert.equal(result.journals[0].date,'2026-12-31');
   assert.deepEqual(result.customField,original.customField);
   assert.equal(result.revision,7);
+});
+
+test('최초 읽기에서 회고 날짜를 고정하여 일정 삽입·순서 변경 후에도 원래 날짜로 조회한다', () => {
+  const normalized=adapter.normalizeTrip(legacyTrip());
+  const originalDay=normalized.days[0],journal=normalized.journals[0];
+  const draftKey=adapter.journalDraftKey(normalized,0);
+  normalized.days.unshift({date:'2026-12-30',title:'추가한 전날',spots:[]});
+  const inserted=adapter.normalizeTrip(normalized);
+  assert.notEqual(inserted.days[0].id,originalDay.id);
+  assert.equal(adapter.getJournalEntry(inserted,0),undefined);
+  assert.equal(adapter.getJournalEntry(inserted,1).text,journal.text);
+  assert.equal(adapter.journalDraftKey(inserted,1),draftKey);
+  assert.notEqual(adapter.journalDraftKey(inserted,0),draftKey);
+  assert.equal(inserted.journals[1].date,'2026-12-31');
+  inserted.days.reverse();
+  const reordered=adapter.normalizeTrip(inserted),target=reordered.days.findIndex(day=>day.id===originalDay.id);
+  assert.equal(adapter.getJournalEntry(reordered,target).id,journal.id);
+  assert.equal(adapter.getJournalEntry(reordered,target).date,'2026-12-31');
+  assert.deepEqual(adapter.normalizeTrip(reordered),reordered);
+});
+
+test('삭제한 날·날짜 미상·같은 날 여러 옛 회고는 새 날에 잘못 연결하거나 덮어쓰지 않는다', () => {
+  const source=legacyTrip();
+  source.journals['2026-12-31']={text:'같은 날의 두 번째 기록'};
+  source.journals[99]={text:'날짜를 확인할 수 없는 기록'};
+  const normalized=adapter.normalizeTrip(source);
+  assert.equal(Object.values(normalized.journals).length,3);
+  assert.ok(Object.values(normalized.journals).some(entry=>entry.text==='날짜를 확인할 수 없는 기록'&&!entry.date&&!entry.dayId));
+  normalized.days.shift();
+  const next=adapter.normalizeTrip(normalized);
+  assert.equal(adapter.getJournalEntry(next,0),undefined);
+  assert.equal(Object.values(next.journals).length,3);
+  assert.ok(Object.values(next.journals).filter(entry=>entry.date==='2026-12-31').every(entry=>entry.dayId));
+  assert.deepEqual(adapter.normalizeTrip(next),next);
 });
 
 test('날짜는 시작일로부터 달·연도 경계를 넘어 계산하며 유효한 개별 날짜는 유지한다', () => {

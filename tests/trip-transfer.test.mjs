@@ -9,6 +9,25 @@ test('default snapshot preserves plan metadata and zero budget while excluding p
  assert.deepEqual(result.trip.journals,{});assert.deepEqual(result.trip.expenses,[]);assert.equal(result.trip.wallets,undefined);assert.equal(result.trip.apiKey,undefined);assert.equal(result.trip.appliedAiJobIds,undefined);
  assert.equal(trip.journals[0].text,'개인 기록');
 });
+test('공유하지 않는 개인 기록의 텍스트와 형식이 계획 사본을 막지 않는다',()=>{
+ const trip=fixture();trip.journals={0:{text:'가격은 x<y, <b>내 기록</b>',photos:['javascript:private-photo']}};
+ trip.activityRecords={broken:{text:'<img src=x>'}};trip.expenses[0].photos=['javascript:private-receipt'];
+ const before=structuredClone(trip),shared=transfer.create(trip).trip;
+ assert.deepEqual(shared.journals,{});assert.deepEqual(shared.expenses,[]);assert.equal(shared.activityRecords,undefined);
+ assert.deepEqual(trip,before);
+ assert.throws(()=>transfer.create(trip,{journals:true}));assert.throws(()=>transfer.create(trip,{finances:true}));
+});
+test('계획 안의 사진과 일정 개인 기록도 기본 공유에서 제외하고 금융 사진 동의는 보존한다',()=>{
+ const trip=fixture(),spot=trip.days[0].spots[0];
+ Object.assign(spot,{recordId:'private-record',originalText:'<b>개인 문장</b>',photos:['javascript:private-photo'],mediaIds:['private-photo-id'],st_gemini_key:'nested-secret'});
+ trip.planBlockMeta.b.nested={journalText:'x<y',photoThumbnails:['private-photo'],access_token:'nested-token',note:'예약 확인'};
+ trip.expenses[0].photos=['data:image/jpeg;base64,YQ=='];
+ const shared=transfer.create(trip,{finances:true}).trip,encoded=JSON.stringify(shared);
+ for(const forbidden of ['private-record','개인 문장','private-photo','nested-secret','nested-token','journalText','recordId','originalText'])assert.equal(encoded.includes(forbidden),false,forbidden);
+ assert.equal(shared.planBlockMeta.b.nested.note,'예약 확인');assert.deepEqual(shared.expenses[0].photos,trip.expenses[0].photos);
+ assert.throws(()=>transfer.create({...fixture(),days:[{spots:[{title:'<img src=x onerror=alert(1)>'}]}]}));
+ assert.throws(()=>transfer.create({...fixture(),days:null}));
+});
 test('opted-in file roundtrip preserves journals and all finance structures',()=>{
  const t=fixture(),result=transfer.parse(JSON.stringify(transfer.create(t,{journals:true,finances:true})));
  for(const key of ['journals','expenses','exchanges','initialBalances','wallets','activeCurrencies'])assert.deepEqual(result.trip[key],t[key]);

@@ -90,10 +90,15 @@
       return syntheticDays.get(key);
     }
     function findDay(entry, fallbackIndex) {
-      const id = entry.dayId || entry.context?.dayId || entry.activityLink?.dayId;
-      if (id != null) { const found = days.find(day => day.id === String(id)); if (found) return found; }
       const date = dateOf(entry.date) || dateOf(entry.context?.date) || dateOf(entry.occurredAt);
+      const id = entry.dayId || entry.context?.dayId || entry.activityLink?.dayId;
+      if (id != null) {
+        const found = days.find(day => day.id === String(id));
+        // 발생 날짜가 있는 기록을 변경된 계획 날짜로 이동하지 않는다.
+        if (found && (!date || found.date === date)) return found;
+      }
       if (date) return days.find(day => day.date === date) || archivedDay(date);
+      if (entry.journalIdentityVersion === 1) return archivedDay(null);
       const index = Number.isInteger(entry.dayIndex) ? entry.dayIndex : Number.isInteger(entry.activityLink?.dayIndex) ? entry.activityLink.dayIndex : fallbackIndex;
       if (Number.isInteger(index) && days.find(day => day.sourceIndex === index && day.dayNum !== null)) return days.find(day => day.sourceIndex === index && day.dayNum !== null);
       return archivedDay(null);
@@ -150,7 +155,8 @@
     array(trip.momentEntries).forEach((entry,index) => addRecord(entry,entry?.id || `moment:${index}`,'moment',`momentEntries[${index}]`));
     Object.entries(trip.journals || {}).forEach(([key,entry]) => {
       const fallback = /^\d+$/.test(key) ? Number(key) : undefined;
-      const withDate = dateOf(key) && !entry?.date ? {...entry,date:key} : entry;
+      const legacy = dateOf(key) && !entry?.date ? {...entry,date:key} : entry;
+      const withDate = root.SulsulTravel?.TripAdapter?.pinJournalIdentity ? root.SulsulTravel.TripAdapter.pinJournalIdentity(trip, legacy, fallback, key) : legacy;
       addRecord(withDate,entry?.id || `journal:${key}`,'reflection',`journals[${JSON.stringify(key)}]`,fallback);
     });
     days.sort((a,b) => a.date && b.date ? a.date.localeCompare(b.date) || a.sourceIndex-b.sourceIndex : a.date ? -1 : b.date ? 1 : a.sourceIndex-b.sourceIndex);

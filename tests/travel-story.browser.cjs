@@ -37,7 +37,8 @@ const server=http.createServer((req,res) => {
     const content=page.locator('#pdf-report-content');
     assert.equal(await content.locator('.travel-story-day').count(),2);
     assert.equal(await content.locator('.travel-story-entry').count(),5);
-    assert.deepEqual(await content.locator('.travel-story-day').first().locator('[data-source-id]').evaluateAll(elements => elements.map(element => element.dataset.sourceId)),['moment:m1','day:d1/spot:s1','activity:r1','moment:m2','day:d1/spot:s2','day:d1/spot:s3','reflection:journal:0']);
+    const reflectionSource=await page.evaluate(()=>SulsulTravel.TravelStory.build(State.trips.find(trip=>trip.id==='story-qa')).days[0].reflections[0].sourceId);
+    assert.deepEqual(await content.locator('.travel-story-day').first().locator('[data-source-id]').evaluateAll(elements => elements.map(element => element.dataset.sourceId)),['moment:m1','day:d1/spot:s1','activity:r1','moment:m2','day:d1/spot:s2','day:d1/spot:s3',reflectionSource]);
     assert.deepEqual(await content.locator('.travel-story-itinerary h4 span').allTextContents(),['방문 완료','건너뜀','예정','예정']);
     assert.match(await content.textContent(),/AI 전 원문 문장/);assert.doesNotMatch(await content.textContent(),/승인 완료 광장 문장/);
     assert.match(await content.textContent(),/실제 기록 시각 미상/);

@@ -15,7 +15,8 @@
   }
   function sanitizePlan(trip,transfer=root.SulsulTravel?.TripTransfer){
     if(!transfer?.create)throw new CollaborationError('ADAPTER_MISSING','여행 공유 모듈을 불러오지 못했습니다.');
-    const published=transfer.create(trip,{journals:false,finances:false}).trip;
+    // 실제 게시 범위에서 제외할 개인 필드는 공유 검증보다 먼저 제거한다.
+    const published=transfer.create(redact(trip),{journals:false,finances:false}).trip;
     const plan=redact(Object.fromEntries(PLAN_FIELDS.filter(key=>published[key]!==undefined).map(key=>[key,published[key]])));
     if(new TextEncoder().encode(JSON.stringify(plan)).length>1024*1024)throw new CollaborationError('PLAN_TOO_LARGE','공동 계획은 1MB 이하만 게시할 수 있습니다. 사진은 개인 기록에 보관해 주세요.');
     return plan;

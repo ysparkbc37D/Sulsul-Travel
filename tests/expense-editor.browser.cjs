@@ -30,7 +30,8 @@ try{
  await page.evaluate(()=>{ExpenseFormState.photos=['data:image/jpeg;base64,YQ=='];lastModalActionTime=0;window.confirm=()=>false;closeModal('modal-expense');});assert.equal(await page.locator('#modal-expense').evaluate(e=>e.classList.contains('sheet-closed')),false);
  await page.evaluate(()=>{window.confirm=()=>true;closeModal('modal-expense',true);openEditExpenseModal(0);});await page.screenshot({path:path.join(out,'edit.png'),fullPage:true});
  const late=await page.evaluate(async()=>{const old=compressExpensePhoto;let finish;compressExpensePhoto=()=>new Promise(r=>finish=r);const pending=handleExpensePhotosUpload({target:{files:[new File(['x'],'x.png')],value:'x'}});openAddExpenseModal();finish('data:image/jpeg;base64,YQ==');await pending;compressExpensePhoto=old;return ExpenseFormState.photos.length;});assert.equal(late,0);
- const wrongSession=await page.evaluate(()=>applyAiDraftPayload({kind:'receipt',input:{expenseSession:'old-form'}}));assert.equal(wrongSession,'conflict');
+ // 유효한 초안도 이미 닫힌 입력 세션에는 적용되지 않아야 한다.
+ const wrongSession=await page.evaluate(()=>applyAiDraftPayload({kind:'receipt',input:{expenseSession:'old-form'},draft:{receipt:{merchant:'합성 영수증',amount:1000,currency:'KRW',category:'shopping',date:'2026-09-14'}}}));assert.equal(wrongSession,'conflict');
  await page.evaluate(()=>{closeModal('modal-expense',true);});await page.reload({waitUntil:'networkidle'});assert.equal(await page.evaluate(()=>State.trips.find(t=>t.id==='expense-test').expenses[0].photos.length),2);
  assert.deepEqual(errors,[]);console.log(JSON.stringify({passed:true,checks:'편집 교체/지갑 재계산, 대표사진/확대, 320~430px 버튼/썸네일, 실패 재시도, 결제수단과 수입 수정, 동시수정 충돌, 사진만 이탈방어, 재시작',errors}));
 }finally{await browser.close();}})().catch(e=>{console.error(e);process.exitCode=1;}).finally(()=>server.close());

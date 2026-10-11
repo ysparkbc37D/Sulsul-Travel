@@ -4,6 +4,7 @@ import {createRequire} from 'node:module';
 import {readFileSync} from 'node:fs';
 import vm from 'node:vm';
 const require=createRequire(import.meta.url);
+const adapter=require('../js/domain/trip-adapter.js');
 const story=require('../js/domain/travel-story.js');
 const ui=require('../js/presentation/travel-story-ui.js');
 const photo='data:image/jpeg;base64,YQ==';
@@ -58,6 +59,30 @@ test('구 일기 인덱스와 ISO 날짜 키를 각각 올바른 날짜에 연�
   const trip=fixture();trip.journals={0:{text:'첫날 회고'},'2026-10-12':{text:'둘째 날 회고'}};
   const model=story.build(trip);
   assert.equal(model.days[0].reflections[0].text,'첫날 회고');assert.equal(model.days[1].reflections[0].text,'둘째 날 회고');
+});
+
+test('회고는 일정 순서·날짜 변경 및 삭제 후에도 저장했던 날짜로 에세이에 남는다',() => {
+  const source=adapter.normalizeTrip(fixture()),reflection=source.journals[0];
+  source.days.reverse();
+  let model=story.build(source);
+  assert.equal(model.days.find(day=>day.date==='2026-10-11').reflections[0].id,reflection.id);
+  source.days.find(day=>day.id==='d1').date='2026-10-15';
+  model=story.build(source);
+  assert.equal(model.days.find(day=>day.date==='2026-10-11').reflections[0].text,reflection.text);
+  assert.equal(model.days.find(day=>day.date==='2026-10-15').reflections.length,0);
+  source.days=source.days.filter(day=>day.id!=='d1');
+  model=story.build(source);
+  assert.equal(model.days.find(day=>day.date==='2026-10-11').reflections[0].text,reflection.text);
+  assert.match(story.toText(model),/2026-10-11/);
+  assert.match(story.toText(model),/하루를 천천히 걸었다/);
+});
+
+test('날짜 미상 회고를 추가 일정에 붙이지 않고 같은 날짜 여러 원문을 별개 출처로 보존한다',() => {
+  const source=fixture();source.journals['2026-10-11']={text:'또 다른 회고'};source.journals[99]={text:'날짜 미상 회고'};
+  const trip=adapter.normalizeTrip(source),model=story.build(trip);
+  assert.equal(model.days.find(day=>day.date==='2026-10-11').reflections.length,2);
+  assert.equal(model.days.find(day=>!day.date).reflections[0].text,'날짜 미상 회고');
+  assert.equal(new Set(model.manifest.facts.map(item=>item.sourceId)).size,model.manifest.facts.length);
 });
 test('원문과 사용자가 승인한 문장을 선택하고 미승인 AI 초안을 출력하지 않는다',() => {
   const trip=fixture();trip.momentEntries[0]={...trip.momentEntries[0],originalText:'카페에 쉬었다',text:'카페에서 잠시 쉬었다.',aiDraftAcceptedAt:'2026-10-11T12:00:00Z'};

@@ -58,6 +58,13 @@ test('offline waits without using attempts and resumes', async () => {
   assert.equal((await flow.run('j1')).state, 'awaiting_review');
 });
 
+test('로컬 초안은 공급자 연결 없이도 같은 검토·승인 경로를 사용한다', async () => {
+  const flow = make({online: job => Boolean(job.input.localDraft)});
+  flow.enqueue({...request(), input:{localDraft:true,text:'기기 초안'}});
+  assert.equal((await flow.run('j1')).state,'awaiting_review');
+  assert.equal((await flow.approve('j1')).state,'applied');
+});
+
 test('concurrency is bounded and queued work can be run later', async () => {
   const pending = deferred();
   const flow = make({ generate: () => pending.promise });
@@ -66,7 +73,23 @@ test('concurrency is bounded and queued work can be run later', async () => {
   await assert.rejects(flow.run('j2'), /RUNNER_BUSY/);
   assert.equal(flow.get('j2').attempts, 0);
   pending.resolve({ text: 'draft' }); await first;
+  assert.equal(flow.reviewJobId, 'j1');
+  await assert.rejects(flow.run('j2'), /REVIEW_BUSY/);
+  assert.equal(flow.get('j2').attempts, 0);
+  await flow.approve('j1');
   assert.equal((await flow.run('j2')).state, 'awaiting_review');
+});
+
+test('검토 중 검증 조건이 바뀌면 승인도 저장 이전에 재검증한다', async () => {
+  let valid = true, writes = 0;
+  const flow = make({validate: () => valid, applyDraft: () => { writes++; return 'applied'; }});
+  flow.enqueue(request()); await flow.run('j1');
+  valid = false;
+  const result = await flow.approve('j1');
+  assert.equal(result.state, 'awaiting_review');
+  assert.equal(result.errorCode, 'INVALID_OUTPUT');
+  assert.equal(writes, 0);
+  assert.ok(result.draft);
 });
 
 test('cancel settles even if provider ignores abort; late response is discarded', async () => {

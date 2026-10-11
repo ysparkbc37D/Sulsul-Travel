@@ -34,6 +34,15 @@ export class Orchestrator {
 
   get(id) { return structuredClone(this.#require(id)); }
 
+  get activeJobId() { return this.#active?.id || null; }
+
+  get reviewJobId() {
+    for (const job of this.#jobs.values()) {
+      if (['awaiting_review', 'applying'].includes(job.state)) return job.id;
+    }
+    return null;
+  }
+
   enqueue(request) {
     const { id, tripId, targetId, kind, baseRevision, input } = request;
     if (![id, tripId, targetId, kind].every(v => typeof v === 'string' && v.trim()) ||
@@ -60,8 +69,9 @@ export class Orchestrator {
     const job = this.#require(id);
     if (!['queued', 'waiting_network', 'failed'].includes(job.state)) return this.get(id);
     if (this.#active) throw new Error('RUNNER_BUSY');
+    if (this.reviewJobId && this.reviewJobId !== id) throw new Error('REVIEW_BUSY');
     if (job.attempts >= this.#maxAttempts) return this.get(id);
-    if (!this.#online()) {
+    if (!this.#online(this.get(id))) {
       job.state = 'waiting_network';
       return this.get(id);
     }
@@ -141,6 +151,12 @@ export class Orchestrator {
     // Claim before awaiting: double approval cannot call the repository twice.
     job.state = 'applying';
     try {
+      // 검토 중 계약·보호 조건이 달라졌어도 저장 어댑터를 호출하기 전에 재확인한다.
+      if (await this.#validate(structuredClone(job.draft), this.get(id)) !== true) {
+        job.state = 'awaiting_review';
+        job.errorCode = 'INVALID_OUTPUT';
+        return this.get(id);
+      }
       const result = await this.#applyDraft(this.get(id));
       if (!['applied', 'conflict'].includes(result)) throw new Error('INVALID_APPLY_RESULT');
       job.state = result;

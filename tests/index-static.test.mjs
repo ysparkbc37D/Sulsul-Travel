@@ -68,8 +68,11 @@ test('AI itinerary approval updates day identity, rebuilds initial plan blocks, 
   assert.match(html, /target\.city = plainAiValue\(proposed\.city/);
   assert.match(html, /replacePlanStructure: Boolean\(job\.input\.replacePlanStructure\)/);
   assert.match(html, /trip\.days\.forEach\(day => delete day\.planBlockId\)/);
-  assert.match(html, /dayNum !== dayIndex \+ 1/);
-  assert.match(html, /day\.spots\.length < minimum/);
+  const validator = readFileSync(new URL('../js/domain/ai-draft-validation.js', import.meta.url), 'utf8');
+  assert.equal((html.match(/function validateAiDraftPayload\(/g) || []).length, 1);
+  assert.match(html, /SulsulTravel\.AiDraftValidation\.validate/);
+  assert.match(validator, /Number\(day\.dayNum\) !== index \+ 1/);
+  assert.match(validator, /day\.spots\.length < minimum/);
   assert.match(html, /minSpotsPerDay: isLongTrip \? 3 : 4/);
   assert.match(html, /const spotDensityRule = isLongTrip/);
   assert.match(html, /:00 또는 :30으로 시작/);
@@ -451,8 +454,14 @@ test('full backup restores clear old overflow journals only after the trip docum
   const gistStart = html.indexOf('async function syncFromGist()');
   const gistEnd = html.indexOf('function saveGeminiKey()', gistStart);
   const gistRestore = html.slice(gistStart, gistEnd);
-  assert.match(jsonRestore, /TripRepository\.saveAll\(replacement,\{approvedRecoveryRaw:recoveryRaw\}\)[\s\S]*?await JournalOverflowRepository\.clearAll\(\)/);
-  assert.match(gistRestore, /TripRepository\.saveAll\(imported\.trips\)[\s\S]*?await JournalOverflowRepository\.clearAll\(\)/);
+  assert.match(jsonRestore, /TripRepository\.saveAll\(replacement,\{approvedRecoveryRaw:recoveryRaw,expectedRaw:pending.baseRaw\}\)[\s\S]*?await JournalOverflowRepository\.clearAll\(\)/);
+  assert.match(gistRestore, /previewTravelBackupText\(content,\{filename:'GitHub Gist 백업',source:'gist',baseRaw,baseState\}\)/);
+  assert.doesNotMatch(gistRestore, /TripRepository\.saveAll|clearAll/);
+});
+
+test('전역 함수 중복 선언이 실제 검증과 화면 동작을 덮어쓰지 않는다', () => {
+  const names=[...html.matchAll(/^ {4}(?:async )?function (\w+)\(/gm)].map(match=>match[1]);
+  assert.equal(new Set(names).size,names.length,'동일 이름의 최상위 함수가 있습니다.');
 });
 
 test('latest travel itinerary is placed at the top and compareTripsLatestFirst works (v1.8.8)', () => {

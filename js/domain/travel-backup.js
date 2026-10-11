@@ -47,20 +47,26 @@
     return next;
   }
   function mergeOverflow(trips,entries=[]){
-    const next=clone(trips);
+    const adapter=root.SulsulTravel.TripAdapter;
+    const next=adapter.normalizeTrips(trips);
     const baseRevisions=new Map(next.map(trip=>[trip.id,Number.isInteger(trip.revision)?trip.revision:0]));
     const accepted=new Map();
     for(const entry of entries){
       const trip=next.find(item=>item.id===entry.tripId);
       if(!trip||!Number.isInteger(entry.dayIndex)||entry.dayIndex<0)continue;
       const revision=Number.isInteger(entry.revision)?entry.revision:baseRevisions.get(trip.id);
-      const key=JSON.stringify([trip.id,entry.dayIndex]);
+      const source={...clone(entry.journal||{}),...(entry.dayId&&!entry.journal?.dayId?{dayId:entry.dayId}:{}),...(entry.date&&!entry.journal?.date?{date:entry.date}:{})};
+      const pinned=adapter.pinJournalIdentity(trip,source,entry.dayIndex);
+      const dayIndex=adapter.resolveJournalDayIndex(trip,pinned);
+      const journalKey=dayIndex>=0?String(dayIndex):`archive:${pinned.id}`;
+      const key=JSON.stringify([trip.id,pinned.dayId||pinned.date||journalKey]);
       if(revision<baseRevisions.get(trip.id)||revision<(accepted.get(key)??-Infinity))continue;
       accepted.set(key,revision);
       trip.journals=trip.journals||{};
-      trip.journals[entry.dayIndex]={...(trip.journals[entry.dayIndex]||{text:'',photos:[]}),...clone(entry.journal||{})};
+      trip.journals[journalKey]={...(trip.journals[journalKey]||{text:'',photos:[]}),...pinned};
       if(Number.isInteger(entry.revision))trip.revision=Math.max(trip.revision||0,entry.revision);
     }
+    next.forEach(trip=>adapter.remapJournals(trip));
     return next;
   }
   function create(trips,entries=[],version=''){

@@ -1,6 +1,6 @@
 # 술술트래블 개발 가이드
 
-이 문서는 현재 앱 구조와 검증 방식을 설명합니다. 이전 구조를 기술한 문서는 상단에 역사 자료 또는 목표 설계라고 표시합니다. 현재 앱 버전은 `1.9.2`입니다.
+이 문서는 현재 앱 구조와 검증 방식을 설명합니다. 이전 구조를 기술한 문서는 상단에 역사 자료 또는 목표 설계라고 표시합니다. 현재 앱 버전은 `1.9.3`입니다.
 
 ## 실행 구조
 
@@ -21,10 +21,14 @@
 | `js/domain/travel-story.js` | 날짜별 일정/실제 기록/원문·승인문과 출처 모델, 공통 비용 집계 |
 | `js/domain/replan.mjs` | 보호 일정과 날짜/범위 RePlan 규칙 |
 | `js/application/orchestration.mjs` | AI 작업 큐, 취소·재시도·승인 흐름 |
+| `js/domain/ai-draft-validation.js` | 생성·승인의 동일 초안 계약과 보호 일정·범위 검증 |
 | `js/infrastructure/storage/legacy-trip-repository.js` | `st_trips_v2` 문서 저장과 revision 경계 |
+| `js/infrastructure/storage/settings-repository.js` | 손상 환율 설정 격리와 원문 보관 |
 | `js/infrastructure/storage/journal-overflow-repository.js` | 용량 초과 하루 일기 임시 보관 |
 | `js/infrastructure/storage/media-repository.js` | 비율 유지 보관본, 썸네일, IndexedDB Blob과 JSON fallback |
 | `js/domain/trip-transfer.js` | 버전 있는 여행 사본 검증·내보내기 계약 |
+| `js/domain/travel-backup.js` | 전체 백업·구 파일 정규화·보조 일기 수집 계약 |
+| `js/presentation/travel-backup-ui.js` | 파일 준비·저장·복원 미리보기·승인·손상 원문 보존 |
 | `js/presentation/activity-journal.js` | 일정별 기록 편집, 사진, AI 윤문 승인 |
 | `js/presentation/moment-journal.js` | 복수 순간 기록과 날짜별 피드, 저장/충돌/이탈 보호 |
 | `js/presentation/travel-story-ui.js` | 공통 이야기 선택·Markdown/텍스트 내보내기 |
@@ -67,6 +71,7 @@ node .\tests\moment-journal.browser.cjs
 node .\tests\travel-story.browser.cjs
 node .\tests\companion-refresh.browser.cjs
 node .\tests\collaboration-review.browser.cjs
+node .\tests\backup-restore.browser.cjs
 .\tools-verify.ps1
 ```
 
@@ -90,9 +95,9 @@ node .\tests\collaboration-review.browser.cjs
 
 ## 현재 알려진 제품 경계
 
-- 하루 자유 기록은 날짜마다 한 편입니다. 별도 순간 기록을 무제한으로 추가하는 모델은 아직 없습니다.
+- 하루 회고는 날짜마다 한 편이며, 별도 `momentEntries`로 같은 날 여러 순간의 글·사진을 추가할 수 있습니다. 회고와 일정 기록·순간 기록은 현재 서로 다른 저장 경로를 사용합니다.
 - 일정별 사진·에세이는 일정당 한 기록이며, 일정 삭제 후에도 당시 제목·날짜 등의 문맥을 유지합니다.
-- 사진은 여행 문서 안에 압축되어 저장됩니다. 영구 사용을 목표로 하면 미디어를 IndexedDB로 분리하고 백업·복원·이전 절차를 마련해야 합니다.
-- 링크·파일·Gist는 공동편집을 구현하지 않습니다. 실시간 동행 편집은 인증, 권한, 변경 로그, 오프라인 outbox와 충돌 해결을 갖춘 별도 서버 기능으로 설계해야 합니다.
+- 사진은 비율 유지 보관본·썸네일 Blob을 IndexedDB에 저장하고 여행 JSON에도 data URL 사본을 남깁니다. 전체 미디어 참조 이전과 localStorage 용량 문제는 후속입니다. v1.9.3 파일/Gist 백업은 같은 사진·보조 일기 수집 및 검토·복원 경로를 사용합니다.
+- 링크·파일·Gist는 사본·백업입니다. 선택형 Supabase에는 공동 계획 권한·초대·이력·outbox·revision 충돌과 비교/승인 코드가 있지만 서버는 기본 미설정이고 실제 SQL/RLS·여러 기기 검증은 미완료입니다. 자동 실시간 병합이나 영구 계정 복구를 제공하지 않습니다.
 
-확장 단계와 충돌 정책은 [목표 아키텍처](docs/architecture-vnext.md), 현재 구성 검토는 [2026-09-13 검토 기록](docs/review-v1.7.8-2026-09-13.md), 개발 흐름은 [오케스트레이션 개발 모델](docs/development-model.md)을 참고하세요.
+현행 위험과 실행 순서는 [v1.9.2 구조 검토](docs/architecture-review-v1.9.2-2026-10-09.md)를 참고하세요. 초기 확장 방향은 [목표 아키텍처](docs/architecture-vnext.md), 과거 재현은 [2026-09-13 검토 기록](docs/review-v1.7.8-2026-09-13.md), 개발 흐름은 [오케스트레이션 개발 모델](docs/development-model.md)에 보존합니다.

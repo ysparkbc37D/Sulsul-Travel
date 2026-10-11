@@ -59,3 +59,30 @@ test('revision conflict and write failure leave caller data unchanged', () => {
     jobId: 'job-2', mutate: trip => { trip.title = 'AI'; } }), /quota/);
   assert.equal(trips[0].title, 'manual');
 });
+
+test('두 저장소의 오래된 목록이 최신 일기를 덮지 않는다', () => {
+  const storage=memoryStorage({st_trips_v2:JSON.stringify([{id:'a',revision:0,journals:{0:{text:'원문'}},days:[]}])});
+  const first=new Repo(storage),second=new Repo(storage);
+  const a=first.loadAll().trips,b=second.loadAll().trips;
+  a[0].journals[0].text='첫 번째 창의 새 글';first.saveAll(a,{bumpTripId:'a'});
+  b[0].title='다른 창의 편집';
+  assert.throws(()=>second.saveAll(b,{bumpTripId:'a'}),error=>error.code==='STORAGE_CONFLICT');
+  assert.equal(JSON.parse(storage.getItem('st_trips_v2'))[0].journals[0].text,'첫 번째 창의 새 글');
+  assert.throws(()=>second.applyDraft(b,{tripId:'a',baseRevision:0,jobId:'stale',mutate:trip=>trip.title='AI'}),error=>error.code==='STORAGE_CONFLICT');
+});
+
+test('명시 복원은 검토한 원문과 현재 저장 문서가 같을 때만 허용한다', () => {
+  const storage=memoryStorage(),repo=new Repo(storage);
+  repo.loadAll();storage.setItem('st_trips_v2',JSON.stringify([{id:'external',revision:1}]));
+  const previewRaw=storage.getItem('st_trips_v2');
+  assert.equal(repo.saveAll([{id:'restored'}],{expectedRaw:previewRaw})[0].id,'restored');
+  assert.throws(()=>repo.saveAll([{id:'stale'}],{expectedRaw:previewRaw}),error=>error.code==='STORAGE_CONFLICT');
+});
+
+test('command의 저장 실패는 원본과 revision을 변경하지 않는다', () => {
+  const storage=memoryStorage(),repo=new Repo(storage),trips=repo.saveAll([{id:'a',revision:2,title:'원본',expenses:[{id:'e'}]}]);
+  storage.setItem=()=>{throw new Error('quota');};
+  assert.throws(()=>repo.commit(trips,{tripId:'a',expectedRevision:2,change:trip=>trip.expenses.splice(0,1)}),/quota/);
+  assert.equal(trips[0].expenses.length,1);assert.equal(trips[0].revision,2);
+  assert.equal(repo.getCommittedTrips()[0].expenses.length,1);
+});

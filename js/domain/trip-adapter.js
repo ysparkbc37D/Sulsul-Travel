@@ -76,6 +76,84 @@
     return ['lodging','tour','shopping'].includes(expense) ? expense : 'etc';
   }
 
+  // 숫자 키는 화면 호환용일 뿐이다. 기록 날짜와 일정 ID는 최초 입력 경계에서 고정한다.
+  function resolveJournalDayIndex(trip, entry, fallbackIndex) {
+    if (!entry || typeof entry !== 'object') return -1;
+    const days = Array.isArray(trip?.days) ? trip.days : [];
+    const dayId = identity(entry.dayId);
+    if (dayId) {
+      const index = days.findIndex(day => identity(day.id) === dayId || identity(day.dayId) === dayId);
+      if (index >= 0) return index;
+    }
+    const date = isoDate(entry.date);
+    if (date) return days.findIndex(day => isoDate(day.date) === date);
+    // 이미 분리된 옛 기록을 나중에 추가한 같은 번호의 일정에 붙이지 않는다.
+    if (dayId || entry.journalIdentityVersion === 1) return -1;
+    return Number.isInteger(fallbackIndex) && fallbackIndex >= 0 && fallbackIndex < days.length ? fallbackIndex : -1;
+  }
+
+  function pinJournalIdentity(trip, source, dayIndex, sourceKey = String(dayIndex)) {
+    if (!source || typeof source !== 'object' || Array.isArray(source)) return source;
+    const entry = {...source};
+    const dateKey = isoDate(sourceKey);
+    if (!entry.date && dateKey) entry.date = dateKey;
+    const resolved = resolveJournalDayIndex(trip, entry, dayIndex);
+    const day = resolved >= 0 ? trip.days[resolved] : null;
+    if (!entry.dayId && day) entry.dayId = identity(day.id) || identity(day.dayId);
+    if (!entry.date && day && isoDate(day.date)) entry.date = isoDate(day.date);
+    if (!entry.id) entry.id = stableId('journal', `${trip.id}:${entry.dayId || entry.date || ''}:${sourceKey}`);
+    if (!own(entry, 'text') && typeof entry.content === 'string') entry.text = entry.content;
+    entry.journalIdentityVersion = 1;
+    return entry;
+  }
+
+  function remapJournals(trip) {
+    if (!trip?.journals || typeof trip.journals !== 'object' || Array.isArray(trip.journals)) return trip;
+    const journals = {};
+    for (const [sourceKey, source] of Object.entries(trip.journals)) {
+      const fallback = /^\d+$/.test(sourceKey) ? Number(sourceKey) : undefined;
+      const entry = pinJournalIdentity(trip, source, fallback, sourceKey);
+      let key = sourceKey;
+      if (entry && typeof entry === 'object' && !Array.isArray(entry)) {
+        const dayIndex = resolveJournalDayIndex(trip, entry);
+        key = dayIndex >= 0 ? String(dayIndex) : `archive:${entry.id}`;
+        // 같은 날짜에 남아 있는 여러 구버전 기록도 덮어쓰지 않는다.
+        if (own(journals, key)) {
+          const base = `archive:${entry.id}`;
+          key = base;
+          let suffix = 1;
+          while (own(journals, key)) key = `${base}:${suffix++}`;
+        }
+      }
+      journals[key] = entry;
+    }
+    trip.journals = journals;
+    return trip;
+  }
+
+  function getJournalEntry(trip, dayIndex) {
+    if (!Number.isInteger(dayIndex) || !trip?.days?.[dayIndex]) return undefined;
+    for (const [key, entry] of Object.entries(trip.journals || {})) {
+      const fallback = /^\d+$/.test(key) ? Number(key) : undefined;
+      if (resolveJournalDayIndex(trip, entry, fallback) === dayIndex) return entry;
+    }
+    return undefined;
+  }
+
+  function setJournalEntry(trip, dayIndex, entry) {
+    if (!trip?.days?.[dayIndex]) throw new TypeError('기록할 여행 날짜가 없습니다.');
+    remapJournals(trip);
+    trip.journals = trip.journals || {};
+    const pinned = pinJournalIdentity(trip, entry, dayIndex);
+    trip.journals[dayIndex] = pinned;
+    return pinned;
+  }
+
+  function journalDraftKey(trip, dayIndex) {
+    const day = trip?.days?.[dayIndex];
+    return `${trip?.id || ''}:${identity(day?.id) || identity(day?.dayId) || isoDate(day?.date) || `index:${dayIndex}`}`;
+  }
+
   function normalizeTrip(input, {idSeed = ''} = {}) {
     if (!input || typeof input !== 'object' || Array.isArray(input)) throw new TypeError('여행 객체가 필요합니다.');
     const trip = clone(input);
@@ -84,9 +162,17 @@
     const start = isoDate(trip.startDate);
     if (start) trip.startDate = start;
     const sourceDays = Array.isArray(trip.days) ? trip.days : [];
+    const reservedDayIds = new Set(sourceDays.map(day => identity(day?.id) || identity(day?.dayId)).filter(Boolean));
     trip.days = sourceDays.map((day, dayIndex) => {
       if (!day || typeof day !== 'object' || Array.isArray(day)) throw new TypeError('일별 일정 객체가 필요합니다.');
-      day.id = identity(day.id) || stableId('day', `${trip.id}:${dayIndex}`);
+      day.id = identity(day.id) || identity(day.dayId);
+      if (!day.id) {
+        const baseId = stableId('day', `${trip.id}:${dayIndex}`);
+        day.id = baseId;
+        let suffix = 1;
+        while (reservedDayIds.has(day.id)) day.id = `${baseId}_${suffix++}`;
+        reservedDayIds.add(day.id);
+      }
       day.dayNum = Number.isInteger(Number(day.dayNum)) && Number(day.dayNum) > 0 ? Number(day.dayNum) : (Number.isInteger(Number(day.day)) && Number(day.day) > 0 ? Number(day.day) : dayIndex + 1);
       const date = isoDate(day.date) || dateForDay(start, dayIndex);
       if (date && day.date !== date) { if (day.date && !own(day, 'sourceDate')) day.sourceDate = day.date; day.date = date; }
@@ -134,11 +220,7 @@
       if (date) expense.date = date;
       return expense;
     });
-    if (trip.journals && typeof trip.journals === 'object' && !Array.isArray(trip.journals)) {
-      for (const entry of Object.values(trip.journals)) {
-        if (entry && typeof entry === 'object' && !own(entry, 'text') && typeof entry.content === 'string') entry.text = entry.content;
-      }
-    }
+    remapJournals(trip);
     // 미지의 timeZone은 새 값으로 덮거나 목적지에서 추정하지 않는다.
     return trip;
   }
@@ -173,7 +255,7 @@
     return upcoming >= 0 ? upcoming : days.length - 1;
   }
 
-  const api = {normalizeTrip, normalizeTrips, normalizeCityName, normalizeExpenseCategory, normalizeSpotCategory, isoDate, dateForDay, localDateKey, localTimeKey, resolveTripStage, resolveTodayDayIndex};
+  const api = {normalizeTrip, normalizeTrips, normalizeCityName, normalizeExpenseCategory, normalizeSpotCategory, isoDate, dateForDay, localDateKey, localTimeKey, resolveTripStage, resolveTodayDayIndex, pinJournalIdentity, remapJournals, getJournalEntry, setJournalEntry, resolveJournalDayIndex, journalDraftKey};
   root.SulsulTravel = root.SulsulTravel || {};
   root.SulsulTravel.TripAdapter = api;
   if (typeof module !== 'undefined' && module.exports) module.exports = api;

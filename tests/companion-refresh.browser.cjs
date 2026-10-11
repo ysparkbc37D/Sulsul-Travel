@@ -47,15 +47,18 @@ const server=http.createServer((req,res) => {
           privateRoundTrip:privateKeys.every(key => JSON.stringify(imported[key])===JSON.stringify(optIn.trip[key])),
           journal:imported.journals[0].text,moment:imported.momentEntries[0].text,activity:Object.values(imported.activityRecords)[0].text,
           expense:{title:imported.expenses[0].title,amount:imported.expenses[0].amount,currency:imported.expenses[0].currency,krw:imported.expenses[0].krw},
-          publicPlanSame:JSON.stringify(publicCopy.days)===JSON.stringify(copy.days),sourceTextsAbsent:![copy.journals[0].text,copy.momentEntries[0].text,Object.values(copy.activityRecords)[0].text,copy.expenses[0].title].some(text => JSON.stringify(defaultPayload).includes(text))
+          // 기본 공유는 일정 기록의 연결 식별자도 제외한다. 시간·장소·완료 상태는 보존한다.
+          publicPlanSame:JSON.stringify(publicCopy.days)===JSON.stringify(copy.days, (key,value) => key==='recordId' ? undefined : value),
+          publicRecordIdsAbsent:publicCopy.days.every(day => day.spots.every(spot => !Object.hasOwn(spot,'recordId'))),
+          sourceTextsAbsent:![copy.journals[0].text,copy.momentEntries[0].text,Object.values(copy.activityRecords)[0].text,copy.expenses[0].title].some(text => JSON.stringify(defaultPayload).includes(text))
         };
       });
       assert.match(result.title,/가상 예제/);assert.equal(result.isSample,true);assert.equal(result.demoTemplateId,'demo_taiwan_5d_v1');assert.equal(result.tripCount,1);
       assert.equal(result.days,5);assert.equal(result.spots,40);assert.equal(result.invalid,0);assert.deepEqual(result.dates,['2030-04-01','2030-04-02','2030-04-03','2030-04-04','2030-04-05']);
       assert.deepEqual(result.cities,['타이베이','타이중']);assert.deepEqual(result.dayCities,['타이베이','타이베이','타이중','타이중','타이베이']);
-      assert.equal(result.same,true);assert.equal(result.publicPlanSame,true);assert.equal(result.completed,true);assert.equal(result.skipped,true);assert.equal(result.notMutated,true);
+      assert.equal(result.same,true,`일정 왕복 결과: ${JSON.stringify(result)}`);assert.equal(result.publicPlanSame,true,'공유 계획의 일정이 바뀌었습니다.');assert.equal(result.publicRecordIdsAbsent,true,'기본 공유에 개인 일정 기록의 연결이 남았습니다.');assert.equal(result.completed,true);assert.equal(result.skipped,true);assert.equal(result.notMutated,true);
       assert.deepEqual(result.defaultScope,{journals:false,finances:false});assert.deepEqual(result.optInScope,{journals:true,finances:true});
-      assert.deepEqual(result.defaultRecords,{journals:0,moments:0,activities:0,expenses:0,exchanges:0});assert.deepEqual(result.sourceRecords,{journals:1,moments:1,activities:1,expenses:1});assert.equal(result.sourceTextsAbsent,true);assert.equal(result.privateRoundTrip,true);
+      assert.deepEqual(result.defaultRecords,{journals:0,moments:0,activities:0,expenses:0,exchanges:0});assert.deepEqual(result.sourceRecords,{journals:1,moments:1,activities:1,expenses:1});assert.equal(result.sourceTextsAbsent,true,'기본 공유에 개인 기록이 포함되었습니다.');assert.equal(result.privateRoundTrip,true,`개인 기록 왕복 결과: ${JSON.stringify(result)}`);
       assert.match(result.journal,/가상 하루 회고/);assert.match(result.moment,/가상 순간 기록/);assert.match(result.activity,/가상 일정 기록/);assert.deepEqual(result.expense,{title:'[가상 지출] 카페',amount:100,currency:'TWD',krw:4000});
       await page.evaluate(() => openShareModal());await settle();
       assert.equal(await page.locator('#share-include-journals').isChecked(),false);assert.equal(await page.locator('#share-include-finances').isChecked(),false);

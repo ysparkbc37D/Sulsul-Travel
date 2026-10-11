@@ -6,6 +6,17 @@
   const MONEY_FIELDS = ['expenses','exchanges','activeCurrencies','initialBalances','wallets'];
   const clone = value => JSON.parse(JSON.stringify(value));
   const canonicalTrip = trip => root.SulsulTravel?.TripAdapter?.normalizeTrip(trip) || trip;
+  const fieldName = key => key.toLowerCase().replace(/[^a-z0-9]/g, '');
+  const credentialField = key => /^(?:apikey|geminikey|githubpat|pat|password|accesstoken|refreshtoken|authorization|credentials?|secret|token)$/.test(fieldName(key)) || /(?:apikey|geminikey|githubpat|password|secret|credential|accesstoken|refreshtoken|authorization)|token$/i.test(fieldName(key));
+  const journalField = key => /^(?:journals?|journalentries|journaltext|diaries|diaryentries|diarytext|activityrecords|momentrecords|momententries|recordid|originaltext|coverindex)$/.test(fieldName(key)) || /(?:photo|thumbnail|mediaid)/i.test(fieldName(key));
+  function projectFields(value, excludeRecords, depth = 0) {
+    if (depth > 20) throw new Error('데이터 구조가 너무 깊습니다.');
+    if (Array.isArray(value)) return value.map(item => projectFields(item, excludeRecords, depth + 1));
+    if (value && typeof value === 'object') return Object.fromEntries(Object.entries(value)
+      .filter(([key]) => !credentialField(key) && !(excludeRecords && journalField(key)))
+      .map(([key, item]) => [key, projectFields(item, excludeRecords, depth + 1)]));
+    return value;
+  }
   function safePhoto(value) {
     if (typeof value !== 'string') return '';
     if (/^data:image\/(jpeg|png|webp);base64,[A-Za-z0-9+/=\s]+$/.test(value)) return value;
@@ -53,17 +64,21 @@
     return trip;
   }
   function snapshot(trip, {journals = false, finances = false} = {}) {
-    validateTrip(trip);
-    trip = canonicalTrip(trip);
+    if (!trip || typeof trip !== 'object' || Array.isArray(trip)) throw new Error('여행 자료 형식을 확인해 주세요.');
     const fields = [...PLAN_FIELDS, ...(journals ? ['journals','activityRecords','momentEntries'] : []), ...(finances ? MONEY_FIELDS : [])];
     const result = {};
-    fields.forEach(key => { if (trip[key] !== undefined) result[key] = clone(trip[key]); });
+    fields.forEach(key => {
+      if (trip[key] !== undefined) result[key] = projectFields(clone(trip[key]), !journals && PLAN_FIELDS.includes(key));
+    });
     result.journals = journals ? result.journals || {} : {};
     result.momentEntries = journals ? result.momentEntries || [] : [];
     result.expenses = finances ? result.expenses || [] : [];
     result.exchanges = finances ? result.exchanges || [] : [];
+    // 선택하지 않은 개인 기록의 내용·형식은 일정 사본 검증에 참여하지 않는다.
+    // 정규화가 잘못된 원본 구조를 기본값으로 바꾸기 전에 실제 전송 자료를 검증한다.
+    validateTrip(result);
     // 적용된 AI 작업, 인증 정보 및 서버 멤버십은 내보내지 않는다.
-    return result;
+    return canonicalTrip(result);
   }
   function create(trip, options = {}, version = '') {
     return {format:'sulsul-trip',schemaVersion:1,ver:version,shareId:root.crypto?.randomUUID?.() || `share-${Date.now()}-${Math.random().toString(36).slice(2)}`,exportedAt:new Date().toISOString(),scope:{journals:!!options.journals,finances:!!options.finances},trip:snapshot(trip, options)};

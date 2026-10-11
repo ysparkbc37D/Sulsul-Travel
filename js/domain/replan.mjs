@@ -1,4 +1,7 @@
+import './ai-draft-validation.js?v=1.9.3';
+
 const clone = value => JSON.parse(JSON.stringify(value));
+const validation = (typeof window !== 'undefined' ? window : globalThis).SulsulTravel.AiDraftValidation;
 
 export function timeToMinutes(value) {
   const text = String(value || '').trim();
@@ -63,6 +66,7 @@ export function createReplanProposal({ days, targetDay = 'all', offsetMinutes = 
       const original = sourceDay.spots[spotIndex];
       if (spot.completed) { preservedCompletedCount += 1; return; }
       if (spot.fixed) { preservedFixedCount += 1; return; }
+      if (spot.recordId) return;
       const shiftedTime = shiftTimeLabel(spot.time, offsetMinutes);
       if (!shiftedTime || shiftedTime === spot.time) return;
       spot.time = shiftedTime;
@@ -91,14 +95,5 @@ export function outsideScopeMatches(beforeDays, afterDays, targetDay = 'all') {
 }
 
 export function protectedSpotsMatch(beforeDays, afterDays) {
-  if (!Array.isArray(beforeDays) || !Array.isArray(afterDays) || beforeDays.length !== afterDays.length) return false;
-  return beforeDays.every((day, dayIndex) => {
-    const next = afterDays[dayIndex];
-    if (!next || !Array.isArray(day.spots) || !Array.isArray(next.spots)) return false;
-    const protectedBefore = day.spots.filter(spot => spot.completed || spot.fixed);
-    return protectedBefore.every(spot => next.spots.some(candidate =>
-      candidate.title === spot.title && candidate.time === spot.time &&
-      Boolean(candidate.completed) === Boolean(spot.completed) && Boolean(candidate.fixed) === Boolean(spot.fixed)
-    ));
-  });
+  return validation.protectedSpotsMatch(beforeDays, afterDays);
 }

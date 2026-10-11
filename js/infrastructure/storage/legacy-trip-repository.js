@@ -14,6 +14,8 @@
       this.key = options.key || 'st_trips_v2';
       this.now = options.now || (() => new Date().toISOString());
       this.beforeWrite = options.beforeWrite || (() => {});
+      this.observedRaw = this.storage.getItem(this.key);
+      this.committedTrips = null;
     }
 
     clone(value) {
@@ -37,9 +39,12 @@
 
     loadAll() {
       const raw = this.storage.getItem(this.key);
-      if (!raw) return { trips: [], recoveredFromCorruption: false, backupKey: null };
+      this.observedRaw = raw;
+      if (!raw) { this.committedTrips = []; return { trips: [], recoveredFromCorruption: false, backupKey: null }; }
       try {
-        return { trips: this.normalize(JSON.parse(raw)), recoveredFromCorruption: false, backupKey: null };
+        const trips = this.normalize(JSON.parse(raw));
+        this.committedTrips = this.clone(trips);
+        return { trips, recoveredFromCorruption: false, backupKey: null };
       } catch (error) {
         const backupKey = `${this.key}_corrupt_${Date.now()}`;
         try { this.storage.setItem(backupKey, raw); } catch (_) {}
@@ -48,7 +53,36 @@
       }
     }
 
-    saveAll(trips, { bumpTripId = null, approvedRemoteTripId = null, approvedRecoveryRaw = null } = {}) {
+    write(next, options = {}) {
+      const storedRaw = this.storage.getItem(this.key);
+      const expectedRaw = Object.prototype.hasOwnProperty.call(options, 'expectedRaw') ? options.expectedRaw : this.observedRaw;
+      if (storedRaw !== expectedRaw) {
+        const error = new Error('다른 창에서 여행이 변경됐습니다. 작성 중인 내용을 보관하고 최신 여행을 다시 불러와 주세요.');
+        error.code = 'STORAGE_CONFLICT';
+        throw error;
+      }
+      this.beforeWrite({next, storedRaw, approvedRemoteTripId:options.approvedRemoteTripId || null, approvedRecoveryRaw:options.approvedRecoveryRaw ?? null});
+      const raw = JSON.stringify(next);
+      this.storage.setItem(this.key, raw);
+      this.observedRaw = raw;
+      this.committedTrips = this.clone(next);
+    }
+
+    getCommittedTrips() { return this.committedTrips === null ? null : this.clone(this.committedTrips); }
+
+    commit(trips, {tripId, expectedRevision, change}) {
+      const next = this.normalize(this.clone(trips));
+      const trip = next.find(item => item.id === tripId);
+      if (!trip || trip.revision !== expectedRevision) {
+        const error = new Error('편집을 시작한 뒤 여행이 변경됐습니다. 내용을 확인하고 다시 편집해 주세요.');
+        error.code = 'REVISION_CONFLICT'; throw error;
+      }
+      change(trip);
+      return this.saveAll(next, {bumpTripId:tripId});
+    }
+
+    saveAll(trips, options = {}) {
+      const { bumpTripId = null } = options;
       const next = this.normalize(this.clone(trips));
       if (bumpTripId) {
         const trip = next.find((item) => item.id === bumpTripId);
@@ -57,8 +91,7 @@
           trip.updatedAt = this.now();
         }
       }
-      this.beforeWrite({next,storedRaw:this.storage.getItem(this.key),approvedRemoteTripId,approvedRecoveryRaw});
-      this.storage.setItem(this.key, JSON.stringify(next));
+      this.write(next, options);
       return next;
     }
 
@@ -75,9 +108,9 @@
       trip.revision += 1;
       trip.updatedAt = this.now();
       trip.appliedAiJobIds = [...trip.appliedAiJobIds, jobId].slice(-50);
-      this.beforeWrite({next,storedRaw:this.storage.getItem(this.key),approvedRemoteTripId:null,approvedRecoveryRaw:null});
-      this.storage.setItem(this.key, JSON.stringify(next));
-      return { status: 'applied', trips: next, duplicate: false };
+      const canonical = this.normalize(next);
+      this.write(canonical);
+      return { status: 'applied', trips: canonical, duplicate: false };
     }
   }
 

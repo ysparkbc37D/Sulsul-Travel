@@ -43,6 +43,16 @@ test('공동 게시와 오프라인 대기 자료에서 개인 기록·사진·�
   assert.equal((await f.service.publishDocument(docId,original,4)).state,'queued');
   assert.equal(JSON.stringify(f.service.outbox()).includes('private-'),false);assert.deepEqual(original,before);assert.equal(f.calls.length,0);
 });
+test('공동 계획 검증은 제외된 개인 HTML 기록보다 실제 게시 필드를 먼저 검사한다',()=>{
+  const original=trip();original.journals[0].text='x<y, <b>개인 기록</b>';
+  original.days[0].spots[0].originalText='<script>private</script>';
+  original.planBlockMeta.block.nested.journalText='<b>공개하지 않는 기록</b>';
+  const before=structuredClone(original),published=sanitizePlan(original,transfer);
+  assert.equal(published.days[0].spots[0].title,'빙하');assert.deepEqual(original,before);
+  assert.equal(JSON.stringify(published).includes('private'),false);
+  original.days[0].spots[0].title='<img src=x onerror=alert(1)>';
+  assert.throws(()=>sanitizePlan(original,transfer));
+});
 
 test('익명 Auth는 명시 요청에서만 생성하고 publishable 키는 apikey 헤더에만 보낸다',async()=>{
   const f=fixture(call=>call.url.endsWith('/auth/v1/signup')?response({access_token:'mock-user-jwt',refresh_token:'mock-refresh',user:{id:userId},expires_in:3600}):response({document_id:docId,revision:1,role:'owner'}));

@@ -1,9 +1,4 @@
-/**
- * IndexedDB overflow store for journal text when the legacy localStorage
- * document is full. Photos remain in the main trip document when possible;
- * this store keeps the user's writing recoverable until the document can be
- * compacted or exported.
- */
+/* 저장 공간이 부족할 때 글과 원래 날짜 연결을 보관한다. 사진은 본 여행 문서에 남긴다. */
 (function (root) {
   'use strict';
 
@@ -34,12 +29,20 @@
         throw new TypeError('INVALID_JOURNAL_OVERFLOW');
       }
       const db = await this.open();
+      const dayId = typeof entry.journal?.dayId === 'string' ? entry.journal.dayId : typeof entry.dayId === 'string' ? entry.dayId : '';
+      const date = typeof entry.journal?.date === 'string' ? entry.journal.date : typeof entry.date === 'string' ? entry.date : '';
       const value = {
-        key: `${entry.tripId}:${entry.dayIndex}`,
+        key: `${entry.tripId}:${dayId ? `day:${dayId}` : date ? `date:${date}` : entry.dayIndex}`,
         tripId: entry.tripId,
         dayIndex: entry.dayIndex,
+        ...(dayId ? {dayId} : {}),
+        ...(date ? {date} : {}),
         revision: Number.isInteger(entry.revision) ? entry.revision : 0,
         journal: {
+          ...(typeof entry.journal?.id === 'string' ? {id:entry.journal.id} : {}),
+          ...(dayId ? {dayId} : {}),
+          ...(date ? {date} : {}),
+          ...(entry.journal?.journalIdentityVersion === 1 || dayId || date ? {journalIdentityVersion:1} : {}),
           originalText: String(entry.journal?.originalText || ''),
           text: String(entry.journal?.text || ''),
           aiDraftAcceptedAt: String(entry.journal?.aiDraftAcceptedAt || '')
@@ -81,13 +84,13 @@
         return await new Promise((resolve, reject) => {
           const tx = db.transaction(STORE_NAME, 'readwrite');
           const store = tx.objectStore(STORE_NAME);
-          const prefix = `${tripId}:`;
           let deleted = 0;
-          const request = store.getAllKeys();
+          const request = store.getAll();
           request.onsuccess = () => {
-            for (const key of request.result || []) {
-              if (typeof key === 'string' && key.startsWith(prefix)) {
-                store.delete(key);
+            for (const entry of request.result || []) {
+              // 가져온 여행의 ID에 콜론이 있어도 다른 여행의 글을 지우지 않는다.
+              if (entry?.tripId === tripId && typeof entry.key === 'string') {
+                store.delete(entry.key);
                 deleted += 1;
               }
             }

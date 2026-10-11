@@ -23,8 +23,20 @@ test('최신 보조 일기는 백업에 합치고 이전 revision 및 삭제된 
 });
 test('서로 다른 날의 보조 일기는 순서와 무관하게 합치며 같은 날짜는 최신 버전을 보존한다',()=>{
  const source=trip(),entries=[{tripId:source.id,dayIndex:0,revision:5,journal:{text:'최신 첫날'}},{tripId:source.id,dayIndex:1,revision:4,journal:{text:'최신 둘째날'}},{tripId:source.id,dayIndex:0,revision:4,journal:{text:'덮으면 안 되는 첫날'}}];
+ source.days.push({id:'d2',date:'2030-01-02',title:'둘째 날',spots:[]});
  for(const order of [entries,[...entries].reverse()]){const result=api.parse(api.create([source],order).json).trips[0];assert.equal(result.journals[0].text,'최신 첫날');assert.equal(result.journals[1].text,'최신 둘째날');assert.equal(result.revision,5);}
  assert.equal(source.revision,3);assert.equal(source.journals[1],undefined);
+});
+
+test('보조 회고는 저장 당시 일정 ID와 날짜를 따라가며 삭제된 날짜도 백업에서 보존한다',()=>{
+ const source=trip();source.days.unshift({id:'new-day',date:'2029-12-31',title:'추가한 전날',spots:[]});
+ const entries=[{tripId:source.id,dayIndex:0,dayId:'d1',date:'2030-01-01',revision:4,journal:{text:'원래 첫날의 보조 기록'}}];
+ const result=api.parse(api.create([source],entries).json).trips[0];
+ assert.equal(result.journals[1].text,'원래 첫날의 보조 기록');assert.equal(result.journals[1].date,'2030-01-01');assert.notEqual(result.journals[0]?.text,'원래 첫날의 보조 기록');
+ source.days=source.days.filter(day=>day.id!=='d1');
+ const archived=api.parse(api.create([source],entries).json).trips[0];
+ assert.ok(Object.values(archived.journals).some(entry=>entry.text==='원래 첫날의 보조 기록'&&entry.date==='2030-01-01'&&entry.dayId==='d1'));
+ assert.notEqual(archived.journals[0]?.text,'원래 첫날의 보조 기록');
 });
 test('손상·잘못된 여행·새 schema·실행 HTML은 저장 전에 거절한다',()=>{
  assert.throws(()=>api.parse('{'),/JSON/);assert.throws(()=>api.parse(JSON.stringify({format:'other',trips:[]})),/형식/);assert.throws(()=>api.parse(JSON.stringify({schemaVersion:2,trips:[]})),/형식/);
