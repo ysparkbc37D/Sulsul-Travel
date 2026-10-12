@@ -13,7 +13,10 @@ function legacy(file){
  }
  return legacyFiles.get(file);
 }
-let deployment='legacy',workerGeneration=0;
+let deployment='legacy',workerGeneration=0,holdFirstInstallWorker=false;
+const pendingFirstInstallWorkers=[];
+let observeFirstInstallWorker;
+const firstInstallWorkerRequested=new Promise(resolve=>{observeFirstInstallWorker=resolve;});
 const server=http.createServer((req,res)=>{
  const url=new URL(req.url,'http://localhost');res.setHeader('Cache-Control','no-store');
  if(url.pathname==='/__upgrade-check'){
@@ -28,7 +31,9 @@ const server=http.createServer((req,res)=>{
   else {res.writeHead(404).end();return;}
  }catch(error){res.writeHead(404).end(error.message);return;}
  if(file==='sw.js'&&deployment==='current'&&workerGeneration)data=Buffer.concat([data,Buffer.from('\n// 합성 업데이트 세대 '+workerGeneration+'\n')]);
- res.setHeader('Content-Type',({'.html':'text/html','.js':'application/javascript','.mjs':'application/javascript','.css':'text/css','.png':'image/png','.woff2':'font/woff2'})[path.extname(file)]||'application/octet-stream');res.end(data);
+ res.setHeader('Content-Type',({'.html':'text/html','.js':'application/javascript','.mjs':'application/javascript','.css':'text/css','.png':'image/png','.woff2':'font/woff2'})[path.extname(file)]||'application/octet-stream');
+ if(file==='sw.js'&&holdFirstInstallWorker){pendingFirstInstallWorkers.push(()=>res.end(data));observeFirstInstallWorker();return;}
+ res.end(data);
 });
 const fixture={id:'upgrade-synthetic',title:'가상 도시 여행',startDate:'2026-10-01',endDate:'2026-10-01',countries:['가상국'],cities:['가상도시'],currency:'KRW',budget:0,revision:3,journals:{'0':{text:'합성 하루 일기 원문',photos:[]}},activityRecords:{'upgrade-record':{id:'upgrade-record',text:'합성 일정 기록 원문',photos:[],context:{date:'2026-10-01',time:'14:00',city:'가상도시',title:'가상 공원 산책'}}},momentEntries:[{id:'upgrade-moment',text:'합성 순간 기록 원문',date:'2026-10-01',time:'15:00',photos:[]}],expenses:[],checklist:[],days:[{id:'upgrade-day',dayNum:1,date:'2026-10-01',city:'가상도시',title:'가상 산책',spots:[{id:'upgrade-spot',recordId:'upgrade-record',time:'14:00',title:'가상 공원 산책',completed:false}]}]};
 (async()=>{
@@ -36,6 +41,26 @@ const fixture={id:'upgrade-synthetic',title:'가상 도시 여행',startDate:'20
  const origin='http://127.0.0.1:'+server.address().port;
  const browser=await chromium.launch({headless:true,...(process.env.CHROME_PATH?{executablePath:process.env.CHROME_PATH}:{})});
  try {
+  // 첫 설치는 화면 초기화 뒤에 claim해도 새 버전 교체 안내를 띄우면 안 된다.
+  deployment='current';holdFirstInstallWorker=true;
+  const firstContext=await browser.newContext({serviceWorkers:'allow',viewport:{width:390,height:844}}),firstPage=await firstContext.newPage();
+  const firstRuntimeErrors=[];firstPage.setDefaultTimeout(15000);firstPage.on('pageerror',error=>firstRuntimeErrors.push(error.message));
+  await firstContext.route('**/*',route=>new URL(route.request().url()).origin===origin?route.continue():route.abort());
+  await firstPage.addInitScript(()=>{
+   window.syntheticFirstClaims=[];
+   navigator.serviceWorker.addEventListener('controllerchange',()=>syntheticFirstClaims.push({started:window.SulsulShell?.started===true}));
+  });
+  await firstPage.goto(origin+'/?first-install-regression=1',{waitUntil:'domcontentloaded'});
+  await firstPage.waitForFunction(()=>window.SulsulShell?.started===true);
+  await firstInstallWorkerRequested;
+  const beforeFirstClaim=await firstPage.evaluate(()=>({time:performance.timeOrigin,controlled:!!navigator.serviceWorker.controller,started:SulsulShell.started,notices:document.querySelectorAll('#app-update-notice').length,trips:State.trips.length}));
+  assert.equal(beforeFirstClaim.controlled,false);assert.equal(beforeFirstClaim.started,true);assert.equal(beforeFirstClaim.notices,0);assert.equal(beforeFirstClaim.trips,0);
+  holdFirstInstallWorker=false;for(const release of pendingFirstInstallWorkers.splice(0))release();
+  await firstPage.waitForFunction(()=>!!navigator.serviceWorker.controller&&window.syntheticFirstClaims.length>0);
+  const firstClaim=await firstPage.evaluate(()=>({time:performance.timeOrigin,version:APP_VER,controlled:!!navigator.serviceWorker.controller,hadController:SulsulShell.hadController,claims:syntheticFirstClaims,notices:document.querySelectorAll('#app-update-notice').length,trips:State.trips.length}));
+  assert.equal(firstClaim.claims.length,1);assert.equal(firstClaim.claims[0].started,true);assert.equal(firstClaim.controlled,true);assert.equal(firstClaim.hadController,true);
+  assert.equal(firstClaim.notices,0);assert.equal(firstClaim.time,beforeFirstClaim.time);assert.equal(firstClaim.version,currentVersion);assert.equal(firstClaim.trips,0);assert.deepEqual(firstRuntimeErrors,[]);
+  await firstContext.close();deployment='legacy';
   const context=await browser.newContext({serviceWorkers:'allow',viewport:{width:390,height:844}}),page=await context.newPage(),runtimeErrors=[];
   page.setDefaultTimeout(15000);page.on('pageerror',error=>runtimeErrors.push(error.message));
   await context.route('**/*',route=>new URL(route.request().url()).origin===origin?route.continue():route.abort());
@@ -129,7 +154,7 @@ const fixture={id:'upgrade-synthetic',title:'가상 도시 여행',startDate:'20
   assert.equal(Object.values(recovered.trip.journals)[0].text,'워커 교체 뒤 남긴 합성 하루 일기');
   assert.equal(recovered.trip.momentEntries[0].text,fixture.momentEntries[0].text);
   assert.deepEqual(runtimeErrors,[]);
-  console.log(JSON.stringify({passed:true,checks:36,runtimeErrors,scope:'실제 v1.9.2 ignoreSearch 캐시→현재 버전 / 혼합 모듈 차단 / 원문 무변경 / 정상 업데이트 / 일정 기록 저장·AI 승인 / 작성 중 워커 교체·재시작 보존 / 현재 캐시 손상·오프라인 보존·명시 재시도 복구'}));
+  console.log(JSON.stringify({passed:true,checks:49,runtimeErrors,firstInstallation:{claims:firstClaim.claims.length,claimedAfterStartup:firstClaim.claims[0].started,updateNotice:false,reloaded:false,runtimeErrors:firstRuntimeErrors},scope:'신규 설치 첫 워커 claim 안내 없음 / 실제 v1.9.2 ignoreSearch 캐시→현재 버전 / 혼합 모듈 차단 / 원문 무변경 / 정상 업데이트 / 일정 기록 저장·AI 승인 / 작성 중 워커 교체·재시작 보존 / 현재 캐시 손상·오프라인 보존·명시 재시도 복구'}));
   await context.close();
  } finally {await browser.close();}
 })().catch(error=>{console.error(error);process.exitCode=1;}).finally(()=>server.close());

@@ -45,9 +45,10 @@
       };
       shell.register = () => {
         if(!('serviceWorker' in navigator))return Promise.resolve(null);
-        if(!shell.listening){shell.listening=true;navigator.serviceWorker.addEventListener('controllerchange',()=>{
+        if(!shell.listening){shell.listening=true;shell.hadController=!!navigator.serviceWorker.controller;navigator.serviceWorker.addEventListener('controllerchange',()=>{
+          const wasControlled=shell.hadController;shell.hadController=!!navigator.serviceWorker.controller;
           if(shell.recovering && !shell.started)shell.reload();
-          else if(shell.started)shell.notify();
+          else if(shell.started && wasControlled)shell.notify();
         });}
         return navigator.serviceWorker.register('./sw.js',{updateViaCache:'none'}).then(async registration=>{
           shell.registration=registration;
@@ -134,17 +135,17 @@
   </script>
 
   <!-- PWA Meta & Icons -->
-  <link rel="manifest" href="manifest.webmanifest?v=1.9.4">
+  <link rel="manifest" href="manifest.webmanifest?v=1.9.5">
   <meta name="theme-color" content="#F7F5F0">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <meta name="apple-mobile-web-app-title" content="술술트래블">
-  <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192-v115.png?v=1.9.4">
-  <link rel="icon" type="image/png" sizes="32x32" href="favicon.png?v=1.9.4">
+  <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192-v115.png?v=1.9.5">
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon.png?v=1.9.5">
   <link rel="shortcut icon" href="favicon.ico">
-  <link rel="apple-touch-icon" sizes="180x180" href="icons/apple-touch-icon-v115.png?v=1.9.4">
-  <link rel="apple-touch-icon" href="icons/apple-touch-icon-v115.png?v=1.9.4">
+  <link rel="apple-touch-icon" sizes="180x180" href="icons/apple-touch-icon-v115.png?v=1.9.5">
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon-v115.png?v=1.9.5">
 
   <!-- Google Fonts: Great Vibes, Dancing Script (Cursive Calligraphy), Cormorant Garamond, Noto Serif KR, Playfair Display -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -152,7 +153,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Great+Vibes&family=Cormorant+Garamond:wght@600;700;800&family=Noto+Serif+KR:wght@500;600;700;900&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
 
   <!-- Local Utilities Bundle (CDN fallback & tailwind utilities) -->
-  <link rel="stylesheet" href="css/utilities.css?v=1.9.4" integrity="sha384-HMVB4SH6xwwGITkNyT8ARmHegAYSuTMocPGl4bpl0JywMIe2PqYrUxqZOgEuZjmP">
+  <link rel="stylesheet" href="css/utilities.css?v=1.9.5" integrity="sha384-HMVB4SH6xwwGITkNyT8ARmHegAYSuTMocPGl4bpl0JywMIe2PqYrUxqZOgEuZjmP">
   <link rel="stylesheet" href="vendor/fontawesome/css/all.min.css" integrity="sha384-t1nt8BQoYMLFN5p42tRAtuAAFQaCQODekUVeKKZrEnEyp4H2R0RHFz0KWpmj7i8g">
 
   <!-- Leaflet Map CSS & JS -->
@@ -1494,36 +1495,36 @@
     }
   </style>
 
-  <link rel="stylesheet" href="css/companion.css?v=1.9.4" integrity="sha384-NiuOoDjU/cCP9AkPZM2xAPW9BIDbwKxbD8J9NsNj68Vr49QkOfFGScSqXiQRzeaS">
-  <link rel="stylesheet" href="css/companion-refresh.css?v=1.9.4" integrity="sha384-ulX7NJeUXVEzSRzPR9IPTOosLj/wr5P74BY4dcuIHByyV/FV9f5rDNjYbZOa9NMC">
-  <link rel="stylesheet" href="css/moment-journal.css?v=1.9.4" integrity="sha384-g1EihgfyPDJ5o5eWSsQgT1WDTRKDtUfzVatlx6T/t+DhApDBY8dznSrwmelasv91">
-  <script src="js/domain/trip-adapter.js?v=1.9.4" integrity="sha384-/j6gmpfAUfKgvJBYggrBibtRMnHPhj/rPb9IrnwnanAo8Yph500htTvTwXoh2Lcw"></script>
-  <script src="js/domain/ai-draft-validation.js?v=1.9.4" integrity="sha384-d9mNrokIS1njpKLOvQED+QO0PcqlBt6N3yMCVN3x7EsJtIcH8YepGD9G/CuCAUT3"></script>
-  <script src="js/domain/travel-story.js?v=1.9.4" integrity="sha384-FPRte9PfIWfmgLmkCzZHF2EO4uJ3BzcfVPeL2BR131x+vzMChKHY9JLs079Ryc/7"></script>
-  <script src="js/infrastructure/storage/media-repository.js?v=1.9.4" integrity="sha384-hr+y2kKdSKxLv1oG2W4RSmc9gzPE1FjwSQcFBWrPTBKoJyKHSk4q4uaDzXHP8gRq"></script>
-  <script src="js/presentation/companion-ui.js?v=1.9.4" integrity="sha384-EZqDu6FyXyrbDxefJxwmWmwEnORo3WiD/BtOLr1kr1MYD8A4cv+wrFs4U3an+91i"></script>
-  <script src="js/domain/trip-transfer.js?v=1.9.4" integrity="sha384-GEnvL3PLzO7LslGu74aYxSeVLrLK//oaS/MgcaNbfCv611thb+CQespNe61oti7W"></script>
-  <script src="js/domain/travel-backup.js?v=1.9.4" integrity="sha384-DRD8j+n7H+jCs0N55457DPBjJk9PSnRLnxYiIiDeka1zLoZBsVWJMhEnIGCzu2qC"></script>
-  <script src="js/presentation/travel-backup-ui.js?v=1.9.4" integrity="sha384-MjtHzvA/+97G1RfTmn7jsaCl9S9a1JuSHwwRBA9OCOYVvCfRzetZInV/5pqQ4iWt"></script>
-  <script src="js/presentation/trip-transfer-ui.js?v=1.9.4" integrity="sha384-9692UFKuSTNYWp/oLVLygVUFDpsS+tJkDpnXxZ8cvJo8kyy74XAhuHABb/ihDmXe"></script>
-  <script src="js/presentation/activity-journal.js?v=1.9.4" integrity="sha384-Zth7iBT/jJwb8Cf2jvfoMSM4uk3tBYqGV0xiX0f7KTGss1AjwfP4gschtiUJheka"></script>
-  <script src="js/presentation/moment-journal.js?v=1.9.4" integrity="sha384-wnX4+XzDGbETV3nCWus537DF9+kc+D/5ROLuAPWSWVxShqvuOUtwT2qe3guBXmXn"></script>
-  <script src="js/presentation/travel-story-ui.js?v=1.9.4" integrity="sha384-s9HZ4A1/X3tCfe4rBfB6nzEwAC7i2U1YVfradgxnQPX5X4tnFszIOPeMsLPfXnfq"></script>
-  <script src="js/config/collaboration-config.js?v=1.9.4" integrity="sha384-ipxhKB+fQ4s3OThYo3p6IWFvP6BbstXYDW6jZWWiPHB4qomo64w7r8/wRvdsi47w"></script>
-  <script src="js/infrastructure/collaboration/supabase-travel-service.js?v=1.9.4" integrity="sha384-+SDvVJ0CNqCMvFlOBOA+nfA1k6/sN6GlaKDhTQo4SgX8x3EwPXyJlvMfJj0D6Bt/"></script>
-  <script src="js/presentation/collaboration-ui.js?v=1.9.4" integrity="sha384-p7U+2X1NfngAz27LiOffxjrDc0NnDrBnaWR204peQGbsPeYb2eUhWICd4bVssIf0"></script>
-  <script src="js/presentation/collaboration-review.js?v=1.9.4" integrity="sha384-QfJkmlcwC5CuDKn83p355LDagawAe7BmsLPDaYwavr3xZGJh2ocAjZYJgQyRg45A"></script>
-  <script src="js/presentation/expense-editor.js?v=1.9.4" integrity="sha384-IdlvYWCuVktfwTJv1GOPiRAtZ3V8BJT91EIoqN85514wfqPNp54xpWQPNBNu+Wu2"></script>
+  <link rel="stylesheet" href="css/companion.css?v=1.9.5" integrity="sha384-NiuOoDjU/cCP9AkPZM2xAPW9BIDbwKxbD8J9NsNj68Vr49QkOfFGScSqXiQRzeaS">
+  <link rel="stylesheet" href="css/companion-refresh.css?v=1.9.5" integrity="sha384-d/Mjp2F8+eUgF8aaRgbXFpzEBQnILfTRwJkKn915RPx3+/R0hajXip3sciPv4frM">
+  <link rel="stylesheet" href="css/moment-journal.css?v=1.9.5" integrity="sha384-g1EihgfyPDJ5o5eWSsQgT1WDTRKDtUfzVatlx6T/t+DhApDBY8dznSrwmelasv91">
+  <script src="js/domain/trip-adapter.js?v=1.9.5" integrity="sha384-/j6gmpfAUfKgvJBYggrBibtRMnHPhj/rPb9IrnwnanAo8Yph500htTvTwXoh2Lcw"></script>
+  <script src="js/domain/ai-draft-validation.js?v=1.9.5" integrity="sha384-d9mNrokIS1njpKLOvQED+QO0PcqlBt6N3yMCVN3x7EsJtIcH8YepGD9G/CuCAUT3"></script>
+  <script src="js/domain/travel-story.js?v=1.9.5" integrity="sha384-FPRte9PfIWfmgLmkCzZHF2EO4uJ3BzcfVPeL2BR131x+vzMChKHY9JLs079Ryc/7"></script>
+  <script src="js/infrastructure/storage/media-repository.js?v=1.9.5" integrity="sha384-hr+y2kKdSKxLv1oG2W4RSmc9gzPE1FjwSQcFBWrPTBKoJyKHSk4q4uaDzXHP8gRq"></script>
+  <script src="js/presentation/companion-ui.js?v=1.9.5" integrity="sha384-aBnG1GIFJ69JLEM34LAWrcC5grgSNEvUet6dpLs1/UZ9RhNqGjBfQPJsqjTk0K9M"></script>
+  <script src="js/domain/trip-transfer.js?v=1.9.5" integrity="sha384-GEnvL3PLzO7LslGu74aYxSeVLrLK//oaS/MgcaNbfCv611thb+CQespNe61oti7W"></script>
+  <script src="js/domain/travel-backup.js?v=1.9.5" integrity="sha384-DRD8j+n7H+jCs0N55457DPBjJk9PSnRLnxYiIiDeka1zLoZBsVWJMhEnIGCzu2qC"></script>
+  <script src="js/presentation/travel-backup-ui.js?v=1.9.5" integrity="sha384-MjtHzvA/+97G1RfTmn7jsaCl9S9a1JuSHwwRBA9OCOYVvCfRzetZInV/5pqQ4iWt"></script>
+  <script src="js/presentation/trip-transfer-ui.js?v=1.9.5" integrity="sha384-9692UFKuSTNYWp/oLVLygVUFDpsS+tJkDpnXxZ8cvJo8kyy74XAhuHABb/ihDmXe"></script>
+  <script src="js/presentation/activity-journal.js?v=1.9.5" integrity="sha384-Zth7iBT/jJwb8Cf2jvfoMSM4uk3tBYqGV0xiX0f7KTGss1AjwfP4gschtiUJheka"></script>
+  <script src="js/presentation/moment-journal.js?v=1.9.5" integrity="sha384-wnX4+XzDGbETV3nCWus537DF9+kc+D/5ROLuAPWSWVxShqvuOUtwT2qe3guBXmXn"></script>
+  <script src="js/presentation/travel-story-ui.js?v=1.9.5" integrity="sha384-s9HZ4A1/X3tCfe4rBfB6nzEwAC7i2U1YVfradgxnQPX5X4tnFszIOPeMsLPfXnfq"></script>
+  <script src="js/config/collaboration-config.js?v=1.9.5" integrity="sha384-ipxhKB+fQ4s3OThYo3p6IWFvP6BbstXYDW6jZWWiPHB4qomo64w7r8/wRvdsi47w"></script>
+  <script src="js/infrastructure/collaboration/supabase-travel-service.js?v=1.9.5" integrity="sha384-+SDvVJ0CNqCMvFlOBOA+nfA1k6/sN6GlaKDhTQo4SgX8x3EwPXyJlvMfJj0D6Bt/"></script>
+  <script src="js/presentation/collaboration-ui.js?v=1.9.5" integrity="sha384-p7U+2X1NfngAz27LiOffxjrDc0NnDrBnaWR204peQGbsPeYb2eUhWICd4bVssIf0"></script>
+  <script src="js/presentation/collaboration-review.js?v=1.9.5" integrity="sha384-QfJkmlcwC5CuDKn83p355LDagawAe7BmsLPDaYwavr3xZGJh2ocAjZYJgQyRg45A"></script>
+  <script src="js/presentation/expense-editor.js?v=1.9.5" integrity="sha384-IdlvYWCuVktfwTJv1GOPiRAtZ3V8BJT91EIoqN85514wfqPNp54xpWQPNBNu+Wu2"></script>
 
   <!-- Knowledge Base Seed & Destination Knowledge Packs (DKP) -->
-  <script src="kb-travel.js?v=1.9.4" integrity="sha384-zxXc7MUMbmXkiaF3ymeLmVSiCyPRVfkUjSZetDVx41zrHGyPeSCN4TFpy5f1jNUd"></script>
+  <script src="kb-travel.js?v=1.9.5" integrity="sha384-zxXc7MUMbmXkiaF3ymeLmVSiCyPRVfkUjSZetDVx41zrHGyPeSCN4TFpy5f1jNUd"></script>
   <script src="js/destinations/destination-registry.js" integrity="sha384-PV7EnpqZusutqYxhFc0vICq72coA/C+TMYaBkk+BFy52dmgfk/RDzf/DAgW7dmvC"></script>
   <script src="js/destinations/pack-default.js" integrity="sha384-KiEdgPiqfhjJ/QjiOogAe0lk6HNE2SOVTHeKqE6tcm8jtdrKtHAVzMaYQfKqho3i"></script>
-  <script src="js/destinations/pack-south-america.js?v=1.9.4" integrity="sha384-p6i8pSXkYDEndehBEqNlXK7ZIZia6Tsxw4TD2LUf7TJPUSlPd2AzXbp3wyyAvDG7"></script>
+  <script src="js/destinations/pack-south-america.js?v=1.9.5" integrity="sha384-p6i8pSXkYDEndehBEqNlXK7ZIZia6Tsxw4TD2LUf7TJPUSlPd2AzXbp3wyyAvDG7"></script>
   <script src="js/destinations/pack-yunnan.js" integrity="sha384-MIgviqt+QV/b06eH6w7DO42JTPFr7Q2kFTi8TRQT4MCouBcFBGiC7x1jnKgVatOX"></script>
-  <script src="js/infrastructure/storage/legacy-trip-repository.js?v=1.9.4" integrity="sha384-T9cRVRqZEOYx77w1ugj9P6j0VnBhyN2qKALfHCn9azWG8/dmrYGtfMzvE/1SGeap"></script>
-  <script src="js/infrastructure/storage/settings-repository.js?v=1.9.4" integrity="sha384-fp7ck757BhOA+Y2i/VoW21KRCkeMyb/G78wxwhZuReB2JbzcyTxBrLxGldhvw3n3"></script>
-  <script src="js/infrastructure/storage/journal-overflow-repository.js?v=1.9.4" integrity="sha384-uRxi9B+oBHCQ+aa8a6Wp72RAAeEuslXu5kZ+gf9Kvo22B3N6fr1XSkVnAV1X42yO"></script>
+  <script src="js/infrastructure/storage/legacy-trip-repository.js?v=1.9.5" integrity="sha384-T9cRVRqZEOYx77w1ugj9P6j0VnBhyN2qKALfHCn9azWG8/dmrYGtfMzvE/1SGeap"></script>
+  <script src="js/infrastructure/storage/settings-repository.js?v=1.9.5" integrity="sha384-fp7ck757BhOA+Y2i/VoW21KRCkeMyb/G78wxwhZuReB2JbzcyTxBrLxGldhvw3n3"></script>
+  <script src="js/infrastructure/storage/journal-overflow-repository.js?v=1.9.5" integrity="sha384-uRxi9B+oBHCQ+aa8a6Wp72RAAeEuslXu5kZ+gf9Kvo22B3N6fr1XSkVnAV1X42yO"></script>
 </head>
 <body class="min-h-screen flex flex-col font-sans transition-colors duration-200">
 
@@ -1533,26 +1534,22 @@
   <header class="companion-app-header sticky top-0 z-40 bg-[#faf8f5]/90 dark:bg-[#121316]/90 backdrop-blur-md border-b border-[#e8e2d5] dark:border-stone-800 transition-colors">
     <div class="max-w-6xl mx-auto px-3 sm:px-4 h-14 flex items-center justify-between gap-1.5 sm:gap-2">
       <!-- 좌측 브랜드 로고 & 워크스페이스 타이틀 (새로 만든 빈티지 베어 마스코트 + 필기체 영문 로고 + A Deep Life Essay) -->
-      <div class="flex items-center gap-2 sm:gap-2.5 min-w-0 cursor-pointer select-none" onclick="switchView('hub')">
+      <div class="app-brand flex items-center gap-2 sm:gap-2.5 min-w-0 cursor-pointer select-none" onclick="switchView('hub')">
         <img src="icons/sulsul_bear_mascot.png" class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl object-cover border border-[#e6e2d8] dark:border-stone-800 shadow-sm shrink-0" alt="Sulsul Travel">
         <div class="min-w-0 flex flex-col justify-center">
           <h1 class="font-brand-script text-xl sm:text-2xl md:text-3xl font-bold tracking-normal text-[#1E2B24] dark:text-[#ededed] whitespace-nowrap leading-tight">Sulsul Travel</h1>
-          <p id="header-trip-name" class="font-serif text-[10px] sm:text-xs tracking-wider text-[#6B5E51] dark:text-stone-400 whitespace-nowrap font-medium leading-none">A Deep Life Essay</p>
+          <div class="app-brand-meta">
+            <button id="app-ver-badge" type="button" onclick="event.stopPropagation(); openVersionHistoryModal()" class="theme-card-subtle font-mono" title="앱 버전과 업데이트 기록 보기">v1.9.5</button>
+            <button id="header-btn-analytics" type="button" onclick="event.stopPropagation();openAnalyticsModal('lifetime')" class="companion-header-analytics w-7 h-7 sm:w-8 sm:h-8 rounded-full theme-card-subtle flex items-center justify-center text-[#a2601b] dark:text-[#d4af37] transition cursor-pointer shrink-0" aria-label="누적 여행 통계" title="누적 여행 통계"><i class="fa-solid fa-chart-pie text-xs" aria-hidden="true"></i></button>
+            <p id="header-trip-name" class="font-serif text-[10px] sm:text-xs tracking-wider text-[#6B5E51] dark:text-stone-400 whitespace-nowrap font-medium leading-none">A Deep Life Essay</p>
+          </div>
         </div>
       </div>
 
       <!-- 우측 액션 클러스터 (버전 알약 -> 원형 통계 -> 원형 설정 -> 다크그린 캡슐 추가) -->
-      <div class="flex items-center gap-1 sm:gap-1.5 shrink-0">
-        <!-- 1. 버전 배지 버튼 (v1.7.8 - 클릭 시 버전 이력) -->
-        <button id="app-ver-badge" onclick="event.stopPropagation(); openVersionHistoryModal()" class="h-7 sm:h-8 px-2 sm:px-2.5 rounded-full theme-card-subtle flex items-center justify-center font-mono text-[10px] sm:text-[11px] font-bold text-[#a2601b] dark:text-[#d4af37] shadow-xs hover:border-amber-500/60 transition cursor-pointer shrink-0" title="버전 업데이트 기록 보기 (클릭)">v1.9.4</button>
-
-        <!-- 2. 통계 버튼 (📊 - 원형 버튼) -->
-        <button id="header-btn-analytics" onclick="openAnalyticsModal('lifetime')" class="companion-header-analytics w-7 h-7 sm:w-8 sm:h-8 rounded-full theme-card-subtle flex items-center justify-center text-[#a2601b] dark:text-[#d4af37] hover:border-amber-500/60 transition shadow-xs cursor-pointer shrink-0" title="술술 여행 통계 대시보드">
-          <i class="fa-solid fa-chart-pie text-xs" aria-hidden="true"></i>
-        </button>
-
+      <div class="app-header-actions flex items-center gap-1 sm:gap-1.5 shrink-0">
         <!-- 3. 설정 버튼 (⚙️ - 원형 버튼) -->
-        <button onclick="openSettingsModal()" class="w-7 h-7 sm:w-8 sm:h-8 rounded-full theme-card-subtle flex items-center justify-center text-[#44403c] dark:text-stone-300 hover:border-amber-500/60 transition shadow-xs cursor-pointer shrink-0" title="앱 설정 & AI & 백업">
+        <button id="header-btn-settings" onclick="openSettingsModal()" class="w-7 h-7 sm:w-8 sm:h-8 rounded-full theme-card-subtle flex items-center justify-center text-[#44403c] dark:text-stone-300 hover:border-amber-500/60 transition shadow-xs cursor-pointer shrink-0" aria-label="앱 설정" title="앱 설정 & AI & 백업">
           <i class="fa-solid fa-sliders text-xs" aria-hidden="true"></i>
         </button>
 
@@ -1585,10 +1582,10 @@
     <div id="smart-welcome-banner" class="hidden"></div>
 
     <!-- 통합 스마트 여행 필터 & 검색 허브 (100% 모바일 1화면 최적화, 스크롤 0px) -->
-    <div class="p-2.5 sm:p-3.5 rounded-2xl bg-white dark:bg-[#16181d] border border-[#e8e2d5] dark:border-stone-800 shadow-[0_2px_12px_rgba(0,0,0,0.03)] space-y-2.5">
+    <div class="hub-filter-panel p-2.5 sm:p-3.5 rounded-2xl bg-white dark:bg-[#16181d] border border-[#e8e2d5] dark:border-stone-800 shadow-[0_2px_12px_rgba(0,0,0,0.03)] space-y-2.5">
       
       <!-- 1. 상태 5대 세그먼트 탭 (360px 모바일 완벽 1줄 균등 분할) -->
-      <div class="grid grid-cols-5 gap-1 p-1 rounded-xl bg-[#f5f4ef] dark:bg-stone-900 border border-[#e8e2d5]/60 dark:border-stone-800 text-[11px] font-bold select-none">
+      <div class="hub-status-tabs grid grid-cols-5 gap-1 p-1 rounded-xl bg-[#f5f4ef] dark:bg-stone-900 border border-[#e8e2d5]/60 dark:border-stone-800 text-[11px] font-bold select-none" role="group" aria-label="여행 상태">
         <button onclick="setHubStatusFilter('all')" id="tab-filter-all" class="py-1.5 rounded-lg transition text-center hub-tab-active shadow-sm cursor-pointer truncate">
           전체 <span id="count-filter-all" class="text-[10px] opacity-80">0</span>
         </button>
@@ -1607,12 +1604,12 @@
       </div>
 
       <!-- 2. 실시간 통합 검색창 + 정렬 선택 + 리셋 / 뷰 모드 전환 버튼 -->
-      <div class="flex items-center gap-1.5 sm:gap-2">
-        <div class="relative flex-1 min-w-0">
+        <div class="hub-search-field relative min-w-0">
           <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-stone-400 text-xs"></i>
-          <input id="hub-search-input" type="text" placeholder="여행지, 국가, 도시, 컨셉 검색..." oninput="handleHubFilterChange()" class="w-full pl-8 pr-2.5 py-2 bg-[#faf8f5] dark:bg-[#0f1117] border border-[#e8e2d5] dark:border-stone-700 rounded-xl text-xs text-[#1c1917] dark:text-[#ededed] placeholder-stone-400 focus:outline-none focus:border-[#a2601b] transition shadow-inner">
+          <input id="hub-search-input" type="search" aria-label="여행 검색" placeholder="여행 검색" oninput="handleHubFilterChange()" class="w-full pl-8 pr-2.5 py-2 bg-[#faf8f5] dark:bg-[#0f1117] border border-[#e8e2d5] dark:border-stone-700 rounded-xl text-xs text-[#1c1917] dark:text-[#ededed] placeholder-stone-400 focus:outline-none focus:border-[#a2601b] transition shadow-inner">
         </div>
 
+      <div class="hub-filter-toolbar">
         <!-- 정렬 선택 (최신순 등) -->
         <select id="hub-filter-sort" onchange="handleHubFilterChange()" class="h-8 px-2 bg-[#faf8f5] dark:bg-[#0f1117] border border-[#e8e2d5] dark:border-stone-700 rounded-xl text-[11px] font-bold text-[#44403c] dark:text-stone-300 focus:outline-none focus:border-[#a2601b] cursor-pointer shadow-sm shrink-0" title="여행 정렬 방식 선택">
           <option value="latest">최신순</option>
@@ -1622,7 +1619,7 @@
         </select>
 
         <!-- 필터 초기화 버튼 -->
-        <button onclick="resetHubFilters()" class="w-8 h-8 rounded-xl bg-[#faf8f5] dark:bg-[#0f1117] hover:bg-[#f0ece1] dark:hover:bg-stone-800 border border-[#e8e2d5] dark:border-stone-700 text-[#78716c] dark:text-stone-300 flex items-center justify-center transition cursor-pointer shrink-0 shadow-sm" title="필터 초기화">
+        <button id="hub-filter-reset" onclick="resetHubFilters()" class="w-8 h-8 rounded-xl bg-[#faf8f5] dark:bg-[#0f1117] hover:bg-[#f0ece1] dark:hover:bg-stone-800 border border-[#e8e2d5] dark:border-stone-700 text-[#78716c] dark:text-stone-300 flex items-center justify-center transition cursor-pointer shrink-0 shadow-sm" aria-label="필터 초기화" title="필터 초기화">
           <i class="fa-solid fa-arrow-rotate-right text-xs"></i>
         </button>
 
@@ -1631,10 +1628,10 @@
           <i id="btn-hub-view-mode-icon" class="fa-solid fa-table-cells text-xs text-[#a2601b]"></i>
           <span id="btn-hub-view-mode-txt" class="hidden sm:inline text-[11px]">격자</span>
         </button>
-      </div>
-
       <!-- 3. 드롭다운 3대 핵심 정밀 필터 (국가, 도시, 컨셉 - 1줄 3컬럼 모바일 최적화) -->
-      <div class="grid grid-cols-3 gap-1.5 sm:gap-2">
+      <details id="hub-filter-details">
+        <summary><i class="fa-solid fa-filter" aria-hidden="true"></i><span>필터</span><span id="hub-filter-count" hidden></span></summary>
+      <div class="hub-advanced-filters grid grid-cols-3 gap-1.5 sm:gap-2">
         <!-- 1. 국가 필터 -->
         <div class="relative">
           <select id="hub-filter-country" onchange="handleHubCountryChange()" class="w-full px-2 py-2 bg-[#faf8f5] dark:bg-[#0f1117] border border-[#e8e2d5] dark:border-stone-700 rounded-xl text-xs font-bold text-[#44403c] dark:text-stone-200 focus:outline-none focus:border-[#a2601b] cursor-pointer truncate shadow-sm" title="국가 필터">
@@ -1664,6 +1661,8 @@
           </select>
         </div>
       </div>
+      </details>
+      </div>
 
       <!-- 4. 활성 필터 요약 칩 컨테이너 (조건 선택 시 즉시 노출, 원클릭 개별/전체 해제) -->
       <div id="hub-active-chips" class="hidden flex items-center gap-1.5 flex-wrap pt-2 border-t border-[#f0ece1] dark:border-stone-800/80 text-xs">
@@ -1681,9 +1680,8 @@
       <button id="snapshot-open-app" type="button" class="companion-button" onclick="openBaseTravelApp()">현재 기본 앱 보기</button>
     </aside>
     <aside id="legacy-demo-hub-notice" class="demo-workspace-notice" hidden>
-      <strong>이전 버전의 기본 초안이 이 기기에 남아 있습니다.</strong>
-      <p>현재 앱의 예제가 아닙니다. 편집한 기록이 있을 수 있어 자동으로 교체하지 않았습니다. 설정에서 확인하고 제거하거나 새 가상 예제를 선택하세요.</p>
-      <button type="button" class="companion-button" onclick="openLegacyDemoManager()">이전 기본 초안 확인</button>
+      <div class="legacy-notice-heading"><strong>이전 기본 초안이 남아 있어요</strong><button type="button" class="companion-button" onclick="openLegacyDemoManager()">초안 관리</button></div>
+      <details><summary>자동으로 바뀌지 않는 이유</summary><p>현재 앱의 예제가 아닙니다. 편집한 기록이 있을 수 있어 자동으로 교체하지 않았습니다. 설정에서 확인하고 제거하거나 새 가상 예제를 선택하세요.</p></details>
     </aside>
     <section id="demo-onboarding-offer" class="demo-onboarding" hidden aria-labelledby="demo-offer-title">
       <span class="demo-label">가상 예제로 먼저 살펴보기</span>
@@ -4577,7 +4575,10 @@
 
       <!-- 버전 목록 스크롤 영역 (독립 스크롤 컨테이너로 Flexbox 압축 버그 영구 척결) -->
       <div class="overflow-y-auto flex-1 min-h-0 space-y-3.5 pr-1.5 custom-scrollbar">
-        <!-- v1.9.4 (Current) -->
+        <!-- v1.9.5 (Current) -->
+        <section class="companion-context"><h3 class="font-bold">v1.9.5 · 모바일 버전 표시와 여행 목록 개선</h3><p class="text-xs">2026-10-12 · st-shell-v1.9.5</p><p class="text-xs leading-relaxed">앱 버전과 누적 통계를 브랜드 아래에서 확인할 수 있습니다. 검색창은 한 줄 전체를 사용하고 상세 필터와 이전 초안 안내는 필요할 때 펼칩니다. 상태 선택과 여행 제목을 키보드로 사용할 수 있으며, 처음 설치했을 때 잘못 뜨던 업데이트 안내도 수정했습니다.</p></section>
+
+        <!-- v1.9.4 -->
         <section class="companion-context"><h3 class="font-bold">v1.9.4 · 기록 저장과 AI 다듬기 복구</h3><p class="text-xs">2026-10-12 · st-shell-v1.9.4</p><p class="text-xs leading-relaxed">이전 버전 코드가 새 화면과 섞이는 경우 여행을 변경하기 전에 안전하게 업데이트합니다. 저장 결과와 화면 갱신 오류를 분리하고 작성 중 자동 새로고침을 막습니다. 하루·일정·순간 기록의 AI 승인과 최초 원문, 사진 삭제 대상과 저장 실패 재시도를 보호합니다.</p></section>
         <!-- v1.9.3 -->
         <section class="companion-context"><h3 class="font-bold">v1.9.3 · 기록과 초안 보호</h3><p class="text-xs">2026-10-11 · st-shell-v1.9.3</p><p class="text-xs leading-relaxed">AI 생성·승인에서 일정 수와 완료·고정·기록 연결 일정을 검사합니다. 일정·지출 편집은 저장 성공 후 반영하고 오래된 창의 저장 충돌을 알립니다. 회고와 작성 중인 글·사진은 날짜 ID로 연결합니다. Gist도 파일 백업과 같은 검토·복원 절차를 사용하며 기본 계획 공유에서 개인 기록을 제외합니다.</p></section>
@@ -5471,7 +5472,7 @@
 
       <!-- 모달 푸터 -->
       <div class="pt-3 border-t border-[#e8e2d5] dark:border-stone-800 flex items-center justify-between shrink-0">
-        <span class="text-[11px] text-stone-400 dark:text-stone-500 font-mono">Sulsul Travel Engine v1.9.4</span>
+        <span class="text-[11px] text-stone-400 dark:text-stone-500 font-mono">Sulsul Travel Engine v1.9.5</span>
         <button onclick="closeModal('modal-version-history')" class="px-4 py-2 rounded-xl bg-[#faf8f5] dark:bg-stone-800 hover:bg-[#f0ece1] dark:hover:bg-stone-700 border border-[#e8e2d5] dark:border-stone-700 text-[#1c1917] dark:text-[#ededed] text-xs font-bold transition cursor-pointer shadow-sm">
           닫기
         </button>
@@ -6082,7 +6083,7 @@
     window.showToast = showToast;
 
     // 앱 버전 및 글로벌 네임스페이스 (Sulsul-Travel Invariant Rule R-10, R-11, R-12, R-13, R-14, R-15, R-16)
-    const APP_VER = '1.9.4';
+    const APP_VER = '1.9.5';
 
     // ══════════════════════════════════════════
     // [3-Way Theme System] 모던, 라이트그레이, 딥 블랙 테마 엔진 (v1.6.7)
@@ -9187,6 +9188,7 @@
         btnTxt.innerText = '격자';
         if (btn) btn.title = '컴팩트 목록 뷰로 전환 (1줄 요약)';
       }
+      if(btn)btn.setAttribute('aria-label',btn.title);
     }
 
     function updateHubFilterDropdowns() {
@@ -9266,6 +9268,10 @@
 
       const chips = [];
       const f = State.hubFilters;
+      for(const status of ['all','ongoing','planned','completed','bucketlist'])document.getElementById(`tab-filter-${status}`)?.setAttribute('aria-pressed',String(f.status===status));
+      const advancedCount=['country','city','concept'].filter(key=>f[key] && f[key]!=='all').length;
+      const count=document.getElementById('hub-filter-count');
+      if(count){count.hidden=advancedCount===0;count.textContent=String(advancedCount);count.closest('details').querySelector('summary').setAttribute('aria-label',advancedCount?`상세 필터, ${advancedCount}개 적용 중`:'상세 필터');}
 
       // 1. 상태 필터
       if (f.status && f.status !== 'all') {
@@ -9624,7 +9630,7 @@
       ` : '';
 
       return `
-        <div class="${bannerHeight} relative p-3.5 flex items-start justify-between overflow-hidden">
+        <div class="hub-card-cover ${bannerHeight} relative p-3.5 flex items-start justify-between overflow-hidden">
           ${bgHtml}
 
           <!-- 상단 좌측: 대표 여정 뱃지 + 가이드 예제 뱃지 -->
@@ -9634,17 +9640,17 @@
           </div>
 
           <!-- 상단 우측: D-Day + [📷 대표사진] + [📄 PDF] + [🗑️ 삭제] -->
-          <div class="relative z-10 flex items-center gap-1.5">
+          <div class="hub-card-cover-actions relative z-10 flex items-center gap-1.5">
             ${renderDDayBadge(trip, now)}
             <button onclick="triggerTripCoverUpload('${trip.id}', event)" class="px-2 py-1 rounded-lg bg-black/45 hover:bg-black/70 backdrop-blur-md text-white/90 hover:text-white border border-white/20 flex items-center gap-1 text-[11px] font-bold shadow-sm transition cursor-pointer" title="${photoBtnLabel}">
               <i class="fa-solid fa-camera text-[10px]"></i>
               <span class="hidden sm:inline">${photoBtnLabel}</span>
             </button>
             ${removeBtn}
-            <button onclick="openTripPdfReport('${trip.id}', event)" class="w-7 h-7 rounded-lg bg-black/45 hover:bg-black/70 backdrop-blur-md text-white/90 hover:text-white border border-white/20 flex items-center justify-center text-xs shadow-sm transition cursor-pointer" title="PDF 여행 에세이 리포트">
+            <button onclick="openTripPdfReport('${trip.id}', event)" class="w-7 h-7 rounded-lg bg-black/45 hover:bg-black/70 backdrop-blur-md text-white/90 hover:text-white border border-white/20 flex items-center justify-center text-xs shadow-sm transition cursor-pointer" aria-label="PDF 여행 에세이 리포트" title="PDF 여행 에세이 리포트">
               <i class="fa-solid fa-file-pdf"></i>
             </button>
-            <button onclick="requestDeleteTrip('${trip.id}', event)" class="w-7 h-7 rounded-lg bg-black/45 hover:bg-rose-700/80 backdrop-blur-md text-white/90 hover:text-white border border-white/20 flex items-center justify-center text-xs shadow-sm transition cursor-pointer" title="여행 삭제">
+            <button onclick="requestDeleteTrip('${trip.id}', event)" class="w-7 h-7 rounded-lg bg-black/45 hover:bg-rose-700/80 backdrop-blur-md text-white/90 hover:text-white border border-white/20 flex items-center justify-center text-xs shadow-sm transition cursor-pointer" aria-label="여행 삭제" title="여행 삭제">
               <i class="fa-regular fa-trash-can"></i>
             </button>
           </div>
@@ -9924,7 +9930,7 @@
                 ${thumbHtml}
                 <div class="min-w-0 flex-1">
                   <div class="flex items-center gap-2 flex-wrap">
-                    <h4 class="text-sm sm:text-base font-extrabold tracking-tight text-[#1E2B24] dark:text-white group-hover:text-[#2C3A2E] dark:group-hover:text-[#D4AF37] transition truncate">${escapeHtml(trip.title)}</h4>
+                    <h4 class="text-sm sm:text-base font-extrabold tracking-tight text-[#1E2B24] dark:text-white group-hover:text-[#2C3A2E] dark:group-hover:text-[#D4AF37] transition truncate"><button type="button" class="hub-trip-open" onclick="event.stopPropagation();openTripWorkspace('${trip.id}')" aria-label="${escapeHtml(trip.title)} 여행 열기">${escapeHtml(trip.title)}</button></h4>
                     ${sampleBadge}
                     ${renderDDayBadge(trip, now)}
                   </div>
@@ -9938,22 +9944,22 @@
                 </div>
               </div>
 
-              <div class="flex items-center justify-between sm:justify-end gap-2.5 shrink-0 pt-2 sm:pt-0 border-t sm:border-t-0 border-[#f0ece1] dark:border-stone-800">
+              <div class="hub-card-footer flex items-center justify-between sm:justify-end gap-2.5 shrink-0 pt-2 sm:pt-0 border-t sm:border-t-0 border-[#f0ece1] dark:border-stone-800">
                 <div class="text-right shrink-0">
                   <div class="text-[10px] text-[#78716c] dark:text-stone-400 font-bold">지출 / 예산 (${pct}%)</div>
                   <div class="text-xs font-bold text-[#1c1917] dark:text-stone-200">₩${(totalSpent/10000).toFixed(0)}만 <span class="text-stone-400 font-normal">/ ₩${(budget/10000).toFixed(0)}만</span></div>
                 </div>
-                <div class="flex items-center gap-1.5 shrink-0" onclick="event.stopPropagation()">
-                  <button onclick="triggerTripCoverUpload('${trip.id}', event)" class="sulsul-capsule-btn w-9 h-9 p-0 rounded-full" title="대표 사진 등록">
+                <div class="hub-card-actions flex items-center gap-1.5 shrink-0" onclick="event.stopPropagation()">
+                  <button onclick="triggerTripCoverUpload('${trip.id}', event)" class="sulsul-capsule-btn w-9 h-9 p-0 rounded-full" aria-label="대표 사진 등록" title="대표 사진 등록">
                     <i class="fa-solid fa-camera"></i>
                   </button>
                   <button onclick="openTripWorkspace('${trip.id}'); navigateToInteractiveMap(); event.stopPropagation();" class="sulsul-capsule-btn w-9 h-9 p-0 rounded-full" title="${tripMapTitle}">
                     <i class="${tripMapIcon}"></i>
                   </button>
-                  <button onclick="openTripPdfReport('${trip.id}', event)" class="sulsul-capsule-btn w-9 h-9 p-0 rounded-full" title="PDF 여행 에세이 리포트">
+                  <button onclick="openTripPdfReport('${trip.id}', event)" class="sulsul-capsule-btn w-9 h-9 p-0 rounded-full" aria-label="PDF 여행 에세이 리포트" title="PDF 여행 에세이 리포트">
                     <i class="fa-solid fa-file-pdf"></i>
                   </button>
-                  <button onclick="requestDeleteTrip('${trip.id}', event)" class="sulsul-capsule-btn w-9 h-9 p-0 rounded-full hover:text-rose-600 dark:hover:text-rose-400 hover:border-rose-400/50" title="여행 삭제">
+                  <button onclick="requestDeleteTrip('${trip.id}', event)" class="sulsul-capsule-btn w-9 h-9 p-0 rounded-full hover:text-rose-600 dark:hover:text-rose-400 hover:border-rose-400/50" aria-label="여행 삭제" title="여행 삭제">
                     <i class="fa-regular fa-trash-can"></i>
                   </button>
                 </div>
@@ -9977,7 +9983,7 @@
                     <div class="flex items-center gap-3 min-w-0">
                       <span class="text-3xl sm:text-4xl shrink-0">${trip.coverEmoji || '🌎'}</span>
                       <div class="min-w-0 flex-1">
-                        <h4 class="text-base sm:text-xl font-extrabold tracking-tight text-[#1E2B24] dark:text-white truncate group-hover:text-[#2C3A2E] dark:group-hover:text-[#D4AF37] transition">${escapeHtml(trip.title)}</h4>
+                        <h4 class="text-base sm:text-xl font-extrabold tracking-tight text-[#1E2B24] dark:text-white truncate group-hover:text-[#2C3A2E] dark:group-hover:text-[#D4AF37] transition"><button type="button" class="hub-trip-open" onclick="event.stopPropagation();openTripWorkspace('${trip.id}')" aria-label="${escapeHtml(trip.title)} 여행 열기">${escapeHtml(trip.title)}</button></h4>
                         <p class="text-xs text-[#78716c] dark:text-stone-400 truncate mt-0.5">${escapeHtml(trip.subtitle || trip.style || '인생의 특별한 여정')}</p>
                       </div>
                     </div>
@@ -10014,7 +10020,7 @@
                 </div>
 
                 <!-- 하단 액션 버튼: [경로 지도] + [다이어리 열기] -->
-                <div class="pt-2 flex items-center gap-2.5">
+                <div class="hub-card-open-actions pt-2 flex items-center gap-2.5">
                   <button onclick="openTripWorkspace('${trip.id}'); navigateToInteractiveMap(); event.stopPropagation();" class="sulsul-capsule-btn px-3.5" title="${tripMapTitle}">
                     <i class="${tripMapIcon}"></i>
                     <span>경로 지도</span>
@@ -10043,7 +10049,7 @@
                   <div class="flex items-center gap-2.5">
                     <span class="text-2xl shrink-0">${trip.coverEmoji || '🌎'}</span>
                     <div class="min-w-0 flex-1">
-                      <h4 class="text-base font-extrabold tracking-tight text-[#1E2B24] dark:text-white truncate group-hover:text-[#2C3A2E] dark:group-hover:text-[#D4AF37] transition">${escapeHtml(trip.title)}</h4>
+                      <h4 class="text-base font-extrabold tracking-tight text-[#1E2B24] dark:text-white truncate group-hover:text-[#2C3A2E] dark:group-hover:text-[#D4AF37] transition"><button type="button" class="hub-trip-open" onclick="event.stopPropagation();openTripWorkspace('${trip.id}')" aria-label="${escapeHtml(trip.title)} 여행 열기">${escapeHtml(trip.title)}</button></h4>
                       <p class="text-[11px] text-[#78716c] dark:text-stone-400 truncate mt-0.5">${escapeHtml(trip.subtitle || trip.style || '인생의 특별한 여정')}</p>
                     </div>
                   </div>
@@ -10073,7 +10079,7 @@
                 </div>
 
                 <!-- 하단 액션 버튼: [지도] + [다이어리 열기] -->
-                <div class="pt-2 flex items-center gap-2">
+                <div class="hub-card-open-actions pt-2 flex items-center gap-2">
                   <button onclick="openTripWorkspace('${trip.id}'); navigateToInteractiveMap(); event.stopPropagation();" class="sulsul-capsule-btn px-3" title="${tripMapTitle}">
                     <i class="${tripMapIcon}"></i>
                     <span>지도</span>
@@ -16156,7 +16162,7 @@ ${JSON.stringify(snapshotDays)}`;
     }
 
     function getReplanDomain() {
-      if (!replanDomainPromise) replanDomainPromise = import('./js/domain/replan.mjs?v=1.9.4');
+      if (!replanDomainPromise) replanDomainPromise = import('./js/domain/replan.mjs?v=1.9.5');
       return replanDomainPromise;
     }
 
@@ -17208,7 +17214,7 @@ ${JSON.stringify(snapshotDays)}`;
 
     async function getAiOrchestrator() {
       if (!aiOrchestratorPromise) {
-        aiOrchestratorPromise = import('./js/application/orchestration.mjs?v=1.9.4').then(({ Orchestrator }) =>
+        aiOrchestratorPromise = import('./js/application/orchestration.mjs?v=1.9.5').then(({ Orchestrator }) =>
           new Orchestrator({
             online: job => Boolean(job?.input?.localDraft) || navigator.onLine,
             timeoutMs: 65000,

@@ -1,6 +1,6 @@
 # 술술트래블 개발 가이드
 
-이 문서는 현재 앱 구조와 검증 방식을 설명합니다. 이전 구조를 기술한 문서는 상단에 역사 자료 또는 목표 설계라고 표시합니다. 현재 앱 버전은 `1.9.4`입니다.
+이 문서는 현재 앱 구조와 검증 방식을 설명합니다. 이전 구조를 기술한 문서는 상단에 역사 자료 또는 목표 설계라고 표시합니다. 현재 앱 버전은 `1.9.5`입니다.
 
 ## 실행 구조
 
@@ -67,6 +67,7 @@ node .\tests\activity-journal.browser.cjs
 node .\tests\expense-editor.browser.cjs
 node .\tests\reliability.browser.cjs
 node .\tests\mobile-ui.browser.cjs
+node .\tests\header-hub.browser.cjs
 node .\tests\moment-journal.browser.cjs
 node .\tests\travel-story.browser.cjs
 node .\tests\companion-refresh.browser.cjs
@@ -76,6 +77,8 @@ node .\tests\backup-restore.browser.cjs
 ```
 
 브라우저 테스트는 독립 합성 여행을 사용합니다. 사용자 여행, 실제 Gemini API 호출, GitHub 쓰기를 사용하지 않습니다. 테스트 요약은 각 스크립트의 출력에서 확인합니다. 헤드리스 Edge CDP를 사용할 수 없는 환경에서는 `tools-verify.ps1`의 브라우저 게이트가 실패할 수 있으므로 변경 기능 브라우저 검사를 별도로 실행하고 제한을 기록합니다.
+
+모바일 헤더·허브는 `test:header-hub`에서 320~430px의 실제 노출·클릭·검색·필터·키보드 이동과 세 테마를 검사합니다. 수평 넘침이 없다는 결과만으로 숨은 버튼이나 읽을 수 없는 입력 폭을 통과시키지 않습니다.
 
 ## 저장·공유 변경 원칙
 

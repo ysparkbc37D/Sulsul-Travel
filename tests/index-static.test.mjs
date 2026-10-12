@@ -348,7 +348,7 @@ test('iOS Safari PWA installation guide and standalone crash guards are wired (v
 
   // 3. 실행 중인 앱은 워커 교체만으로 편집 내용을 새로고침하지 않는다.
   assert.match(html, /shell\.recovering && !shell\.started/);
-  assert.match(html, /else if\(shell\.started\)shell\.notify\(\)/);
+  assert.match(html, /else if\(shell\.started && wasControlled\)shell\.notify\(\)/);
 
   // 4. Boot watchdog guard against hanging/crashed screens
   assert.match(html, /sulsul-boot-watchdog/);

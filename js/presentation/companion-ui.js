@@ -181,6 +181,14 @@ function updateCompanionViewport() {
   document.documentElement.style.setProperty('--visual-top', `${viewport.offsetTop}px`);
 }
 document.addEventListener('DOMContentLoaded', () => {
+  // 로고·버전·글꼴 크기가 바뀌어도 데스크톱 고정 메뉴가 헤더 뒤로 들어가지 않는다.
+  const header = document.querySelector('.companion-app-header');
+  if (header) {
+    const syncHeaderHeight = () => document.documentElement.style.setProperty('--app-header-height', `${Math.ceil(header.getBoundingClientRect().height)}px`);
+    syncHeaderHeight();
+    if (typeof ResizeObserver === 'function') new ResizeObserver(syncHeaderHeight).observe(header);
+    else window.addEventListener('resize', syncHeaderHeight);
+  }
   window.visualViewport?.addEventListener('resize', updateCompanionViewport);
   window.visualViewport?.addEventListener('scroll', updateCompanionViewport);
   document.addEventListener('focusin', updateCompanionViewport);
