@@ -24,6 +24,8 @@ function buildPublic(output=path.join(root,'public')) {
   const assets=publicAssets();
   fs.mkdirSync(target,{recursive:true});
   assets.forEach(file=>{fs.mkdirSync(path.dirname(path.join(target,file)),{recursive:true});fs.copyFileSync(path.join(root,file),path.join(target,file));});
+  // Git 체크아웃의 개행 변환과 무관하게 실제 배포 바이트로 SRI를 계산한다.
+  require('./update-asset-integrity.cjs').updateIntegrity({rootDir:target});
   return {output:target,files:assets};
 }
 if(require.main===module){const result=buildPublic();process.stdout.write(`공개 앱 배포 파일 생성 완료: ${result.output}\n`);}

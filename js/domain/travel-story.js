@@ -138,15 +138,17 @@
     function addRecord(entry,id,kind,path,fallbackIndex) {
       if (!entry || typeof entry !== 'object') return;
       const location = kind === 'activity' || entry.activityLink || entry.spotId || entry.activityId ? locate(entry,id) : null;
-      // 순간은 자신의 발생 날짜를 보존하고, 일정 기록은 현재 연결 일정을 따른다.
-      const day = kind === 'activity' && location ? location.day : findDay(entry,fallbackIndex);
+      // 계획 날짜가 바뀌어도 이미 남긴 기록의 발생 날짜와 사진 출처는 이동하지 않는다.
+      // 날짜가 없는 구 일정 기록만 연결 일정의 날짜를 보충한다.
+      const recordedDate = dateOf(entry.date) || dateOf(entry.context?.date) || dateOf(entry.occurredAt);
+      const day = kind === 'activity' && location && !recordedDate ? location.day : findDay(entry,fallbackIndex);
       const sourceId = `${kind}:${String(id)}`;
       const selected = selectText(entry,selection.textMode);
       const occurredAt = stamp(entry.occurredAt);
       const time = timeOf(entry.time) || timeOf(occurredAt);
-      const scheduledTime = kind === 'activity' ? timeOf(location?.spot.time || entry.context?.time) : timeOf(entry.activityLink?.time);
-      const title = kind === 'reflection' ? '하루 회고' : kind === 'activity' ? firstText(location?.item.title,entry.context?.title,entry.title,'일정의 기록') : firstText(entry.title,'순간 기록');
-      const record = {kind,id:String(id),sourceId,dayId:day.id,spotId:location?.spotId || entry.spotId || entry.activityLink?.spotId || null,date:dateOf(entry.date) || day.date,title,...selected,time,scheduledTime,timeSource:time ? 'actual' : 'unknown',occurredAt,createdAt:stamp(entry.createdAt),updatedAt:stamp(entry.updatedAt),weather:text(entry.weather),mood:text(entry.mood),locationTitle:firstText(location?.item.title,entry.activityLink?.title,entry.context?.title),orphaned:kind === 'activity' && !location,photos:photoList(entry,options,sourceId),photoCount:Math.max(array(entry.photos).length,array(entry.mediaIds).length),sortTime:time || (kind === 'activity' ? scheduledTime : null),order:day.records.length+1000};
+      const scheduledTime = kind === 'activity' ? timeOf(entry.context?.time) || timeOf(location?.spot.time) : timeOf(entry.activityLink?.time);
+      const title = kind === 'reflection' ? '하루 회고' : kind === 'activity' ? firstText(entry.context?.title,entry.title,location?.item.title,'일정의 기록') : firstText(entry.title,'순간 기록');
+      const record = {kind,id:String(id),sourceId,dayId:day.id,spotId:location?.spotId || entry.spotId || entry.activityLink?.spotId || null,date:dateOf(entry.date) || day.date,title,...selected,time,scheduledTime,timeSource:time ? 'actual' : 'unknown',occurredAt,createdAt:stamp(entry.createdAt),updatedAt:stamp(entry.updatedAt),weather:text(entry.weather),mood:text(entry.mood),locationTitle:firstText(entry.context?.title,entry.activityLink?.title,location?.item.title),orphaned:kind === 'activity' && !location,photos:photoList(entry,options,sourceId),photoCount:Math.max(array(entry.photos).length,array(entry.mediaIds).length),sortTime:time || (kind === 'activity' ? scheduledTime : null),order:day.records.length+1000};
       if (kind === 'reflection') day.reflections.push(record);
       else { day.records.push(record); day.timeline.push(record); }
       facts.push({sourceId,sourceType:kind,path,dayId:day.id,spotId:record.spotId,date:record.date,title:record.title,text:record.originalText,approvedText:record.approvedText,approvedAt:record.approvedAt,time,scheduledTime,occurredAt,createdAt:record.createdAt,photoSourceIds:record.photos.map(photo => photo.id)});

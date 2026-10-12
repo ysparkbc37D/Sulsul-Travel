@@ -346,9 +346,9 @@ test('iOS Safari PWA installation guide and standalone crash guards are wired (v
   assert.match(html, /오른쪽 상단/);
   assert.match(html, /하단 중앙/);
 
-  // 3. Service Worker controllerchange reload guard prevents WebClip white screen
-  assert.match(html, /const hadController = !!navigator\.serviceWorker\.controller;/);
-  assert.match(html, /if \(!hadController \|\| refreshing\) return;/);
+  // 3. 실행 중인 앱은 워커 교체만으로 편집 내용을 새로고침하지 않는다.
+  assert.match(html, /shell\.recovering && !shell\.started/);
+  assert.match(html, /else if\(shell\.started\)shell\.notify\(\)/);
 
   // 4. Boot watchdog guard against hanging/crashed screens
   assert.match(html, /sulsul-boot-watchdog/);

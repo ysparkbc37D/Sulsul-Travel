@@ -5,6 +5,90 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>술술트래블 (Sulsul-Travel) - 인생 여행 다이어리 & AI 어시스턴트</title>
 
+  <script>
+    // 구 워커가 다른 배포본의 자산을 반환하면 여행을 읽고 쓰기 전에 복구한다.
+    window.SulsulTravel = window.SulsulTravel || {};
+    window.SulsulShell = (() => {
+      const shell = {failedAssets:[],started:false,recovering:false,reloading:false,registration:null};
+      window.addEventListener('error', event => {
+        const asset=event.target;
+        if(asset?.integrity && /^(SCRIPT|LINK)$/.test(asset.tagName)) shell.failedAssets.push(asset.src || asset.href);
+      }, true);
+      shell.compatible = () => !shell.failedAssets.length &&
+        ['getJournalEntry','setJournalEntry','pinJournalIdentity','journalDraftKey'].every(name => typeof window.SulsulTravel?.TripAdapter?.[name] === 'function') &&
+        typeof window.SulsulTravel?.LegacyTripRepository?.prototype.getCommittedTrips === 'function';
+      shell.reload = () => {if(!shell.reloading){shell.reloading=true;location.reload();}};
+      shell.canReload = () => {
+        if(!shell.started)return true;
+        if(document.querySelector('.sheet-container:not(.sheet-closed)'))return false;
+        if(typeof State==='undefined')return false;
+        if(State.runningAiJobId || State.reviewAiJobId)return false;
+        if(Object.values(State.journalPhotoDrafts || {}).some(draft=>draft.photos?.length))return false;
+        const adapter=window.SulsulTravel?.TripAdapter;
+        for(const trip of State.trips || [])for(let i=0;i<(trip.days || []).length;i++){
+          const key=adapter.journalDraftKey(trip,i),draft=State.journalTextDrafts?.[key];
+          if(draft!=null && draft!==(adapter.getJournalEntry(trip,i)?.text || ''))return false;
+        }
+        const input=document.getElementById('journal-text-input'),trip=typeof getActiveTrip==='function' && getActiveTrip();
+        return !input || !trip || input.value===(adapter.getJournalEntry(trip,State.activeJournalDay)?.text || '');
+      };
+      shell.notify = () => {
+        if(document.getElementById('app-update-notice'))return;
+        const bar=document.createElement('aside');bar.id='app-update-notice';bar.setAttribute('role','status');
+        bar.style.cssText='position:relative;z-index:90;display:flex;align-items:center;gap:12px;justify-content:center;padding:12px 16px;background:#1e2b24;color:#fff;font:14px system-ui;flex-wrap:wrap;';
+        bar.innerHTML='<span>새 버전이 준비됐어요. 작성 중인 내용은 그대로 유지됩니다.</span><button id="app-update-apply" type="button" style="padding:10px 14px;border:0;border-radius:12px;background:#f4dfad;color:#1e2b24;font-weight:700">업데이트 열기</button>';
+        bar.querySelector('button').onclick=()=>{
+          if(!shell.canReload()){bar.querySelector('span').textContent='작성 중인 기록을 저장하고 열린 창을 닫은 뒤 업데이트해 주세요.';return;}
+          shell.reload();
+        };
+        document.body.prepend(bar);
+      };
+      shell.register = () => {
+        if(!('serviceWorker' in navigator))return Promise.resolve(null);
+        if(!shell.listening){shell.listening=true;navigator.serviceWorker.addEventListener('controllerchange',()=>{
+          if(shell.recovering && !shell.started)shell.reload();
+          else if(shell.started)shell.notify();
+        });}
+        return navigator.serviceWorker.register('./sw.js',{updateViaCache:'none'}).then(async registration=>{
+          shell.registration=registration;
+          try{await registration.update();}catch(_){/* 오프라인에서도 현재 앱과 기록은 유지한다. */}
+          return registration;
+        }).catch(()=>null);
+      };
+      shell.recover = () => {
+        shell.recovering=true;
+        if(window.__bootWatchdogTimer)clearTimeout(window.__bootWatchdogTimer);
+        if(document.getElementById('app-shell-recovery'))return;
+        const panel=document.createElement('section');panel.id='app-shell-recovery';panel.setAttribute('role','alert');
+        panel.style.cssText='position:fixed;inset:0;z-index:100000;background:#f7f5f0;color:#1e2b24;display:flex;align-items:center;justify-content:center;padding:24px;overflow:auto;font:16px/1.6 system-ui;';
+        panel.innerHTML='<div style="max-width:440px"><h1 style="font-size:24px">앱 업데이트를 준비하고 있어요</h1><p>이전 화면과 새 기능이 섞여 있어 안전하게 다시 불러옵니다. 기존 여행과 기록은 삭제하지 않습니다.</p><p id="app-shell-status" role="status">업데이트 파일을 확인하고 있어요. 잠시만 기다려 주세요.</p><button id="app-shell-retry" type="button" style="padding:14px 18px;border:0;border-radius:14px;background:#1e2b24;color:#fff;font-weight:700">업데이트 다시 확인</button></div>';
+        panel.querySelector('button').onclick=async()=>{
+          const status=document.getElementById('app-shell-status');status.textContent='업데이트 파일을 다시 확인하고 있어요.';
+          const registration=await shell.register();
+          if(!registration || !navigator.onLine){status.textContent='인터넷 연결을 확인한 뒤 앱을 다시 열어 주세요. 저장된 여행은 그대로입니다.';return;}
+          if(registration.installing || registration.waiting)return;
+          // 같은 워커에서도 일시적으로 실패한 공개 파일은 명시 재시도로 복구할 수 있다.
+          try{if('caches' in window){
+            const paths=new Set(shell.failedAssets.map(value=>new URL(value,location.href)).filter(url=>url.origin===location.origin && /\.(?:js|css)$/.test(url.pathname)).map(url=>url.pathname));
+            for(const name of await caches.keys())if(name.startsWith('st-shell-')){
+              const cache=await caches.open(name);
+              for(const request of await cache.keys())if(paths.has(new URL(request.url).pathname))await cache.delete(request);
+            }
+          }}catch(_){status.textContent='업데이트 파일을 다시 받지 못했습니다. 연결을 확인한 뒤 다시 시도해 주세요.';return;}
+          shell.reload();
+        };
+        // 배경의 구 기능은 복구가 끝날 때까지 조작할 수 없게 한다.
+        for(const child of document.body.children)if(child.tagName!=='SCRIPT')child.inert=true;
+        document.body.append(panel);panel.querySelector('button').focus();shell.register();
+        setTimeout(()=>{const status=document.getElementById('app-shell-status');if(status)status.textContent='연결이 느리거나 업데이트 중일 수 있어요. 연결을 확인한 뒤 다시 확인해 주세요.';},12000);
+      };
+      document.addEventListener('DOMContentLoaded',()=>setTimeout(()=>{
+        if(!shell.started)shell.recover();
+      },0));
+      return shell;
+    })();
+  </script>
+
   <!-- 3-Way Theme FOUC Prevention Script (v1.6.7) -->
   <script>
     (function() {
@@ -50,17 +134,17 @@
   </script>
 
   <!-- PWA Meta & Icons -->
-  <link rel="manifest" href="manifest.webmanifest?v=1.9.3">
+  <link rel="manifest" href="manifest.webmanifest?v=1.9.4">
   <meta name="theme-color" content="#F7F5F0">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <meta name="apple-mobile-web-app-title" content="술술트래블">
-  <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192-v115.png?v=1.9.3">
-  <link rel="icon" type="image/png" sizes="32x32" href="favicon.png?v=1.9.3">
+  <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192-v115.png?v=1.9.4">
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon.png?v=1.9.4">
   <link rel="shortcut icon" href="favicon.ico">
-  <link rel="apple-touch-icon" sizes="180x180" href="icons/apple-touch-icon-v115.png?v=1.9.3">
-  <link rel="apple-touch-icon" href="icons/apple-touch-icon-v115.png?v=1.9.3">
+  <link rel="apple-touch-icon" sizes="180x180" href="icons/apple-touch-icon-v115.png?v=1.9.4">
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon-v115.png?v=1.9.4">
 
   <!-- Google Fonts: Great Vibes, Dancing Script (Cursive Calligraphy), Cormorant Garamond, Noto Serif KR, Playfair Display -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -68,15 +152,15 @@
   <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Great+Vibes&family=Cormorant+Garamond:wght@600;700;800&family=Noto+Serif+KR:wght@500;600;700;900&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
 
   <!-- Local Utilities Bundle (CDN fallback & tailwind utilities) -->
-  <link rel="stylesheet" href="css/utilities.css?v=1.9.3">
-  <link rel="stylesheet" href="vendor/fontawesome/css/all.min.css">
+  <link rel="stylesheet" href="css/utilities.css?v=1.9.4" integrity="sha384-HMVB4SH6xwwGITkNyT8ARmHegAYSuTMocPGl4bpl0JywMIe2PqYrUxqZOgEuZjmP">
+  <link rel="stylesheet" href="vendor/fontawesome/css/all.min.css" integrity="sha384-t1nt8BQoYMLFN5p42tRAtuAAFQaCQODekUVeKKZrEnEyp4H2R0RHFz0KWpmj7i8g">
 
   <!-- Leaflet Map CSS & JS -->
-  <link rel="stylesheet" href="vendor/leaflet/leaflet.css">
-  <script src="vendor/leaflet/leaflet.js"></script>
+  <link rel="stylesheet" href="vendor/leaflet/leaflet.css" integrity="sha384-sHL9NAb7lN7rfvG5lfHpm643Xkcjzp4jFvuavGOndn6pjVqS6ny56CAt3nsEVT4H">
+  <script src="vendor/leaflet/leaflet.js" integrity="sha384-cxOPjt7s7Iz04uaHJceBmS+qpjv2JkIHNVcuOrM+YHwZOmJGBXI00mdUXEq65HTH"></script>
 
   <!-- Compression Library -->
-  <script src="vendor/lz-string/lz-string.min.js"></script>
+  <script src="vendor/lz-string/lz-string.min.js" integrity="sha384-0d+Gr7vM4Drod8E3hXKgciWJSWbjD/opKLLygI9ktiWbuvlDwQLzU46wJ9s5gsp7"></script>
 
 
   <style>
@@ -1410,36 +1494,36 @@
     }
   </style>
 
-  <link rel="stylesheet" href="css/companion.css?v=1.9.3">
-  <link rel="stylesheet" href="css/companion-refresh.css?v=1.9.3">
-  <link rel="stylesheet" href="css/moment-journal.css?v=1.9.3">
-  <script src="js/domain/trip-adapter.js?v=1.9.3"></script>
-  <script src="js/domain/ai-draft-validation.js?v=1.9.3"></script>
-  <script src="js/domain/travel-story.js?v=1.9.3"></script>
-  <script src="js/infrastructure/storage/media-repository.js?v=1.9.3"></script>
-  <script src="js/presentation/companion-ui.js?v=1.9.3"></script>
-  <script src="js/domain/trip-transfer.js?v=1.9.3"></script>
-  <script src="js/domain/travel-backup.js?v=1.9.3"></script>
-  <script src="js/presentation/travel-backup-ui.js?v=1.9.3"></script>
-  <script src="js/presentation/trip-transfer-ui.js?v=1.9.3"></script>
-  <script src="js/presentation/activity-journal.js?v=1.9.3"></script>
-  <script src="js/presentation/moment-journal.js?v=1.9.3"></script>
-  <script src="js/presentation/travel-story-ui.js?v=1.9.3"></script>
-  <script src="js/config/collaboration-config.js?v=1.9.3"></script>
-  <script src="js/infrastructure/collaboration/supabase-travel-service.js?v=1.9.3"></script>
-  <script src="js/presentation/collaboration-ui.js?v=1.9.3"></script>
-  <script src="js/presentation/collaboration-review.js?v=1.9.3"></script>
-  <script src="js/presentation/expense-editor.js?v=1.9.3"></script>
+  <link rel="stylesheet" href="css/companion.css?v=1.9.4" integrity="sha384-NiuOoDjU/cCP9AkPZM2xAPW9BIDbwKxbD8J9NsNj68Vr49QkOfFGScSqXiQRzeaS">
+  <link rel="stylesheet" href="css/companion-refresh.css?v=1.9.4" integrity="sha384-ulX7NJeUXVEzSRzPR9IPTOosLj/wr5P74BY4dcuIHByyV/FV9f5rDNjYbZOa9NMC">
+  <link rel="stylesheet" href="css/moment-journal.css?v=1.9.4" integrity="sha384-g1EihgfyPDJ5o5eWSsQgT1WDTRKDtUfzVatlx6T/t+DhApDBY8dznSrwmelasv91">
+  <script src="js/domain/trip-adapter.js?v=1.9.4" integrity="sha384-/j6gmpfAUfKgvJBYggrBibtRMnHPhj/rPb9IrnwnanAo8Yph500htTvTwXoh2Lcw"></script>
+  <script src="js/domain/ai-draft-validation.js?v=1.9.4" integrity="sha384-d9mNrokIS1njpKLOvQED+QO0PcqlBt6N3yMCVN3x7EsJtIcH8YepGD9G/CuCAUT3"></script>
+  <script src="js/domain/travel-story.js?v=1.9.4" integrity="sha384-FPRte9PfIWfmgLmkCzZHF2EO4uJ3BzcfVPeL2BR131x+vzMChKHY9JLs079Ryc/7"></script>
+  <script src="js/infrastructure/storage/media-repository.js?v=1.9.4" integrity="sha384-hr+y2kKdSKxLv1oG2W4RSmc9gzPE1FjwSQcFBWrPTBKoJyKHSk4q4uaDzXHP8gRq"></script>
+  <script src="js/presentation/companion-ui.js?v=1.9.4" integrity="sha384-EZqDu6FyXyrbDxefJxwmWmwEnORo3WiD/BtOLr1kr1MYD8A4cv+wrFs4U3an+91i"></script>
+  <script src="js/domain/trip-transfer.js?v=1.9.4" integrity="sha384-GEnvL3PLzO7LslGu74aYxSeVLrLK//oaS/MgcaNbfCv611thb+CQespNe61oti7W"></script>
+  <script src="js/domain/travel-backup.js?v=1.9.4" integrity="sha384-DRD8j+n7H+jCs0N55457DPBjJk9PSnRLnxYiIiDeka1zLoZBsVWJMhEnIGCzu2qC"></script>
+  <script src="js/presentation/travel-backup-ui.js?v=1.9.4" integrity="sha384-MjtHzvA/+97G1RfTmn7jsaCl9S9a1JuSHwwRBA9OCOYVvCfRzetZInV/5pqQ4iWt"></script>
+  <script src="js/presentation/trip-transfer-ui.js?v=1.9.4" integrity="sha384-9692UFKuSTNYWp/oLVLygVUFDpsS+tJkDpnXxZ8cvJo8kyy74XAhuHABb/ihDmXe"></script>
+  <script src="js/presentation/activity-journal.js?v=1.9.4" integrity="sha384-Zth7iBT/jJwb8Cf2jvfoMSM4uk3tBYqGV0xiX0f7KTGss1AjwfP4gschtiUJheka"></script>
+  <script src="js/presentation/moment-journal.js?v=1.9.4" integrity="sha384-wnX4+XzDGbETV3nCWus537DF9+kc+D/5ROLuAPWSWVxShqvuOUtwT2qe3guBXmXn"></script>
+  <script src="js/presentation/travel-story-ui.js?v=1.9.4" integrity="sha384-s9HZ4A1/X3tCfe4rBfB6nzEwAC7i2U1YVfradgxnQPX5X4tnFszIOPeMsLPfXnfq"></script>
+  <script src="js/config/collaboration-config.js?v=1.9.4" integrity="sha384-ipxhKB+fQ4s3OThYo3p6IWFvP6BbstXYDW6jZWWiPHB4qomo64w7r8/wRvdsi47w"></script>
+  <script src="js/infrastructure/collaboration/supabase-travel-service.js?v=1.9.4" integrity="sha384-+SDvVJ0CNqCMvFlOBOA+nfA1k6/sN6GlaKDhTQo4SgX8x3EwPXyJlvMfJj0D6Bt/"></script>
+  <script src="js/presentation/collaboration-ui.js?v=1.9.4" integrity="sha384-p7U+2X1NfngAz27LiOffxjrDc0NnDrBnaWR204peQGbsPeYb2eUhWICd4bVssIf0"></script>
+  <script src="js/presentation/collaboration-review.js?v=1.9.4" integrity="sha384-QfJkmlcwC5CuDKn83p355LDagawAe7BmsLPDaYwavr3xZGJh2ocAjZYJgQyRg45A"></script>
+  <script src="js/presentation/expense-editor.js?v=1.9.4" integrity="sha384-IdlvYWCuVktfwTJv1GOPiRAtZ3V8BJT91EIoqN85514wfqPNp54xpWQPNBNu+Wu2"></script>
 
   <!-- Knowledge Base Seed & Destination Knowledge Packs (DKP) -->
-  <script src="kb-travel.js?v=1.9.3"></script>
-  <script src="js/destinations/destination-registry.js"></script>
-  <script src="js/destinations/pack-default.js"></script>
-  <script src="js/destinations/pack-south-america.js?v=1.9.3"></script>
-  <script src="js/destinations/pack-yunnan.js"></script>
-  <script src="js/infrastructure/storage/legacy-trip-repository.js?v=1.9.3"></script>
-  <script src="js/infrastructure/storage/settings-repository.js?v=1.9.3"></script>
-  <script src="js/infrastructure/storage/journal-overflow-repository.js?v=1.9.3"></script>
+  <script src="kb-travel.js?v=1.9.4" integrity="sha384-zxXc7MUMbmXkiaF3ymeLmVSiCyPRVfkUjSZetDVx41zrHGyPeSCN4TFpy5f1jNUd"></script>
+  <script src="js/destinations/destination-registry.js" integrity="sha384-PV7EnpqZusutqYxhFc0vICq72coA/C+TMYaBkk+BFy52dmgfk/RDzf/DAgW7dmvC"></script>
+  <script src="js/destinations/pack-default.js" integrity="sha384-KiEdgPiqfhjJ/QjiOogAe0lk6HNE2SOVTHeKqE6tcm8jtdrKtHAVzMaYQfKqho3i"></script>
+  <script src="js/destinations/pack-south-america.js?v=1.9.4" integrity="sha384-p6i8pSXkYDEndehBEqNlXK7ZIZia6Tsxw4TD2LUf7TJPUSlPd2AzXbp3wyyAvDG7"></script>
+  <script src="js/destinations/pack-yunnan.js" integrity="sha384-MIgviqt+QV/b06eH6w7DO42JTPFr7Q2kFTi8TRQT4MCouBcFBGiC7x1jnKgVatOX"></script>
+  <script src="js/infrastructure/storage/legacy-trip-repository.js?v=1.9.4" integrity="sha384-T9cRVRqZEOYx77w1ugj9P6j0VnBhyN2qKALfHCn9azWG8/dmrYGtfMzvE/1SGeap"></script>
+  <script src="js/infrastructure/storage/settings-repository.js?v=1.9.4" integrity="sha384-fp7ck757BhOA+Y2i/VoW21KRCkeMyb/G78wxwhZuReB2JbzcyTxBrLxGldhvw3n3"></script>
+  <script src="js/infrastructure/storage/journal-overflow-repository.js?v=1.9.4" integrity="sha384-uRxi9B+oBHCQ+aa8a6Wp72RAAeEuslXu5kZ+gf9Kvo22B3N6fr1XSkVnAV1X42yO"></script>
 </head>
 <body class="min-h-screen flex flex-col font-sans transition-colors duration-200">
 
@@ -1460,7 +1544,7 @@
       <!-- 우측 액션 클러스터 (버전 알약 -> 원형 통계 -> 원형 설정 -> 다크그린 캡슐 추가) -->
       <div class="flex items-center gap-1 sm:gap-1.5 shrink-0">
         <!-- 1. 버전 배지 버튼 (v1.7.8 - 클릭 시 버전 이력) -->
-        <button id="app-ver-badge" onclick="event.stopPropagation(); openVersionHistoryModal()" class="h-7 sm:h-8 px-2 sm:px-2.5 rounded-full theme-card-subtle flex items-center justify-center font-mono text-[10px] sm:text-[11px] font-bold text-[#a2601b] dark:text-[#d4af37] shadow-xs hover:border-amber-500/60 transition cursor-pointer shrink-0" title="버전 업데이트 기록 보기 (클릭)">v1.9.3</button>
+        <button id="app-ver-badge" onclick="event.stopPropagation(); openVersionHistoryModal()" class="h-7 sm:h-8 px-2 sm:px-2.5 rounded-full theme-card-subtle flex items-center justify-center font-mono text-[10px] sm:text-[11px] font-bold text-[#a2601b] dark:text-[#d4af37] shadow-xs hover:border-amber-500/60 transition cursor-pointer shrink-0" title="버전 업데이트 기록 보기 (클릭)">v1.9.4</button>
 
         <!-- 2. 통계 버튼 (📊 - 원형 버튼) -->
         <button id="header-btn-analytics" onclick="openAnalyticsModal('lifetime')" class="companion-header-analytics w-7 h-7 sm:w-8 sm:h-8 rounded-full theme-card-subtle flex items-center justify-center text-[#a2601b] dark:text-[#d4af37] hover:border-amber-500/60 transition shadow-xs cursor-pointer shrink-0" title="술술 여행 통계 대시보드">
@@ -4493,7 +4577,9 @@
 
       <!-- 버전 목록 스크롤 영역 (독립 스크롤 컨테이너로 Flexbox 압축 버그 영구 척결) -->
       <div class="overflow-y-auto flex-1 min-h-0 space-y-3.5 pr-1.5 custom-scrollbar">
-        <!-- v1.9.3 (Current) -->
+        <!-- v1.9.4 (Current) -->
+        <section class="companion-context"><h3 class="font-bold">v1.9.4 · 기록 저장과 AI 다듬기 복구</h3><p class="text-xs">2026-10-12 · st-shell-v1.9.4</p><p class="text-xs leading-relaxed">이전 버전 코드가 새 화면과 섞이는 경우 여행을 변경하기 전에 안전하게 업데이트합니다. 저장 결과와 화면 갱신 오류를 분리하고 작성 중 자동 새로고침을 막습니다. 하루·일정·순간 기록의 AI 승인과 최초 원문, 사진 삭제 대상과 저장 실패 재시도를 보호합니다.</p></section>
+        <!-- v1.9.3 -->
         <section class="companion-context"><h3 class="font-bold">v1.9.3 · 기록과 초안 보호</h3><p class="text-xs">2026-10-11 · st-shell-v1.9.3</p><p class="text-xs leading-relaxed">AI 생성·승인에서 일정 수와 완료·고정·기록 연결 일정을 검사합니다. 일정·지출 편집은 저장 성공 후 반영하고 오래된 창의 저장 충돌을 알립니다. 회고와 작성 중인 글·사진은 날짜 ID로 연결합니다. Gist도 파일 백업과 같은 검토·복원 절차를 사용하며 기본 계획 공유에서 개인 기록을 제외합니다.</p></section>
         <!-- v1.9.2 -->
         <section class="companion-context"><h3 class="font-bold">v1.9.2 · 휴대폰 백업·복원 개선</h3><p class="text-xs">2026-10-08 · st-shell-v1.9.2</p><p class="text-xs leading-relaxed">백업 파일을 준비한 뒤 파일 저장 또는 휴대폰 저장·공유를 선택합니다. JSON 복원은 글·사진·지출 미리보기와 적용 확인을 거칩니다. 구 백업의 평문·기본 서식·별칭과 BOM을 지원하고, 손상된 기존 문서와 저장 실패에서도 원본을 보호합니다.</p></section>
@@ -5385,7 +5471,7 @@
 
       <!-- 모달 푸터 -->
       <div class="pt-3 border-t border-[#e8e2d5] dark:border-stone-800 flex items-center justify-between shrink-0">
-        <span class="text-[11px] text-stone-400 dark:text-stone-500 font-mono">Sulsul Travel Engine v1.9.3</span>
+        <span class="text-[11px] text-stone-400 dark:text-stone-500 font-mono">Sulsul Travel Engine v1.9.4</span>
         <button onclick="closeModal('modal-version-history')" class="px-4 py-2 rounded-xl bg-[#faf8f5] dark:bg-stone-800 hover:bg-[#f0ece1] dark:hover:bg-stone-700 border border-[#e8e2d5] dark:border-stone-700 text-[#1c1917] dark:text-[#ededed] text-xs font-bold transition cursor-pointer shadow-sm">
           닫기
         </button>
@@ -5996,7 +6082,7 @@
     window.showToast = showToast;
 
     // 앱 버전 및 글로벌 네임스페이스 (Sulsul-Travel Invariant Rule R-10, R-11, R-12, R-13, R-14, R-15, R-16)
-    const APP_VER = '1.9.3';
+    const APP_VER = '1.9.4';
 
     // ══════════════════════════════════════════
     // [3-Way Theme System] 모던, 라이트그레이, 딥 블랙 테마 엔진 (v1.6.7)
@@ -6460,8 +6546,8 @@
       quickCalcAmount: 50000,
 
       // 실시간 환율 및 커스텀 환율 관리 상태 (v1.4.9)
-      liveRates: SulsulTravel.SettingsRepository.readRates(localStorage, 'st_live_rates'),
-      customRates: SulsulTravel.SettingsRepository.readRates(localStorage, 'st_custom_rates'),
+      liveRates: SulsulTravel.SettingsRepository?.readRates(localStorage, 'st_live_rates') || {},
+      customRates: SulsulTravel.SettingsRepository?.readRates(localStorage, 'st_custom_rates') || {},
       ratesLastUpdated: localStorage.getItem('st_rates_last_updated') || null,
       
       // Sulsul-Diary Hub Filters & View Mode (v1.0.7)
@@ -6509,8 +6595,8 @@
       handlingPopState: false
     };
 
-    const TripRepository = new window.SulsulTravel.LegacyTripRepository(localStorage,{beforeWrite:guardSharedTravelWrite});
-    const JournalOverflowRepository = new window.SulsulTravel.JournalOverflowRepository();
+    const TripRepository = window.SulsulTravel.LegacyTripRepository ? new window.SulsulTravel.LegacyTripRepository(localStorage,{beforeWrite:guardSharedTravelWrite}) : null;
+    const JournalOverflowRepository = window.SulsulTravel.JournalOverflowRepository ? new window.SulsulTravel.JournalOverflowRepository() : null;
     let aiOrchestratorPromise = null;
     let replanDomainPromise = null;
 
@@ -6553,7 +6639,9 @@
     }
 
     document.addEventListener('DOMContentLoaded', () => {
+      if(!SulsulShell.compatible()){SulsulShell.recover();return;}
       initApp();
+      SulsulShell.started=true;
       setupPwaInstallPrompt();
       checkUrlParamsForSharedRoom();
       if(SulsulTravel.CollaborationUI.checkInviteOnStartup()){openShareModal();document.getElementById('travel-collaboration').closest('details').open=true;}
@@ -13216,6 +13304,7 @@
       const days = trip.days || [];
       const pillsContainer = document.getElementById('journal-day-pills');
       const cardContainer = document.getElementById('journal-day-card');
+      if(!Number.isInteger(State.activeJournalDay) || !days[State.activeJournalDay])State.activeJournalDay=0;
 
       pillsContainer.innerHTML = days.map((d, idx) => `
         <button onclick="selectJournalDay(${idx})" aria-pressed="${State.activeJournalDay === idx}" class="px-3 py-1 rounded-lg text-xs font-bold shrink-0 transition ${State.activeJournalDay === idx ? 'bg-amber-500 text-slate-950 shadow' : 'bg-[#080b12] text-slate-400 hover:text-white border border-[#1a2236]'}">
@@ -13223,8 +13312,8 @@
         </button>
       `).join('');
 
-      const activeDay = days[State.activeJournalDay] || days[0];
-      if (!activeDay) return;
+      const activeDay = days[State.activeJournalDay];
+      if (!activeDay) {cardContainer.innerHTML='';return;}
 
       const journals = trip.journals || {};
       const journalEntry = SulsulTravel.TripAdapter.getJournalEntry(trip, State.activeJournalDay) || { text: '', photos: [] };
@@ -13271,7 +13360,7 @@
               <i class="fa-solid fa-wand-magic-sparkles text-[10px]"></i> AI로 다듬기
             </button>
           </label>
-          <textarea id="journal-text-input" oninput="rememberJournalDraft()" rows="4" placeholder="오늘 하루 인상 깊었던 순간, 감정, 만난 사람들의 이야기를 자유롭게 적어보세요..." class="w-full p-3 bg-[#080b12] border border-[#1a2236] rounded-xl text-xs text-slate-200 placeholder-slate-600 focus:outline-none focus:border-amber-500 leading-relaxed">${escapeHtml(visibleText)}</textarea>
+          <textarea id="journal-text-input" data-trip-id="${escapeHtml(trip.id)}" data-day-id="${escapeHtml(activeDay.id || '')}" oninput="rememberJournalDraft()" rows="4" placeholder="오늘 하루 인상 깊었던 순간, 감정, 만난 사람들의 이야기를 자유롭게 적어보세요..." class="w-full p-3 bg-[#080b12] border border-[#1a2236] rounded-xl text-xs text-slate-200 placeholder-slate-600 focus:outline-none focus:border-amber-500 leading-relaxed">${escapeHtml(visibleText)}</textarea>
           <div class="flex justify-end gap-2">
             <button class="companion-button" onclick="downloadJournalDraft()">글 파일 보관</button>
             <button onclick="saveJournalText()" class="px-4 py-2 bg-[#141c2e] hover:bg-[#1a263e] border border-[#23304c] text-amber-400 font-black rounded-xl text-xs transition">
@@ -13293,28 +13382,35 @@
     function saveJournalText() {
       const trip = getActiveTrip();
       if (!trip) return false;
-      const next = JSON.parse(JSON.stringify(State.trips));
-      const target = next.find(item => item.id === trip.id);
-      target.journals = target.journals || {};
       const dayIndex = State.activeJournalDay;
-      const text = document.getElementById('journal-text-input').value;
-      SulsulTravel.TripAdapter.setJournalEntry(target, dayIndex, {...(SulsulTravel.TripAdapter.getJournalEntry(target, dayIndex) || {photos:[]}), text});
-      try { State.trips = TripRepository.saveAll(next, {bumpTripId:trip.id}); }
+      const input=document.getElementById('journal-text-input');
+      if(!input)return false;
+      rememberJournalDraft();
+      try {
+        if(input.dataset.tripId && (input.dataset.tripId!==trip.id || input.dataset.dayId!==trip.days?.[dayIndex]?.id))throw new Error('기록을 작성한 날짜가 변경되었습니다.');
+        const next = JSON.parse(JSON.stringify(State.trips));
+        const target = next.find(item => item.id === trip.id);
+        SulsulTravel.TripAdapter.setJournalEntry(target, dayIndex, {...(SulsulTravel.TripAdapter.getJournalEntry(target, dayIndex) || {photos:[]}), text:input.value});
+        State.trips = TripRepository.saveAll(next, {bumpTripId:trip.id});
+      }
       catch (_) {
-        rememberJournalDraft();
         showToast('저장하지 못했습니다. 작성 중인 글은 화면에 남아 있습니다. 다시 저장하거나 글 파일로 보관해 주세요.', 6000);
         return false;
       }
       delete (State.journalTextDrafts || {})[SulsulTravel.TripAdapter.journalDraftKey(trip,dayIndex)];
+      refreshActivitySurfaces();
       showToast('일기를 이 기기에 저장했습니다.');
       return true;
     }
 
     function rememberJournalDraft() {
-      const trip = getActiveTrip(), input = document.getElementById('journal-text-input');
+      const input = document.getElementById('journal-text-input');
+      const trip = input?.dataset.tripId ? State.trips.find(item=>item.id===input.dataset.tripId) : getActiveTrip();
       if (!trip || !input) return;
+      const dayIndex=input.dataset.dayId ? trip.days.findIndex(day=>day.id===input.dataset.dayId) : State.activeJournalDay;
+      if(dayIndex<0)return;
       State.journalTextDrafts = State.journalTextDrafts || {};
-      State.journalTextDrafts[SulsulTravel.TripAdapter.journalDraftKey(trip,State.activeJournalDay)] = input.value;
+      State.journalTextDrafts[SulsulTravel.TripAdapter.journalDraftKey(trip,dayIndex)] = input.value;
     }
 
     function downloadJournalDraft() {
@@ -13364,13 +13460,12 @@
           if(State.journalTextDrafts?.[key]!=null)record.text=State.journalTextDrafts[key];
           State.trips = TripRepository.saveAll(next,{bumpTripId:sourceTripId});
           delete State.journalPhotoDrafts[key];delete (State.journalTextDrafts || {})[key];
-          if (getActiveTrip()?.id === sourceTripId && State.activeJournalDay === sourceDayIndex) renderJournalTab();
-          showToast('사진을 선택했던 날짜에 저장했습니다.');
-          return true;
       } catch(error) {
-        if(getActiveTrip()?.id===sourceTripId&&State.activeJournalDay===sourceDayIndex)renderJournalTab();
+        if(getActiveTrip()?.id===sourceTripId&&State.activeJournalDay===sourceDayIndex){try{renderJournalTab();}catch(_) {}}
         showToast('사진을 저장하지 못했습니다. 글과 사진 초안은 화면에 남아 있습니다. 다시 저장하거나 초안 파일을 보관해 주세요. '+(error.message || ''),6000);return false;
       }
+      if(getActiveTrip()?.id===sourceTripId&&State.activeJournalDay===sourceDayIndex){try{renderJournalTab();}catch(error){console.warn('[사진 저장 후 화면 갱신]',error);showToast('사진은 저장되었습니다. 화면을 다시 열어 확인해 주세요.');return true;}}
+      showToast('사진을 선택했던 날짜에 저장했습니다.');return true;
     }
     function downloadJournalPhotoDraft() {
       const trip=getActiveTrip(),key=SulsulTravel.TripAdapter.journalDraftKey(trip,State.activeJournalDay),pending=State.journalPhotoDrafts?.[key];if(!pending)return;
@@ -13747,19 +13842,24 @@
     }
 
     function requestDeleteJournalPhoto(dayIdx, photoIdx) {
+      const trip=getActiveTrip(),adapter=SulsulTravel.TripAdapter;
+      const journal=adapter.getJournalEntry(trip,dayIdx);
+      if(!journal?.photos?.[photoIdx])return;
+      const tripId=trip.id,revision=trip.revision,dayId=trip.days[dayIdx].id,journalId=journal.id;
+      const photoSnapshot=JSON.stringify([journal.photos,journal.photoThumbnails,journal.mediaIds]);
       showConfirmDelete(
         '사진을 삭제하시겠습니까?',
         `Day ${dayIdx + 1} 등록 사진`,
         '다이어리에서 선택한 사진이 영구 제거됩니다.',
         () => {
-          const trip = getActiveTrip();
-          if (trip.journals && trip.journals[dayIdx] && trip.journals[dayIdx].photos) {
-            trip.journals[dayIdx].photos.splice(photoIdx, 1);
-            trip.journals[dayIdx].photoThumbnails?.splice(photoIdx,1);
-            trip.journals[dayIdx].mediaIds?.splice(photoIdx,1);
-            saveTrips();
-            renderJournalTab();
-          }
+          if(!commitTripCommand({tripId,expectedRevision:revision,change:target=>{
+            const index=target.days.findIndex(day=>day.id===dayId),entry=adapter.getJournalEntry(target,index);
+            if(!entry || entry.id!==journalId || JSON.stringify([entry.photos,entry.photoThumbnails,entry.mediaIds])!==photoSnapshot)throw new Error('삭제할 사진이 변경되었습니다. 다시 확인해 주세요.');
+            entry.photos.splice(photoIdx,1);entry.photoThumbnails?.splice(photoIdx,1);entry.mediaIds?.splice(photoIdx,1);
+            if(Number.isInteger(entry.coverIndex))entry.coverIndex=Math.max(0,Math.min(entry.photos.length-1,entry.coverIndex-(photoIdx<entry.coverIndex?1:0)));
+          }}))return false;
+          try{rememberJournalDraft();renderJournalTab();}catch(error){console.warn('[기록 화면 갱신]',error);showToast('사진 삭제는 저장되었습니다. 화면을 다시 열어 확인해 주세요.');}
+          return true;
         }
       );
     }
@@ -16056,7 +16156,7 @@ ${JSON.stringify(snapshotDays)}`;
     }
 
     function getReplanDomain() {
-      if (!replanDomainPromise) replanDomainPromise = import('./js/domain/replan.mjs?v=1.9.3');
+      if (!replanDomainPromise) replanDomainPromise = import('./js/domain/replan.mjs?v=1.9.4');
       return replanDomainPromise;
     }
 
@@ -17108,7 +17208,7 @@ ${JSON.stringify(snapshotDays)}`;
 
     async function getAiOrchestrator() {
       if (!aiOrchestratorPromise) {
-        aiOrchestratorPromise = import('./js/application/orchestration.mjs?v=1.9.3').then(({ Orchestrator }) =>
+        aiOrchestratorPromise = import('./js/application/orchestration.mjs?v=1.9.4').then(({ Orchestrator }) =>
           new Orchestrator({
             online: job => Boolean(job?.input?.localDraft) || navigator.onLine,
             timeoutMs: 65000,
@@ -17380,6 +17480,14 @@ ${JSON.stringify(snapshotDays)}`;
       if (!validateAiDraftPayload(job.draft, job)) throw new Error('INVALID_OUTPUT');
       if (job.kind === 'moment-journal') return applyMomentAiDraft(job);
       if (job.kind === 'activity-journal') return applyActivityAiDraft(job);
+      if(job.kind==='journal'){
+        const trip=State.trips.find(item=>item.id===job.tripId),adapter=SulsulTravel.TripAdapter;
+        const day=trip?.days?.[job.input.dayIndex],entry=adapter.getJournalEntry(trip,job.input.dayIndex);
+        if(!day || (job.input.dayId && day.id!==job.input.dayId) || (job.input.date && day.date!==job.input.date) || (entry?.text || '')!==job.input.sourceText)return 'conflict';
+        const key=adapter.journalDraftKey(trip,job.input.dayIndex),draft=State.journalTextDrafts?.[key];
+        const input=getActiveTrip()?.id===trip.id && State.activeJournalDay===job.input.dayIndex ? document.getElementById('journal-text-input') : null;
+        if((draft!=null && draft!==job.input.sourceText) || (input && input.value!==job.input.sourceText))return 'conflict';
+      }
       if (job.kind === 'receipt') {
         if (job.input.expenseSession && job.input.expenseSession !== ExpenseFormState.sessionId) return 'conflict';
         if (job.input.expenseSnapshot && job.input.expenseSnapshot !== expenseFormSnapshot()) return 'conflict';
@@ -17451,7 +17559,7 @@ ${JSON.stringify(snapshotDays)}`;
         if (job.kind === 'journal') {
           if (!trip.journals) trip.journals = {};
           const current = SulsulTravel.TripAdapter.getJournalEntry(trip, job.input.dayIndex) || { text: '', photos: [] };
-          current.originalText = job.input.sourceText;
+          current.originalText = current.originalText || job.input.sourceText;
           current.text = job.draft.text;
           current.aiDraftAcceptedAt = new Date().toISOString();
           SulsulTravel.TripAdapter.setJournalEntry(trip, job.input.dayIndex, current);
@@ -17459,6 +17567,12 @@ ${JSON.stringify(snapshotDays)}`;
       };
 
       let result;
+      const acceptJournalInEditor = () => {
+        if(job.kind!=='journal')return;
+        const trip=State.trips.find(item=>item.id===job.tripId),key=SulsulTravel.TripAdapter.journalDraftKey(trip,job.input.dayIndex);
+        delete (State.journalTextDrafts || {})[key];
+        if(getActiveTrip()?.id===job.tripId && State.activeJournalDay===job.input.dayIndex){const input=document.getElementById('journal-text-input');if(input)input.value=job.draft.text;}
+      };
       try {
         result = TripRepository.applyDraft(State.trips, {
           tripId: job.tripId,
@@ -17481,9 +17595,10 @@ ${JSON.stringify(snapshotDays)}`;
         fallbackTrip.appliedAiJobIds = [...(fallbackTrip.appliedAiJobIds || []), job.id].slice(-50);
         await saveJournalOverflowEntry(fallbackTrip, job.input.dayIndex, fallbackTrip.journals[job.input.dayIndex], fallbackTrip.revision);
         State.trips = next;
+        acceptJournalInEditor();
         return 'applied';
       }
-      if (result.status === 'applied' && result.trips) State.trips = result.trips;
+      if (result.status === 'applied' && result.trips) {State.trips = result.trips;acceptJournalInEditor();}
       return result.status;
     }
 
@@ -17592,15 +17707,18 @@ ${JSON.stringify(snapshotDays)}`;
         if (State.reviewAiJobId === jobId) State.reviewAiJobId = null;
         if (State.activeAiJobId === jobId) State.activeAiJobId = null;
         closeModal('modal-ai-draft-review', true);
+        let refreshed=true;
         if (result.kind === 'receipt') openModal('modal-expense');
+        else if(['journal','activity-journal','moment-journal'].includes(result.kind))refreshed=refreshActivitySurfaces();
         else {
-          renderActiveTripWorkspace();
+          try{renderActiveTripWorkspace();}catch(error){refreshed=false;console.warn('[AI 적용 후 화면 갱신]',error);}
           if (result.kind === 'replan' && State.replanReturnBlockId) {
             State.activePlanBlockId = State.replanReturnBlockId;
             State.replanReturnBlockId = null;
             renderPlanBlockDetail();
           }
         }
+        if(!refreshed){showToast('AI 제안은 저장되었습니다. 일부 화면을 갱신하지 못해 다시 열어 확인해 주세요.',5000);return;}
         showToast(result.kind === 'replan' ? '✅ AI RePlan을 적용했습니다. 완료·고정·기록 연결 일정은 유지됩니다.' : result.kind === 'itinerary' ? '✅ 기존 일정을 보존하고 AI 제안을 추가했습니다.' :
           (result.kind === 'journal' || result.kind === 'activity-journal' || result.kind === 'moment-journal') ? '✅ 원문을 보존하고 여행기 초안을 적용했습니다.' : '✅ 판독값을 입력 폼에 적용했습니다.');
       } else if (result.state === 'conflict') {
@@ -18519,8 +18637,9 @@ JSON 배열만 출력하세요. 각 day는 dayNum, title, city, date, spots를 �
     async function generateAiJournalEssay() {
       let trip = getActiveTrip();
       const input = document.getElementById('journal-text-input');
-      const currentText = input.value.trim();
-      if (!currentText) {
+      if(!trip || !input)return;
+      const currentText = input.value;
+      if (!currentText.trim()) {
         alert('일기장에 몇 가지 단어나 문장을 먼저 적어주세요.');
         return;
       }
@@ -19588,23 +19707,7 @@ JSON 배열만 출력하세요. 각 day는 dayNum, title, city, date, spots를 �
     }
 
     function registerServiceWorker() {
-      if ('serviceWorker' in navigator) {
-        const hadController = !!navigator.serviceWorker.controller;
-        navigator.serviceWorker.register('./sw.js')
-          .then(reg => {
-            console.log('[PWA] Service Worker registered:', reg.scope);
-            if (reg.update) reg.update();
-          })
-          .catch(err => console.warn('[PWA] Service Worker registration failed:', err));
-
-        let refreshing = false;
-        navigator.serviceWorker.addEventListener('controllerchange', () => {
-          // Prevent white screen crash on iOS WebClip: Never reload on cold boot when there was no previous controller!
-          if (!hadController || refreshing) return;
-          refreshing = true;
-          window.location.reload();
-        });
-      }
+      return SulsulShell.register();
     }
 
     // ==========================================

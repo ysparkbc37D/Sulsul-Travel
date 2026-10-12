@@ -23,7 +23,7 @@ test('계획·실제·순간을 날짜별 시간순으로 묶고 하루 회고�
   assert.deepEqual(model.days[0].timeline.map(item => item.id),['m1','s1','r1','m2','s2','d1:spot:2']);
   assert.deepEqual(model.days[0].itinerary.map(item => item.status),['completed','skipped','planned']);
   assert.equal(model.days[0].itinerary[0].title,'오래된 광장');
-  assert.equal(model.days[0].records.find(item => item.id==='r1').title,'오래된 광장');
+  assert.equal(model.days[0].records.find(item => item.id==='r1').title,'옛 일정 제목');
   assert.equal(model.timeline.at(-1).kind,'reflection');
   assert.equal(model.stats.recordCount,4);assert.equal(model.stats.photoCount,2);
   assert.equal(model.days[0].city,'New York');
@@ -43,8 +43,30 @@ test('안정적인 날짜·장소 ID는 일정을 옮기거나 이름을 바꾸�
   trip.activityRecords.r1.context={dayId:'d1',spotId:'s1',title:'옛 제목'};
   const model=story.build(trip);
   assert.equal(model.days[0].id,'d1');assert.equal(model.days[0].records.find(item => item.id==='r1').spotId,'s1');
-  assert.equal(model.days[0].records.find(item => item.id==='r1').title,'전체 이름을 보존한 새 광장');
+  assert.equal(model.days[0].records.find(item => item.id==='r1').title,'옛 제목');
+  assert.equal(model.days[0].itinerary[0].title,'전체 이름을 보존한 새 광장');
   assert.equal(model.days[0].records.find(item => item.id==='m1').dayId,'d1');
+});
+test('재계획으로 기록 연결 일정을 다른 날에 옮겨도 기록과 사진은 원래 날짜에 출력한다',() => {
+  const trip=fixture(),spot=trip.days[0].spots.shift();trip.days[1].spots.push({...spot,time:'15:00'});
+  const before=JSON.stringify(trip),model=story.build(trip),originalDay=model.days.find(day=>day.date==='2026-10-11'),newDay=model.days.find(day=>day.date==='2026-10-12');
+  const record=originalDay.records.find(item=>item.id==='r1');
+  assert.ok(record,'기록은 발생했던 원래 날짜에 남는다');assert.equal(record.spotId,'s1');assert.equal(record.photos[0].src,photo);assert.equal(record.orphaned,false);
+  assert.equal(record.scheduledTime,'09:00');assert.equal(record.title,'옛 일정 제목');assert.equal(record.locationTitle,'옛 일정 제목');
+  assert.equal(newDay.records.some(item=>item.id==='r1'),false);assert.equal(newDay.itinerary.some(item=>item.id==='s1'),true);
+  const fact=model.manifest.facts.find(item=>item.sourceId==='activity:r1');assert.equal(fact.date,'2026-10-11');assert.equal(fact.dayId,'d1');
+  assert.equal(JSON.stringify(trip),before);assert.equal(model.stats.recordCount,4);
+});
+test('큰 계획 날짜가 바뀌거나 원래 날짜가 사라져도 일정 기록의 원문 날짜를 재작성하지 않는다',() => {
+  const trip=fixture();trip.days[0].date='2026-10-19';trip.days[0].spots[0].time='17:00';
+  let model=story.build(trip),originalDay=model.days.find(day=>day.date==='2026-10-11'),changedDay=model.days.find(day=>day.date==='2026-10-19');
+  assert.equal(originalDay.records.find(item=>item.id==='r1')?.text,'광장에 도착했다.');assert.equal(changedDay.records.some(item=>item.id==='r1'),false);
+  assert.ok(originalDay.id.startsWith('archive:'));assert.equal(changedDay.itinerary[0].scheduledTime,'17:00');
+  assert.equal(originalDay.records.find(item=>item.id==='r1').scheduledTime,'09:00');
+  assert.equal(model.manifest.facts.find(item=>item.sourceId==='activity:r1').date,'2026-10-11');
+  trip.activityRecords.r1.date='2026-10-10';model=story.build(trip);
+  assert.equal(model.days.find(day=>day.date==='2026-10-10').records.find(item=>item.id==='r1')?.date,'2026-10-10','명시된 실제 기록 날짜는 과거 context 날짜보다 우선');
+  assert.match(story.toText(model),/2026-10-10/);assert.match(story.toMarkdown(model),/광장에 도착했다/);
 });
 test('현재 일정에서 빠진 기록과 날짜 미상 기록도 잃지 않고 보존한다',() => {
   const trip=fixture();trip.activityRecords.archived={id:'archived',text:'지난 일정의 기록',photos:[],context:{title:'지워진 일정',date:'2026-10-13',time:'15:00'}};

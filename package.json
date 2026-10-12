@@ -1,7 +1,7 @@
 {
   "name": "sulsul-travel",
   "private": true,
-  "version": "1.9.3",
+  "version": "1.9.4",
   "scripts": {
     "build:public": "node tools/build-public.cjs",
     "test:demo": "node tests/demo-onboarding.browser.cjs",
@@ -20,7 +20,10 @@
     "test:ai-contract": "node tests/ai-reliability.browser.cjs",
     "test:journal-identity": "node tests/journal-identity.browser.cjs",
     "test:structure": "node tests/structural-reliability.browser.cjs",
-    "test:sw": "node tests/service-worker.browser.cjs"
+    "test:sw": "node tests/service-worker.browser.cjs",
+    "test:sw-upgrade": "node tests/service-worker-upgrade.browser.cjs",
+    "test:record-persistence": "node tests/record-persistence.browser.cjs",
+    "build:integrity": "node tools/update-asset-integrity.cjs"
   },
   "devDependencies": {
     "@fortawesome/fontawesome-free": "6.5.1",
