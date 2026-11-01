@@ -1,6 +1,6 @@
 # 술술트래블 개발 가이드
 
-이 문서는 현재 앱 구조와 검증 방식을 설명합니다. 이전 구조를 기술한 문서는 상단에 역사 자료 또는 목표 설계라고 표시합니다. 현재 앱 버전은 `1.9.5`입니다.
+이 문서는 현재 앱 구조와 검증 방식을 설명합니다. 이전 구조를 기술한 문서는 상단에 역사 자료 또는 목표 설계라고 표시합니다. 현재 앱 버전은 `1.9.6`입니다.
 
 ## 실행 구조
 
@@ -19,6 +19,8 @@
 | `index.html` | 앱 셸, 주요 화면, 전역 상태, 일부 레거시 기능 |
 | `js/domain/trip-adapter.js` | 시드/구버전/공유/AI 입력 계약, 도시명, 현지 날짜, 여행 단계 |
 | `js/domain/travel-story.js` | 날짜별 일정/실제 기록/원문·승인문과 출처 모델, 공통 비용 집계 |
+| `js/domain/schedule-change.js` | 취소·보호 일정 판정, 시간 범위와 자정 지연 미리보기 |
+| `js/presentation/schedule-change-ui.js` | 수동 변경·취소·복구·대체·지연 검토, 준비물 전문 보기 |
 | `js/domain/replan.mjs` | 보호 일정과 날짜/범위 RePlan 규칙 |
 | `js/application/orchestration.mjs` | AI 작업 큐, 취소·재시도·승인 흐름 |
 | `js/domain/ai-draft-validation.js` | 생성·승인의 동일 초안 계약과 보호 일정·범위 검증 |
@@ -68,6 +70,7 @@ node .\tests\expense-editor.browser.cjs
 node .\tests\reliability.browser.cjs
 node .\tests\mobile-ui.browser.cjs
 node .\tests\header-hub.browser.cjs
+node .\tests\schedule-change.browser.cjs
 node .\tests\moment-journal.browser.cjs
 node .\tests\travel-story.browser.cjs
 node .\tests\companion-refresh.browser.cjs

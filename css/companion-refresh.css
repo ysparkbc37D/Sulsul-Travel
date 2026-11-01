@@ -13,9 +13,8 @@
 .companion-app-header button { min-width:44px !important; min-height:44px !important; height:44px; }
 .companion-app-header h1 { font-size:24px; }
 .companion-app-header > div { padding-top:max(4px,var(--safe-top,0px)); padding-bottom:4px; }
-.app-brand { flex:1; }
-.app-brand-meta { display:flex; align-items:center; gap:8px; min-width:0; }
-.companion-app-header #app-ver-badge { display:inline-flex !important; align-items:center; justify-content:center; flex-shrink:0; min-width:64px !important; padding:0 10px; border-radius:12px; border:1px solid var(--line2); background:var(--surface) !important; color:var(--ink) !important; font-size:11px; font-weight:700; }
+.app-brand { flex:1; flex-wrap:nowrap; gap:6px; }
+.companion-app-header #app-ver-badge { display:inline-flex !important; align-items:center; justify-content:center; flex-shrink:0; min-width:48px !important; padding:0 4px; border-radius:10px; border:1px solid var(--line2); background:var(--surface) !important; color:var(--ink) !important; font-size:10px; font-weight:700; }
 .companion-app-header .app-brand > img { display:block; width:36px; height:36px; }
 .app-header-actions { gap:6px; }
 .app-header-actions > button { border-radius:14px; }
@@ -47,6 +46,7 @@
 .companion-trip-bar > div:first-child > button { display:none; }
 #ws-trip-sub-title { font-size:19px !important; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
 #ws-trip-sub-dates { color:var(--ink3) !important; font-size:13px !important; }
+#ws-trip-sub-dates { white-space:normal; overflow-wrap:anywhere; }
 .travel-tools { position:relative; flex-shrink:0; }
 .travel-tools > summary { list-style:none; cursor:pointer; min-height:44px; padding:10px 12px; border:1px solid var(--line); border-radius:12px; font-size:13px; color:var(--ink); background:var(--surface); font-weight:700; }
 .travel-tools > summary::-webkit-details-marker { display:none; }
@@ -107,16 +107,46 @@
 .moment-form input,.moment-form textarea,.moment-form select { min-height:44px; width:100%; padding:10px 12px; border:1px solid var(--line); border-radius:10px; background:var(--surface); color:var(--ink); font-size:16px; }
 .moment-form textarea { min-height:160px; line-height:1.7; }
 .activity-record-thumb img { object-fit:cover; }
+.companion-spot-edit-actions { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:8px; padding-top:8px; border-top:1px solid var(--line); }
+.companion-spot-edit-actions button { min-height:44px; min-width:0; padding:8px 4px; font-size:13px; white-space:normal; }
+.companion-cancelled { margin:16px 0; }
+.companion-cancelled > summary { min-height:44px; cursor:pointer; padding:12px 0; color:var(--ink2); font-weight:700; }
+.companion-cancelled .companion-spot { margin-top:12px; }
+#modal-schedule-change [hidden] { display:none !important; }
+.schedule-change-body { display:grid; gap:12px; color:var(--ink); }
+.schedule-change-body p,.schedule-change-body h4 { overflow-wrap:anywhere; line-height:1.6; }
+.schedule-change-body input:not([type=checkbox]) { width:100%; min-height:44px; padding:10px 12px; background:var(--surface2); color:var(--ink); border:1px solid var(--line); border-radius:10px; font-size:16px; }
+.schedule-direct-actions { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:8px; }
+.schedule-direct-actions button { min-width:0; white-space:normal; }
+#schedule-fixed-wrap,.schedule-fixed-field { display:flex; gap:10px; align-items:center; min-height:44px; color:var(--ink); }
+#schedule-fixed-confirm,#spot-form-fixed { width:20px; height:20px; min-height:20px; flex-shrink:0; }
+#schedule-delay-section { display:grid; gap:10px; border-top:1px solid var(--line); padding-top:16px; }
+#schedule-change-feedback { color:var(--ink); font-weight:700; }
+#modal-readable-text h3,#readable-text-body,#readable-text-meta { white-space:pre-wrap; overflow-wrap:anywhere; line-height:1.75; color:var(--ink); }
+.checklist-row { display:flex; align-items:center; gap:8px; padding:10px; border-radius:12px; min-width:0; }
+.checklist-check { display:flex; align-items:center; justify-content:center; min-width:44px; min-height:44px; cursor:pointer; }
+.checklist-detail { display:flex; align-items:center; gap:6px; text-align:left; min-width:0; flex:1; min-height:44px; color:var(--ink); }
+.checklist-detail > span { white-space:nowrap; overflow:hidden; text-overflow:ellipsis; min-width:0; flex:1; }
+.checklist-detail > i { font-size:11px; color:var(--ink3); }
+.checklist-badges { display:flex; gap:4px; flex-shrink:0; }
+.checklist-badges > span { padding:4px; border-radius:6px; background:var(--surface2); color:var(--ink); font-size:11px; }
+#ws-trip-sub-title { min-height:44px; cursor:pointer; }
+#view-hub .hub-trip-open { white-space:normal; overflow-wrap:anywhere; }
+#view-hub .trip-st-card h4 { -webkit-line-clamp:unset; }
 #journal-day-card img { cursor:zoom-in; }
 @media(min-width:768px) {
   #companion-main-nav { top:var(--app-header-height,84px); }
 }
 @media(max-width:767px) {
-  .companion-app-header > div { padding-left:12px; padding-right:12px; }
+  .companion-app-header > div { padding-left:8px; padding-right:8px; gap:4px; }
   .companion-app-header #header-trip-name { display:none !important; }
-  .companion-app-header h1 { font-size:22px; }
-  .companion-app-header .app-brand > img { display:block !important; width:32px; height:32px; }
-  .companion-app-header #header-btn-create-trip,.companion-app-header #header-btn-back-hub { font-size:12px; padding:8px 10px; }
+  .companion-app-header h1 { font-size:clamp(14px,calc(7.5vw - 10px),24px); }
+  .companion-app-header .app-brand { gap:4px; }
+  .companion-app-header > div > .app-brand:first-child { gap:3px; }
+  .companion-app-header .app-brand > img { display:block !important; width:24px; height:24px; }
+  .companion-app-header .app-header-actions { gap:4px; }
+  .companion-app-header #header-btn-create-trip,.companion-app-header #header-btn-back-hub { font-size:11px; padding:8px 4px; gap:2px; }
+  .companion-app-header #header-btn-back-hub { padding:8px 4px !important; }
   .hub-filter-toolbar { gap:6px; }
   #hub-filter-sort { padding-left:8px; padding-right:4px; }
   .companion-trip-bar > div:first-child { flex-basis:0; }

@@ -1,4 +1,4 @@
-import './ai-draft-validation.js?v=1.9.3';
+import './ai-draft-validation.js?v=1.9.6';
 
 const clone = value => JSON.parse(JSON.stringify(value));
 const validation = (typeof window !== 'undefined' ? window : globalThis).SulsulTravel.AiDraftValidation;
@@ -66,7 +66,7 @@ export function createReplanProposal({ days, targetDay = 'all', offsetMinutes = 
       const original = sourceDay.spots[spotIndex];
       if (spot.completed) { preservedCompletedCount += 1; return; }
       if (spot.fixed) { preservedFixedCount += 1; return; }
-      if (spot.recordId) return;
+      if (spot.recordId || spot.skipped || spot.cancelled) return;
       const shiftedTime = shiftTimeLabel(spot.time, offsetMinutes);
       if (!shiftedTime || shiftedTime === spot.time) return;
       spot.time = shiftedTime;

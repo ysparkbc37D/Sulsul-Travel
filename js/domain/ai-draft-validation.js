@@ -49,7 +49,7 @@
       const proposed = after[index];
       if (!Array.isArray(day?.spots) || !Array.isArray(proposed?.spots)) return false;
       const claimed = new Set();
-      return day.spots.filter(spot => spot.completed || spot.fixed || spot.recordId).every(spot => {
+      return day.spots.filter(spot => spot.completed || spot.fixed || spot.recordId || spot.skipped || spot.cancelled).every(spot => {
         const candidateIndex = proposed.spots.findIndex((candidate, spotIndex) => !claimed.has(spotIndex) &&
           (!spot.id || candidate.id === spot.id) && equal(spot, candidate));
         if (candidateIndex < 0) return false;
