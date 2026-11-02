@@ -58,7 +58,8 @@ const fixture=()=>({id:'structural-trip',title:'구조 검증 가상 여행',sta
       await api.page.evaluate(type=>type==='expense'?requestDeleteExpense(0):requestDeleteSpot(0,0),type);await api.page.locator('#confirm-delete-btn').tap();
       assert.deepEqual(await api.state(),before);await api.assertDialogOpen();await api.quota(false);await api.page.locator('#confirm-delete-btn').tap();
       await api.page.waitForFunction(()=>document.getElementById('modal-confirm-delete').classList.contains('sheet-closed'));
-      const after=await api.state();assert.equal(type==='expense'?after.trips[0].expenses.length:after.trips[0].days[0].spots.length,type==='expense'?0:1);
+      const after=await api.state();assert.equal(type==='expense'?after.trips[0].expenses.length:after.trips[0].days[0].spots.filter(spot=>!spot.removed).length,type==='expense'?0:1);
+      if(type==='spot'){assert.equal(after.trips[0].days[0].spots.length,2,'제거한 원본도 복구할 수 있게 보관');assert.equal(after.trips[0].days[0].spots[0].removed,true);assert.equal(after.trips[0].planHistory.at(-1).type,'remove');}
       assert.equal(JSON.parse(after.stored)[0].revision,before.trips[0].revision+1);return {failedDeleteAtomic:true,dialogRetained:true,retryCommittedOnce:true};
     });
     await check('실제 일정 편집 폼은 저장 실패에서 입력과 원본을 보존하고 같은 폼으로 재시도한다',async api=>{

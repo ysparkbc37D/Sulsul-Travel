@@ -1,0 +1,44 @@
+/* 현장 일정 편집의 모든 조작은 작은 휴대폰에서도 44px 터치 영역을 유지한다. */
+.live-toolbar { display:flex; flex-wrap:wrap; gap:8px; margin:12px 0 16px; min-width:0; }
+.live-toolbar > .companion-button { flex:1 1 130px; min-height:44px; min-width:44px; white-space:normal; }
+.live-toolbar [data-live-action="order-mode"][aria-pressed="true"] { color:var(--accent); background:var(--accent-bg); border-color:var(--accent); }
+.live-toolbar > .live-help { flex-basis:100%; margin:0; }
+.live-between-insert { width:100%; min-height:44px; padding:9px 12px; border:1px dashed var(--line2); border-radius:10px; background:transparent; color:var(--accent); font-size:12px; font-weight:700; line-height:1.5; }
+.live-between-insert:hover { background:var(--accent-bg); border-color:var(--accent); }
+.live-help { color:var(--ink2); font-size:13px; line-height:1.7; overflow-wrap:anywhere; }
+.live-toolbar button:disabled, .live-sheet button:disabled { opacity:.45; cursor:default; }
+.live-sheet { width:min(100%,640px); min-width:0; color:var(--ink); background:var(--surface); }
+.live-sheet .activity-sheet-header { align-items:flex-start; gap:12px; }
+.live-sheet .activity-sheet-header > div { min-width:0; }
+.live-sheet .activity-sheet-header h3 { overflow-wrap:anywhere; }
+.live-sheet-body { display:grid; gap:12px; min-width:0; }
+.live-sheet-body > label { font-size:13px; font-weight:750; margin-bottom:-6px; }
+.live-sheet-body > select { width:100%; min-width:0; min-height:48px; padding:10px 12px; border:1px solid var(--line2); border-radius:12px; background:var(--surface); color:var(--ink); font-size:14px; }
+.live-sheet-body > [role="status"] { min-height:20px; font-size:13px; line-height:1.6; color:var(--accent); overflow-wrap:anywhere; }
+.live-item-summary { font-size:16px; line-height:1.6; font-weight:750; overflow-wrap:anywhere; }
+.live-sheet-actions { display:flex; gap:8px; padding-top:8px; }
+.live-sheet-actions > button { flex:1; min-width:0; min-height:48px; }
+.live-history-list { display:grid; gap:0; list-style:none; padding:0; margin:0; }
+.live-history-entry { padding:14px 0; border-bottom:1px solid var(--line); overflow-wrap:anywhere; }
+.live-history-entry > strong { font-size:14px; line-height:1.6; }
+.live-history-entry > p { color:var(--ink3); font-size:12px; line-height:1.6; margin-top:4px; }
+.live-baseline { border:1px solid var(--line); border-radius:14px; padding:14px; min-width:0; margin-top:8px; }
+.live-baseline h4 { font-size:16px; font-weight:800; line-height:1.5; margin-bottom:8px; }
+.live-baseline details { border-top:1px solid var(--line); margin-top:10px; }
+.live-baseline summary { display:flex; align-items:center; min-height:44px; padding:9px 0; font-size:13px; font-weight:700; line-height:1.6; cursor:pointer; overflow-wrap:anywhere; }
+.live-baseline ol { display:grid; gap:8px; margin:0; padding:0 0 12px 20px; font-size:13px; line-height:1.6; overflow-wrap:anywhere; }
+.live-item-actions { display:none; gap:6px; padding:10px 0; }
+body.live-order-editing .live-item-actions { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); }
+.live-item-actions button, [data-live-action] { min-height:44px; min-width:44px; }
+.live-item-actions button { min-width:0; padding:8px; border:1px solid var(--line); border-radius:10px; background:var(--surface); color:var(--ink2); font-size:12px; font-weight:700; line-height:1.5; }
+.live-item-actions button:last-child { grid-column:1 / -1; }
+@media (max-width:600px) {
+  .live-toolbar { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); }
+  .live-toolbar > .companion-button { min-width:0; padding-left:9px; padding-right:9px; }
+  .live-toolbar > .live-help { grid-column:1 / -1; }
+}
+@media (max-width:360px) {
+  .live-toolbar > .companion-button { flex-basis:110px; padding-left:9px; padding-right:9px; font-size:12px; }
+  .live-sheet .activity-sheet-header { padding-left:16px; padding-right:16px; }
+  .live-sheet-body { padding-left:16px; padding-right:16px; }
+}

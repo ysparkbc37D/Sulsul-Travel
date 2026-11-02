@@ -49,7 +49,7 @@
       const proposed = after[index];
       if (!Array.isArray(day?.spots) || !Array.isArray(proposed?.spots)) return false;
       const claimed = new Set();
-      return day.spots.filter(spot => spot.completed || spot.fixed || spot.recordId || spot.skipped || spot.cancelled).every(spot => {
+      return day.spots.filter(spot => spot.completed || spot.fixed || spot.recordId || spot.skipped || spot.cancelled || spot.removed || spot.deferred).every(spot => {
         const candidateIndex = proposed.spots.findIndex((candidate, spotIndex) => !claimed.has(spotIndex) &&
           (!spot.id || candidate.id === spot.id) && equal(spot, candidate));
         if (candidateIndex < 0) return false;
@@ -85,7 +85,7 @@
         if (day.spots.length < minimum) return false;
       }
       return day.spots.every(spot => {
-        if (!object(spot) || !text(spot.title, 200) || !validTime(spot.time, job.kind === 'itinerary')) return false;
+        if (!object(spot) || !text(spot.title, 200) || !(job.kind==='replan' && spot.time==='' || validTime(spot.time, job.kind === 'itinerary'))) return false;
         if (spot.id) { if (!text(spot.id, 200) || spotIds.has(spot.id)) return false; spotIds.add(spot.id); }
         return true;
       });

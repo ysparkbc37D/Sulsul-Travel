@@ -543,11 +543,11 @@
       if (trip && Array.isArray(trip.days)) {
         trip.days.forEach(day => {
           (day.spots || []).forEach(s => {
-            if (s.title && s.title !== '새 일정') {
+            if (s.title && s.title !== '새 일정' && !s.skipped && !s.cancelled && !s.removed && !s.deferred) {
               spots.push({
                 id: 'spot_' + Math.random().toString(36).substr(2, 9),
                 name: s.title,
-                city: day.city || destinations[0].nameKo || '현지',
+                city: s.city || day.city || destinations[0].nameKo || '현지',
                 lat: s.lat || destinations[0].lat,
                 lng: s.lng || destinations[0].lng,
                 cat: s.cat || 'tour',

@@ -33,6 +33,11 @@
       }
     };
     walk(trip);
+    if (['planHistory','planBaseline','planRevision'].some(key => trip[key] != null)) {
+      const validate = root.SulsulTravel?.LiveItinerary?.validateMetadata;
+      if (typeof validate !== 'function') throw new Error('변경 이력을 검사할 수 없습니다. 앱을 새로고침한 뒤 다시 가져와 주세요.');
+      validate(trip);
+    }
     for (const day of trip.days) {
       if (!day || typeof day !== 'object' || !Array.isArray(day.spots) || day.spots.length > 500) throw new Error('일별 일정 형식이 올바르지 않습니다.');
       if (day.spots.some(s => !s || typeof s !== 'object' || Array.isArray(s) || (typeof s.title !== 'string' && typeof s.name !== 'string'))) throw new Error('장소 이름을 확인해 주세요.');

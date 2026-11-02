@@ -131,6 +131,10 @@
 .checklist-badges { display:flex; gap:4px; flex-shrink:0; }
 .checklist-badges > span { padding:4px; border-radius:6px; background:var(--surface2); color:var(--ink); font-size:11px; }
 #ws-trip-sub-title { min-height:44px; cursor:pointer; }
+.live-position-fields { display:grid; grid-template-columns:1fr; gap:6px; }
+.live-position-fields label { color:var(--ink); font-size:13px; font-weight:700; }
+.live-position-fields select { min-width:0; width:100%; min-height:44px; padding:10px; border:1px solid var(--line); border-radius:10px; background:var(--surface2); color:var(--ink); font-size:16px; }
+.live-between-insert { width:100%; min-height:44px; border:1px dashed var(--line2); border-radius:12px; background:var(--surface); color:var(--ink2); margin:6px 0; font-size:13px; }
 #view-hub .hub-trip-open { white-space:normal; overflow-wrap:anywhere; }
 #view-hub .trip-st-card h4 { -webkit-line-clamp:unset; }
 #journal-day-card img { cursor:zoom-in; }

@@ -112,8 +112,8 @@
         const sourceId = `day:${modelDay.id}/spot:${spotId}`;
         const scheduledTime = timeOf(spot.time);
         const actualTime = timeOf(spot.completedAt || spot.visitedAt);
-        const status = spot.cancelled ? 'cancelled' : spot.skipped ? 'skipped' : spot.completed ? 'completed' : 'planned';
-        const item = {kind:'itinerary',id:spotId,sourceId,dayId:modelDay.id,spotId,date:modelDay.date,title:firstText(spot.title,spot.name,'이름 없는 일정'),description:firstText(spot.desc,spot.description),status,statusLabel:{planned:'예정',completed:'방문 완료',skipped:'건너뜀',cancelled:'취소'}[status],scheduledTime,time:actualTime || scheduledTime,timeSource:actualTime ? 'actual' : scheduledTime ? 'scheduled' : 'unknown',occurredAt:stamp(spot.completedAt || spot.visitedAt),createdAt:null,sortTime:actualTime || scheduledTime,order:spotIndex};
+        const status = spot.removed ? 'removed' : spot.deferred ? 'deferred' : spot.cancelled ? 'cancelled' : spot.skipped ? 'skipped' : spot.completed ? 'completed' : 'planned';
+        const item = {kind:'itinerary',id:spotId,sourceId,dayId:modelDay.id,spotId,date:modelDay.date,title:firstText(spot.title,spot.name,'이름 없는 일정'),description:firstText(spot.desc,spot.description),status,statusLabel:{planned:'예정',completed:'방문 완료',skipped:'건너뜀',cancelled:'취소',removed:'일정에서 제거',deferred:'나중에 갈 곳'}[status],scheduledTime,time:actualTime || scheduledTime,timeSource:actualTime ? 'actual' : scheduledTime ? 'scheduled' : 'unknown',occurredAt:stamp(spot.completedAt || spot.visitedAt),createdAt:null,sortTime:actualTime || scheduledTime,order:spotIndex};
         modelDay.itinerary.push(item); modelDay.timeline.push(item);
         locations.push({day:modelDay,spot,spotIndex,spotId,item});
         facts.push({sourceId,sourceType:'itinerary',path:`days[${index}].spots[${spotIndex}]`,dayId:modelDay.id,spotId,date:modelDay.date,title:item.title,description:item.description,status,scheduledTime,occurredAt:item.occurredAt});

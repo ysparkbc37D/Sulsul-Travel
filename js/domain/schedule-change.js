@@ -1,9 +1,9 @@
 /* 현장 수동 변경은 AI 보호 규칙과 구분하고 완료·고정·기록·취소 일정은 지연에서 보존한다. */
 (function(root){
   'use strict';
-  const retired=spot=>Boolean(spot?.skipped||spot?.cancelled);
+  const retired=spot=>Boolean(spot?.skipped||spot?.cancelled||spot?.removed||spot?.deferred);
   const protectedSpot=spot=>Boolean(spot?.completed||spot?.fixed||spot?.recordId||retired(spot));
-  const minutes=value=>{const match=/^(?:\+(\d+)일\s*)?(\d{2}):(\d{2})/.exec(String(value||'').trim());return match?Number(match[1]||0)*1440+Number(match[2])*60+Number(match[3]):null;};
+  const minutes=value=>{if(root.SulsulTravel.LiveItinerary)return root.SulsulTravel.LiveItinerary.minutes(value);const match=/^(?:\+(\d+)일\s*)?(\d{2}):(\d{2})/.exec(String(value||'').trim());return match?Number(match[1]||0)*1440+Number(match[2])*60+Number(match[3]):null;};
   function shift(value,offset){
     if(!root.SulsulTravel.AiDraftValidation.validTime(value))throw new Error('시간 형식을 확인한 뒤 다시 조정해 주세요.');
     let previous=-1,inferredDay=0;
@@ -20,7 +20,7 @@
     if(index<0)throw new Error('조정할 일정이 변경되었습니다.');
     const changes=[],warnings=[];let preserved=0;
     day.spots.slice(index).forEach(spot=>{
-      if(protectedSpot(spot)){preserved++;return;}
+      if(protectedSpot(spot)||!String(spot.time||'').trim()){preserved++;return;}
       const after=shift(spot.time,offset);
       changes.push({id:spot.id,title:spot.title,before:spot.time,after});
       for(const anchor of day.spots.filter(item=>item.fixed&&!retired(item)&&!item.completed)){

@@ -16,8 +16,18 @@ function scheduleChangeTarget(){
 function scheduleChangeFeedback(error){document.getElementById('schedule-change-feedback').textContent=error?.message||String(error);return false;}
 function invalidateScheduleDelay(){if(scheduleChangeSession)scheduleChangeSession.preview=null;document.getElementById('schedule-delay-apply').hidden=true;document.getElementById('schedule-delay-changes').replaceChildren();}
 function refreshScheduleViews(){
-  try{renderTimelineTab();renderBigPlanTab();renderTodayTab();if(State.activePlanBlockId)renderPlanBlockDetail();}
-  catch(error){console.warn('[일정 화면 갱신]',error);showToast('변경은 저장했습니다. 화면을 다시 열어 확인해 주세요.');}
+  const y=window.scrollY,detail=document.getElementById('plan-block-detail-scroll'),detailY=detail?.scrollTop||0;
+  const anchor=State.lastLiveScheduleChange?.itemId;
+  const page=document.getElementById('plan-block-detail-page'),detailOpen=page&&!page.classList.contains('hidden');
+  try{
+    renderBigPlanTab();renderTodayTab();
+    if(State.activeTab==='plan'&&document.getElementById('tab-content-plan').dataset.presentation==='timeline'&&!detailOpen)renderTimelineTab();
+    if(detailOpen&&State.activePlanBlockId)renderPlanBlockDetail();
+    if(State.activeTab==='plan'&&State.planSubTab==='map'){initOrUpdateLeafletMap();}
+    if(State.activeTab==='plan'&&State.planSubTab==='cityguide')renderCityGuides();
+    window.scrollTo({top:y,behavior:'instant'});if(detail)detail.scrollTop=detailY;
+    requestAnimationFrame(()=>{window.scrollTo({top:y,behavior:'instant'});if(detail)detail.scrollTop=detailY;});
+  }catch(error){console.warn('[일정 화면 갱신]',error);showToast('변경은 저장했습니다. 화면을 다시 열어 확인해 주세요.');}
 }
 function openScheduleChange(dayIndex,spotIndex,event){
   event?.stopPropagation();if(!requireSharedPlanEdit())return;
@@ -56,12 +66,8 @@ function applyScheduleCancellation(){
   try{
     const {trip,day,spot}=scheduleChangeTarget();if(spot.completed)throw new Error('완료를 취소한 다음 변경해 주세요.');requireManualFixedChange(spot);
     const restore=SulsulTravel.ScheduleChange.retired(spot),reason=document.getElementById('schedule-change-reason').value.trim();
-    if(!commitTripCommand({tripId:trip.id,expectedRevision:trip.revision,change:draft=>{
-      const target=draft.days.find(item=>item.id===day.id).spots.find(item=>item.id===spot.id);
-      target.skipped=!restore;target.cancelled=!restore;
-      if(!restore){target.cancelReason=reason;target.cancelledAt=new Date().toISOString();}
-      else{delete target.cancelReason;delete target.cancelledAt;}
-    }}))return scheduleChangeFeedback('변경을 저장하지 못했습니다. 입력을 유지했으니 다시 시도해 주세요.');
+    const command=restore?{type:'restore',tripId:trip.id,dayId:day.id,itemId:spot.id}:{type:'update',tripId:trip.id,dayId:day.id,itemId:spot.id,changes:{skipped:true,cancelled:true,cancelReason:reason,cancelledAt:new Date().toISOString()}};
+    if(!commitLiveSchedule(command,trip.revision,''))return scheduleChangeFeedback('변경을 저장하지 못했습니다. 입력을 유지했으니 다시 시도해 주세요.');
     closeModal('modal-schedule-change',true);refreshScheduleViews();showToast(restore?'예정 일정으로 복구했습니다. 대체 일정이 있다면 함께 확인해 주세요.':'일정을 취소로 보관했습니다. 언제든 복구할 수 있습니다.');return true;
   }catch(error){return scheduleChangeFeedback(error);}
 }
@@ -80,11 +86,9 @@ function applyScheduleDelay(){
   try{
     const {trip,day}=scheduleChangeTarget(),preview=scheduleChangeSession.preview;if(!preview?.changes.length)throw new Error('먼저 변경안을 만들어 주세요.');
     const reason=document.getElementById('schedule-change-reason').value.trim();
-    if(!commitTripCommand({tripId:trip.id,expectedRevision:trip.revision,change:draft=>{
-      const target=draft.days.find(item=>item.id===day.id);
-      for(const change of preview.changes){const spot=target.spots.find(item=>item.id===change.id);if(!spot||spot.time!==change.before||SulsulTravel.ScheduleChange.protectedSpot(spot))throw new Error('검토 중 일정이 바뀌었습니다.');spot.time=change.after;if(reason)spot.replanNote=reason;}
-      if(!target.spots.some(spot=>spot.isDateLine))target.spots.sort((a,b)=>(SulsulTravel.ScheduleChange.minutes(a.time)??99999)-(SulsulTravel.ScheduleChange.minutes(b.time)??99999));
-    }}))return scheduleChangeFeedback('저장하지 못했습니다. 변경안을 유지했으니 다시 시도해 주세요.');
+    for(const change of preview.changes){const spot=day.spots.find(item=>item.id===change.id);if(!spot||spot.time!==change.before||SulsulTravel.ScheduleChange.protectedSpot(spot))throw new Error('검토 중 일정이 바뀌었습니다.');}
+    const commands=preview.changes.map(change=>({type:'update',dayId:day.id,itemId:change.id,changes:{time:change.after,...(reason?{replanNote:reason}:{})}}));
+    if(!commitLiveSchedule({type:'batch',tripId:trip.id,commands},trip.revision,''))return scheduleChangeFeedback('저장하지 못했습니다. 변경안을 유지했으니 다시 시도해 주세요.');
     closeModal('modal-schedule-change',true);refreshScheduleViews();showToast('남은 일정에 지연을 적용했습니다. 보호 일정은 유지됩니다.');return true;
   }catch(error){return scheduleChangeFeedback(error);}
 }

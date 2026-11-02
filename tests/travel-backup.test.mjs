@@ -4,10 +4,10 @@ import {readFileSync} from 'node:fs';
 import vm from 'node:vm';
 function domain(){
   const context={TextEncoder,URL};
-  for(const file of ['trip-adapter.js','trip-transfer.js','travel-backup.js'])vm.runInNewContext(readFileSync(new URL('../js/domain/'+file,import.meta.url),'utf8'),context,{filename:file});
-  return context.SulsulTravel.TravelBackup;
+  for(const file of ['trip-adapter.js','live-itinerary.js','trip-transfer.js','travel-backup.js'])vm.runInNewContext(readFileSync(new URL('../js/domain/'+file,import.meta.url),'utf8'),context,{filename:file});
+  return context.SulsulTravel;
 }
-const api=domain(),plain=value=>JSON.parse(JSON.stringify(value));
+const domains=domain(),api=domains.TravelBackup,plain=value=>JSON.parse(JSON.stringify(value));
 const trip=()=>({id:'backup-trip',title:'합성 여행',revision:3,currency:'KRW',countries:['대한민국'],cities:['서울'],days:[{id:'d1',date:'2030-01-01',title:'첫날',city:'서울',spots:[{id:'s1',title:'산책',desc:'<b>원문</b><br>둘째 줄',time:'09:00',completed:true,recordId:'r1'}]}],journals:{0:{text:'x < y 비교와 <b>하루</b>',originalText:'보존할 원문',photos:['data:image/png;base64,AAAA']}},activityRecords:{r1:{id:'r1',context:{title:'산책'},text:'일정의 글',photos:[],coverIndex:0}},momentEntries:[{id:'m1',date:'2030-01-01',time:'10:30',text:'순간의 글',photos:[],coverIndex:0}],expenses:[{id:'e1',title:'식사',amount:1000,currency:'KRW'}],privateNote:'개인 필드도 보존'});
 test('전체 백업은 원문·사진·상태·개인 필드를 보존하고 공유용 필터를 적용하지 않는다',()=>{
  const source=trip(),before=JSON.stringify(source),created=api.create([source],[],'1.9.2'),restored=api.parse(created.json).trips[0];
@@ -51,4 +51,17 @@ test('onclick 경계를 벗어나는 식별자·통화와 실행 사진 URL을 �
 });
 test('명시적 빈 목록 백업은 유효하며 가져오기 크기 한도는 전체 백업의 공통 50MB이다',()=>{
  assert.deepEqual(plain(api.parse(api.create([]).json).trips),[]);assert.equal(api.MAX_BYTES,50*1024*1024);assert.throws(()=>api.parse('a'.repeat(api.MAX_BYTES+1)),/50MB/);
+});
+
+test('전체 백업은 손상 이력을 복원 전에 거절하고 정상 이력·기준 계획·원문은 보존한다',()=>{
+  for(const metadata of [{planHistory:{}},{planHistory:[null]},{planBaseline:{days:{}}},{planBaseline:{source:'captured-current',capturedAt:'2030-01-01',planRevision:0,days:[{id:'d1',spots:{}}]}}]) {
+    assert.throws(()=>api.parse(JSON.stringify({trips:[{...trip(),...metadata}]})),/이력/);
+  }
+  const source=trip();
+  domains.LiveItinerary.apply(source,{type:'insert',dayId:'d1',item:{id:'added',title:'가상 휴식',time:''}});
+  const restored=api.parse(api.create([source]).json).trips[0];
+  assert.deepEqual(plain(restored.planHistory),plain(source.planHistory)); assert.deepEqual(plain(restored.planBaseline),plain(source.planBaseline));
+  domains.LiveItinerary.apply(restored,{type:'undo'});
+  assert.equal(restored.days[0].spots.find(item=>item.id==='added').removed,true);
+  assert.equal(restored.activityRecords.r1.text,'일정의 글');
 });

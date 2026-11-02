@@ -1,16 +1,11 @@
-import './ai-draft-validation.js?v=1.9.6';
+import './ai-draft-validation.js?v=1.9.7';
+import './live-itinerary.js?v=1.9.7';
 
 const clone = value => JSON.parse(JSON.stringify(value));
 const validation = (typeof window !== 'undefined' ? window : globalThis).SulsulTravel.AiDraftValidation;
 
 export function timeToMinutes(value) {
-  const text = String(value || '').trim();
-  const match = /(\d{2}):(\d{2})/.exec(text);
-  if (!match) return null;
-  const hour = Number(match[1]);
-  const minute = Number(match[2]);
-  if (hour > 23 || minute > 59) return null;
-  return hour * 60 + minute + (/^\+1일\s*/.test(text) ? 1440 : 0);
+  return (typeof window !== 'undefined' ? window : globalThis).SulsulTravel.LiveItinerary.minutes(value);
 }
 
 export function minutesToTime(value) {
@@ -66,7 +61,7 @@ export function createReplanProposal({ days, targetDay = 'all', offsetMinutes = 
       const original = sourceDay.spots[spotIndex];
       if (spot.completed) { preservedCompletedCount += 1; return; }
       if (spot.fixed) { preservedFixedCount += 1; return; }
-      if (spot.recordId || spot.skipped || spot.cancelled) return;
+      if (spot.recordId || spot.skipped || spot.cancelled || spot.removed || spot.deferred) return;
       const shiftedTime = shiftTimeLabel(spot.time, offsetMinutes);
       if (!shiftedTime || shiftedTime === spot.time) return;
       spot.time = shiftedTime;
@@ -79,9 +74,7 @@ export function createReplanProposal({ days, targetDay = 'all', offsetMinutes = 
       });
       if (reason) spot.replanNote = String(reason).slice(0, 300);
     });
-    if (!target.spots.some(spot => spot.isDateLine)) {
-      target.spots.sort((a, b) => (timeToMinutes(a.time) ?? 9999) - (timeToMinutes(b.time) ?? 9999));
-    }
+
   });
 
   return { proposedDays, changes, preservedCompletedCount, preservedFixedCount };
