@@ -1,5 +1,5 @@
-import './ai-draft-validation.js?v=1.9.8';
-import './live-itinerary.js?v=1.9.8';
+import './ai-draft-validation.js?v=1.9.9';
+import './live-itinerary.js?v=1.9.9';
 
 const clone = value => JSON.parse(JSON.stringify(value));
 const validation = (typeof window !== 'undefined' ? window : globalThis).SulsulTravel.AiDraftValidation;

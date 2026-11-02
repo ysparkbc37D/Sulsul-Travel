@@ -14,10 +14,23 @@ const server=http.createServer((req,res)=>{
   const browser=await chromium.launch({headless:true,...(process.env.CHROME_PATH?{executablePath:process.env.CHROME_PATH}:{})});
   try{
     const context=await browser.newContext({viewport:{width:390,height:844},hasTouch:true,serviceWorkers:'block'}),errors=[];
+    let interactiveBoots=0;
+    async function readyAndInteractive(target){
+      await target.waitForFunction(()=>window.SulsulShell?.started===true);
+      assert.equal(await target.locator('#app-shell-recovery').count(),0,'정상 사진 복원 부팅에는 업데이트 복구 덮개가 없어야 한다');
+      const version=target.locator('#app-ver-badge');
+      assert.equal(await version.evaluate(button=>{const rect=button.getBoundingClientRect(),hit=document.elementFromPoint(rect.left+rect.width/2,rect.top+rect.height/2);return hit===button||button.contains(hit);}),true,'실제 터치 위치에 버전 버튼이 노출되어야 한다');
+      await version.click();
+      await target.waitForFunction(()=>!document.getElementById('modal-version-history').classList.contains('sheet-closed'));
+      await target.goBack();
+      await target.waitForFunction(()=>document.getElementById('modal-version-history').classList.contains('sheet-closed'));
+      assert.equal(await target.locator('#app-shell-recovery').count(),0);
+      interactiveBoots++;
+    }
     await context.route('**/*',route=>new URL(route.request().url()).hostname==='127.0.0.1'?route.continue():route.abort());
     const page=await context.newPage();page.on('pageerror',error=>errors.push(error.message));page.on('dialog',dialog=>dialog.accept());
     await page.goto(`http://127.0.0.1:${server.address().port}/`,{waitUntil:'networkidle'});
-    await page.waitForFunction(()=>window.SulsulShell?.started===true);
+    await readyAndInteractive(page);
     await page.addStyleTag({content:'*,*::before,*::after{transition:none!important;animation:none!important;scroll-behavior:auto!important}'});
     const baseline=await page.evaluate(()=>{
       const canvas=document.createElement('canvas');canvas.width=800;canvas.height=600;const ctx=canvas.getContext('2d'),pixels=ctx.createImageData(800,600);let seed=171;
@@ -49,7 +62,7 @@ const server=http.createServer((req,res)=>{
     assert.deepEqual(geometry,{width:56,height:56,contained:true});
     await page.screenshot({path:path.join(out,'saved-390.png'),fullPage:false});
     const before=await page.evaluate(()=>State.trips);
-    await page.reload({waitUntil:'networkidle'});await page.waitForFunction(()=>window.SulsulShell?.started===true);
+    await page.reload({waitUntil:'networkidle'});await readyAndInteractive(page);
     // 시작 화면은 여행 최신순으로 표시한다. 개별 여행 문서는 안정 ID로 모두 대조한다.
     const byId=trips=>[...trips].sort((a,b)=>a.id.localeCompare(b.id));
     assert.deepEqual(byId(await page.evaluate(()=>State.trips)),byId(before));
@@ -60,7 +73,7 @@ const server=http.createServer((req,res)=>{
     assert.equal(standalone.photos,20);assert.equal(standalone.refInFile,false);assert.equal(standalone.primary,7);
     const separate=await browser.newContext({viewport:{width:390,height:844},serviceWorkers:'block'});await separate.route('**/*',route=>new URL(route.request().url()).hostname==='127.0.0.1'?route.continue():route.abort());
     const other=await separate.newPage();other.on('pageerror',error=>errors.push(error.message));
-    await other.goto(`http://127.0.0.1:${server.address().port}/`,{waitUntil:'networkidle'});await other.waitForFunction(()=>window.SulsulShell?.started===true);
+    await other.goto(`http://127.0.0.1:${server.address().port}/`,{waitUntil:'networkidle'});await readyAndInteractive(other);
     const read=await other.evaluate(json=>{const trips=SulsulTravel.TravelBackup.parse(json).trips;return {photos:trips[0].expenses.reduce((sum,expense)=>sum+expense.photos.length,0),primary:trips[0].expenses[0].primaryPhotoIndex,trips:trips.length};},standalone.json);
     assert.deepEqual(read,{photos:20,primary:7,trips:4});await separate.close();
     // 누락 보관본의 부팅은 기본값·큰 계획 ID를 보충하는 렌더에서도 원문을 다시 쓰지 않는다.
@@ -69,15 +82,15 @@ const server=http.createServer((req,res)=>{
       window.expenseBootWrites=0;const original=Storage.prototype.setItem;
       Storage.prototype.setItem=function(key,value){if(key==='st_trips_v2')window.expenseBootWrites++;return original.call(this,key,value);};
     });
-    await missingPage.goto(`http://127.0.0.1:${server.address().port}/`,{waitUntil:'networkidle'});await missingPage.waitForFunction(()=>window.SulsulShell?.started===true);
+    await missingPage.goto(`http://127.0.0.1:${server.address().port}/`,{waitUntil:'networkidle'});await readyAndInteractive(missingPage);
     const missingRaw=JSON.stringify([{id:'missing-expense-synthetic',title:'합성 누락 사진 여행',days:[{id:'missing-day',title:'합성 하루',spots:[]}],expenses:[{id:'missing-expense',title:'가상 물건',photos:[],expensePhotoArchive:{id:'not-stored-synthetic',count:1,hash:'1:abc'}}],journals:{0:{text:'누락 사진과 별개로 보존할 합성 원문',photos:[]}}}]);
     await missingPage.evaluate(raw=>localStorage.setItem('st_trips_v2',raw),missingRaw);
-    await missingPage.reload({waitUntil:'networkidle'});await missingPage.waitForFunction(()=>window.SulsulShell?.started===true);
+    await missingPage.reload({waitUntil:'networkidle'});await readyAndInteractive(missingPage);
     const missing=await missingPage.evaluate(raw=>{
       let backupBlocked=false;try{SulsulTravel.TravelBackup.create(State.trips);}catch(_){backupBlocked=true;}
       return {rawPreserved:localStorage.getItem('st_trips_v2')===raw,writes:window.expenseBootWrites,missing:SulsulTravel.expensePhotoRepository.missingReferences().length,tripVisible:State.trips[0].title==='합성 누락 사진 여행',recordPreserved:State.trips[0].journals[0].text==='누락 사진과 별개로 보존할 합성 원문',notCorrupt:!State.storageRecovery,backupBlocked};
     },missingRaw);
     assert.deepEqual(missing,{rawPreserved:true,writes:0,missing:1,tripVisible:true,recordPreserved:true,notCorrupt:true,backupBlocked:true});
-    assert.deepEqual(errors,[]);const result={passed:true,baseline,saved,actualFileInput:true,actualSaveButton:true,freshPageHydration:true,independentBackup:true,missingArchiveBoot:missing,runtimeErrors:errors};fs.writeFileSync(path.join(out,'results.json'),JSON.stringify(result,null,2));console.log(JSON.stringify(result,null,2));
+    assert.deepEqual(errors,[]);const result={passed:true,baseline,saved,actualFileInput:true,actualSaveButton:true,freshPageHydration:true,independentBackup:true,interactiveBoots,noRecoveryOverlay:true,missingArchiveBoot:missing,runtimeErrors:errors};fs.writeFileSync(path.join(out,'results.json'),JSON.stringify(result,null,2));console.log(JSON.stringify(result,null,2));
   }finally{await browser.close();server.close();}
 })().catch(error=>{console.error(error);process.exitCode=1;server.close();});
