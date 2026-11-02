@@ -1,6 +1,6 @@
 # 술술트래블 개발 가이드
 
-이 문서는 현재 앱 구조와 검증 방식을 설명합니다. 이전 구조를 기술한 문서는 상단에 역사 자료 또는 목표 설계라고 표시합니다. 현재 앱 버전은 `1.9.7`입니다.
+이 문서는 현재 앱 구조와 검증 방식을 설명합니다. 이전 구조를 기술한 문서는 상단에 역사 자료 또는 목표 설계라고 표시합니다. 현재 앱 버전은 `1.9.8`입니다.
 
 ## 실행 구조
 
@@ -31,6 +31,8 @@
 | `js/infrastructure/storage/settings-repository.js` | 손상 환율 설정 격리와 원문 보관 |
 | `js/infrastructure/storage/journal-overflow-repository.js` | 용량 초과 하루 일기 임시 보관 |
 | `js/infrastructure/storage/media-repository.js` | 비율 유지 보관본, 썸네일, IndexedDB Blob과 JSON fallback |
+| `js/infrastructure/storage/expense-photo-repository.js` | 지출 사진 durable 보관·JSON projection·부팅 원본 복원 |
+| `js/presentation/mobile-navigation.js` | 사진·편집창·상세 복귀와 종료 확인의 단일 history 경계 |
 | `js/domain/trip-transfer.js` | 버전 있는 여행 사본 검증·내보내기 계약 |
 | `js/domain/travel-backup.js` | 전체 백업·구 파일 정규화·보조 일기 수집 계약 |
 | `js/presentation/travel-backup-ui.js` | 파일 준비·저장·복원 미리보기·승인·손상 원문 보존 |
@@ -70,6 +72,9 @@ $testFiles = Get-ChildItem .\tests -Filter '*.test.mjs' | ForEach-Object { $_.Fu
 node --test $testFiles
 node .\tests\activity-journal.browser.cjs
 node .\tests\expense-editor.browser.cjs
+node .\tests\expense-photo-repository.browser.cjs
+node .\tests\expense-photo-quota.browser.cjs
+node .\tests\mobile-navigation.browser.cjs
 node .\tests\reliability.browser.cjs
 node .\tests\mobile-ui.browser.cjs
 node .\tests\header-hub.browser.cjs

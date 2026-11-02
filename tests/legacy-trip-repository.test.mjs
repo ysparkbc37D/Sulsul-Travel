@@ -86,3 +86,16 @@ test('command의 저장 실패는 원본과 revision을 변경하지 않는다',
   assert.equal(trips[0].expenses.length,1);assert.equal(trips[0].revision,2);
   assert.equal(repo.getCommittedTrips()[0].expenses.length,1);
 });
+
+test('사진 직렬화 사본과 부팅 복원을 분리해도 원문 충돌과 메모리 보관본은 유지한다',()=>{
+  const storage=memoryStorage(),photo='data:image/jpeg;base64,YQ==';
+  const options={serialize:trips=>trips.map(t=>({...t,photos:[]})),restore:trips=>trips.map(t=>({...t,photos:[photo]}))};
+  const repo=new Repo(storage,options),original=[{id:'a',revision:0,photos:[photo],days:[]}];
+  const saved=repo.saveAll(original);
+  assert.deepEqual(JSON.parse(storage.getItem('st_trips_v2'))[0].photos,[]);
+  assert.deepEqual(saved[0].photos,[photo]);assert.deepEqual(repo.getCommittedTrips()[0].photos,[photo]);
+  assert.deepEqual(new Repo(storage,options).loadAll().trips[0].photos,[photo]);
+  storage.setItem('st_trips_v2','[]');
+  assert.throws(()=>repo.commit(saved,{tripId:'a',expectedRevision:0,change:t=>t.photos.push('안 되는 변경')}),e=>e.code==='STORAGE_CONFLICT');
+  assert.deepEqual(saved[0].photos,[photo]);assert.deepEqual(original[0].photos,[photo]);
+});

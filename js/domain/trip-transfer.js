@@ -59,6 +59,7 @@
     }
     for (const expense of trip.expenses || []) {
       if (!expense || typeof expense !== 'object' || (expense.photos != null && (!Array.isArray(expense.photos) || expense.photos.some(p=>!safePhoto(p))))) throw new Error('지출 사진 형식이 올바르지 않습니다.');
+      if (expense.expensePhotoArchive && (!Array.isArray(expense.photos) || expense.photos.length !== expense.expensePhotoArchive.count)) throw new Error('보관 지출 사진 원본을 읽지 못했습니다. 사진을 확인한 뒤 사본을 만들어 주세요.');
     }
     for (const journal of [...Object.values(trip.journals || {}),...Object.values(trip.activityRecords || {}),...(trip.momentEntries || [])]) {
       if (!journal || typeof journal !== 'object' || (journal.text != null && typeof journal.text !== 'string') || (journal.photos != null && !Array.isArray(journal.photos))) throw new Error('일기 형식이 올바르지 않습니다.');
@@ -82,6 +83,7 @@
     // 선택하지 않은 개인 기록의 내용·형식은 일정 사본 검증에 참여하지 않는다.
     // 정규화가 잘못된 원본 구조를 기본값으로 바꾸기 전에 실제 전송 자료를 검증한다.
     validateTrip(result);
+    for (const expense of result.expenses || []) delete expense.expensePhotoArchive;
     // 적용된 AI 작업, 인증 정보 및 서버 멤버십은 내보내지 않는다.
     return canonicalTrip(result);
   }

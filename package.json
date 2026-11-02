@@ -1,7 +1,7 @@
 {
   "name": "sulsul-travel",
   "private": true,
-  "version": "1.9.7",
+  "version": "1.9.8",
   "scripts": {
     "build:public": "node tools/build-public.cjs",
     "test:demo": "node tests/demo-onboarding.browser.cjs",
@@ -26,7 +26,10 @@
     "build:integrity": "node tools/update-asset-integrity.cjs",
     "test:header-hub": "node tests/header-hub.browser.cjs",
     "test:schedule-change": "node tests/schedule-change.browser.cjs",
-    "test:live-itinerary": "node tests/live-itinerary.browser.cjs"
+    "test:live-itinerary": "node tests/live-itinerary.browser.cjs",
+    "test:expense-photos": "node tests/expense-photo-repository.browser.cjs",
+    "test:expense-quota": "node tests/expense-photo-quota.browser.cjs",
+    "test:navigation": "node tests/mobile-navigation.browser.cjs"
   },
   "devDependencies": {
     "@fortawesome/fontawesome-free": "6.5.1",

@@ -118,7 +118,7 @@
         const remoteLink={documentId:remote.id,revision:remote.revision,role:remote.role};
         const result=await state.options.onRemoteReview?.({remote,localTrip:trip,link:remoteLink,source:state.remoteSource});
         if(result?.applied&&result.tripId){service._assertContext(state.operationContext);const value=attachTrip(result.tripId,remoteLink,service);await state.options.onRoomLinked?.({tripId:result.tripId,link:value});state.remote=null;
-          if(state.remoteSource==='invite'){pendingInvite='';if(/^#invite=/.test(root.location?.hash||''))root.history?.replaceState(null,'',root.location.pathname+root.location.search);}
+          if(state.remoteSource==='invite'){pendingInvite='';if(/^#invite=/.test(root.location?.hash||''))root.history?.replaceState(root.history.state,'',root.location.pathname+root.location.search);}
           showMessage(state,'검토한 공동 계획을 연결했습니다. 개인 기록은 여행 안에 유지됩니다.');
         }else showMessage(state,'적용을 완료하지 않았습니다. 서버 계획과 내 여행은 그대로 유지됩니다.');
       },{disabled:!state.options.onRemoteReview,primary:true})));

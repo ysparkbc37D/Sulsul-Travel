@@ -65,3 +65,15 @@ test('전체 백업은 손상 이력을 복원 전에 거절하고 정상 이력
   assert.equal(restored.days[0].spots.find(item=>item.id==='added').removed,true);
   assert.equal(restored.activityRecords.r1.text,'일정의 글');
 });
+
+test('지출 사진 백업은 기기 참조 없이 복원되며 원본 없는 참조를 정상 백업으로 만들지 않는다',()=>{
+  const source=trip();source.expenses[0].photos=['data:image/jpeg;base64,YQ=='];
+  source.expenses[0].expensePhotoArchive={id:'synthetic-archive',count:1,hash:'1:abc'};
+  const result=api.parse(api.create([source]).json).trips[0];
+  assert.equal('expensePhotoArchive' in result.expenses[0],false);
+  assert.deepEqual(plain(result.expenses[0].photos),source.expenses[0].photos);
+  assert.ok(source.expenses[0].expensePhotoArchive);
+  source.expenses[0].photos=[];
+  assert.throws(()=>api.create([source]),/사진 원본/);
+  assert.throws(()=>api.parse(JSON.stringify({trips:[source]})),/사진 원본/);
+});

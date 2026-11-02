@@ -85,7 +85,7 @@ function openMomentJournal(dayIndex = State.activeJournalDay, entryId = null, ev
   document.getElementById('moment-record-link').innerHTML='<option value="">일정 없이 기록</option>'+Object.entries(linkOptions).map(([key,item])=>`<option value="${escapeHtml(key)}">${key==='archived'?'변경 전 일정 · ':''}${escapeHtml([item.date,item.time,item.title].filter(Boolean).join(' · '))}</option>`).join('');document.getElementById('moment-record-link').value=selected;
   document.getElementById('moment-record-original').textContent=entry?.originalText || '';document.getElementById('moment-record-original-wrap').hidden=!entry?.originalText;document.getElementById('moment-record-delete').hidden=!entry;
   setMomentFeedback('한 줄 또는 사진만 저장할 수 있어요. 기존 하루 회고는 그대로 남습니다.');renderMomentPhotos();openModal('modal-moment-record');
-  if(!history.state?.stMomentSheet)history.pushState({...history.state,stMomentSheet:true},'');
+  if(!SulsulTravel.MobileNavigation?.active&&!history.state?.stMomentSheet)history.pushState({...history.state,stMomentSheet:true},'');
   document.getElementById('moment-record-text').focus({preventScroll:true});
 }
 function closeMomentPhotoViewer() {
@@ -98,7 +98,8 @@ function closeMomentJournal(force = false, { fromHistory = false } = {}) {
   if(!force&&momentEditorDirty()&&!confirm('작성 중인 순간 기록이 있습니다. 저장하지 않고 닫을까요?'))return false;
   const focus=State.momentRecordEditor?.returnFocus;closeMomentPhotoViewer();modal.classList.add('sheet-closed');State.momentRecordEditor=null;
   if(!document.querySelector('.sheet-container:not(.sheet-closed)'))document.body.style.overflow=document.getElementById('plan-block-detail-page')?.classList.contains('hidden')?'':'hidden';
-  focus?.focus?.({preventScroll:true});if(!fromHistory&&history.state?.stMomentSheet)history.back();return true;
+  SulsulTravel.MobileNavigation?.closed('modal-moment-record');
+  focus?.focus?.({preventScroll:true});if(!SulsulTravel.MobileNavigation?.active&&!fromHistory&&history.state?.stMomentSheet)history.back();return true;
 }
 function renderMomentPhotos() {
   const editor=State.momentRecordEditor;if(!editor)return;
@@ -193,6 +194,7 @@ if(typeof window!=='undefined'){
     event.preventDefault();event.stopImmediatePropagation();if(!document.getElementById('moment-record-viewer').hidden)closeMomentPhotoViewer();else closeMomentJournal();
   },true);
   window.addEventListener('popstate',async event=>{
+    if(SulsulTravel.MobileNavigation?.active)return;
     const modal=document.getElementById('modal-moment-record');if(!modal||modal.classList.contains('sheet-closed'))return;
     event.stopImmediatePropagation();
     if(!document.getElementById('moment-record-viewer').hidden){closeMomentPhotoViewer();history.pushState({...history.state,stMomentSheet:true},'');return;}

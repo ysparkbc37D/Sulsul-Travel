@@ -5,9 +5,12 @@ function expenseFormSnapshot() {
 function expenseFeedback(message) { document.getElementById('expense-editor-feedback').textContent=message; }
 function resetExpenseEditor() {
   ExpenseFormState.sessionId=crypto.randomUUID();ExpenseFormState.tripId=State.activeTripId;
-  ExpenseFormState.edit=null;ExpenseFormState.photosLoading=false;ExpenseFormState.baseline=null;
+  ExpenseFormState.edit=null;ExpenseFormState.photosLoading=false;ExpenseFormState.saving=false;ExpenseFormState.savePending=null;ExpenseFormState.baseline=null;
   document.getElementById('exp-form-submit-btn').disabled=false;
+  document.getElementById('modal-expense').removeAttribute('aria-busy');
+  const draft=document.getElementById('exp-draft-download-btn');if(draft)draft.hidden=true;
   document.getElementById('expense-photo-viewer').hidden=true;
+  document.getElementById('receipt-scan-loading')?.classList.add('hidden');
   expenseFeedback('');
 }
 function expenseEditIndex(trip) {
@@ -20,7 +23,8 @@ function expenseEditIndex(trip) {
 function expensePreviewTrip() {
   const trip=State.trips.find(t=>t.id===ExpenseFormState.tripId) || getActiveTrip();
   if(!trip)return trip;
-  const copy=JSON.parse(JSON.stringify(trip)),index=expenseEditIndex(copy);
+  // 지갑 계산은 일부 구 내역을 보충한다. 계산용 객체만 분리하고 큰 사진 문자열은 복제하지 않는다.
+  const copy={...trip,expenses:(trip.expenses||[]).map(expense=>({...expense}))},index=expenseEditIndex(trip);
   if(index>=0)copy.expenses.splice(index,1);
   return copy;
 }
@@ -52,22 +56,58 @@ function openEditExpenseModal(index,event) {
 }
 async function uploadExpensePhotos(event) {
   const files=Array.from(event.target.files || []);event.target.value='';
-  if(!files.length || ExpenseFormState.photosLoading)return;
+  if(!files.length || ExpenseFormState.photosLoading || ExpenseFormState.saving)return;
   if(ExpenseFormState.photos.length+files.length>8){expenseFeedback('사진은 한 내역에 최대 8장까지 첨부할 수 있습니다.');return;}
   const session=ExpenseFormState.sessionId;ExpenseFormState.photosLoading=true;document.getElementById('exp-form-submit-btn').disabled=true;expenseFeedback('사진을 준비하고 있습니다…');
   try{
-    const photos=[];for(const file of files)photos.push(await compressExpensePhoto(file));
+    let added=0;const failures=[];
+    for(let index=0;index<files.length;index++){
+      if(session!==ExpenseFormState.sessionId)return;
+      expenseFeedback(`사진 ${index+1}/${files.length} 준비 중…`);
+      // 여러 고화질 사진을 한 번에 디코딩하지 않고, 화면 표시 기회를 준 뒤 순차 처리한다.
+      await new Promise(resolve=>setTimeout(resolve,0));
+      try{
+        const photo=await compressExpensePhoto(files[index]);
+        if(session!==ExpenseFormState.sessionId)return;
+        ExpenseFormState.photos.push(photo);added++;renderExpensePhotos();
+      }catch(error){failures.push(error.message||'사진을 처리하지 못했습니다.');}
+    }
     if(session!==ExpenseFormState.sessionId)return;
-    ExpenseFormState.photos.push(...photos);renderExpensePhotos();expenseFeedback('사진을 첨부했습니다. 저장을 눌러 보관하세요.');
-  }catch(error){if(session===ExpenseFormState.sessionId)expenseFeedback(error.message);}
+    expenseFeedback(failures.length?`${added}장 준비 · ${failures.length}장 실패. ${failures[0]} 준비된 사진은 남아 있으니 확인 후 저장하세요.`:'사진을 첨부했습니다. 저장을 눌러 보관하세요.');
+  }catch(error){if(session===ExpenseFormState.sessionId)expenseFeedback(error.message||'사진을 준비하지 못했습니다. 다시 선택해 주세요.');}
   finally{if(session===ExpenseFormState.sessionId){ExpenseFormState.photosLoading=false;document.getElementById('exp-form-submit-btn').disabled=false;}}
 }
 function compressExpensePhoto(file) {
   return new Promise((resolve,reject)=>{
     if(file.size>20*1024*1024){reject(new Error('사진 한 장은 20MB 이하로 선택해 주세요.'));return;}
-    const url=URL.createObjectURL(file),img=new Image();
-    img.onerror=()=>{URL.revokeObjectURL(url);reject(new Error('사진을 읽지 못했습니다. JPEG/PNG로 다시 선택해 주세요.'));};
-    img.onload=()=>{try{const scale=Math.min(1,800/Math.max(img.width,img.height)),c=document.createElement('canvas');c.width=Math.max(1,Math.round(img.width*scale));c.height=Math.max(1,Math.round(img.height*scale));const ctx=c.getContext('2d');ctx.fillStyle='#fff';ctx.fillRect(0,0,c.width,c.height);ctx.drawImage(img,0,0,c.width,c.height);resolve(c.toDataURL('image/jpeg',.8));}catch(_){reject(new Error('사진을 처리하지 못했습니다.'));}finally{URL.revokeObjectURL(url);}};img.src=url;
+    if(file.type&&!file.type.startsWith('image/')){reject(new Error('사진 파일을 선택해 주세요.'));return;}
+    const url=URL.createObjectURL(file),img=new Image();let canvas=null,settled=false;
+    const finish=(error,value)=>{
+      if(settled)return;settled=true;clearTimeout(timer);img.onload=img.onerror=null;URL.revokeObjectURL(url);
+      if(canvas){canvas.width=1;canvas.height=1;}
+      error?reject(error):resolve(value);
+    };
+    const timer=setTimeout(()=>finish(new Error('사진 처리가 오래 걸립니다. 사진을 줄이거나 JPEG/PNG로 다시 선택해 주세요.')),30000);
+    img.onerror=()=>finish(new Error('사진을 읽지 못했습니다. JPEG/PNG로 다시 선택해 주세요.'));
+    img.onload=async()=>{
+      try{
+        const scale=Math.min(1,800/Math.max(img.naturalWidth||img.width,img.naturalHeight||img.height));
+        canvas=document.createElement('canvas');canvas.width=Math.max(1,Math.round((img.naturalWidth||img.width)*scale));canvas.height=Math.max(1,Math.round((img.naturalHeight||img.height)*scale));
+        const ctx=canvas.getContext('2d');if(!ctx)throw new Error('사진을 처리하지 못했습니다.');
+        ctx.fillStyle='#fff';ctx.fillRect(0,0,canvas.width,canvas.height);ctx.drawImage(img,0,0,canvas.width,canvas.height);
+        const encode=quality=>new Promise((accept,deny)=>canvas.toBlob(blob=>blob?accept(blob):deny(new Error('사진을 처리하지 못했습니다.')),'image/jpeg',quality));
+        let blob=await encode(.8);
+        // 복잡한 고해상도 사진도 JSON 저장을 과도하게 차지하지 않도록 크기 상한을 둔다.
+        for(const quality of [.68,.55]){if(blob.size<=240*1024)break;blob=await encode(quality);}
+        while(blob.size>240*1024&&Math.max(canvas.width,canvas.height)>320){
+          canvas.width=Math.max(1,Math.round(canvas.width*.8));canvas.height=Math.max(1,Math.round(canvas.height*.8));
+          ctx.fillStyle='#fff';ctx.fillRect(0,0,canvas.width,canvas.height);ctx.drawImage(img,0,0,canvas.width,canvas.height);blob=await encode(.7);
+        }
+        if(blob.size>240*1024)throw new Error('사진 용량을 줄이지 못했습니다. JPEG/PNG 사진으로 다시 선택해 주세요.');
+        if(settled)return;
+        const reader=new FileReader();reader.onerror=()=>finish(new Error('사진을 읽지 못했습니다. 다시 선택해 주세요.'));reader.onload=()=>finish(null,reader.result);reader.readAsDataURL(blob);
+      }catch(error){finish(error);}
+    };img.src=url;
   });
 }
 function renderExpensePhotoEditor() {
@@ -82,9 +122,7 @@ function deleteExpenseFormPhoto(index,event) {
   ExpenseFormState.primaryPhotoIndex=index===old?0:Math.max(0,old-(index<old?1:0));
   document.getElementById('expense-photo-viewer').hidden=true;renderExpensePhotos();
 }
-function saveExpenseRecord() {
-  if(!ExpenseFormState.sessionId)return false;
-  if(ExpenseFormState.photosLoading){expenseFeedback('사진 준비가 끝난 뒤 저장해 주세요.');return false;}
+function expenseChangeDraft() {
   const trip=State.trips.find(t=>t.id===ExpenseFormState.tripId);
   if(!trip || trip.id!==State.activeTripId){expenseFeedback('여행이 변경되었습니다. 원래 여행에서 다시 열어 주세요.');return false;}
   const value=k=>document.getElementById('exp-form-'+k).value;
@@ -96,9 +134,73 @@ function saveExpenseRecord() {
   if(!Number.isFinite(krw)){expenseFeedback('환율을 확인해 주세요.');return false;}
   const paymentSource=value('payment-source'),walletCurr=paymentSource==='none'?null:paymentSource==='wallet_krw'?'KRW':paymentSource==='wallet_curr'?curr:paymentSource.replace('wallet_','');
   const entry={...original,id:original?.id || 'exp_'+crypto.randomUUID(),title,amount,curr,krw,cat:ExpenseFormState.selectedCat,date:value('date'),time:value('time'),memo:value('memo').trim(),payMethod:ExpenseFormState.payMethod,type:ExpenseFormState.type,photos:[...ExpenseFormState.photos],primaryPhotoIndex:ExpenseFormState.primaryPhotoIndex || 0,paymentSource,walletCurr,updatedAt:new Date().toISOString()};
-  const next=JSON.parse(JSON.stringify(State.trips)),copy=next.find(t=>t.id===trip.id);copy.expenses=copy.expenses || [];
+  if(original?.expensePhotoArchive&&JSON.stringify(original.photos)!==JSON.stringify(entry.photos))delete entry.expensePhotoArchive;
+  const copy={...trip,expenses:[...(trip.expenses||[])]},next=State.trips.map(item=>item.id===trip.id?copy:item);
   if(original)copy.expenses[index]=entry;else copy.expenses.unshift(entry);
   copy.activeCurrencies=[...new Set([...(copy.activeCurrencies || ['KRW']),curr,...(walletCurr?[walletCurr]:[])])];
-  try{State.trips=TripRepository.saveAll(next,{bumpTripId:trip.id});}catch(_){expenseFeedback('저장하지 못했습니다. 입력과 사진은 이 창에 남아 있습니다. 공간 확보 후 다시 저장해 주세요.');return false;}
-  closeModal('modal-expense',true);renderActiveTripWorkspace();renderLifetimeAnalytics();showToast(original?'지출·수입 내역을 수정했습니다.':'지출·수입 내역을 저장했습니다.');return true;
+  return {trip,entry,original,next};
+}
+
+function saveExpenseRecord({fromQueue=false,prepared=null}={}) {
+  if(!ExpenseFormState.sessionId)return false;
+  if(ExpenseFormState.saving&&!fromQueue)return false;
+  if(ExpenseFormState.photosLoading){expenseFeedback('사진 준비가 끝난 뒤 저장해 주세요.');return false;}
+  const draft=prepared||expenseChangeDraft();if(!draft)return false;
+  const {trip,original,next}=draft;
+  if(trip.id!==State.activeTripId||trip.id!==ExpenseFormState.tripId){expenseFeedback('여행이 변경되었습니다. 원래 여행에서 다시 열어 주세요.');return false;}
+  try{State.trips=TripRepository.saveAll(next,{bumpTripId:trip.id});}catch(error){
+    const reason=['STORAGE_CONFLICT','REVISION_CONFLICT','READ_ONLY_TRIP'].includes(error?.code)?error.message:error?.name==='QuotaExceededError'?'기기의 앱 저장 공간이 부족합니다.':'기기 저장소에 쓰지 못했습니다. 브라우저의 저장소 권한과 여유 공간을 확인해 주세요.';
+    expenseFeedback(`${reason} 입력과 사진은 이 창에 남아 있습니다. 초안 파일을 보관한 뒤 다시 시도할 수 있습니다.`);
+    const draft=document.getElementById('exp-draft-download-btn');if(draft)draft.hidden=false;
+    return false;
+  }
+  ExpenseFormState.saving=false;
+  closeModal('modal-expense',true);
+  // 저장 결과와 화면 갱신 결과를 분리한다. 숨은 전체 일정·평생 통계는 이 저장에서 다시 만들지 않는다.
+  let refreshed=true;
+  try{renderExpensesTab();}catch(error){refreshed=false;console.warn('[지출 저장 후 화면 갱신]',error);}
+  showToast(refreshed?(original?'지출·수입 내역을 수정했습니다.':'지출·수입 내역을 저장했습니다.'):'내역은 저장했습니다. 지출 화면을 다시 열어 확인해 주세요.');return true;
+}
+
+async function requestExpenseSave() {
+  if(ExpenseFormState.savePending)return false;
+  if(ExpenseFormState.photosLoading){expenseFeedback('사진 준비가 끝난 뒤 저장해 주세요.');return false;}
+  const session=ExpenseFormState.sessionId;if(!session)return false;
+  const button=document.getElementById('exp-form-submit-btn'),modal=document.getElementById('modal-expense');
+  ExpenseFormState.saving=true;ExpenseFormState.savePending=session;button.disabled=true;button.textContent='저장 중…';modal.setAttribute('aria-busy','true');expenseFeedback('사진과 내역을 기기에 저장하고 있습니다…');
+  try{
+    await new Promise(resolve=>{let done=false;const finish=()=>{if(!done){done=true;resolve();}};requestAnimationFrame(()=>setTimeout(finish,0));setTimeout(finish,100);});
+    if(ExpenseFormState.sessionId!==session)return false;
+    const draft=expenseChangeDraft();if(!draft)return false;
+    const state=State.trips,revision=draft.trip.revision,snapshot=expenseFormSnapshot();
+    let next=draft.next;
+    const photoRepository=SulsulTravel.expensePhotoRepository;
+    if(photoRepository){
+      try{next=await photoRepository.prepare(next,{tripId:draft.trip.id});}
+      catch(error){console.warn('[지출 사진 보관본 준비]',error?.message||error);}
+    }
+    if(ExpenseFormState.sessionId!==session)return false;
+    if(State.activeTripId!==draft.trip.id||State.trips!==state||getActiveTrip()?.revision!==revision){expenseFeedback('저장 중 여행이 변경되었습니다. 입력과 사진은 유지되니 최신 여행을 확인한 뒤 다시 저장해 주세요.');return false;}
+    if(expenseFormSnapshot()!==snapshot){expenseFeedback('저장 중 입력 내용이 변경되었습니다. 현재 입력과 사진을 확인한 뒤 다시 저장해 주세요.');return false;}
+    return saveExpenseRecord({fromQueue:true,prepared:{...draft,next}});
+  }catch(error){
+    console.warn('[지출 저장 준비]',error?.message||error);
+    if(ExpenseFormState.sessionId===session){expenseFeedback('저장 준비를 마치지 못했습니다. 입력과 사진은 유지됩니다. 초안 파일을 보관하거나 다시 저장해 주세요.');const draft=document.getElementById('exp-draft-download-btn');if(draft)draft.hidden=false;}
+    return false;
+  }finally{
+    if(ExpenseFormState.sessionId===session){ExpenseFormState.saving=false;ExpenseFormState.savePending=null;button.disabled=false;button.textContent=ExpenseFormState.edit?'수정 저장':ExpenseFormState.type==='income'?'수입 저장':'지출 저장';modal.removeAttribute('aria-busy');}
+  }
+}
+
+function downloadExpenseDraft() {
+  if(!ExpenseFormState.sessionId)return false;
+  if(ExpenseFormState.photosLoading){expenseFeedback('사진 준비가 끝난 뒤 초안 파일을 보관해 주세요.');return false;}
+  try{
+    const value=key=>document.getElementById('exp-form-'+key)?.value||'';
+    const trip=State.trips.find(item=>item.id===ExpenseFormState.tripId);
+    const payload={format:'sulsul-expense-draft',schemaVersion:1,exportedAt:new Date().toISOString(),trip:{id:ExpenseFormState.tripId,title:trip?.title||''},expense:{id:ExpenseFormState.edit?.id||null,title:value('title'),amount:value('amount'),curr:value('curr'),date:value('date'),time:value('time'),memo:value('memo'),paymentSource:value('payment-source'),payMethod:ExpenseFormState.payMethod,type:ExpenseFormState.type,cat:ExpenseFormState.selectedCat,photos:[...ExpenseFormState.photos],primaryPhotoIndex:ExpenseFormState.primaryPhotoIndex||0}};
+    const blob=new Blob([JSON.stringify(payload,null,2)],{type:'application/json;charset=utf-8'}),url=URL.createObjectURL(blob),link=document.createElement('a');
+    link.href=url;link.download=`sulsul-expense-draft-${new Date().toISOString().slice(0,10)}.json`;document.body.append(link);link.click();link.remove();setTimeout(()=>URL.revokeObjectURL(url),60000);
+    expenseFeedback('사진과 입력 내용을 담은 초안 파일을 준비했습니다. 다운로드 폴더에서 확인해 주세요. 기존 지출에는 아직 반영되지 않았습니다.');return true;
+  }catch(_){expenseFeedback('초안 파일을 준비하지 못했습니다. 입력과 사진은 이 창에 유지됩니다.');return false;}
 }

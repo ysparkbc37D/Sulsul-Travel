@@ -73,7 +73,7 @@ function acceptTravelSnapshot(payload, {fromUrl = false} = {}) {
   try { next = TripRepository.saveAll([incoming,...State.trips],{bumpTripId:incoming.id}); }
   catch (_) { shareFeedback('저장하지 못했습니다. 기존 여행과 원본 링크는 유지됩니다. 공간 확보 후 다시 가져와 주세요.'); return false; }
   State.trips = next; State.activeTripId = incoming.id;
-  if (fromUrl) history.replaceState(null,'',location.pathname+location.search);
+  if (fromUrl) history.replaceState(history.state,'',location.pathname+location.search);
   updateHubFilterDropdowns(); switchView('workspace');
   closeModal('modal-share-room',true);
   showToast('여행 사본을 이 기기에 저장했습니다.'); return true;

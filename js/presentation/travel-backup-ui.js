@@ -137,10 +137,13 @@ async function applyTravelBackupRestore(){
         recoveryRaw=pending.baseRaw;
       }
     }
-    const replacement=pending.imported.trips.map(trip=>{
+    let replacement=pending.imported.trips.map(trip=>{
       const current=State.trips.find(item=>item.id===trip.id),old=overflow.filter(entry=>entry.tripId===trip.id).map(entry=>Number.isInteger(entry.revision)?entry.revision:0);
       return {...trip,revision:Math.max(trip.revision||0,current?.revision||0,...old)+1};
     });
+    try { replacement=await SulsulTravel.expensePhotoRepository.prepare(replacement); }
+    catch(error) { console.warn('[복원 지출 사진 보관본]',error?.message||error); }
+    if(JSON.stringify(State.trips)!==pending.baseState)throw new Error('사진을 준비하는 동안 현재 여행이 변경되었습니다. 백업을 다시 검토해 주세요.');
     const next=TripRepository.saveAll(replacement,{approvedRecoveryRaw:recoveryRaw,expectedRaw:pending.baseRaw});
     committed=true;State.trips=next;State.activeTripId=next[0]?.id||null;State.storageRecovery=null;TravelBackupUI.pending=null;
     if(pending.source==='gist'){

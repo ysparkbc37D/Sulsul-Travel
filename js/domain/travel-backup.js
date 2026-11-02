@@ -37,6 +37,13 @@
     });
     const next=root.SulsulTravel.TripAdapter.normalizeTrips(trips);
     next.forEach(trip=>{
+      for(const expense of trip.expenses||[]){
+        if(expense.expensePhotoArchive){
+          if(!Array.isArray(expense.photos)||expense.photos.length!==expense.expensePhotoArchive.count)throw new Error('보관 지출 사진 원본을 읽지 못했습니다. 원본을 확인한 뒤 백업을 다시 준비해 주세요.');
+          // 파일은 이 기기의 IndexedDB 식별자 없이도 사진을 완전히 복원할 수 있어야 한다.
+          delete expense.expensePhotoArchive;
+        }
+      }
       root.SulsulTravel.TripTransfer.validateTrip(validationCopy(trip,{checkMarkup}));
       // HTML 안의 onclick에 사용되는 식별자는 실행문으로 해석되지 않아야 한다.
       const ids=[trip.id,...trip.days.flatMap(day=>[day.id,day.planBlockId,...day.spots.map(spot=>spot.id)]),...Object.keys(trip.planBlockMeta||{}),...Object.keys(trip.activityRecords||{}),...(trip.momentEntries||[]).map(record=>record.id)];

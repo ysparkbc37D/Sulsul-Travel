@@ -72,7 +72,7 @@ function openActivityRecordEditor(trip, recordId, location) {
   if(document.getElementById('activity-record-delete'))document.getElementById('activity-record-delete').hidden=!record;
   setActivityFeedback(record ? '저장된 기록입니다. 수정 후 저장해 주세요.' : '사진만, 글만 남겨도 좋아요. 일정 완료 여부는 바뀌지 않습니다.');
   renderActivityPhotos(); openModal('modal-activity-record');
-  if (!history.state?.stActivitySheet) history.pushState({...history.state,stActivitySheet:true},'');
+  if (!SulsulTravel.MobileNavigation?.active && !history.state?.stActivitySheet) history.pushState({...history.state,stActivitySheet:true},'');
 }
 function renderActivityPhotos() {
   const editor = State.activityRecordEditor; if (!editor) return;

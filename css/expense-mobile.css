@@ -1,0 +1,31 @@
+/* 지출 입력은 내용만 스크롤하고 저장 상태와 행동은 계속 보이게 한다. */
+#modal-expense .sheet-box.sheet-scroll-layout {overflow:hidden;padding:0;gap:0;}
+.expense-editor-header {display:grid;grid-template-columns:minmax(0,1fr) 44px;gap:10px;align-items:center;}
+.expense-editor-header h3 {font-size:16px;min-width:0;overflow-wrap:anywhere;}
+.expense-editor-header .exp-pill-tray {grid-column:1/-1;grid-row:2;}
+.expense-editor-header .exp-pill-btn {min-height:44px;flex:1;}
+.expense-editor-header .expense-close {grid-column:2;grid-row:1;width:44px;min-height:44px;}
+#expense-editor-body {overscroll-behavior:contain;scroll-padding-bottom:18px;}
+#modal-expense .exp-input {font-size:16px;min-height:44px;}
+#modal-expense .exp-scan-banner {flex-wrap:wrap;}
+#modal-expense .exp-scan-banner label {min-height:44px;display:inline-flex;align-items:center;}
+#modal-expense .exp-pill-tray button {min-height:44px;}
+#modal-expense .exp-amount-card input {min-height:44px;}
+.expense-editor-footer {display:block;}
+.expense-editor-footer [hidden] {display:none!important;}
+.expense-editor-footer p {margin:0 0 8px;font-size:12px;line-height:1.5;color:var(--ink);overflow-wrap:anywhere;}
+.expense-editor-footer p:empty {display:none;}
+.expense-editor-save-actions {display:grid;grid-template-columns:minmax(72px,1fr) minmax(0,2fr);gap:10px;}
+.expense-editor-save-actions button {width:100%;min-height:48px;}
+#exp-draft-download-btn:not([hidden]) {width:100%;margin-bottom:8px;min-height:44px;}
+#modal-expense [aria-busy="true"] {cursor:progress;}
+#modal-expense button:disabled {opacity:.6;cursor:wait;}
+#modal-expense #expense-photo-viewer:not([hidden]) {z-index:6;padding:16px;overflow:hidden;}
+#expense-photo-viewer img {flex:1;min-height:0;width:100%;max-height:calc(100% - 64px);object-fit:contain;}
+#modal-expense .expense-primary {min-height:44px;}
+#modal-expense .expense-remove-photo {width:44px;height:44px;min-height:44px;}
+@media(min-width:640px) {
+  .expense-editor-header {grid-template-columns:minmax(0,1fr) auto 44px;}
+  .expense-editor-header .exp-pill-tray {grid-column:2;grid-row:1;}
+  .expense-editor-header .expense-close {grid-column:3;}
+}

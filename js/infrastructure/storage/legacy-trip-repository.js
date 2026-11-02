@@ -14,6 +14,8 @@
       this.key = options.key || 'st_trips_v2';
       this.now = options.now || (() => new Date().toISOString());
       this.beforeWrite = options.beforeWrite || (() => {});
+      this.serialize = options.serialize || (trips => trips);
+      this.restore = options.restore || (trips => trips);
       this.observedRaw = this.storage.getItem(this.key);
       this.committedTrips = null;
     }
@@ -28,7 +30,8 @@
         if (!trip || typeof trip !== 'object' || typeof trip.id !== 'string' || !trip.id) {
           throw new TypeError('INVALID_TRIP');
         }
-        const canonical = root.SulsulTravel?.TripAdapter?.normalizeTrip(trip) || trip;
+        // normalizeTrip 자체가 깊은 복사본을 만든다. 없는 환경에서만 직접 복사한다.
+        const canonical = root.SulsulTravel?.TripAdapter?.normalizeTrip(trip) || this.clone(trip);
         return {
           ...canonical,
           revision: Number.isInteger(trip.revision) && trip.revision >= 0 ? trip.revision : 0,
@@ -42,7 +45,7 @@
       this.observedRaw = raw;
       if (!raw) { this.committedTrips = []; return { trips: [], recoveredFromCorruption: false, backupKey: null }; }
       try {
-        const trips = this.normalize(JSON.parse(raw));
+        const trips = this.normalize(this.restore(JSON.parse(raw)));
         this.committedTrips = this.clone(trips);
         return { trips, recoveredFromCorruption: false, backupKey: null };
       } catch (error) {
@@ -62,7 +65,7 @@
         throw error;
       }
       this.beforeWrite({next, storedRaw, approvedRemoteTripId:options.approvedRemoteTripId || null, approvedRecoveryRaw:options.approvedRecoveryRaw ?? null});
-      const raw = JSON.stringify(next);
+      const raw = JSON.stringify(this.serialize(next));
       this.storage.setItem(this.key, raw);
       this.observedRaw = raw;
       this.committedTrips = this.clone(next);
@@ -71,19 +74,23 @@
     getCommittedTrips() { return this.committedTrips === null ? null : this.clone(this.committedTrips); }
 
     commit(trips, {tripId, expectedRevision, change}) {
-      const next = this.normalize(this.clone(trips));
+      const next = this.normalize(trips);
       const trip = next.find(item => item.id === tripId);
       if (!trip || trip.revision !== expectedRevision) {
         const error = new Error('편집을 시작한 뒤 여행이 변경됐습니다. 내용을 확인하고 다시 편집해 주세요.');
         error.code = 'REVISION_CONFLICT'; throw error;
       }
       change(trip);
-      return this.saveAll(next, {bumpTripId:tripId});
+      next[next.indexOf(trip)] = this.normalize([trip])[0];
+      return this.savePrepared(next, {bumpTripId:tripId});
     }
 
     saveAll(trips, options = {}) {
+      return this.savePrepared(this.normalize(trips),options);
+    }
+
+    savePrepared(next, options = {}) {
       const { bumpTripId = null } = options;
-      const next = this.normalize(this.clone(trips));
       if (bumpTripId) {
         const trip = next.find((item) => item.id === bumpTripId);
         if (trip) {
@@ -97,7 +104,7 @@
 
     applyDraft(trips, { tripId, baseRevision, jobId, mutate }) {
       if (typeof mutate !== 'function') throw new TypeError('MUTATOR_REQUIRED');
-      const next = this.normalize(this.clone(trips));
+      const next = this.normalize(trips);
       const trip = next.find((item) => item.id === tripId);
       if (!trip) return { status: 'conflict', reason: 'TRIP_NOT_FOUND' };
       if (trip.appliedAiJobIds.includes(jobId)) return { status: 'applied', trips: next, duplicate: true };
@@ -108,9 +115,9 @@
       trip.revision += 1;
       trip.updatedAt = this.now();
       trip.appliedAiJobIds = [...trip.appliedAiJobIds, jobId].slice(-50);
-      const canonical = this.normalize(next);
-      this.write(canonical);
-      return { status: 'applied', trips: canonical, duplicate: false };
+      next[next.indexOf(trip)] = this.normalize([trip])[0];
+      this.write(next);
+      return { status: 'applied', trips: next, duplicate: false };
     }
   }
 

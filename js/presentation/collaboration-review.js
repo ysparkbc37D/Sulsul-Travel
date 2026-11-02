@@ -56,7 +56,7 @@ function reviewRemoteTravelPlan({remote,localTrip,link,source}) {
   document.getElementById('collaboration-review-apply').hidden=!localTrip;
   return new Promise(resolve=>{
     State.collaborationReview={remote,localTripId:localTrip?.id,baseRevision:localTrip?.revision,link,resolve};openModal('modal-collaboration-review');
-    if(!history.state?.stCollaborationReview)history.pushState({...history.state,stCollaborationReview:true},'');
+    if(!SulsulTravel.MobileNavigation?.active&&!history.state?.stCollaborationReview)history.pushState({...history.state,stCollaborationReview:true},'');
   });
 }
 function applyRemoteTravelPlan(asCopy) {

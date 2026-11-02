@@ -41,7 +41,8 @@ const server=http.createServer((req,res)=>{
     finally{await context.close();}
    }
    // 복원은 대기 AI·옛 보조 기록 충돌 방지를 위해 로컬 revision만 올린다.
-   const restoredData=trips=>trips.map(({revision,...record})=>record);
+   // 기기 전용 보관 ID는 복원마다 새로 생긴다. 거래·원문·실제 사진은 그대로 대조한다.
+   const restoredData=trips=>trips.map(({revision,...record})=>({...record,...(Array.isArray(record.expenses)?{expenses:record.expenses.map(({expensePhotoArchive,...expense})=>expense)}:{})}));
    const backup=trips=>({format:'sulsul-backup',schemaVersion:1,version:'test',exportedAt:'2030-01-01T00:00:00.000Z',trips});
    await check('settings 실제 Blob 다운로드와 사진·원문 백업 미리보기/확정 왕복',async(api,original)=>{
     await api.prepare();const widths=[];for(const width of [320,360,390,430]){await api.page.setViewportSize({width,height:844});const geometry=await api.page.locator('#backup-file-save').evaluate(element=>{const box=element.getBoundingClientRect();return {overflow:document.documentElement.scrollWidth>innerWidth,contained:box.left>=0&&box.right<=innerWidth+1,height:box.height};});assert.equal(geometry.overflow,false);assert.equal(geometry.contained,true);assert.ok(geometry.height>=44);widths.push(width);}await api.page.setViewportSize({width:390,height:844});await api.page.screenshot({path:path.join(output,`${engine.name}-backup-ready.png`)});const exported=await api.download(),payload=JSON.parse(exported.buffer.toString('utf8'));assert.equal(payload.format,'sulsul-backup');assert.equal(payload.schemaVersion,1);assert.deepEqual(payload.trips,original);
