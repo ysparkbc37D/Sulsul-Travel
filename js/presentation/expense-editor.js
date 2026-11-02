@@ -11,6 +11,7 @@ function resetExpenseEditor() {
   const draft=document.getElementById('exp-draft-download-btn');if(draft)draft.hidden=true;
   document.getElementById('expense-photo-viewer').hidden=true;
   document.getElementById('receipt-scan-loading')?.classList.add('hidden');
+  const quality=document.getElementById('exp-photo-quality');if(quality)quality.value='photo';
   expenseFeedback('');
 }
 function expenseEditIndex(trip) {
@@ -58,7 +59,7 @@ async function uploadExpensePhotos(event) {
   const files=Array.from(event.target.files || []);event.target.value='';
   if(!files.length || ExpenseFormState.photosLoading || ExpenseFormState.saving)return;
   if(ExpenseFormState.photos.length+files.length>8){expenseFeedback('사진은 한 내역에 최대 8장까지 첨부할 수 있습니다.');return;}
-  const session=ExpenseFormState.sessionId;ExpenseFormState.photosLoading=true;document.getElementById('exp-form-submit-btn').disabled=true;expenseFeedback('사진을 준비하고 있습니다…');
+  const session=ExpenseFormState.sessionId,preset=document.getElementById('exp-photo-quality')?.value||'photo';ExpenseFormState.photosLoading=true;document.getElementById('exp-form-submit-btn').disabled=true;expenseFeedback('사진을 준비하고 있습니다…');
   try{
     let added=0;const failures=[];
     for(let index=0;index<files.length;index++){
@@ -67,7 +68,7 @@ async function uploadExpensePhotos(event) {
       // 여러 고화질 사진을 한 번에 디코딩하지 않고, 화면 표시 기회를 준 뒤 순차 처리한다.
       await new Promise(resolve=>setTimeout(resolve,0));
       try{
-        const photo=await compressExpensePhoto(files[index]);
+        const photo=await compressExpensePhoto(files[index],{preset});
         if(session!==ExpenseFormState.sessionId)return;
         ExpenseFormState.photos.push(photo);added++;renderExpensePhotos();
       }catch(error){failures.push(error.message||'사진을 처리하지 못했습니다.');}
@@ -77,38 +78,10 @@ async function uploadExpensePhotos(event) {
   }catch(error){if(session===ExpenseFormState.sessionId)expenseFeedback(error.message||'사진을 준비하지 못했습니다. 다시 선택해 주세요.');}
   finally{if(session===ExpenseFormState.sessionId){ExpenseFormState.photosLoading=false;document.getElementById('exp-form-submit-btn').disabled=false;}}
 }
-function compressExpensePhoto(file) {
-  return new Promise((resolve,reject)=>{
-    if(file.size>20*1024*1024){reject(new Error('사진 한 장은 20MB 이하로 선택해 주세요.'));return;}
-    if(file.type&&!file.type.startsWith('image/')){reject(new Error('사진 파일을 선택해 주세요.'));return;}
-    const url=URL.createObjectURL(file),img=new Image();let canvas=null,settled=false;
-    const finish=(error,value)=>{
-      if(settled)return;settled=true;clearTimeout(timer);img.onload=img.onerror=null;URL.revokeObjectURL(url);
-      if(canvas){canvas.width=1;canvas.height=1;}
-      error?reject(error):resolve(value);
-    };
-    const timer=setTimeout(()=>finish(new Error('사진 처리가 오래 걸립니다. 사진을 줄이거나 JPEG/PNG로 다시 선택해 주세요.')),30000);
-    img.onerror=()=>finish(new Error('사진을 읽지 못했습니다. JPEG/PNG로 다시 선택해 주세요.'));
-    img.onload=async()=>{
-      try{
-        const scale=Math.min(1,800/Math.max(img.naturalWidth||img.width,img.naturalHeight||img.height));
-        canvas=document.createElement('canvas');canvas.width=Math.max(1,Math.round((img.naturalWidth||img.width)*scale));canvas.height=Math.max(1,Math.round((img.naturalHeight||img.height)*scale));
-        const ctx=canvas.getContext('2d');if(!ctx)throw new Error('사진을 처리하지 못했습니다.');
-        ctx.fillStyle='#fff';ctx.fillRect(0,0,canvas.width,canvas.height);ctx.drawImage(img,0,0,canvas.width,canvas.height);
-        const encode=quality=>new Promise((accept,deny)=>canvas.toBlob(blob=>blob?accept(blob):deny(new Error('사진을 처리하지 못했습니다.')),'image/jpeg',quality));
-        let blob=await encode(.8);
-        // 복잡한 고해상도 사진도 JSON 저장을 과도하게 차지하지 않도록 크기 상한을 둔다.
-        for(const quality of [.68,.55]){if(blob.size<=240*1024)break;blob=await encode(quality);}
-        while(blob.size>240*1024&&Math.max(canvas.width,canvas.height)>320){
-          canvas.width=Math.max(1,Math.round(canvas.width*.8));canvas.height=Math.max(1,Math.round(canvas.height*.8));
-          ctx.fillStyle='#fff';ctx.fillRect(0,0,canvas.width,canvas.height);ctx.drawImage(img,0,0,canvas.width,canvas.height);blob=await encode(.7);
-        }
-        if(blob.size>240*1024)throw new Error('사진 용량을 줄이지 못했습니다. JPEG/PNG 사진으로 다시 선택해 주세요.');
-        if(settled)return;
-        const reader=new FileReader();reader.onerror=()=>finish(new Error('사진을 읽지 못했습니다. 다시 선택해 주세요.'));reader.onload=()=>finish(null,reader.result);reader.readAsDataURL(blob);
-      }catch(error){finish(error);}
-    };img.src=url;
-  });
+async function compressExpensePhoto(file,{preset='photo'}={}) {
+  const compression=SulsulTravel.PhotoCompression;
+  const result=await compression.compress(file,{preset,timeoutMs:30000});
+  return compression.toDataUrl(result.source);
 }
 function renderExpensePhotoEditor() {
   const list=document.getElementById('exp-photos-list');if(!list)return;

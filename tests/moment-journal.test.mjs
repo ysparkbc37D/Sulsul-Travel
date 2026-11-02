@@ -6,8 +6,8 @@ const Media=require('../js/infrastructure/storage/media-repository.js');
 const {momentEntries,momentFeedEntries,momentLocalDateTime}=require('../js/presentation/moment-journal.js');
 
 test('보관본과 썸네일 크기를 비율 유지하면서 구하고 작은 원본을 확대하지 않는다',()=>{
-  assert.deepEqual(Media.dimensions(3200,1800),{width:1600,height:900});
-  assert.deepEqual(Media.dimensions(1800,3200),{width:900,height:1600});
+  assert.deepEqual(Media.dimensions(3200,1800),{width:1280,height:720});
+  assert.deepEqual(Media.dimensions(1800,3200),{width:720,height:1280});
   assert.deepEqual(Media.dimensions(3200,1800,448),{width:448,height:252});
   assert.deepEqual(Media.dimensions(300,200),{width:300,height:200});
   assert.throws(()=>Media.dimensions(0,0));

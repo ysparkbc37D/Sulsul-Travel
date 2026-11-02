@@ -14,14 +14,9 @@
     return { width: Math.max(1, Math.round(width * scale)), height: Math.max(1, Math.round(height * scale)) };
   }
   function sourceHash(value) { let hash=2166136261;for(let i=0;i<value.length;i++)hash=Math.imul(hash^value.charCodeAt(i),16777619);return `${value.length}:${hash>>>0}`; }
-  const readDataUrl = blob => new Promise((resolve, reject) => {
-    const reader = new root.FileReader(); reader.onload = () => resolve(reader.result); reader.onerror = () => reject(new Error('사진을 읽지 못했습니다.'));
-    reader.readAsDataURL(blob);
-  });
-  const canvasBlob = canvas => new Promise((resolve, reject) => canvas.toBlob(blob => blob ? resolve(blob) : reject(new Error('사진을 처리하지 못했습니다.')), 'image/jpeg', .85));
   class MediaRepository {
     constructor(indexedDb = root.indexedDB) { this.indexedDb = indexedDb; this.urls = new Set(); }
-    static dimensions(width, height, limit = 1600) { return dimensions(width, height, limit); }
+    static dimensions(width, height, limit = 1280) { return dimensions(width, height, limit); }
     static photoSource(record, index = 0, { thumbnail = false } = {}) {
       const full = Array.isArray(record) ? record[index] : record?.photos?.[index];
       const thumb = !Array.isArray(record) && record?.photoThumbnails?.[index];
@@ -89,28 +84,16 @@
         });
       } finally { db.close(); }
     }
-    async prepare(file, { tripId = '', store = true, maxDimension = 1600 } = {}) {
-      if (!file || file.size > 20 * 1024 * 1024) throw new Error('사진 한 장은 20MB 이하로 선택해 주세요.');
-      if (file.type && !file.type.startsWith('image/')) throw new Error('사진 파일을 선택해 주세요.');
-      const objectUrl = root.URL.createObjectURL(file), img = new root.Image();
-      try {
-        await new Promise((resolve, reject) => { img.onload = resolve; img.onerror = () => reject(new Error('사진을 읽지 못했습니다. JPEG 또는 PNG 사진으로 다시 선택해 주세요.')); img.src = objectUrl; });
-        const render = limit => {
-          const size = dimensions(img.naturalWidth || img.width, img.naturalHeight || img.height, limit);
-          const canvas = root.document.createElement('canvas'); canvas.width = size.width; canvas.height = size.height;
-          const ctx = canvas.getContext('2d'); if (!ctx) throw new Error('사진을 처리하지 못했습니다.');
-          ctx.fillStyle = '#ffffff'; ctx.fillRect(0, 0, size.width, size.height); ctx.drawImage(img, 0, 0, size.width, size.height);
-          return { canvas, ...size };
-        };
-        const full = render(maxDimension), small = render(448);
-        const original = await canvasBlob(full.canvas), thumbnail = await canvasBlob(small.canvas);
-        const source = await readDataUrl(original), thumbnailSource = await readDataUrl(thumbnail);
+    async prepare(file, { tripId = '', store = true, maxDimension, preset = 'photo' } = {}) {
+        const compression=root.SulsulTravel.PhotoCompression;
+        const result=await compression.compress(file,{preset,maxDimension});
+        const original=result.source, thumbnail=result.thumbnail;
+        const source=await compression.toDataUrl(original),thumbnailSource=await compression.toDataUrl(thumbnail);
         const id = `media_${root.crypto?.randomUUID?.() || `${Date.now()}_${Math.random().toString(36).slice(2)}`}`;
         let stored = false;
         // 브라우저가 IndexedDB를 제한해도 data URL을 이용한 기존 저장을 계속할 수 있다.
-        if (store) { try { await this.save({ id, tripId, original, thumbnail, sourceHash: sourceHash(source), width: full.width, height: full.height, createdAt: new Date().toISOString() }); stored = true; } catch (_) {} }
-        return { source, thumbnail: thumbnailSource, mediaId: stored ? id : null, width: full.width, height: full.height, stored };
-      } finally { root.URL.revokeObjectURL(objectUrl); }
+        if (store) { try { await this.save({ id, tripId, original, thumbnail, sourceHash: sourceHash(source), width: result.width, height: result.height, createdAt: new Date().toISOString() }); stored = true; } catch (_) {} }
+        return { source, thumbnail: thumbnailSource, mediaId: stored ? id : null, width: result.width, height: result.height, bytes:result.bytes, stored };
     }
     async resolve(record, index = 0, { thumbnail = false } = {}) {
       const fallback = MediaRepository.photoSource(record, index, { thumbnail }), id = record?.mediaIds?.[index];

@@ -31,7 +31,7 @@ const server=http.createServer((req,res)=>{
    const img=new Image();img.src=record.photos[0];await img.decode();
    return {ok,completed:getActiveTrip().days[0].spots[0].completed,photos:record.photos.length,cover:record.coverIndex,w:img.width,h:img.height,stat:document.getElementById('stat-ws-diaries').textContent};
   });
-  assert.deepEqual(saved,{ok:true,completed:false,photos:2,cover:1,w:1600,h:900,stat:'1편 / 2장'});
+  assert.deepEqual(saved,{ok:true,completed:false,photos:2,cover:1,w:1280,h:720,stat:'1편 / 2장'});
   const privacy=await page.evaluate(()=>{
    const trip=getActiveTrip(),api=SulsulTravel.TripTransfer;
    return {private:api.create(trip).trip.activityRecords,roundtrip:api.parse(JSON.stringify(api.create(trip,{journals:true}))).trip.activityRecords[testRecordId].photos.length};

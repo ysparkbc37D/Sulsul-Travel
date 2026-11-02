@@ -42,9 +42,9 @@ try{
    const before=ExpenseFormState.photos.length;await uploadExpensePhotos({target:{files:[file,new File(['broken-image'],'broken.jpg',{type:'image/jpeg'})],value:'x'}});
    const source=ExpenseFormState.photos.at(-1),photoBlob=await(await fetch(source)).blob();
    const size=await new Promise(resolve=>{const img=new Image();img.onload=()=>resolve({width:img.naturalWidth,height:img.naturalHeight});img.src=source;});
-   return {before,after:ExpenseFormState.photos.length,loading:ExpenseFormState.photosLoading,disabled:document.getElementById('exp-form-submit-btn').disabled,bytes:photoBlob.size,size,message:document.getElementById('expense-editor-feedback').textContent};
+   return {before,after:ExpenseFormState.photos.length,loading:ExpenseFormState.photosLoading,disabled:document.getElementById('exp-form-submit-btn').disabled,bytes:photoBlob.size,size,inputBytes:blob.size,message:document.getElementById('expense-editor-feedback').textContent};
  });
- assert.equal(prepared.after,prepared.before+1);assert.equal(prepared.loading,false);assert.equal(prepared.disabled,false);assert.ok(prepared.bytes<=240*1024);assert.ok(Math.max(prepared.size.width,prepared.size.height)<=800);assert.match(prepared.message,/1장 실패/);
+ assert.equal(prepared.after,prepared.before+1);assert.equal(prepared.loading,false);assert.equal(prepared.disabled,false);assert.ok(prepared.bytes<prepared.inputBytes);assert.ok(Math.max(prepared.size.width,prepared.size.height)<=1280);assert.match(prepared.message,/1장 실패/);
  // 실제 저장 버튼은 저장중 표시를 먼저 그린다. 연타와 늦은 세션은 새 내역을 중복 작성하지 않는다.
  const queued=await page.evaluate(async()=>{document.getElementById('exp-form-memo').value='저장 중 연타 검증';const first=requestExpenseSave(),state={disabled:document.getElementById('exp-form-submit-btn').disabled,label:document.getElementById('exp-form-submit-btn').textContent,busy:ExpenseFormState.saving},second=await requestExpenseSave();return {...state,first:await first,second,count:getActiveTrip().expenses.length};});
  assert.deepEqual(queued,{disabled:true,label:'저장 중…',busy:true,first:true,second:false,count:1});
@@ -72,7 +72,7 @@ try{
  }
  await page.setViewportSize({width:320,height:560});await page.screenshot({path:path.join(out,'sticky-keyboard-320.png')});
  // 영수증의 실제 파일 입력도 같은 사진 처리와 세션 경계를 사용한다. 외부 AI 호출은 대체한다.
- const receiptSource=await page.evaluate(()=>{closeModal('modal-expense',true);window.expenseOriginalStartAi=startAiDraftJob;window.expenseReceiptJobs=[];startAiDraftJob=async job=>{expenseReceiptJobs.push({kind:job.kind,session:job.input.expenseSession,mimeType:job.input.mimeType});return null;};return getActiveTrip().expenses[0].photos[0];});
+ const receiptSource=await page.evaluate(()=>{closeModal('modal-expense',true);window.expenseOriginalStartAi=startAiDraftJob;window.expenseReceiptJobs=[];startAiDraftJob=async job=>{expenseReceiptJobs.push({kind:job.kind,session:job.input.expenseSession,mimeType:job.input.mimeType,actualType:/^data:([^;]+);/.exec(job.input.base64)?.[1]});return null;};return getActiveTrip().expenses[0].photos[0];});
  await page.locator('#exp-tab-receipt-file').setInputFiles({name:'broken-receipt.jpg',mimeType:'image/jpeg',buffer:Buffer.from('broken-image')});
  await page.waitForFunction(()=>!ExpenseFormState.photosLoading&&document.getElementById('expense-editor-feedback').textContent.includes('읽지 못'));
  assert.deepEqual(await page.evaluate(()=>({photos:ExpenseFormState.photos.length,jobs:expenseReceiptJobs.length,disabled:document.getElementById('exp-form-submit-btn').disabled})),{photos:0,jobs:0,disabled:false});
@@ -80,6 +80,7 @@ try{
  await page.locator('#exp-tab-receipt-file').setInputFiles(receiptFile);await page.waitForFunction(()=>expenseReceiptJobs.length===1&&!ExpenseFormState.photosLoading);
  await page.locator('#exp-receipt-file').setInputFiles(receiptFile);await page.waitForFunction(()=>expenseReceiptJobs.length===2&&!ExpenseFormState.photosLoading);
  assert.deepEqual(await page.evaluate(()=>({photos:ExpenseFormState.photos.length,primary:ExpenseFormState.primaryPhotoIndex,disabled:document.getElementById('exp-form-submit-btn').disabled,kinds:expenseReceiptJobs.map(job=>job.kind)})),{photos:2,primary:1,disabled:false,kinds:['receipt','receipt']});
+ assert.equal(await page.evaluate(()=>expenseReceiptJobs.every(job=>job.mimeType===job.actualType)),true,'영수증 AI에는 실제 PNG/JPEG/WebP 형식을 전달한다');
  await page.evaluate(()=>{window.expenseOriginalCompress=compressExpensePhoto;compressExpensePhoto=()=>new Promise(resolve=>window.expenseReceiptFinish=resolve);});
  await page.locator('#exp-receipt-file').setInputFiles(receiptFile);await page.waitForFunction(()=>typeof expenseReceiptFinish==='function');
  const lateReceipt=await page.evaluate(async source=>{const disabled=document.getElementById('exp-form-submit-btn').disabled;closeModal('modal-expense',true);openAddExpenseModal();expenseReceiptFinish(source);await Promise.resolve();await Promise.resolve();compressExpensePhoto=expenseOriginalCompress;startAiDraftJob=expenseOriginalStartAi;return {disabledWhilePreparing:disabled,photos:ExpenseFormState.photos.length,jobs:expenseReceiptJobs.length,disabledNewSession:document.getElementById('exp-form-submit-btn').disabled,loaderReset:document.getElementById('receipt-scan-loading').classList.contains('hidden')};},receiptSource);

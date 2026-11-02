@@ -20,6 +20,7 @@ $readmePath = Join-Path $baseDir "README.md"
 $servePath = Join-Path $baseDir "tools-serve.ps1"
 $mapImgPath = Join-Path $baseDir "south_america_illustrated_map.jpg"
 $mediaPath = Join-Path $baseDir "js\infrastructure\storage\media-repository.js"
+$compressionPath = Join-Path $baseDir "js\infrastructure\storage\photo-compression.js"
 
 # Detect Sulsul Chronicle (술술트래블신록.md) regardless of console encoding
 $sillokFile = Get-ChildItem -Path $baseDir -Filter "*.md" | Where-Object { $_.Name -notmatch "^(CHANGELOG|DEVELOPMENT|README)" } | Select-Object -First 1
@@ -83,6 +84,7 @@ $swContent = if (Test-Path $swJsPath) { Get-Content -Raw -Path $swJsPath -Encodi
 $clContent = if (Test-Path $changelogPath) { Get-Content -Raw -Path $changelogPath -Encoding UTF8 } else { "" }
 $sillokContent = if (Test-Path $sillokPath) { Get-Content -Raw -Path $sillokPath -Encoding UTF8 } else { "" }
 $mediaContent = if (Test-Path $mediaPath) { Get-Content -Raw -Path $mediaPath -Encoding UTF8 } else { "" }
+$compressionContent = if (Test-Path $compressionPath) { Get-Content -Raw -Path $compressionPath -Encoding UTF8 } else { "" }
 
 $mIndex = [regex]::Match($indexContent, "const APP_VER\s*=\s*'([^']+)'")
 $appVer = if ($mIndex.Success) { $mIndex.Groups[1].Value } else { "UNKNOWN" }
@@ -136,8 +138,8 @@ Report-Gate "Gemini Free-Tier 3-Tier Multi-Model Fallback Chain (R-5)" $has3Tier
 
 # R-4: Keep the archival aspect ratio; generate thumbnails separately.
 # Gate 4 exercises real landscape/portrait uploads rather than requiring a crop.
-$hasMediaPolicy = ($indexContent -match "js/infrastructure/storage/media-repository\.js") -and ($mediaContent -match "maxDimension\s*=\s*1600") -and ($mediaContent -match "render\(448\)") -and ($mediaContent -match "original, thumbnail")
-Report-Gate "Archival Photo / Separate Thumbnail Pipeline (R-4)" $hasMediaPolicy "Archival max edge: 1600px | Thumbnail max edge: 448px | IndexedDB Blob + JSON fallback"
+$hasMediaPolicy = ($indexContent -match "js/infrastructure/storage/photo-compression\.js") -and ($mediaContent -match "PhotoCompression") -and ($compressionContent -match "maxDimension: 1280") -and ($compressionContent -match "minShortEdge: 1000") -and ($compressionContent -match "maxDimension: 320") -and ($mediaContent -match "original, thumbnail")
+Report-Gate "Archival Photo / Separate Thumbnail Pipeline (R-4)" $hasMediaPolicy "Photo max edge: 1280px | Document short edge: 1000px | Thumbnail: 320px | IndexedDB Blob + JSON fallback"
 
 # R-6: MEP Exchange Rate Switch
 $hasMepSwitch = $indexContent -match "chk-mep-rate"
@@ -334,7 +336,7 @@ new Promise(function(resolve) {
         $photoResponse = Invoke-CdpCommand -WebSocketUrl $pageSocketUrl -Method "Runtime.evaluate" -Params @{ expression = $photoEvaluation; awaitPromise = $true; returnByValue = $true }
         if ($photoResponse.result.exceptionDetails) { throw "R-4 photo evaluation failed: $($photoResponse.result.exceptionDetails.text)" }
         $photoResult = $photoResponse.result.result.value | ConvertFrom-Json
-        $photoPass = ($photoResult.Count -eq 2) -and ($photoResult[0].full[0] -eq 1600) -and ($photoResult[0].full[1] -eq 900) -and ($photoResult[1].full[0] -eq 900) -and ($photoResult[1].full[1] -eq 1600) -and ($photoResult[0].thumb[0] -eq 448) -and ($photoResult[0].thumb[1] -eq 252) -and ($photoResult[1].thumb[0] -eq 252) -and ($photoResult[1].thumb[1] -eq 448) -and $photoResult[0].compatible -and $photoResult[1].compatible
+        $photoPass = ($photoResult.Count -eq 2) -and ($photoResult[0].full[0] -eq 1280) -and ($photoResult[0].full[1] -eq 720) -and ($photoResult[1].full[0] -eq 720) -and ($photoResult[1].full[1] -eq 1280) -and ($photoResult[0].thumb[0] -eq 320) -and ($photoResult[0].thumb[1] -eq 180) -and ($photoResult[1].thumb[0] -eq 180) -and ($photoResult[1].thumb[1] -eq 320) -and $photoResult[0].compatible -and $photoResult[1].compatible
         Report-Gate "Landscape/Portrait Aspect Ratio & JSON Photo Compatibility (R-4)" $photoPass ($photoResponse.result.result.value)
 
         # ---------------------------------------------------------------

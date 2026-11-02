@@ -1,6 +1,6 @@
 # 술술트래블 개발 가이드
 
-이 문서는 현재 앱 구조와 검증 방식을 설명합니다. 이전 구조를 기술한 문서는 상단에 역사 자료 또는 목표 설계라고 표시합니다. 현재 앱 버전은 `1.9.9`입니다.
+이 문서는 현재 앱 구조와 검증 방식을 설명합니다. 이전 구조를 기술한 문서는 상단에 역사 자료 또는 목표 설계라고 표시합니다. 현재 앱 버전은 `2.0.0`입니다.
 
 ## 실행 구조
 
@@ -30,6 +30,10 @@
 | `js/infrastructure/storage/legacy-trip-repository.js` | `st_trips_v2` 문서 저장과 revision 경계 |
 | `js/infrastructure/storage/settings-repository.js` | 손상 환율 설정 격리와 원문 보관 |
 | `js/infrastructure/storage/journal-overflow-repository.js` | 용량 초과 하루 일기 임시 보관 |
+| `js/infrastructure/storage/photo-compression.js` | 일반 사진·문서·썸네일의 용도별 압축과 자원 정리 |
+| `js/domain/photo-optimization.js` | 기존 사진 출처·식별자 검사와 복사본 교체 |
+| `js/infrastructure/storage/photo-cleanup.js` | 교체 후보 ID만 정리·모든 여행 참조 보호 |
+| `js/presentation/photo-optimization-ui.js` | 절감량·확대 미리보기·선택 적용·실패 재시도 |
 | `js/infrastructure/storage/media-repository.js` | 비율 유지 보관본, 썸네일, IndexedDB Blob과 JSON fallback |
 | `js/infrastructure/storage/expense-photo-repository.js` | 지출 사진 durable 보관·JSON projection·부팅 원본 복원 |
 | `js/presentation/mobile-navigation.js` | 사진·편집창·상세 복귀와 종료 확인의 단일 history 경계 |
@@ -71,6 +75,8 @@ Node.js 18 이상과 Playwright/Chromium을 사용할 수 있는 환경에서 �
 $testFiles = Get-ChildItem .\tests -Filter '*.test.mjs' | ForEach-Object { $_.FullName }
 node --test $testFiles
 node .\tests\activity-journal.browser.cjs
+node .\tests\photo-compression.browser.cjs
+node .\tests\photo-optimization.browser.cjs
 node .\tests\expense-editor.browser.cjs
 node .\tests\expense-photo-repository.browser.cjs
 node .\tests\expense-photo-quota.browser.cjs
