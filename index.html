@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
@@ -1495,7 +1495,7 @@
     }
   </style>
 
-  <link rel="stylesheet" href="css/companion.css?v=2.0.0" integrity="sha384-0Z4uvA+TQg136QslU/lerdomzqLEXamBBqfTARD5kruZjdU3cBDsvGm+KVnZPlO+">
+  <link rel="stylesheet" href="css/companion.css?v=2.0.0" integrity="sha384-ogoX2lXoqa4MRzXA6ee4sTw7P+dlamJv+owfw0iM4uP+dEvozoyXwWZekvYS0m7f">
   <link rel="stylesheet" href="css/companion-refresh.css?v=2.0.0" integrity="sha384-g1MzsPxYgFA1G2Ba189anhZCcQnMwkNSt6MlFXiazIHGO0Kqp2sbMXQZ2kjr3p4u">
   <link rel="stylesheet" href="css/live-itinerary.css?v=2.0.0" integrity="sha384-e/V9wyJ/Gi6baSHcWzBeNGjdn/eKDQIvKWyiYmByLE7C7nYJaQOA+GshtUMcCR72">
   <link rel="stylesheet" href="css/expense-mobile.css?v=2.0.0" integrity="sha384-QZFtKrU/YvkTaEKv0oJ2ZQi1Zry8RgEFaHzTckwuPFsMDDmadYBH7UuYgTVS7281">
@@ -1515,7 +1515,7 @@
   <script src="js/presentation/photo-optimization-ui.js?v=2.0.0" integrity="sha384-VhSAzyfhLGHeztkcMZhxqnkKTZsAVnuUcU9JaHfbTlXqu86UlbN8RIlvuCyXTyQi"></script>
   <script src="js/infrastructure/storage/media-repository.js?v=2.0.0" integrity="sha384-uRMSm/SsC90644vL2l/tHSvOAIk4e5rvXEkGKvG/l5cv879XC0M7aMG5HSULmANU"></script>
   <script src="js/infrastructure/storage/expense-photo-repository.js?v=2.0.0" integrity="sha384-gdumvFYkJqEbRPJlK4mffCsUjPsnKCXLg6/1fLMR8kUuU1QDMeLLOYmMVSRTGNSy"></script>
-  <script src="js/presentation/companion-ui.js?v=2.0.0" integrity="sha384-eL+CNgq8JPOdZPVZ2wcwDGH2CWPsrUyXRnKmNZ+HGF15mtOjk2TJ68Vl/HxOFpxe"></script>
+  <script src="js/presentation/companion-ui.js?v=2.0.0" integrity="sha384-cVo2YA0qVG86ZcmeknohWZQXL0BN7aKn5Igo7sWXQR8XZtFxCB+q1JsZfBs7Is7a"></script>
   <script src="js/domain/trip-transfer.js?v=2.0.0" integrity="sha384-2DbGuFMcI+/890akrM1xJKdRfBXROqXvDdpzZbku3tx7rMTs8RtmC9jE6QvYSKYw"></script>
   <script src="js/domain/travel-backup.js?v=2.0.0" integrity="sha384-2tUabty22tYrBgP9E/PSL3TuW0rX+S20qcRNPJm9utnX+BUjsYot9rdLRMTDCdhy"></script>
   <script src="js/presentation/travel-backup-ui.js?v=2.0.0" integrity="sha384-Xfc0a6iOhcKoxY13D8lVJ0T2brSbyBbsjlFptDUQrOQfghikJOMtop54Qva1gJX8"></script>
@@ -1770,10 +1770,28 @@
         </div>
       </div>
 
+      <!-- 긴급 SOS 1-Tap 다이얼 및 소통 버튼 -->
+      <button id="ws-btn-sos" onclick="openSosEmergencyModal()" class="px-2 sm:px-2.5 py-1.5 rounded-xl bg-rose-500/15 hover:bg-rose-500/25 border border-rose-500/40 text-rose-500 dark:text-rose-400 text-xs font-black flex items-center gap-1 transition shadow-sm cursor-pointer shrink-0" title="긴급 SOS 비상 연락망 & 약국·병원 의사소통 카드">
+        <i class="fa-solid fa-triangle-exclamation text-rose-500 text-[11px] animate-pulse"></i>
+        <span>SOS</span>
+      </button>
+
       <!-- 상황별 도구는 펼쳐서 사용하고 일정·기록을 먼저 보여준다. -->
       <details class="travel-tools">
         <summary>여행 도구 <i class="fa-solid fa-ellipsis" aria-hidden="true"></i></summary>
         <div>
+        <button onclick="openSosEmergencyModal();this.closest('details').open=false" class="px-2.5 sm:px-3 py-1.5 rounded-xl bg-rose-500/15 text-rose-500 dark:text-rose-400 border border-rose-500/30 text-xs font-bold flex items-center gap-1.5 shadow-sm transition cursor-pointer" title="오프라인 긴급 비상 SOS & 약국/병원">
+          <i class="fa-solid fa-truck-medical text-[12px]"></i>
+          <span>긴급 SOS</span>
+        </button>
+        <button onclick="openQuickCapsuleModal();this.closest('details').open=false" class="px-2.5 sm:px-3 py-1.5 rounded-xl theme-card-subtle text-xs font-bold flex items-center gap-1.5 shadow-sm transition cursor-pointer text-amber-500 hover:border-amber-500/40" title="현장 길거리 음성 & 스냅 캡슐">
+          <i class="fa-solid fa-microphone text-[12px]"></i>
+          <span>퀵 캡슐</span>
+        </button>
+        <button onclick="openStoryMagazineModal();this.closest('details').open=false" class="px-2.5 sm:px-3 py-1.5 rounded-xl theme-card-subtle text-xs font-bold flex items-center gap-1.5 shadow-sm transition cursor-pointer text-sky-400 hover:border-sky-500/40" title="여행 에디토리얼 스토리 매거진 뷰 & PDF">
+          <i class="fa-solid fa-newspaper text-[12px]"></i>
+          <span>매거진</span>
+        </button>
         <button onclick="openAnalyticsModal('workspace')" class="px-2.5 sm:px-3 py-1.5 rounded-xl theme-card-subtle text-xs font-bold flex items-center gap-1.5 shadow-sm transition cursor-pointer" title="여정 정밀 통계 열람">
           <i class="fa-solid fa-chart-pie text-amber-500 text-[12px]"></i>
           <span>통계</span>
@@ -2140,6 +2158,11 @@
           </div>
         </div>
 
+        <!-- 일일 예산 소진 속도 및 페이싱 게이지 위젯 (Daily Budget Burn-Rate HUD) -->
+        <div id="budget-pacing-hud" class="p-3.5 bg-[#080b12] rounded-xl border border-[#1a2236] space-y-2">
+          <!-- 동적 렌더링: updateBudgetPacingHud() -->
+        </div>
+
         <!-- 실시간 간편 환율 계산기 위젯 (Quick Currency Converter) -->
         <div id="quick-currency-converter" class="p-3.5 bg-[#080b12] rounded-xl border border-[#1a2236] space-y-2.5">
           <div class="flex items-center justify-between gap-2 flex-wrap">
@@ -2267,7 +2290,12 @@
             </h3>
             <p class="text-xs text-slate-400 mt-0.5">확인한 경험과 사진, 메모를 한 편의 여행 이야기로 남깁니다.</p>
           </div>
-          <button id="journal-open-expenses-btn" onclick="switchTab('expenses')" class="px-3 py-1.5 rounded-lg bg-[#141c2e] border border-[#23304c] text-emerald-400 text-xs font-bold shrink-0 cursor-pointer">가계부 열기</button>
+          <div class="flex items-center gap-1.5 shrink-0">
+            <button onclick="openStoryMagazineModal()" class="px-2.5 sm:px-3 py-1.5 rounded-lg bg-amber-500/15 hover:bg-amber-500/25 border border-amber-500/30 text-amber-400 text-xs font-black shrink-0 cursor-pointer flex items-center gap-1.5 transition" title="한 편의 여행 잡지 에디토리얼 레이아웃 & PDF 제본 인쇄">
+              <i class="fa-solid fa-newspaper text-xs"></i> <span class="hidden sm:inline">에디토리얼</span> <span>매거진 뷰</span>
+            </button>
+            <button id="journal-open-expenses-btn" onclick="switchTab('expenses')" class="px-3 py-1.5 rounded-lg bg-[#141c2e] border border-[#23304c] text-emerald-400 text-xs font-bold shrink-0 cursor-pointer">가계부 열기</button>
+          </div>
         </div>
 
         <!-- 일자 빠른 스크롤 선택 바 -->
@@ -2950,6 +2978,68 @@
       </div>
       <div class="sheet-scroll-body space-y-4" id="taxi-card-content">
         <!-- 동적 렌더링 영역: renderTaxiCardContent() -->
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================== -->
+  <!-- 긴급 SOS 비상 연락망 & 병원·약국 카드 (MODAL-SOS-EMERGENCY) -->
+  <!-- ========================================== -->
+  <div id="modal-sos-emergency" class="sheet-container sheet-closed">
+    <div class="sheet-scrim" onclick="closeModal('modal-sos-emergency')"></div>
+    <div class="sheet-box sheet-scroll-layout max-w-lg">
+      <div class="sheet-sticky-header flex items-center justify-between">
+        <h3 class="text-base font-black text-rose-500 flex items-center gap-2">
+          <i class="fa-solid fa-triangle-exclamation text-rose-500 animate-pulse"></i>
+          <span>오프라인 긴급 SOS & 약국·병원 카드</span>
+        </h3>
+        <button onclick="closeModal('modal-sos-emergency')" class="tap-target text-slate-400 hover:text-white text-base" aria-label="긴급 SOS 닫기">✕</button>
+      </div>
+      <div class="sheet-scroll-body space-y-4" id="sos-emergency-content">
+        <!-- 동적 렌더링 영역: renderSosEmergencyContent() -->
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================== -->
+  <!-- 현장 길거리 음성 & 퀵 스냅 캡슐 모달 (MODAL-QUICK-CAPSULE) -->
+  <!-- ========================================== -->
+  <div id="modal-quick-capsule" class="sheet-container sheet-closed">
+    <div class="sheet-scrim" onclick="closeModal('modal-quick-capsule')"></div>
+    <div class="sheet-box sheet-scroll-layout max-w-lg">
+      <div class="sheet-sticky-header flex items-center justify-between">
+        <h3 class="text-base font-black text-white flex items-center gap-2">
+          <i class="fa-solid fa-microphone-lines text-amber-400"></i>
+          <span>길거리 음성 & 퀵 스냅 캡슐</span>
+        </h3>
+        <button onclick="closeModal('modal-quick-capsule')" class="tap-target text-slate-400 hover:text-white text-base" aria-label="퀵 캡슐 닫기">✕</button>
+      </div>
+      <div class="sheet-scroll-body space-y-4" id="quick-capsule-content">
+        <!-- 동적 렌더링 영역: renderQuickCapsuleContent() -->
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================== -->
+  <!-- 여행 에디토리얼 스토리 매거진 & PDF 제본 뷰 (MODAL-STORY-MAGAZINE) -->
+  <!-- ========================================== -->
+  <div id="modal-story-magazine" class="sheet-container sheet-closed">
+    <div class="sheet-scrim no-print" onclick="closeModal('modal-story-magazine')"></div>
+    <div class="sheet-box sheet-scroll-layout max-w-2xl sm:max-w-3xl">
+      <div class="sheet-sticky-header flex items-center justify-between no-print">
+        <h3 class="text-base font-black text-amber-400 flex items-center gap-2">
+          <i class="fa-solid fa-newspaper text-amber-400"></i>
+          <span>여행 에디토리얼 매거진</span>
+        </h3>
+        <div class="flex items-center gap-2">
+          <button type="button" onclick="printStoryMagazine()" class="px-3 py-1.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 text-xs font-black flex items-center gap-1.5 transition cursor-pointer shadow">
+            <i class="fa-solid fa-print"></i> <span>A4 PDF / 인쇄</span>
+          </button>
+          <button onclick="closeModal('modal-story-magazine')" class="tap-target text-slate-400 hover:text-white text-base" aria-label="매거진 닫기">✕</button>
+        </div>
+      </div>
+      <div class="sheet-scroll-body p-2 sm:p-4" id="story-magazine-content">
+        <!-- 동적 렌더링 영역: renderStoryMagazineContent() -->
       </div>
     </div>
   </div>
@@ -12220,6 +12310,9 @@
       }).join('');
 
       initQuickCurrencyCalc(trip, walletData);
+      if (typeof updateBudgetPacingHud === 'function') {
+        updateBudgetPacingHud(trip, walletData);
+      }
     }
 
     function updateQuickCurrencyCalc(syncBadgeOnly = false) {
@@ -17349,6 +17442,7 @@ ${JSON.stringify(snapshotDays)}`;
         : lastError ? `AI 서버 오류 (${lastError.message})` : 'AI 서비스에 연결할 수 없습니다.';
       throw finalErr;
     }
+    window.callGeminiApiWithFallback = callGeminiApiWithFallback;
 
     async function getAiOrchestrator() {
       if (!aiOrchestratorPromise) {

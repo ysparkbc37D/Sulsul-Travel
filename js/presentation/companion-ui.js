@@ -156,13 +156,25 @@ function companionSpot(spot, dayIndex, spotIndex, {today = false} = {}) {
     ? `<div class="companion-lodging-banner"><i class="fa-solid fa-hotel text-amber-500" aria-hidden="true"></i> <span class="font-bold">숙소 안내:</span> <span>${escapeHtml(lodgingText)}</span></div>`
     : '';
 
+  const totalDaySpots = day?.spots?.length || 1;
+  const isFirstSpot = spotIndex === 0;
+  const isLastSpot = spotIndex >= (totalDaySpots - 1);
+  const reorderCtrls = window.__spotReorderModeActive ? `
+    <div class="companion-spot-reorder-ctrls no-print">
+      <button type="button" class="reorder-btn" onclick="moveCompanionSpotOrder(${dayIndex},${spotIndex},-1,event)" ${isFirstSpot ? 'disabled' : ''} aria-label="일정 위로 이동" title="위로"><i class="fa-solid fa-arrow-up"></i></button>
+      <button type="button" class="reorder-btn" onclick="moveCompanionSpotOrder(${dayIndex},${spotIndex},1,event)" ${isLastSpot ? 'disabled' : ''} aria-label="일정 아래로 이동" title="아래로"><i class="fa-solid fa-arrow-down"></i></button>
+    </div>
+  ` : '';
+
   return `<article data-spot-id="${escapeHtml(spot.id)}" class="companion-spot ${kindClass} ${spot.completed ? 'is-completed' : ''}">
     <div class="companion-spot-header">
-      <div class="companion-spot-time"><time>${escapeHtml(spot.time || '시간 미정')}</time>${kindBadge}${status ? `<span class="companion-status">${status}</span>` : ''}</div>
+      <div class="companion-spot-time"><time>${escapeHtml(spot.time || '시간 미정')}</time>${kindBadge}${status ? `<span class="companion-status">${status}</span>` : ''}${reorderCtrls}</div>
       <details class="companion-spot-more">
         <summary class="companion-spot-more-trigger" aria-label="일정 관리 더보기" title="수정·관리 더보기"><i class="fa-solid fa-ellipsis" aria-hidden="true"></i></summary>
         <div class="companion-spot-edit-actions">
           <button class="companion-button" onclick="openEditSpotModal(${dayIndex},${spotIndex},event)"><i class="fa-solid fa-pen-to-square" aria-hidden="true"></i> 시간·내용 수정</button>
+          <button class="companion-button" onclick="moveCompanionSpotOrder(${dayIndex},${spotIndex},-1,event)" ${isFirstSpot ? 'disabled' : ''}><i class="fa-solid fa-arrow-up" aria-hidden="true"></i> 위로 이동</button>
+          <button class="companion-button" onclick="moveCompanionSpotOrder(${dayIndex},${spotIndex},1,event)" ${isLastSpot ? 'disabled' : ''}><i class="fa-solid fa-arrow-down" aria-hidden="true"></i> 아래로 이동</button>
           <button class="companion-button" data-action="change" onclick="openScheduleChange(${dayIndex},${spotIndex},event)"><i class="fa-solid fa-shuffle" aria-hidden="true"></i> ${SulsulTravel.ScheduleChange.retired(spot)?'복구·관리':'취소·대체·지연'}</button>
         </div>
       </details>
@@ -198,8 +210,27 @@ function openCompanionDirections(dayIndex,spotIndex,originIndex) {
 }
 function companionTimeline(items,dayIndex,options={}) {
   const bridgeHtml = renderCityTransitionBridge(dayIndex);
+  const reorderToolbarHtml = (items && items.length > 1) ? `
+    <div class="spot-reorder-toolbar no-print">
+      <div class="flex items-center gap-1.5 font-bold text-slate-300">
+        <i class="fa-solid fa-arrows-up-down text-amber-400"></i>
+        <span>일정 순서 조작</span>
+      </div>
+      <div class="flex items-center gap-1.5">
+        <button type="button" onclick="toggleSpotReorderMode()" class="px-2 py-1 rounded-lg text-xs font-bold transition ${window.__spotReorderModeActive ? 'bg-amber-500 text-slate-950 shadow' : 'bg-[#1e293b] text-slate-300 hover:text-white border border-[#334155]'}">
+          <i class="fa-solid fa-up-down-left-right mr-1"></i> ${window.__spotReorderModeActive ? '순서 편집 완료' : '순서 편집'}
+        </button>
+        <button type="button" onclick="realignSpotSchedule(${dayIndex}, 30)" class="px-2 py-1 rounded-lg text-xs font-bold bg-[#1e293b] text-slate-300 hover:text-white border border-[#334155] transition" title="첫 스팟 시간 기준 30분 간격 순차 자동 정렬">
+          30분 정렬
+        </button>
+        <button type="button" onclick="realignSpotSchedule(${dayIndex}, 60)" class="px-2 py-1 rounded-lg text-xs font-bold bg-[#1e293b] text-slate-300 hover:text-white border border-[#334155] transition" title="첫 스팟 시간 기준 1시간 간격 순차 자동 정렬">
+          1시간 정렬
+        </button>
+      </div>
+    </div>
+  ` : '';
   const itemsHtml = items.map((item,index)=>`<button class="live-between-insert" data-live-action="insert-between" onclick="openLiveInsert(${dayIndex},${item.spotIndex},'before')">+ 여기에 추가</button>${index ? `<button class="companion-transit" onclick="openCompanionDirections(${dayIndex},${item.spotIndex},${items[index-1].spotIndex})"><i class="fa-solid fa-route" aria-hidden="true"></i> 이동 경로 · 지도에서 소요 시간 확인</button>`:''}${companionSpot(item.spot,dayIndex,item.spotIndex,options)}`).join('');
-  return (bridgeHtml || '') + itemsHtml;
+  return (bridgeHtml || '') + reorderToolbarHtml + itemsHtml;
 }
 function adjustCompanionDay(dayIndex,reason) {
   openScheduleTuningModal(dayIndex);
@@ -767,6 +798,1185 @@ if (typeof window !== 'undefined' && !window.__companionHudTimer) {
     }
   }, 60000);
 }
+
+/* ==========================================================================
+   스팟 순서 실시간 스왑 & 순서 조작 (Priority 4-1)
+   ========================================================================== */
+window.__spotReorderModeActive = false;
+
+function toggleSpotReorderMode() {
+  window.__spotReorderModeActive = !window.__spotReorderModeActive;
+  const trip = getActiveTrip();
+  if (trip && typeof renderPlanDetail === 'function' && State?.activeTab === 'plan') {
+    renderPlanDetail(State?.activePlanDayIndex ?? 0);
+  }
+  if (typeof renderCompanionToday === 'function' && State?.activeTab === 'today') {
+    renderCompanionToday();
+  }
+  if (typeof showToast === 'function') {
+    showToast(window.__spotReorderModeActive ? '스팟 순서 편집 모드가 켜졌습니다.' : '순서 편집 모드가 종료되었습니다.');
+  }
+}
+window.toggleSpotReorderMode = toggleSpotReorderMode;
+
+function moveCompanionSpotOrder(dayIndex, spotIndex, direction, evt) {
+  if (evt && typeof evt.stopPropagation === 'function') evt.stopPropagation();
+  const trip = getActiveTrip();
+  const day = trip?.days?.[dayIndex];
+  if (!day?.spots) return;
+  const targetIndex = spotIndex + direction;
+  if (targetIndex < 0 || targetIndex >= day.spots.length) return;
+
+  const temp = day.spots[spotIndex];
+  day.spots[spotIndex] = day.spots[targetIndex];
+  day.spots[targetIndex] = temp;
+
+  if (typeof saveTrips === 'function') saveTrips();
+  if (window.TripRepository && typeof TripRepository.saveAll === 'function' && State?.trips) {
+    TripRepository.saveAll(State.trips);
+  }
+
+  if (typeof showToast === 'function') {
+    showToast(`일정 순서가 ${direction < 0 ? '위' : '아래'}로 변경되었습니다.`);
+  }
+
+  if (typeof renderPlanDetail === 'function' && State?.activeTab === 'plan') {
+    renderPlanDetail(dayIndex);
+  }
+  if (typeof renderCompanionToday === 'function' && State?.activeTab === 'today') {
+    renderCompanionToday();
+  }
+}
+window.moveCompanionSpotOrder = moveCompanionSpotOrder;
+
+function realignSpotSchedule(dayIndex, intervalMinutes = 30) {
+  const trip = getActiveTrip();
+  const day = trip?.days?.[dayIndex];
+  if (!day?.spots || !day.spots.length) return;
+
+  if (!confirm(`이 날의 ${day.spots.length}개 일정을 ${intervalMinutes}분 간격으로 순차적 자동 정렬할까요?`)) return;
+
+  let baseHour = 10;
+  let baseMin = 0;
+  const firstTime = day.spots[0]?.time;
+  if (firstTime) {
+    const m = firstTime.match(/^(\d{1,2}):(\d{2})/);
+    if (m) {
+      baseHour = parseInt(m[1], 10);
+      baseMin = parseInt(m[2], 10);
+    }
+  }
+
+  let totalMinutes = baseHour * 60 + baseMin;
+  day.spots.forEach((spot) => {
+    const h = Math.floor(totalMinutes / 60) % 24;
+    const m = totalMinutes % 60;
+    spot.time = `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}`;
+    totalMinutes += intervalMinutes;
+  });
+
+  if (typeof saveTrips === 'function') saveTrips();
+  if (window.TripRepository && typeof TripRepository.saveAll === 'function' && State?.trips) {
+    TripRepository.saveAll(State.trips);
+  }
+
+  if (typeof showToast === 'function') {
+    showToast(`일정이 ${intervalMinutes}분 간격으로 재정렬되었습니다.`);
+  }
+
+  if (typeof renderPlanDetail === 'function' && State?.activeTab === 'plan') {
+    renderPlanDetail(dayIndex);
+  }
+  if (typeof renderCompanionToday === 'function' && State?.activeTab === 'today') {
+    renderCompanionToday();
+  }
+}
+window.realignSpotSchedule = realignSpotSchedule;
+
+/* ==========================================================================
+   아이디어 1: 긴급 SOS & 병원·약국 소통 모달 (Priority 4-2)
+   ========================================================================== */
+function detectEmergencyCountryInfo(trip) {
+  const text = `${(trip?.countries || []).join(' ')} ${trip?.title || ''} ${(trip?.cities || []).join(' ')}`.toLowerCase();
+  
+  const koreaConsular = { name: "외교부 영사콜센터 (24시간)", tel: "+82232100404", displayTel: "+82-2-3210-0404" };
+
+  if (/(스페인|spain|madrid|barcelona|toledo|sevilla)/i.test(text)) {
+    return {
+      country: '스페인 (Spain)', langCode: 'es', langName: '스페인어',
+      police: { name: "국립 경찰 (Policía 112)", tel: "112" },
+      ambulance: { name: "구급·응급 (Ambulancia 112)", tel: "112" },
+      embassy: { name: "주스페인 대한민국 대사관", tel: "+34913532000", displayTel: "+34-91-353-2000" },
+      korea: koreaConsular
+    };
+  }
+  if (/(일본|japan|tokyo|osaka|kyoto|fukuoka|sapporo)/i.test(text)) {
+    return {
+      country: '일본 (Japan)', langCode: 'ja', langName: '일본어',
+      police: { name: "경찰 (警察 110)", tel: "110" },
+      ambulance: { name: "구급·소방 (救急 119)", tel: "119" },
+      embassy: { name: "주일 대한민국 대사관", tel: "+81334527611", displayTel: "+81-3-3452-7611" },
+      korea: koreaConsular
+    };
+  }
+  if (/(대만|taiwan|taipei|kaohsiung|중국|china)/i.test(text)) {
+    return {
+      country: '대만 / 중화권 (Taiwan/China)', langCode: 'zh', langName: '중국어',
+      police: { name: "경찰 (報案 110)", tel: "110" },
+      ambulance: { name: "구급 (救護車 119)", tel: "119" },
+      embassy: { name: "주타이베이 한국대표부", tel: "+886227588320", displayTel: "+886-2-2758-8320" },
+      korea: koreaConsular
+    };
+  }
+  if (/(태국|thailand|bangkok|chiang mai|phuket)/i.test(text)) {
+    return {
+      country: '태국 (Thailand)', langCode: 'th', langName: '태국어',
+      police: { name: "관광경찰 (1155) / 경찰 (191)", tel: "1155" },
+      ambulance: { name: "구급·응급 (1669)", tel: "1669" },
+      embassy: { name: "주태국 대한민국 대사관", tel: "+6622477537", displayTel: "+66-2-247-7537" },
+      korea: koreaConsular
+    };
+  }
+  if (/(베트남|vietnam|da nang|hanoi|ho chi minh)/i.test(text)) {
+    return {
+      country: '베트남 (Vietnam)', langCode: 'vi', langName: '베트남어',
+      police: { name: "경찰 (Cảnh sát 113)", tel: "113" },
+      ambulance: { name: "구급 (Cấp cứu 115)", tel: "115" },
+      embassy: { name: "주베트남 대한민국 대사관", tel: "+842438315111", displayTel: "+84-24-3831-5111" },
+      korea: koreaConsular
+    };
+  }
+  if (/(프랑스|france|paris|nice|lyon)/i.test(text)) {
+    return {
+      country: '프랑스 (France)', langCode: 'fr', langName: '프랑스어',
+      police: { name: "경찰 (Police 17 / EU 112)", tel: "112" },
+      ambulance: { name: "구급 (SAMU 15 / EU 112)", tel: "112" },
+      embassy: { name: "주프랑스 대한민국 대사관", tel: "+33147530101", displayTel: "+33-1-47-53-01-01" },
+      korea: koreaConsular
+    };
+  }
+  if (/(페루|peru|lima|cusco|칠레|chile|santiago|아르헨티나|argentina|buenos aires|볼리비아|bolivia|la paz|uyuni)/i.test(text)) {
+    return {
+      country: '남미 (South America)', langCode: 'es', langName: '스페인어',
+      police: { name: "경찰 (Policía 105/911/133)", tel: "911" },
+      ambulance: { name: "구급 (Ambulancia 116/107/131)", tel: "116" },
+      embassy: { name: "외교부 영사콜센터 (24H)", tel: "+82232100404", displayTel: "+82-2-3210-0404" },
+      korea: koreaConsular
+    };
+  }
+  if (/(미국|usa|new york|los angeles|괌|사이판|하와이|hawaii|캐나다|canada)/i.test(text)) {
+    return {
+      country: '미국 / 북미 (USA/Canada)', langCode: 'en', langName: 'English',
+      police: { name: "경찰 (Police 911)", tel: "911" },
+      ambulance: { name: "구급 (Ambulance 911)", tel: "911" },
+      embassy: { name: "주미합중국 대한민국 대사관", tel: "+12029395600", displayTel: "+1-202-939-5600" },
+      korea: koreaConsular
+    };
+  }
+  return {
+    country: '해외 여행 긴급 비상 (Global)', langCode: 'en', langName: 'English',
+    police: { name: "국제 긴급 경찰 (Police 112/911)", tel: "112" },
+    ambulance: { name: "국제 긴급 구급 (Ambulance 112/911)", tel: "112" },
+    embassy: { name: "외교부 영사콜센터 (24시간)", tel: "+82232100404", displayTel: "+82-2-3210-0404" },
+    korea: koreaConsular
+  };
+}
+
+function getSosMedicalPhrases() {
+  return [
+    {
+      id: 'stomach',
+      cat: 'pharmacy',
+      title: '배·위통 / 경련 / 위장약',
+      icon: 'fa-solid fa-pills',
+      ko: '배가 너무 아프고 경련이 있어요. 위장약/진경제 있나요?',
+      es: { phrase: '¿Tiene pastillas para el dolor de estómago y cólicos?', pron: '띠에네 빠스띠야스 빠라 엘 돌로르 데 에스또마고 이 꼴리꼬스?' },
+      en: { phrase: 'My stomach hurts severely with cramps. Do you have stomach medication?', pron: '마이 스터먹 헐츠 시비얼리 위드 크램프스. 두 유 해브 스터먹 메디케이션?' },
+      ja: { phrase: '胃とお腹がひどく痛みます。胃腸薬や鎮痙剤はありますか？', pron: '이토 오나카가 히도쿠 이타미마스. 이쵸야쿠와 아리마스카?' },
+      zh: { phrase: '我肚子很痛且有痙攣。請問有胃腸藥或止痛藥嗎？', pron: '워 두즈 헌 통 치에 여우 징롼. 칭원 여우 웨이창야오 마?' },
+      fr: { phrase: "J'ai très mal au ventre avec des crampes. Avez-vous des médicaments ?", pron: '줴 트레 말 오 방트르 아베크 데 크랑프.' },
+      th: { phrase: 'ปวดท้องรุนแรงและมีอาการเกร็ง มียาแก้ปวดท้องไหมครับ/ค่ะ', pron: '뿌엇 통 룬랭 래 미 아깐 그랭 미 야깨뿌엇통 마이 캅/카' },
+      vi: { phrase: 'Tôi bị đau dạ dày dữ dội và co thắt. Có thuốc giảm đau không?', pron: '또이 비 다우 자 자이 즈 조이 바 꺼 탓.' }
+    },
+    {
+      id: 'diarrhea',
+      cat: 'pharmacy',
+      title: '설사 / 장염 / 지사제',
+      icon: 'fa-solid fa-kit-medical',
+      ko: '설사와 탈수가 심해요. 지사제(설사 멈추는 약)와 전해질 수액가루 주세요.',
+      es: { phrase: 'Tengo diarrea fuerte. ¿Tiene pastillas antidiarreicas y suero oral?', pron: '뗑고 디아레아 푸에르떼. 띠에네 빠스띠야스 안띠디아레이까스?' },
+      en: { phrase: 'I have severe diarrhea. Please give me antidiarrheal medication and hydration salts.', pron: '아이 해브 시비어 다이어리어. 플리즈 기브 미 안티다이어리얼 메디케이션.' },
+      ja: { phrase: '下痢と脱水がひどいです。下痢止めと経口補水塩をください。', pron: '게리토 닷수이가 히도이데스. 게리도메오 쿠다사이.' },
+      zh: { phrase: '嚴重腹瀉與脫水。請給我止瀉藥和口服補液鹽。', pron: '옌중 푸시에 위 퉈수이. 칭 게이 워 즈시에야오.' },
+      fr: { phrase: 'J’ai une forte diarrhée. Avez-vous un antidiarrhéique et des sels de réhydratation ?', pron: '줴 윈 포르트 디아레. 아베-부 욍 앙티디아레이크?' },
+      th: { phrase: 'ท้องเสียหนักมาก ขอยาแก้ท้องเสียและผงเกลือแร่ครับ/ค่ะ', pron: '통시아 낙 막 커 야깨통시아 래 퐁 끄르아 래 캅/카' },
+      vi: { phrase: 'Tôi bị tiêu chảy nặng. Làm ơn cho tôi thuốc cầm tiêu chảy.', pron: '또이 비 띠에우 차이 낭. 람 온 쪼 또이 투옥 깜 띠에우 차이.' }
+    },
+    {
+      id: 'fever',
+      cat: 'pharmacy',
+      title: '고열 / 두통 / 해열진통제',
+      icon: 'fa-solid fa-temperature-arrow-up',
+      ko: '열이 많이 나고 두통이 심합니다. 타이레놀(아세트아미노펜)이나 해열제 주세요.',
+      es: { phrase: 'Tengo fiebre alta y fuerte dolor de cabeza. ¿Tiene paracetamol o ibuprofeno?', pron: '뗑고 피에브레 알따 이 푸에르떼 돌로르 데 까베사. 띠에네 빠라세따몰?' },
+      en: { phrase: 'I have a high fever and headache. Do you have Paracetamol (Tylenol) or Ibuprofen?', pron: '아이 해브 어 하이 피버 앤 헤덱. 두 유 해브 파라세타몰?' },
+      ja: { phrase: '高熱と激しい頭痛があります。アセトアミノフェンや解熱鎮痛剤をください。', pron: '코오네츠토 하게시이 즈츠우가 아리마스. 카이네츠 친츠자이오 쿠다사이.' },
+      zh: { phrase: '我發高燒且劇烈頭痛。請給我退燒藥（乙醯胺酚/布洛芬）。', pron: '워 파 가오샤오 치에 쥐리에 터우통. 칭 게이 워 투이샤오야오.' },
+      fr: { phrase: 'J’ai une forte fièvre et un mal de tête. Avez-vous du paracétamol ?', pron: '줴 윈 포르트 피에브르 에 욍 말 드 테트. 아베-부 뒤 파라세타몰?' },
+      th: { phrase: 'มีไข้สูงและปวดศีรษะ ขอยาลดไข้พาราเซตามอลครับ/ค่ะ', pron: '미 카이 숭 래 뿌엇 시사 커 야롯카이 파라세타몰 캅/카' },
+      vi: { phrase: 'Tôi bị sốt cao và đau đầu. Cho tôi thuốc hạ sốt paracetamol.', pron: '또이 비 솟 까오 바 다우 더우. 쪼 또이 투옥 하 솟 파라세타몰.' }
+    },
+    {
+      id: 'soroche',
+      cat: 'pharmacy',
+      title: '고산병 / 숨참 / 소로체',
+      icon: 'fa-solid fa-mountain',
+      ko: '고산병 증상(어지럼증, 숨참, 두통)이 심해요. 고산병 약(소로체/다이아목스) 있나요?',
+      es: { phrase: 'Sufro de mal de altura (soroche). ¿Tiene pastillas para el soroche o Acetazolamida (Diamox)?', pron: '수프로 데 말 데 알뚜라(소로체). 띠에네 빠스띠야스 빠라 엘 소로체?' },
+      en: { phrase: 'I have severe altitude sickness. Do you have Diamox (Acetazolamide)?', pron: '아이 해브 시비어 알티튜드 식니스. 두 유 해브 다이아목스?' },
+      ja: { phrase: '高山病の症状がひどいです。高山病の薬（ダイアモックス）はありますか？', pron: '코오잔뵤오노 쇼오조오가 히도이데스. 다이아목쿠스와 아리마스카?' },
+      zh: { phrase: '我高山症很嚴重。請問有高山症藥（丹木斯/Acetazolamide）嗎？', pron: '워 가오산정 헌 옌중. 칭원 여우 가오산정야오 마?' },
+      fr: { phrase: 'Je souffre du mal aigu des montagnes. Avez-vous de l’acétazolamide (Diamox) ?', pron: '주 수프르 뒤 말 에귀 데 몽타뉴.' },
+      th: { phrase: 'แพ้ความสูงอย่างหนัก มียารักษาอาการแพ้ความสูง (Diamox) ไหมครับ/ค่ะ', pron: '패 쾀 숭 양 낙 미 야락사 아깐 패 쾀 숭 마이 캅/카' },
+      vi: { phrase: 'Tôi bị sốc độ cao nghiêm trọng. Có thuốc chống say độ cao Diamox không?', pron: '또이 비 속 도 까오 응이엠 쫑. 꼬 투옥 쫑 싸이 도 까오 콩?' }
+    },
+    {
+      id: 'allergy',
+      cat: 'emergency',
+      title: '⚠️ 땅콩/갑각류 심한 알레르기 (응급)',
+      icon: 'fa-solid fa-triangle-exclamation text-rose-500',
+      ko: '⚠️ 긴급! 땅콩/갑각류 심한 알레르기입니다! 숨쉬기 힘들고 목이 붓습니다. 응급 처치가 필요합니다!',
+      es: { phrase: '¡EMERGENCIA! ¡Tengo una reacción alérgica grave! No puedo respirar bien, necesito atención médica urgente.', pron: '¡에메르헨시아! ¡뗑고 우나 레악시온 알레르히까 그라베! 노 뿌에도 레스삐라르 비엔!' },
+      en: { phrase: 'EMERGENCY! Severe allergic reaction! Trouble breathing and throat swelling. Need urgent hospital help!', pron: '이머전시! 시비어 알러직 리액션! 트러블 브리딩. 니드 어전트 헬프!' },
+      ja: { phrase: '【緊急】重度のアレルギー発作です！呼吸困難です。大至急、救急医療をお願いします！', pron: '긴큐우! 쥬우도노 아레루기이 홋사데스! 코큐우 콘난데스!' },
+      zh: { phrase: '【緊急求助】嚴重過敏反應！呼吸困難且喉嚨腫脹，請立刻送醫急救！', pron: '진지 치우주! 옌중 궈민 판잉! 후시 쿤난, 칭 리커 쑹이 지지우!' },
+      fr: { phrase: 'URGENCE ! Réaction allergique sévère ! Difficulté respiratoire, besoin de soins urgents !', pron: '위르장스 ! 레악시옹 알레르지크 세베르 !' },
+      th: { phrase: 'ฉุกเฉิน! แพ้อาหารรุนแรง หายใจไม่ออก ต้องการความช่วยเหลือทางการแพทย์ด่วนครับ/ค่ะ', pron: '툭천! 패 아한 룬랭 하이짜이 마이 억 떵깐 쾀추아이르어 두언 캅/카' },
+      vi: { phrase: 'CẤP CỨU! Dị ứng cực kỳ nghiêm trọng! Khó thở, cần cấp cứu y tế khẩn cấp!', pron: '깝 꾸우! 지 응 극 끼 응이엠 쫑! 커 터, 껀 깝 꾸우 칸 겁!' }
+    },
+    {
+      id: 'theft',
+      cat: 'safety',
+      title: '소매치기 / 도난 / 경찰 리포트',
+      icon: 'fa-solid fa-shield-halved',
+      ko: '여권과 지갑을 소매치기(도난)당했습니다. 보험 청구용 경찰 신고서(Police Report)가 필요합니다.',
+      es: { phrase: 'He sufrido un robo. Me robaron el pasaporte y la cartera. Necesito hacer una denuncia policial.', pron: '에 수프리도 운 로보. 메 로바론 엘 빠사뽀르떼. 네세시또 우나 데눈시아 뽈리시알.' },
+      en: { phrase: 'My passport and wallet were stolen. I need to make a police report for insurance.', pron: '마이 패스포트 앤 월렛 워 스톨른. 아이 니드 투 메이크 어 폴리스 리포트.' },
+      ja: { phrase: 'スリ（盗難）に遭いパスポートと財布を盗まれました。警察の事故届（ポリスレポート）が必要です。', pron: '스리니 아이 파스포오토가 누스마레마시타. 케이사츠노 토도케가 히츠요오데스.' },
+      zh: { phrase: '我的護照和皮夾被偷了。我需要報案開立警方報案證明（Police Report）。', pron: '워 더 후자오 허 피지아 베이 터우 러. 워 쉬야오 바오안 카이리 징팡 바오안정밍.' },
+      fr: { phrase: 'On m’a volé mon passeport et mon portefeuille. J’ai besoin d’une déclaration de vol à la police.', pron: '옹 마 볼레 몽 파스포르. 줴 베주앙 뒨 데클라라시옹 드 볼.' },
+      th: { phrase: 'ถูกขโมยพาสปอร์ตและกระเป๋าเงิน ต้องการใบแจ้งความจากตำรวจครับ/ค่ะ', pron: '툭 카모이 파스폿 래 끄라빠오 응언 떵깐 바이 쨍쾀 캅/카' },
+      vi: { phrase: 'Tôi bị mất cắp hộ chiếu và ví tiền. Cần biên bản trình báo công an để làm bảo hiểm.', pron: '또이 비 떳 깝 호 찌에우 바 비 띠엔. 껀 까인 삿 바오 까오.' }
+    },
+    {
+      id: 'wound',
+      cat: 'pharmacy',
+      title: '상처 / 출혈 / 소독약·붕대',
+      icon: 'fa-solid fa-bandage',
+      ko: '넘어져서 상처가 나고 피가 납니다. 소독약(포비돈)과 멸균 거즈, 밴드 주세요.',
+      es: { phrase: 'Me lastimé y estoy sangrando. ¿Tiene antiséptico, gasas y apósitos (tiritas)?', pron: '메 라스띠메 이 에스또이 상그란도. 띠에네 안띠셉띠꼬, 가사스 이 띠리따스?' },
+      en: { phrase: 'I got injured and am bleeding. Do you have antiseptic, sterile gauze, and bandages?', pron: '아이 갓 인저드 앤 앰 블리딩. 두 유 해브 안티셉틱, 거즈 앤 밴디지스?' },
+      ja: { phrase: '怪我をして血が出ています。消毒液とガーゼ、絆創膏をください。', pron: '케가오 시테 치가 데테이마스. 쇼오도쿠에키토 반소오코오오 쿠다사이.' },
+      zh: { phrase: '我受傷流血了。請問有消毒藥水、無菌紗布和創可貼嗎？', pron: '워 서우상 류쉐 러. 칭원 여우 샤오두야오수이, 샤부 한 촹커톄 마?' },
+      fr: { phrase: 'Je suis blessé et je saigne. Avez-vous un antiseptique, des compresses et des pansements ?', pron: '주 슈이 블레세 에 주 센. 아베-부 욍 앙티셉티크?' },
+      th: { phrase: 'มีแผลและเลือดออก ขอยาฆ่าเชื้อ ผ้าก๊อซ และพลาสเตอร์ยาครับ/ค่ะ', pron: '미 팰 래 르앗 억 커 야카츠아 래 플라스터 야 캅/카' },
+      vi: { phrase: 'Tôi bị thương và chảy máu. Cho tôi thuốc sát trùng, gạc y tế và băng keo cá nhân.', pron: '또이 비  thuong 바 차이 마우. 쪼 또이 투옥 삿 쭝.' }
+    },
+    {
+      id: 'emergency',
+      cat: 'emergency',
+      title: '🚨 종합병원 응급실 (ER) 안내 요청',
+      icon: 'fa-solid fa-truck-medical text-rose-500',
+      ko: '의료 응급 상황입니다! 가장 가까운 종합병원 응급실(Hospital Emergency)로 데려다주세요!',
+      es: { phrase: '¡Es una emergencia médica! Por favor, lléveme al servicio de urgencias del hospital más cercano.', pron: '¡에스 우나 에메르헨시아 메디까! 뽀르 파보르, 예베메 알 오스삐딸 마스 세르까노.' },
+      en: { phrase: 'This is a medical emergency! Please take me to the nearest hospital Emergency Room (ER)!', pron: '디스 이즈 어 메디컬 이머전시! 플리즈 테이크 미 투 더 니어리스트 ER!' },
+      ja: { phrase: '医療緊急事態です！最寄りの総合病院の救急外来（ER）へ連れて行ってください！', pron: '이료오 긴큐우 지타이데스! 큐우큐우 가이라에 츠레테잇테 쿠다사이!' },
+      zh: { phrase: '這是醫療緊急狀況！請立刻帶我去最近的綜合醫院急診室（ER）！', pron: '저 스 이랴오 진지 좡쾅! 칭 리커 다이 워 취 쭈이 진 더 이위안 지전스!' },
+      fr: { phrase: 'Urgence médicale ! S’il vous plaît, emmenez-moi au service des urgences de l’hôpital le plus proche !', pron: '위르장스 메디칼! 앙므네-무아 오 쥐르장스 드 롭피탈.' },
+      th: { phrase: 'เหตุฉุกเฉินทางการแพทย์! ช่วยพาไปห้องฉุกเฉินของโรงพยาบาลที่ใกล้ที่สุดด่วนครับ/ค่ะ', pron: '헷 툭천 탕 깐 패! 추아이 파 빠이 헝툭천 롱파야반 티 끌라이 티쑷 캅/카' },
+      vi: { phrase: 'Tình huống cấp cứu y tế! Làm ơn đưa tôi đến phòng cấp cứu bệnh viện gần nhất!', pron: '띤 후옹 깝 꾸우 이 떼! 람 온 드어 또이 덴 퐁 깝 꾸우.' }
+    }
+  ];
+}
+
+window.__sosCurrentLang = 'auto';
+window.__sosActiveCategory = 'all';
+window.__sosExpandedSymptomId = null;
+
+function renderSosEmergencyContent(selectedLang = null, activeCategory = null, expandedSymptomId = undefined) {
+  const container = document.getElementById('sos-emergency-content');
+  if (!container) return;
+
+  if (selectedLang !== null) window.__sosCurrentLang = selectedLang;
+  if (activeCategory !== null) window.__sosActiveCategory = activeCategory;
+  if (expandedSymptomId !== undefined) window.__sosExpandedSymptomId = expandedSymptomId;
+
+  const trip = getActiveTrip();
+  const info = detectEmergencyCountryInfo(trip);
+
+  let lang = window.__sosCurrentLang;
+  if (lang === 'auto') lang = info.langCode || 'en';
+
+  const phrases = getSosMedicalPhrases();
+  const filteredPhrases = window.__sosActiveCategory === 'all'
+    ? phrases
+    : phrases.filter(p => p.cat === window.__sosActiveCategory);
+
+  const langButtons = [
+    { code: 'auto', label: `현지어 (${info.langName})` },
+    { code: 'en', label: 'English' },
+    { code: 'es', label: 'Español' },
+    { code: 'ja', label: '日本語' },
+    { code: 'zh', label: '中文' },
+    { code: 'fr', label: 'Français' },
+    { code: 'th', label: 'ไทย' },
+    { code: 'vi', label: 'Tiếng Việt' },
+    { code: 'ko', label: '한국어' }
+  ];
+
+  container.innerHTML = `
+    <!-- 상단 국가 안내 배너 -->
+    <div class="flex items-center justify-between gap-2 p-2.5 rounded-xl bg-rose-500/10 border border-rose-500/25">
+      <div class="flex items-center gap-2 min-w-0">
+        <span class="w-8 h-8 rounded-lg bg-rose-500/20 text-rose-500 flex items-center justify-center shrink-0">
+          <i class="fa-solid fa-location-dot"></i>
+        </span>
+        <div class="min-w-0">
+          <div class="text-xs font-black text-rose-400 truncate">${escapeHtml(info.country)}</div>
+          <div class="text-[10px] text-slate-400">오프라인에서도 즉시 작동하는 비상 다이얼 & 증상 카드</div>
+        </div>
+      </div>
+      <span class="px-2 py-0.5 rounded-full bg-rose-500/20 text-rose-300 text-[10px] font-bold shrink-0 border border-rose-500/30">100% 오프라인</span>
+    </div>
+
+    <!-- 3대 긴급 전화 퀵 다이얼 그리드 -->
+    <div>
+      <div class="text-[11px] font-bold text-slate-400 mb-1.5 flex items-center justify-between">
+        <span>현지 긴급 전화 (터치 시 바로 통화 연결)</span>
+        <span class="text-[10px] text-amber-400">외교부 24H 영사콜센터 연동</span>
+      </div>
+      <div class="sos-dial-grid">
+        <a href="tel:${info.police.tel}" class="sos-dial-card is-police">
+          <i class="fa-solid fa-shield-halved text-sky-400 text-sm mb-0.5"></i>
+          <span class="sos-dial-name">현지 경찰</span>
+          <span class="sos-dial-num text-sky-300">${info.police.tel}</span>
+        </a>
+        <a href="tel:${info.ambulance.tel}" class="sos-dial-card is-ambulance">
+          <i class="fa-solid fa-truck-medical text-rose-400 text-sm mb-0.5"></i>
+          <span class="sos-dial-name">구급·응급</span>
+          <span class="sos-dial-num text-rose-400">${info.ambulance.tel}</span>
+        </a>
+        <a href="tel:${info.korea.tel}" class="sos-dial-card is-embassy" title="24시간 한국어 사건사고 및 통역 지원">
+          <i class="fa-solid fa-phone-volume text-amber-400 text-sm mb-0.5"></i>
+          <span class="sos-dial-name">영사콜센터</span>
+          <span class="sos-dial-num text-amber-400 text-xs">${info.korea.displayTel}</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- 증상 소통 플래시카드 영역 -->
+    <div class="pt-1">
+      <div class="flex items-center justify-between gap-2 mb-2 flex-wrap">
+        <div class="text-xs font-black text-white flex items-center gap-1.5">
+          <i class="fa-solid fa-notes-medical text-rose-400"></i>
+          <span>약국·병원·응급 증상 소통 카드</span>
+        </div>
+        <!-- 카테고리 필터 -->
+        <div class="flex items-center gap-1 text-[11px]">
+          <button type="button" onclick="renderSosEmergencyContent(null,'all',undefined)" class="px-2 py-0.5 rounded-lg font-bold transition ${window.__sosActiveCategory==='all'?'bg-rose-500 text-slate-950':'text-slate-400 bg-[#1e293b]'}">전체</button>
+          <button type="button" onclick="renderSosEmergencyContent(null,'pharmacy',undefined)" class="px-2 py-0.5 rounded-lg font-bold transition ${window.__sosActiveCategory==='pharmacy'?'bg-rose-500 text-slate-950':'text-slate-400 bg-[#1e293b]'}">약국/약품</button>
+          <button type="button" onclick="renderSosEmergencyContent(null,'emergency',undefined)" class="px-2 py-0.5 rounded-lg font-bold transition ${window.__sosActiveCategory==='emergency'?'bg-rose-500 text-slate-950':'text-slate-400 bg-[#1e293b]'}">응급/병원</button>
+          <button type="button" onclick="renderSosEmergencyContent(null,'safety',undefined)" class="px-2 py-0.5 rounded-lg font-bold transition ${window.__sosActiveCategory==='safety'?'bg-rose-500 text-slate-950':'text-slate-400 bg-[#1e293b]'}">도난/안전</button>
+        </div>
+      </div>
+
+      <!-- 언어 선택 바 -->
+      <div class="flex items-center gap-1 overflow-x-auto pb-1.5 no-scrollbar mb-2 text-xs">
+        ${langButtons.map(b => `
+          <button type="button" onclick="renderSosEmergencyContent('${b.code}',null,undefined)" class="px-2.5 py-1 rounded-lg font-bold whitespace-nowrap transition cursor-pointer shrink-0 ${window.__sosCurrentLang === b.code ? 'bg-amber-500 text-slate-950 shadow' : 'bg-[#141c2e] border border-[#23304c] text-slate-300 hover:text-white'}">
+            ${escapeHtml(b.label)}
+          </button>
+        `).join('')}
+      </div>
+
+      <!-- 증상 카드 목록 -->
+      <div class="sos-phrase-list custom-scrollbar">
+        ${filteredPhrases.map(p => {
+          const targetLang = (lang === 'auto') ? (info.langCode || 'en') : lang;
+          const phraseData = p[targetLang] || p.en || { phrase: p.ko, pron: '' };
+          const isHuge = (window.__sosExpandedSymptomId === p.id);
+
+          return `
+            <div class="sos-phrase-card ${isHuge ? 'is-huge' : ''}" id="sos-card-${p.id}">
+              <div class="flex items-center justify-between gap-2 mb-1.5">
+                <span class="text-xs font-black text-rose-400 flex items-center gap-1.5">
+                  <i class="${p.icon}" aria-hidden="true"></i>
+                  <span>${escapeHtml(p.title)}</span>
+                </span>
+                <div class="flex items-center gap-1">
+                  <button type="button" onclick="toggleSosPhraseHuge('${p.id}')" class="px-2 py-0.5 rounded bg-[#1e293b] hover:bg-[#334155] border border-[#334155] text-[10px] font-bold text-slate-200 transition cursor-pointer" title="약사/의사에게 보여줄 대형 글씨 토글">
+                    <i class="fa-solid ${isHuge ? 'fa-compress' : 'fa-magnifying-glass-plus'} text-amber-400"></i>
+                    <span>${isHuge ? '보통 크기' : '대형 확대 (AAA)'}</span>
+                  </button>
+                  <button type="button" onclick="copySosPhraseText('${escapeHtml(phraseData.phrase).replace(/'/g, "\\'")}', this)" class="px-2 py-0.5 rounded bg-[#1e293b] hover:bg-[#334155] border border-[#334155] text-[10px] font-bold text-slate-200 transition cursor-pointer" title="복사하기">
+                    <i class="fa-solid fa-copy text-sky-400"></i> <span>복사</span>
+                  </button>
+                </div>
+              </div>
+
+              <!-- 현지어 본문 (초고대비) -->
+              <div class="sos-phrase-main">${escapeHtml(phraseData.phrase)}</div>
+
+              <!-- 한글 발음 표기 -->
+              ${phraseData.pron ? `<div class="sos-phrase-phonetic"><i class="fa-solid fa-volume-high mr-1 text-[10px] opacity-70"></i>${escapeHtml(phraseData.pron)}</div>` : ''}
+
+              <!-- 한국어 뜻 설명 -->
+              <div class="sos-phrase-meaning">의미: ${escapeHtml(p.ko)}</div>
+            </div>
+          `;
+        }).join('')}
+      </div>
+    </div>
+  `;
+}
+window.renderSosEmergencyContent = renderSosEmergencyContent;
+
+function toggleSosPhraseHuge(symptomId) {
+  const current = window.__sosExpandedSymptomId;
+  window.__sosExpandedSymptomId = (current === symptomId) ? null : symptomId;
+  renderSosEmergencyContent();
+}
+window.toggleSosPhraseHuge = toggleSosPhraseHuge;
+
+function copySosPhraseText(text, btnEl) {
+  if (!text) return;
+  const cb = navigator.clipboard;
+  if (cb && typeof cb.writeText === 'function') {
+    cb.writeText(text).then(() => {
+      if (typeof showToast === 'function') showToast('증상 문구가 복사되었습니다.');
+      if (btnEl) {
+        const orig = btnEl.innerHTML;
+        btnEl.innerHTML = '<i class="fa-solid fa-check text-emerald-400"></i> 복사됨';
+        setTimeout(() => { btnEl.innerHTML = orig; }, 1500);
+      }
+    }).catch(() => fallbackCopyTaxiCardText(text));
+  } else {
+    fallbackCopyTaxiCardText(text);
+  }
+}
+window.copySosPhraseText = copySosPhraseText;
+
+function openSosEmergencyModal() {
+  renderSosEmergencyContent('auto', 'all', null);
+  if (typeof openModal === 'function') openModal('modal-sos-emergency');
+}
+window.openSosEmergencyModal = openSosEmergencyModal;
+
+/* ==========================================================================
+   아이디어 3: 가계부 일일 예산 소진 속도 (Burn-Rate) & 페이싱 HUD (Priority 4-3)
+   ========================================================================== */
+function calculateBudgetPacing(trip, walletData) {
+  const totalDays = Math.max(1, trip?.days?.length || 1);
+  
+  let currentDayNum = 1;
+  if (trip?.startDate) {
+    const start = new Date(trip.startDate);
+    const today = new Date();
+    start.setHours(0,0,0,0);
+    today.setHours(0,0,0,0);
+    const diffDays = Math.floor((today - start) / (1000 * 60 * 60 * 24)) + 1;
+    if (diffDays >= 1 && diffDays <= totalDays) {
+      currentDayNum = diffDays;
+    } else if (diffDays > totalDays) {
+      currentDayNum = totalDays;
+    }
+  } else if (Number.isInteger(State?.activePlanDayIndex)) {
+    currentDayNum = Math.min(totalDays, State.activePlanDayIndex + 1);
+  }
+
+  const remainingDays = Math.max(1, totalDays - currentDayNum + 1);
+
+  const totalBudgetKrw = Number(walletData?.totalBudgetKrw || trip?.totalBudgetKrw || 0);
+  const totalSpentKrw = Number(walletData?.totalSpentKrw || 0);
+
+  let todaySpentKrw = 0;
+  const currentDayIndex = currentDayNum - 1;
+  const dayDate = trip?.days?.[currentDayIndex]?.date;
+  const todayExpenses = (trip?.expenses || []).filter(e => {
+    return e.dayIndex === currentDayIndex || (dayDate && e.date === dayDate);
+  });
+  todaySpentKrw = todayExpenses.reduce((sum, e) => {
+    const rate = typeof getCurrencyRate === 'function' ? getCurrencyRate(e.currency || 'KRW') : 1;
+    return sum + Math.round((Number(e.amount) || 0) * rate);
+  }, 0);
+
+  const remainingBudgetKrw = Math.max(0, totalBudgetKrw - totalSpentKrw + todaySpentKrw);
+  const dailyRecommendedBudget = Math.round(remainingBudgetKrw / remainingDays);
+
+  let burnRatio = 0;
+  if (dailyRecommendedBudget > 0) {
+    burnRatio = todaySpentKrw / dailyRecommendedBudget;
+  } else if (todaySpentKrw > 0) {
+    burnRatio = 2.0;
+  }
+
+  let statusKey = 'safe';
+  let statusLabel = '양호 (안전한 소비 속도)';
+  let barColor = '#10b981';
+
+  if (burnRatio > 1.3) {
+    statusKey = 'danger';
+    statusLabel = '경고 (오늘 권장 예산 초과)';
+    barColor = '#f43f5e';
+  } else if (burnRatio > 1.0) {
+    statusKey = 'warning';
+    statusLabel = '주의 (내일 절약 권장)';
+    barColor = '#f97316';
+  } else if (burnRatio > 0.7) {
+    statusKey = 'good';
+    statusLabel = '적정 (균형 있는 소비)';
+    barColor = '#f59e0b';
+  }
+
+  const pct = Math.min(100, Math.round(burnRatio * 100));
+
+  return {
+    totalDays,
+    currentDayNum,
+    remainingDays,
+    totalBudgetKrw,
+    totalSpentKrw,
+    todaySpentKrw,
+    remainingBudgetKrw,
+    dailyRecommendedBudget,
+    burnRatio,
+    pct,
+    statusKey,
+    statusLabel,
+    barColor
+  };
+}
+window.calculateBudgetPacing = calculateBudgetPacing;
+
+function updateBudgetPacingHud(trip, walletData) {
+  const container = document.getElementById('budget-pacing-hud');
+  if (!container) return;
+
+  const pacing = calculateBudgetPacing(trip, walletData);
+
+  if (pacing.totalBudgetKrw <= 0) {
+    container.innerHTML = `
+      <div class="flex items-center justify-between gap-2 flex-wrap">
+        <span class="text-xs font-black text-white flex items-center gap-1.5">
+          <i class="fa-solid fa-gauge-high text-amber-400"></i>
+          <span>일일 예산 소진 속도 (Burn-Rate)</span>
+        </span>
+        <button type="button" onclick="openInitialFundsModal()" class="text-[10px] text-amber-400 hover:text-amber-300 font-bold px-2 py-0.5 rounded bg-amber-500/15 border border-amber-500/30 transition flex items-center gap-1 cursor-pointer">
+          <i class="fa-solid fa-plus text-[9px]"></i> 목표 예산 설정하기
+        </button>
+      </div>
+      <p class="text-[11px] text-slate-400 leading-relaxed">
+        목표 예산을 설정하시면 남은 여행 기간과 오늘 지출 속도를 실시간으로 분석하여 <b>일일 권장 지출액</b>과 <b>소진 페이싱 게이지</b>를 자동으로 안내해 드립니다.
+      </p>
+    `;
+    return;
+  }
+
+  container.innerHTML = `
+    <div class="flex items-center justify-between gap-2 flex-wrap">
+      <span class="text-xs font-black text-white flex items-center gap-1.5">
+        <i class="fa-solid fa-gauge-high text-amber-400"></i>
+        <span>일일 예산 소진 속도 (Burn-Rate)</span>
+      </span>
+      <span class="pacing-badge status-${pacing.statusKey}">
+        <i class="fa-solid fa-circle text-[7px]" aria-hidden="true"></i> ${pacing.statusLabel}
+      </span>
+    </div>
+
+    <!-- 페이싱 프로그레스 바 -->
+    <div class="pacing-progress-track">
+      <div class="pacing-progress-bar" style="width: ${pacing.pct}%; background-color: ${pacing.barColor};"></div>
+    </div>
+
+    <div class="flex items-center justify-between gap-2 pt-0.5 flex-wrap text-[11px]">
+      <div>
+        <span class="text-slate-400">오늘 지출: </span>
+        <span class="font-bold font-mono text-white">₩${pacing.todaySpentKrw.toLocaleString()}</span>
+        <span class="text-slate-500 mx-1">/</span>
+        <span class="text-slate-400">권장 한도: </span>
+        <span class="font-bold font-mono text-amber-400">₩${pacing.dailyRecommendedBudget.toLocaleString()}</span>
+        <span class="text-[10px] text-slate-400 ml-1">(${pacing.pct}%)</span>
+      </div>
+      <div class="text-slate-400">
+        여정 <span class="font-bold text-white">Day ${pacing.currentDayNum}/${pacing.totalDays}</span> (남은 ${pacing.remainingDays}일간 일평균 <span class="text-emerald-400 font-bold font-mono">₩${pacing.dailyRecommendedBudget.toLocaleString()}</span> 가능)
+      </div>
+    </div>
+  `;
+}
+window.updateBudgetPacingHud = updateBudgetPacingHud;
+
+/* ==========================================================================
+   아이디어 2: 길거리 음성/사진 퀵 캡슐 & AI 일기 완성 (Priority 4-4)
+   ========================================================================== */
+window.__capsuleSelectedMood = 'wonder';
+window.__capsulePhotoData = null;
+window.__capsuleSpeechRecognition = null;
+window.__capsuleIsRecording = false;
+
+function openQuickCapsuleModal() {
+  window.__capsulePhotoData = null;
+  renderQuickCapsuleContent();
+  if (typeof openModal === 'function') openModal('modal-quick-capsule');
+}
+window.openQuickCapsuleModal = openQuickCapsuleModal;
+
+function setCapsuleMood(moodKey) {
+  window.__capsuleSelectedMood = moodKey;
+  renderQuickCapsuleContent(false);
+}
+window.setCapsuleMood = setCapsuleMood;
+
+function toggleCapsuleVoiceRecognition() {
+  const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
+  const statusEl = document.getElementById('capsule-mic-status');
+  const micBtn = document.getElementById('capsule-mic-btn');
+
+  if (!SpeechRec) {
+    if (typeof showToast === 'function') showToast('현재 브라우저가 음성 인식을 지원하지 않습니다. 텍스트로 직접 입력해 주세요.');
+    return;
+  }
+
+  if (window.__capsuleIsRecording && window.__capsuleSpeechRecognition) {
+    try {
+      window.__capsuleSpeechRecognition.stop();
+    } catch (_) {}
+    window.__capsuleIsRecording = false;
+    if (micBtn) micBtn.classList.remove('is-recording');
+    if (statusEl) statusEl.innerText = '음성 인식 완료 (텍스트를 확인하고 저장하세요)';
+    return;
+  }
+
+  try {
+    const recognition = new SpeechRec();
+    recognition.lang = 'ko-KR';
+    recognition.continuous = false;
+    recognition.interimResults = true;
+
+    recognition.onstart = () => {
+      window.__capsuleIsRecording = true;
+      if (micBtn) micBtn.classList.add('is-recording');
+      if (statusEl) statusEl.innerHTML = '<span class="text-rose-400 font-bold animate-pulse">🎙️ 듣고 있습니다... 말씀해 주세요!</span>';
+    };
+
+    recognition.onresult = (event) => {
+      const input = document.getElementById('capsule-text-input');
+      let transcript = '';
+      for (let i = event.resultIndex; i < event.results.length; ++i) {
+        transcript += event.results[i][0].transcript;
+      }
+      if (input && transcript) {
+        input.value = transcript;
+      }
+    };
+
+    recognition.onerror = (e) => {
+      console.warn('SpeechRecognition error:', e);
+      window.__capsuleIsRecording = false;
+      if (micBtn) micBtn.classList.remove('is-recording');
+      if (statusEl) statusEl.innerText = '음성 인식 대기 중';
+      if (typeof showToast === 'function') showToast('음성 인식 오류: ' + (e.error || '권한을 확인하세요'));
+    };
+
+    recognition.onend = () => {
+      window.__capsuleIsRecording = false;
+      if (micBtn) micBtn.classList.remove('is-recording');
+      if (statusEl) statusEl.innerText = '음성 인식 완료';
+    };
+
+    window.__capsuleSpeechRecognition = recognition;
+    recognition.start();
+  } catch (err) {
+    console.warn('Failed to start speech recognition:', err);
+    if (typeof showToast === 'function') showToast('마이크 연결 실패: ' + err.message);
+  }
+}
+window.toggleCapsuleVoiceRecognition = toggleCapsuleVoiceRecognition;
+
+function handleCapsulePhotoInput(event) {
+  const file = event.target.files?.[0];
+  if (!file) return;
+
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    window.__capsulePhotoData = e.target.result;
+    const preview = document.getElementById('capsule-photo-preview');
+    if (preview) {
+      preview.innerHTML = `
+        <div class="relative w-16 h-12 rounded-xl overflow-hidden border border-amber-500/40">
+          <img src="${window.__capsulePhotoData}" class="w-full h-full object-fit-cover" alt="사진 미리보기">
+          <button type="button" onclick="removeCapsulePhoto()" class="absolute top-0.5 right-0.5 w-4 h-4 rounded-full bg-slate-900/80 text-white text-[9px] flex items-center justify-center">✕</button>
+        </div>
+      `;
+    }
+  };
+  reader.readAsDataURL(file);
+}
+window.handleCapsulePhotoInput = handleCapsulePhotoInput;
+
+function removeCapsulePhoto() {
+  window.__capsulePhotoData = null;
+  const preview = document.getElementById('capsule-photo-preview');
+  if (preview) preview.innerHTML = '';
+}
+window.removeCapsulePhoto = removeCapsulePhoto;
+
+function saveQuickCapsule() {
+  const textInput = document.getElementById('capsule-text-input');
+  const spotSelect = document.getElementById('capsule-spot-select');
+  const text = (textInput?.value || '').trim();
+
+  if (!text && !window.__capsulePhotoData) {
+    if (typeof showToast === 'function') showToast('음성 또는 메모 내용을 입력해 주세요.');
+    return;
+  }
+
+  const trip = getActiveTrip();
+  if (!trip) return;
+
+  trip.quickCapsules = trip.quickCapsules || [];
+  const activeDayIndex = State?.activePlanDayIndex ?? 0;
+  const currentDay = trip.days?.[activeDayIndex];
+
+  const now = new Date();
+  const timeStr = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
+
+  const capsule = {
+    id: 'cap-' + Date.now(),
+    dayIndex: activeDayIndex,
+    date: currentDay?.date || now.toISOString().split('T')[0],
+    time: timeStr,
+    text: text,
+    mood: window.__capsuleSelectedMood,
+    spotTitle: spotSelect?.value || '',
+    photo: window.__capsulePhotoData || null,
+    createdAt: now.toISOString()
+  };
+
+  trip.quickCapsules.unshift(capsule);
+
+  if (typeof saveTrips === 'function') saveTrips();
+  if (window.TripRepository && typeof TripRepository.saveAll === 'function' && State?.trips) {
+    TripRepository.saveAll(State.trips);
+  }
+
+  if (typeof showToast === 'function') showToast('길거리 퀵 캡슐이 보관되었습니다!');
+
+  if (textInput) textInput.value = '';
+  window.__capsulePhotoData = null;
+  renderQuickCapsuleContent();
+}
+window.saveQuickCapsule = saveQuickCapsule;
+
+function deleteQuickCapsule(capsuleId) {
+  const trip = getActiveTrip();
+  if (!trip?.quickCapsules) return;
+  trip.quickCapsules = trip.quickCapsules.filter(c => c.id !== capsuleId);
+  if (typeof saveTrips === 'function') saveTrips();
+  renderQuickCapsuleContent();
+  if (typeof showToast === 'function') showToast('캡슐이 삭제되었습니다.');
+}
+window.deleteQuickCapsule = deleteQuickCapsule;
+
+async function generateDiaryFromCapsules() {
+  const trip = getActiveTrip();
+  const activeDayIndex = State?.activePlanDayIndex ?? 0;
+  const capsules = (trip?.quickCapsules || []).filter(c => c.dayIndex === activeDayIndex);
+
+  if (!capsules.length) {
+    if (typeof showToast === 'function') showToast('오늘 저장된 퀵 캡슐이 없습니다. 먼저 음성이나 메모를 남겨보세요.');
+    return;
+  }
+
+  const currentDay = trip?.days?.[activeDayIndex];
+  const cityName = currentDay?.city || '여행지';
+
+  const notes = capsules.map((c, i) => {
+    return `[${c.time} / 무드: ${c.mood} / 장소: ${c.spotTitle || '거리'}] ${c.text}`;
+  }).join('\n');
+
+  const prompt = `
+당신은 최고의 감성 여행 에세이 작가입니다.
+여행자가 오늘 ${cityName}에서 걸어 다니며 남긴 현장 음성 퀵 메모 캡슐들을 바탕으로, 마치 한 편의 감성적인 여행 다이어리(일기)를 정갈하게 작성해 주세요.
+
+[현장 메모 캡슐 목록]:
+${notes}
+
+[작성 가이드라인]:
+- 한국어 자연스러운 에세이 어조 (~했다, ~느꼈다 체 또는 ~했답니다)
+- 300~500자 분량으로 하루의 공기와 분위기, 현장의 감각(맛, 소리, 감정)을 살려 풍성하게 집필
+- 제목 1줄과 본문 2~3개 문단으로 구성
+`.trim();
+
+  const btn = document.getElementById('btn-ai-synthesize-diary');
+  if (btn) {
+    btn.disabled = true;
+    btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-1"></i> AI가 감성 일기를 집필 중입니다...';
+  }
+
+  try {
+    if (typeof window.callGeminiApiWithFallback !== 'function') {
+      throw new Error('Gemini API 함수가 준비되지 않았습니다.');
+    }
+    const diaryContent = await window.callGeminiApiWithFallback(prompt);
+    
+    if (!trip.activityRecords || Array.isArray(trip.activityRecords) || typeof trip.activityRecords !== 'object') {
+      trip.activityRecords = {};
+    }
+    const newRecordId = 'rec-' + Date.now();
+    const newRecord = {
+      id: newRecordId,
+      dayIndex: activeDayIndex,
+      date: currentDay?.date || new Date().toISOString().split('T')[0],
+      city: cityName,
+      title: `${cityName}의 하루, 캡슐로 엮은 이야기`,
+      content: diaryContent,
+      photos: capsules.map(c => c.photo).filter(Boolean),
+      mood: capsules[0]?.mood || 'wonder',
+      createdAt: new Date().toISOString()
+    };
+    trip.activityRecords[newRecordId] = newRecord;
+
+    if (typeof saveTrips === 'function') saveTrips();
+    if (window.TripRepository && typeof TripRepository.saveAll === 'function' && State?.trips) {
+      TripRepository.saveAll(State.trips);
+    }
+
+    if (typeof showToast === 'function') showToast('✨ AI 여행 일기가 성공적으로 집필되어 기록 탭에 등록되었습니다!');
+    closeModal('modal-quick-capsule');
+    if (typeof switchTab === 'function') switchTab('journal');
+  } catch (err) {
+    console.error('AI Diary Generation Error:', err);
+    if (typeof showToast === 'function') showToast('일기 작성 실패: ' + (err.userMessage || err.message));
+  } finally {
+    if (btn) {
+      btn.disabled = false;
+      btn.innerHTML = '<i class="fa-solid fa-wand-magic-sparkles mr-1"></i> 오늘의 캡슐로 AI 여행 일기 자동 집필';
+    }
+  }
+}
+window.generateDiaryFromCapsules = generateDiaryFromCapsules;
+
+function renderQuickCapsuleContent(preserveText = true) {
+  const container = document.getElementById('quick-capsule-content');
+  if (!container) return;
+
+  const trip = getActiveTrip();
+  const activeDayIndex = State?.activePlanDayIndex ?? 0;
+  const currentDay = trip?.days?.[activeDayIndex];
+  const spots = currentDay?.spots || [];
+
+  const existingText = preserveText ? (document.getElementById('capsule-text-input')?.value || '') : '';
+
+  const moods = [
+    { key: 'wonder', label: '✨ 감탄/경이' },
+    { key: 'food', label: '🍜 꿀맛/맛집' },
+    { key: 'tip', label: '💡 여행 꿀팁' },
+    { key: 'warning', label: '⚠️ 주의/바가지' },
+    { key: 'moved', label: '💖 감동' },
+    { key: 'photo', label: '📸 포토스팟' }
+  ];
+
+  const todayCapsules = (trip?.quickCapsules || []).filter(c => c.dayIndex === activeDayIndex);
+
+  container.innerHTML = `
+    <!-- 음성 녹음 상단 섹션 -->
+    <div class="text-center p-3.5 rounded-2xl bg-[#080b12] border border-[#1a2236] space-y-2.5">
+      <div id="capsule-mic-btn" onclick="toggleCapsuleVoiceRecognition()" class="capsule-mic-btn shadow-lg" title="마이크 터치하여 음성으로 말하기">
+        <i class="fa-solid fa-microphone"></i>
+      </div>
+      <div id="capsule-mic-status" class="text-xs text-slate-400 font-medium">마이크를 터치하여 현장 감상을 바로 말씀하세요</div>
+    </div>
+
+    <!-- 텍스트 입력창 -->
+    <div class="space-y-1.5">
+      <div class="flex items-center justify-between text-xs">
+        <label for="capsule-text-input" class="font-bold text-slate-300">현장 메모 / 음성 변환 내용</label>
+        <span class="text-[11px] text-amber-400">키보드 직접 입력 가능</span>
+      </div>
+      <textarea id="capsule-text-input" rows="3" placeholder="걷거나 구경하며 느낀 감상, 꿀팁, 가게 이름을 남겨보세요..." class="w-full p-3 rounded-xl bg-[#141c2e] border border-[#23304c] text-white text-xs placeholder-slate-500 focus:outline-none focus:border-amber-500 leading-relaxed">${escapeHtml(existingText)}</textarea>
+    </div>
+
+    <!-- 무드 칩 선택 -->
+    <div class="space-y-1.5">
+      <div class="text-[11px] font-bold text-slate-400">감성 무드 선택</div>
+      <div class="capsule-mood-grid">
+        ${moods.map(m => `
+          <button type="button" onclick="setCapsuleMood('${m.key}')" class="capsule-mood-chip ${window.__capsuleSelectedMood === m.key ? 'is-active' : ''}">
+            ${escapeHtml(m.label)}
+          </button>
+        `).join('')}
+      </div>
+    </div>
+
+    <!-- 연결 스팟 선택 & 사진 첨부 툴바 -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-1">
+      <div class="space-y-1">
+        <label for="capsule-spot-select" class="text-[11px] font-bold text-slate-400">관련 스팟 (선택)</label>
+        <select id="capsule-spot-select" class="w-full p-2 rounded-xl bg-[#141c2e] border border-[#23304c] text-slate-200 text-xs focus:outline-none focus:border-amber-500">
+          <option value="">[스팟 미지정 / 길거리]</option>
+          ${spots.map((s, idx) => `
+            <option value="${escapeHtml(s.title || s.name)}">${idx + 1}. ${escapeHtml(s.title || s.name)}</option>
+          `).join('')}
+        </select>
+      </div>
+      <div class="space-y-1">
+        <div class="text-[11px] font-bold text-slate-400">사진 1장 스냅 (선택)</div>
+        <div class="flex items-center gap-2">
+          <label for="capsule-photo-input" class="flex-1 py-2 px-3 rounded-xl bg-[#141c2e] hover:bg-[#1e293b] border border-[#23304c] text-xs font-bold text-slate-300 flex items-center justify-center gap-1.5 cursor-pointer transition">
+            <i class="fa-solid fa-camera text-amber-400"></i> <span>사진 촬영/선택</span>
+          </label>
+          <input type="file" id="capsule-photo-input" accept="image/*" capture="environment" onchange="handleCapsulePhotoInput(event)" class="hidden">
+          <div id="capsule-photo-preview"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 저장 버튼 -->
+    <button type="button" onclick="saveQuickCapsule()" class="w-full py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs transition shadow-md cursor-pointer flex items-center justify-center gap-1.5">
+      <i class="fa-solid fa-floppy-disk"></i> <span>퀵 캡슐 보관하기</span>
+    </button>
+
+    <!-- 오늘 수집된 캡슐 목록 및 AI 합성 -->
+    <div class="pt-3 border-t border-[#1a2236] space-y-2">
+      <div class="flex items-center justify-between">
+        <span class="text-xs font-black text-white flex items-center gap-1.5">
+          <i class="fa-solid fa-boxes-packing text-amber-400"></i>
+          <span>오늘 수집된 캡슐 (${todayCapsules.length}개)</span>
+        </span>
+        ${todayCapsules.length > 0 ? `
+          <button type="button" id="btn-ai-synthesize-diary" onclick="generateDiaryFromCapsules()" class="text-[11px] font-black text-amber-400 hover:text-amber-300 px-2.5 py-1 rounded-lg bg-amber-500/15 border border-amber-500/30 transition flex items-center gap-1 cursor-pointer" title="모은 캡슐로 Gemini AI 일기 완성">
+            <i class="fa-solid fa-wand-magic-sparkles text-[10px]"></i> <span>AI 일기 완성</span>
+          </button>
+        ` : ''}
+      </div>
+
+      ${todayCapsules.length === 0 ? `
+        <div class="text-[11px] text-slate-500 text-center py-4 bg-[#080b12] rounded-xl border border-[#141c2e]">
+          아직 저장된 캡슐이 없습니다. 위 마이크를 터치해 첫 번째 감상을 남겨보세요!
+        </div>
+      ` : `
+        <div class="space-y-2 max-h-48 overflow-y-auto pr-1 custom-scrollbar">
+          ${todayCapsules.map(c => `
+            <div class="capsule-list-item">
+              <div class="flex items-center justify-between gap-1">
+                <span class="text-[10px] text-amber-400 font-mono font-bold">${escapeHtml(c.time)} · ${escapeHtml(c.spotTitle || '길거리')}</span>
+                <button type="button" onclick="deleteQuickCapsule('${c.id}')" class="text-slate-500 hover:text-rose-400 text-[10px] cursor-pointer">✕</button>
+              </div>
+              <div class="text-xs text-white leading-relaxed select-all">${escapeHtml(c.text)}</div>
+              ${c.photo ? `<img src="${c.photo}" class="w-16 h-12 object-fit-cover rounded-lg mt-1 border border-[#334155]" alt="캡슐 사진">` : ''}
+            </div>
+          `).join('')}
+        </div>
+      `}
+    </div>
+  `;
+}
+window.renderQuickCapsuleContent = renderQuickCapsuleContent;
+
+/* ==========================================================================
+   아이디어 5: 여행 에디토리얼 매거진 뷰 & PDF 제본 (Priority 4-5)
+   ========================================================================== */
+function openStoryMagazineModal() {
+  renderStoryMagazineContent();
+  if (typeof openModal === 'function') openModal('modal-story-magazine');
+}
+window.openStoryMagazineModal = openStoryMagazineModal;
+
+function printStoryMagazine() {
+  window.print();
+}
+window.printStoryMagazine = printStoryMagazine;
+
+function renderStoryMagazineContent() {
+  const container = document.getElementById('story-magazine-content');
+  if (!container) return;
+
+  const trip = getActiveTrip();
+  if (!trip) {
+    container.innerHTML = '<div class="text-center py-8 text-slate-400">선택된 여행이 없습니다.</div>';
+    return;
+  }
+
+  const days = trip.days || [];
+  const totalSpots = days.reduce((sum, d) => sum + (d.spots?.length || 0), 0);
+  const completedSpots = days.reduce((sum, d) => sum + (d.spots?.filter(s => s.completed)?.length || 0), 0);
+  const records = [
+    ...Object.values(trip.journals || {}),
+    ...Object.values(trip.activityRecords || {}),
+    ...(trip.momentEntries || [])
+  ];
+  const capsules = trip.quickCapsules || [];
+
+  const allPhotos = [];
+  records.forEach(r => {
+    (r.photos || []).forEach(p => allPhotos.push(p));
+  });
+  capsules.forEach(c => {
+    if (c.photo) allPhotos.push(c.photo);
+  });
+
+  const heroPhoto = allPhotos[0] || '';
+
+  const cities = [...new Set(days.map(d => d.city).filter(Boolean))];
+  const cityFlow = cities.join(' ➔ ') || '여행 여정';
+
+  const expenses = trip.expenses || [];
+  const totalSpentKrw = expenses.reduce((sum, e) => {
+    const rate = typeof getCurrencyRate === 'function' ? getCurrencyRate(e.currency || 'KRW') : 1;
+    return sum + Math.round((Number(e.amount) || 0) * rate);
+  }, 0);
+
+  container.innerHTML = `
+    <div id="story-magazine-container">
+      <!-- 매거진 표지 (Editorial Masthead Cover) -->
+      <div class="magazine-cover-card">
+        <header class="magazine-masthead">
+          <div class="magazine-masthead-title">THE SULSUL CHRONICLE</div>
+          <div class="magazine-masthead-meta">VOYAGE MEMOIR · SPECIAL EDITION · ARCHIVE No. ${escapeHtml(trip.id || '01')}</div>
+        </header>
+
+        <div class="text-center space-y-3 mb-4">
+          <h1 class="text-2xl sm:text-3xl font-black text-white tracking-tight leading-snug">${escapeHtml(trip.title || '나의 인생 여행기')}</h1>
+          <div class="text-xs sm:text-sm font-bold text-amber-400 font-mono tracking-wide">
+            <i class="fa-solid fa-route mr-1.5"></i> ${escapeHtml(cityFlow)}
+          </div>
+          <div class="text-[11px] text-slate-400 font-medium">
+            일정: ${escapeHtml(trip.startDate || '일정 미정')} ~ ${escapeHtml(trip.endDate || '')} · 총 ${days.length}일간의 여정
+          </div>
+          ${trip.desc ? `<p class="text-xs text-slate-300 max-w-lg mx-auto italic leading-relaxed pt-1">"${escapeHtml(trip.desc)}"</p>` : ''}
+        </div>
+
+        ${heroPhoto ? `
+          <div class="w-full aspect-video rounded-2xl overflow-hidden border border-[#334155] shadow-2xl mb-4">
+            <img src="${heroPhoto}" class="w-full h-full object-fit-cover" alt="대표 여행 사진">
+          </div>
+        ` : ''}
+
+        <!-- 요약 스탯 바 -->
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-center pt-2 border-t border-[#1e293b]">
+          <div class="p-2 rounded-xl bg-[#080b12] border border-[#1e263c]">
+            <div class="text-[10px] text-slate-400">방문 스팟</div>
+            <div class="text-sm font-black text-white mt-0.5">${completedSpots} / ${totalSpots} 완료</div>
+          </div>
+          <div class="p-2 rounded-xl bg-[#080b12] border border-[#1e263c]">
+            <div class="text-[10px] text-slate-400">기록된 추억</div>
+            <div class="text-sm font-black text-amber-400 mt-0.5">${records.length}편의 일기</div>
+          </div>
+          <div class="p-2 rounded-xl bg-[#080b12] border border-[#1e263c]">
+            <div class="text-[10px] text-slate-400">수집된 사진</div>
+            <div class="text-sm font-black text-sky-400 mt-0.5">${allPhotos.length}장의 스냅</div>
+          </div>
+          <div class="p-2 rounded-xl bg-[#080b12] border border-[#1e263c]">
+            <div class="text-[10px] text-slate-400">총 여정 지출</div>
+            <div class="text-sm font-black text-emerald-400 mt-0.5">₩${totalSpentKrw.toLocaleString()}</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 각 일자별 스프레드 (Daily Spreads) -->
+      <div class="space-y-4">
+        ${days.map((day, idx) => {
+          const daySpots = day.spots || [];
+          const dayRecords = records.filter(r => r.dayIndex === idx || r.date === day.date);
+          const dayPhotos = [];
+          dayRecords.forEach(r => (r.photos || []).forEach(p => dayPhotos.push(p)));
+          const dayCapsules = capsules.filter(c => c.dayIndex === idx || c.date === day.date);
+          dayCapsules.forEach(c => { if (c.photo) dayPhotos.push(c.photo); });
+
+          const dayExpenses = expenses.filter(e => e.dayIndex === idx || e.date === day.date);
+          const daySpent = dayExpenses.reduce((sum, e) => {
+            const rate = typeof getCurrencyRate === 'function' ? getCurrencyRate(e.currency || 'KRW') : 1;
+            return sum + Math.round((Number(e.amount) || 0) * rate);
+          }, 0);
+
+          return `
+            <article class="magazine-day-spread">
+              <div class="magazine-day-header">
+                <div>
+                  <span class="magazine-day-num">DAY ${String(idx + 1).padStart(2, '0')}</span>
+                  <span class="magazine-day-city ml-2">${escapeHtml(day.city || '도시 미정')}</span>
+                </div>
+                <div class="text-xs text-slate-400 font-mono">${escapeHtml(day.date || '')}</div>
+              </div>
+
+              <!-- 스팟 흐름 -->
+              ${daySpots.length > 0 ? `
+                <div class="magazine-spot-flow">
+                  <span class="text-[10px] font-bold text-amber-400 mr-1"><i class="fa-solid fa-shoe-prints mr-1"></i> 동선:</span>
+                  ${daySpots.map((s, sIdx) => `
+                    <span class="magazine-spot-pill ${s.completed ? 'border-amber-500/50 text-amber-300' : ''}">
+                      ${sIdx + 1}. ${escapeHtml(s.title || s.name)} ${s.time ? `<span class="text-slate-400 font-normal">(${escapeHtml(s.time)})</span>` : ''}
+                    </span>
+                    ${sIdx < daySpots.length - 1 ? '<i class="fa-solid fa-arrow-right text-[9px] text-slate-500"></i>' : ''}
+                  `).join('')}
+                </div>
+              ` : ''}
+
+              <!-- 일기 및 메모 본문 -->
+              ${dayRecords.length > 0 ? dayRecords.map(r => `
+                <div class="magazine-journal-quote">
+                  <div class="font-bold text-xs text-amber-400 mb-1 flex items-center gap-1.5">
+                    <i class="fa-solid fa-pen-fancy text-[10px]"></i>
+                    <span>${escapeHtml(r.title || '오늘의 여행 일기')}</span>
+                  </div>
+                  <div class="leading-relaxed whitespace-pre-wrap">${escapeHtml(r.content || '')}</div>
+                </div>
+              `).join('') : (dayCapsules.length > 0 ? `
+                <div class="magazine-journal-quote">
+                  <div class="font-bold text-xs text-amber-400 mb-1">🎙️ 현장 퀵 캡슐 기록</div>
+                  ${dayCapsules.map(c => `
+                    <div class="text-xs leading-relaxed my-0.5">• [${escapeHtml(c.time)}] ${escapeHtml(c.text)}</div>
+                  `).join('')}
+                </div>
+              ` : '')}
+
+              <!-- 사진 그리드 -->
+              ${dayPhotos.length > 0 ? `
+                <div class="magazine-photo-grid">
+                  ${dayPhotos.slice(0, 6).map(photo => `
+                    <div class="magazine-photo-tile">
+                      <img src="${photo}" alt="여행 사진" loading="lazy">
+                    </div>
+                  `).join('')}
+                </div>
+              ` : ''}
+
+              <!-- 일일 지출 푸터 -->
+              ${daySpent > 0 ? `
+                <div class="flex items-center justify-between text-[11px] pt-3 mt-3 border-t border-[#1e293b] text-slate-400">
+                  <span>오늘의 총 지출</span>
+                  <span class="font-bold font-mono text-emerald-400">₩${daySpent.toLocaleString()}</span>
+                </div>
+              ` : ''}
+            </article>
+          `;
+        }).join('')}
+      </div>
+
+      <!-- 에필로그 및 완주 스탬프 -->
+      <div class="magazine-epilogue-card">
+        <div class="text-base font-black text-white">JOURNEY ARCHIVE COMPLETED</div>
+        <p class="text-xs text-slate-400 mt-1 max-w-md mx-auto leading-relaxed">
+          이 소중한 여행 기록은 술술트래블에 안전하게 보존되었습니다. 상단의 [A4 PDF / 인쇄] 버튼을 눌러 소장용 PDF 또는 책자로 제본하실 수 있습니다.
+        </p>
+        <div class="magazine-stamp">
+          ★ SULSUL OFFICIAL EXPEDITION ★
+        </div>
+      </div>
+    </div>
+  `;
+}
+window.renderStoryMagazineContent = renderStoryMagazineContent;
 
 
 
