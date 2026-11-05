@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
@@ -1495,7 +1495,7 @@
     }
   </style>
 
-  <link rel="stylesheet" href="css/companion.css?v=2.0.0" integrity="sha384-NiuOoDjU/cCP9AkPZM2xAPW9BIDbwKxbD8J9NsNj68Vr49QkOfFGScSqXiQRzeaS">
+  <link rel="stylesheet" href="css/companion.css?v=2.0.0" integrity="sha384-0Z4uvA+TQg136QslU/lerdomzqLEXamBBqfTARD5kruZjdU3cBDsvGm+KVnZPlO+">
   <link rel="stylesheet" href="css/companion-refresh.css?v=2.0.0" integrity="sha384-g1MzsPxYgFA1G2Ba189anhZCcQnMwkNSt6MlFXiazIHGO0Kqp2sbMXQZ2kjr3p4u">
   <link rel="stylesheet" href="css/live-itinerary.css?v=2.0.0" integrity="sha384-e/V9wyJ/Gi6baSHcWzBeNGjdn/eKDQIvKWyiYmByLE7C7nYJaQOA+GshtUMcCR72">
   <link rel="stylesheet" href="css/expense-mobile.css?v=2.0.0" integrity="sha384-QZFtKrU/YvkTaEKv0oJ2ZQi1Zry8RgEFaHzTckwuPFsMDDmadYBH7UuYgTVS7281">
@@ -1515,7 +1515,7 @@
   <script src="js/presentation/photo-optimization-ui.js?v=2.0.0" integrity="sha384-VhSAzyfhLGHeztkcMZhxqnkKTZsAVnuUcU9JaHfbTlXqu86UlbN8RIlvuCyXTyQi"></script>
   <script src="js/infrastructure/storage/media-repository.js?v=2.0.0" integrity="sha384-uRMSm/SsC90644vL2l/tHSvOAIk4e5rvXEkGKvG/l5cv879XC0M7aMG5HSULmANU"></script>
   <script src="js/infrastructure/storage/expense-photo-repository.js?v=2.0.0" integrity="sha384-gdumvFYkJqEbRPJlK4mffCsUjPsnKCXLg6/1fLMR8kUuU1QDMeLLOYmMVSRTGNSy"></script>
-  <script src="js/presentation/companion-ui.js?v=2.0.0" integrity="sha384-thc9N39jluQz4pZ8xIeTqeNihK7FSfrJ6TxoVEomdSTtf1PI8uO/gGeUHEtPh3KV"></script>
+  <script src="js/presentation/companion-ui.js?v=2.0.0" integrity="sha384-eL+CNgq8JPOdZPVZ2wcwDGH2CWPsrUyXRnKmNZ+HGF15mtOjk2TJ68Vl/HxOFpxe"></script>
   <script src="js/domain/trip-transfer.js?v=2.0.0" integrity="sha384-2DbGuFMcI+/890akrM1xJKdRfBXROqXvDdpzZbku3tx7rMTs8RtmC9jE6QvYSKYw"></script>
   <script src="js/domain/travel-backup.js?v=2.0.0" integrity="sha384-2tUabty22tYrBgP9E/PSL3TuW0rX+S20qcRNPJm9utnX+BUjsYot9rdLRMTDCdhy"></script>
   <script src="js/presentation/travel-backup-ui.js?v=2.0.0" integrity="sha384-Xfc0a6iOhcKoxY13D8lVJ0T2brSbyBbsjlFptDUQrOQfghikJOMtop54Qva1gJX8"></script>
@@ -2137,6 +2137,47 @@
           <div class="p-3 bg-[#080b12] rounded-xl border border-[#1a2236]">
             <div id="exp-total-balance-label" class="text-[11px] text-slate-400">남은 총 자산 (원화 환산 합산)</div>
             <div id="exp-total-balance" class="text-base font-black text-emerald-400 mt-0.5">₩8,500,000</div>
+          </div>
+        </div>
+
+        <!-- 실시간 간편 환율 계산기 위젯 (Quick Currency Converter) -->
+        <div id="quick-currency-converter" class="p-3.5 bg-[#080b12] rounded-xl border border-[#1a2236] space-y-2.5">
+          <div class="flex items-center justify-between gap-2 flex-wrap">
+            <span class="text-xs font-black text-white flex items-center gap-1.5">
+              <i class="fa-solid fa-calculator text-amber-400"></i>
+              <span>현지 통화 즉석 환율 계산기</span>
+            </span>
+            <span id="quick-calc-rate-badge" class="text-[11px] text-amber-400 font-mono font-bold">1 TWD = ₩41.50</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <div class="flex-1 relative min-w-0">
+              <input type="number" id="quick-calc-input" placeholder="현지 금액 입력 (예: 100)" oninput="updateQuickCurrencyCalc()" class="w-full pl-3 pr-20 py-2 bg-[#141c2e] border border-[#23304c] rounded-xl text-sm font-bold text-white placeholder-slate-500 focus:outline-none focus:border-amber-500 font-mono">
+              <select id="quick-calc-curr" onchange="updateQuickCurrencyCalc(true)" class="absolute right-1 top-1 bottom-1 bg-[#1a263e] text-amber-400 text-xs font-black px-2 rounded-lg border-0 focus:outline-none cursor-pointer">
+              </select>
+            </div>
+            <i class="fa-solid fa-arrow-right-arrow-left text-slate-500 text-xs shrink-0"></i>
+            <div class="flex-1 py-1 px-3 bg-[#141c2e] border border-[#23304c] rounded-xl flex items-center justify-between min-w-0">
+              <div class="min-w-0">
+                <div class="text-[9px] text-slate-400 font-medium">원화 환산</div>
+                <div id="quick-calc-result" class="text-sm font-black text-emerald-400 font-mono truncate">≈ ₩0</div>
+              </div>
+              <button type="button" onclick="quickApplyCalcToExpense()" class="text-[11px] text-amber-400 hover:text-amber-300 font-black px-2 py-1 rounded-lg bg-amber-500/15 hover:bg-amber-500/25 border border-amber-500/30 transition flex items-center gap-1 cursor-pointer shrink-0 ml-1" title="이 금액으로 지출 등록 바로가기">
+                <i class="fa-solid fa-plus text-[9px]"></i><span>기록</span>
+              </button>
+            </div>
+          </div>
+          <div class="flex items-center justify-between gap-1 flex-wrap pt-0.5 text-[11px]">
+            <div class="flex items-center gap-1.5 flex-wrap">
+              <span class="text-[10px] text-slate-400">빠른 입력:</span>
+              <button type="button" onclick="setQuickCalcAmount(10)" class="px-2 py-0.5 rounded-lg bg-[#141c2e] hover:bg-[#1a263e] border border-[#23304c] text-slate-300 hover:text-white text-[10px] font-bold cursor-pointer">10</button>
+              <button type="button" onclick="setQuickCalcAmount(50)" class="px-2 py-0.5 rounded-lg bg-[#141c2e] hover:bg-[#1a263e] border border-[#23304c] text-slate-300 hover:text-white text-[10px] font-bold cursor-pointer">50</button>
+              <button type="button" onclick="setQuickCalcAmount(100)" class="px-2 py-0.5 rounded-lg bg-[#141c2e] hover:bg-[#1a263e] border border-[#23304c] text-slate-300 hover:text-white text-[10px] font-bold cursor-pointer">100</button>
+              <button type="button" onclick="setQuickCalcAmount(500)" class="px-2 py-0.5 rounded-lg bg-[#141c2e] hover:bg-[#1a263e] border border-[#23304c] text-slate-300 hover:text-white text-[10px] font-bold cursor-pointer">500</button>
+              <button type="button" onclick="setQuickCalcAmount(1000)" class="px-2 py-0.5 rounded-lg bg-[#141c2e] hover:bg-[#1a263e] border border-[#23304c] text-slate-300 hover:text-white text-[10px] font-bold cursor-pointer">1,000</button>
+            </div>
+            <button type="button" onclick="openExchangeModalForCurr(document.getElementById('quick-calc-curr')?.value)" class="text-[10px] text-amber-400 hover:text-amber-300 font-bold flex items-center gap-1 cursor-pointer">
+              <i class="fa-solid fa-arrow-right-arrow-left text-[9px]"></i><span>이 통화 환전하기</span>
+            </button>
           </div>
         </div>
 
@@ -2890,6 +2931,25 @@
           <i class="fa-solid fa-plus text-[11px]"></i>
           <span>새 여행 등록하기</span>
         </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================== -->
+  <!-- 현지어 기사님 카드 모달 (MODAL-TAXI-CARD) -->
+  <!-- ========================================== -->
+  <div id="modal-taxi-card" class="sheet-container sheet-closed">
+    <div class="sheet-scrim" onclick="closeModal('modal-taxi-card')"></div>
+    <div class="sheet-box sheet-scroll-layout max-w-lg">
+      <div class="sheet-sticky-header flex items-center justify-between">
+        <h3 class="text-base font-black text-white flex items-center gap-2">
+          <i class="fa-solid fa-taxi text-amber-400"></i>
+          <span>현지어 기사님 카드</span>
+        </h3>
+        <button onclick="closeModal('modal-taxi-card')" class="tap-target text-slate-400 hover:text-white text-base" aria-label="기사님 카드 닫기">✕</button>
+      </div>
+      <div class="sheet-scroll-body space-y-4" id="taxi-card-content">
+        <!-- 동적 렌더링 영역: renderTaxiCardContent() -->
       </div>
     </div>
   </div>
@@ -12121,6 +12181,13 @@
         });
 
         const isNegative = w.balance < 0;
+        const rate = getCurrencyRate(curr);
+        const rateText = (curr !== 'KRW')
+          ? `<span class="text-[9px] text-slate-400 font-mono">1 ${curr}=₩${rate.toLocaleString()}</span>`
+          : '';
+        const exchBtn = (curr !== 'KRW')
+          ? `<button type="button" onclick="openExchangeModalForCurr('${curr}')" class="text-[9px] text-amber-400 hover:text-amber-300 font-bold px-1.5 py-0.5 rounded bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/20 cursor-pointer transition flex items-center gap-0.5" title="${curr} 환전하기"><i class="fa-solid fa-arrow-right-arrow-left text-[8px]"></i> 환전</button>`
+          : '';
 
         return `
           <div class="wallet-card p-2.5 rounded-xl bg-[#080b12] border ${isNegative ? 'border-rose-500/40' : 'border-[#1e263c]'} flex flex-col justify-between transition">
@@ -12129,7 +12196,10 @@
                 <span>${w.flag}</span>
                 <span>${w.curr}</span>
               </span>
-              <span class="text-[9px] text-slate-400 truncate">${w.name.split(' ')[0]}</span>
+              <div class="flex items-center gap-1 shrink-0">
+                <span class="text-[9px] text-slate-400 truncate">${w.name.split(' ')[0]}</span>
+                ${exchBtn}
+              </div>
             </div>
             <div class="my-1">
               <div class="text-sm font-black ${isNegative ? 'text-rose-400' : 'text-white'} tracking-tight truncate">
@@ -12141,14 +12211,116 @@
                 ${curr === 'KRW' ? '원화 자금' : `≈ ₩${(w.krwValue || 0).toLocaleString()}`}
               </span>
               <div class="flex items-center gap-1.5 shrink-0 text-[9px]">
-                ${w.income > 0 ? `<span class="text-emerald-400 font-bold">수입 +${w.symbol}${(w.income||0).toLocaleString()}</span>` : ''}
-                ${w.spent > 0 ? `<span class="text-slate-500">지출 ${w.symbol}${(w.spent||0).toLocaleString()}</span>` : ''}
+                ${rateText}
+                ${w.income > 0 ? `<span class="text-emerald-400 font-bold">+${w.symbol}${(w.income||0).toLocaleString()}</span>` : ''}
               </div>
             </div>
           </div>
         `;
       }).join('');
+
+      initQuickCurrencyCalc(trip, walletData);
     }
+
+    function updateQuickCurrencyCalc(syncBadgeOnly = false) {
+      const input = document.getElementById('quick-calc-input');
+      const currSelect = document.getElementById('quick-calc-curr');
+      const resultEl = document.getElementById('quick-calc-result');
+      const badgeEl = document.getElementById('quick-calc-rate-badge');
+      if (!currSelect) return;
+
+      const curr = currSelect.value || 'USD';
+      const rate = typeof getCurrencyRate === 'function' ? getCurrencyRate(curr) : 1;
+      const isDec = (rate < 10);
+      const formattedRate = rate.toLocaleString(undefined, {
+        minimumFractionDigits: isDec ? 2 : (curr === 'ARS' ? 2 : 0),
+        maximumFractionDigits: 2
+      });
+
+      if (badgeEl) {
+        const isMep = (curr === 'ARS' && State?.isMepEnabled);
+        badgeEl.innerText = `1 ${curr} = ₩${formattedRate}${isMep ? ' (MEP)' : ''}`;
+      }
+
+      const amt = parseFloat(input?.value) || 0;
+      const krw = Math.round(amt * rate);
+      if (resultEl) {
+        resultEl.innerText = `≈ ₩${krw.toLocaleString()}`;
+      }
+    }
+    window.updateQuickCurrencyCalc = updateQuickCurrencyCalc;
+
+    function setQuickCalcAmount(amt) {
+      const input = document.getElementById('quick-calc-input');
+      if (input) {
+        input.value = amt;
+        updateQuickCurrencyCalc();
+      }
+    }
+    window.setQuickCalcAmount = setQuickCalcAmount;
+
+    function initQuickCurrencyCalc(trip, walletData) {
+      const currSelect = document.getElementById('quick-calc-curr');
+      if (!currSelect || !walletData) return;
+      const activeCurrs = walletData.activeCurrencies || ['KRW'];
+      const foreignCurrs = activeCurrs.filter(c => c !== 'KRW');
+      const targetCurrs = foreignCurrs.length > 0 ? foreignCurrs : activeCurrs;
+
+      const currentVal = currSelect.value;
+      currSelect.innerHTML = targetCurrs.map(c => {
+        const info = window.CURRENCY_INFO?.[c] || {};
+        return `<option value="${c}" ${c === currentVal ? 'selected' : ''}>${info.flag || ''} ${c}</option>`;
+      }).join('');
+
+      if (!targetCurrs.includes(currSelect.value)) {
+        currSelect.value = targetCurrs[0];
+      }
+      updateQuickCurrencyCalc();
+    }
+    window.initQuickCurrencyCalc = initQuickCurrencyCalc;
+
+    function openExchangeModalForCurr(curr) {
+      if (typeof openExchangeModal === 'function') {
+        openExchangeModal();
+      }
+      const toCurrSelect = document.getElementById('exch-form-to-curr');
+      const fromCurrSelect = document.getElementById('exch-form-from-curr');
+      if (curr && curr !== 'KRW') {
+        if (toCurrSelect) toCurrSelect.value = curr;
+        if (fromCurrSelect) fromCurrSelect.value = 'KRW';
+      } else if (curr === 'KRW') {
+        const trip = getActiveTrip();
+        const foreign = (trip?.activeCurrencies || []).find(c => c !== 'KRW');
+        if (foreign && toCurrSelect) toCurrSelect.value = foreign;
+      }
+      if (typeof updateExchangeRateAndBanner === 'function') {
+        updateExchangeRateAndBanner();
+      }
+    }
+    window.openExchangeModalForCurr = openExchangeModalForCurr;
+
+    function quickApplyCalcToExpense() {
+      const input = document.getElementById('quick-calc-input');
+      const currSelect = document.getElementById('quick-calc-curr');
+      const amt = Number(input?.value) || 0;
+      const curr = currSelect?.value || 'KRW';
+      if (amt <= 0) {
+        if (typeof showToast === 'function') showToast('계산기에 금액을 먼저 입력해 주세요.');
+        return;
+      }
+      if (typeof openAddExpenseModal === 'function') {
+        openAddExpenseModal();
+        const amtInput = document.getElementById('exp-form-amount');
+        if (amtInput) amtInput.value = amt;
+        if (typeof renderExpenseCurrencyChips === 'function') {
+          renderExpenseCurrencyChips(curr);
+        }
+        if (typeof updateExpenseInlineKrwPreview === 'function') {
+          updateExpenseInlineKrwPreview();
+        }
+      }
+    }
+    window.quickApplyCalcToExpense = quickApplyCalcToExpense;
 
     function switchExpenseViewTab(subTab) {
       State.activeExpenseSubTab = subTab;
