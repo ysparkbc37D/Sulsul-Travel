@@ -1417,6 +1417,10 @@ button.smart-hud-card:hover .hud-link-arrow { color:var(--companion-warm); trans
 #activity-record-feedback {font-size:13px;line-height:1.7;margin-top:16px;color:var(--ink2);overflow-wrap:anywhere;}
 .activity-sheet-footer {border-top:1px solid var(--line);padding-bottom:max(16px,env(safe-area-inset-bottom));}
 .activity-sheet-footer button {flex:1;min-height:48px;}
+.spot-realignment-list {display:grid;gap:10px;padding:0;margin:12px 0;list-style:none;}
+.spot-realignment-list li {display:flex;justify-content:space-between;align-items:flex-start;gap:12px;padding:12px;border:1px solid var(--line);border-radius:14px;background:var(--surface2);}
+.spot-realignment-list strong {min-width:0;overflow-wrap:anywhere;font-size:14px;}
+.spot-realignment-list span {flex-shrink:0;color:var(--ink2);font-variant-numeric:tabular-nums;font-size:13px;}
 #activity-record-viewer:not([hidden]) {position:absolute;inset:0;z-index:2;background:var(--surface);display:flex;flex-direction:column;align-items:center;gap:12px;padding:20px;}
 #activity-record-full-photo {min-height:0;max-height:100%;max-width:100%;flex:1;object-fit:contain;}
 #activity-record-original-wrap {font-size:13px;margin:0 0 20px;}

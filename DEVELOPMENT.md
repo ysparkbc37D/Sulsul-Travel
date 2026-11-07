@@ -1,6 +1,6 @@
 # 술술트래블 개발 가이드
 
-이 문서는 현재 앱 구조와 검증 방식을 설명합니다. 이전 구조를 기술한 문서는 상단에 역사 자료 또는 목표 설계라고 표시합니다. 현재 앱 버전은 `2.0.0`입니다.
+이 문서는 현재 앱 구조와 검증 방식을 설명합니다. 이전 구조를 기술한 문서는 상단에 역사 자료 또는 목표 설계라고 표시합니다. 현재 소스 버전은 `2.0.1`입니다. 원격 저장소와 배포 반영 여부는 별도로 확인합니다.
 
 ## 실행 구조
 
@@ -20,6 +20,8 @@
 | `js/domain/trip-adapter.js` | 시드/구버전/공유/AI 입력 계약, 도시명, 현지 날짜, 여행 단계 |
 | `js/domain/travel-story.js` | 날짜별 일정/실제 기록/원문·승인문과 출처 모델, 공통 비용 집계 |
 | `js/domain/live-itinerary.js` | 안정 ID 수동 명령·기준안·최근 이력·Undo·공통 시간 해석 |
+| `js/domain/spot-realignment.js` | 보호 일정·소요시간을 고려한 재정렬 미리보기 계산 |
+| `js/presentation/spot-realignment-ui.js` | 변경 미리보기, 충돌 확인, 단일 저장 명령 |
 | `js/presentation/live-itinerary-bridge.js` | 기존 폼과 저장 경계 연결·영향 범위 적용 |
 | `js/presentation/live-itinerary-ui.js` | 삽입·순서·날짜 이동·보류·복구·변경 이력 UI |
 | `js/domain/schedule-change.js` | 취소·보호 일정 판정, 시간 범위와 자정 지연 미리보기 |
@@ -65,7 +67,7 @@
 
 ## 운영 배포
 
-운영 사이트는 [sulsul-travel.vercel.app](https://sulsul-travel.vercel.app/)이며, GitHub 저장소의 `main` 브랜치와 연결된 Vercel 배포를 사용합니다. GitHub Pages는 현재 설정되어 있지 않습니다. 2026-09-27에 커밋 `1ee2b67`이 `main`에 반영된 뒤 운영 사이트에서 앱 버전 `v1.8.6`을 확인했습니다.
+운영 사이트는 [sulsul-travel.vercel.app](https://sulsul-travel.vercel.app/)이며, GitHub 저장소의 `main` 브랜치와 연결된 Vercel 배포를 사용합니다. GitHub Pages는 현재 설정되어 있지 않습니다. 현재 작업 버전 `v2.0.1`의 push와 운영 반영 여부는 이 문서 갱신만으로 확인되지 않습니다.
 
 ## 검증
 
@@ -101,7 +103,7 @@ node .\tests\backup-restore.browser.cjs
 ## 저장·공유 변경 원칙
 
 1. 원본 객체를 바로 수정하기 전에 복사본을 만듭니다.
-2. `TripRepository.saveAll` 또는 저장소 전용 계약이 성공한 뒤 전역 상태와 화면을 갱신합니다.
+2. 개별 일정 변경은 `commitTripCommand`→`TripRepository.commit` revision 경계를 사용하고, 전체 교체·가져오기만 `saveAll` 계약을 사용합니다. 저장 성공 뒤 전역 상태와 화면을 갱신합니다.
 3. 저장 실패 시 초안·확인창·원본 데이터를 유지하고 재시도 가능한 안내를 표시합니다.
 4. IDB 보조 데이터와 사진/일기 연결도 삭제·가져오기·여행 ID 변경 때 함께 점검합니다.
 5. 공유 링크·파일은 고정된 사본입니다. 개인 일기와 금액은 명시적 선택 없이 공유하지 않습니다.

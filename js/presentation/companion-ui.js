@@ -220,10 +220,10 @@ function companionTimeline(items,dayIndex,options={}) {
         <button type="button" onclick="toggleSpotReorderMode()" class="px-2 py-1 rounded-lg text-xs font-bold transition ${window.__spotReorderModeActive ? 'bg-amber-500 text-slate-950 shadow' : 'bg-[#1e293b] text-slate-300 hover:text-white border border-[#334155]'}">
           <i class="fa-solid fa-up-down-left-right mr-1"></i> ${window.__spotReorderModeActive ? '순서 편집 완료' : '순서 편집'}
         </button>
-        <button type="button" onclick="realignSpotSchedule(${dayIndex}, 30)" class="px-2 py-1 rounded-lg text-xs font-bold bg-[#1e293b] text-slate-300 hover:text-white border border-[#334155] transition" title="첫 스팟 시간 기준 30분 간격 순차 자동 정렬">
+        <button type="button" onclick="realignSpotSchedule(${dayIndex}, 30)" class="px-2 py-1 rounded-lg text-xs font-bold bg-[#1e293b] text-slate-300 hover:text-white border border-[#334155] transition" title="등록된 소요시간과 완료·고정 일정을 반영한 30분 기준 변경 미리보기">
           30분 정렬
         </button>
-        <button type="button" onclick="realignSpotSchedule(${dayIndex}, 60)" class="px-2 py-1 rounded-lg text-xs font-bold bg-[#1e293b] text-slate-300 hover:text-white border border-[#334155] transition" title="첫 스팟 시간 기준 1시간 간격 순차 자동 정렬">
+        <button type="button" onclick="realignSpotSchedule(${dayIndex}, 60)" class="px-2 py-1 rounded-lg text-xs font-bold bg-[#1e293b] text-slate-300 hover:text-white border border-[#334155] transition" title="등록된 소요시간과 완료·고정 일정을 반영한 1시간 기준 변경 미리보기">
           1시간 정렬
         </button>
       </div>
@@ -798,100 +798,6 @@ if (typeof window !== 'undefined' && !window.__companionHudTimer) {
     }
   }, 60000);
 }
-
-/* ==========================================================================
-   스팟 순서 실시간 스왑 & 순서 조작 (Priority 4-1)
-   ========================================================================== */
-window.__spotReorderModeActive = false;
-
-function toggleSpotReorderMode() {
-  window.__spotReorderModeActive = !window.__spotReorderModeActive;
-  const trip = getActiveTrip();
-  if (trip && typeof renderPlanDetail === 'function' && State?.activeTab === 'plan') {
-    renderPlanDetail(State?.activePlanDayIndex ?? 0);
-  }
-  if (typeof renderCompanionToday === 'function' && State?.activeTab === 'today') {
-    renderCompanionToday();
-  }
-  if (typeof showToast === 'function') {
-    showToast(window.__spotReorderModeActive ? '스팟 순서 편집 모드가 켜졌습니다.' : '순서 편집 모드가 종료되었습니다.');
-  }
-}
-window.toggleSpotReorderMode = toggleSpotReorderMode;
-
-function moveCompanionSpotOrder(dayIndex, spotIndex, direction, evt) {
-  if (evt && typeof evt.stopPropagation === 'function') evt.stopPropagation();
-  const trip = getActiveTrip();
-  const day = trip?.days?.[dayIndex];
-  if (!day?.spots) return;
-  const targetIndex = spotIndex + direction;
-  if (targetIndex < 0 || targetIndex >= day.spots.length) return;
-
-  const temp = day.spots[spotIndex];
-  day.spots[spotIndex] = day.spots[targetIndex];
-  day.spots[targetIndex] = temp;
-
-  if (typeof saveTrips === 'function') saveTrips();
-  if (window.TripRepository && typeof TripRepository.saveAll === 'function' && State?.trips) {
-    TripRepository.saveAll(State.trips);
-  }
-
-  if (typeof showToast === 'function') {
-    showToast(`일정 순서가 ${direction < 0 ? '위' : '아래'}로 변경되었습니다.`);
-  }
-
-  if (typeof renderPlanDetail === 'function' && State?.activeTab === 'plan') {
-    renderPlanDetail(dayIndex);
-  }
-  if (typeof renderCompanionToday === 'function' && State?.activeTab === 'today') {
-    renderCompanionToday();
-  }
-}
-window.moveCompanionSpotOrder = moveCompanionSpotOrder;
-
-function realignSpotSchedule(dayIndex, intervalMinutes = 30) {
-  const trip = getActiveTrip();
-  const day = trip?.days?.[dayIndex];
-  if (!day?.spots || !day.spots.length) return;
-
-  if (!confirm(`이 날의 ${day.spots.length}개 일정을 ${intervalMinutes}분 간격으로 순차적 자동 정렬할까요?`)) return;
-
-  let baseHour = 10;
-  let baseMin = 0;
-  const firstTime = day.spots[0]?.time;
-  if (firstTime) {
-    const m = firstTime.match(/^(\d{1,2}):(\d{2})/);
-    if (m) {
-      baseHour = parseInt(m[1], 10);
-      baseMin = parseInt(m[2], 10);
-    }
-  }
-
-  let totalMinutes = baseHour * 60 + baseMin;
-  day.spots.forEach((spot) => {
-    const h = Math.floor(totalMinutes / 60) % 24;
-    const m = totalMinutes % 60;
-    spot.time = `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}`;
-    totalMinutes += intervalMinutes;
-  });
-
-  if (typeof saveTrips === 'function') saveTrips();
-  if (window.TripRepository && typeof TripRepository.saveAll === 'function' && State?.trips) {
-    TripRepository.saveAll(State.trips);
-  }
-
-  if (typeof showToast === 'function') {
-    showToast(`일정이 ${intervalMinutes}분 간격으로 재정렬되었습니다.`);
-  }
-
-  if (typeof renderPlanDetail === 'function' && State?.activeTab === 'plan') {
-    renderPlanDetail(dayIndex);
-  }
-  if (typeof renderCompanionToday === 'function' && State?.activeTab === 'today') {
-    renderCompanionToday();
-  }
-}
-window.realignSpotSchedule = realignSpotSchedule;
 
 /* ==========================================================================
    아이디어 1: 긴급 SOS & 병원·약국 소통 모달 (Priority 4-2)
