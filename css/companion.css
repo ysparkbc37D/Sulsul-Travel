@@ -1,35 +1,51 @@
 /* Sulsul Archival Journal 3-Theme Design System Tokens (v1.6.7) */
+/* Sulsul Archival Journal 3-Theme Design System Tokens (v2.0.2 / ui-ux-pro-max standard) */
 /* 1. 모던 (Modern Vintage Archival) - 기본 테마 */
 :root, :root[data-theme="modern"], :root[data-theme="light"] {
   --bg:#F5EFEB; --surface:#FFFDF9; --surface2:#EDE5DA; --surface3:#E3DACB;
+  --surface-base:#F5EFEB; --surface-card:#FFFDF9; --surface-elevated:#EDE5DA; --surface-floating:rgba(255,253,249,.96);
   --ink:#2B2118; --ink2:#59493B; --ink3:#8A7868; --line:#E2D7C8; --line2:#D0C3B0;
-  --accent:#2C3A2E; --accent2:#C8A27A; --accent-bg:#EAE4D7; --accent-line:#C8A27A;
+  --border-subtle:rgba(43,33,24,.08); --border-default:var(--line); --border-prominent:var(--line2);
+  --accent:#2C3A2E; --accent2:#C8A27A; --accent-bg:#EAE4D7; --accent-line:#C8A27A; --accent-glow:rgba(200,162,122,.35);
   --card-bg:var(--surface); --card-border:var(--line); --header-bg:rgba(245,239,235,.96);
   --header-border:var(--line); --tab-active-bg:#2C3A2E; --tab-active-text:#FFFDF9;
   --input-bg:var(--surface); --input-border:var(--line); --companion-warm:#C8A27A;
   --companion-next:#EDE5DA;
+  --radius-sm:8px; --radius-md:12px; --radius-lg:16px; --radius-xl:20px;
+  --shadow-bento:0 4px 16px -2px rgba(43,33,24,.06), 0 1px 3px rgba(43,33,24,.04);
+  --shadow-floating:0 12px 32px -4px rgba(43,33,24,.12), 0 4px 12px rgba(43,33,24,.06);
   --serif:'Cormorant Garamond', 'Playfair Display', 'Noto Serif KR', Nanum Myeongjo, Georgia, serif;
 }
 /* 2. 라이트그레이 (Light Gray / Clean Minimalist) */
 :root[data-theme="lightgray"] {
   --bg:#F3F4F6; --surface:#FFFFFF; --surface2:#E5E7EB; --surface3:#D1D5DB;
+  --surface-base:#F3F4F6; --surface-card:#FFFFFF; --surface-elevated:#E5E7EB; --surface-floating:rgba(255,255,255,.96);
   --ink:#111827; --ink2:#4B5563; --ink3:#6B7280; --line:#E5E7EB; --line2:#D1D5DB;
-  --accent:#1E293B; --accent2:#3B82F6; --accent-bg:#E0E7FF; --accent-line:#93C5FD;
+  --border-subtle:rgba(17,24,39,.06); --border-default:var(--line); --border-prominent:var(--line2);
+  --accent:#1E293B; --accent2:#3B82F6; --accent-bg:#E0E7FF; --accent-line:#93C5FD; --accent-glow:rgba(59,130,246,.25);
   --card-bg:var(--surface); --card-border:var(--line); --header-bg:rgba(243,244,246,.96);
   --header-border:var(--line); --tab-active-bg:#1E293B; --tab-active-text:#FFFFFF;
   --input-bg:var(--surface); --input-border:var(--line); --companion-warm:#3B82F6;
   --companion-next:#E5E7EB;
+  --radius-sm:8px; --radius-md:12px; --radius-lg:16px; --radius-xl:20px;
+  --shadow-bento:0 4px 16px -2px rgba(0,0,0,.05), 0 1px 3px rgba(0,0,0,.03);
+  --shadow-floating:0 12px 32px -4px rgba(0,0,0,.1), 0 4px 12px rgba(0,0,0,.05);
   --serif:'Pretendard', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 }
 /* 3. 딥 블랙 (Deep Black / Obsidian Dark) */
 :root[data-theme="deepblack"], :root[data-theme="dark"] {
   --bg:#080B12; --surface:#16181D; --surface2:#22252C; --surface3:#2C3039;
+  --surface-base:#080B12; --surface-card:#16181D; --surface-elevated:#22252C; --surface-floating:rgba(18,21,29,.96);
   --ink:#EDEDED; --ink2:#94A3B8; --ink3:#64748B; --line:rgba(255,255,255,.08); --line2:rgba(255,255,255,.16);
-  --accent:#D4AF37; --accent2:#7E9A86; --accent-bg:rgba(212,175,55,.12); --accent-line:rgba(212,175,55,.3);
+  --border-subtle:rgba(255,255,255,.08); --border-default:rgba(255,255,255,.12); --border-prominent:rgba(212,175,55,.35);
+  --accent:#D4AF37; --accent2:#7E9A86; --accent-bg:rgba(212,175,55,.12); --accent-line:rgba(212,175,55,.3); --accent-glow:rgba(212,175,55,.3);
   --card-bg:var(--surface); --card-border:var(--line); --header-bg:rgba(14,17,23,.96);
   --header-border:var(--line); --tab-active-bg:#D4AF37; --tab-active-text:#080B12;
   --input-bg:var(--surface); --input-border:rgba(255,255,255,.12); --companion-warm:#D4AF37;
   --companion-next:#22252C;
+  --radius-sm:8px; --radius-md:12px; --radius-lg:16px; --radius-xl:20px;
+  --shadow-bento:0 4px 20px -2px rgba(0,0,0,.5), 0 0 0 1px rgba(255,255,255,.06);
+  --shadow-floating:0 14px 36px -4px rgba(0,0,0,.7), 0 0 0 1px rgba(255,255,255,.12);
   --serif:'Noto Serif KR', 'Cormorant Garamond', 'Playfair Display', Nanum Myeongjo, Georgia, serif;
 }
 :root[data-theme] body[class] { background:var(--bg) !important; color:var(--ink) !important; }
@@ -1541,6 +1557,276 @@ button.smart-hud-card:hover .hud-link-arrow { color:var(--companion-warm); trans
 .magazine-photo-tile img { width:100%; height:100%; object-fit:cover; }
 .magazine-epilogue-card { text-align:center; padding:24px 16px; background:#0b0f19; border:2px dashed #f59e0b55; border-radius:20px; margin-top:24px; }
 .magazine-stamp { display:inline-block; border:3px solid #f59e0b; color:#f59e0b; font-size:13px; font-weight:900; letter-spacing:0.1em; text-transform:uppercase; padding:6px 16px; border-radius:8px; transform:rotate(-3deg); margin-top:12px; }
+
+/* ==========================================================================
+   UI/UX PRO MAX DESIGN SYSTEM EXTENSION (v2.0.2)
+   1. Tabular Nums & Typographic Jitter Prevention
+   2. Micro-Interactions & Tactile Press (active:scale-97)
+   3. Ambient Breathing Glow on Active Hero/Spot
+   4. Bento Grid Layouts for Today Hub & Action Deck
+   5. Emotional Empty States & Onboarding CTAs
+   ========================================================================== */
+
+/* 1. Tabular Nums & Typographic Jitter Prevention */
+.tabular-nums,
+.hud-card-val,
+.hud-progress-stat,
+.companion-countdown-badge,
+.pacing-progress-bar,
+.pacing-badge,
+.companion-spot-time time,
+.fx-quick-input,
+.fx-quick-result,
+.reorder-btn,
+.stat-number,
+.font-mono,
+.bento-stat-num,
+.hud-pacing-mini,
+.bento-hero-time {
+  font-variant-numeric: tabular-nums lining-nums !important;
+  font-feature-settings: "tnum" 1, "lnum" 1 !important;
+}
+
+/* Text Wrap & Korean Orphan Word Protection */
+h1, h2, h3, h4, h5, h6,
+.companion-eyebrow,
+.companion-section-title,
+.companion-intro,
+.companion-next,
+.bento-tile,
+.companion-spot h4,
+.companion-empty-title,
+.companion-empty-desc,
+.today-smart-hud {
+  word-break: keep-all;
+  overflow-wrap: break-word;
+}
+
+/* 2. Micro-Interactions & Tactile Scaling */
+.companion-button,
+.sulsul-capsule-btn,
+.smart-hud-card,
+.reorder-btn,
+.companion-spot-actions button,
+.companion-next-actions button,
+.companion-change-reason button,
+.bento-action-pill,
+.empty-actions button {
+  transition: transform 0.12s cubic-bezier(0.2, 0, 0, 1), box-shadow 0.15s ease, background-color 0.15s ease, border-color 0.15s ease;
+  will-change: transform;
+}
+.companion-button:active,
+.sulsul-capsule-btn:active,
+.smart-hud-card:active,
+.reorder-btn:active,
+.companion-spot-actions button:active,
+.companion-next-actions button:active,
+.companion-change-reason button:active,
+.bento-action-pill:active,
+.empty-actions button:active {
+  transform: scale(0.97);
+}
+
+/* 3. Ambient Breathing Glow for Active Hero/Spot */
+@keyframes ambient-breathing {
+  0%, 100% {
+    box-shadow: 0 0 0 1px var(--accent-line), 0 4px 16px -2px var(--accent-glow);
+  }
+  50% {
+    box-shadow: 0 0 0 2px var(--accent), 0 8px 26px 2px var(--accent-glow);
+  }
+}
+.companion-next.is-active,
+.companion-spot.is-active-spot,
+.bento-hero.is-active {
+  animation: ambient-breathing 2.4s ease-in-out infinite;
+  border-color: var(--accent) !important;
+}
+
+/* 4. Bento Grid Layouts for Today Hub */
+.today-bento-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+  width: 100%;
+  box-sizing: border-box;
+  margin: 10px 0 16px;
+}
+@media (min-width: 640px) {
+  .today-bento-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .bento-hero {
+    grid-column: span 2;
+  }
+}
+
+.bento-tile {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg, 16px);
+  padding: 16px;
+  box-shadow: var(--shadow-bento);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+  min-width: 0;
+  box-sizing: border-box;
+  position: relative;
+  overflow: hidden;
+}
+.bento-tile:hover {
+  border-color: var(--border-prominent);
+}
+
+/* Bento Quick Action Pills Deck */
+.today-bento-actions-deck {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  overflow-x: auto;
+  padding: 4px 0 10px;
+  margin-bottom: 8px;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+}
+.today-bento-actions-deck::-webkit-scrollbar { display: none; }
+
+.bento-action-pill {
+  height: 40px;
+  min-width: 40px;
+  padding: 0 13px;
+  border-radius: 9999px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  color: var(--ink);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 750;
+  box-shadow: var(--shadow-bento);
+  cursor: pointer;
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+.bento-action-pill:hover {
+  border-color: var(--accent);
+  background: var(--surface2);
+  color: var(--accent);
+}
+.bento-action-pill.pill-sos {
+  border-color: rgba(244,63,94,.4);
+  background: rgba(244,63,94,.08);
+  color: #e11d48;
+}
+:root[data-theme="deepblack"] .bento-action-pill.pill-sos,
+:root[data-theme="dark"] .bento-action-pill.pill-sos {
+  color: #fb7185;
+}
+.bento-action-pill.pill-capsule {
+  border-color: rgba(245,158,11,.4);
+  background: rgba(245,158,11,.08);
+  color: #d97706;
+}
+:root[data-theme="deepblack"] .bento-action-pill.pill-capsule,
+:root[data-theme="dark"] .bento-action-pill.pill-capsule {
+  color: #fbbf24;
+}
+
+/* Today Smart HUD Bento Polish */
+.today-smart-hud {
+  box-shadow: var(--shadow-bento);
+  border-radius: var(--radius-lg, 16px);
+  border-color: var(--line);
+}
+.smart-hud-card {
+  box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+  border-radius: var(--radius-md, 12px);
+  border-color: var(--line);
+  background: var(--surface2);
+}
+.hud-pacing-mini {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 5px;
+  font-size: 10px;
+  font-weight: 700;
+}
+.pacing-badge-mini {
+  padding: 1px 6px;
+  border-radius: 9999px;
+  font-size: 9px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.pacing-badge-mini.status-safe { background: rgba(16,185,129,.18); color: #10b981; border: 1px solid rgba(16,185,129,.35); }
+.pacing-badge-mini.status-good { background: rgba(59,130,246,.18); color: #3b82f6; border: 1px solid rgba(59,130,246,.35); }
+.pacing-badge-mini.status-warning { background: rgba(245,158,11,.18); color: #f59e0b; border: 1px solid rgba(245,158,11,.35); }
+.pacing-badge-mini.status-danger { background: rgba(239,68,68,.18); color: #ef4444; border: 1px solid rgba(239,68,68,.35); }
+.pacing-rec-val { color: var(--ink3); font-variant-numeric: tabular-nums; }
+
+/* 5. Emotional Empty States & Storytelling CTAs */
+.companion-bento-empty {
+  padding: 36px 20px;
+  border: 1px dashed var(--line2);
+  border-radius: var(--radius-lg, 16px);
+  background: var(--surface);
+  text-align: center;
+  box-sizing: border-box;
+  width: 100%;
+  margin: 14px 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--shadow-bento);
+}
+.companion-bento-empty .empty-icon-wrap {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: var(--surface2);
+  color: var(--companion-warm);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  margin-bottom: 14px;
+  border: 1px solid var(--line);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+}
+.companion-bento-empty.is-celebration .empty-icon-wrap {
+  background: rgba(16, 185, 129, 0.15);
+  color: #10b981;
+  border-color: rgba(16, 185, 129, 0.3);
+}
+.companion-empty-title {
+  font-size: 16px;
+  font-weight: 800;
+  color: var(--ink);
+  margin: 0 0 6px;
+  letter-spacing: -0.02em;
+}
+.companion-empty-desc {
+  font-size: 13px;
+  color: var(--ink2);
+  line-height: 1.6;
+  max-width: 320px;
+  margin: 0 auto 18px;
+}
+.companion-bento-empty .empty-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+  width: 100%;
+}
+.companion-bento-empty .empty-actions button {
+  min-height: 42px;
+  font-size: 12px;
+}
 
 /* In-depth Print Optimization for Story Magazine */
 @media print {

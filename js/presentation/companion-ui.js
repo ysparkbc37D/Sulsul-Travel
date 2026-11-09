@@ -159,6 +159,8 @@ function companionSpot(spot, dayIndex, spotIndex, {today = false} = {}) {
   const totalDaySpots = day?.spots?.length || 1;
   const isFirstSpot = spotIndex === 0;
   const isLastSpot = spotIndex >= (totalDaySpots - 1);
+  const nextSpotIndex = (day?.spots || []).findIndex(s => !s.completed && !SulsulTravel.ScheduleChange.retired(s));
+  const isCurrentNextSpot = today && !spot.completed && (nextSpotIndex === spotIndex);
   const reorderCtrls = window.__spotReorderModeActive ? `
     <div class="companion-spot-reorder-ctrls no-print">
       <button type="button" class="reorder-btn" onclick="moveCompanionSpotOrder(${dayIndex},${spotIndex},-1,event)" ${isFirstSpot ? 'disabled' : ''} aria-label="일정 위로 이동" title="위로"><i class="fa-solid fa-arrow-up"></i></button>
@@ -166,7 +168,7 @@ function companionSpot(spot, dayIndex, spotIndex, {today = false} = {}) {
     </div>
   ` : '';
 
-  return `<article data-spot-id="${escapeHtml(spot.id)}" class="companion-spot ${kindClass} ${spot.completed ? 'is-completed' : ''}">
+  return `<article data-spot-id="${escapeHtml(spot.id)}" class="companion-spot ${kindClass} ${spot.completed ? 'is-completed' : ''} ${isCurrentNextSpot ? 'is-active-spot' : ''}">
     <div class="companion-spot-header">
       <div class="companion-spot-time"><time>${escapeHtml(spot.time || '시간 미정')}</time>${kindBadge}${status ? `<span class="companion-status">${status}</span>` : ''}${reorderCtrls}</div>
       <details class="companion-spot-more">
@@ -253,7 +255,7 @@ function renderCompanionDetail() {
     ${renderLiveToolbar(selected)}
     ${block.lodging || block.notes || block.priorities.length ? `<details class="companion-context"><summary>숙소·꼭 하고 싶은 일·메모 <i class="fa-solid fa-chevron-down" aria-hidden="true"></i></summary><div>${block.lodging ? `<p><b>숙소</b> ${escapeHtml(block.lodging)}</p>` : ''}${block.priorities.length ? `<p>${block.priorities.map(escapeHtml).join(' · ')}</p>` : ''}${block.notes ? `<p>${escapeHtml(block.notes)}</p>` : ''}</div></details>` : ''}
     <div class="companion-day-heading"><div><p class="companion-eyebrow">DAY ${day.dayNum || selected + 1} · ${escapeHtml(companionDate(day.date))}</p><h3>${escapeHtml(day.title || day.city || block.place)}</h3><p class="companion-muted">${pending.length}개 예정 · ${completed.length}개 완료</p></div><button class="companion-button" onclick="openScheduleTuningModal(${selected})">이 날 조정</button></div>
-    <div class="companion-timeline">${companionTimeline(pending,selected) || `<div class="companion-empty">${completed.length ? '이 날의 계획을 모두 마쳤어요. 기억을 남겨 볼까요?' : '아직 일정이 없어요. 아래에서 일정을 추가해 보세요.'}</div>`}</div>
+    <div class="companion-timeline">${companionTimeline(pending,selected) || `<div class="companion-bento-empty"><div class="empty-icon-wrap"><i class="fa-regular fa-compass"></i></div><h4 class="companion-empty-title">${completed.length ? '이 날의 계획을 모두 마쳤어요 🎉' : '아직 일정이 비어있는 하루예요'}</h4><p class="companion-empty-desc">${completed.length ? '오늘 하루의 소중한 기억을 일기로 남겨 볼까요?' : '가고 싶은 장소를 추가하여 알찬 일정을 완성해 보세요.'}</p><div class="empty-actions"><button class="companion-button companion-primary" onclick="openAddSpotToDay(${selected})"><i class="fa-solid fa-plus"></i> 일정 추가하기</button><button class="companion-button" onclick="openJournalFromPlanBlock(${selected})"><i class="fa-solid fa-book-open"></i> 기억 남기기</button></div></div>`}</div>
     ${completed.length ? `<details class="companion-completed"><summary>완료한 일정 ${completed.length}개 보기 <i class="fa-solid fa-chevron-down" aria-hidden="true"></i></summary>${completed.map(item => companionSpot(item.spot, selected, item.spotIndex)).join('')}</details>` : ''}
     ${(day.spots||[]).some(spot=>SulsulTravel.ScheduleChange.retired(spot))?`<details class="companion-cancelled"><summary>보관·취소·나중에 갈 곳 ${day.spots.filter(spot=>SulsulTravel.ScheduleChange.retired(spot)).length}개 보기</summary>${day.spots.map((spot,spotIndex)=>({spot,spotIndex})).filter(item=>SulsulTravel.ScheduleChange.retired(item.spot)).map(item=>companionSpot(item.spot,selected,item.spotIndex)).join('')}</details>`:''}
     <button class="companion-button companion-record" onclick="openJournalFromPlanBlock(${selected})"><i class="fa-solid fa-book-open" aria-hidden="true"></i> 이 날의 기억 남기기</button>`;
@@ -468,6 +470,22 @@ function renderTodaySmartHud(trip, day, dayIndex, today) {
 
   const weatherInfo = getTodayWeatherInfo(day, trip);
 
+  let pacingMiniHtml = '';
+  try {
+    const walletData = (typeof getWalletData === 'function' ? getWalletData(trip) : (trip.wallet || {}));
+    const pacing = calculateBudgetPacing(trip, walletData);
+    if (pacing && pacing.totalBudgetKrw > 0) {
+      pacingMiniHtml = `
+        <div class="hud-pacing-mini" title="권장 일일 예산: ₩${pacing.dailyRecommendedBudget.toLocaleString()} (${pacing.statusLabel})">
+          <span class="pacing-badge-mini status-${pacing.statusKey}">${pacing.statusLabel}</span>
+          <span class="pacing-rec-val">권장 ₩${pacing.dailyRecommendedBudget.toLocaleString()}</span>
+        </div>
+      `;
+    }
+  } catch (e) {
+    // optional pacing mini
+  }
+
   return `
     <section class="today-smart-hud" aria-label="오늘의 현장 스마트 브리핑">
       <div class="today-smart-hud-grid">
@@ -487,6 +505,7 @@ function renderTodaySmartHud(trip, day, dayIndex, today) {
           </div>
           <div class="hud-card-val">${expenseValText}</div>
           <div class="hud-card-sub" title="${escapeHtml(expenseSubText)}">${escapeHtml(expenseSubText)}</div>
+          ${pacingMiniHtml}
         </button>
       </div>
 
@@ -513,7 +532,20 @@ function renderCompanionToday() {
   const trip = getActiveTrip();
   const container = document.getElementById('today-overview-container');
   if (!trip || !container) return;
-  if (!trip.days?.length) { container.innerHTML = '<div class="companion-empty">큰 계획에서 첫 일정을 만들어 주세요.</div>'; return; }
+  if (!trip.days?.length) {
+    container.innerHTML = `
+      <div class="companion-bento-empty">
+        <div class="empty-icon-wrap"><i class="fa-solid fa-map-location-dot"></i></div>
+        <h4 class="companion-empty-title">아직 생성된 여행 계획이 없어요</h4>
+        <p class="companion-empty-desc">큰 계획 탭에서 첫 일정을 만들거나, AI 일정 스튜디오에서 순식간에 맞춤 일정을 생성해 보세요.</p>
+        <div class="empty-actions">
+          <button class="companion-button companion-primary" onclick="confirmResetAiDraft()"><i class="fa-solid fa-wand-magic-sparkles"></i> AI 일정 생성하기</button>
+          <button class="companion-button" onclick="switchTab('plan')"><i class="fa-solid fa-calendar-plus"></i> 직접 일정 만들기</button>
+        </div>
+      </div>
+    `;
+    return;
+  }
   const selected = State.companionTodaySelection;
   const dayIndex = selected?.tripId === trip.id && trip.days[selected.dayIndex] ? selected.dayIndex : resolveTodayDayIndex(trip);
   State.activeTodayDayIndex = dayIndex;
@@ -530,11 +562,74 @@ function renderCompanionToday() {
   const countdownBadge = renderSpotCountdownBadge(next, day, trip, today, localTime);
   const smartHudHtml = renderTodaySmartHud(trip, day, dayIndex, today);
 
+  let isCurrentSpotActive = false;
+  if (next && next.time && !preview) {
+    const range = parseSpotTimeRange(next.time);
+    if (range) {
+      const [curH, curM] = (localTime || '00:00').split(':').map(Number);
+      const curMinutes = (curH || 0) * 60 + (curM || 0);
+      const effectiveEndMinutes = range.endMinutes != null ? range.endMinutes : range.startMinutes + 60;
+      if (curMinutes >= range.startMinutes && curMinutes <= effectiveEndMinutes) {
+        isCurrentSpotActive = true;
+      }
+    }
+  }
+
+  const actionDeckHtml = `
+    <div class="today-bento-actions-deck no-print" aria-label="현장 빠른 액션 덱">
+      <button type="button" class="bento-action-pill pill-sos" onclick="openSosEmergencyModal()" title="긴급 SOS 비상 연락망 & 의사소통">
+        <i class="fa-solid fa-triangle-exclamation animate-pulse"></i> <span>긴급 SOS</span>
+      </button>
+      <button type="button" class="bento-action-pill" onclick="openTaxiCardModal(${dayIndex},${nextIndex >= 0 ? nextIndex : 0},event)" title="현지어 기사님 카드">
+        <i class="fa-solid fa-taxi text-amber-500"></i> <span>기사님 카드</span>
+      </button>
+      <button type="button" class="bento-action-pill pill-capsule" onclick="openQuickCapsuleModal()" title="1-Tap 길거리 음성/사진 퀵 캡슐">
+        <i class="fa-solid fa-microphone text-rose-500"></i> <span>퀵 캡슐</span>
+      </button>
+      <button type="button" class="bento-action-pill" onclick="openStoryMagazineModal()" title="에디토리얼 스토리 매거진">
+        <i class="fa-solid fa-book-open-reader text-indigo-500"></i> <span>스토리 매거진</span>
+      </button>
+      <button type="button" class="bento-action-pill" onclick="switchTab('expenses')" title="가계부 및 퀵 환율 계산기">
+        <i class="fa-solid fa-coins text-emerald-500"></i> <span>환율·지출</span>
+      </button>
+    </div>
+  `;
+
+  let emptyTimelineHtml = '';
+  if (completed.length > 0) {
+    emptyTimelineHtml = `
+      <div class="companion-bento-empty is-celebration">
+        <div class="empty-icon-wrap"><i class="fa-solid fa-flag-checkered"></i></div>
+        <h4 class="companion-empty-title">오늘의 모든 일정을 완주했어요! 🎉</h4>
+        <p class="companion-empty-desc">오늘 만난 멋진 순간들과 기억들을 매거진이나 일기로 생생하게 간직해 보세요.</p>
+        <div class="empty-actions">
+          <button class="companion-button companion-primary" onclick="openStoryMagazineModal()"><i class="fa-solid fa-book-open-reader"></i> 스토리 매거진 보기</button>
+          <button class="companion-button" onclick="openQuickCapsuleModal()"><i class="fa-solid fa-microphone"></i> 오늘의 감상 남기기</button>
+          <button class="companion-button" onclick="switchTab('journal');selectJournalDay(${dayIndex})"><i class="fa-solid fa-pen-fancy"></i> 하루 회고 작성</button>
+        </div>
+      </div>
+    `;
+  } else {
+    emptyTimelineHtml = `
+      <div class="companion-bento-empty">
+        <div class="empty-icon-wrap"><i class="fa-regular fa-compass"></i></div>
+        <h4 class="companion-empty-title">아직 일정이 비어있는 하루예요</h4>
+        <p class="companion-empty-desc">새로운 설렘으로 이 날을 채워보세요. 가고 싶은 장소를 추가하거나 지도에서 명소를 둘러보실 수 있어요.</p>
+        <div class="empty-actions">
+          <button class="companion-button companion-primary" onclick="openAddSpotToDay(${dayIndex})"><i class="fa-solid fa-plus"></i> 첫 일정 추가하기</button>
+          <button class="companion-button" onclick="openQuickCapsuleModal()"><i class="fa-solid fa-microphone"></i> 음성 캡슐로 기록</button>
+          <button class="companion-button" onclick="navigateToInteractiveMap()"><i class="fa-solid fa-map-pin"></i> 추천 명소 지도</button>
+        </div>
+      </div>
+    `;
+  }
+
   container.innerHTML = `<div class="companion-section-title"><h3>하루의 여행</h3><div class="flex items-center gap-1.5"><button class="companion-button" onclick="switchTab('expenses')"><i class="fa-solid fa-wallet" aria-hidden="true"></i> 지출</button><button class="companion-button" onclick="navigateToInteractiveMap()"><i class="fa-solid fa-map" aria-hidden="true"></i> 지도</button></div></div>
     ${companionDayPicker(trip.days.map((day,dayIndex)=>({day,dayIndex})), dayIndex, 'selectCompanionTodayDay')}
+    ${actionDeckHtml}
     ${smartHudHtml}
     ${preview ? `<p class="companion-preview">${day.date < today ? '지난 여행일을 보고 있어요' : '미리 보는 하루'} · ${escapeHtml(day.date)}</p>`:''}
-    <section class="companion-next">
+    <section class="companion-next ${isCurrentSpotActive ? 'is-active' : ''}">
       <div class="companion-next-header">
         <p class="companion-eyebrow">${next ? 'NEXT STOP · 다음 일정' : 'YOUR DAY · 하루의 기록'}</p>
         ${countdownBadge}
@@ -544,9 +639,9 @@ function renderCompanionToday() {
       <div class="companion-next-actions">${next ? `<button class="companion-button companion-primary" onclick="openCompanionDirections(${dayIndex},${nextIndex})"><i class="fa-solid fa-location-arrow" aria-hidden="true"></i> 길찾기</button><button class="companion-button" onclick="openTaxiCardModal(${dayIndex},${nextIndex},event)"><i class="fa-solid fa-taxi" aria-hidden="true"></i> 기사님</button><button class="companion-button" onclick="openActivityJournal(${dayIndex},${nextIndex},event)"><i class="fa-solid fa-book-open" aria-hidden="true"></i> 기록</button><button class="companion-button" onclick="completeTodaySpot(${dayIndex},${nextIndex},event)"><i class="fa-solid fa-check" aria-hidden="true"></i> 완료</button>`:`<button class="companion-button companion-primary" onclick="openMomentJournal(${dayIndex})">+ 순간 기록</button><button class="companion-button" onclick="switchTab('journal');selectJournalDay(${dayIndex})">하루 회고</button>`}</div>
     </section>
     ${renderLiveToolbar(dayIndex)}
-    <div class="companion-change-reason" aria-label="상황에 맞게 일정 조정"><button onclick="adjustCompanionDay(${dayIndex},'비가 와서 실내 위주로 변경')">비가 와요</button><button onclick="adjustCompanionDay(${dayIndex},'교통 지연으로 남은 동선을 조정')">이동 지연</button><button onclick="adjustCompanionDay(${dayIndex},'휴식 시간을 늘리고 무리하지 않는 일정으로 변경')">쉬고 싶어요</button><button onclick="openScheduleTuningModal(${dayIndex})">직접 조정</button></div>
+    <div class="companion-change-reason" aria-label="상황에 맞게 일정 조정"><button onclick="adjustCompanionDay(${dayIndex},'비가 와서 실내 위주로 변경')">🌧️ 비가 와요</button><button onclick="adjustCompanionDay(${dayIndex},'교통 지연으로 남은 동선을 조정')">⏳ 이동 지연</button><button onclick="adjustCompanionDay(${dayIndex},'휴식 시간을 늘리고 무리하지 않는 일정으로 변경')">☕ 쉬고 싶어요</button><button onclick="openScheduleTuningModal(${dayIndex})">⚙️ 직접 조정</button></div>
     <div class="companion-section-title"><h3>하루의 흐름</h3><button class="companion-button" onclick="openAddSpotToDay(${dayIndex})">+ 일정 추가</button></div>
-    <div class="companion-timeline">${companionTimeline(pending,dayIndex,{today:true}) || '<div class="companion-empty">남은 일정이 없어요. 새로운 순간을 기록해 보세요.</div>'}</div>
+    <div class="companion-timeline">${companionTimeline(pending,dayIndex,{today:true}) || emptyTimelineHtml}</div>
     ${completed.length ? `<details class="companion-completed"><summary>완료한 일정 ${completed.length}개 보기</summary>${completed.map(item=>companionSpot(item.spot,dayIndex,item.spotIndex,{today:true})).join('')}</details>`:''}
     ${(day.spots||[]).some(spot=>SulsulTravel.ScheduleChange.retired(spot))?`<details class="companion-cancelled"><summary>보관·취소·나중에 갈 곳 ${day.spots.filter(spot=>SulsulTravel.ScheduleChange.retired(spot)).length}개 보기</summary>${day.spots.map((spot,spotIndex)=>({spot,spotIndex})).filter(item=>SulsulTravel.ScheduleChange.retired(item.spot)).map(item=>companionSpot(item.spot,dayIndex,item.spotIndex)).join('')}</details>`:''}
     <button class="companion-button companion-record" onclick="openMomentJournal(${dayIndex})">+ 생각날 때 순간 기록</button>`;

@@ -150,26 +150,38 @@ new Promise(function(resolve) {
     }
     const hasProgressBar = pacingContainer ? !!pacingContainer.querySelector('.pacing-progress-bar') : false;
 
-    // Feature 4: Spot Reorder & Rescheduling
+    // Feature 4: Spot Reorder & Rescheduling (considering protection rules from abb395c)
     const daySpots = (currentTrip.days && currentTrip.days[0] && currentTrip.days[0].spots) || [];
     let swapped = false;
     let timesAligned = false;
-    if (daySpots.length >= 2) {
-      const origFirstTitle = daySpots[0].title;
-      if (typeof moveCompanionSpotOrder === 'function') {
-        moveCompanionSpotOrder(0, 0, 1, null);
+    let swapIdx = -1;
+    for (let i = 0; i < daySpots.length - 1; i++) {
+      const sA = daySpots[i], sB = daySpots[i + 1];
+      const isProtA = Boolean(sA.completed || sA.fixed || sA.recordId);
+      const isProtB = Boolean(sB.completed || sB.fixed || sB.recordId);
+      if (!isProtA && !isProtB) {
+        swapIdx = i;
+        break;
       }
-      swapped = (daySpots[0].title !== origFirstTitle && daySpots[1].title === origFirstTitle);
-      if (typeof realignSpotSchedule === 'function') {
-        const origConfirm = window.confirm;
-        window.confirm = () => true;
-        realignSpotSchedule(0, 30);
-        window.confirm = origConfirm;
-      }
-      const time0 = daySpots[0]?.time;
-      const time1 = daySpots[1]?.time;
-      timesAligned = (time0 && time1 && time0 !== time1);
     }
+    if (swapIdx >= 0) {
+      const origTitle = daySpots[swapIdx].title;
+      if (typeof moveCompanionSpotOrder === 'function') {
+        moveCompanionSpotOrder(0, swapIdx, 1, null);
+      }
+      const updatedTrip = (typeof getActiveTrip === 'function' && getActiveTrip()) || currentTrip;
+      const updatedDaySpots = (updatedTrip.days && updatedTrip.days[0] && updatedTrip.days[0].spots) || daySpots;
+      swapped = (updatedDaySpots[swapIdx]?.title !== origTitle && updatedDaySpots[swapIdx + 1]?.title === origTitle);
+    }
+    if (typeof realignSpotSchedule === 'function') {
+      const origConfirm = window.confirm;
+      window.confirm = () => true;
+      realignSpotSchedule(0, 30);
+      window.confirm = origConfirm;
+    }
+    const time0 = daySpots[0]?.time;
+    const time1 = daySpots[1]?.time;
+    timesAligned = (time0 && time1 && time0 !== time1);
 
     // Feature 5: Story Magazine
     const magazineModal = document.getElementById('modal-story-magazine');
