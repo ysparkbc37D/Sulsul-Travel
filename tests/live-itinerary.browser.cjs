@@ -154,7 +154,7 @@ function content(trip) {
       async reveal(itemId) {
         const card = page.locator(`#today-overview-container [data-spot-id="${itemId}"]`);
         const details = card.locator('xpath=ancestor::details[1]');
-        if (await details.count() && !await details.evaluate(element => element.open)) await details.locator('summary').click();
+        if (await details.count() && !await details.evaluate(element => element.open)) await details.locator(':scope > summary').click();
         return card;
       },
       async insert(anchorId, position, title, time = '') {

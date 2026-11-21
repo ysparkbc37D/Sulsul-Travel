@@ -62,7 +62,7 @@
   function validate(payload, job, {currencyCodes = []} = {}) {
     if (!object(payload) || !object(job)) return false;
     const input = object(job.input) ? job.input : {};
-    if (['journal','activity-journal','moment-journal'].includes(job.kind)) return text(payload.text, 20000);
+    if (['journal','activity-journal','moment-journal','capsule-diary'].includes(job.kind)) return text(payload.text, 20000);
     if (job.kind === 'receipt') {
       const receipt = payload.receipt, currencies = new Set(currencyCodes);
       return object(receipt) && text(receipt.merchant, 200) &&

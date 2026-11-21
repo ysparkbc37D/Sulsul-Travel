@@ -1,6 +1,6 @@
 # 술술트래블 개발 가이드
 
-이 문서는 현재 앱 구조와 검증 방식을 설명합니다. 이전 구조를 기술한 문서는 상단에 역사 자료 또는 목표 설계라고 표시합니다. 현재 소스 버전은 `2.0.1`입니다. 원격 저장소와 배포 반영 여부는 별도로 확인합니다.
+이 문서는 현재 앱 구조와 검증 방식을 설명합니다. 이전 구조를 기술한 문서는 상단에 역사 자료 또는 목표 설계라고 표시합니다. 현재 소스 버전은 `2.0.2`입니다. 원격 저장소와 배포 반영 여부는 별도로 확인합니다.
 
 ## 실행 구조
 
@@ -51,6 +51,8 @@
 | `js/presentation/expense-editor.js` | 지출 거래 편집, 사진과 지갑 반영 |
 | `js/presentation/trip-transfer-ui.js` | 사본 링크·파일 공유와 가져오기 |
 | `js/destinations/` | 국가/도시 목적지 지식 팩과 레지스트리 |
+| `js/destinations/emergency-contacts.js` | 출처·확인일이 있는 국가별 긴급 번호와 오늘 도시 기준 국가 판별. 확인하지 못한 국가는 추정하지 않음 |
+| `js/presentation/companion-ui.js` | 오늘 화면·큰 계획 카드, SOS, 퀵 캡슐(순간 기록 입력), 매거진(TravelStory 보기) |
 | `sw.js` | 앱 셸 및 오프라인 에셋 캐시 |
 
 새 도메인 규칙은 DOM과 저장소에서 분리합니다. 기존 기능을 옮길 때는 데이터 계약과 오류 경계를 먼저 만든 뒤 화면 연결을 바꿉니다. 모든 화면을 한 번에 재작성하지 않습니다.
@@ -67,7 +69,7 @@
 
 ## 운영 배포
 
-운영 사이트는 [sulsul-travel.vercel.app](https://sulsul-travel.vercel.app/)이며, GitHub 저장소의 `main` 브랜치와 연결된 Vercel 배포를 사용합니다. GitHub Pages는 현재 설정되어 있지 않습니다. 현재 작업 버전 `v2.0.1`의 push와 운영 반영 여부는 이 문서 갱신만으로 확인되지 않습니다.
+운영 사이트는 [sulsul-travel.vercel.app](https://sulsul-travel.vercel.app/)이며, GitHub 저장소의 `main` 브랜치와 연결된 Vercel 배포를 사용합니다. GitHub Pages는 현재 설정되어 있지 않습니다. 현재 작업 버전 `v2.0.2`의 push와 운영 반영 여부는 이 문서 갱신만으로 확인되지 않습니다.
 
 ## 검증
 
@@ -93,10 +95,11 @@ node .\tests\travel-story.browser.cjs
 node .\tests\companion-refresh.browser.cjs
 node .\tests\collaboration-review.browser.cjs
 node .\tests\backup-restore.browser.cjs
+node .\tests\field-records.browser.cjs
 .\tools-verify.ps1
 ```
 
-브라우저 테스트는 독립 합성 여행을 사용합니다. 사용자 여행, 실제 Gemini API 호출, GitHub 쓰기를 사용하지 않습니다. 테스트 요약은 각 스크립트의 출력에서 확인합니다. 헤드리스 Edge CDP를 사용할 수 없는 환경에서는 `tools-verify.ps1`의 브라우저 게이트가 실패할 수 있으므로 변경 기능 브라우저 검사를 별도로 실행하고 제한을 기록합니다.
+Playwright 브라우저를 내려받지 않은 환경에서는 `PLAYWRIGHT_MODULE`(playwright 모듈 경로)과 `CHROME_PATH`(설치된 Chrome 실행 파일)를 지정하면 같은 검사를 실행할 수 있습니다. 브라우저 테스트는 독립 합성 여행을 사용합니다. 사용자 여행, 실제 Gemini API 호출, GitHub 쓰기를 사용하지 않습니다. 테스트 요약은 각 스크립트의 출력에서 확인합니다. 헤드리스 Edge CDP를 사용할 수 없는 환경에서는 `tools-verify.ps1`의 브라우저 게이트가 실패할 수 있으므로 변경 기능 브라우저 검사를 별도로 실행하고 제한을 기록합니다.
 
 모바일 헤더·허브는 `test:header-hub`에서 320~430px의 실제 노출·클릭·검색·필터·키보드 이동과 세 테마를 검사합니다. 수평 넘침이 없다는 결과만으로 숨은 버튼이나 읽을 수 없는 입력 폭을 통과시키지 않습니다.
 

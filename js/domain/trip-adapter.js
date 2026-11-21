@@ -221,8 +221,51 @@
       return expense;
     });
     remapJournals(trip);
+    migrateQuickCapsules(trip);
     // 미지의 timeZone은 새 값으로 덮거나 목적지에서 추정하지 않는다.
     return trip;
+  }
+
+  // v2.0.0~2.0.1의 퀵 캡슐(quickCapsules)과 자동 저장 AI 일기(activityRecords.content)를
+  // 순간 기록으로 옮긴다. 당시 날짜는 배열 위치로 잘못 저장됐으므로 실제 생성 시각을 우선한다.
+  function capsuleMoment(trip, raw, {id, source, title, text, extra = {}}) {
+    const created = typeof raw.createdAt === 'string' && Number.isFinite(Date.parse(raw.createdAt)) ? raw.createdAt : '';
+    const date = (created && localDateKey(new Date(created), trip.timeZone)) || isoDate(raw.date) || '';
+    const time = created ? localTimeKey(new Date(created), trip.timeZone) : (/^([01]\d|2[0-3]):[0-5]\d$/.test(raw.time || '') ? raw.time : '');
+    const dayIndex = date ? trip.days.findIndex(day => day.date === date) : -1;
+    const photos = (Array.isArray(raw.photos) ? raw.photos : [raw.photo]).filter(photo => typeof photo === 'string' && photo);
+    const entry = {id, source, date, time, text, ...(title ? {title} : {}), photos, photoThumbnails:photos.map(() => null), mediaIds:photos.map(() => null), coverIndex:0, activityLink:null, visibility:'private', ...extra, createdAt:created || undefined, updatedAt:created || undefined, migratedFrom:extra.migratedFrom};
+    if (dayIndex >= 0) {
+      entry.dayIndex = dayIndex;
+      const day = trip.days[dayIndex], spotTitle = firstText(raw.spotTitle);
+      const spotIndex = spotTitle ? day.spots.findIndex(spot => spot.title === spotTitle) : -1;
+      if (spotIndex >= 0) entry.activityLink = {dayIndex, spotIndex, title:spotTitle, date, time:day.spots[spotIndex].time || '', city:day.city || '', spotId:day.spots[spotIndex].id};
+      else if (spotTitle) entry.activityLink = {title:spotTitle, date};
+    } else if (firstText(raw.spotTitle)) entry.activityLink = {title:firstText(raw.spotTitle), date};
+    return JSON.parse(JSON.stringify(entry));
+  }
+  function migrateQuickCapsules(trip) {
+    const capsules = Array.isArray(trip.quickCapsules) ? trip.quickCapsules : [];
+    const records = trip.activityRecords && typeof trip.activityRecords === 'object' && !Array.isArray(trip.activityRecords) ? trip.activityRecords : {};
+    const autoDiaries = Object.entries(records).filter(([key, record]) => record && typeof record === 'object' && /^rec-\d+$/.test(String(record.id || key)) && typeof record.content === 'string' && !firstText(record.text) && !record.context);
+    if (!capsules.length && !autoDiaries.length) { if (own(trip, 'quickCapsules')) delete trip.quickCapsules; return; }
+    if (!Array.isArray(trip.momentEntries)) trip.momentEntries = [];
+    const existing = new Set(trip.momentEntries.map(entry => entry?.id));
+    capsules.forEach((capsule, index) => {
+      if (!capsule || typeof capsule !== 'object') return;
+      const id = identity(capsule.id) || `cap-legacy-${index}`;
+      if (existing.has(id) || (!firstText(capsule.text) && !capsule.photo)) return;
+      trip.momentEntries.push(capsuleMoment(trip, capsule, {id, source:'capsule', text:text(capsule.text), extra:{mood:text(capsule.mood) || undefined, migratedFrom:'quickCapsules'}}));
+      existing.add(id);
+    });
+    autoDiaries.forEach(([key, record]) => {
+      const id = identity(record.id) || key;
+      // 검토·승인 없이 저장된 AI 글임을 제목과 표식으로 남긴다.
+      if (!existing.has(id)) trip.momentEntries.push(capsuleMoment(trip, record, {id, source:'capsule-diary', title:`${firstText(record.title) || '캡슐로 엮은 이야기'} (AI 작성·검토 전)`, text:record.content, extra:{mood:text(record.mood) || undefined, aiAuthored:true, migratedFrom:'activityRecords'}}));
+      existing.add(id);
+      delete records[key];
+    });
+    delete trip.quickCapsules;
   }
 
   function normalizeTrips(trips) {

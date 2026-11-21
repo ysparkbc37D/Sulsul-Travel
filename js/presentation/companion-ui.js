@@ -626,8 +626,6 @@ function renderCompanionToday() {
 
   container.innerHTML = `<div class="companion-section-title"><h3>하루의 여행</h3><div class="flex items-center gap-1.5"><button class="companion-button" onclick="switchTab('expenses')"><i class="fa-solid fa-wallet" aria-hidden="true"></i> 지출</button><button class="companion-button" onclick="navigateToInteractiveMap()"><i class="fa-solid fa-map" aria-hidden="true"></i> 지도</button></div></div>
     ${companionDayPicker(trip.days.map((day,dayIndex)=>({day,dayIndex})), dayIndex, 'selectCompanionTodayDay')}
-    ${actionDeckHtml}
-    ${smartHudHtml}
     ${preview ? `<p class="companion-preview">${day.date < today ? '지난 여행일을 보고 있어요' : '미리 보는 하루'} · ${escapeHtml(day.date)}</p>`:''}
     <section class="companion-next ${isCurrentSpotActive ? 'is-active' : ''}">
       <div class="companion-next-header">
@@ -638,6 +636,8 @@ function renderCompanionToday() {
       <p>${escapeHtml(next?.time || companionDate(day.date))} · ${escapeHtml(day.city || day.loc || '여행')} · ${done}/${(day.spots||[]).filter(spot=>SulsulTravel.LiveItinerary.active(spot)).length} 완료</p>
       <div class="companion-next-actions">${next ? `<button class="companion-button companion-primary" onclick="openCompanionDirections(${dayIndex},${nextIndex})"><i class="fa-solid fa-location-arrow" aria-hidden="true"></i> 길찾기</button><button class="companion-button" onclick="openTaxiCardModal(${dayIndex},${nextIndex},event)"><i class="fa-solid fa-taxi" aria-hidden="true"></i> 기사님</button><button class="companion-button" onclick="openActivityJournal(${dayIndex},${nextIndex},event)"><i class="fa-solid fa-book-open" aria-hidden="true"></i> 기록</button><button class="companion-button" onclick="completeTodaySpot(${dayIndex},${nextIndex},event)"><i class="fa-solid fa-check" aria-hidden="true"></i> 완료</button>`:`<button class="companion-button companion-primary" onclick="openMomentJournal(${dayIndex})">+ 순간 기록</button><button class="companion-button" onclick="switchTab('journal');selectJournalDay(${dayIndex})">하루 회고</button>`}</div>
     </section>
+    ${actionDeckHtml}
+    ${smartHudHtml}
     ${renderLiveToolbar(dayIndex)}
     <div class="companion-change-reason" aria-label="상황에 맞게 일정 조정"><button onclick="adjustCompanionDay(${dayIndex},'비가 와서 실내 위주로 변경')">🌧️ 비가 와요</button><button onclick="adjustCompanionDay(${dayIndex},'교통 지연으로 남은 동선을 조정')">⏳ 이동 지연</button><button onclick="adjustCompanionDay(${dayIndex},'휴식 시간을 늘리고 무리하지 않는 일정으로 변경')">☕ 쉬고 싶어요</button><button onclick="openScheduleTuningModal(${dayIndex})">⚙️ 직접 조정</button></div>
     <div class="companion-section-title"><h3>하루의 흐름</h3><button class="companion-button" onclick="openAddSpotToDay(${dayIndex})">+ 일정 추가</button></div>
@@ -895,94 +895,32 @@ if (typeof window !== 'undefined' && !window.__companionHudTimer) {
 }
 
 /* ==========================================================================
-   아이디어 1: 긴급 SOS & 병원·약국 소통 모달 (Priority 4-2)
+   긴급 SOS & 병원·약국 소통 카드 (v2.0.2)
+   국가는 오늘 거점 도시로 정하고 번호는 출처가 있는 EmergencyContacts에서만 읽는다.
    ========================================================================== */
-function detectEmergencyCountryInfo(trip) {
-  const text = `${(trip?.countries || []).join(' ')} ${trip?.title || ''} ${(trip?.cities || []).join(' ')}`.toLowerCase();
-  
-  const koreaConsular = { name: "외교부 영사콜센터 (24시간)", tel: "+82232100404", displayTel: "+82-2-3210-0404" };
-
-  if (/(스페인|spain|madrid|barcelona|toledo|sevilla)/i.test(text)) {
-    return {
-      country: '스페인 (Spain)', langCode: 'es', langName: '스페인어',
-      police: { name: "국립 경찰 (Policía 112)", tel: "112" },
-      ambulance: { name: "구급·응급 (Ambulancia 112)", tel: "112" },
-      embassy: { name: "주스페인 대한민국 대사관", tel: "+34913532000", displayTel: "+34-91-353-2000" },
-      korea: koreaConsular
-    };
-  }
-  if (/(일본|japan|tokyo|osaka|kyoto|fukuoka|sapporo)/i.test(text)) {
-    return {
-      country: '일본 (Japan)', langCode: 'ja', langName: '일본어',
-      police: { name: "경찰 (警察 110)", tel: "110" },
-      ambulance: { name: "구급·소방 (救急 119)", tel: "119" },
-      embassy: { name: "주일 대한민국 대사관", tel: "+81334527611", displayTel: "+81-3-3452-7611" },
-      korea: koreaConsular
-    };
-  }
-  if (/(대만|taiwan|taipei|kaohsiung|중국|china)/i.test(text)) {
-    return {
-      country: '대만 / 중화권 (Taiwan/China)', langCode: 'zh', langName: '중국어',
-      police: { name: "경찰 (報案 110)", tel: "110" },
-      ambulance: { name: "구급 (救護車 119)", tel: "119" },
-      embassy: { name: "주타이베이 한국대표부", tel: "+886227588320", displayTel: "+886-2-2758-8320" },
-      korea: koreaConsular
-    };
-  }
-  if (/(태국|thailand|bangkok|chiang mai|phuket)/i.test(text)) {
-    return {
-      country: '태국 (Thailand)', langCode: 'th', langName: '태국어',
-      police: { name: "관광경찰 (1155) / 경찰 (191)", tel: "1155" },
-      ambulance: { name: "구급·응급 (1669)", tel: "1669" },
-      embassy: { name: "주태국 대한민국 대사관", tel: "+6622477537", displayTel: "+66-2-247-7537" },
-      korea: koreaConsular
-    };
-  }
-  if (/(베트남|vietnam|da nang|hanoi|ho chi minh)/i.test(text)) {
-    return {
-      country: '베트남 (Vietnam)', langCode: 'vi', langName: '베트남어',
-      police: { name: "경찰 (Cảnh sát 113)", tel: "113" },
-      ambulance: { name: "구급 (Cấp cứu 115)", tel: "115" },
-      embassy: { name: "주베트남 대한민국 대사관", tel: "+842438315111", displayTel: "+84-24-3831-5111" },
-      korea: koreaConsular
-    };
-  }
-  if (/(프랑스|france|paris|nice|lyon)/i.test(text)) {
-    return {
-      country: '프랑스 (France)', langCode: 'fr', langName: '프랑스어',
-      police: { name: "경찰 (Police 17 / EU 112)", tel: "112" },
-      ambulance: { name: "구급 (SAMU 15 / EU 112)", tel: "112" },
-      embassy: { name: "주프랑스 대한민국 대사관", tel: "+33147530101", displayTel: "+33-1-47-53-01-01" },
-      korea: koreaConsular
-    };
-  }
-  if (/(페루|peru|lima|cusco|칠레|chile|santiago|아르헨티나|argentina|buenos aires|볼리비아|bolivia|la paz|uyuni)/i.test(text)) {
-    return {
-      country: '남미 (South America)', langCode: 'es', langName: '스페인어',
-      police: { name: "경찰 (Policía 105/911/133)", tel: "911" },
-      ambulance: { name: "구급 (Ambulancia 116/107/131)", tel: "116" },
-      embassy: { name: "외교부 영사콜센터 (24H)", tel: "+82232100404", displayTel: "+82-2-3210-0404" },
-      korea: koreaConsular
-    };
-  }
-  if (/(미국|usa|new york|los angeles|괌|사이판|하와이|hawaii|캐나다|canada)/i.test(text)) {
-    return {
-      country: '미국 / 북미 (USA/Canada)', langCode: 'en', langName: 'English',
-      police: { name: "경찰 (Police 911)", tel: "911" },
-      ambulance: { name: "구급 (Ambulance 911)", tel: "911" },
-      embassy: { name: "주미합중국 대한민국 대사관", tel: "+12029395600", displayTel: "+1-202-939-5600" },
-      korea: koreaConsular
-    };
-  }
-  return {
-    country: '해외 여행 긴급 비상 (Global)', langCode: 'en', langName: 'English',
-    police: { name: "국제 긴급 경찰 (Police 112/911)", tel: "112" },
-    ambulance: { name: "국제 긴급 구급 (Ambulance 112/911)", tel: "112" },
-    embassy: { name: "외교부 영사콜센터 (24시간)", tel: "+82232100404", displayTel: "+82-2-3210-0404" },
-    korea: koreaConsular
-  };
+const SOS_LANG_NAMES = Object.freeze({ en: 'English', es: '스페인어', ja: '일본어', zh: '중국어', fr: '프랑스어', th: '태국어', vi: '베트남어', ko: '한국어' });
+function sosState() {
+  if (!State.sos) State.sos = { lang: 'auto', category: 'all', expanded: null, countryOverride: null, tripId: null };
+  return State.sos;
 }
-
+function sosCountryInfo(trip) {
+  const contacts = SulsulTravel.EmergencyContacts;
+  const state = sosState();
+  const dayIndex = trip?.days?.length ? SulsulTravel.TripAdapter.resolveTodayDayIndex(trip) : 0;
+  const lookup = typeof resolveCanonicalCountry === 'function' ? resolveCanonicalCountry : null;
+  const resolved = contacts.resolve(trip, dayIndex, lookup);
+  const override = state.tripId === trip?.id && state.countryOverride && contacts.DATA[state.countryOverride] ? state.countryOverride : null;
+  const code = override || resolved.code;
+  const entry = code ? contacts.contacts(code) : null;
+  return { code, entry, basis: override ? 'manual' : resolved.basis, candidates: resolved.candidates, day: trip?.days?.[dayIndex], langCode: entry?.lang || 'en', langName: SOS_LANG_NAMES[entry?.lang] || 'English' };
+}
+function selectSosCountry(code) {
+  const state = sosState(), trip = getActiveTrip();
+  state.tripId = trip?.id || null;
+  state.countryOverride = SulsulTravel.EmergencyContacts.DATA[code] ? code : null;
+  renderSosEmergencyContent();
+}
+window.selectSosCountry = selectSosCountry;
 function getSosMedicalPhrases() {
   return [
     {
@@ -1100,141 +1038,99 @@ function getSosMedicalPhrases() {
   ];
 }
 
-window.__sosCurrentLang = 'auto';
-window.__sosActiveCategory = 'all';
-window.__sosExpandedSymptomId = null;
-
 function renderSosEmergencyContent(selectedLang = null, activeCategory = null, expandedSymptomId = undefined) {
   const container = document.getElementById('sos-emergency-content');
   if (!container) return;
-
-  if (selectedLang !== null) window.__sosCurrentLang = selectedLang;
-  if (activeCategory !== null) window.__sosActiveCategory = activeCategory;
-  if (expandedSymptomId !== undefined) window.__sosExpandedSymptomId = expandedSymptomId;
+  const state = sosState();
+  if (selectedLang !== null) state.lang = selectedLang;
+  if (activeCategory !== null) state.category = activeCategory;
+  if (expandedSymptomId !== undefined) state.expanded = expandedSymptomId;
 
   const trip = getActiveTrip();
-  const info = detectEmergencyCountryInfo(trip);
-
-  let lang = window.__sosCurrentLang;
-  if (lang === 'auto') lang = info.langCode || 'en';
-
+  const info = sosCountryInfo(trip);
+  const contacts = SulsulTravel.EmergencyContacts;
+  const lang = state.lang === 'auto' ? info.langCode : state.lang;
   const phrases = getSosMedicalPhrases();
-  const filteredPhrases = window.__sosActiveCategory === 'all'
-    ? phrases
-    : phrases.filter(p => p.cat === window.__sosActiveCategory);
-
+  const filteredPhrases = state.category === 'all' ? phrases : phrases.filter(p => p.cat === state.category);
   const langButtons = [
     { code: 'auto', label: `현지어 (${info.langName})` },
-    { code: 'en', label: 'English' },
-    { code: 'es', label: 'Español' },
-    { code: 'ja', label: '日本語' },
-    { code: 'zh', label: '中文' },
-    { code: 'fr', label: 'Français' },
-    { code: 'th', label: 'ไทย' },
-    { code: 'vi', label: 'Tiếng Việt' },
-    { code: 'ko', label: '한국어' }
+    { code: 'en', label: 'English' }, { code: 'es', label: 'Español' }, { code: 'ja', label: '日本語' }, { code: 'zh', label: '中文' },
+    { code: 'fr', label: 'Français' }, { code: 'th', label: 'ไทย' }, { code: 'vi', label: 'Tiếng Việt' }, { code: 'ko', label: '한국어' }
   ];
+  const dialIcon = { police: 'fa-shield-halved text-sky-400', ambulance: 'fa-truck-medical text-rose-400', fire: 'fa-fire-extinguisher text-orange-400', general: 'fa-phone text-emerald-400', extra: 'fa-user-shield text-sky-300' };
+  const numColor = { police: 'text-sky-300', ambulance: 'text-rose-400', fire: 'text-orange-400', general: 'text-emerald-400', extra: 'text-sky-300' };
+  const dialCards = (info.entry?.lines || []).map(line => `
+    <a href="tel:${escapeHtml(line.tel)}" class="sos-dial-card is-${line.kind === 'ambulance' || line.kind === 'fire' ? 'ambulance' : 'police'}" aria-label="${escapeHtml(`${line.label} ${line.tel}에 전화`)}">
+      <i class="fa-solid ${dialIcon[line.kind]} text-sm mb-0.5" aria-hidden="true"></i>
+      <span class="sos-dial-name">${escapeHtml(line.label)}</span>
+      <span class="sos-dial-num ${numColor[line.kind]}">${escapeHtml(line.tel)}</span>
+    </a>`).join('');
+  const countryLabel = info.entry ? `${info.entry.name}${info.day?.city ? ` · ${info.day.city}` : ''}` : '국가를 확인하지 못했어요';
+  const basisLabel = info.basis === 'day' ? '오늘 일정의 도시 기준' : info.basis === 'trip' ? '여행 국가 기준' : info.basis === 'manual' ? '직접 고른 국가' : '';
+  const choices = (info.candidates?.length > 1 || info.basis === 'manual') ? (info.candidates || []) : [];
 
   container.innerHTML = `
-    <!-- 상단 국가 안내 배너 -->
     <div class="flex items-center justify-between gap-2 p-2.5 rounded-xl bg-rose-500/10 border border-rose-500/25">
       <div class="flex items-center gap-2 min-w-0">
-        <span class="w-8 h-8 rounded-lg bg-rose-500/20 text-rose-500 flex items-center justify-center shrink-0">
-          <i class="fa-solid fa-location-dot"></i>
-        </span>
+        <span class="w-8 h-8 rounded-lg bg-rose-500/20 text-rose-500 flex items-center justify-center shrink-0"><i class="fa-solid fa-location-dot" aria-hidden="true"></i></span>
         <div class="min-w-0">
-          <div class="text-xs font-black text-rose-400 truncate">${escapeHtml(info.country)}</div>
-          <div class="text-[10px] text-slate-400">오프라인에서도 즉시 작동하는 비상 다이얼 & 증상 카드</div>
+          <div class="text-xs font-black text-rose-400 truncate">${escapeHtml(countryLabel)}</div>
+          <div class="text-[10px] text-slate-400">${escapeHtml(basisLabel || '긴급 번호 대신 영사콜센터를 먼저 안내합니다')}</div>
         </div>
       </div>
-      <span class="px-2 py-0.5 rounded-full bg-rose-500/20 text-rose-300 text-[10px] font-bold shrink-0 border border-rose-500/30">100% 오프라인</span>
+      <span class="px-2 py-0.5 rounded-full bg-rose-500/20 text-rose-300 text-[10px] font-bold shrink-0 border border-rose-500/30">오프라인 사용 가능</span>
     </div>
 
-    <!-- 3대 긴급 전화 퀵 다이얼 그리드 -->
+    ${choices.length ? `
+      <div class="flex flex-wrap items-center gap-1.5 text-[11px]" aria-label="지금 있는 나라 고르기">
+        <span class="text-slate-400 font-bold">지금 있는 나라:</span>
+        ${choices.map(code => `<button type="button" onclick="selectSosCountry('${escapeHtml(code)}')" class="min-h-[44px] px-2.5 rounded-lg font-bold ${info.code === code ? 'bg-rose-500 text-slate-950' : 'bg-[#1e293b] text-slate-300'}" aria-pressed="${info.code === code}">${escapeHtml(contacts.DATA[code]?.name || code)}</button>`).join('')}
+      </div>` : ''}
+
     <div>
-      <div class="text-[11px] font-bold text-slate-400 mb-1.5 flex items-center justify-between">
-        <span>현지 긴급 전화 (터치 시 바로 통화 연결)</span>
-        <span class="text-[10px] text-amber-400">외교부 24H 영사콜센터 연동</span>
-      </div>
+      <div class="text-[11px] font-bold text-slate-400 mb-1.5">현지 긴급 전화 (누르면 전화 앱이 열립니다)</div>
       <div class="sos-dial-grid">
-        <a href="tel:${info.police.tel}" class="sos-dial-card is-police">
-          <i class="fa-solid fa-shield-halved text-sky-400 text-sm mb-0.5"></i>
-          <span class="sos-dial-name">현지 경찰</span>
-          <span class="sos-dial-num text-sky-300">${info.police.tel}</span>
-        </a>
-        <a href="tel:${info.ambulance.tel}" class="sos-dial-card is-ambulance">
-          <i class="fa-solid fa-truck-medical text-rose-400 text-sm mb-0.5"></i>
-          <span class="sos-dial-name">구급·응급</span>
-          <span class="sos-dial-num text-rose-400">${info.ambulance.tel}</span>
-        </a>
-        <a href="tel:${info.korea.tel}" class="sos-dial-card is-embassy" title="24시간 한국어 사건사고 및 통역 지원">
-          <i class="fa-solid fa-phone-volume text-amber-400 text-sm mb-0.5"></i>
-          <span class="sos-dial-name">영사콜센터</span>
-          <span class="sos-dial-num text-amber-400 text-xs">${info.korea.displayTel}</span>
+        ${dialCards}
+        <a href="tel:${escapeHtml(contacts.CONSULAR.tel)}" class="sos-dial-card is-embassy" aria-label="외교부 영사콜센터 ${escapeHtml(contacts.CONSULAR.display)}에 전화">
+          <i class="fa-solid fa-phone-volume text-amber-400 text-sm mb-0.5" aria-hidden="true"></i>
+          <span class="sos-dial-name">영사콜센터 24시간</span>
+          <span class="sos-dial-num text-amber-400 text-xs">${escapeHtml(contacts.CONSULAR.display)}</span>
         </a>
       </div>
+      <p class="text-[10px] text-slate-400 mt-1.5 leading-relaxed">${info.entry ? escapeHtml([info.entry.note, `출처: ${contacts.SOURCE.label} · ${contacts.SOURCE.checkedAt} 확인.`, contacts.SOURCE.advice].filter(Boolean).join(' ')) : '이 여행지의 현지 긴급 번호는 앱에 확인된 자료가 없습니다. 영사콜센터(해외 사건·사고 24시간 한국어 지원)로 연락하거나 외교부 해외안전여행(0404.go.kr)에서 번호를 확인하세요.'}</p>
     </div>
 
-    <!-- 증상 소통 플래시카드 영역 -->
     <div class="pt-1">
       <div class="flex items-center justify-between gap-2 mb-2 flex-wrap">
-        <div class="text-xs font-black text-white flex items-center gap-1.5">
-          <i class="fa-solid fa-notes-medical text-rose-400"></i>
-          <span>약국·병원·응급 증상 소통 카드</span>
-        </div>
-        <!-- 카테고리 필터 -->
+        <div class="text-xs font-black text-white flex items-center gap-1.5"><i class="fa-solid fa-notes-medical text-rose-400" aria-hidden="true"></i><span>약국·병원·응급 증상 소통 카드</span></div>
         <div class="flex items-center gap-1 text-[11px]">
-          <button type="button" onclick="renderSosEmergencyContent(null,'all',undefined)" class="px-2 py-0.5 rounded-lg font-bold transition ${window.__sosActiveCategory==='all'?'bg-rose-500 text-slate-950':'text-slate-400 bg-[#1e293b]'}">전체</button>
-          <button type="button" onclick="renderSosEmergencyContent(null,'pharmacy',undefined)" class="px-2 py-0.5 rounded-lg font-bold transition ${window.__sosActiveCategory==='pharmacy'?'bg-rose-500 text-slate-950':'text-slate-400 bg-[#1e293b]'}">약국/약품</button>
-          <button type="button" onclick="renderSosEmergencyContent(null,'emergency',undefined)" class="px-2 py-0.5 rounded-lg font-bold transition ${window.__sosActiveCategory==='emergency'?'bg-rose-500 text-slate-950':'text-slate-400 bg-[#1e293b]'}">응급/병원</button>
-          <button type="button" onclick="renderSosEmergencyContent(null,'safety',undefined)" class="px-2 py-0.5 rounded-lg font-bold transition ${window.__sosActiveCategory==='safety'?'bg-rose-500 text-slate-950':'text-slate-400 bg-[#1e293b]'}">도난/안전</button>
+          ${[['all', '전체'], ['pharmacy', '약국/약품'], ['emergency', '응급/병원'], ['safety', '도난/안전']].map(([key, label]) => `<button type="button" onclick="renderSosEmergencyContent(null,'${key}',undefined)" class="px-2 py-0.5 rounded-lg font-bold transition ${state.category === key ? 'bg-rose-500 text-slate-950' : 'text-slate-400 bg-[#1e293b]'}" aria-pressed="${state.category === key}">${label}</button>`).join('')}
         </div>
       </div>
-
-      <!-- 언어 선택 바 -->
       <div class="flex items-center gap-1 overflow-x-auto pb-1.5 no-scrollbar mb-2 text-xs">
-        ${langButtons.map(b => `
-          <button type="button" onclick="renderSosEmergencyContent('${b.code}',null,undefined)" class="px-2.5 py-1 rounded-lg font-bold whitespace-nowrap transition cursor-pointer shrink-0 ${window.__sosCurrentLang === b.code ? 'bg-amber-500 text-slate-950 shadow' : 'bg-[#141c2e] border border-[#23304c] text-slate-300 hover:text-white'}">
-            ${escapeHtml(b.label)}
-          </button>
-        `).join('')}
+        ${langButtons.map(b => `<button type="button" onclick="renderSosEmergencyContent('${b.code}',null,undefined)" class="px-2.5 py-1 rounded-lg font-bold whitespace-nowrap transition cursor-pointer shrink-0 ${state.lang === b.code ? 'bg-amber-500 text-slate-950 shadow' : 'bg-[#141c2e] border border-[#23304c] text-slate-300'}" aria-pressed="${state.lang === b.code}">${escapeHtml(b.label)}</button>`).join('')}
       </div>
-
-      <!-- 증상 카드 목록 -->
       <div class="sos-phrase-list custom-scrollbar">
         ${filteredPhrases.map(p => {
-          const targetLang = (lang === 'auto') ? (info.langCode || 'en') : lang;
-          const phraseData = p[targetLang] || p.en || { phrase: p.ko, pron: '' };
-          const isHuge = (window.__sosExpandedSymptomId === p.id);
-
+          const phraseData = p[lang] || p.en || { phrase: p.ko, pron: '' };
+          const isHuge = state.expanded === p.id;
           return `
-            <div class="sos-phrase-card ${isHuge ? 'is-huge' : ''}" id="sos-card-${p.id}">
+            <div class="sos-phrase-card ${isHuge ? 'is-huge' : ''}" id="sos-card-${escapeHtml(p.id)}">
               <div class="flex items-center justify-between gap-2 mb-1.5">
-                <span class="text-xs font-black text-rose-400 flex items-center gap-1.5">
-                  <i class="${p.icon}" aria-hidden="true"></i>
-                  <span>${escapeHtml(p.title)}</span>
-                </span>
+                <span class="text-xs font-black text-rose-400 flex items-center gap-1.5"><i class="${p.icon}" aria-hidden="true"></i><span>${escapeHtml(p.title)}</span></span>
                 <div class="flex items-center gap-1">
-                  <button type="button" onclick="toggleSosPhraseHuge('${p.id}')" class="px-2 py-0.5 rounded bg-[#1e293b] hover:bg-[#334155] border border-[#334155] text-[10px] font-bold text-slate-200 transition cursor-pointer" title="약사/의사에게 보여줄 대형 글씨 토글">
-                    <i class="fa-solid ${isHuge ? 'fa-compress' : 'fa-magnifying-glass-plus'} text-amber-400"></i>
-                    <span>${isHuge ? '보통 크기' : '대형 확대 (AAA)'}</span>
+                  <button type="button" onclick="toggleSosPhraseHuge('${escapeHtml(p.id)}')" class="px-2 py-0.5 rounded bg-[#1e293b] hover:bg-[#334155] border border-[#334155] text-[10px] font-bold text-slate-200 transition cursor-pointer">
+                    <i class="fa-solid ${isHuge ? 'fa-compress' : 'fa-magnifying-glass-plus'} text-amber-400" aria-hidden="true"></i><span>${isHuge ? '보통 크기' : '크게 보여주기'}</span>
                   </button>
-                  <button type="button" onclick="copySosPhraseText('${escapeHtml(phraseData.phrase).replace(/'/g, "\\'")}', this)" class="px-2 py-0.5 rounded bg-[#1e293b] hover:bg-[#334155] border border-[#334155] text-[10px] font-bold text-slate-200 transition cursor-pointer" title="복사하기">
-                    <i class="fa-solid fa-copy text-sky-400"></i> <span>복사</span>
+                  <button type="button" onclick="copySosPhraseText(${escapeHtml(JSON.stringify(phraseData.phrase))}, this)" class="px-2 py-0.5 rounded bg-[#1e293b] hover:bg-[#334155] border border-[#334155] text-[10px] font-bold text-slate-200 transition cursor-pointer">
+                    <i class="fa-solid fa-copy text-sky-400" aria-hidden="true"></i> <span>복사</span>
                   </button>
                 </div>
               </div>
-
-              <!-- 현지어 본문 (초고대비) -->
               <div class="sos-phrase-main">${escapeHtml(phraseData.phrase)}</div>
-
-              <!-- 한글 발음 표기 -->
-              ${phraseData.pron ? `<div class="sos-phrase-phonetic"><i class="fa-solid fa-volume-high mr-1 text-[10px] opacity-70"></i>${escapeHtml(phraseData.pron)}</div>` : ''}
-
-              <!-- 한국어 뜻 설명 -->
+              ${phraseData.pron ? `<div class="sos-phrase-phonetic"><i class="fa-solid fa-volume-high mr-1 text-[10px] opacity-70" aria-hidden="true"></i>${escapeHtml(phraseData.pron)}</div>` : ''}
               <div class="sos-phrase-meaning">의미: ${escapeHtml(p.ko)}</div>
-            </div>
-          `;
+            </div>`;
         }).join('')}
       </div>
     </div>
@@ -1243,8 +1139,8 @@ function renderSosEmergencyContent(selectedLang = null, activeCategory = null, e
 window.renderSosEmergencyContent = renderSosEmergencyContent;
 
 function toggleSosPhraseHuge(symptomId) {
-  const current = window.__sosExpandedSymptomId;
-  window.__sosExpandedSymptomId = (current === symptomId) ? null : symptomId;
+  const state = sosState();
+  state.expanded = state.expanded === symptomId ? null : symptomId;
   renderSosEmergencyContent();
 }
 window.toggleSosPhraseHuge = toggleSosPhraseHuge;
@@ -1254,10 +1150,10 @@ function copySosPhraseText(text, btnEl) {
   const cb = navigator.clipboard;
   if (cb && typeof cb.writeText === 'function') {
     cb.writeText(text).then(() => {
-      if (typeof showToast === 'function') showToast('증상 문구가 복사되었습니다.');
+      showToast('증상 문구를 복사했습니다.');
       if (btnEl) {
         const orig = btnEl.innerHTML;
-        btnEl.innerHTML = '<i class="fa-solid fa-check text-emerald-400"></i> 복사됨';
+        btnEl.innerHTML = '<i class="fa-solid fa-check text-emerald-400" aria-hidden="true"></i> 복사됨';
         setTimeout(() => { btnEl.innerHTML = orig; }, 1500);
       }
     }).catch(() => fallbackCopyTaxiCardText(text));
@@ -1268,6 +1164,8 @@ function copySosPhraseText(text, btnEl) {
 window.copySosPhraseText = copySosPhraseText;
 
 function openSosEmergencyModal() {
+  const state = sosState(), trip = getActiveTrip();
+  if (state.tripId !== trip?.id) { state.tripId = trip?.id || null; state.countryOverride = null; }
   renderSosEmergencyContent('auto', 'all', null);
   if (typeof openModal === 'function') openModal('modal-sos-emergency');
 }
@@ -1291,8 +1189,8 @@ function calculateBudgetPacing(trip, walletData) {
     } else if (diffDays > totalDays) {
       currentDayNum = totalDays;
     }
-  } else if (Number.isInteger(State?.activePlanDayIndex)) {
-    currentDayNum = Math.min(totalDays, State.activePlanDayIndex + 1);
+  } else if (Number.isInteger(State?.activeTodayDayIndex)) {
+    currentDayNum = Math.min(totalDays, State.activeTodayDayIndex + 1);
   }
 
   const remainingDays = Math.max(1, totalDays - currentDayNum + 1);
@@ -1417,324 +1315,331 @@ function updateBudgetPacingHud(trip, walletData) {
 window.updateBudgetPacingHud = updateBudgetPacingHud;
 
 /* ==========================================================================
-   아이디어 2: 길거리 음성/사진 퀵 캡슐 & AI 일기 완성 (Priority 4-4)
+   현장 퀵 캡슐: 순간 기록(momentEntries)의 빠른 입력 방식 (v2.0.2)
+   날짜·사진·저장·AI 승인 경계는 순간 기록과 같다. 별도 컬렉션을 만들지 않는다.
    ========================================================================== */
-window.__capsuleSelectedMood = 'wonder';
-window.__capsulePhotoData = null;
-window.__capsuleSpeechRecognition = null;
-window.__capsuleIsRecording = false;
+const CAPSULE_MOODS = Object.freeze([
+  { key: 'wonder', label: '✨ 감탄/경이' },
+  { key: 'food', label: '🍜 꿀맛/맛집' },
+  { key: 'tip', label: '💡 여행 꿀팁' },
+  { key: 'warning', label: '⚠️ 주의/바가지' },
+  { key: 'moved', label: '💖 감동' },
+  { key: 'photo', label: '📸 포토스팟' }
+]);
+function capsuleMoodLabel(key) { return CAPSULE_MOODS.find(mood => mood.key === key)?.label || ''; }
+function capsuleEntries(trip, date) {
+  return (Array.isArray(trip?.momentEntries) ? trip.momentEntries : [])
+    .filter(entry => entry?.source === 'capsule' && entry.date === date)
+    .sort((a, b) => (a.time || '24:00').localeCompare(b.time || '24:00') || String(a.createdAt || '').localeCompare(String(b.createdAt || '')));
+}
+function capsuleTrip() { const editor = State.capsuleEditor; return editor ? State.trips.find(trip => trip.id === editor.tripId) : null; }
+// 지금 현지 날짜가 여행 안이면 그 날, 아니면 여행 단계에 맞는 날을 고른다. 사용자가 바꿀 수 있다.
+function capsuleDefaultDayIndex(trip) {
+  const today = SulsulTravel.TripAdapter.localDateKey(new Date(), trip.timeZone);
+  const exact = (trip.days || []).findIndex(day => day.date === today);
+  return exact >= 0 ? exact : SulsulTravel.TripAdapter.resolveTodayDayIndex(trip);
+}
+function stopCapsuleVoice(editor = State.capsuleEditor) {
+  if (!editor?.recognition) return;
+  try { editor.recognition.stop(); } catch (_) {}
+  editor.recognition = null; editor.recording = false;
+}
+function setCapsuleFeedback(message) {
+  if (State.capsuleEditor) State.capsuleEditor.feedback = message;
+  const element = document.getElementById('capsule-feedback');
+  if (element) element.textContent = message;
+}
 
 function openQuickCapsuleModal() {
-  window.__capsulePhotoData = null;
-  renderQuickCapsuleContent();
+  const trip = getActiveTrip();
+  if (!trip?.days?.length) { showToast('먼저 여행 일정을 만들어 주세요.'); return; }
+  stopCapsuleVoice();
+  State.capsuleEditor = { tripId: trip.id, dayIndex: capsuleDefaultDayIndex(trip), mood: 'wonder', photo: null, busy: false, usedVoice: false, recognition: null, recording: false, feedback: '' };
+  renderQuickCapsuleContent(false);
   if (typeof openModal === 'function') openModal('modal-quick-capsule');
 }
 window.openQuickCapsuleModal = openQuickCapsuleModal;
 
 function setCapsuleMood(moodKey) {
-  window.__capsuleSelectedMood = moodKey;
-  renderQuickCapsuleContent(false);
+  const editor = State.capsuleEditor;
+  if (!editor || !CAPSULE_MOODS.some(mood => mood.key === moodKey)) return;
+  editor.mood = moodKey;
+  renderQuickCapsuleContent(true);
 }
 window.setCapsuleMood = setCapsuleMood;
 
+function selectCapsuleDay(value) {
+  const editor = State.capsuleEditor, trip = capsuleTrip(), dayIndex = Number(value);
+  if (!editor || !trip?.days?.[dayIndex]) return;
+  editor.dayIndex = dayIndex;
+  renderQuickCapsuleContent(true);
+}
+window.selectCapsuleDay = selectCapsuleDay;
+
 function toggleCapsuleVoiceRecognition() {
+  const editor = State.capsuleEditor;
+  if (!editor) return;
   const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
   const statusEl = document.getElementById('capsule-mic-status');
   const micBtn = document.getElementById('capsule-mic-btn');
-
-  if (!SpeechRec) {
-    if (typeof showToast === 'function') showToast('현재 브라우저가 음성 인식을 지원하지 않습니다. 텍스트로 직접 입력해 주세요.');
+  if (!SpeechRec) { showToast('현재 브라우저가 음성 인식을 지원하지 않습니다. 텍스트로 직접 입력해 주세요.'); return; }
+  if (editor.recording) {
+    stopCapsuleVoice(editor);
+    micBtn?.classList.remove('is-recording');
+    if (statusEl) statusEl.textContent = '음성 인식을 멈췄어요. 내용을 확인하고 보관하세요.';
     return;
   }
-
-  if (window.__capsuleIsRecording && window.__capsuleSpeechRecognition) {
-    try {
-      window.__capsuleSpeechRecognition.stop();
-    } catch (_) {}
-    window.__capsuleIsRecording = false;
-    if (micBtn) micBtn.classList.remove('is-recording');
-    if (statusEl) statusEl.innerText = '음성 인식 완료 (텍스트를 확인하고 저장하세요)';
-    return;
-  }
-
   try {
     const recognition = new SpeechRec();
-    recognition.lang = 'ko-KR';
-    recognition.continuous = false;
-    recognition.interimResults = true;
-
+    recognition.lang = 'ko-KR'; recognition.continuous = false; recognition.interimResults = true;
+    const input = document.getElementById('capsule-text-input');
+    const before = input?.value || '';
     recognition.onstart = () => {
-      window.__capsuleIsRecording = true;
-      if (micBtn) micBtn.classList.add('is-recording');
-      if (statusEl) statusEl.innerHTML = '<span class="text-rose-400 font-bold animate-pulse">🎙️ 듣고 있습니다... 말씀해 주세요!</span>';
+      editor.recording = true; micBtn?.classList.add('is-recording');
+      if (statusEl) statusEl.textContent = '🎙️ 듣고 있어요. 말씀해 주세요.';
     };
-
-    recognition.onresult = (event) => {
-      const input = document.getElementById('capsule-text-input');
+    recognition.onresult = event => {
       let transcript = '';
-      for (let i = event.resultIndex; i < event.results.length; ++i) {
-        transcript += event.results[i][0].transcript;
-      }
-      if (input && transcript) {
-        input.value = transcript;
-      }
+      for (let i = event.resultIndex; i < event.results.length; ++i) transcript += event.results[i][0].transcript;
+      const target = document.getElementById('capsule-text-input');
+      // 이미 적은 메모 뒤에 이어 붙인다. 덮어쓰지 않는다.
+      if (target && transcript && State.capsuleEditor === editor) { target.value = before ? `${before} ${transcript}` : transcript; editor.usedVoice = true; }
     };
-
-    recognition.onerror = (e) => {
-      console.warn('SpeechRecognition error:', e);
-      window.__capsuleIsRecording = false;
-      if (micBtn) micBtn.classList.remove('is-recording');
-      if (statusEl) statusEl.innerText = '음성 인식 대기 중';
-      if (typeof showToast === 'function') showToast('음성 인식 오류: ' + (e.error || '권한을 확인하세요'));
+    recognition.onerror = event => {
+      editor.recording = false; editor.recognition = null; micBtn?.classList.remove('is-recording');
+      if (statusEl) statusEl.textContent = '음성 인식을 사용할 수 없어요. 직접 입력해 주세요.';
+      console.warn('SpeechRecognition error:', event?.error);
     };
-
     recognition.onend = () => {
-      window.__capsuleIsRecording = false;
-      if (micBtn) micBtn.classList.remove('is-recording');
-      if (statusEl) statusEl.innerText = '음성 인식 완료';
+      editor.recording = false; editor.recognition = null; micBtn?.classList.remove('is-recording');
+      if (statusEl && State.capsuleEditor === editor) statusEl.textContent = '음성 인식이 끝났어요. 내용을 확인하고 보관하세요.';
     };
-
-    window.__capsuleSpeechRecognition = recognition;
+    editor.recognition = recognition;
     recognition.start();
-  } catch (err) {
-    console.warn('Failed to start speech recognition:', err);
-    if (typeof showToast === 'function') showToast('마이크 연결 실패: ' + err.message);
+  } catch (error) {
+    console.warn('Failed to start speech recognition:', error);
+    showToast('마이크를 시작하지 못했습니다. 권한을 확인하거나 직접 입력해 주세요.');
   }
 }
 window.toggleCapsuleVoiceRecognition = toggleCapsuleVoiceRecognition;
 
-function handleCapsulePhotoInput(event) {
-  const file = event.target.files?.[0];
-  if (!file) return;
+function renderCapsulePhotoPreview() {
+  const editor = State.capsuleEditor, preview = document.getElementById('capsule-photo-preview');
+  const input = document.getElementById('capsule-photo-input'), save = document.getElementById('capsule-save-btn');
+  if (input) input.disabled = !!editor?.busy;
+  if (save) save.disabled = !!editor?.busy;
+  if (!preview) return;
+  const source = editor?.photo ? SulsulTravel.MediaRepository.photoSource({ photos: [editor.photo.source], photoThumbnails: [editor.photo.thumbnail] }, 0, { thumbnail: true }) : '';
+  preview.innerHTML = editor?.busy ? '<span class="text-[11px] text-slate-400">사진 준비 중…</span>' : source ? `
+    <div class="relative w-16 h-12 rounded-xl overflow-hidden border border-amber-500/40">
+      <img src="${escapeHtml(source)}" class="w-full h-full object-cover" alt="첨부할 사진 미리보기">
+      <button type="button" onclick="removeCapsulePhoto()" class="absolute top-0.5 right-0.5 w-6 h-6 rounded-full capsule-photo-remove text-white text-[11px] flex items-center justify-center" aria-label="첨부한 사진 빼기">✕</button>
+    </div>` : '';
+}
 
-  const reader = new FileReader();
-  reader.onload = (e) => {
-    window.__capsulePhotoData = e.target.result;
-    const preview = document.getElementById('capsule-photo-preview');
-    if (preview) {
-      preview.innerHTML = `
-        <div class="relative w-16 h-12 rounded-xl overflow-hidden border border-amber-500/40">
-          <img src="${window.__capsulePhotoData}" class="w-full h-full object-fit-cover" alt="사진 미리보기">
-          <button type="button" onclick="removeCapsulePhoto()" class="absolute top-0.5 right-0.5 w-4 h-4 rounded-full bg-slate-900/80 text-white text-[9px] flex items-center justify-center">✕</button>
-        </div>
-      `;
-    }
-  };
-  reader.readAsDataURL(file);
+async function handleCapsulePhotoInput(event) {
+  const editor = State.capsuleEditor, file = event.target.files?.[0];
+  event.target.value = '';
+  if (!editor || !file || editor.busy) return;
+  editor.busy = true; renderCapsulePhotoPreview();
+  setCapsuleFeedback('사진의 비율을 유지해 보관본과 썸네일을 준비하고 있어요…');
+  try {
+    // 순간 기록과 같은 압축·IndexedDB 보관 경로. 원본 data URL을 여행 문서에 넣지 않는다.
+    const prepared = await SulsulTravel.mediaRepository.prepare(file, { tripId: editor.tripId });
+    if (State.capsuleEditor !== editor) return;
+    editor.photo = prepared;
+    setCapsuleFeedback('사진이 준비되었습니다. 보관하기를 누르면 저장됩니다.');
+  } catch (error) {
+    if (State.capsuleEditor === editor) setCapsuleFeedback(error?.message || '사진을 준비하지 못했습니다. 다시 선택해 주세요.');
+  } finally {
+    editor.busy = false;
+    if (State.capsuleEditor === editor) renderCapsulePhotoPreview();
+  }
 }
 window.handleCapsulePhotoInput = handleCapsulePhotoInput;
 
 function removeCapsulePhoto() {
-  window.__capsulePhotoData = null;
-  const preview = document.getElementById('capsule-photo-preview');
-  if (preview) preview.innerHTML = '';
+  const editor = State.capsuleEditor;
+  if (!editor || editor.busy) return;
+  editor.photo = null;
+  renderCapsulePhotoPreview();
 }
 window.removeCapsulePhoto = removeCapsulePhoto;
 
-function saveQuickCapsule() {
-  const textInput = document.getElementById('capsule-text-input');
-  const spotSelect = document.getElementById('capsule-spot-select');
-  const text = (textInput?.value || '').trim();
-
-  if (!text && !window.__capsulePhotoData) {
-    if (typeof showToast === 'function') showToast('음성 또는 메모 내용을 입력해 주세요.');
-    return;
-  }
-
-  const trip = getActiveTrip();
-  if (!trip) return;
-
-  trip.quickCapsules = trip.quickCapsules || [];
-  const activeDayIndex = State?.activePlanDayIndex ?? 0;
-  const currentDay = trip.days?.[activeDayIndex];
-
-  const now = new Date();
-  const timeStr = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
-
-  const capsule = {
-    id: 'cap-' + Date.now(),
-    dayIndex: activeDayIndex,
-    date: currentDay?.date || now.toISOString().split('T')[0],
-    time: timeStr,
-    text: text,
-    mood: window.__capsuleSelectedMood,
-    spotTitle: spotSelect?.value || '',
-    photo: window.__capsulePhotoData || null,
-    createdAt: now.toISOString()
+function buildCapsuleEntry(trip, editor, text) {
+  const day = trip.days[editor.dayIndex];
+  const local = SulsulTravel.TripAdapter.localDateKey(new Date(), trip.timeZone);
+  const now = new Date().toISOString();
+  const spotId = document.getElementById('capsule-spot-select')?.value || '';
+  const spotIndex = spotId ? (day.spots || []).findIndex(spot => spot.id === spotId) : -1;
+  const spot = spotIndex >= 0 ? day.spots[spotIndex] : null;
+  const photo = editor.photo;
+  return {
+    id: `moment_${crypto.randomUUID()}`,
+    source: 'capsule', capture: editor.usedVoice ? 'voice' : 'text',
+    date: day.date, dayIndex: editor.dayIndex,
+    // 다른 날을 골랐으면 지금 시각을 그 날의 기록 시각으로 쓰지 않는다.
+    time: day.date === local ? SulsulTravel.TripAdapter.localTimeKey(new Date(), trip.timeZone) : '',
+    text, mood: editor.mood,
+    photos: photo ? [photo.source] : [], photoThumbnails: photo ? [photo.thumbnail] : [], mediaIds: photo ? [photo.mediaId] : [], coverIndex: 0,
+    activityLink: spot ? { dayIndex: editor.dayIndex, spotIndex, title: spot.title || '일정', date: day.date, time: spot.time || '', city: day.city || '', ...(spot.recordId ? { recordId: spot.recordId } : {}), spotId: spot.id } : null,
+    visibility: 'private', createdAt: now, updatedAt: now
   };
+}
 
-  trip.quickCapsules.unshift(capsule);
-
-  if (typeof saveTrips === 'function') saveTrips();
-  if (window.TripRepository && typeof TripRepository.saveAll === 'function' && State?.trips) {
-    TripRepository.saveAll(State.trips);
+function saveQuickCapsule() {
+  const editor = State.capsuleEditor, trip = capsuleTrip();
+  if (!editor || editor.busy) return false;
+  if (!trip?.days?.[editor.dayIndex]) { setCapsuleFeedback('여행 날짜를 찾지 못했습니다. 창을 닫고 다시 열어 주세요.'); return false; }
+  const textInput = document.getElementById('capsule-text-input');
+  const text = (textInput?.value || '').trim();
+  if (!text && !editor.photo) { setCapsuleFeedback('음성·메모 또는 사진을 먼저 남겨 주세요.'); return false; }
+  stopCapsuleVoice(editor);
+  const entry = buildCapsuleEntry(trip, editor, text);
+  const saved = commitTripCommand({ tripId: trip.id, expectedRevision: trip.revision, change: copy => {
+    copy.momentEntries = Array.isArray(copy.momentEntries) ? copy.momentEntries : [];
+    copy.momentEntries.push(entry);
+  } });
+  if (!saved) {
+    // 실패하면 입력·사진을 그대로 두고 성공 안내를 띄우지 않는다.
+    setCapsuleFeedback('보관하지 못했습니다. 입력한 글과 사진은 이 창에 그대로 있어요. 저장 공간을 확인한 뒤 다시 눌러 주세요.');
+    return false;
   }
-
-  if (typeof showToast === 'function') showToast('길거리 퀵 캡슐이 보관되었습니다!');
-
+  editor.photo = null; editor.usedVoice = false;
   if (textInput) textInput.value = '';
-  window.__capsulePhotoData = null;
-  renderQuickCapsuleContent();
+  setCapsuleFeedback('순간 기록으로 보관했습니다. 기록 탭과 여행 이야기에도 함께 나타납니다.');
+  renderQuickCapsuleContent(true);
+  if (typeof refreshMomentSurfaces === 'function') refreshMomentSurfaces();
+  showToast('퀵 캡슐을 순간 기록으로 보관했습니다.');
+  return true;
 }
 window.saveQuickCapsule = saveQuickCapsule;
 
-function deleteQuickCapsule(capsuleId) {
-  const trip = getActiveTrip();
-  if (!trip?.quickCapsules) return;
-  trip.quickCapsules = trip.quickCapsules.filter(c => c.id !== capsuleId);
-  if (typeof saveTrips === 'function') saveTrips();
-  renderQuickCapsuleContent();
-  if (typeof showToast === 'function') showToast('캡슐이 삭제되었습니다.');
+function deleteQuickCapsule(entryId) {
+  const editor = State.capsuleEditor, trip = capsuleTrip();
+  if (!editor || editor.busy || !trip) return false;
+  if (!momentEntries(trip).some(entry => entry.id === entryId)) return false;
+  if (!confirm('이 캡슐의 글과 사진을 삭제할까요? 다른 기록은 그대로이며 되돌릴 수 없습니다.')) return false;
+  const saved = commitTripCommand({ tripId: trip.id, expectedRevision: trip.revision, change: copy => {
+    copy.momentEntries = momentEntries(copy).filter(entry => entry.id !== entryId);
+  } });
+  if (!saved) { setCapsuleFeedback('삭제하지 못했습니다. 캡슐은 그대로 남아 있습니다.'); return false; }
+  renderQuickCapsuleContent(true);
+  if (typeof refreshMomentSurfaces === 'function') refreshMomentSurfaces();
+  showToast('캡슐을 삭제했습니다.');
+  return true;
 }
 window.deleteQuickCapsule = deleteQuickCapsule;
 
+function capsuleDiarySource(capsules) {
+  return capsules.map(entry => `[${[entry.time || '시각 미상', entry.activityLink?.title, capsuleMoodLabel(entry.mood)].filter(Boolean).join(' · ')}] ${entry.text || '(사진만 남김)'}`).join('\n');
+}
+
+// AI는 캡슐 메모를 하루 기록 초안으로 엮기만 한다. 승인 전에는 아무것도 저장하지 않는다.
 async function generateDiaryFromCapsules() {
-  const trip = getActiveTrip();
-  const activeDayIndex = State?.activePlanDayIndex ?? 0;
-  const capsules = (trip?.quickCapsules || []).filter(c => c.dayIndex === activeDayIndex);
+  const editor = State.capsuleEditor, trip = capsuleTrip();
+  if (!editor || editor.busy || !trip) return;
+  const day = trip.days?.[editor.dayIndex];
+  const capsules = capsuleEntries(trip, day?.date);
+  if (!day || !capsules.some(entry => (entry.text || '').trim())) { setCapsuleFeedback('글이 있는 캡슐을 먼저 남겨 주세요. 사진만으로는 일기를 엮지 않아요.'); return; }
+  const city = day.city || '여행지';
+  const sourceText = capsuleDiarySource(capsules);
+  const prompt = `당신은 여행 에세이 편집자입니다. 아래는 여행자가 ${day.date} ${city}에서 직접 남긴 현장 메모입니다.
+메모에 있는 사실과 감정만 사용해 자연스러운 1인칭 한국어 하루 기록으로 엮으세요.
+메모에 없는 장소·음식·사람·시각·날씨·감각을 지어내지 마세요. 메모가 짧으면 짧게 쓰세요. 제목·머리말·설명 없이 본문만 쓰세요.
 
-  if (!capsules.length) {
-    if (typeof showToast === 'function') showToast('오늘 저장된 퀵 캡슐이 없습니다. 먼저 음성이나 메모를 남겨보세요.');
-    return;
-  }
-
-  const currentDay = trip?.days?.[activeDayIndex];
-  const cityName = currentDay?.city || '여행지';
-
-  const notes = capsules.map((c, i) => {
-    return `[${c.time} / 무드: ${c.mood} / 장소: ${c.spotTitle || '거리'}] ${c.text}`;
-  }).join('\n');
-
-  const prompt = `
-당신은 최고의 감성 여행 에세이 작가입니다.
-여행자가 오늘 ${cityName}에서 걸어 다니며 남긴 현장 음성 퀵 메모 캡슐들을 바탕으로, 마치 한 편의 감성적인 여행 다이어리(일기)를 정갈하게 작성해 주세요.
-
-[현장 메모 캡슐 목록]:
-${notes}
-
-[작성 가이드라인]:
-- 한국어 자연스러운 에세이 어조 (~했다, ~느꼈다 체 또는 ~했답니다)
-- 300~500자 분량으로 하루의 공기와 분위기, 현장의 감각(맛, 소리, 감정)을 살려 풍성하게 집필
-- 제목 1줄과 본문 2~3개 문단으로 구성
-`.trim();
-
-  const btn = document.getElementById('btn-ai-synthesize-diary');
-  if (btn) {
-    btn.disabled = true;
-    btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-1"></i> AI가 감성 일기를 집필 중입니다...';
-  }
-
+[현장 메모]
+${sourceText}`;
+  setCapsuleFeedback('AI 제안을 준비하고 있어요. 승인하기 전에는 저장되지 않습니다…');
+  const button = document.getElementById('btn-ai-synthesize-diary');
+  if (button) button.disabled = true;
   try {
-    if (typeof window.callGeminiApiWithFallback !== 'function') {
-      throw new Error('Gemini API 함수가 준비되지 않았습니다.');
-    }
-    const diaryContent = await window.callGeminiApiWithFallback(prompt);
-    
-    if (!trip.activityRecords || Array.isArray(trip.activityRecords) || typeof trip.activityRecords !== 'object') {
-      trip.activityRecords = {};
-    }
-    const newRecordId = 'rec-' + Date.now();
-    const newRecord = {
-      id: newRecordId,
-      dayIndex: activeDayIndex,
-      date: currentDay?.date || new Date().toISOString().split('T')[0],
-      city: cityName,
-      title: `${cityName}의 하루, 캡슐로 엮은 이야기`,
-      content: diaryContent,
-      photos: capsules.map(c => c.photo).filter(Boolean),
-      mood: capsules[0]?.mood || 'wonder',
-      createdAt: new Date().toISOString()
-    };
-    trip.activityRecords[newRecordId] = newRecord;
-
-    if (typeof saveTrips === 'function') saveTrips();
-    if (window.TripRepository && typeof TripRepository.saveAll === 'function' && State?.trips) {
-      TripRepository.saveAll(State.trips);
-    }
-
-    if (typeof showToast === 'function') showToast('✨ AI 여행 일기가 성공적으로 집필되어 기록 탭에 등록되었습니다!');
-    closeModal('modal-quick-capsule');
-    if (typeof switchTab === 'function') switchTab('journal');
-  } catch (err) {
-    console.error('AI Diary Generation Error:', err);
-    if (typeof showToast === 'function') showToast('일기 작성 실패: ' + (err.userMessage || err.message));
+    const result = await startAiDraftJob({ id: `capsule-diary:${trip.id}:${day.id}:${Date.now()}`, tripId: trip.id, targetId: day.id, kind: 'capsule-diary', baseRevision: trip.revision || 0,
+      input: { dayId: day.id, date: day.date, dayIndex: editor.dayIndex, city, sourceText, capsuleIds: capsules.map(entry => entry.id), prompt } });
+    if (State.capsuleEditor === editor) setCapsuleFeedback(result?.state === 'awaiting_review' ? 'AI 제안을 비교하고 승인하면 이 날의 순간 기록으로 저장됩니다. 캡슐 원문은 그대로 남아요.' : 'AI 제안을 만들지 못했습니다. 캡슐은 그대로 있어요.');
+  } catch (_) {
+    if (State.capsuleEditor === editor) setCapsuleFeedback('AI 연결을 확인해 주세요. 캡슐은 그대로 있어요.');
   } finally {
-    if (btn) {
-      btn.disabled = false;
-      btn.innerHTML = '<i class="fa-solid fa-wand-magic-sparkles mr-1"></i> 오늘의 캡슐로 AI 여행 일기 자동 집필';
-    }
+    const current = document.getElementById('btn-ai-synthesize-diary');
+    if (current) current.disabled = false;
   }
 }
 window.generateDiaryFromCapsules = generateDiaryFromCapsules;
 
+// 승인된 AI 일기를 새 순간 기록으로 저장한다. 그사이 캡슐이 바뀌었으면 적용하지 않는다.
+function applyCapsuleDiaryDraft(job) {
+  const trip = State.trips.find(item => item.id === job.tripId);
+  const day = trip?.days?.find(item => item.id === job.input.dayId);
+  if (!trip || !day || day.date !== job.input.date) return 'conflict';
+  if (capsuleDiarySource(capsuleEntries(trip, day.date)) !== job.input.sourceText) return 'conflict';
+  const now = new Date().toISOString();
+  const result = TripRepository.applyDraft(State.trips, { tripId: trip.id, baseRevision: job.baseRevision, jobId: job.id, mutate: copy => {
+    copy.momentEntries = Array.isArray(copy.momentEntries) ? copy.momentEntries : [];
+    copy.momentEntries.push({ id: `moment_${crypto.randomUUID()}`, source: 'capsule-diary', date: day.date, dayIndex: copy.days.findIndex(item => item.id === day.id), time: '',
+      title: `${job.input.city} 하루 이야기`, originalText: job.input.sourceText, text: job.draft.text, aiDraftAcceptedAt: now, capsuleIds: job.input.capsuleIds,
+      photos: [], photoThumbnails: [], mediaIds: [], coverIndex: 0, activityLink: null, visibility: 'private', createdAt: now, updatedAt: now });
+  } });
+  if (result.status === 'applied') {
+    State.trips = result.trips;
+    if (State.capsuleEditor?.tripId === trip.id) { setCapsuleFeedback('승인한 AI 글을 순간 기록으로 저장했습니다. 원래 메모도 함께 보관됩니다.'); renderQuickCapsuleContent(true); }
+  }
+  return result.status;
+}
+window.applyCapsuleDiaryDraft = applyCapsuleDiaryDraft;
+
 function renderQuickCapsuleContent(preserveText = true) {
   const container = document.getElementById('quick-capsule-content');
+  const editor = State.capsuleEditor, trip = capsuleTrip();
   if (!container) return;
-
-  const trip = getActiveTrip();
-  const activeDayIndex = State?.activePlanDayIndex ?? 0;
-  const currentDay = trip?.days?.[activeDayIndex];
-  const spots = currentDay?.spots || [];
-
+  if (!editor || !trip?.days?.length) { container.innerHTML = '<p class="text-xs text-slate-400 text-center py-6">여행을 선택한 뒤 다시 열어 주세요.</p>'; return; }
+  const day = trip.days[editor.dayIndex] || trip.days[0];
+  const spots = (day.spots || []).filter(spot => SulsulTravel.LiveItinerary?.active ? SulsulTravel.LiveItinerary.active(spot) : true);
   const existingText = preserveText ? (document.getElementById('capsule-text-input')?.value || '') : '';
-
-  const moods = [
-    { key: 'wonder', label: '✨ 감탄/경이' },
-    { key: 'food', label: '🍜 꿀맛/맛집' },
-    { key: 'tip', label: '💡 여행 꿀팁' },
-    { key: 'warning', label: '⚠️ 주의/바가지' },
-    { key: 'moved', label: '💖 감동' },
-    { key: 'photo', label: '📸 포토스팟' }
-  ];
-
-  const todayCapsules = (trip?.quickCapsules || []).filter(c => c.dayIndex === activeDayIndex);
+  const selectedSpot = preserveText ? (document.getElementById('capsule-spot-select')?.value || '') : '';
+  const dayCapsules = capsuleEntries(trip, day.date);
+  const today = SulsulTravel.TripAdapter.localDateKey(new Date(), trip.timeZone);
 
   container.innerHTML = `
-    <!-- 음성 녹음 상단 섹션 -->
+    <div class="space-y-1.5">
+      <label for="capsule-day-select" class="text-[11px] font-bold text-slate-400">기록할 날짜</label>
+      <select id="capsule-day-select" onchange="selectCapsuleDay(this.value)" class="w-full p-2 rounded-xl bg-[#141c2e] border border-[#23304c] text-slate-200 text-xs focus:outline-none focus:border-amber-500">
+        ${trip.days.map((item, index) => `<option value="${index}" ${index === editor.dayIndex ? 'selected' : ''}>Day ${index + 1} · ${escapeHtml(item.date || '날짜 미정')}${item.city ? ` · ${escapeHtml(item.city)}` : ''}${item.date === today ? ' (오늘)' : ''}</option>`).join('')}
+      </select>
+      ${day.date !== today ? '<p class="text-[11px] text-slate-400">오늘이 아닌 날짜를 골랐어요. 기록 시각은 비워 두고 저장합니다.</p>' : ''}
+    </div>
+
     <div class="text-center p-3.5 rounded-2xl bg-[#080b12] border border-[#1a2236] space-y-2.5">
-      <div id="capsule-mic-btn" onclick="toggleCapsuleVoiceRecognition()" class="capsule-mic-btn shadow-lg" title="마이크 터치하여 음성으로 말하기">
-        <i class="fa-solid fa-microphone"></i>
-      </div>
-      <div id="capsule-mic-status" class="text-xs text-slate-400 font-medium">마이크를 터치하여 현장 감상을 바로 말씀하세요</div>
+      <button type="button" id="capsule-mic-btn" onclick="toggleCapsuleVoiceRecognition()" class="capsule-mic-btn shadow-lg ${editor.recording ? 'is-recording' : ''}" aria-label="음성으로 메모 말하기">
+        <i class="fa-solid fa-microphone" aria-hidden="true"></i>
+      </button>
+      <div id="capsule-mic-status" class="text-xs text-slate-400 font-medium" role="status">마이크를 눌러 현장 감상을 말하거나 아래에 적어 주세요</div>
     </div>
 
-    <!-- 텍스트 입력창 -->
     <div class="space-y-1.5">
-      <div class="flex items-center justify-between text-xs">
-        <label for="capsule-text-input" class="font-bold text-slate-300">현장 메모 / 음성 변환 내용</label>
-        <span class="text-[11px] text-amber-400">키보드 직접 입력 가능</span>
-      </div>
-      <textarea id="capsule-text-input" rows="3" placeholder="걷거나 구경하며 느낀 감상, 꿀팁, 가게 이름을 남겨보세요..." class="w-full p-3 rounded-xl bg-[#141c2e] border border-[#23304c] text-white text-xs placeholder-slate-500 focus:outline-none focus:border-amber-500 leading-relaxed">${escapeHtml(existingText)}</textarea>
+      <label for="capsule-text-input" class="text-xs font-bold text-slate-300">현장 메모 / 음성 변환 내용</label>
+      <textarea id="capsule-text-input" rows="3" placeholder="걷거나 구경하며 느낀 감상, 꿀팁, 가게 이름을 남겨보세요..." class="w-full p-3 rounded-xl bg-[#141c2e] border border-[#23304c] text-white text-base sm:text-xs placeholder-slate-500 focus:outline-none focus:border-amber-500 leading-relaxed">${escapeHtml(existingText)}</textarea>
     </div>
 
-    <!-- 무드 칩 선택 -->
     <div class="space-y-1.5">
-      <div class="text-[11px] font-bold text-slate-400">감성 무드 선택</div>
+      <div class="text-[11px] font-bold text-slate-400">감성 무드</div>
       <div class="capsule-mood-grid">
-        ${moods.map(m => `
-          <button type="button" onclick="setCapsuleMood('${m.key}')" class="capsule-mood-chip ${window.__capsuleSelectedMood === m.key ? 'is-active' : ''}">
-            ${escapeHtml(m.label)}
-          </button>
-        `).join('')}
+        ${CAPSULE_MOODS.map(mood => `<button type="button" onclick="setCapsuleMood('${mood.key}')" class="capsule-mood-chip ${editor.mood === mood.key ? 'is-active' : ''}" aria-pressed="${editor.mood === mood.key}">${escapeHtml(mood.label)}</button>`).join('')}
       </div>
     </div>
 
-    <!-- 연결 스팟 선택 & 사진 첨부 툴바 -->
     <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-1">
       <div class="space-y-1">
-        <label for="capsule-spot-select" class="text-[11px] font-bold text-slate-400">관련 스팟 (선택)</label>
+        <label for="capsule-spot-select" class="text-[11px] font-bold text-slate-400">관련 일정 (선택)</label>
         <select id="capsule-spot-select" class="w-full p-2 rounded-xl bg-[#141c2e] border border-[#23304c] text-slate-200 text-xs focus:outline-none focus:border-amber-500">
-          <option value="">[스팟 미지정 / 길거리]</option>
-          ${spots.map((s, idx) => `
-            <option value="${escapeHtml(s.title || s.name)}">${idx + 1}. ${escapeHtml(s.title || s.name)}</option>
-          `).join('')}
+          <option value="">일정 없이 기록</option>
+          ${spots.map((spot, index) => `<option value="${escapeHtml(spot.id)}" ${spot.id === selectedSpot ? 'selected' : ''}>${index + 1}. ${escapeHtml(spot.title || spot.name || '일정')}</option>`).join('')}
         </select>
       </div>
       <div class="space-y-1">
-        <div class="text-[11px] font-bold text-slate-400">사진 1장 스냅 (선택)</div>
+        <div class="text-[11px] font-bold text-slate-400">사진 1장 (선택)</div>
         <div class="flex items-center gap-2">
-          <label for="capsule-photo-input" class="flex-1 py-2 px-3 rounded-xl bg-[#141c2e] hover:bg-[#1e293b] border border-[#23304c] text-xs font-bold text-slate-300 flex items-center justify-center gap-1.5 cursor-pointer transition">
-            <i class="fa-solid fa-camera text-amber-400"></i> <span>사진 촬영/선택</span>
+          <label for="capsule-photo-input" class="flex-1 min-h-[44px] py-2 px-3 rounded-xl bg-[#141c2e] hover:bg-[#1e293b] border border-[#23304c] text-xs font-bold text-slate-300 flex items-center justify-center gap-1.5 cursor-pointer transition">
+            <i class="fa-solid fa-camera text-amber-400" aria-hidden="true"></i> <span>사진 촬영/선택</span>
           </label>
           <input type="file" id="capsule-photo-input" accept="image/*" capture="environment" onchange="handleCapsulePhotoInput(event)" class="hidden">
           <div id="capsule-photo-preview"></div>
@@ -1742,50 +1647,48 @@ function renderQuickCapsuleContent(preserveText = true) {
       </div>
     </div>
 
-    <!-- 저장 버튼 -->
-    <button type="button" onclick="saveQuickCapsule()" class="w-full py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs transition shadow-md cursor-pointer flex items-center justify-center gap-1.5">
-      <i class="fa-solid fa-floppy-disk"></i> <span>퀵 캡슐 보관하기</span>
+    <p id="capsule-feedback" class="text-[11px] text-amber-300 capsule-feedback" role="status">${escapeHtml(editor.feedback || '')}</p>
+    <button type="button" id="capsule-save-btn" onclick="saveQuickCapsule()" class="w-full min-h-[44px] py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs transition shadow-md cursor-pointer flex items-center justify-center gap-1.5">
+      <i class="fa-solid fa-floppy-disk" aria-hidden="true"></i> <span>퀵 캡슐 보관하기</span>
     </button>
 
-    <!-- 오늘 수집된 캡슐 목록 및 AI 합성 -->
     <div class="pt-3 border-t border-[#1a2236] space-y-2">
-      <div class="flex items-center justify-between">
+      <div class="flex items-center justify-between gap-2">
         <span class="text-xs font-black text-white flex items-center gap-1.5">
-          <i class="fa-solid fa-boxes-packing text-amber-400"></i>
-          <span>오늘 수집된 캡슐 (${todayCapsules.length}개)</span>
+          <i class="fa-solid fa-boxes-packing text-amber-400" aria-hidden="true"></i>
+          <span>이 날의 캡슐 (${dayCapsules.length}개)</span>
         </span>
-        ${todayCapsules.length > 0 ? `
-          <button type="button" id="btn-ai-synthesize-diary" onclick="generateDiaryFromCapsules()" class="text-[11px] font-black text-amber-400 hover:text-amber-300 px-2.5 py-1 rounded-lg bg-amber-500/15 border border-amber-500/30 transition flex items-center gap-1 cursor-pointer" title="모은 캡슐로 Gemini AI 일기 완성">
-            <i class="fa-solid fa-wand-magic-sparkles text-[10px]"></i> <span>AI 일기 완성</span>
-          </button>
-        ` : ''}
+        ${dayCapsules.some(entry => (entry.text || '').trim()) ? `
+          <button type="button" id="btn-ai-synthesize-diary" onclick="generateDiaryFromCapsules()" class="min-h-[44px] text-[11px] font-black text-amber-400 hover:text-amber-300 px-2.5 py-1 rounded-lg bg-amber-500/15 border border-amber-500/30 transition flex items-center gap-1 cursor-pointer">
+            <i class="fa-solid fa-wand-magic-sparkles text-[10px]" aria-hidden="true"></i> <span>AI 일기 초안</span>
+          </button>` : ''}
       </div>
-
-      ${todayCapsules.length === 0 ? `
-        <div class="text-[11px] text-slate-500 text-center py-4 bg-[#080b12] rounded-xl border border-[#141c2e]">
-          아직 저장된 캡슐이 없습니다. 위 마이크를 터치해 첫 번째 감상을 남겨보세요!
-        </div>
+      ${dayCapsules.length === 0 ? `
+        <div class="text-[11px] text-slate-500 text-center py-4 bg-[#080b12] rounded-xl border border-[#141c2e]">아직 이 날의 캡슐이 없습니다. 첫 감상을 남겨 보세요.</div>
       ` : `
-        <div class="space-y-2 max-h-48 overflow-y-auto pr-1 custom-scrollbar">
-          ${todayCapsules.map(c => `
-            <div class="capsule-list-item">
+        <div class="space-y-2 capsule-list custom-scrollbar">
+          ${dayCapsules.map(entry => {
+            const photo = SulsulTravel.MediaRepository.photoSource(entry, entry.coverIndex || 0, { thumbnail: true });
+            return `<div class="capsule-list-item">
               <div class="flex items-center justify-between gap-1">
-                <span class="text-[10px] text-amber-400 font-mono font-bold">${escapeHtml(c.time)} · ${escapeHtml(c.spotTitle || '길거리')}</span>
-                <button type="button" onclick="deleteQuickCapsule('${c.id}')" class="text-slate-500 hover:text-rose-400 text-[10px] cursor-pointer">✕</button>
+                <span class="text-[10px] text-amber-400 font-mono font-bold">${escapeHtml([entry.time || '시각 미상', entry.activityLink?.title || '길거리', capsuleMoodLabel(entry.mood)].filter(Boolean).join(' · '))}</span>
+                <button type="button" onclick="deleteQuickCapsule(${escapeHtml(JSON.stringify(entry.id))})" class="w-8 h-8 text-slate-500 hover:text-rose-400 text-[11px] cursor-pointer" aria-label="이 캡슐 삭제">✕</button>
               </div>
-              <div class="text-xs text-white leading-relaxed select-all">${escapeHtml(c.text)}</div>
-              ${c.photo ? `<img src="${c.photo}" class="w-16 h-12 object-fit-cover rounded-lg mt-1 border border-[#334155]" alt="캡슐 사진">` : ''}
-            </div>
-          `).join('')}
+              ${entry.text ? `<div class="text-xs text-white leading-relaxed">${escapeHtml(entry.text)}</div>` : ''}
+              ${photo ? `<img src="${escapeHtml(photo)}" class="w-16 h-12 object-cover rounded-lg mt-1 border border-[#334155]" alt="캡슐 사진">` : ''}
+            </div>`;
+          }).join('')}
         </div>
       `}
     </div>
   `;
+  renderCapsulePhotoPreview();
 }
 window.renderQuickCapsuleContent = renderQuickCapsuleContent;
 
 /* ==========================================================================
-   아이디어 5: 여행 에디토리얼 매거진 뷰 & PDF 제본 (Priority 4-5)
+   여행 에디토리얼 매거진: TravelStory 공통 모델을 그리는 보기 (v2.0.2)
+   PDF·Markdown 출력과 같은 기록·날짜·원화 환산 규칙을 쓴다.
    ========================================================================== */
 function openStoryMagazineModal() {
   renderStoryMagazineContent();
@@ -1798,181 +1701,97 @@ function printStoryMagazine() {
 }
 window.printStoryMagazine = printStoryMagazine;
 
+function magazineMoodLabel(key) { return typeof capsuleMoodLabel === 'function' ? capsuleMoodLabel(key) : ''; }
+
 function renderStoryMagazineContent() {
   const container = document.getElementById('story-magazine-content');
   if (!container) return;
-
   const trip = getActiveTrip();
   if (!trip) {
     container.innerHTML = '<div class="text-center py-8 text-slate-400">선택된 여행이 없습니다.</div>';
     return;
   }
-
-  const days = trip.days || [];
-  const totalSpots = days.reduce((sum, d) => sum + (d.spots?.length || 0), 0);
-  const completedSpots = days.reduce((sum, d) => sum + (d.spots?.filter(s => s.completed)?.length || 0), 0);
-  const records = [
-    ...Object.values(trip.journals || {}),
-    ...Object.values(trip.activityRecords || {}),
-    ...(trip.momentEntries || [])
-  ];
-  const capsules = trip.quickCapsules || [];
-
-  const allPhotos = [];
-  records.forEach(r => {
-    (r.photos || []).forEach(p => allPhotos.push(p));
-  });
-  capsules.forEach(c => {
-    if (c.photo) allPhotos.push(c.photo);
-  });
-
-  const heroPhoto = allPhotos[0] || '';
-
-  const cities = [...new Set(days.map(d => d.city).filter(Boolean))];
-  const cityFlow = cities.join(' ➔ ') || '여행 여정';
-
-  const expenses = trip.expenses || [];
-  const totalSpentKrw = expenses.reduce((sum, e) => {
-    const rate = typeof getCurrencyRate === 'function' ? getCurrencyRate(e.currency || 'KRW') : 1;
-    return sum + Math.round((Number(e.amount) || 0) * rate);
-  }, 0);
+  // 승인한 AI 문장이 있으면 그 문장을, 없으면 사용자가 쓴 원문을 보여 준다.
+  const story = SulsulTravel.TravelStory.build(trip, { textMode: 'approved', includePhotos: true, photoSource: SulsulTravel.MediaRepository?.photoSource });
+  const itinerary = story.days.flatMap(day => day.itinerary).filter(item => !['removed', 'deferred', 'cancelled'].includes(item.status));
+  const completedSpots = itinerary.filter(item => item.status === 'completed').length;
+  const records = story.days.flatMap(day => [...day.records, ...day.reflections]);
+  const photos = records.flatMap(record => record.photos);
+  const heroPhoto = photos[0]?.src || '';
+  const cities = [...new Set(story.days.map(day => day.city).filter(Boolean))];
+  const money = value => `₩${Math.round(Number(value) || 0).toLocaleString('ko-KR')}`;
+  const spentOn = date => story.expenses.records.filter(record => date && record.date === date).reduce((sum, record) => sum + (record.krw || 0), 0);
+  const recordMeta = record => [record.time ? `기록 ${record.time}` : '', record.locationTitle, magazineMoodLabel(record.mood), record.textOrigin === 'approved' ? '승인한 AI 문장' : ''].filter(Boolean).join(' · ');
 
   container.innerHTML = `
     <div id="story-magazine-container">
-      <!-- 매거진 표지 (Editorial Masthead Cover) -->
       <div class="magazine-cover-card">
         <header class="magazine-masthead">
           <div class="magazine-masthead-title">THE SULSUL CHRONICLE</div>
-          <div class="magazine-masthead-meta">VOYAGE MEMOIR · SPECIAL EDITION · ARCHIVE No. ${escapeHtml(trip.id || '01')}</div>
+          <div class="magazine-masthead-meta">VOYAGE MEMOIR · ${escapeHtml(story.cover.startDate || '')}</div>
         </header>
-
         <div class="text-center space-y-3 mb-4">
-          <h1 class="text-2xl sm:text-3xl font-black text-white tracking-tight leading-snug">${escapeHtml(trip.title || '나의 인생 여행기')}</h1>
-          <div class="text-xs sm:text-sm font-bold text-amber-400 font-mono tracking-wide">
-            <i class="fa-solid fa-route mr-1.5"></i> ${escapeHtml(cityFlow)}
-          </div>
-          <div class="text-[11px] text-slate-400 font-medium">
-            일정: ${escapeHtml(trip.startDate || '일정 미정')} ~ ${escapeHtml(trip.endDate || '')} · 총 ${days.length}일간의 여정
-          </div>
-          ${trip.desc ? `<p class="text-xs text-slate-300 max-w-lg mx-auto italic leading-relaxed pt-1">"${escapeHtml(trip.desc)}"</p>` : ''}
+          <h1 class="text-2xl sm:text-3xl font-black text-white tracking-tight leading-snug">${escapeHtml(story.cover.title)}</h1>
+          <div class="text-xs sm:text-sm font-bold text-amber-400 font-mono tracking-wide"><i class="fa-solid fa-route mr-1.5" aria-hidden="true"></i> ${escapeHtml(cities.join(' ➔ ') || '여행 여정')}</div>
+          <div class="text-[11px] text-slate-400 font-medium">일정: ${escapeHtml(story.cover.startDate || '일정 미정')} ~ ${escapeHtml(story.cover.endDate || '')} · 총 ${story.cover.dayCount}일간의 여정</div>
         </div>
-
-        ${heroPhoto ? `
-          <div class="w-full aspect-video rounded-2xl overflow-hidden border border-[#334155] shadow-2xl mb-4">
-            <img src="${heroPhoto}" class="w-full h-full object-fit-cover" alt="대표 여행 사진">
-          </div>
-        ` : ''}
-
-        <!-- 요약 스탯 바 -->
+        ${heroPhoto ? `<div class="w-full aspect-video rounded-2xl overflow-hidden border border-[#334155] shadow-2xl mb-4"><img src="${escapeHtml(heroPhoto)}" class="w-full h-full object-cover" alt="대표 여행 사진"></div>` : ''}
         <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-center pt-2 border-t border-[#1e293b]">
-          <div class="p-2 rounded-xl bg-[#080b12] border border-[#1e263c]">
-            <div class="text-[10px] text-slate-400">방문 스팟</div>
-            <div class="text-sm font-black text-white mt-0.5">${completedSpots} / ${totalSpots} 완료</div>
-          </div>
-          <div class="p-2 rounded-xl bg-[#080b12] border border-[#1e263c]">
-            <div class="text-[10px] text-slate-400">기록된 추억</div>
-            <div class="text-sm font-black text-amber-400 mt-0.5">${records.length}편의 일기</div>
-          </div>
-          <div class="p-2 rounded-xl bg-[#080b12] border border-[#1e263c]">
-            <div class="text-[10px] text-slate-400">수집된 사진</div>
-            <div class="text-sm font-black text-sky-400 mt-0.5">${allPhotos.length}장의 스냅</div>
-          </div>
-          <div class="p-2 rounded-xl bg-[#080b12] border border-[#1e263c]">
-            <div class="text-[10px] text-slate-400">총 여정 지출</div>
-            <div class="text-sm font-black text-emerald-400 mt-0.5">₩${totalSpentKrw.toLocaleString()}</div>
-          </div>
+          <div class="p-2 rounded-xl bg-[#080b12] border border-[#1e263c]"><div class="text-[10px] text-slate-400">방문 일정</div><div class="text-sm font-black text-white mt-0.5">${completedSpots} / ${itinerary.length} 완료</div></div>
+          <div class="p-2 rounded-xl bg-[#080b12] border border-[#1e263c]"><div class="text-[10px] text-slate-400">남긴 기록</div><div class="text-sm font-black text-amber-400 mt-0.5">${records.length}편</div></div>
+          <div class="p-2 rounded-xl bg-[#080b12] border border-[#1e263c]"><div class="text-[10px] text-slate-400">사진</div><div class="text-sm font-black text-sky-400 mt-0.5">${photos.length}장</div></div>
+          <div class="p-2 rounded-xl bg-[#080b12] border border-[#1e263c]"><div class="text-[10px] text-slate-400">원화 환산 지출</div><div class="text-sm font-black text-emerald-400 mt-0.5">${money(story.expenses.totalSpentKrw)}</div></div>
         </div>
+        ${story.expenses.unconvertedCount ? `<p class="text-[11px] text-slate-400 text-center mt-2">원화 환산액이 없는 지출 ${story.expenses.unconvertedCount}건은 합계에 넣지 않았어요.</p>` : ''}
       </div>
 
-      <!-- 각 일자별 스프레드 (Daily Spreads) -->
       <div class="space-y-4">
-        ${days.map((day, idx) => {
-          const daySpots = day.spots || [];
-          const dayRecords = records.filter(r => r.dayIndex === idx || r.date === day.date);
-          const dayPhotos = [];
-          dayRecords.forEach(r => (r.photos || []).forEach(p => dayPhotos.push(p)));
-          const dayCapsules = capsules.filter(c => c.dayIndex === idx || c.date === day.date);
-          dayCapsules.forEach(c => { if (c.photo) dayPhotos.push(c.photo); });
-
-          const dayExpenses = expenses.filter(e => e.dayIndex === idx || e.date === day.date);
-          const daySpent = dayExpenses.reduce((sum, e) => {
-            const rate = typeof getCurrencyRate === 'function' ? getCurrencyRate(e.currency || 'KRW') : 1;
-            return sum + Math.round((Number(e.amount) || 0) * rate);
-          }, 0);
-
+        ${story.days.map(day => {
+          const dayRecords = [...day.records, ...day.reflections];
+          const dayItinerary = day.itinerary.filter(item => item.status !== 'removed');
+          const dayPhotos = dayRecords.flatMap(record => record.photos);
+          const daySpent = spentOn(day.date);
+          if (!dayItinerary.length && !dayRecords.length && !daySpent) return '';
           return `
             <article class="magazine-day-spread">
               <div class="magazine-day-header">
                 <div>
-                  <span class="magazine-day-num">DAY ${String(idx + 1).padStart(2, '0')}</span>
-                  <span class="magazine-day-city ml-2">${escapeHtml(day.city || '도시 미정')}</span>
+                  <span class="magazine-day-num">${day.dayNum ? `DAY ${String(day.dayNum).padStart(2, '0')}` : '기록'}</span>
+                  <span class="magazine-day-city ml-2">${escapeHtml(day.city || day.title || '도시 미정')}</span>
                 </div>
-                <div class="text-xs text-slate-400 font-mono">${escapeHtml(day.date || '')}</div>
+                <div class="text-xs text-slate-400 font-mono">${escapeHtml(day.date || day.dateLabel || '')}</div>
               </div>
-
-              <!-- 스팟 흐름 -->
-              ${daySpots.length > 0 ? `
+              ${dayItinerary.length ? `
                 <div class="magazine-spot-flow">
-                  <span class="text-[10px] font-bold text-amber-400 mr-1"><i class="fa-solid fa-shoe-prints mr-1"></i> 동선:</span>
-                  ${daySpots.map((s, sIdx) => `
-                    <span class="magazine-spot-pill ${s.completed ? 'border-amber-500/50 text-amber-300' : ''}">
-                      ${sIdx + 1}. ${escapeHtml(s.title || s.name)} ${s.time ? `<span class="text-slate-400 font-normal">(${escapeHtml(s.time)})</span>` : ''}
-                    </span>
-                    ${sIdx < daySpots.length - 1 ? '<i class="fa-solid fa-arrow-right text-[9px] text-slate-500"></i>' : ''}
+                  <span class="text-[10px] font-bold text-amber-400 mr-1"><i class="fa-solid fa-shoe-prints mr-1" aria-hidden="true"></i> 동선:</span>
+                  ${dayItinerary.map((item, index) => `
+                    <span class="magazine-spot-pill ${item.status === 'completed' ? 'border-amber-500/50 text-amber-300' : ''}">${index + 1}. ${escapeHtml(item.title)}${item.scheduledTime ? ` <span class="text-slate-400 font-normal">(${escapeHtml(item.scheduledTime)})</span>` : ''}${['skipped', 'cancelled', 'deferred'].includes(item.status) ? ` <span class="text-slate-400 font-normal">· ${escapeHtml(item.statusLabel)}</span>` : ''}</span>
+                    ${index < dayItinerary.length - 1 ? '<i class="fa-solid fa-arrow-right text-[9px] text-slate-500" aria-hidden="true"></i>' : ''}
                   `).join('')}
-                </div>
-              ` : ''}
-
-              <!-- 일기 및 메모 본문 -->
-              ${dayRecords.length > 0 ? dayRecords.map(r => `
+                </div>` : ''}
+              ${dayRecords.map(record => `
                 <div class="magazine-journal-quote">
-                  <div class="font-bold text-xs text-amber-400 mb-1 flex items-center gap-1.5">
-                    <i class="fa-solid fa-pen-fancy text-[10px]"></i>
-                    <span>${escapeHtml(r.title || '오늘의 여행 일기')}</span>
-                  </div>
-                  <div class="leading-relaxed whitespace-pre-wrap">${escapeHtml(r.content || '')}</div>
-                </div>
-              `).join('') : (dayCapsules.length > 0 ? `
-                <div class="magazine-journal-quote">
-                  <div class="font-bold text-xs text-amber-400 mb-1">🎙️ 현장 퀵 캡슐 기록</div>
-                  ${dayCapsules.map(c => `
-                    <div class="text-xs leading-relaxed my-0.5">• [${escapeHtml(c.time)}] ${escapeHtml(c.text)}</div>
-                  `).join('')}
-                </div>
-              ` : '')}
-
-              <!-- 사진 그리드 -->
-              ${dayPhotos.length > 0 ? `
+                  <div class="font-bold text-xs text-amber-400 mb-1 flex items-center gap-1.5"><i class="fa-solid fa-pen-fancy text-[10px]" aria-hidden="true"></i><span>${escapeHtml(record.title)}</span></div>
+                  ${recordMeta(record) ? `<div class="text-[10px] text-slate-400 mb-1">${escapeHtml(recordMeta(record))}</div>` : ''}
+                  ${record.text ? `<div class="leading-relaxed whitespace-pre-wrap">${escapeHtml(record.text)}</div>` : ''}
+                </div>`).join('')}
+              ${dayPhotos.length ? `
                 <div class="magazine-photo-grid">
-                  ${dayPhotos.slice(0, 6).map(photo => `
-                    <div class="magazine-photo-tile">
-                      <img src="${photo}" alt="여행 사진" loading="lazy">
-                    </div>
-                  `).join('')}
-                </div>
-              ` : ''}
-
-              <!-- 일일 지출 푸터 -->
+                  ${dayPhotos.slice(0, 6).map(photo => `<div class="magazine-photo-tile"><img src="${escapeHtml(photo.src)}" alt="${escapeHtml(photo.alt)}" loading="lazy"></div>`).join('')}
+                </div>` : ''}
               ${daySpent > 0 ? `
                 <div class="flex items-center justify-between text-[11px] pt-3 mt-3 border-t border-[#1e293b] text-slate-400">
-                  <span>오늘의 총 지출</span>
-                  <span class="font-bold font-mono text-emerald-400">₩${daySpent.toLocaleString()}</span>
-                </div>
-              ` : ''}
-            </article>
-          `;
+                  <span>이날의 원화 환산 지출</span>
+                  <span class="font-bold font-mono text-emerald-400">${money(daySpent)}</span>
+                </div>` : ''}
+            </article>`;
         }).join('')}
       </div>
 
-      <!-- 에필로그 및 완주 스탬프 -->
       <div class="magazine-epilogue-card">
-        <div class="text-base font-black text-white">JOURNEY ARCHIVE COMPLETED</div>
-        <p class="text-xs text-slate-400 mt-1 max-w-md mx-auto leading-relaxed">
-          이 소중한 여행 기록은 술술트래블에 안전하게 보존되었습니다. 상단의 [A4 PDF / 인쇄] 버튼을 눌러 소장용 PDF 또는 책자로 제본하실 수 있습니다.
-        </p>
-        <div class="magazine-stamp">
-          ★ SULSUL OFFICIAL EXPEDITION ★
-        </div>
+        <div class="text-base font-black text-white">JOURNEY ARCHIVE</div>
+        <div class="magazine-stamp">★ SULSUL OFFICIAL EXPEDITION ★</div>
+        <p class="text-xs text-slate-400 mt-1 max-w-md mx-auto leading-relaxed">이 기록은 이 기기에 저장되어 있어요. 기기를 바꾸거나 브라우저 데이터를 지우기 전에 설정의 JSON 백업을 만들어 두세요. 상단의 [A4 PDF / 인쇄]로 책자처럼 보관할 수 있습니다.</p>
       </div>
     </div>
   `;
