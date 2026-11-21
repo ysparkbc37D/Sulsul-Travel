@@ -26,7 +26,13 @@ const fixture=()=>({id:'structural-trip',title:'구조 검증 가상 여행',sta
           async state(){return page.evaluate(()=>({trips:State.trips,stored:localStorage.getItem('st_trips_v2')}));},
           async quota(value){return page.evaluate(value=>{if(value){window.structuralSetItem=Storage.prototype.setItem;Storage.prototype.setItem=function(key,value){if(key==='st_trips_v2')throw new DOMException('synthetic quota','QuotaExceededError');return structuralSetItem.call(this,key,value);};}else Storage.prototype.setItem=structuralSetItem;},value);},
           async gistSettings(){await page.evaluate(()=>openSettingsModal('ai'));await page.locator('#cfg-github-pat').fill('synthetic-test-token');await page.locator('#cfg-github-gist').fill('synthetic-gist-id');},
-          async saveJournal(text){await page.locator('#journal-text-input').fill(text);await page.locator('button[onclick="saveJournalText()"]').tap();},
+          // tap()은 화면 밖 버튼을 스크롤한 직후 터치가 옛 스크롤 위치로 처리돼 다른 요소를 누르는 일이 있다(헤드리스 Chrome).
+          // 그러면 저장 자체가 일어나지 않아 뒤 검사가 엉뚱한 이유로 실패하므로 click()으로 누르고 실제 기록을 확인한다.
+          async saveJournal(text){
+            await page.locator('#journal-text-input').fill(text);await page.locator('button[onclick="saveJournalText()"]').click();
+            await page.waitForFunction(text=>(localStorage.getItem('st_trips_v2')||'').includes(JSON.stringify(text).slice(1,-1)),text,{timeout:3000})
+              .catch(()=>{throw new Error('일기 저장 버튼을 눌렀지만 저장소에 기록되지 않았다: '+text);});
+          },
           async assertDialogOpen(){assert.equal(await page.locator('#modal-confirm-delete').evaluate(element=>element.classList.contains('sheet-closed')),false);}
         };
         const details=await operation(api);assert.deepEqual(errors,[]);results.push({name,passed:true,details});
@@ -37,7 +43,9 @@ const fixture=()=>({id:'structural-trip',title:'구조 검증 가상 여행',sta
       await api.seed();const second=await api.context.newPage();second.on('pageerror',error=>api.errors.push(error.message));await second.goto(origin+'/',{waitUntil:'networkidle'});
       await second.evaluate(()=>{State.activeTripId='structural-trip';});
       await api.saveJournal('첫 번째 탭에서 새로 확정한 원문');
-      const latest=await api.state(),result=await second.evaluate(()=>{
+      const latest=await api.state();
+      assert.equal(JSON.parse(latest.stored)[0].journals[0].text,'첫 번째 탭에서 새로 확정한 원문','첫 탭의 새 일기가 먼저 저장돼야 충돌 검사가 의미 있다');
+      const result=await second.evaluate(()=>{
         State.trips[0].title='오래된 두 번째 탭의 제목';const saved=saveTrips();let errorCode=null;
         try{TripRepository.saveAll(State.trips);}catch(error){errorCode=error.code;}
         return {saved,errorCode,stored:localStorage.getItem('st_trips_v2')};

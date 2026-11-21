@@ -13,6 +13,19 @@
   function arm(){
     root.history.pushState(state('guard'),'');
   }
+  // 앱 안의 기록은 기본 기록과 그 위의 가드 둘이다. 공유·초대 주소를 지울 때 현재 기록만 바꾸면
+  // 기본 기록에 남은 옛 주소가 뒤로가기나 첫 터치의 가드 교체 뒤 다시 나타난다. 그래서 앱이 정한
+  // 주소를 기억해 두고, 기본 기록으로 돌아올 때마다 가드를 다시 쌓기 전에 그 주소로 맞춘다.
+  let appUrl=null;
+  const here=()=>root.location.pathname+root.location.search+root.location.hash;
+  function replaceUrl(url){
+    root.history.replaceState(root.history.state,'',url);
+    appUrl=here();
+    return true;
+  }
+  function syncUrl(){
+    if(appUrl!==null&&here()!==appUrl)root.history.replaceState(root.history.state,'',appUrl);
+  }
   function start(){
     if(active)return true;
     clearTimeout(exitTimer);departing=false;approvedExit=false;
@@ -127,6 +140,7 @@
   root.addEventListener('popstate',event=>{
     if(!active)return;
     event.stopImmediatePropagation();
+    if(!departing)syncUrl();
     if(refreshing){refreshing=false;arm();return;}
     if(departing){
       active=false;departing=false;
@@ -150,5 +164,5 @@
   root.addEventListener('pagehide',()=>clearTimeout(exitTimer));
   root.addEventListener('pageshow',event=>{if(event.persisted&&!active)start();});
   root.SulsulTravel=root.SulsulTravel||{};
-  root.SulsulTravel.MobileNavigation={get active(){return active;},start,opened,closed,goBack,requestExit,cancelExit,confirmExit,pendingTravelRecords};
+  root.SulsulTravel.MobileNavigation={get active(){return active;},start,opened,closed,goBack,requestExit,cancelExit,confirmExit,pendingTravelRecords,replaceUrl};
 })(window);
