@@ -52,8 +52,9 @@
       if (!record || record.id !== id || !record.context || typeof record.context !== 'object' || typeof record.context.title !== 'string' || !Array.isArray(record.photos) || record.photos.length > 8 || !Number.isInteger(record.coverIndex) || record.coverIndex < 0 || record.coverIndex >= Math.max(1,record.photos.length)) throw new Error('일정 기록 형식이 올바르지 않습니다.');
     }
     const momentIds = new Set();
+    // 작성 시각을 모르는 순간 기록(빈 시각)도 기록이다. 시각을 추정해 채우지 않고 그대로 보낸다.
     for (const record of trip.momentEntries || []) {
-      if (!record || typeof record !== 'object' || typeof record.id !== 'string' || !record.id || momentIds.has(record.id) || !/^\d{4}-\d{2}-\d{2}$/.test(record.date || '') || !/^\d{2}:\d{2}$/.test(record.time || '') || !Array.isArray(record.photos) || record.photos.length > 8 || !Number.isInteger(record.coverIndex) || record.coverIndex < 0 || record.coverIndex >= Math.max(1,record.photos.length)) throw new Error('순간 기록 형식이 올바르지 않습니다.');
+      if (!record || typeof record !== 'object' || typeof record.id !== 'string' || !record.id || momentIds.has(record.id) || !/^\d{4}-\d{2}-\d{2}$/.test(record.date || '') || !/^(?:(?:[01]\d|2[0-3]):[0-5]\d)?$/.test(record.time ?? '') || !Array.isArray(record.photos) || record.photos.length > 8 || !Number.isInteger(record.coverIndex) || record.coverIndex < 0 || record.coverIndex >= Math.max(1,record.photos.length)) throw new Error('순간 기록 형식이 올바르지 않습니다.');
       momentIds.add(record.id);
       if(record.visibility != null && !['private','shared'].includes(record.visibility)) throw new Error('순간 기록 공개 범위를 확인해 주세요.');
     }

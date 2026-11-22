@@ -92,8 +92,13 @@
     return {...payload,trips:normalize(payload.trips)};
   }
   function records(trip){return [...Object.values(trip.journals||{}),...Object.values(trip.activityRecords||{}),...(trip.momentEntries||[]),...(trip.expenses||[])];}
+  // 글 수와 사진 수는 화면·공유와 같은 공통 기록 모델(TravelRecords)로 센다. 빈 항목은 기록이 아니다.
+  function recordModel(){return root.SulsulTravel?.TravelRecords||(typeof require==='function'?require('./travel-records.js'):null);}
   function summary(trips){
-    return {trips:trips.length,days:trips.reduce((n,t)=>n+(t.days||[]).length,0),records:trips.reduce((n,t)=>n+Object.keys(t.journals||{}).length+Object.keys(t.activityRecords||{}).length+(t.momentEntries||[]).length,0),photos:trips.reduce((n,t)=>n+records(t).reduce((count,r)=>count+(r.photos||[]).filter(Boolean).length,0),0),expenses:trips.reduce((n,t)=>n+(t.expenses||[]).length,0)};
+    const model=recordModel();if(!model)throw new Error('TravelRecords 모듈을 먼저 불러와야 합니다.');
+    const counted=trips.map(t=>model.summary(t));
+    const expensePhotos=t=>(t.expenses||[]).reduce((count,e)=>count+(e.photos||[]).filter(Boolean).length,0);
+    return {trips:trips.length,days:trips.reduce((n,t)=>n+(t.days||[]).length,0),records:counted.reduce((n,c)=>n+c.count,0),photos:trips.reduce((n,t,i)=>n+counted[i].photoCount+expensePhotos(t),0),expenses:trips.reduce((n,t)=>n+(t.expenses||[]).length,0)};
   }
   root.SulsulTravel=root.SulsulTravel||{};
   root.SulsulTravel.TravelBackup={MAX_BYTES,create,parse,summary,records,mergeOverflow};

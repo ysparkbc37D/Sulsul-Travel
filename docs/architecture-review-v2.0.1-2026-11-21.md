@@ -168,3 +168,12 @@ flowchart TD
 - **릴리스 규칙**: `tools/check-release.cjs` — 마지막 `vX.Y.Z` 태그 이후 배포 파일(index.html·sw.js·프리캐시 목록)의 내용이 바뀌었으면 `APP_VER`·서비스워커 캐시 버전·바뀐 자산의 `?v=`가 모두 올라가야 한다. 개행 차이는 무시한다. `abb395c`(v2.0.1)→`9486e13`에 실행해 서비스워커 버전과 자산 2개의 `?v=` 미상승 3건을 찾았다. 태그 `v2.0.2`·`v2.0.3`을 만들었다(원격에 올리려면 `--follow-tags`).
 - **회귀 검사**: 규칙마다 위반을 넣은 fixture 검사(`tests/boundary-lint.test.mjs` 6개, `tests/release-check.test.mjs` 4개, 0단계에서 요구한 '같은 버전, 다른 내용' 포함). `structural-reliability`에 옮긴 명령의 실패 무변경·거짓 성공 없음, 끼어든 변경 뒤 환전 삭제 거절 검사 2개를 더했다. 두 검사는 수정 전 커밋(`dbb9c10`)에서 실패한다.
 - **하지 않은 것**: 편집 창 기반 기능(초기 자금·환전 추가·큰 계획)은 아직 창을 연 시점이 아니라 저장 시점의 revision을 쓴다. 저장소 충돌(다른 탭)은 막지만, 같은 탭의 다른 화면이 그 사이에 바꾼 내용은 덮을 수 있다. HTML01 기준값을 줄이는 작업은 4단계 화면 분리 때 한다.
+
+## 13. 2단계 진행 결과 (v2.0.5)
+
+- **공통 기록 모델**: `js/domain/travel-records.js`(`TravelRecords`)가 하루 회고·일정 기록·순간 기록(퀵 캡슐 포함)을 한 형식으로 읽는다. 계획 7절의 Record 계약에 맞춰 `kind`·`id`·`tripId`·`dayId`·`occurredDate`·`occurredAt`·`time`·`spotId`·`text`·`originalText`·`approvedText`·`mood`·`mediaIds`·`source`와 판별 결과(`archiveDate`·`orphaned`·`hasContent`)를 낸다. 퀵 캡슐은 0단계에서 이미 순간 기록(`source:'capsule'`)으로 흡수했으므로 별도 `kind`를 두지 않았다.
+- **읽는 곳 통일**: 여행 이야기(PDF·매거진·Markdown)는 날짜·일정 판별을 이 모델에 맡기고 출력은 그대로다(기존 TravelStory 테스트 통과). 허브 누적 통계·상세 목록, 작업 화면 통계(첫 렌더와 기록 저장 뒤 갱신 두 곳), 대표 사진 자동 선택, 공유 사본 확인, 전체 백업 요약이 모두 `summary`·`firstPhoto`를 쓴다. 글·사진·기분·날씨가 모두 빈 항목은 기록이 아니다.
+- **찾아서 고친 어긋남**: 허브 상세 목록이 하루 회고만 내부 키(`Day archive:…`)로 보임, 공유 확인 창이 순간 기록을 셈하지 않음, 기록 저장 뒤 작업 화면 통계가 빈 회고까지 셈(새 브라우저 검사가 찾음), 대표 사진이 하루 회고만 봄, 시각 미상 순간 기록 하나로 기록 포함 공유 전체가 실패함.
+- **쓰는 곳 통일**: 하루 회고 글·사진, 일정 기록 저장·삭제, 순간 기록 저장·삭제를 `commitTripRecord`(저장소 `commit`, 기록 단위 충돌 검사 유지)로 옮겼다. 경계 검사 허용 목록 27건 → 21건.
+- **완료 기준 검사**: `tests/travel-records.test.mjs`가 일정 삽입·이동·삭제·재계획·큰 계획 날짜 변경 뒤에도 모든 기록의 발생 날짜·원문·승인문·사진 수가 같고, 이야기·백업 요약이 같은 수를 내며, 다른 날로 옮긴 일정의 기록이 남긴 날짜에 출력되는지 본다. `tests/records-consistency.browser.cjs`가 실제 화면에서 허브·상세 목록·작업 화면·공유 확인·기록 저장을 본다.
+- **하지 않은 것**: 기록을 저장소에서 한 컬렉션으로 합치는 저장 구조 변경은 3단계(IndexedDB) 몫이다. 지금은 세 필드(`journals`·`activityRecords`·`momentEntries`)를 그대로 두고 읽기·쓰기 경로만 하나로 모았다. 매거진은 0단계에서 이미 TravelStory를 그린다.

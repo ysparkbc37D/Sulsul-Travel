@@ -197,6 +197,7 @@ test('출력 UI의 원문/승인문 및 사진 선택은 콜백과 내보낼 모
 });
 test('브라우저 IIFE는 DOM 없이 공통 모델과 UI API를 순서대로 등록한다',() => {
   const context=vm.createContext({URL,Date,window:{}});
+  vm.runInContext(readFileSync(new URL('../js/domain/travel-records.js',import.meta.url),'utf8'),context);
   vm.runInContext(readFileSync(new URL('../js/domain/travel-story.js',import.meta.url),'utf8'),context);
   vm.runInContext(readFileSync(new URL('../js/presentation/travel-story-ui.js',import.meta.url),'utf8'),context);
   assert.equal(typeof context.window.SulsulTravel.TravelStory.build,'function');

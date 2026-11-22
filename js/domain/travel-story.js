@@ -29,12 +29,13 @@
       return url.protocol === 'https:' && !url.username && !url.password ? url.href : '';
     } catch (_) { return ''; }
   }
-  function selectText(entry, mode = 'original') {
-    const original = firstText(entry.originalText,entry.sourceText,entry.text);
-    const accepted = !!(stamp(entry.aiDraftAcceptedAt) || stamp(entry.approvedAt) || entry.aiApproval?.status === 'approved');
-    const approved = accepted ? firstText(entry.approvedText,entry.text,original) : original;
-    return {text:mode === 'approved' ? approved : original,originalText:original,approvedText:accepted ? approved : null,textOrigin:mode === 'approved' && accepted ? 'approved' : 'original',approvedAt:stamp(entry.aiDraftAcceptedAt) || stamp(entry.approvedAt),accepted};
+  // 기록 판별(날짜·연결 일정·원문/승인문)은 공통 기록 모델이 한다. 이야기는 그 결과를 조립만 한다.
+  function recordModel() {
+    const model = root.SulsulTravel?.TravelRecords || (typeof require === 'function' ? require('./travel-records.js') : null);
+    if (!model) throw new Error('TravelRecords 모듈을 먼저 불러와야 합니다.');
+    return model;
   }
+  function selectText(entry, mode = 'original') { return recordModel().selectText(entry, mode); }
   function photoList(entry, options, sourceId) {
     if (options.includePhotos === false) return [];
     const photos = array(entry.photos);
@@ -78,7 +79,6 @@
       const dayNum = Number(day.dayNum || day.day) || index+1;
       return [{id:String(day.dayId || day.id || `day:${tripId}:${date || dayNum}`),dayNum,date,dateLabel:firstText(day.date,'날짜 미상'),title:firstText(day.title,day.name,`Day ${dayNum}`),city:text(day.city),sourceIndex:index,itinerary:[],records:[],reflections:[],timeline:[]}];
     });
-    const locations = [];
     const facts = [];
     const syntheticDays = new Map();
     function archivedDay(date) {
@@ -88,20 +88,6 @@
         syntheticDays.set(key,day); days.push(day);
       }
       return syntheticDays.get(key);
-    }
-    function findDay(entry, fallbackIndex) {
-      const date = dateOf(entry.date) || dateOf(entry.context?.date) || dateOf(entry.occurredAt);
-      const id = entry.dayId || entry.context?.dayId || entry.activityLink?.dayId;
-      if (id != null) {
-        const found = days.find(day => day.id === String(id));
-        // 발생 날짜가 있는 기록을 변경된 계획 날짜로 이동하지 않는다.
-        if (found && (!date || found.date === date)) return found;
-      }
-      if (date) return days.find(day => day.date === date) || archivedDay(date);
-      if (entry.journalIdentityVersion === 1) return archivedDay(null);
-      const index = Number.isInteger(entry.dayIndex) ? entry.dayIndex : Number.isInteger(entry.activityLink?.dayIndex) ? entry.activityLink.dayIndex : fallbackIndex;
-      if (Number.isInteger(index) && days.find(day => day.sourceIndex === index && day.dayNum !== null)) return days.find(day => day.sourceIndex === index && day.dayNum !== null);
-      return archivedDay(null);
     }
     array(trip.days).forEach((day,index) => {
       const modelDay = days.find(item => item.sourceIndex === index && item.dayNum !== null);
@@ -115,51 +101,19 @@
         const status = spot.removed ? 'removed' : spot.deferred ? 'deferred' : spot.cancelled ? 'cancelled' : spot.skipped ? 'skipped' : spot.completed ? 'completed' : 'planned';
         const item = {kind:'itinerary',id:spotId,sourceId,dayId:modelDay.id,spotId,date:modelDay.date,title:firstText(spot.title,spot.name,'이름 없는 일정'),description:firstText(spot.desc,spot.description),status,statusLabel:{planned:'예정',completed:'방문 완료',skipped:'건너뜀',cancelled:'취소',removed:'일정에서 제거',deferred:'나중에 갈 곳'}[status],scheduledTime,time:actualTime || scheduledTime,timeSource:actualTime ? 'actual' : scheduledTime ? 'scheduled' : 'unknown',occurredAt:stamp(spot.completedAt || spot.visitedAt),createdAt:null,sortTime:actualTime || scheduledTime,order:spotIndex};
         modelDay.itinerary.push(item); modelDay.timeline.push(item);
-        locations.push({day:modelDay,spot,spotIndex,spotId,item});
         facts.push({sourceId,sourceType:'itinerary',path:`days[${index}].spots[${spotIndex}]`,dayId:modelDay.id,spotId,date:modelDay.date,title:item.title,description:item.description,status,scheduledTime,occurredAt:item.occurredAt});
       });
     });
-    function locate(entry,id) {
-      const recordId = entry.activityLink?.recordId || entry.recordId || id;
-      let found = locations.find(location => location.spot.recordId === recordId);
-      if (found) return found;
-      const spotId = entry.spotId || entry.activityId || entry.context?.spotId || entry.activityLink?.spotId;
-      if (spotId) {
-        const candidates = locations.filter(location => location.spotId === String(spotId));
-        const dayId = entry.dayId || entry.context?.dayId || entry.activityLink?.dayId;
-        found = dayId ? candidates.find(location => location.day.id === String(dayId)) : candidates.length === 1 ? candidates[0] : null;
-        if (found) return found;
-      }
-      const title = firstText(entry.context?.title,entry.activityLink?.title);
-      const date = dateOf(entry.context?.date) || dateOf(entry.activityLink?.date);
-      const candidates = locations.filter(location => title && location.item.title === title && (!date || location.day.date === date));
-      return candidates.length === 1 ? candidates[0] : null;
-    }
-    function addRecord(entry,id,kind,path,fallbackIndex) {
-      if (!entry || typeof entry !== 'object') return;
-      const location = kind === 'activity' || entry.activityLink || entry.spotId || entry.activityId ? locate(entry,id) : null;
-      // 계획 날짜가 바뀌어도 이미 남긴 기록의 발생 날짜와 사진 출처는 이동하지 않는다.
-      // 날짜가 없는 구 일정 기록만 연결 일정의 날짜를 보충한다.
-      const recordedDate = dateOf(entry.date) || dateOf(entry.context?.date) || dateOf(entry.occurredAt);
-      const day = kind === 'activity' && location && !recordedDate ? location.day : findDay(entry,fallbackIndex);
-      const sourceId = `${kind}:${String(id)}`;
-      const selected = selectText(entry,selection.textMode);
-      const occurredAt = stamp(entry.occurredAt);
-      const time = timeOf(entry.time) || timeOf(occurredAt);
-      const scheduledTime = kind === 'activity' ? timeOf(entry.context?.time) || timeOf(location?.spot.time) : timeOf(entry.activityLink?.time);
-      const title = kind === 'reflection' ? '하루 회고' : kind === 'activity' ? firstText(entry.context?.title,entry.title,location?.item.title,'일정의 기록') : firstText(entry.title,'순간 기록');
-      const record = {kind,id:String(id),sourceId,dayId:day.id,spotId:location?.spotId || entry.spotId || entry.activityLink?.spotId || null,date:dateOf(entry.date) || day.date,title,...selected,time,scheduledTime,timeSource:time ? 'actual' : 'unknown',occurredAt,createdAt:stamp(entry.createdAt),updatedAt:stamp(entry.updatedAt),weather:text(entry.weather),mood:text(entry.mood),locationTitle:firstText(entry.context?.title,entry.activityLink?.title,location?.item.title),orphaned:kind === 'activity' && !location,photos:photoList(entry,options,sourceId),photoCount:Math.max(array(entry.photos).length,array(entry.mediaIds).length),sortTime:time || (kind === 'activity' ? scheduledTime : null),order:day.records.length+1000};
+    // 글·사진·기분·날씨가 모두 빈 항목은 이야기와 기록 수에 넣지 않는다.
+    recordModel().list(trip,{textMode:selection.textMode}).forEach(source => {
+      if (!source.hasContent) return;
+      const entry = source.entry, kind = source.kind;
+      const day = source.dayId !== null ? days.find(item => item.sourceIndex === source.dayIndex && item.dayNum !== null) : archivedDay(source.archiveDate);
+      const title = kind === 'reflection' ? '하루 회고' : kind === 'activity' ? firstText(entry.context?.title,entry.title,source.location?.title,'일정의 기록') : firstText(entry.title,'순간 기록');
+      const record = {kind,id:source.id,sourceId:source.sourceId,dayId:day.id,spotId:source.spotId,date:source.occurredDate,title,text:source.text,originalText:source.originalText,approvedText:source.approvedText,textOrigin:source.textOrigin,approvedAt:source.approvedAt,accepted:source.accepted,time:source.time,scheduledTime:source.scheduledTime,timeSource:source.time ? 'actual' : 'unknown',occurredAt:source.occurredAt,createdAt:source.createdAt,updatedAt:source.updatedAt,weather:source.weather,mood:source.mood,locationTitle:firstText(entry.context?.title,entry.activityLink?.title,source.location?.title),orphaned:source.orphaned,photos:photoList(entry,options,source.sourceId),photoCount:source.photoCount,sortTime:source.time || (kind === 'activity' ? source.scheduledTime : null),order:day.records.length+1000};
       if (kind === 'reflection') day.reflections.push(record);
       else { day.records.push(record); day.timeline.push(record); }
-      facts.push({sourceId,sourceType:kind,path,dayId:day.id,spotId:record.spotId,date:record.date,title:record.title,text:record.originalText,approvedText:record.approvedText,approvedAt:record.approvedAt,time,scheduledTime,occurredAt,createdAt:record.createdAt,photoSourceIds:record.photos.map(photo => photo.id)});
-    }
-    Object.entries(trip.activityRecords || {}).forEach(([key,entry]) => addRecord(entry,entry?.id || key,'activity',`activityRecords[${JSON.stringify(key)}]`));
-    array(trip.momentEntries).forEach((entry,index) => addRecord(entry,entry?.id || `moment:${index}`,'moment',`momentEntries[${index}]`));
-    Object.entries(trip.journals || {}).forEach(([key,entry]) => {
-      const fallback = /^\d+$/.test(key) ? Number(key) : undefined;
-      const legacy = dateOf(key) && !entry?.date ? {...entry,date:key} : entry;
-      const withDate = root.SulsulTravel?.TripAdapter?.pinJournalIdentity ? root.SulsulTravel.TripAdapter.pinJournalIdentity(trip, legacy, fallback, key) : legacy;
-      addRecord(withDate,entry?.id || `journal:${key}`,'reflection',`journals[${JSON.stringify(key)}]`,fallback);
+      facts.push({sourceId:source.sourceId,sourceType:kind,path:source.path,dayId:day.id,spotId:record.spotId,date:record.date,title:record.title,text:record.originalText,approvedText:record.approvedText,approvedAt:record.approvedAt,time:record.time,scheduledTime:record.scheduledTime,occurredAt:record.occurredAt,createdAt:record.createdAt,photoSourceIds:record.photos.map(photo => photo.id)});
     });
     days.sort((a,b) => a.date && b.date ? a.date.localeCompare(b.date) || a.sourceIndex-b.sourceIndex : a.date ? -1 : b.date ? 1 : a.sourceIndex-b.sourceIndex);
     days.forEach(day => day.timeline.sort((a,b) => (a.sortTime || '99:99').localeCompare(b.sortTime || '99:99') || a.order-b.order));

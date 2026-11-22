@@ -1,6 +1,6 @@
 # 술술트래블 개발 가이드
 
-이 문서는 현재 앱 구조와 검증 방식을 설명합니다. 이전 구조를 기술한 문서는 상단에 역사 자료 또는 목표 설계라고 표시합니다. 현재 소스 버전은 `2.0.4`입니다. 원격 저장소와 배포 반영 여부는 별도로 확인합니다.
+이 문서는 현재 앱 구조와 검증 방식을 설명합니다. 이전 구조를 기술한 문서는 상단에 역사 자료 또는 목표 설계라고 표시합니다. 현재 소스 버전은 `2.0.5`입니다. 원격 저장소와 배포 반영 여부는 별도로 확인합니다.
 
 ## 실행 구조
 
@@ -69,7 +69,7 @@
 
 ## 운영 배포
 
-운영 사이트는 [sulsul-travel.vercel.app](https://sulsul-travel.vercel.app/)이며, GitHub 저장소의 `main` 브랜치와 연결된 Vercel 배포를 사용합니다. GitHub Pages는 현재 설정되어 있지 않습니다. 현재 작업 버전 `v2.0.4`의 push와 운영 반영 여부는 이 문서 갱신만으로 확인되지 않습니다.
+운영 사이트는 [sulsul-travel.vercel.app](https://sulsul-travel.vercel.app/)이며, GitHub 저장소의 `main` 브랜치와 연결된 Vercel 배포를 사용합니다. GitHub Pages는 현재 설정되어 있지 않습니다. 현재 작업 버전 `v2.0.5`의 push와 운영 반영 여부는 이 문서 갱신만으로 확인되지 않습니다.
 
 ## 검증
 
@@ -98,6 +98,7 @@ node .\tests\companion-refresh.browser.cjs
 node .\tests\collaboration-review.browser.cjs
 node .\tests\backup-restore.browser.cjs
 node .\tests\field-records.browser.cjs
+node .\tests\records-consistency.browser.cjs
 .\tools-verify.ps1
 ```
 
@@ -110,9 +111,10 @@ Playwright 브라우저를 내려받지 않은 환경에서는 `PLAYWRIGHT_MODUL
 1. 원본 객체를 바로 수정하기 전에 복사본을 만듭니다.
 2. 여행 하나를 고치는 기능은 `commitTripCommand`(편집 시작 때의 revision) 또는 `commitTrip(tripId, change)`(바로 적용하는 조작)를 씁니다. `change`는 저장소가 만든 복사본을 받으며 저장에 성공해야 `State`가 바뀝니다. 여행을 더하거나 빼는 기능은 `commitTripsCommand`를 씁니다. 셸과 `js/presentation/`에서 `saveTrips(`·`TripRepository.saveAll(`·`st_trips_v2`를 새로 쓰면 `tools/lint-boundaries.cjs`(WRITE01)가 실패합니다. 예외는 `tools/boundary-allowlist.json`에 정확한 개수와 사유로만 둡니다.
 3. 저장 실패 시 초안·확인창·원본 데이터를 유지하고 재시도 가능한 안내를 표시합니다.
-4. IDB 보조 데이터와 사진/일기 연결도 삭제·가져오기·여행 ID 변경 때 함께 점검합니다.
-5. 공유 링크·파일은 고정된 사본입니다. 개인 일기와 금액은 명시적 선택 없이 공유하지 않습니다.
-6. Gist 복원은 여행 목록 전체를 교체하므로 덮어쓰기 확인과 실패 시 원본 보존을 유지합니다.
+4. 기록(하루 회고·일정 기록·순간 기록)을 세거나 목록·이야기·백업·공유에 보여 줄 때는 `js/domain/travel-records.js`(`TravelRecords.list`·`summary`·`firstPhoto`)만 씁니다. 저장 필드를 직접 세면 화면마다 수가 달라집니다. 글·사진·기분·날씨가 모두 빈 항목은 기록이 아닙니다. 기록을 쓰는 화면은 `commitTripRecord(tripId, write)`를 쓰고, 편집을 시작할 때의 그 기록과 지금 기록이 같은지 먼저 확인합니다(다른 일정·기록 변경은 충돌이 아닙니다).
+5. IDB 보조 데이터와 사진/일기 연결도 삭제·가져오기·여행 ID 변경 때 함께 점검합니다.
+6. 공유 링크·파일은 고정된 사본입니다. 개인 일기와 금액은 명시적 선택 없이 공유하지 않습니다.
+7. Gist 복원은 여행 목록 전체를 교체하므로 덮어쓰기 확인과 실패 시 원본 보존을 유지합니다.
 
 ## PWA와 외부 통신
 

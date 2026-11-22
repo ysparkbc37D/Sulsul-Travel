@@ -144,12 +144,12 @@ function saveActivityRecord({quiet=false}={}) {
     if(!trip)throw new Error('여행을 찾지 못했습니다. 글 파일로 먼저 보관해 주세요.');
     if(JSON.stringify(trip.activityRecords?.[editor.recordId] || null)!==editor.baseRecord)throw new Error('다른 화면에서 기록이 변경되었습니다. 현재 글을 파일로 보관한 뒤 다시 열어 주세요.');
     const target=resolveActivityEditorTarget(trip,editor);
-    const next=JSON.parse(JSON.stringify(State.trips)),copy=next.find(t=>t.id===trip.id);
     const context=activityRecordContext(trip.activityRecords?.[editor.recordId] || {context:editor.context},target);
-    if(target)copy.days[target.dayIndex].spots[target.spotIndex].recordId=editor.recordId;
-    copy.activityRecords=copy.activityRecords || {};
-    copy.activityRecords[editor.recordId]={...copy.activityRecords[editor.recordId],id:editor.recordId,...editor.draft,context,updatedAt:new Date().toISOString()};
-    State.trips=TripRepository.saveAll(next,{bumpTripId:trip.id});
+    commitTripRecord(trip.id,copy=>{
+      if(target)copy.days[target.dayIndex].spots[target.spotIndex].recordId=editor.recordId;
+      copy.activityRecords=copy.activityRecords || {};
+      copy.activityRecords[editor.recordId]={...copy.activityRecords[editor.recordId],id:editor.recordId,...editor.draft,context,updatedAt:new Date().toISOString()};
+    });
     editor.baseRecord=JSON.stringify(State.trips.find(t=>t.id===trip.id).activityRecords[editor.recordId]);
     editor.savedDraft=JSON.stringify(editor.draft);editor.context=context;
   } catch(error) {setActivityFeedback((typeof isStorageWriteFailure==='function'&&isStorageWriteFailure(error))?'저장 공간이 부족합니다. 초안은 이 창에 남아 있습니다. 글 파일로 보관하거나 공간 확보 후 다시 저장해 주세요.':error.message);return false;}
@@ -167,10 +167,10 @@ function deleteActivityRecord() {
   try {
     const trip=State.trips.find(t=>t.id===editor.tripId);
     if(!trip||JSON.stringify(trip.activityRecords?.[editor.recordId]||null)!==editor.baseRecord)throw new Error('기록이 변경되었습니다. 다시 열어 확인한 뒤 삭제해 주세요.');
-    const next=JSON.parse(JSON.stringify(State.trips)),copy=next.find(t=>t.id===trip.id);
-    delete (copy.activityRecords||{})[editor.recordId];
-    (copy.days||[]).forEach(day=>(day.spots||[]).forEach(spot=>{if(spot.recordId===editor.recordId)delete spot.recordId;}));
-    State.trips=TripRepository.saveAll(next,{bumpTripId:trip.id});
+    commitTripRecord(trip.id,copy=>{
+      delete (copy.activityRecords||{})[editor.recordId];
+      (copy.days||[]).forEach(day=>(day.spots||[]).forEach(spot=>{if(spot.recordId===editor.recordId)delete spot.recordId;}));
+    });
   }catch(error){setActivityFeedback('삭제하지 못했습니다. 기존 기록과 작성 중인 글은 그대로입니다. '+(error.message||''));return false;}
   closeModal('modal-activity-record',true);refreshActivitySurfaces();showToast('일정 기록을 삭제했습니다.');return true;
 }
@@ -188,8 +188,9 @@ function refreshActivitySurfaces({rememberJournal=true}={}) {
   if(State.activePlanBlockId)refresh('구간 상세',()=>renderPlanBlockDetail());
   refresh('여행 기록',()=>renderJournalTab());
   refresh('기록 통계',()=>{
-    const trip=getActiveTrip(),entries=[...Object.values(trip.journals || {}),...activityEntries(trip),...(trip.momentEntries || [])],element=document.getElementById('stat-ws-diaries');
-    if(element)element.textContent=`${entries.length}편 / ${entries.reduce((sum,r)=>sum+(r.photos?.length || 0),0)}장`;
+    // 작업 화면 첫 렌더와 같은 공통 기록 모델로 센다(빈 항목 제외).
+    const summary=SulsulTravel.TravelRecords.summary(getActiveTrip()),element=document.getElementById('stat-ws-diaries');
+    if(element)element.textContent=`${summary.count}편 / ${summary.photoCount}장`;
   });
   refresh('누적 통계',()=>renderLifetimeAnalytics());
   State.recordSurfaceErrors=failed;

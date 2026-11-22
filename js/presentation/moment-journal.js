@@ -145,10 +145,12 @@ function saveMomentRecord({quiet=false}={}) {
   try {
     const trip=State.trips.find(t=>t.id===editor.tripId);if(!trip)throw new Error('여행을 찾지 못했습니다. 글 파일로 먼저 보관해 주세요.');
     const current=momentEntries(trip).find(entry=>entry.id===editor.entryId);if(JSON.stringify(current || null)!==editor.baseEntry)throw new Error('다른 화면에서 이 순간 기록이 변경되었습니다. 글 파일로 보관한 뒤 다시 열어 주세요.');
-    const next=JSON.parse(JSON.stringify(State.trips)),copy=next.find(t=>t.id===trip.id),now=new Date().toISOString();copy.momentEntries=momentEntries(copy);
-    const index=copy.momentEntries.findIndex(entry=>entry.id===editor.entryId),entry={...current,...editor.draft,id:editor.entryId,createdAt:current?.createdAt || now,updatedAt:now};
-    if(index>=0)copy.momentEntries[index]=entry;else copy.momentEntries.push(entry);
-    State.trips=TripRepository.saveAll(next,{bumpTripId:trip.id});editor.baseEntry=JSON.stringify(momentEntries(State.trips.find(t=>t.id===trip.id)).find(entry=>entry.id===editor.entryId));editor.savedDraft=JSON.stringify(editor.draft);
+    const now=new Date().toISOString(),entry={...current,...editor.draft,id:editor.entryId,createdAt:current?.createdAt || now,updatedAt:now};
+    commitTripRecord(trip.id,copy=>{
+      copy.momentEntries=momentEntries(copy);
+      const index=copy.momentEntries.findIndex(item=>item.id===editor.entryId);
+      if(index>=0)copy.momentEntries[index]=entry;else copy.momentEntries.push(entry);
+    });editor.baseEntry=JSON.stringify(momentEntries(State.trips.find(t=>t.id===trip.id)).find(entry=>entry.id===editor.entryId));editor.savedDraft=JSON.stringify(editor.draft);
   }catch(error){setMomentFeedback((typeof isStorageWriteFailure==='function'&&isStorageWriteFailure(error))?'저장 공간이 부족합니다. 글과 사진 초안은 이 창에 남아 있습니다. 글 파일로 보관하거나 공간 확보 후 다시 저장해 주세요.':error.message);return false;}
   document.getElementById('moment-record-delete').hidden=false;document.getElementById('moment-record-title').textContent='순간 기록 수정';
   const refreshed=refreshMomentSurfaces();setMomentFeedback(refreshed?'이 순간을 기기에 저장했습니다. 다른 기록은 그대로 남아 있습니다.':'이 순간은 저장되었습니다. 일부 화면을 갱신하지 못했습니다. 작성 중인 글을 보관한 뒤 화면을 다시 열어 주세요.');if(!quiet)showToast('순간 기록을 저장했습니다.');return true;
@@ -158,7 +160,7 @@ function deleteMomentRecord() {
   if(!confirm('이 순간의 글과 사진을 삭제할까요? 다른 순간과 하루 회고는 그대로이며 되돌릴 수 없습니다.'))return false;
   try {
     const trip=State.trips.find(t=>t.id===editor.tripId),entry=momentEntries(trip).find(item=>item.id===editor.entryId);if(!trip||JSON.stringify(entry || null)!==editor.baseEntry)throw new Error('기록이 변경되었습니다. 다시 열어 확인한 뒤 삭제해 주세요.');
-    const next=JSON.parse(JSON.stringify(State.trips)),copy=next.find(t=>t.id===trip.id);copy.momentEntries=momentEntries(copy).filter(item=>item.id!==editor.entryId);State.trips=TripRepository.saveAll(next,{bumpTripId:trip.id});
+    commitTripRecord(trip.id,copy=>{copy.momentEntries=momentEntries(copy).filter(item=>item.id!==editor.entryId);});
   }catch(error){setMomentFeedback('삭제하지 못했습니다. 기존 기록과 작성 중인 글은 그대로입니다. '+(error.message || ''));return false;}
   closeMomentJournal(true);refreshMomentSurfaces();showToast('순간 기록을 삭제했습니다.');return true;
 }

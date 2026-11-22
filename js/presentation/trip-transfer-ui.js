@@ -62,9 +62,9 @@ function acceptTravelSnapshot(payload, {fromUrl = false} = {}) {
     shareFeedback('이미 가져온 여행 사본입니다. 내 여행에서 확인해 주세요.'); return false;
   }
   const incoming = parsed.trip;
-  const allEntries = [...Object.values(incoming.journals || {}),...Object.values(incoming.activityRecords || {})];
-  const photoCount = allEntries.reduce((sum,j)=>sum+(j.photos || []).length,0);
-  if (!confirm(`공유 당시의 여행 사본을 내 기기에 추가할까요?\n\n${incoming.title}\n${incoming.days.length}일 · 기록 ${allEntries.length}편 · 사진 ${photoCount}장 · 지출 ${(incoming.expenses || []).length}건\n\n앱 업데이트는 링크 안의 일정을 바꾸지 않습니다. 기존 여행은 유지됩니다. 이후 동료의 수정은 자동 반영되지 않습니다.`)) return false;
+  // 순간 기록까지 같은 기록 모델로 센다.
+  const incomingRecords = SulsulTravel.TravelRecords.summary(incoming);
+  if (!confirm(`공유 당시의 여행 사본을 내 기기에 추가할까요?\n\n${incoming.title}\n${incoming.days.length}일 · 기록 ${incomingRecords.count}편 · 사진 ${incomingRecords.photoCount}장 · 지출 ${(incoming.expenses || []).length}건\n\n앱 업데이트는 링크 안의 일정을 바꾸지 않습니다. 기존 여행은 유지됩니다. 이후 동료의 수정은 자동 반영되지 않습니다.`)) return false;
   incoming.id = `trip_imp_${crypto.randomUUID()}`;
   incoming.title += ' (공유받음)';
   if (parsed.shareId) incoming.importedShareId = parsed.shareId;

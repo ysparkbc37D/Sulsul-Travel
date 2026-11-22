@@ -4,7 +4,7 @@ import {readFileSync} from 'node:fs';
 import vm from 'node:vm';
 function domain(){
   const context={TextEncoder,URL};
-  for(const file of ['trip-adapter.js','live-itinerary.js','trip-transfer.js','travel-backup.js'])vm.runInNewContext(readFileSync(new URL('../js/domain/'+file,import.meta.url),'utf8'),context,{filename:file});
+  for(const file of ['trip-adapter.js','live-itinerary.js','trip-transfer.js','travel-records.js','travel-backup.js'])vm.runInNewContext(readFileSync(new URL('../js/domain/'+file,import.meta.url),'utf8'),context,{filename:file});
   return context.SulsulTravel;
 }
 const domains=domain(),api=domains.TravelBackup,plain=value=>JSON.parse(JSON.stringify(value));
