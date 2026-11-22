@@ -1,6 +1,6 @@
 # 술술트래블 개발 가이드
 
-이 문서는 현재 앱 구조와 검증 방식을 설명합니다. 이전 구조를 기술한 문서는 상단에 역사 자료 또는 목표 설계라고 표시합니다. 현재 소스 버전은 `2.0.3`입니다. 원격 저장소와 배포 반영 여부는 별도로 확인합니다.
+이 문서는 현재 앱 구조와 검증 방식을 설명합니다. 이전 구조를 기술한 문서는 상단에 역사 자료 또는 목표 설계라고 표시합니다. 현재 소스 버전은 `2.0.4`입니다. 원격 저장소와 배포 반영 여부는 별도로 확인합니다.
 
 ## 실행 구조
 
@@ -69,7 +69,7 @@
 
 ## 운영 배포
 
-운영 사이트는 [sulsul-travel.vercel.app](https://sulsul-travel.vercel.app/)이며, GitHub 저장소의 `main` 브랜치와 연결된 Vercel 배포를 사용합니다. GitHub Pages는 현재 설정되어 있지 않습니다. 현재 작업 버전 `v2.0.3`의 push와 운영 반영 여부는 이 문서 갱신만으로 확인되지 않습니다.
+운영 사이트는 [sulsul-travel.vercel.app](https://sulsul-travel.vercel.app/)이며, GitHub 저장소의 `main` 브랜치와 연결된 Vercel 배포를 사용합니다. GitHub Pages는 현재 설정되어 있지 않습니다. 현재 작업 버전 `v2.0.4`의 push와 운영 반영 여부는 이 문서 갱신만으로 확인되지 않습니다.
 
 ## 검증
 
@@ -78,6 +78,8 @@ Node.js 18 이상과 Playwright/Chromium을 사용할 수 있는 환경에서 �
 ```powershell
 $testFiles = Get-ChildItem .\tests -Filter '*.test.mjs' | ForEach-Object { $_.FullName }
 node --test $testFiles
+node .	oolslint-boundaries.cjs
+node .	oolscheck-release.cjs
 node .\tests\activity-journal.browser.cjs
 node .\tests\photo-compression.browser.cjs
 node .\tests\photo-optimization.browser.cjs
@@ -106,7 +108,7 @@ Playwright 브라우저를 내려받지 않은 환경에서는 `PLAYWRIGHT_MODUL
 ## 저장·공유 변경 원칙
 
 1. 원본 객체를 바로 수정하기 전에 복사본을 만듭니다.
-2. 개별 일정 변경은 `commitTripCommand`→`TripRepository.commit` revision 경계를 사용하고, 전체 교체·가져오기만 `saveAll` 계약을 사용합니다. 저장 성공 뒤 전역 상태와 화면을 갱신합니다.
+2. 여행 하나를 고치는 기능은 `commitTripCommand`(편집 시작 때의 revision) 또는 `commitTrip(tripId, change)`(바로 적용하는 조작)를 씁니다. `change`는 저장소가 만든 복사본을 받으며 저장에 성공해야 `State`가 바뀝니다. 여행을 더하거나 빼는 기능은 `commitTripsCommand`를 씁니다. 셸과 `js/presentation/`에서 `saveTrips(`·`TripRepository.saveAll(`·`st_trips_v2`를 새로 쓰면 `tools/lint-boundaries.cjs`(WRITE01)가 실패합니다. 예외는 `tools/boundary-allowlist.json`에 정확한 개수와 사유로만 둡니다.
 3. 저장 실패 시 초안·확인창·원본 데이터를 유지하고 재시도 가능한 안내를 표시합니다.
 4. IDB 보조 데이터와 사진/일기 연결도 삭제·가져오기·여행 ID 변경 때 함께 점검합니다.
 5. 공유 링크·파일은 고정된 사본입니다. 개인 일기와 금액은 명시적 선택 없이 공유하지 않습니다.
@@ -116,6 +118,8 @@ Playwright 브라우저를 내려받지 않은 환경에서는 `PLAYWRIGHT_MODUL
 
 - 앱 버전 변경 시 `index.html`의 `APP_VER`, 버전 배지, 자산 쿼리 버전, `sw.js` 캐시 이름과 프리캐시 URL, `package.json`, `CHANGELOG.md`, `술술트래블신록.md`를 일치시킵니다.
 - 화면의 버전 기록도 최신 항목을 추가합니다. 캐시된 설치 앱에 업데이트가 적용되는지 새 서비스워커 버전으로 확인합니다.
+- 배포 파일을 바꾸면 버전을 올립니다. `tools/check-release.cjs`는 마지막 릴리스 태그(`vX.Y.Z`)와 비교해 내용이 바뀐 배포 파일이 있는데 `APP_VER`·`sw.js` 캐시 버전·해당 자산의 `?v=`가 그대로면 실패합니다(개행 차이는 무시). 릴리스 커밋마다 `git tag -a vX.Y.Z`를 만들고 `git push --follow-tags`로 올립니다. 태그가 없으면 검사를 건너뛰었다고 출력합니다.
+- `tools/lint-boundaries.cjs`의 다른 두 규칙: 새 `window.__` 전역 상태 금지(GLOBAL01), HTML 템플릿에 escape하지 않은 값 삽입 수가 파일별 기준값을 넘지 않기(HTML01). 기준값은 줄면 함께 낮춥니다. 둘 다 `tools-verify.ps1`과 단위 테스트에서 실행합니다.
 - 로컬 JS/CSS 변경 후 `node tools/update-asset-integrity.cjs`로 HTML의 SRI를 갱신합니다. 공개 빌드는 Git 개행 변환과 무관하게 실제 배포 바이트로 다시 계산합니다. 자산 오류가 있으면 `SulsulShell`이 초기 데이터 쓰기를 차단하고 업데이트 복구 화면을 엽니다.
 - 실제 구버전 워커 캐시에서 새 버전으로 진입하는 `test:sw-upgrade`와 렌더링 오류를 주입하는 `test:record-persistence`를 확인합니다. 워커 교체는 작성 중 자동 새로고침을 유발하지 않습니다. 자세한 범위는 [v1.9.4 기록 복구](docs/record-recovery-v1.9.4.md)를 참고하세요.
 - Google Fonts/jsDelivr 글꼴, OpenStreetMap 지도 타일, 요청형 환율 API, 사용자가 호출한 Gemini API, Gist 백업, Google Maps 링크 전송을 기능별로 구분해 안내합니다.

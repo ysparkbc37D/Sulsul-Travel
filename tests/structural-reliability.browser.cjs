@@ -80,6 +80,37 @@ const fixture=()=>({id:'structural-trip',title:'구조 검증 가상 여행',sta
       const after=await api.state();assert.equal(after.trips[0].days[0].spots[0].title,'재시도할 합성 일정');assert.equal(after.trips[0].days[0].spots[0].desc,'실패해도 잃지 않을 편집 메모');assert.equal(after.trips[0].revision,before.trips[0].revision+1);
       return {formInputRetained:true,originalUnchangedOnFailure:true,retryCommittedOnce:true};
     });
+    // v2.0.4: 셸의 saveTrips 호출을 commitTrip·commitTripsCommand로 옮겼다. 실패하면 여행·저장본이 그대로이고 성공 안내가 없어야 한다.
+    const ledgerTrip=()=>({...fixture(),activeCurrencies:['KRW'],checklist:[{id:'check-1',text:'여권 확인',checked:false},{id:'check-2',text:'보험 가입',checked:false}],
+      exchanges:[{id:'exchange-1',date:'2030-05-10',fromCurr:'KRW',fromAmount:10000,toCurr:'USD',toAmount:7,rate:0.0007},{id:'exchange-2',date:'2030-05-10',fromCurr:'KRW',fromAmount:20000,toCurr:'USD',toAmount:14,rate:0.0007}]});
+    const captureToasts=page=>page.evaluate(()=>{window.structuralToasts=[];const original=window.showToast;window.showToast=(message,...rest)=>{window.structuralToasts.push(String(message));return original(message,...rest);};});
+    await check('명령 경계로 옮긴 셸 저장은 실패하면 여행과 저장본을 바꾸지 않고 성공을 알리지 않는다',async api=>{
+      await api.seed(ledgerTrip());await captureToasts(api.page);const before=await api.state();await api.quota(true);
+      await api.page.evaluate(()=>{checkAllChecklistItems(true);selectAddCurrency('EUR');toggleBookingGuideCompleted('guide-synthetic');duplicateTrip('structural-trip');});
+      assert.deepEqual(await api.state(),before);
+      const failed=await api.page.evaluate(()=>window.structuralToasts);
+      assert.equal(failed.some(message=>/지갑이 추가되었습니다|복제되었습니다/.test(message)),false,failed.join(' / '));
+      assert.ok(failed.some(message=>/저장하지 못했습니다/.test(message)),'실패를 알린다');
+      await api.quota(false);await api.page.evaluate(()=>{checkAllChecklistItems(true);selectAddCurrency('EUR');duplicateTrip('structural-trip');});
+      const after=await api.state(),stored=JSON.parse(after.stored),original=stored.find(trip=>trip.id==='structural-trip');
+      assert.deepEqual(original.checklist.map(item=>item.checked),[true,true]);assert.ok(original.activeCurrencies.includes('EUR'));assert.equal(before.trips[0].activeCurrencies.includes('EUR'),false);
+      assert.equal(original.revision,before.trips[0].revision+2,'바뀐 명령 두 번만 revision을 올린다');
+      assert.equal(stored.length,2);assert.equal(after.trips.length,2);
+      return {failedCommandsLeftStateUntouched:true,noFalseSuccess:true,retryCommitted:true};
+    });
+    await check('환전 삭제 확인 뒤 다른 변경이 끼어들면 삭제를 거절하고 창을 남긴다',async api=>{
+      await api.seed(ledgerTrip());await captureToasts(api.page);
+      await api.page.evaluate(()=>requestDeleteExchange(0));await api.assertDialogOpen();
+      assert.equal(await api.page.evaluate(()=>commitTrip('structural-trip',trip=>{trip.title='다른 화면에서 바꾼 제목';})),true);
+      await api.page.locator('#confirm-delete-btn').click();await api.assertDialogOpen();
+      let stored=JSON.parse((await api.state()).stored)[0];
+      assert.deepEqual(stored.exchanges.map(item=>item.id),['exchange-1','exchange-2']);assert.equal(stored.title,'다른 화면에서 바꾼 제목');
+      assert.ok((await api.page.evaluate(()=>window.structuralToasts)).some(message=>/편집을 시작한 뒤 여행이 변경됐습니다/.test(message)));
+      await api.page.evaluate(()=>{closeModal('modal-confirm-delete',true);requestDeleteExchange(0);});await api.page.locator('#confirm-delete-btn').click();
+      await api.page.waitForFunction(()=>document.getElementById('modal-confirm-delete').classList.contains('sheet-closed'));
+      stored=JSON.parse((await api.state()).stored)[0];assert.deepEqual(stored.exchanges.map(item=>item.id),['exchange-2']);
+      return {staleConfirmRejected:true,dialogRetained:true,freshConfirmDeletedOnlyTarget:true};
+    });
     await check('모의 Gist 전체 백업은 원문·HTML 텍스트·보관 사진·보조 글을 담고 검토 후 확정 복원한다',async api=>{
       await api.seed();const image=await api.page.evaluate(async()=>{
         const canvas=document.createElement('canvas');canvas.width=120;canvas.height=80;const ctx=canvas.getContext('2d');ctx.fillStyle='#2b6556';ctx.fillRect(0,0,120,80);

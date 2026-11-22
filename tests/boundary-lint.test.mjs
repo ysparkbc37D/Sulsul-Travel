@@ -1,0 +1,90 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {createRequire} from 'node:module';
+import {mkdtempSync, mkdirSync, writeFileSync, rmSync} from 'node:fs';
+import {tmpdir} from 'node:os';
+import path from 'node:path';
+
+const require = createRequire(import.meta.url);
+const {lint, isSafe, scan} = require('../tools/lint-boundaries.cjs');
+
+// 규칙 위반을 일부러 넣은 작은 저장소를 만든다.
+function fixture({html = '', presentation = '', domain = ''} = {}) {
+  const dir = mkdtempSync(path.join(tmpdir(), 'sulsul-lint-'));
+  mkdirSync(path.join(dir, 'js', 'presentation'), {recursive: true});
+  mkdirSync(path.join(dir, 'js', 'domain'), {recursive: true});
+  writeFileSync(path.join(dir, 'index.html'), `<!doctype html><p>localStorage: st_trips_v2</p><script src="js/x.js"></script><script>${html}</script>`);
+  writeFileSync(path.join(dir, 'js', 'presentation', 'feature.js'), presentation);
+  writeFileSync(path.join(dir, 'js', 'domain', 'model.js'), domain);
+  return dir;
+}
+const empty = {writes: {}, globals: {}, html: {}};
+const rules = result => result.violations.map(item => item.rule);
+
+test('the real repository passes its own boundary lint', () => {
+  const result = lint();
+  assert.deepEqual(result.violations, [], result.violations.map(v => v.message).join('\n'));
+  assert.equal(Object.keys(result.writes).some(key => /#saveTrips$/.test(key) && !/#initApp#|renderCompanionPlan/.test(key)), false, '셸 기능 함수에 saveTrips 직접 호출이 남지 않는다');
+});
+
+test('a new direct trip write in the shell or a presentation file fails', () => {
+  const dir = fixture({
+    html: 'function renameTrip(){ getActiveTrip().title="x"; saveTrips(); }\nfunction saveTrips(){ return true; }',
+    presentation: "function wipe(){ localStorage.setItem('st_trips_v2','[]'); TripRepository.saveAll([]); }",
+    domain: "function domainWrite(){ TripRepository.saveAll([]); }"
+  });
+  try {
+    const result = lint({rootDir: dir, allowlist: empty});
+    const messages = result.violations.filter(v => v.rule === 'WRITE01').map(v => v.message).join('\n');
+    assert.match(messages, /index\.html#renameTrip#saveTrips/);
+    assert.match(messages, /js\/presentation\/feature\.js#wipe#st_trips_v2/);
+    assert.match(messages, /js\/presentation\/feature\.js#wipe#TripRepository\.write/);
+    assert.doesNotMatch(messages, /index\.html#saveTrips#saveTrips/, '정의 자체는 호출이 아니다');
+    assert.doesNotMatch(messages, /domain/, '저장소 계층(domain·infrastructure)은 규칙 밖이다');
+    assert.doesNotMatch(messages, /최상위/, 'HTML 본문의 저장 키 설명은 코드가 아니다');
+  } finally { rmSync(dir, {recursive: true, force: true}); }
+});
+
+test('allow-listed writes pass only with the exact count and a reason', () => {
+  const dir = fixture({html: 'function boot(){ saveTrips({bump:false}); }'});
+  try {
+    const key = 'index.html#boot#saveTrips';
+    assert.deepEqual(rules(lint({rootDir: dir, allowlist: {...empty, writes: {[key]: {count: 1, reason: '부팅 정규화'}}}})), []);
+    assert.deepEqual(rules(lint({rootDir: dir, allowlist: {...empty, writes: {[key]: {count: 2, reason: '부팅 정규화'}}}})), ['WRITE01'], '줄어든 허용 수는 목록도 줄인다');
+    assert.deepEqual(rules(lint({rootDir: dir, allowlist: {...empty, writes: {[key]: {count: 1}}}})), ['WRITE01'], '사유 없는 허용은 실패한다');
+  } finally { rmSync(dir, {recursive: true, force: true}); }
+});
+
+test('new window.__ state fails and unused allow-list names are reported', () => {
+  const dir = fixture({presentation: 'window.__draftCache = {}; function f(){ return window.__draftCache; }'});
+  try {
+    assert.match(lint({rootDir: dir, allowlist: empty}).violations[0].message, /window\.__draftCache/);
+    assert.deepEqual(rules(lint({rootDir: dir, allowlist: {...empty, globals: {__draftCache: '테스트'}}})), []);
+    assert.deepEqual(rules(lint({rootDir: dir, allowlist: {...empty, globals: {__draftCache: '테스트', __gone: '지운 값'}}})), ['GLOBAL01']);
+  } finally { rmSync(dir, {recursive: true, force: true}); }
+});
+
+test('unescaped data in an HTML template fails above the baseline; escaped or derived values do not count', () => {
+  const presentation = [
+    'function card(trip){ return `<article><h3>${trip.title}</h3>`; }',
+    'function safe(trip,index,list){ return `<p data-i="${index}">${escapeHtml(trip.title)} ${trip.done ? \'완료\' : \'\'} ${list.map(item => `<b>${escapeHtml(item)}</b>`).join(\'\')} ${list.length}</p>`; }',
+    'function text(trip){ return `여행 ${trip.title}`; } // HTML이 아닌 템플릿'
+  ].join('\n');
+  const dir = fixture({presentation});
+  try {
+    const result = lint({rootDir: dir, allowlist: empty});
+    assert.equal(result.html['js/presentation/feature.js'], 1);
+    assert.match(result.violations.find(v => v.rule === 'HTML01').places[0], /trip\.title/);
+    assert.deepEqual(rules(lint({rootDir: dir, allowlist: {...empty, html: {'js/presentation/feature.js': 1}}})), []);
+    assert.deepEqual(rules(lint({rootDir: dir, allowlist: {...empty, html: {'js/presentation/feature.js': 3}}})), ['HTML01'], '줄었으면 기준값을 낮춘다');
+  } finally { rmSync(dir, {recursive: true, force: true}); }
+});
+
+test('the scanner ignores comments, strings and regex literals when finding calls and templates', () => {
+  const {code, templates} = scan("const a = '`not a template`'; // saveTrips()\nconst r = /`/g; const t = `<i>${x}</i>`;");
+  assert.doesNotMatch(code, /saveTrips/);
+  assert.equal(templates.length, 1);
+  assert.equal(templates[0].exprs[0].text, 'x');
+  for (const expr of ['escapeHtml(x)', "ok ? 'a' : 'b'", 'items.length', 'dayIndex + 1', "rows.map(row => `<td>${escapeHtml(row)}</td>`).join('')", 'Number(x).toLocaleString()', 'badgeHtml']) assert.equal(isSafe(expr), true, expr);
+  for (const expr of ['trip.title', "ok ? trip.title : ''", 'formatName(trip)', 'a + b']) assert.equal(isSafe(expr), false, expr);
+});

@@ -105,6 +105,23 @@ $verMatch = ($appVer -eq $swVer) -and ($appVer -eq $clVer) -and ($appVer -eq $ba
 $details = "App: v$appVer | Badge: v$badgeVer | SW: v$swVer | Changelog: v$clVer | Chronicle: v$sillokVer"
 Report-Gate "Version Synchronization (v$appVer)" $verMatch $details
 
+# Node-based gates: write boundary / global state / HTML escape lint, and release version vs last tag.
+$nodeExe = $null
+$nodeCmd = Get-Command node -ErrorAction SilentlyContinue
+if ($nodeCmd) { $nodeExe = $nodeCmd.Source }
+if (-not $nodeExe) {
+    $bundledNode = Join-Path $env:USERPROFILE ".cache\codex-runtimes\codex-primary-runtime\dependencies\node\bin\node.exe"
+    if (Test-Path $bundledNode) { $nodeExe = $bundledNode }
+}
+if ($nodeExe) {
+    $lintOut = (& $nodeExe (Join-Path $baseDir "tools\lint-boundaries.cjs") 2>&1 | Out-String).Trim()
+    Report-Gate "Write Boundary, Global State & HTML Escape Lint (tools/lint-boundaries.cjs)" ($LASTEXITCODE -eq 0) $lintOut
+    $releaseOut = (& $nodeExe (Join-Path $baseDir "tools\check-release.cjs") 2>&1 | Out-String).Trim()
+    Report-Gate "Release Version vs Last Tag (tools/check-release.cjs)" ($LASTEXITCODE -eq 0) $releaseOut
+} else {
+    Report-Gate "Node.js Runtime for Boundary & Release Gates" $false "node was not found on PATH or in the bundled runtime folder"
+}
+
 # ---------------------------------------------------------------
 # [Gate 3/5] Selected Invariant Laws Validation
 # ---------------------------------------------------------------
