@@ -95,13 +95,13 @@ const server=http.createServer((req,res)=>{
    const base=structuredClone(State.trips.find(trip=>trip.id==='moment-test')),entry=structuredClone(base.momentEntries[1]);
    const owner={...structuredClone(base),id:'media-cleanup-owner',title:'사진 원본 여행',journals:{},activityRecords:{},momentEntries:[{...entry,id:'cleanup-moment',photos:[shared.source,orphan.source],photoThumbnails:[shared.thumbnail,orphan.thumbnail],mediaIds:[shared.mediaId,orphan.mediaId],coverIndex:0}]};
    const copy={...structuredClone(base),id:'media-cleanup-copy',title:'같은 사진을 참조하는 사본',momentEntries:[],activityRecords:{},journals:{0:{text:'사본의 사진 원문',photos:[shared.source],photoThumbnails:[shared.thumbnail],mediaIds:[shared.mediaId],coverIndex:0}}};
-   State.trips=TripRepository.saveAll([...State.trips,owner,copy]);window.cleanupMedia={shared:shared.mediaId,orphan:orphan.mediaId,other:other.mediaId};window.cleanupBefore=JSON.stringify(State.trips);window.cleanupCalls=[];
+   State.trips=TripRepository.saveAll([...State.trips,owner,copy]);window.cleanupMedia={shared:shared.mediaId,orphan:orphan.mediaId,other:other.mediaId};window.cleanupBefore=JSON.stringify(State.trips);window.cleanupRaw=localStorage.getItem('st_trips_v2');window.cleanupCalls=[];
    const original=repo.prune.bind(repo);repo.prune=async(...args)=>{cleanupCalls.push(args[1]?.tripId||'*');return original(...args);};
    const stored=await Promise.all(Object.values(cleanupMedia).map(id=>repo.get(id)));return {allStored:stored.every(value=>value.original instanceof Blob&&value.thumbnail instanceof Blob),ids:stored.length};
   });assert.deepEqual(cleanupSetup,{allStored:true,ids:3});
   const deleteStorageFailure=await page.evaluate(async()=>{
    const old=Storage.prototype.setItem;requestDeleteTrip('media-cleanup-owner');Storage.prototype.setItem=function(key,value){if(key==='st_trips_v2')throw new DOMException('quota','QuotaExceededError');return old.call(this,key,value);};try{document.getElementById('confirm-delete-btn').onclick();}finally{Storage.prototype.setItem=old;}
-   return {memory:JSON.stringify(State.trips)===cleanupBefore,persisted:localStorage.getItem('st_trips_v2')===cleanupBefore,pruneCalls:cleanupCalls.length,blobs:(await Promise.all(Object.values(cleanupMedia).map(id=>SulsulTravel.mediaRepository.get(id)))).every(Boolean)};
+   return {memory:JSON.stringify(State.trips)===cleanupBefore,persisted:localStorage.getItem('st_trips_v2')===cleanupRaw,pruneCalls:cleanupCalls.length,blobs:(await Promise.all(Object.values(cleanupMedia).map(id=>SulsulTravel.mediaRepository.get(id)))).every(Boolean)};
   });assert.deepEqual(deleteStorageFailure,{memory:true,persisted:true,pruneCalls:0,blobs:true});
   await page.waitForTimeout(400);await page.locator('#confirm-delete-btn').click();
   await page.waitForFunction(async()=>!(await SulsulTravel.mediaRepository.get(cleanupMedia.orphan)));
@@ -112,12 +112,12 @@ const server=http.createServer((req,res)=>{
    return {failures,blob:!!(await SulsulTravel.mediaRepository.get(cleanupMedia.other))};
   });assert.deepEqual(invalidCleanup,{failures:['INVALID_RETAINED_TRIPS','INVALID_MEDIA_TRIP_ID'],blob:true});
   await page.evaluate(async()=>{
-   const copy=structuredClone(State.trips.find(trip=>trip.id==='media-cleanup-copy'));copy.journals[0].mediaIds=[];window.cleanupRestoreJson=JSON.stringify({trips:[copy]});window.cleanupRestoreBefore=JSON.stringify(State.trips);window.cleanupOldSetItem=Storage.prototype.setItem;
+   const copy=structuredClone(State.trips.find(trip=>trip.id==='media-cleanup-copy'));copy.journals[0].mediaIds=[];window.cleanupRestoreJson=JSON.stringify({trips:[copy]});window.cleanupRestoreBefore=JSON.stringify(State.trips);window.cleanupRestoreRaw=localStorage.getItem('st_trips_v2');window.cleanupOldSetItem=Storage.prototype.setItem;
    Storage.prototype.setItem=function(key,value){if(key==='st_trips_v2')throw new DOMException('quota','QuotaExceededError');return cleanupOldSetItem.call(this,key,value);};window.cleanupRestoreInput={files:[new File([cleanupRestoreJson],'restore.json',{type:'application/json'})],value:'restore.json'};window.confirm=()=>true;await importDataFromJson({target:cleanupRestoreInput});await applyTravelBackupRestore();
   });
   await page.waitForFunction(()=>cleanupRestoreInput.value==='');
   const restoreStorageFailure=await page.evaluate(async()=>{
-   Storage.prototype.setItem=cleanupOldSetItem;return {memory:JSON.stringify(State.trips)===cleanupRestoreBefore,persisted:localStorage.getItem('st_trips_v2')===cleanupRestoreBefore,calls:cleanupCalls.slice(),blobs:(await Promise.all([cleanupMedia.shared,cleanupMedia.other].map(id=>SulsulTravel.mediaRepository.get(id)))).every(Boolean)};
+   Storage.prototype.setItem=cleanupOldSetItem;return {memory:JSON.stringify(State.trips)===cleanupRestoreBefore,persisted:localStorage.getItem('st_trips_v2')===cleanupRestoreRaw,calls:cleanupCalls.slice(),blobs:(await Promise.all([cleanupMedia.shared,cleanupMedia.other].map(id=>SulsulTravel.mediaRepository.get(id)))).every(Boolean)};
   });assert.deepEqual(restoreStorageFailure,{memory:true,persisted:true,calls:['media-cleanup-owner'],blobs:true});
   await page.evaluate(async()=>{cleanupRestoreInput={files:[new File([cleanupRestoreJson],'restore.json',{type:'application/json'})],value:'restore.json'};await importDataFromJson({target:cleanupRestoreInput});await applyTravelBackupRestore();});
   await page.waitForFunction(()=>cleanupRestoreInput.value==='');await page.waitForFunction(async()=>!(await SulsulTravel.mediaRepository.get(cleanupMedia.shared))&&!(await SulsulTravel.mediaRepository.get(cleanupMedia.other)));

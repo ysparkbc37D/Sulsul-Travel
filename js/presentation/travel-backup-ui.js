@@ -35,6 +35,7 @@ function openTravelBackupFilePicker(){
   const input=document.getElementById('backup-json-input');input.value='';input.click();return true;
 }
 function travelBackupDownloadRequested(){
+  SulsulTravel.StorageHealth?.markBackup('file');
   travelBackupFeedback('backup-file-feedback','파일 저장을 요청했습니다. 브라우저 다운로드 목록에서 파일을 확인해 주세요. 저장되지 않으면 휴대폰 저장·공유를 사용하세요.');
 }
 async function sharePreparedTravelBackup(){
@@ -43,6 +44,7 @@ async function sharePreparedTravelBackup(){
     // 비동기 파일 준비가 끝난 후 별도 버튼 클릭에서 공유를 요청한다.
     if(!navigator.share||!navigator.canShare?.({files:[file]}))throw new Error('이 브라우저는 파일 공유를 지원하지 않습니다. 파일 저장을 눌러 주세요.');
     await navigator.share({files:[file],title:'술술트래블 전체 백업'});
+    SulsulTravel.StorageHealth?.markBackup('share');
     travelBackupFeedback('backup-file-feedback','기기의 저장·공유 창으로 백업을 전달했습니다. 선택한 위치에서 파일을 확인해 주세요.');return true;
   }catch(error){travelBackupFeedback('backup-file-feedback',error.name==='AbortError'?'저장·공유를 취소했습니다. 준비된 파일은 다시 저장할 수 있습니다.':error.message||'저장·공유 창을 열지 못했습니다. 파일 저장을 사용해 주세요.');return false;}
 }
@@ -143,6 +145,10 @@ async function applyTravelBackupRestore(){
     });
     try { replacement=await SulsulTravel.expensePhotoRepository.prepare(replacement); }
     catch(error) { console.warn('[복원 지출 사진 보관본]',error?.message||error); }
+    // 기록 사진도 문서에 쓰기 전에 IDB에 보관하고 다시 읽어 대조한다. 사진이 많은 백업도 기기 문서 한도(약 5MB)에 걸리지 않는다.
+    // 실패한 사진은 문서에 그대로 남는다(지금까지와 같음).
+    try { const adopted=await SulsulTravel.recordMediaStore.adopt(replacement,{raw:pending.baseRaw}); replacement=SulsulTravel.recordMediaStore.applyPatches(replacement,adopted.archived).trips; }
+    catch(error) { console.warn('[복원 기록 사진 보관본]',error?.message||error); }
     if(JSON.stringify(State.trips)!==pending.baseState)throw new Error('사진을 준비하는 동안 현재 여행이 변경되었습니다. 백업을 다시 검토해 주세요.');
     const next=TripRepository.saveAll(replacement,{approvedRecoveryRaw:recoveryRaw,expectedRaw:pending.baseRaw});
     committed=true;State.trips=next;State.activeTripId=next[0]?.id||null;State.storageRecovery=null;TravelBackupUI.pending=null;

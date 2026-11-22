@@ -1,6 +1,20 @@
 /* 격리된 45일 합성 여행만 사용한다. 외부 AI·계정·개인 브라우저 자료에 접근하지 않는다. */
 'use strict';
 
+function settleMediaIds(actual, reference) {
+  const copy = JSON.parse(JSON.stringify(actual));
+  copy.forEach(trip => {
+    const before = reference.find(item => item.id === trip.id);
+    if (!before) return;
+    const pairs = [...Object.entries(trip.journals || {}).map(([key, entry]) => [entry, before.journals?.[key]]), ...Object.entries(trip.activityRecords || {}).map(([key, entry]) => [entry, before.activityRecords?.[key]]), ...(trip.momentEntries || []).map((entry, index) => [entry, before.momentEntries?.[index]])];
+    pairs.forEach(([entry, old]) => {
+      if (!entry || !old || !Array.isArray(entry.mediaIds)) return;
+      entry.mediaIds = entry.mediaIds.map((id, index) => (old.mediaIds?.[index] == null && typeof id === 'string' && /^media_/.test(id)) ? old.mediaIds?.[index] ?? id : id);
+      if (!Array.isArray(old.mediaIds) && entry.mediaIds.every(id => typeof id === 'string' && /^media_/.test(id))) delete entry.mediaIds;
+    });
+  });
+  return copy;
+}
 const { chromium } = require(process.env.PLAYWRIGHT_MODULE || 'playwright');
 const fs = require('node:fs');
 const path = require('node:path');
@@ -108,8 +122,9 @@ function content(trip) {
         }, { trip, extraTrips });
         return this.snapshot();
       },
+      // v2.0.6부터 저장 문서는 대조된 기록 사진을 빼고 보관본 ID만 둔다. 문서와 메모리 비교는 사진을 채운 문서(hydrated)로 한다.
       async snapshot() {
-        return page.evaluate(key => ({ trips: State.trips, raw: localStorage.getItem(key) }), storageKey);
+        return page.evaluate(key => { const raw = localStorage.getItem(key); return { trips: State.trips, raw, hydrated: raw ? SulsulTravel.recordMediaStore.hydrate(JSON.parse(raw)) : null }; }, storageKey);
       },
       async trip() { return (await this.snapshot()).trips.find(trip => trip.id === tripId); },
       async quota(enabled) {
@@ -193,7 +208,7 @@ function content(trip) {
 
       async function verify(affectedDayIds = [firstDayId]) {
         const snapshot = await api.snapshot(), trip = snapshot.trips[0];
-        assert.deepEqual(JSON.parse(snapshot.raw), snapshot.trips, 'memory and persisted document agree');
+        assert.deepEqual(snapshot.hydrated, snapshot.trips, 'memory and persisted document agree');
         assert.equal(trip.days.length, 45);
         assert.deepEqual(ids(trip.days[0]), expected0);
         assert.deepEqual(ids(trip.days[1]), expected1);
@@ -282,17 +297,17 @@ function content(trip) {
       assert.deepEqual(await api.snapshot(), beforeHistory, 'viewing history and baseline never changes stored state');
       await page.evaluate(() => closeModal('modal-live-history', true));
       await page.screenshot({ path: path.join(output, 'live-sequence-' + width + '.png') });
-      const persisted = await api.snapshot(); await page.reload({ waitUntil: 'networkidle' });
-      assert.deepEqual((await api.snapshot()).trips, persisted.trips, 'reload keeps schedule and immutable evidence');
+      const persisted = await api.snapshot(); await page.reload({ waitUntil: 'networkidle' }); await page.waitForFunction(() => window.SulsulShell?.started);
+      assert.deepEqual(settleMediaIds((await api.snapshot()).trips, persisted.trips), persisted.trips, 'reload keeps schedule and immutable evidence');
       if (width === 390) {
         await page.evaluate(async () => { await navigator.serviceWorker.register('/sw.js'); await navigator.serviceWorker.ready; });
         await page.waitForFunction(() => !!navigator.serviceWorker.controller, undefined, { timeout: 30000 });
         await page.close(); await api.context.setOffline(true);
         const restarted = await api.context.newPage(); restarted.on('pageerror', error => api.errors.push(error.message));
         await restarted.goto(origin + '/?live-sequence-offline=1', { waitUntil: 'domcontentloaded' });
-        await restarted.waitForFunction(() => typeof commitLiveSchedule === 'function');
+        await restarted.waitForFunction(() => typeof commitLiveSchedule === 'function' && window.SulsulShell?.started);
         assert.equal(await restarted.evaluate(() => navigator.onLine), false);
-        assert.deepEqual(await restarted.evaluate(() => State.trips), persisted.trips, 'the complete consecutive edit sequence survives a fresh offline page');
+        assert.deepEqual(settleMediaIds(await restarted.evaluate(() => State.trips), persisted.trips), persisted.trips, 'the complete consecutive edit sequence survives a fresh offline page');
         await restarted.evaluate(id => { State.activeTripId = id; switchView('workspace'); switchTab('today'); selectCompanionTodayDay(0); }, tripId);
         assert.deepEqual(await restarted.locator('#today-overview-container > .companion-timeline > article[data-spot-id]').evaluateAll(cards => cards.map(card => card.dataset.spotId)), pendingIds(persisted.trips[0].days[0]));
         await restarted.close();
@@ -325,7 +340,7 @@ function content(trip) {
         assert.equal(current.planHistory.length, (prior.planHistory || []).length + 1);
         assert.deepEqual(content(current), content(prior));
         assert.deepEqual(current.days.slice(2), prior.days.slice(2));
-        assert.deepEqual(JSON.parse(after.raw), after.trips);
+        assert.deepEqual(after.hydrated, after.trips);
       }
       return { commands: cases.map(command => command.type), atomicRollback: true, retryCommittedOnce: true };
     });
@@ -437,16 +452,16 @@ function content(trip) {
       const restarted = await context.newPage(); restarted.on('pageerror', error => api.errors.push(error.message)); restarted.on('dialog', dialog => dialog.accept());
       restarted.setDefaultTimeout(10000);
       await restarted.goto(origin + '/?live-offline-restart=1', { waitUntil: 'domcontentloaded' });
-      await restarted.waitForFunction(() => typeof commitLiveSchedule === 'function' && !!window.SulsulTravel?.LiveItinerary);
+      await restarted.waitForFunction(() => typeof commitLiveSchedule === 'function' && !!window.SulsulTravel?.LiveItinerary && window.SulsulShell?.started);
       assert.equal(await restarted.evaluate(() => navigator.onLine), false);
-      assert.deepEqual(await restarted.evaluate(() => State.trips), saved.trips);
+      assert.deepEqual(settleMediaIds(await restarted.evaluate(() => State.trips), saved.trips), saved.trips);
       await restarted.evaluate(id => { State.activeTripId = id; switchView('workspace'); switchTab('today'); selectCompanionTodayDay(1); }, tripId);
       assert.deepEqual(await restarted.locator('#today-overview-container > .companion-timeline > article[data-spot-id]').evaluateAll(cards => cards.map(card => card.dataset.spotId)), pendingIds(saved.trips[0].days[1]));
       assert.equal(await restarted.evaluate(id => commitLiveSchedule({ type: 'defer', tripId: id, dayId: 'live-day-02', itemId: 'record' }, getActiveTrip().revision, '합성 오프라인 변경'), tripId), true);
-      const changed = await restarted.evaluate(() => ({ trips: State.trips, raw: localStorage.getItem('st_trips_v2') }));
-      assert.deepEqual(content(changed.trips[0]), content(saved.trips[0])); assert.equal(changed.trips[0].planHistory.length, saved.trips[0].planHistory.length + 1);
+      const changed = await restarted.evaluate(() => { const raw = localStorage.getItem('st_trips_v2'); return { trips: State.trips, raw, hydrated: SulsulTravel.recordMediaStore.hydrate(JSON.parse(raw)) }; });
+      assert.deepEqual(content(settleMediaIds(changed.trips, saved.trips)[0]), content(saved.trips[0])); assert.equal(changed.trips[0].planHistory.length, saved.trips[0].planHistory.length + 1);
       assert.equal(changed.trips[0].days[1].spots.find(spot => spot.id === 'record').deferred, true);
-      assert.deepEqual(JSON.parse(changed.raw), changed.trips); await restarted.close();
+      assert.deepEqual(changed.hydrated, changed.trips); await restarted.close();
       return { realServiceWorker: true, freshOfflinePage: true, offlineCommitPersisted: true, days: 45 };
     }, { offline: true });
   } finally {

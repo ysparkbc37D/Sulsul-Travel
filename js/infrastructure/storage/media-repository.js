@@ -53,6 +53,21 @@
         });
       } finally { db.close(); }
     }
+    // 여러 보관본을 한 거래로 읽는다. 부팅 때 기록 사진을 되살리는 데 쓴다. 없는 ID는 결과에 넣지 않는다.
+    async getMany(ids) {
+      const wanted = [...new Set((Array.isArray(ids) ? ids : []).filter(id => typeof id === 'string' && id))];
+      if (!wanted.length) return new Map();
+      const db = await this.open();
+      try {
+        return await new Promise((resolve, reject) => {
+          const found = new Map(), tx = db.transaction(STORE_NAME, 'readonly'), store = tx.objectStore(STORE_NAME);
+          wanted.forEach(id => { const request = store.get(id); request.onsuccess = () => { if (request.result) found.set(id, request.result); }; });
+          tx.oncomplete = () => resolve(found);
+          tx.onerror = tx.onabort = () => reject(tx.error || new Error('INDEXEDDB_READ_FAILED'));
+        });
+      } finally { db.close(); }
+    }
+    static sourceHash(value) { return sourceHash(value); }
     async prune(retainedTrips, { tripId } = {}) {
       // 문서 저장이 성공한 뒤의 전체 여행 목록만 받는다. 사본의 참조도 보관본을 지킨다.
       if (!Array.isArray(retainedTrips)) throw new TypeError('INVALID_RETAINED_TRIPS');
@@ -93,6 +108,8 @@
         let stored = false;
         // 브라우저가 IndexedDB를 제한해도 data URL을 이용한 기존 저장을 계속할 수 있다.
         if (store) { try { await this.save({ id, tripId, original, thumbnail, sourceHash: sourceHash(source), width: result.width, height: result.height, createdAt: new Date().toISOString() }); stored = true; } catch (_) {} }
+        // 거래가 끝난 보관본만 알린다. 기록 사진 저장소는 이 사진을 다음 저장부터 문서에서 뺄 수 있다.
+        if (stored) { try { this.onStored?.({ id, source, thumbnail: thumbnailSource, sourceHash: sourceHash(source) }); } catch (_) {} }
         return { source, thumbnail: thumbnailSource, mediaId: stored ? id : null, width: result.width, height: result.height, bytes:result.bytes, stored };
     }
     async resolve(record, index = 0, { thumbnail = false } = {}) {
