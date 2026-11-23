@@ -100,13 +100,13 @@ const fixture=()=>({id:'structural-trip',title:'구조 검증 가상 여행',sta
     });
     await check('환전 삭제 확인 뒤 다른 변경이 끼어들면 삭제를 거절하고 창을 남긴다',async api=>{
       await api.seed(ledgerTrip());await captureToasts(api.page);
-      await api.page.evaluate(()=>requestDeleteExchange(0));await api.assertDialogOpen();
+      await api.page.evaluate(()=>SulsulTravel.ExpensesTab.removeExchange(0));await api.assertDialogOpen();
       assert.equal(await api.page.evaluate(()=>commitTrip('structural-trip',trip=>{trip.title='다른 화면에서 바꾼 제목';})),true);
       await api.page.locator('#confirm-delete-btn').click();await api.assertDialogOpen();
       let stored=JSON.parse((await api.state()).stored)[0];
       assert.deepEqual(stored.exchanges.map(item=>item.id),['exchange-1','exchange-2']);assert.equal(stored.title,'다른 화면에서 바꾼 제목');
       assert.ok((await api.page.evaluate(()=>window.structuralToasts)).some(message=>/편집을 시작한 뒤 여행이 변경됐습니다/.test(message)));
-      await api.page.evaluate(()=>{closeModal('modal-confirm-delete',true);requestDeleteExchange(0);});await api.page.locator('#confirm-delete-btn').click();
+      await api.page.evaluate(()=>{closeModal('modal-confirm-delete',true);SulsulTravel.ExpensesTab.removeExchange(0);});await api.page.locator('#confirm-delete-btn').click();
       await api.page.waitForFunction(()=>document.getElementById('modal-confirm-delete').classList.contains('sheet-closed'));
       stored=JSON.parse((await api.state()).stored)[0];assert.deepEqual(stored.exchanges.map(item=>item.id),['exchange-2']);
       return {staleConfirmRejected:true,dialogRetained:true,freshConfirmDeletedOnlyTarget:true};

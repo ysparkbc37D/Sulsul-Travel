@@ -131,7 +131,7 @@ async function saveExpenseRecord({fromQueue=false,prepared=null}={}) {
   closeModal('modal-expense',true);
   // 저장 결과와 화면 갱신 결과를 분리한다. 숨은 전체 일정·평생 통계는 이 저장에서 다시 만들지 않는다.
   let refreshed=true;
-  try{renderExpensesTab();}catch(error){refreshed=false;console.warn('[지출 저장 후 화면 갱신]',error);}
+  try{SulsulTravel.ExpensesTab.render();}catch(error){refreshed=false;console.warn('[지출 저장 후 화면 갱신]',error);}
   showToast(refreshed?(original?'지출·수입 내역을 수정했습니다.':'지출·수입 내역을 저장했습니다.'):'내역은 저장했습니다. 지출 화면을 다시 열어 확인해 주세요.');return true;
 }
 

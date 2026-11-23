@@ -1,7 +1,7 @@
 {
   "name": "sulsul-travel",
   "private": true,
-  "version": "2.1.0",
+  "version": "2.1.1",
   "scripts": {
     "build:public": "node tools/build-public.cjs",
     "test:demo": "node tests/demo-onboarding.browser.cjs",
@@ -39,7 +39,8 @@
     "test:record-media": "node tests/record-media.browser.cjs",
     "test:trip-store": "node tests/trip-store-idb.browser.cjs",
     "test:checklist": "node tests/checklist-tab.browser.cjs",
-    "test:journal-tab": "node tests/journal-tab.browser.cjs"
+    "test:journal-tab": "node tests/journal-tab.browser.cjs",
+    "test:expenses-tab": "node tests/expenses-tab.browser.cjs"
   },
   "devDependencies": {
     "@fortawesome/fontawesome-free": "6.5.1",
