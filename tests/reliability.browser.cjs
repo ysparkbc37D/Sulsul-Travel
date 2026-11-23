@@ -18,14 +18,14 @@ const server=http.createServer((req,res)=>{
   const result=await page.evaluate(async()=>{
    window.alerts=[];window.alert=m=>alerts.push(String(m));window.confirm=()=>true;
    const t={id:'test-spain',title:'스페인 여행',startDate:'2026-09-13',endDate:'2026-09-15',durationDays:3,budget:0,countries:['스페인'],cities:['마드리드'],revision:0,days:[{dayNum:1,date:'2026-09-13',city:'마드리드',title:'첫날',planBlockId:'b1',spots:[{id:'s1',title:'미술관',time:'09:00',desc:'작품 감상',completed:true},{id:'s2',title:'시장',time:'12:00',skipped:true},{id:'s3',title:'공원',time:'15:00'}]},{dayNum:2,date:'2026-09-14',title:'둘째 날',city:'마드리드',planBlockId:'b1',spots:[]}],planBlockMeta:{b1:{place:'마드리드',lodging:'호텔',notes:'예약 메모'}},journals:{0:{text:'원문',photos:[]}},expenses:[],checklist:[]};
-   State.trips=[t];State.activeTripId=t.id;State.activeJournalDay=0;await saveTrips();switchView('workspace');switchTab('journal');renderJournalTab();
+   State.trips=[t];State.activeTripId=t.id;State.activeJournalDay=0;await saveTrips();switchView('workspace');switchTab('journal');SulsulTravel.JournalTab.render();
    const withFailure=async fn=>{const old=Storage.prototype.setItem;Storage.prototype.setItem=function(k,v){if(k==='st_trips_v2')throw new DOMException('test quota','QuotaExceededError');return old.call(this,k,v);};try{return await fn();}finally{Storage.prototype.setItem=old;}};
    document.getElementById('journal-text-input').value='새 원문';
-   const failed=await withFailure(()=>saveJournalText());
+   const failed=await withFailure(()=>SulsulTravel.JournalTab.saveText());
    const persistedOnFail=JSON.parse((await TripRepository.readRaw()))[0].journals[0].text;
    const memoryOnFail=getActiveTrip().journals[0].text;
-   selectJournalDay(1);selectJournalDay(0);const draftRetained=document.getElementById('journal-text-input').value;
-   const retry=await saveJournalText();const saved=JSON.parse((await TripRepository.readRaw()))[0].journals[0].text;
+   SulsulTravel.JournalTab.selectDay(1);SulsulTravel.JournalTab.selectDay(0);const draftRetained=document.getElementById('journal-text-input').value;
+   const retry=await SulsulTravel.JournalTab.saveText();const saved=JSON.parse((await TripRepository.readRaw()))[0].journals[0].text;
    await withFailure(()=>toggleSpotCompleted(0,2));const completedOnFailure=getActiveTrip().days[0].spots[2].completed===true;
    const payload=SulsulTravel.TripTransfer.create(getActiveTrip(),{journals:true},APP_VER);
    const link=`${location.origin}/#share=${LZString.compressToEncodedURIComponent(JSON.stringify(payload))}`;

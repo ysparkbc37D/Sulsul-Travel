@@ -26,7 +26,7 @@ const server=http.createServer((req,res)=>{
    rememberActivityText();
    const files=[];
    for(const color of ['#d4a754','#527b6c']){const c=document.createElement('canvas');c.width=1600;c.height=900;c.getContext('2d').fillStyle=color;c.getContext('2d').fillRect(0,0,1600,900);const blob=await new Promise(r=>c.toBlob(r));files.push(new File([blob],'photo.png',{type:'image/png'}));}
-   const reading=addActivityPhotos({target:{files,value:'photo.png'}});selectJournalDay(1);await reading;setActivityCover(1);
+   const reading=addActivityPhotos({target:{files,value:'photo.png'}});SulsulTravel.JournalTab.selectDay(1);await reading;setActivityCover(1);
    const ok=await saveActivityRecord();const record=activityEntries(getActiveTrip())[0];window.testRecordId=record.id;
    const img=new Image();img.src=record.photos[0];await img.decode();
    return {ok,completed:getActiveTrip().days[0].spots[0].completed,photos:record.photos.length,cover:record.coverIndex,w:img.width,h:img.height,stat:document.getElementById('stat-ws-diaries').textContent};

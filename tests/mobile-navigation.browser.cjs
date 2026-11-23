@@ -149,7 +149,7 @@ const server=http.createServer((req,res)=>{
     await check('허브에서도 미저장 하루 회고·사진을 경고하고 취소·새로고침 거절로 보존',async api=>{
       const {page}=api;await api.seed();
       assert.equal(await page.evaluate(()=>SulsulTravel.MobileNavigation.pendingTravelRecords()),false);
-      await page.evaluate(()=>{switchTab('journal');selectJournalDay(0);});
+      await page.evaluate(()=>{switchTab('journal');SulsulTravel.JournalTab.selectDay(0);});
       await page.locator('#journal-text-input').click();await page.locator('#journal-text-input').fill('아직 저장하지 않은 합성 하루 회고');
       await page.waitForFunction(()=>history.state?.stAppNavigation?.activated===true);
       await page.evaluate(()=>{

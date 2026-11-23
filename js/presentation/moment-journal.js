@@ -133,7 +133,7 @@ async function addMomentPhotos(event) {
 }
 function refreshMomentSurfaces() {
   if(typeof refreshActivitySurfaces==='function')return refreshActivitySurfaces();
-  try{if(typeof rememberJournalDraft==='function')rememberJournalDraft();if(typeof renderJournalTab==='function')renderJournalTab();return true;}
+  try{if(SulsulTravel.JournalTab){SulsulTravel.JournalTab.rememberDraft();SulsulTravel.JournalTab.render();}return true;}
   catch(error){console.warn('[순간 기록 화면 갱신]',error);return false;}
 }
 async function saveMomentRecord({quiet=false}={}) {

@@ -605,7 +605,7 @@ function renderCompanionToday() {
         <div class="empty-actions">
           <button class="companion-button companion-primary" onclick="openStoryMagazineModal()"><i class="fa-solid fa-book-open-reader"></i> 스토리 매거진 보기</button>
           <button class="companion-button" onclick="openQuickCapsuleModal()"><i class="fa-solid fa-microphone"></i> 오늘의 감상 남기기</button>
-          <button class="companion-button" onclick="switchTab('journal');selectJournalDay(${dayIndex})"><i class="fa-solid fa-pen-fancy"></i> 하루 회고 작성</button>
+          <button class="companion-button" onclick="switchTab('journal');SulsulTravel.JournalTab.selectDay(${dayIndex})"><i class="fa-solid fa-pen-fancy"></i> 하루 회고 작성</button>
         </div>
       </div>
     `;
@@ -634,7 +634,7 @@ function renderCompanionToday() {
       </div>
       <h3>${escapeHtml(next ? next.title || next.name || '일정 제목 미정' : (day.spots?.length ? '남은 예정이 없어요' : '이 하루는 아직 비어 있어요'))}</h3>
       <p>${escapeHtml(next?.time || companionDate(day.date))} · ${escapeHtml(day.city || day.loc || '여행')} · ${done}/${(day.spots||[]).filter(spot=>SulsulTravel.LiveItinerary.active(spot)).length} 완료</p>
-      <div class="companion-next-actions">${next ? `<button class="companion-button companion-primary" onclick="openCompanionDirections(${dayIndex},${nextIndex})"><i class="fa-solid fa-location-arrow" aria-hidden="true"></i> 길찾기</button><button class="companion-button" onclick="openTaxiCardModal(${dayIndex},${nextIndex},event)"><i class="fa-solid fa-taxi" aria-hidden="true"></i> 기사님</button><button class="companion-button" onclick="openActivityJournal(${dayIndex},${nextIndex},event)"><i class="fa-solid fa-book-open" aria-hidden="true"></i> 기록</button><button class="companion-button" onclick="completeTodaySpot(${dayIndex},${nextIndex},event)"><i class="fa-solid fa-check" aria-hidden="true"></i> 완료</button>`:`<button class="companion-button companion-primary" onclick="openMomentJournal(${dayIndex})">+ 순간 기록</button><button class="companion-button" onclick="switchTab('journal');selectJournalDay(${dayIndex})">하루 회고</button>`}</div>
+      <div class="companion-next-actions">${next ? `<button class="companion-button companion-primary" onclick="openCompanionDirections(${dayIndex},${nextIndex})"><i class="fa-solid fa-location-arrow" aria-hidden="true"></i> 길찾기</button><button class="companion-button" onclick="openTaxiCardModal(${dayIndex},${nextIndex},event)"><i class="fa-solid fa-taxi" aria-hidden="true"></i> 기사님</button><button class="companion-button" onclick="openActivityJournal(${dayIndex},${nextIndex},event)"><i class="fa-solid fa-book-open" aria-hidden="true"></i> 기록</button><button class="companion-button" onclick="completeTodaySpot(${dayIndex},${nextIndex},event)"><i class="fa-solid fa-check" aria-hidden="true"></i> 완료</button>`:`<button class="companion-button companion-primary" onclick="openMomentJournal(${dayIndex})">+ 순간 기록</button><button class="companion-button" onclick="switchTab('journal');SulsulTravel.JournalTab.selectDay(${dayIndex})">하루 회고</button>`}</div>
     </section>
     ${actionDeckHtml}
     ${smartHudHtml}

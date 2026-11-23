@@ -133,7 +133,7 @@ const server=http.createServer((req,res) => {
       await page.evaluate(() => switchTab('plan'));await settle();assert.ok(Math.abs(await page.evaluate(() => scrollY)-planY)<2);return {todayY,planY,restored};
     });
     await check('허브와 다른 여행을 거친 뒤 탭·날짜·계획 보기·스크롤 복원',async() => {
-      await page.evaluate(() => {openPlanPresentation('timeline');switchTab('journal');selectJournalDay(3);});await settle();
+      await page.evaluate(() => {openPlanPresentation('timeline');switchTab('journal');SulsulTravel.JournalTab.selectDay(3);});await settle();
       await page.evaluate(() => window.scrollTo({top:130,behavior:'instant'}));await settle();const before=await page.evaluate(() => scrollY);
       await page.evaluate(() => {switchView('hub');openTripWorkspace('refresh-b');});await settle();
       await page.evaluate(() => {switchTab('today');selectCompanionTodayDay(1);switchView('hub');openTripWorkspace('refresh-a');});await settle();

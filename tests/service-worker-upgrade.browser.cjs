@@ -119,13 +119,13 @@ const fixture={id:'upgrade-synthetic',title:'가상 도시 여행',startDate:'20
   assert.equal(await page.locator('#activity-record-text').inputValue(),'워커 교체 중에도 보존할 합성 미저장 글');
   assert.equal(await page.evaluate(()=>saveActivityRecord()),true);
   await page.evaluate(()=>{
-   closeModal('modal-activity-record',true);renderJournalTab();
-   document.getElementById('journal-text-input').value='워커 교체 뒤 남긴 합성 하루 일기';rememberJournalDraft();
+   closeModal('modal-activity-record',true);SulsulTravel.JournalTab.render();
+   document.getElementById('journal-text-input').value='워커 교체 뒤 남긴 합성 하루 일기';SulsulTravel.JournalTab.rememberDraft();
   });
   await page.evaluate(()=>document.getElementById('app-update-apply').click());
   assert.equal(await page.evaluate(()=>performance.timeOrigin),beforeUpdate.time);
   assert.equal(await page.locator('#journal-text-input').inputValue(),'워커 교체 뒤 남긴 합성 하루 일기');
-  assert.equal(await page.evaluate(()=>saveJournalText()),true);
+  assert.equal(await page.evaluate(()=>SulsulTravel.JournalTab.saveText()),true);
   await page.evaluate(()=>document.querySelectorAll('.sheet-container').forEach(element=>element.classList.add('sheet-closed')));
   await Promise.all([page.waitForEvent('load'),page.evaluate(()=>document.getElementById('app-update-apply').click())]);
   await page.waitForFunction(()=>window.SulsulShell?.started===true);

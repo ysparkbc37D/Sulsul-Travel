@@ -185,6 +185,7 @@ test('화면 동작을 등록하는 파일이 불러올 때 문서를 건드리�
 test('실제 저장소의 화면 동작 등록 목록과 위임 모듈', () => {
   const result = lint();
   assert.deepEqual(result.actions.filter(name => name.startsWith('checklist.')).sort(), ['checklist.add', 'checklist.category', 'checklist.checkAll', 'checklist.close', 'checklist.details', 'checklist.onlyUnchecked', 'checklist.remove', 'checklist.saveNew', 'checklist.toggle', 'checklist.viewMode']);
+  assert.deepEqual(result.actions.filter(name => name.startsWith('journal.')).sort(), ['journal.aiPolish', 'journal.closePhoto', 'journal.day', 'journal.downloadPhotos', 'journal.downloadText', 'journal.magazine', 'journal.openExpenses', 'journal.photoUpload', 'journal.rememberDraft', 'journal.removePhoto', 'journal.retryPhotos', 'journal.saveText', 'journal.storyPdf', 'journal.viewPhoto']);
   const source = readFileSync(uiActionsSource, 'utf8');
   assert.doesNotMatch(source.replace(/\/\*[\s\S]*?\*\//g, ''), /\[data-action\]|'data-action'/, '오늘 화면의 data-action 표식과 섞지 않는다');
 });

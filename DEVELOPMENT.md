@@ -57,6 +57,7 @@
 | `js/destinations/` | 국가/도시 목적지 지식 팩과 레지스트리 |
 | `js/destinations/emergency-contacts.js` | 출처·확인일이 있는 국가별 긴급 번호와 오늘 도시 기준 국가 판별. 확인하지 못한 국가는 추정하지 않음 |
 | `js/presentation/ui-actions.js` | 화면 동작 위임(v2.0.9). `data-on-click`·`data-on-change`·`data-on-input`의 동작 이름을 문서 한 곳에서 받아 `UiActions.define`으로 등록된 처리기로 넘긴다. 등록되지 않은 이름은 오류 |
+| `js/presentation/journal-tab.js` | 기록 탭(v2.1.0): 날짜 고르기, 하루 회고 글·사진 저장, 사진 크게 보기·안전 삭제, 저장 대기 사진 재시도, 글·사진 초안 파일. 순간 기록 목록은 `moment-journal.js`가 그린다 |
 | `js/presentation/checklist-tab.js` | 준비물 화면(v2.0.9, 4단계 첫 분리): 분류·D-Day 보기, 체크·전체 완료, 추가·상세·안전 삭제, 예약 가이드의 준비물 체크 |
 | `js/presentation/companion-ui.js` | 오늘 화면·큰 계획 카드, SOS, 퀵 캡슐(순간 기록 입력), 매거진(TravelStory 보기) |
 | `sw.js` | 앱 셸 및 오프라인 에셋 캐시 |
@@ -108,6 +109,7 @@ node .\tests\records-consistency.browser.cjs
 node .\tests\record-media.browser.cjs
 node .\tests\trip-store-idb.browser.cjs
 node .\tests\checklist-tab.browser.cjs
+node .\tests\journal-tab.browser.cjs
 .\tools-verify.ps1
 ```
 

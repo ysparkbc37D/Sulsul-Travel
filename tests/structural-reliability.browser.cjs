@@ -22,14 +22,14 @@ const fixture=()=>({id:'structural-trip',title:'구조 검증 가상 여행',sta
       try{
         await page.goto(origin+'/',{waitUntil:'networkidle'});await page.addStyleTag({content:'*,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}'});
         const api={page,context,errors,dialogs,
-          async seed(trip=fixture()){return page.evaluate(async trip=>{State.trips=await TripRepository.saveAll([trip]);State.activeTripId=trip.id;State.activeJournalDay=0;switchView('workspace');switchTab('journal');renderJournalTab();return State.trips;},trip);},
+          async seed(trip=fixture()){return page.evaluate(async trip=>{State.trips=await TripRepository.saveAll([trip]);State.activeTripId=trip.id;State.activeJournalDay=0;switchView('workspace');switchTab('journal');SulsulTravel.JournalTab.render();return State.trips;},trip);},
           async state(){return page.evaluate(async ()=>{const stored=await TripRepository.readRaw();return {trips:State.trips,stored};});},
           async quota(value){return page.evaluate(value=>{if(value){window.structuralSetItem=Storage.prototype.setItem;Storage.prototype.setItem=function(key,value){if(key==='st_trips_v2')throw new DOMException('synthetic quota','QuotaExceededError');return structuralSetItem.call(this,key,value);};}else Storage.prototype.setItem=structuralSetItem;},value);},
           async gistSettings(){await page.evaluate(()=>openSettingsModal('ai'));await page.locator('#cfg-github-pat').fill('synthetic-test-token');await page.locator('#cfg-github-gist').fill('synthetic-gist-id');},
           // tap()은 화면 밖 버튼을 스크롤한 직후 터치가 옛 스크롤 위치로 처리돼 다른 요소를 누르는 일이 있다(헤드리스 Chrome).
           // 그러면 저장 자체가 일어나지 않아 뒤 검사가 엉뚱한 이유로 실패하므로 click()으로 누르고 실제 기록을 확인한다.
           async saveJournal(text){
-            await page.locator('#journal-text-input').fill(text);await page.locator('button[onclick="saveJournalText()"]').click();
+            await page.locator('#journal-text-input').fill(text);await page.locator('[data-on-click="journal.saveText"]').click();
             await page.waitForFunction(async text=>((await TripRepository.readRaw())||'').includes(JSON.stringify(text).slice(1,-1)),text,{timeout:3000})
               .catch(()=>{throw new Error('일기 저장 버튼을 눌렀지만 저장소에 기록되지 않았다: '+text);});
           },
