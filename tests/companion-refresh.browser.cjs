@@ -23,8 +23,8 @@ const server=http.createServer((req,res) => {
     await check('첫 진입은 빈 여행이며 선택한 가상 5일 예제와 공유 범위가 왕복 유지',async() => {
       const initial=await page.evaluate(() => ({trips:State.trips.length,offerHidden:document.getElementById('demo-onboarding-offer').hidden,choice:getDemoChoice()}));
       assert.equal(initial.trips,0,'예제는 첫 진입에 자동 등록되지 않는다.');assert.equal(initial.offerHidden,false);assert.equal(initial.choice,'');
-      const result=await page.evaluate(() => {
-        if(!addDemoTrip())throw new Error('선택한 가상 예제를 추가하지 못했습니다.');
+      const result=await page.evaluate(async () => {
+        if(!await addDemoTrip())throw new Error('선택한 가상 예제를 추가하지 못했습니다.');
         const trip=State.trips.find(isDemoTrip);
         if(!trip)throw new Error('선택한 가상 예제가 없습니다.');
         const before=JSON.stringify(trip),copy=JSON.parse(before);

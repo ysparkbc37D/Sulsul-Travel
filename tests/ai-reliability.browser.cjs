@@ -26,12 +26,13 @@ const server = http.createServer((req,res) => {
         {id:`walk-${dayNum}`,time:'12:00',title:'가상 산책',cat:'tour'},
         {id:`meal-${dayNum}`,time:'14:30',title:'가상 식사',cat:'food'}
       ]}))};
-      State.trips = TripRepository.saveAll([trip]); State.activeTripId = trip.id; State.activeJournalDay = 0;
+      State.trips = await TripRepository.saveAll([trip]); State.activeTripId = trip.id; State.activeJournalDay = 0;
       switchView('workspace'); switchTab('journal');
       const snapshotDays = structuredClone(getActiveTrip().days);
       const job = {id:'bad-replan',kind:'replan',tripId:trip.id,targetId:'replan',baseRevision:getActiveTrip().revision,input:{snapshotDays,targetDayVal:'1',offsetMinutes:30,reason:'가상 지연'}};
       const invalid = structuredClone(snapshotDays); invalid[1].spots.shift();
-      const raw = localStorage.getItem('st_trips_v2'); let directError;
+      // 화면을 그릴 때 맡긴 구조 보정 저장이 끝난 뒤의 원문을 기준으로 삼는다.
+      await TripRepository.idle(); const raw = localStorage.getItem('st_trips_v2'); let directError;
       try { await applyAiDraftPayload({...job,draft:{days:invalid}}); } catch (error) { directError = error.message; }
       const originalProvider = callGeminiApiWithFallback;
       callGeminiApiWithFallback = async () => { throw new Error('INVALID_API_KEY'); };

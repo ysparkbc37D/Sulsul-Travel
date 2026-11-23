@@ -1,6 +1,6 @@
 # 술술트래블 개발 가이드
 
-이 문서는 현재 앱 구조와 검증 방식을 설명합니다. 이전 구조를 기술한 문서는 상단에 역사 자료 또는 목표 설계라고 표시합니다. 현재 소스 버전은 `2.0.6`입니다. 원격 저장소와 배포 반영 여부는 별도로 확인합니다.
+이 문서는 현재 앱 구조와 검증 방식을 설명합니다. 이전 구조를 기술한 문서는 상단에 역사 자료 또는 목표 설계라고 표시합니다. 현재 소스 버전은 `2.0.7`입니다. 원격 저장소와 배포 반영 여부는 별도로 확인합니다.
 
 ## 실행 구조
 
@@ -38,6 +38,7 @@
 | `js/presentation/photo-optimization-ui.js` | 절감량·확대 미리보기·선택 적용·실패 재시도 |
 | `js/infrastructure/storage/media-repository.js` | 비율 유지 보관본, 썸네일, IndexedDB Blob과 JSON fallback |
 | `js/infrastructure/storage/expense-photo-repository.js` | 지출 사진 durable 보관·JSON projection·부팅 원본 복원 |
+| `js/infrastructure/storage/trip-store.js` | 여행 저장의 비동기 명령 경계. 저장을 한 줄로 차례대로 실행하고 성공한 작업 안에서 `State.trips`를 바꾼다. 백엔드(localStorage·IndexedDB)를 바꿔도 부르는 쪽은 같다 |
 | `js/infrastructure/storage/record-media-store.js` | 기록 사진을 IDB 보관본과 대조한 뒤 문서에서 빼기(project)·채우기(hydrate)·부팅 준비(prime)·옛 사진 보관(adopt), 첫 이전 전 원래 문서 보관 |
 | `js/presentation/storage-health-ui.js` | 설정 → 데이터의 저장 공간·사진 보관소·영구 보관·마지막 백업 표시와 하루 한 번 백업 알림 |
 | `js/presentation/mobile-navigation.js` | 사진·편집창·상세 복귀와 종료 확인의 단일 history 경계 |
@@ -71,7 +72,7 @@
 
 ## 운영 배포
 
-운영 사이트는 [sulsul-travel.vercel.app](https://sulsul-travel.vercel.app/)이며, GitHub 저장소의 `main` 브랜치와 연결된 Vercel 배포를 사용합니다. GitHub Pages는 현재 설정되어 있지 않습니다. 현재 작업 버전 `v2.0.6`의 push와 운영 반영 여부는 이 문서 갱신만으로 확인되지 않습니다.
+운영 사이트는 [sulsul-travel.vercel.app](https://sulsul-travel.vercel.app/)이며, GitHub 저장소의 `main` 브랜치와 연결된 Vercel 배포를 사용합니다. GitHub Pages는 현재 설정되어 있지 않습니다. 현재 작업 버전 `v2.0.7`의 push와 운영 반영 여부는 이 문서 갱신만으로 확인되지 않습니다.
 
 ## 검증
 
@@ -80,8 +81,8 @@ Node.js 18 이상과 Playwright/Chromium을 사용할 수 있는 환경에서 �
 ```powershell
 $testFiles = Get-ChildItem .\tests -Filter '*.test.mjs' | ForEach-Object { $_.FullName }
 node --test $testFiles
-node .	oolslint-boundaries.cjs
-node .	oolscheck-release.cjs
+node .\tools\lint-boundaries.cjs
+node .\tools\check-release.cjs
 node .\tests\activity-journal.browser.cjs
 node .\tests\photo-compression.browser.cjs
 node .\tests\photo-optimization.browser.cjs
@@ -112,7 +113,7 @@ Playwright 브라우저를 내려받지 않은 환경에서는 `PLAYWRIGHT_MODUL
 ## 저장·공유 변경 원칙
 
 1. 원본 객체를 바로 수정하기 전에 복사본을 만듭니다.
-2. 여행 하나를 고치는 기능은 `commitTripCommand`(편집 시작 때의 revision) 또는 `commitTrip(tripId, change)`(바로 적용하는 조작)를 씁니다. `change`는 저장소가 만든 복사본을 받으며 저장에 성공해야 `State`가 바뀝니다. 여행을 더하거나 빼는 기능은 `commitTripsCommand`를 씁니다. 셸과 `js/presentation/`에서 `saveTrips(`·`TripRepository.saveAll(`·`st_trips_v2`를 새로 쓰면 `tools/lint-boundaries.cjs`(WRITE01)가 실패합니다. 예외는 `tools/boundary-allowlist.json`에 정확한 개수와 사유로만 둡니다.
+2. 여행 하나를 고치는 기능은 `commitTripCommand`(편집 시작 때의 revision) 또는 `commitTrip(tripId, change)`(바로 적용하는 조작)를 씁니다. 모든 저장 명령은 비동기입니다(v2.0.7). 반드시 `await`로 결과(true/false)를 받은 뒤 화면을 갱신합니다. `TripRepository`(`js/infrastructure/storage/trip-store.js`의 `TripStore`)는 저장을 한 줄로 차례대로 실행하고, 성공한 저장 작업 안에서 `State.trips`를 바꿉니다. 여행 목록 전체를 저장할 때는 저장 직전 목록을 받는 함수(`current => [...]`)를 넘깁니다. 호출할 때 만든 배열을 넘기면, 그 사이 다른 저장이 여행을 바꿨을 때 `STORAGE_CONFLICT`로 거절됩니다. `tools/lint-boundaries.cjs`의 ASYNC01이 기다리지 않은 저장과 Promise를 조건에 쓴 곳을 막습니다. `change`는 저장소가 만든 복사본을 받으며 저장에 성공해야 `State`가 바뀝니다. 여행을 더하거나 빼는 기능은 `commitTripsCommand`를 씁니다. 셸과 `js/presentation/`에서 `saveTrips(`·`TripRepository.saveAll(`·`st_trips_v2`를 새로 쓰면 `tools/lint-boundaries.cjs`(WRITE01)가 실패합니다. 예외는 `tools/boundary-allowlist.json`에 정확한 개수와 사유로만 둡니다.
 3. 저장 실패 시 초안·확인창·원본 데이터를 유지하고 재시도 가능한 안내를 표시합니다.
 4. 기록(하루 회고·일정 기록·순간 기록)을 세거나 목록·이야기·백업·공유에 보여 줄 때는 `js/domain/travel-records.js`(`TravelRecords.list`·`summary`·`firstPhoto`)만 씁니다. 저장 필드를 직접 세면 화면마다 수가 달라집니다. 글·사진·기분·날씨가 모두 빈 항목은 기록이 아닙니다. 기록을 쓰는 화면은 `commitTripRecord(tripId, write)`를 쓰고, 편집을 시작할 때의 그 기록과 지금 기록이 같은지 먼저 확인합니다(다른 일정·기록 변경은 충돌이 아닙니다).
 5. 기록 사진은 `photos[i]`에 data URL이 있어도 저장 문서에는 빈 문자열과 `mediaIds[i]`만 남을 수 있습니다(v2.0.6). 메모리의 `State`는 늘 사진이 채워져 있으므로 화면은 그대로 `photos`를 읽습니다. 저장 문서(`localStorage`)를 `JSON.stringify(State.trips)`와 비교하지 말고, 원문끼리 비교합니다. 새 사진은 `mediaRepository.prepare`로 만들어야 첫 저장부터 보관소로 갑니다. 그 밖의 경로로 들어온 사진은 다음 부팅 때 보관·대조한 뒤 옮깁니다. 저장 뒤 백그라운드에서 문서를 다시 쓰지 않습니다(사진 최적화·백업 복원이 잡은 원문 기준을 흔들기 때문).
@@ -125,7 +126,7 @@ Playwright 브라우저를 내려받지 않은 환경에서는 `PLAYWRIGHT_MODUL
 - 앱 버전 변경 시 `index.html`의 `APP_VER`, 버전 배지, 자산 쿼리 버전, `sw.js` 캐시 이름과 프리캐시 URL, `package.json`, `CHANGELOG.md`, `술술트래블신록.md`를 일치시킵니다.
 - 화면의 버전 기록도 최신 항목을 추가합니다. 캐시된 설치 앱에 업데이트가 적용되는지 새 서비스워커 버전으로 확인합니다.
 - 배포 파일을 바꾸면 버전을 올립니다. `tools/check-release.cjs`는 마지막 릴리스 태그(`vX.Y.Z`)와 비교해 내용이 바뀐 배포 파일이 있는데 `APP_VER`·`sw.js` 캐시 버전·해당 자산의 `?v=`가 그대로면 실패합니다(개행 차이는 무시). 릴리스 커밋마다 `git tag -a vX.Y.Z`를 만들고 `git push --follow-tags`로 올립니다. 태그가 없으면 검사를 건너뛰었다고 출력합니다.
-- `tools/lint-boundaries.cjs`의 다른 두 규칙: 새 `window.__` 전역 상태 금지(GLOBAL01), HTML 템플릿에 escape하지 않은 값 삽입 수가 파일별 기준값을 넘지 않기(HTML01). 기준값은 줄면 함께 낮춥니다. 둘 다 `tools-verify.ps1`과 단위 테스트에서 실행합니다.
+- `tools/lint-boundaries.cjs`의 다른 규칙: 저장 명령과 저장 명령을 부르는 함수는 `await`·`return`으로 끝을 기다리고, 비동기 함수의 결과(Promise)를 조건·대입에 바로 쓰지 않기(ASYNC01, 예외는 허용 목록 `async`에 사유와 함께), 새 `window.__` 전역 상태 금지(GLOBAL01), HTML 템플릿에 escape하지 않은 값 삽입 수가 파일별 기준값을 넘지 않기(HTML01). 기준값은 줄면 함께 낮춥니다. 둘 다 `tools-verify.ps1`과 단위 테스트에서 실행합니다.
 - 로컬 JS/CSS 변경 후 `node tools/update-asset-integrity.cjs`로 HTML의 SRI를 갱신합니다. 공개 빌드는 Git 개행 변환과 무관하게 실제 배포 바이트로 다시 계산합니다. 자산 오류가 있으면 `SulsulShell`이 초기 데이터 쓰기를 차단하고 업데이트 복구 화면을 엽니다.
 - 실제 구버전 워커 캐시에서 새 버전으로 진입하는 `test:sw-upgrade`와 렌더링 오류를 주입하는 `test:record-persistence`를 확인합니다. 워커 교체는 작성 중 자동 새로고침을 유발하지 않습니다. 자세한 범위는 [v1.9.4 기록 복구](docs/record-recovery-v1.9.4.md)를 참고하세요.
 - Google Fonts/jsDelivr 글꼴, OpenStreetMap 지도 타일, 요청형 환율 API, 사용자가 호출한 Gemini API, Gist 백업, Google Maps 링크 전송을 기능별로 구분해 안내합니다.

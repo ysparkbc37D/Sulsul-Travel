@@ -114,8 +114,8 @@ function content(trip) {
     const api = {
       page, context, errors,
       async seed(trip = fixture(), extraTrips = []) {
-        await page.evaluate(({ trip, extraTrips }) => {
-          State.trips = TripRepository.saveAll([trip, ...extraTrips]);
+        await page.evaluate(async ({ trip, extraTrips }) => {
+          State.trips = await TripRepository.saveAll([trip, ...extraTrips]);
           State.activeTripId = trip.id;
           State.companionTodaySelection = { tripId: trip.id, dayIndex: 0 };
           switchView('workspace'); switchTab('today'); renderTodayTab();

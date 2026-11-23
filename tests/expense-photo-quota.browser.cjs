@@ -32,12 +32,12 @@ const server=http.createServer((req,res)=>{
     await page.goto(`http://127.0.0.1:${server.address().port}/`,{waitUntil:'networkidle'});
     await readyAndInteractive(page);
     await page.addStyleTag({content:'*,*::before,*::after{transition:none!important;animation:none!important;scroll-behavior:auto!important}'});
-    const baseline=await page.evaluate(()=>{
+    const baseline=await page.evaluate(async ()=>{
       const canvas=document.createElement('canvas');canvas.width=800;canvas.height=600;const ctx=canvas.getContext('2d'),pixels=ctx.createImageData(800,600);let seed=171;
       for(let index=0;index<pixels.data.length;index+=4){seed=(Math.imul(seed,1664525)+1013904223)|0;pixels.data[index]=seed>>>24;pixels.data[index+1]=seed>>>16;pixels.data[index+2]=seed>>>8;pixels.data[index+3]=255;}
       ctx.putImageData(pixels,0,0);window.syntheticQuotaCanvas=canvas;const photo=canvas.toDataURL('image/jpeg',.8);
       const trips=Array.from({length:4},(_,trip)=>({id:'quota-trip-'+trip,title:'합성 누적 사진 여행 '+trip,revision:0,currency:'KRW',budget:100000,initialBalances:{KRW:100000},activeCurrencies:['KRW'],countries:['대한민국'],cities:['서울'],startDate:'2030-05-01',endDate:'2030-06-14',days:Array.from({length:45},(_,day)=>({id:`quota-day-${trip}-${day}`,dayNum:day+1,title:'합성 하루',date:new Date(Date.UTC(2030,4,day+1)).toISOString().slice(0,10),city:'서울',spots:Array.from({length:8},(_,spot)=>({id:`quota-spot-${trip}-${day}-${spot}`,title:'합성 일정',time:'09:00',cat:'tour'}))})),journals:{},expenses:trip?[]:Array.from({length:4},(_,index)=>({id:'quota-expense-'+index,title:'가상 물건 '+index,amount:1000,curr:'KRW',krw:1000,date:'2030-05-01',time:'09:00',cat:'shopping',type:'expense',photos:[photo,photo,photo,photo],primaryPhotoIndex:0})),checklist:[]}));
-      State.trips=TripRepository.saveAll(trips);State.activeTripId=trips[0].id;switchView('workspace');switchTab('expenses');
+      State.trips=await TripRepository.saveAll(trips);State.activeTripId=trips[0].id;switchView('workspace');switchTab('expenses');
       const raw=localStorage.getItem('st_trips_v2'),over=JSON.parse(JSON.stringify(State.trips));over[0].expenses[0].photos.push(photo,photo,photo,photo);
       let originalQuotaFailed=false;
       try{localStorage.setItem('st_trips_v2',JSON.stringify(over));}catch(error){originalQuotaFailed=error.name==='QuotaExceededError';}

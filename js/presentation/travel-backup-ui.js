@@ -103,7 +103,7 @@ async function readTravelBackupFile(event){
     const text=await readTravelBackupText(file);
     if(token!==TravelBackupUI.token)return false;
     let raw;try{raw=JSON.parse(text.replace(/^\uFEFF/,''));}catch(_){}
-    if(raw?.trip){const applied=acceptTravelSnapshot(raw);if(applied)closeModal('modal-travel-backup',true);else travelBackupFeedback('backup-restore-feedback','여행 사본 가져오기를 취소했거나 적용하지 못했습니다. 기존 여행은 유지됩니다.');return applied;}
+    if(raw?.trip){const applied=await acceptTravelSnapshot(raw);if(applied)closeModal('modal-travel-backup',true);else travelBackupFeedback('backup-restore-feedback','여행 사본 가져오기를 취소했거나 적용하지 못했습니다. 기존 여행은 유지됩니다.');return applied;}
     return previewTravelBackupText(text,{filename:file.name,baseRaw,baseState});
   }catch(error){if(token===TravelBackupUI.token)travelBackupFeedback('backup-restore-feedback',`불러오지 못했습니다. 기존 여행은 유지됩니다. ${error.message||'파일을 확인해 주세요.'}`);return false;}
   finally{if(input)input.value='';}
@@ -150,8 +150,8 @@ async function applyTravelBackupRestore(){
     try { const adopted=await SulsulTravel.recordMediaStore.adopt(replacement,{raw:pending.baseRaw}); replacement=SulsulTravel.recordMediaStore.applyPatches(replacement,adopted.archived).trips; }
     catch(error) { console.warn('[복원 기록 사진 보관본]',error?.message||error); }
     if(JSON.stringify(State.trips)!==pending.baseState)throw new Error('사진을 준비하는 동안 현재 여행이 변경되었습니다. 백업을 다시 검토해 주세요.');
-    const next=TripRepository.saveAll(replacement,{approvedRecoveryRaw:recoveryRaw,expectedRaw:pending.baseRaw});
-    committed=true;State.trips=next;State.activeTripId=next[0]?.id||null;State.storageRecovery=null;TravelBackupUI.pending=null;
+    const next=await TripRepository.saveAll(replacement,{approvedRecoveryRaw:recoveryRaw,expectedRaw:pending.baseRaw});
+    committed=true;State.activeTripId=next[0]?.id||null;State.storageRecovery=null;TravelBackupUI.pending=null;
     if(pending.source==='gist'){
       try{localStorage.setItem('st_github_last_sync',`${new Date().toLocaleString('ko-KR')} (복원)`);updateGithubSyncUi();}catch(_){}
     }

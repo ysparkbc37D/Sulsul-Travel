@@ -37,7 +37,7 @@ const legacyTrip={id:'legacy_capsule_trip',title:'레거시 캡슐 여행',start
     const context=await browser.newContext({viewport:{width:390,height:844},timezoneId:'Asia/Taipei',serviceWorkers:'block'});
     await context.grantPermissions(['clipboard-read','clipboard-write'],{origin:url.slice(0,-1)});
     const {page,errors}=await open(context);
-    await page.evaluate(() => {addDemoTrip();switchTab('today');});
+    await page.evaluate(async () => {await addDemoTrip();switchTab('today');});
 
     await check('캡슐은 오늘(3일차) 날짜·현지 시각의 순간 기록으로 저장되고 이야기 모델에 들어간다',async() => {
       await page.evaluate(() => openQuickCapsuleModal());
@@ -75,7 +75,7 @@ const legacyTrip={id:'legacy_capsule_trip',title:'레거시 캡슐 여행',start
         const file=new File([blob],'street.png',{type:'image/png'});
         await handleCapsulePhotoInput({target:{files:[file],value:''}});
         document.getElementById('capsule-text-input').value='사진 캡슐';
-        const before=(localStorage.getItem('st_trips_v2') || '').length,saved=saveQuickCapsule();
+        const before=(localStorage.getItem('st_trips_v2') || '').length,saved=await saveQuickCapsule();
         const entry=getActiveTrip().momentEntries.find(item => item.text==='사진 캡슐');
         const size=async source => {const image=new Image();image.src=source;await image.decode();return [image.naturalWidth,image.naturalHeight];};
         return {saved,originalBytes:blob.size,photo:entry?.photos?.[0] ? await size(entry.photos[0]) : null,thumb:entry?.photoThumbnails?.[0] ? await size(entry.photoThumbnails[0]) : null,mediaId:entry?.mediaIds?.[0] || null,growth:(localStorage.getItem('st_trips_v2') || '').length-before};
@@ -89,13 +89,13 @@ const legacyTrip={id:'legacy_capsule_trip',title:'레거시 캡슐 여행',start
     });
 
     await check('저장 공간이 부족하면 입력과 사진을 남기고 성공으로 알리지 않는다',async() => {
-      const result=await page.evaluate(() => {
+      const result=await page.evaluate(async () => {
         const trip=getActiveTrip(),before=JSON.stringify(trip.momentEntries),original=Storage.prototype.setItem;
         document.getElementById('capsule-text-input').value='용량 실패 메모';window.__toasts=[];
         Storage.prototype.setItem=function(key,value){if(key==='st_trips_v2')throw new DOMException('synthetic quota','QuotaExceededError');return original.call(this,key,value);};
-        let saved;try{saved=saveQuickCapsule();}finally{Storage.prototype.setItem=original;}
+        let saved;try{saved=await saveQuickCapsule();}finally{Storage.prototype.setItem=original;}
         const failed={saved,input:document.getElementById('capsule-text-input').value,unchanged:JSON.stringify(getActiveTrip().momentEntries)===before,toasts:[...window.__toasts],feedback:document.getElementById('capsule-feedback').textContent};
-        const retry=saveQuickCapsule();
+        const retry=await saveQuickCapsule();
         return {...failed,retry,retried:getActiveTrip().momentEntries.some(item => item.text==='용량 실패 메모')};
       });
       assert.equal(result.saved,false);assert.equal(result.input,'용량 실패 메모');assert.ok(result.unchanged);
@@ -156,9 +156,9 @@ const legacyTrip={id:'legacy_capsule_trip',title:'레거시 캡슐 여행',start
     });
 
     await check('매거진은 실제 기록 본문과 원화 환산액으로 그린다',async() => {
-      const result=await page.evaluate(() => {
+      const result=await page.evaluate(async () => {
         closeModal('modal-sos-emergency',true);const trip=getActiveTrip();
-        const ok=commitTripCommand({tripId:trip.id,expectedRevision:trip.revision,change:copy => {copy.expenses=[...(copy.expenses || []),{id:'exp_magazine',title:'야시장',date:'2030-04-03',curr:'TWD',amount:1000,krw:42000,cat:'meal'}];}});
+        const ok=await commitTripCommand({tripId:trip.id,expectedRevision:trip.revision,change:copy => {copy.expenses=[...(copy.expenses || []),{id:'exp_magazine',title:'야시장',date:'2030-04-03',curr:'TWD',amount:1000,krw:42000,cat:'meal'}];}});
         openStoryMagazineModal();
         const text=document.getElementById('story-magazine-content').textContent;
         const story=SulsulTravel.TravelStory.build(getActiveTrip(),{textMode:'approved'});
@@ -183,7 +183,7 @@ const legacyTrip={id:'legacy_capsule_trip',title:'레거시 캡슐 여행',start
       assert.equal(capsule.date,'2030-04-03');assert.equal(capsule.dayIndex,2);assert.equal(capsule.link,'s3');
       assert.equal(diary.source,'capsule-diary');assert.match(diary.title,/AI 작성·검토 전/);assert.equal(diary.text,'AI가 쓴 글');
       // 다음 저장에서 옮긴 형식이 문서에도 남는다.
-      const persisted=await legacy.evaluate(() => {const trip=getActiveTrip();commitTripCommand({tripId:trip.id,expectedRevision:trip.revision,change:copy => {copy.title='레거시 캡슐 여행 (확인)';}});const stored=JSON.parse(localStorage.getItem('st_trips_v2'))[0];return {quick:'quickCapsules' in stored,moments:stored.momentEntries.length};});
+      const persisted=await legacy.evaluate(async () => {const trip=getActiveTrip();await commitTripCommand({tripId:trip.id,expectedRevision:trip.revision,change:copy => {copy.title='레거시 캡슐 여행 (확인)';}});const stored=JSON.parse(localStorage.getItem('st_trips_v2'))[0];return {quick:'quickCapsules' in stored,moments:stored.momentEntries.length};});
       assert.equal(persisted.quick,false);assert.equal(persisted.moments,2);
       assert.deepEqual(legacyErrors,[],legacyErrors.join('\n'));
       return {loaded,persisted};

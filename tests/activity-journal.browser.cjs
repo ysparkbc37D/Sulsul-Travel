@@ -15,10 +15,10 @@ const server=http.createServer((req,res)=>{
   page.setDefaultTimeout(10000);page.on('pageerror',e=>errors.push(e.message));
   await page.route('**/*',route=>new URL(route.request().url()).hostname==='127.0.0.1'?route.continue():route.abort());
   await page.goto(`http://127.0.0.1:${server.address().port}/`,{waitUntil:'networkidle'});
-  await page.evaluate(()=>{
+  await page.evaluate(async ()=>{
    window.alert=()=>{};window.confirm=()=>true;
    document.querySelectorAll('.sheet-container').forEach(el=>el.classList.add('sheet-closed'));
-   State.trips=[{id:'activity-test',title:'마드리드 산책',startDate:'2026-09-09',endDate:'2026-09-10',countries:['스페인'],cities:['마드리드'],currency:'EUR',budget:0,journals:{},expenses:[],checklist:[],days:[{dayNum:1,date:'2026-09-09',city:'마드리드',title:'도착한 날',spots:[{time:'14:00',title:'마드리드 공항 도착',desc:'공항철도로 이동',completed:false},{time:'16:00',title:'오래된 광장 산책',completed:false}]},{dayNum:2,date:'2026-09-10',city:'마드리드',title:'둘째 날',spots:[]}]}];State.activeTripId='activity-test';State.activeJournalDay=0;saveTrips();switchView('workspace');setTheme('modern');State.allTimelinesExpanded=true;switchPlanSubTab('timeline');renderTimelineTab();
+   State.trips=[{id:'activity-test',title:'마드리드 산책',startDate:'2026-09-09',endDate:'2026-09-10',countries:['스페인'],cities:['마드리드'],currency:'EUR',budget:0,journals:{},expenses:[],checklist:[],days:[{dayNum:1,date:'2026-09-09',city:'마드리드',title:'도착한 날',spots:[{time:'14:00',title:'마드리드 공항 도착',desc:'공항철도로 이동',completed:false},{time:'16:00',title:'오래된 광장 산책',completed:false}]},{dayNum:2,date:'2026-09-10',city:'마드리드',title:'둘째 날',spots:[]}]}];State.activeTripId='activity-test';State.activeJournalDay=0;await saveTrips();switchView('workspace');setTheme('modern');State.allTimelinesExpanded=true;switchPlanSubTab('timeline');renderTimelineTab();
    openActivityJournal(0,0);
   });
   await page.locator('#activity-record-text').fill('공항에 내려 따뜻한 햇살을 맞았다. 새로운 여행이 설렜다.');
@@ -27,7 +27,7 @@ const server=http.createServer((req,res)=>{
    const files=[];
    for(const color of ['#d4a754','#527b6c']){const c=document.createElement('canvas');c.width=1600;c.height=900;c.getContext('2d').fillStyle=color;c.getContext('2d').fillRect(0,0,1600,900);const blob=await new Promise(r=>c.toBlob(r));files.push(new File([blob],'photo.png',{type:'image/png'}));}
    const reading=addActivityPhotos({target:{files,value:'photo.png'}});selectJournalDay(1);await reading;setActivityCover(1);
-   const ok=saveActivityRecord();const record=activityEntries(getActiveTrip())[0];window.testRecordId=record.id;
+   const ok=await saveActivityRecord();const record=activityEntries(getActiveTrip())[0];window.testRecordId=record.id;
    const img=new Image();img.src=record.photos[0];await img.decode();
    return {ok,completed:getActiveTrip().days[0].spots[0].completed,photos:record.photos.length,cover:record.coverIndex,w:img.width,h:img.height,stat:document.getElementById('stat-ws-diaries').textContent};
   });
@@ -36,12 +36,12 @@ const server=http.createServer((req,res)=>{
    const trip=getActiveTrip(),api=SulsulTravel.TripTransfer;
    return {private:api.create(trip).trip.activityRecords,roundtrip:api.parse(JSON.stringify(api.create(trip,{journals:true}))).trip.activityRecords[testRecordId].photos.length};
   });assert.equal(privacy.private,undefined);assert.equal(privacy.roundtrip,2);
-  const failure=await page.evaluate(()=>{
+  const failure=await page.evaluate(async ()=>{
    const original=activityEntries(getActiveTrip())[0].text,old=Storage.prototype.setItem;
    document.getElementById('activity-record-text').value='저장 실패 후 재시도할 원문';rememberActivityText();
    Storage.prototype.setItem=function(k,v){if(k==='st_trips_v2')throw new DOMException('quota','QuotaExceededError');return old.call(this,k,v);};
-   let ok;try{ok=saveActivityRecord();}finally{Storage.prototype.setItem=old;}
-   return {ok,original,persisted:JSON.parse(localStorage.getItem('st_trips_v2'))[0].activityRecords[testRecordId].text,memory:getActiveTrip().activityRecords[testRecordId].text,draft:document.getElementById('activity-record-text').value,retry:saveActivityRecord()};
+   let ok;try{ok=await saveActivityRecord();}finally{Storage.prototype.setItem=old;}
+   return {ok,original,persisted:JSON.parse(localStorage.getItem('st_trips_v2'))[0].activityRecords[testRecordId].text,memory:getActiveTrip().activityRecords[testRecordId].text,draft:document.getElementById('activity-record-text').value,retry:await saveActivityRecord()};
   });assert.equal(failure.ok,false);assert.equal(failure.persisted,failure.original);assert.equal(failure.memory,failure.original);assert.equal(failure.draft,'저장 실패 후 재시도할 원문');assert.equal(failure.retry,true);
   await page.evaluate(async()=>{callGeminiApiWithFallback=async()=> '여행의 시작을 천천히 기록했다.';await generateActivityEssay();});
   assert.equal(await page.locator('#modal-ai-draft-review').evaluate(el=>el.classList.contains('sheet-closed')),false);
@@ -61,11 +61,11 @@ const server=http.createServer((req,res)=>{
   await page.evaluate(async()=>{await generateActivityEssay();document.getElementById('activity-record-text').value='AI 생성 후 내가 수정한 글';rememberActivityText();await approveActiveAiDraft();});
   assert.ok((await page.locator('#ai-draft-review-status').textContent()).includes('원본이 변경'));
   assert.equal(await page.locator('#activity-record-text').inputValue(),'AI 생성 후 내가 수정한 글');
-  await page.evaluate(async()=>{closeModal('modal-ai-draft-review',true);saveActivityRecord();callGeminiApiWithFallback=async()=>{throw new Error('INVALID_API_KEY');};await generateActivityEssay();});
+  await page.evaluate(async()=>{closeModal('modal-ai-draft-review',true);await saveActivityRecord();callGeminiApiWithFallback=async()=>{throw new Error('INVALID_API_KEY');};await generateActivityEssay();});
   assert.ok((await page.locator('#activity-record-feedback').textContent()).includes('원문은 그대로'));
   await page.evaluate(()=>{window.confirm=()=>false;document.getElementById('activity-record-text').value='닫지 않고 보존할 초안';rememberActivityText();lastModalActionTime=0;closeModal('modal-activity-record');});
   assert.equal(await page.locator('#modal-activity-record').evaluate(el=>el.classList.contains('sheet-closed')),false);
-  await page.evaluate(()=>{window.confirm=()=>true;saveActivityRecord();});
+  await page.evaluate(async ()=>{window.confirm=()=>true;await saveActivityRecord();});
   await page.waitForTimeout(400);
   await page.evaluate(()=>history.back());
   await page.waitForFunction(()=>document.getElementById('modal-activity-record').classList.contains('sheet-closed'));
@@ -75,7 +75,7 @@ const server=http.createServer((req,res)=>{
   await page.waitForTimeout(100);
   assert.equal(await page.locator('#activity-record-text').inputValue(),'뒤로가기에도 보존할 글');
   assert.equal(await page.locator('#modal-activity-record').evaluate(el=>el.classList.contains('sheet-closed')),false);
-  await page.evaluate(()=>{window.confirm=()=>true;saveActivityRecord();});
+  await page.evaluate(async ()=>{window.confirm=()=>true;await saveActivityRecord();});
   for(const width of [320,360,390,430]){
    await page.setViewportSize({width,height:740});
    const geometry=await page.evaluate(()=>{const box=document.querySelector('.activity-sheet').getBoundingClientRect(),footer=document.querySelector('.activity-sheet-footer').getBoundingClientRect();return {overflow:document.documentElement.scrollWidth>innerWidth,contained:box.left>=0&&box.right<=innerWidth+1,footer:footer.bottom<=innerHeight+1};});
@@ -96,8 +96,8 @@ const server=http.createServer((req,res)=>{
   }
   await page.setViewportSize({width:390,height:844});await page.screenshot({path:path.join(output,'timeline-modern.png'),fullPage:true});
   await page.evaluate(()=>{setTheme('deepblack');openActivityJournal(0,0);});await page.screenshot({path:path.join(output,'editor-dark.png')});
-  const moved=await page.evaluate(()=>{saveActivityRecord();const trip=getActiveTrip();trip.days[1].spots.push(trip.days[0].spots.shift());saveTrips();return activityLocation(getActiveTrip(),testRecordId).day.date;});assert.equal(moved,'2026-09-10');
-  const archived=await page.evaluate(()=>{getActiveTrip().days[1].spots=[];saveTrips();State.activeJournalDay=0;refreshActivitySurfaces();renderPdfReport(getActiveTrip(),{textMode:'original'});const originalReport=document.getElementById('pdf-report-content').textContent;renderPdfReport(getActiveTrip(),{textMode:'approved'});return {text:document.getElementById('pdf-report-content').textContent,originalReport,original:getActiveTrip().activityRecords[testRecordId].originalText,record:getActiveTrip().activityRecords[testRecordId].text,archive:document.querySelector('.moment-feed').textContent};});
+  const moved=await page.evaluate(async ()=>{await saveActivityRecord();const trip=getActiveTrip();trip.days[1].spots.push(trip.days[0].spots.shift());await saveTrips();return activityLocation(getActiveTrip(),testRecordId).day.date;});assert.equal(moved,'2026-09-10');
+  const archived=await page.evaluate(async ()=>{getActiveTrip().days[1].spots=[];await saveTrips();State.activeJournalDay=0;refreshActivitySurfaces();renderPdfReport(getActiveTrip(),{textMode:'original'});const originalReport=document.getElementById('pdf-report-content').textContent;renderPdfReport(getActiveTrip(),{textMode:'approved'});return {text:document.getElementById('pdf-report-content').textContent,originalReport,original:getActiveTrip().activityRecords[testRecordId].originalText,record:getActiveTrip().activityRecords[testRecordId].text,archive:document.querySelector('.moment-feed').textContent};});
   assert.ok(archived.originalReport.includes(archived.original));assert.ok(archived.text.includes(archived.record));assert.ok(archived.text.includes('일정 변경 전 기록'));assert.equal(await page.locator('#pdf-report-content .travel-story-activity').count(),1);assert.ok(archived.text.includes('날짜별 여행 이야기 (1편 / 2장)'));assert.ok(archived.archive.includes(archived.record));
   await page.evaluate(()=>{closeModal('modal-activity-record',true);});await page.waitForTimeout(150);await page.reload({waitUntil:'networkidle'});
   assert.equal(await page.evaluate(()=>activityEntries(State.trips.find(t=>t.id==='activity-test'))[0].text),archived.record);

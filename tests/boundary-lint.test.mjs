@@ -46,12 +46,40 @@ test('a new direct trip write in the shell or a presentation file fails', () => 
 });
 
 test('allow-listed writes pass only with the exact count and a reason', () => {
-  const dir = fixture({html: 'function boot(){ saveTrips({bump:false}); }'});
+  const dir = fixture({html: 'async function boot(){ await saveTrips({bump:false}); }'});
   try {
     const key = 'index.html#boot#saveTrips';
     assert.deepEqual(rules(lint({rootDir: dir, allowlist: {...empty, writes: {[key]: {count: 1, reason: '부팅 정규화'}}}})), []);
     assert.deepEqual(rules(lint({rootDir: dir, allowlist: {...empty, writes: {[key]: {count: 2, reason: '부팅 정규화'}}}})), ['WRITE01'], '줄어든 허용 수는 목록도 줄인다');
     assert.deepEqual(rules(lint({rootDir: dir, allowlist: {...empty, writes: {[key]: {count: 1}}}})), ['WRITE01'], '사유 없는 허용은 실패한다');
+  } finally { rmSync(dir, {recursive: true, force: true}); }
+});
+
+test('저장 명령과 저장 함수는 끝날 때까지 기다리고, Promise를 조건에 쓰지 않는다 (ASYNC01)', () => {
+  const dir = fixture({
+    html: [
+      "async function saveTitle(){ return await commitTrip('a', trip => { trip.title = 'x'; }); }",
+      "function forgetCommand(){ commitTrip('a', trip => {}); renderHub(); }",
+      "function conditionOnPromise(){ if(!saveTitle()) return; renderHub(); }",
+      "function forgetSaving(){ saveTitle(); renderHub(); }",
+      "function wrapper(){ return saveTitle(); }",
+      "function assignWrapper(){ const ok = wrapper(); return ok; }",
+      "async function fine(){ if(!await saveTitle()) return false; setTimeout(() => saveTitle(), 0); return `<button onclick=\"saveTitle()\">저장</button>`; }",
+      "async function fetchOnly(){ return 1; } function loader(){ fetchOnly(); }",
+      "function renderLater(){ void saveTitle(); }"
+    ].join('\n')
+  });
+  try {
+    const result = lint({rootDir: dir, allowlist: empty}), async = result.violations.filter(v => v.rule === 'ASYNC01').map(v => v.message).join('\n');
+    assert.match(async, /#forgetCommand#commitTrip/, '저장 명령을 기다리지 않음');
+    assert.match(async, /#conditionOnPromise#saveTitle/, 'Promise를 조건에 씀');
+    assert.match(async, /#forgetSaving#saveTitle/, '저장 명령을 부르는 async 함수도 저장 함수다');
+    assert.match(async, /#assignWrapper#wrapper/, 'async 결과를 return하는 동기 함수도 Promise를 돌려준다');
+    assert.match(async, /#renderLater#saveTitle/, '결과를 버리는 void도 허용 목록에 있어야 한다');
+    assert.doesNotMatch(async, /#fine#/, 'await·화살표 반환·HTML 문자열 안의 이름은 위반이 아니다');
+    assert.doesNotMatch(async, /#loader#/, '저장하지 않는 async 함수는 기다리지 않아도 된다');
+    const allowed = lint({rootDir: dir, allowlist: {...empty, async: {'index.html#renderLater#saveTitle': {count: 1, reason: '렌더 중 보정'}}}});
+    assert.doesNotMatch(allowed.violations.map(v => v.message).join('\n'), /renderLater/);
   } finally { rmSync(dir, {recursive: true, force: true}); }
 });
 

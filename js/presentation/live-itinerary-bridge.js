@@ -1,10 +1,10 @@
 /* 기존 화면도 안정 ID 명령을 통하도록 연결한다. 기록 저장과 계획 변경은 별개다. */
-function commitLiveSchedule(command,expectedRevision,label='일정을 변경했습니다.') {
+async function commitLiveSchedule(command,expectedRevision,label='일정을 변경했습니다.') {
   if(!requireSharedPlanEdit())return false;
   const active=getActiveTrip(),tripId=command.tripId||active?.id;
   if(!active||active.id!==tripId){showToast('편집하던 여행으로 돌아가 다시 저장해 주세요.');return false;}
   let result,domainError;
-  const saved=commitTripCommand({tripId,expectedRevision:expectedRevision??active.revision,change:trip=>{try{result=SulsulTravel.LiveItinerary.apply(trip,command);}catch(error){domainError=error;throw error;}}});
+  const saved=await commitTripCommand({tripId,expectedRevision:expectedRevision??active.revision,change:trip=>{try{result=SulsulTravel.LiveItinerary.apply(trip,command);}catch(error){domainError=error;throw error;}}});
   if(!saved){if(domainError)showToast(domainError.message);return false;}
   State.lastLiveScheduleChange=result;
   refreshScheduleViews();
@@ -35,7 +35,7 @@ function liveSpotPlacement(day,position,anchorId,itemTime,excludeId){
   }
   return {position,anchorId:['before','after'].includes(position)?anchorId:undefined};
 }
-function submitLiveSpot(){
+async function submitLiveSpot(){
   const trip=getActiveTrip(),session=document.getElementById('modal-spot').dataset;
   if(!trip||trip.id!==session.tripId){showToast('편집하던 여행으로 돌아가 다시 저장해 주세요.');return false;}
   const day=trip.days[Number(document.getElementById('spot-form-day').value)],title=document.getElementById('spot-form-title').value.trim();
@@ -50,7 +50,7 @@ function submitLiveSpot(){
   const command={tripId:trip.id,type:replacement?'replace':editing?'update':'insert',dayId:session.sourceDayId||day.id,targetDayId:day.id,itemId:session.editSpotId||undefined,...placement};
   if(editing&&!replacement)command.changes=changes;
   else command.item={...changes,completed:false};
-  if(!commitLiveSchedule(command,Number(session.baseRevision),''))return false;
+  if(!await commitLiveSchedule(command,Number(session.baseRevision),''))return false;
   closeModal('modal-spot',true);
   showToast(replacement?'대체 일정을 저장했습니다. 원래 기록은 그대로 남습니다.':editing?'일정을 수정했습니다. 기존 순서와 다른 날짜는 유지합니다.':'새 일정을 넣었습니다. 되돌리기에서 취소할 수 있습니다.');
   return true;

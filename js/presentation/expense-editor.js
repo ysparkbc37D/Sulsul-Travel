@@ -114,14 +114,14 @@ function expenseChangeDraft() {
   return {trip,entry,original,next};
 }
 
-function saveExpenseRecord({fromQueue=false,prepared=null}={}) {
+async function saveExpenseRecord({fromQueue=false,prepared=null}={}) {
   if(!ExpenseFormState.sessionId)return false;
   if(ExpenseFormState.saving&&!fromQueue)return false;
   if(ExpenseFormState.photosLoading){expenseFeedback('사진 준비가 끝난 뒤 저장해 주세요.');return false;}
   const draft=prepared||expenseChangeDraft();if(!draft)return false;
   const {trip,original,next}=draft;
   if(trip.id!==State.activeTripId||trip.id!==ExpenseFormState.tripId){expenseFeedback('여행이 변경되었습니다. 원래 여행에서 다시 열어 주세요.');return false;}
-  try{State.trips=TripRepository.saveAll(next,{bumpTripId:trip.id});}catch(error){
+  try{await TripRepository.saveAll(next,{bumpTripId:trip.id});}catch(error){
     const reason=['STORAGE_CONFLICT','REVISION_CONFLICT','READ_ONLY_TRIP'].includes(error?.code)?error.message:error?.name==='QuotaExceededError'?'기기의 앱 저장 공간이 부족합니다.':'기기 저장소에 쓰지 못했습니다. 브라우저의 저장소 권한과 여유 공간을 확인해 주세요.';
     expenseFeedback(`${reason} 입력과 사진은 이 창에 남아 있습니다. 초안 파일을 보관한 뒤 다시 시도할 수 있습니다.`);
     const draft=document.getElementById('exp-draft-download-btn');if(draft)draft.hidden=false;
@@ -155,7 +155,7 @@ async function requestExpenseSave() {
     if(ExpenseFormState.sessionId!==session)return false;
     if(State.activeTripId!==draft.trip.id||State.trips!==state||getActiveTrip()?.revision!==revision){expenseFeedback('저장 중 여행이 변경되었습니다. 입력과 사진은 유지되니 최신 여행을 확인한 뒤 다시 저장해 주세요.');return false;}
     if(expenseFormSnapshot()!==snapshot){expenseFeedback('저장 중 입력 내용이 변경되었습니다. 현재 입력과 사진을 확인한 뒤 다시 저장해 주세요.');return false;}
-    return saveExpenseRecord({fromQueue:true,prepared:{...draft,next}});
+    return await saveExpenseRecord({fromQueue:true,prepared:{...draft,next}});
   }catch(error){
     console.warn('[지출 저장 준비]',error?.message||error);
     if(ExpenseFormState.sessionId===session){expenseFeedback('저장 준비를 마치지 못했습니다. 입력과 사진은 유지됩니다. 초안 파일을 보관하거나 다시 저장해 주세요.');const draft=document.getElementById('exp-draft-download-btn');if(draft)draft.hidden=false;}

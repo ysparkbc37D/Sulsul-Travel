@@ -16,7 +16,8 @@
       }, true);
       shell.compatible = () => !shell.failedAssets.length &&
         ['getJournalEntry','setJournalEntry','pinJournalIdentity','journalDraftKey'].every(name => typeof window.SulsulTravel?.TripAdapter?.[name] === 'function') &&
-        typeof window.SulsulTravel?.LegacyTripRepository?.prototype.getCommittedTrips === 'function';
+        typeof window.SulsulTravel?.LegacyTripRepository?.prototype.getCommittedTrips === 'function' &&
+        typeof window.SulsulTravel?.TripStore?.prototype.commit === 'function';
       shell.reload = () => {if(!shell.reloading){shell.reloading=true;location.reload();}};
       shell.canReload = () => {
         if(!shell.started)return true;
@@ -135,17 +136,17 @@
   </script>
 
   <!-- PWA Meta & Icons -->
-  <link rel="manifest" href="manifest.webmanifest?v=2.0.6">
+  <link rel="manifest" href="manifest.webmanifest?v=2.0.7">
   <meta name="theme-color" content="#F7F5F0">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <meta name="apple-mobile-web-app-title" content="술술트래블">
-  <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192-v115.png?v=2.0.6">
-  <link rel="icon" type="image/png" sizes="32x32" href="favicon.png?v=2.0.6">
+  <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192-v115.png?v=2.0.7">
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon.png?v=2.0.7">
   <link rel="shortcut icon" href="favicon.ico">
-  <link rel="apple-touch-icon" sizes="180x180" href="icons/apple-touch-icon-v115.png?v=2.0.6">
-  <link rel="apple-touch-icon" href="icons/apple-touch-icon-v115.png?v=2.0.6">
+  <link rel="apple-touch-icon" sizes="180x180" href="icons/apple-touch-icon-v115.png?v=2.0.7">
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon-v115.png?v=2.0.7">
 
   <!-- Google Fonts: Great Vibes, Dancing Script (Cursive Calligraphy), Cormorant Garamond, Noto Serif KR, Playfair Display -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -153,7 +154,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Great+Vibes&family=Cormorant+Garamond:wght@600;700;800&family=Noto+Serif+KR:wght@500;600;700;900&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
 
   <!-- Local Utilities Bundle (CDN fallback & tailwind utilities) -->
-  <link rel="stylesheet" href="css/utilities.css?v=2.0.6" integrity="sha384-HMVB4SH6xwwGITkNyT8ARmHegAYSuTMocPGl4bpl0JywMIe2PqYrUxqZOgEuZjmP">
+  <link rel="stylesheet" href="css/utilities.css?v=2.0.7" integrity="sha384-HMVB4SH6xwwGITkNyT8ARmHegAYSuTMocPGl4bpl0JywMIe2PqYrUxqZOgEuZjmP">
   <link rel="stylesheet" href="vendor/fontawesome/css/all.min.css" integrity="sha384-t1nt8BQoYMLFN5p42tRAtuAAFQaCQODekUVeKKZrEnEyp4H2R0RHFz0KWpmj7i8g">
 
   <!-- Leaflet Map CSS & JS -->
@@ -1495,56 +1496,57 @@
     }
   </style>
 
-  <link rel="stylesheet" href="css/companion.css?v=2.0.6" integrity="sha384-Syant7HB0IYUZUU2saRSYUDkM71WKVuK2JtHM+kAluFdw3VvWv9gSglgJh4utHv/">
-  <link rel="stylesheet" href="css/companion-refresh.css?v=2.0.6" integrity="sha384-g1MzsPxYgFA1G2Ba189anhZCcQnMwkNSt6MlFXiazIHGO0Kqp2sbMXQZ2kjr3p4u">
-  <link rel="stylesheet" href="css/live-itinerary.css?v=2.0.6" integrity="sha384-e/V9wyJ/Gi6baSHcWzBeNGjdn/eKDQIvKWyiYmByLE7C7nYJaQOA+GshtUMcCR72">
-  <link rel="stylesheet" href="css/expense-mobile.css?v=2.0.6" integrity="sha384-QZFtKrU/YvkTaEKv0oJ2ZQi1Zry8RgEFaHzTckwuPFsMDDmadYBH7UuYgTVS7281">
-  <link rel="stylesheet" href="css/moment-journal.css?v=2.0.6" integrity="sha384-g1EihgfyPDJ5o5eWSsQgT1WDTRKDtUfzVatlx6T/t+DhApDBY8dznSrwmelasv91">
-  <script src="js/domain/trip-adapter.js?v=2.0.6" integrity="sha384-JHU/NkAlxwR9G9/49TaFK4sTvg9xKGsSVd3re8rLivtiXcSNdnQA9gRIfvVWUtG7"></script>
-  <script src="js/domain/ai-draft-validation.js?v=2.0.6" integrity="sha384-OTRAiX7YaOiiNrpMWDjkOyH0bTbbL3KrGwGp1RmIkgvd15pErNTTKVTJkoesmpfi"></script>
-  <script src="js/domain/live-itinerary.js?v=2.0.6" integrity="sha384-cwMH5i2F5Mve7Z9cKeWrP7uLU5plcu6c7xvTf4Lyz3Xkb6GlNCI14lnEWzw46cVg"></script>
-  <script src="js/presentation/live-itinerary-ui.js?v=2.0.6" integrity="sha384-n2tu0UzqdADvvSWb0plIzaUmkBace76FFf21tUMVCnLgUMNs57GaYRoEYx/1pXdV"></script>
-  <script src="js/presentation/live-itinerary-bridge.js?v=2.0.6" integrity="sha384-4rrdNRFq7p3ryYJK+7hhm+gAgh5M84AQSqIN6yK1f6HkW3IJP26KihWxAzDWOpvk"></script>
-  <script src="js/domain/schedule-change.js?v=2.0.6" integrity="sha384-v7zQ2iSY9DIrsztq758NvV0o6vbsguJn70NviXT6itT6YcuNaCvSW2beDogcMbD7"></script>
-  <script src="js/presentation/schedule-change-ui.js?v=2.0.6" integrity="sha384-lxcF8PKWODbJtbd2IHA8v70tdlf61IS046UQy0A4LtOn1pdcyHVmlKKcjPUNGMIk"></script>
-  <script src="js/domain/spot-realignment.js?v=2.0.6" integrity="sha384-gCFPNcD1aD3UegqTLtFPCU7Xqm7CtRN0yjQx2QnWe1ee0i3cZu8pzZic7YzBJLKt"></script>
-  <script src="js/presentation/spot-realignment-ui.js?v=2.0.6" integrity="sha384-XH4TUgIJak2+9QvuxzMs8dS/U1XfK74T85mIQ48lh4aLNHEsNIUs7wOhspNJUIfS"></script>
-  <script src="js/domain/travel-records.js?v=2.0.6" integrity="sha384-qhkfkF1xKTuPtBvsB5Gwpz631xTkyy2tS1BU9Hixd2L1t+oobsXBMJnFv1pBHNnW"></script>
-  <script src="js/domain/travel-story.js?v=2.0.6" integrity="sha384-vjuGNDpytM6vG8SuZbKLW7qTTV1L33j48P1KSwNQnvca7uxo5EYkBM2X0IOdn/Qa"></script>
-  <script src="js/infrastructure/storage/photo-compression.js?v=2.0.6" integrity="sha384-MeOApXBzhg++Rcq/Lfjwb04/MA1U6wmwHppDgFZvKA4ZfdPC4oR2Hv1BhPFNU7Ig"></script>
-  <link rel="stylesheet" href="css/photo-optimization.css?v=2.0.6" integrity="sha384-9sgcirlxZs5tcmp/22RdH56B3bZla/q4DVH7x8W+fO8P4neR4WJMDDtQNK4WPq+/">
-  <script src="js/domain/photo-optimization.js?v=2.0.6" integrity="sha384-fpPZ4nJ383bIJaSHvmuZg+9BYd5LQ8YuVtEEMjtJnQr2Fod/mawAoB5SYMdtvBRU"></script>
-  <script src="js/infrastructure/storage/photo-cleanup.js?v=2.0.6" integrity="sha384-hws5SGtCziHhqp8Y2hysTXIAd0s1vfgNY0xU5/1LSw8G/D0LtlmWtrQZRaFuC7Q5"></script>
-  <script src="js/presentation/photo-optimization-ui.js?v=2.0.6" integrity="sha384-VhSAzyfhLGHeztkcMZhxqnkKTZsAVnuUcU9JaHfbTlXqu86UlbN8RIlvuCyXTyQi"></script>
-  <script src="js/infrastructure/storage/media-repository.js?v=2.0.6" integrity="sha384-q0IPoo86aU2ruB130X1HAh01dr4hpI0IAXeMVCoa7Jy/2pIB09f7WbSKPm8vowhw"></script>
-  <script src="js/infrastructure/storage/record-media-store.js?v=2.0.6" integrity="sha384-vNu5tI/i1vWsxi2/3aQYW+9zYfivBNB2ewaUTRlwhnGwRbv9dpR4bu/sqzv1D2jm"></script>
-  <script src="js/infrastructure/storage/expense-photo-repository.js?v=2.0.6" integrity="sha384-gdumvFYkJqEbRPJlK4mffCsUjPsnKCXLg6/1fLMR8kUuU1QDMeLLOYmMVSRTGNSy"></script>
-  <script src="js/presentation/companion-ui.js?v=2.0.6" integrity="sha384-0A0BQcT6Ix7sqjnrMS13DXGbLrhMaUzB8tOXe7dp1gkmjpoToTqvm2ap7BQuredL"></script>
-  <script src="js/domain/trip-transfer.js?v=2.0.6" integrity="sha384-VD9q1co1+bJzdS4i19rvfkQN/4KvzfnNdHUjbbucghcxzjmPim+kWF93qv5DaXSu"></script>
-  <script src="js/domain/travel-backup.js?v=2.0.6" integrity="sha384-4zE43uWlz5y3eP7g98tEL3HqAsw08/XvINQ+RhLLt4wz+cnySMWiy3Eu1m7BaBbK"></script>
-  <script src="js/presentation/travel-backup-ui.js?v=2.0.6" integrity="sha384-F6B8ktwj0NjlNyKiGCj3ODk4GOhVBque4hTNEPgOOrU5YuvjT9u2w4IB4ZKGm0JT"></script>
-  <script src="js/presentation/storage-health-ui.js?v=2.0.6" integrity="sha384-E/ReLeCv1g4D0UVOP8GSAZN6sbTcFzg6/yzIKez71U0Y67OCPt4oym71uJMvHXrv"></script>
-  <script src="js/presentation/trip-transfer-ui.js?v=2.0.6" integrity="sha384-r9Wfy8tYnpo51sEG1kKbiujkh5+9kF1MGKJ34glLKTB5zga13KqEuJRsRBznS5vK"></script>
-  <script src="js/presentation/mobile-navigation.js?v=2.0.6" integrity="sha384-siDaTMxmkO/lATIBC8kqJzq3boL1P4OuIdM1qnxNZW7qiG+dz9+jJ2+tI1KSvzWd"></script>
-  <script src="js/presentation/activity-journal.js?v=2.0.6" integrity="sha384-/lKkgoZyKGGQjOi61ULuKBI5gr3CVIMr/ErdnjOsELdDovysjYLgygsLS3xCeCRR"></script>
-  <script src="js/presentation/moment-journal.js?v=2.0.6" integrity="sha384-oyBt0A9g7GyQ872S6kLzC6rMgws2Hu3xeFPqzzu/rffiz9fVcILVjMFtPaZSb/js"></script>
-  <script src="js/presentation/travel-story-ui.js?v=2.0.6" integrity="sha384-s9HZ4A1/X3tCfe4rBfB6nzEwAC7i2U1YVfradgxnQPX5X4tnFszIOPeMsLPfXnfq"></script>
-  <script src="js/config/collaboration-config.js?v=2.0.6" integrity="sha384-ipxhKB+fQ4s3OThYo3p6IWFvP6BbstXYDW6jZWWiPHB4qomo64w7r8/wRvdsi47w"></script>
-  <script src="js/infrastructure/collaboration/supabase-travel-service.js?v=2.0.6" integrity="sha384-+SDvVJ0CNqCMvFlOBOA+nfA1k6/sN6GlaKDhTQo4SgX8x3EwPXyJlvMfJj0D6Bt/"></script>
-  <script src="js/presentation/collaboration-ui.js?v=2.0.6" integrity="sha384-KvnYI6ym2/deKsOtKryWJS5tljPjqYRx67JGGgWVRNyWHEC470iPDg3+fdw0OHX0"></script>
-  <script src="js/presentation/collaboration-review.js?v=2.0.6" integrity="sha384-e9jNExYV4J1J4XC0IaVDaDlXWLxrJeazC+JwdzEq9XGGfX0UkHnqO0C+9mosMiQ5"></script>
-  <script src="js/presentation/expense-editor.js?v=2.0.6" integrity="sha384-jrfx70ArrLOAMjavKyFDsvRwMACadbXdVArA9Sgl00pkMua7JFo5bh6RB35XKlku"></script>
+  <link rel="stylesheet" href="css/companion.css?v=2.0.7" integrity="sha384-Syant7HB0IYUZUU2saRSYUDkM71WKVuK2JtHM+kAluFdw3VvWv9gSglgJh4utHv/">
+  <link rel="stylesheet" href="css/companion-refresh.css?v=2.0.7" integrity="sha384-g1MzsPxYgFA1G2Ba189anhZCcQnMwkNSt6MlFXiazIHGO0Kqp2sbMXQZ2kjr3p4u">
+  <link rel="stylesheet" href="css/live-itinerary.css?v=2.0.7" integrity="sha384-e/V9wyJ/Gi6baSHcWzBeNGjdn/eKDQIvKWyiYmByLE7C7nYJaQOA+GshtUMcCR72">
+  <link rel="stylesheet" href="css/expense-mobile.css?v=2.0.7" integrity="sha384-QZFtKrU/YvkTaEKv0oJ2ZQi1Zry8RgEFaHzTckwuPFsMDDmadYBH7UuYgTVS7281">
+  <link rel="stylesheet" href="css/moment-journal.css?v=2.0.7" integrity="sha384-g1EihgfyPDJ5o5eWSsQgT1WDTRKDtUfzVatlx6T/t+DhApDBY8dznSrwmelasv91">
+  <script src="js/domain/trip-adapter.js?v=2.0.7" integrity="sha384-JHU/NkAlxwR9G9/49TaFK4sTvg9xKGsSVd3re8rLivtiXcSNdnQA9gRIfvVWUtG7"></script>
+  <script src="js/domain/ai-draft-validation.js?v=2.0.7" integrity="sha384-OTRAiX7YaOiiNrpMWDjkOyH0bTbbL3KrGwGp1RmIkgvd15pErNTTKVTJkoesmpfi"></script>
+  <script src="js/domain/live-itinerary.js?v=2.0.7" integrity="sha384-cwMH5i2F5Mve7Z9cKeWrP7uLU5plcu6c7xvTf4Lyz3Xkb6GlNCI14lnEWzw46cVg"></script>
+  <script src="js/presentation/live-itinerary-ui.js?v=2.0.7" integrity="sha384-SLjn2QhNBI6VfrG3siiRZqfs51VnmqyRCTMGjMN25fIyHhYwf4LnECXOOiQ4arog"></script>
+  <script src="js/presentation/live-itinerary-bridge.js?v=2.0.7" integrity="sha384-lRoX8rvtVNC3rl6v9tCVjTLCSBjLmTH3EhNiq6OPizV+6GvspGEUIpH00HoPTgEn"></script>
+  <script src="js/domain/schedule-change.js?v=2.0.7" integrity="sha384-v7zQ2iSY9DIrsztq758NvV0o6vbsguJn70NviXT6itT6YcuNaCvSW2beDogcMbD7"></script>
+  <script src="js/presentation/schedule-change-ui.js?v=2.0.7" integrity="sha384-fOItr8fMYWgvB5eWBN7rYfZwI39HhAcWCn8j9+oJjijLWEYZjccXKl2D7mt1VF+T"></script>
+  <script src="js/domain/spot-realignment.js?v=2.0.7" integrity="sha384-gCFPNcD1aD3UegqTLtFPCU7Xqm7CtRN0yjQx2QnWe1ee0i3cZu8pzZic7YzBJLKt"></script>
+  <script src="js/presentation/spot-realignment-ui.js?v=2.0.7" integrity="sha384-GKlSQQKluvxcnRhJmQVQL4lZIFXbqf8ac/0BnxPiWNWcLjFJWYx/IZU3+5fZI7dk"></script>
+  <script src="js/domain/travel-records.js?v=2.0.7" integrity="sha384-qhkfkF1xKTuPtBvsB5Gwpz631xTkyy2tS1BU9Hixd2L1t+oobsXBMJnFv1pBHNnW"></script>
+  <script src="js/domain/travel-story.js?v=2.0.7" integrity="sha384-vjuGNDpytM6vG8SuZbKLW7qTTV1L33j48P1KSwNQnvca7uxo5EYkBM2X0IOdn/Qa"></script>
+  <script src="js/infrastructure/storage/photo-compression.js?v=2.0.7" integrity="sha384-MeOApXBzhg++Rcq/Lfjwb04/MA1U6wmwHppDgFZvKA4ZfdPC4oR2Hv1BhPFNU7Ig"></script>
+  <link rel="stylesheet" href="css/photo-optimization.css?v=2.0.7" integrity="sha384-9sgcirlxZs5tcmp/22RdH56B3bZla/q4DVH7x8W+fO8P4neR4WJMDDtQNK4WPq+/">
+  <script src="js/domain/photo-optimization.js?v=2.0.7" integrity="sha384-fpPZ4nJ383bIJaSHvmuZg+9BYd5LQ8YuVtEEMjtJnQr2Fod/mawAoB5SYMdtvBRU"></script>
+  <script src="js/infrastructure/storage/photo-cleanup.js?v=2.0.7" integrity="sha384-hws5SGtCziHhqp8Y2hysTXIAd0s1vfgNY0xU5/1LSw8G/D0LtlmWtrQZRaFuC7Q5"></script>
+  <script src="js/presentation/photo-optimization-ui.js?v=2.0.7" integrity="sha384-sNDBh1Yg+XPxZQQUpYuT0VZVdIK34vTEaNH2itk/XO2oOS5iRzjhXrAQkLWO46TU"></script>
+  <script src="js/infrastructure/storage/media-repository.js?v=2.0.7" integrity="sha384-q0IPoo86aU2ruB130X1HAh01dr4hpI0IAXeMVCoa7Jy/2pIB09f7WbSKPm8vowhw"></script>
+  <script src="js/infrastructure/storage/record-media-store.js?v=2.0.7" integrity="sha384-vNu5tI/i1vWsxi2/3aQYW+9zYfivBNB2ewaUTRlwhnGwRbv9dpR4bu/sqzv1D2jm"></script>
+  <script src="js/infrastructure/storage/expense-photo-repository.js?v=2.0.7" integrity="sha384-gdumvFYkJqEbRPJlK4mffCsUjPsnKCXLg6/1fLMR8kUuU1QDMeLLOYmMVSRTGNSy"></script>
+  <script src="js/presentation/companion-ui.js?v=2.0.7" integrity="sha384-hZkc18DoCwXe/Uwp1EN1dw8rSLnSOlHqBPalNvKlsZGhYlnbYSMqsApQV5Z+cLLK"></script>
+  <script src="js/domain/trip-transfer.js?v=2.0.7" integrity="sha384-VD9q1co1+bJzdS4i19rvfkQN/4KvzfnNdHUjbbucghcxzjmPim+kWF93qv5DaXSu"></script>
+  <script src="js/domain/travel-backup.js?v=2.0.7" integrity="sha384-4zE43uWlz5y3eP7g98tEL3HqAsw08/XvINQ+RhLLt4wz+cnySMWiy3Eu1m7BaBbK"></script>
+  <script src="js/presentation/travel-backup-ui.js?v=2.0.7" integrity="sha384-G22/sODve5h2jDPECkmpvn3ce0MyfayfnWrclJ3d5CY9rtkH+9fkIve2Ox5dfybO"></script>
+  <script src="js/presentation/storage-health-ui.js?v=2.0.7" integrity="sha384-E/ReLeCv1g4D0UVOP8GSAZN6sbTcFzg6/yzIKez71U0Y67OCPt4oym71uJMvHXrv"></script>
+  <script src="js/presentation/trip-transfer-ui.js?v=2.0.7" integrity="sha384-alWNP5q7xJLSbe8GlkYNmHLw8G9jbXGLNSi28LERcPAb1pESASALcV/HOiFWa12h"></script>
+  <script src="js/presentation/mobile-navigation.js?v=2.0.7" integrity="sha384-siDaTMxmkO/lATIBC8kqJzq3boL1P4OuIdM1qnxNZW7qiG+dz9+jJ2+tI1KSvzWd"></script>
+  <script src="js/presentation/activity-journal.js?v=2.0.7" integrity="sha384-xg0gGQRxITo6qu1Qwq78dzoaLc/GPU6FR5pbr9cd+cxEkEILIgj1iChOJnmkzgkI"></script>
+  <script src="js/presentation/moment-journal.js?v=2.0.7" integrity="sha384-W5tYJI4BKLYXNY8oGs8jMcPaIahgrr6X+qsEVq+6ITXa2iYeZdCUMIylgzaumNeJ"></script>
+  <script src="js/presentation/travel-story-ui.js?v=2.0.7" integrity="sha384-s9HZ4A1/X3tCfe4rBfB6nzEwAC7i2U1YVfradgxnQPX5X4tnFszIOPeMsLPfXnfq"></script>
+  <script src="js/config/collaboration-config.js?v=2.0.7" integrity="sha384-ipxhKB+fQ4s3OThYo3p6IWFvP6BbstXYDW6jZWWiPHB4qomo64w7r8/wRvdsi47w"></script>
+  <script src="js/infrastructure/collaboration/supabase-travel-service.js?v=2.0.7" integrity="sha384-+SDvVJ0CNqCMvFlOBOA+nfA1k6/sN6GlaKDhTQo4SgX8x3EwPXyJlvMfJj0D6Bt/"></script>
+  <script src="js/presentation/collaboration-ui.js?v=2.0.7" integrity="sha384-KvnYI6ym2/deKsOtKryWJS5tljPjqYRx67JGGgWVRNyWHEC470iPDg3+fdw0OHX0"></script>
+  <script src="js/presentation/collaboration-review.js?v=2.0.7" integrity="sha384-cbND/rT26DaIY2hR++LBuByF9L/ACu5TDl0b85EN2zsk/sTapWGm2BPQqZgN6GzI"></script>
+  <script src="js/presentation/expense-editor.js?v=2.0.7" integrity="sha384-fEJndy5orED9wsO98Oxn+qSaV4z93C+AY7GTwh2cvMdQw36+fpP9L1URxs7x3HsG"></script>
 
   <!-- Knowledge Base Seed & Destination Knowledge Packs (DKP) -->
-  <script src="kb-travel.js?v=2.0.6" integrity="sha384-zxXc7MUMbmXkiaF3ymeLmVSiCyPRVfkUjSZetDVx41zrHGyPeSCN4TFpy5f1jNUd"></script>
+  <script src="kb-travel.js?v=2.0.7" integrity="sha384-zxXc7MUMbmXkiaF3ymeLmVSiCyPRVfkUjSZetDVx41zrHGyPeSCN4TFpy5f1jNUd"></script>
   <script src="js/destinations/destination-registry.js" integrity="sha384-PV7EnpqZusutqYxhFc0vICq72coA/C+TMYaBkk+BFy52dmgfk/RDzf/DAgW7dmvC"></script>
   <script src="js/destinations/pack-default.js" integrity="sha384-mCe4oKfrN+8fbLFCJJexsHJXBZkw6b6q1bOg5skoupZ9hXUrhZ92sTRRTF831vDt"></script>
-  <script src="js/destinations/pack-south-america.js?v=2.0.6" integrity="sha384-p6i8pSXkYDEndehBEqNlXK7ZIZia6Tsxw4TD2LUf7TJPUSlPd2AzXbp3wyyAvDG7"></script>
+  <script src="js/destinations/pack-south-america.js?v=2.0.7" integrity="sha384-p6i8pSXkYDEndehBEqNlXK7ZIZia6Tsxw4TD2LUf7TJPUSlPd2AzXbp3wyyAvDG7"></script>
   <script src="js/destinations/pack-yunnan.js" integrity="sha384-MIgviqt+QV/b06eH6w7DO42JTPFr7Q2kFTi8TRQT4MCouBcFBGiC7x1jnKgVatOX"></script>
-  <script src="js/destinations/emergency-contacts.js?v=2.0.6" integrity="sha384-q3IUPhGWY99DNBNM269wiapa6eQYahcwaro/PvPILVtAgkUM0pE23GI5E63eMLlN"></script>
-  <script src="js/infrastructure/storage/legacy-trip-repository.js?v=2.0.6" integrity="sha384-liSoIp8m7N4UlEs/b2uz0MImyE8U7WAZwZa8JAbXpPlz6W0RW2Xg/JTukexxz/n4"></script>
-  <script src="js/infrastructure/storage/settings-repository.js?v=2.0.6" integrity="sha384-fp7ck757BhOA+Y2i/VoW21KRCkeMyb/G78wxwhZuReB2JbzcyTxBrLxGldhvw3n3"></script>
-  <script src="js/infrastructure/storage/journal-overflow-repository.js?v=2.0.6" integrity="sha384-uRxi9B+oBHCQ+aa8a6Wp72RAAeEuslXu5kZ+gf9Kvo22B3N6fr1XSkVnAV1X42yO"></script>
+  <script src="js/destinations/emergency-contacts.js?v=2.0.7" integrity="sha384-q3IUPhGWY99DNBNM269wiapa6eQYahcwaro/PvPILVtAgkUM0pE23GI5E63eMLlN"></script>
+  <script src="js/infrastructure/storage/legacy-trip-repository.js?v=2.0.7" integrity="sha384-liSoIp8m7N4UlEs/b2uz0MImyE8U7WAZwZa8JAbXpPlz6W0RW2Xg/JTukexxz/n4"></script>
+  <script src="js/infrastructure/storage/trip-store.js?v=2.0.7" integrity="sha384-WdKcx5F2YF+J30txACXDR6Jtab6dZ46yFh5xpn7TJpA/OZe2V0VQBes+adlQjpj6"></script>
+  <script src="js/infrastructure/storage/settings-repository.js?v=2.0.7" integrity="sha384-fp7ck757BhOA+Y2i/VoW21KRCkeMyb/G78wxwhZuReB2JbzcyTxBrLxGldhvw3n3"></script>
+  <script src="js/infrastructure/storage/journal-overflow-repository.js?v=2.0.7" integrity="sha384-uRxi9B+oBHCQ+aa8a6Wp72RAAeEuslXu5kZ+gf9Kvo22B3N6fr1XSkVnAV1X42yO"></script>
 </head>
 <body class="min-h-screen flex flex-col font-sans transition-colors duration-200">
 
@@ -1557,7 +1559,7 @@
       <div class="app-brand flex items-center gap-2 sm:gap-2.5 min-w-0 cursor-pointer select-none" onclick="switchView('hub')">
         <img src="icons/sulsul_bear_mascot.png" class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl object-cover border border-[#e6e2d8] dark:border-stone-800 shadow-sm shrink-0" alt="Sulsul Travel">
           <h1 class="font-brand-script text-xl sm:text-2xl md:text-3xl font-bold tracking-normal text-[#1E2B24] dark:text-[#ededed] whitespace-nowrap leading-tight">Sulsul Travel</h1>
-            <button id="app-ver-badge" type="button" onclick="event.stopPropagation(); openVersionHistoryModal()" class="theme-card-subtle font-mono" title="앱 버전과 업데이트 기록 보기">v2.0.6</button>
+            <button id="app-ver-badge" type="button" onclick="event.stopPropagation(); openVersionHistoryModal()" class="theme-card-subtle font-mono" title="앱 버전과 업데이트 기록 보기">v2.0.7</button>
             <p id="header-trip-name" class="sr-only">A Deep Life Essay</p>
       </div>
 
@@ -4768,7 +4770,10 @@
 
       <!-- 버전 목록 스크롤 영역 (독립 스크롤 컨테이너로 Flexbox 압축 버그 영구 척결) -->
       <div class="overflow-y-auto flex-1 min-h-0 space-y-3.5 pr-1.5 custom-scrollbar">
-        <!-- v2.0.6 (Current) -->
+        <!-- v2.0.7 (Current) -->
+        <section class="companion-context"><h3 class="font-bold">v2.0.7 · 저장을 차례대로, 끝난 뒤에 화면으로</h3><p class="text-xs">2026-11-23 · st-shell-v2.0.7</p><p class="text-xs leading-relaxed">여행 저장을 비동기 명령으로 바꿨습니다. 모든 저장은 한 줄로 차례대로 실행되고, 저장이 끝난 뒤에만 화면과 안내가 바뀝니다. 삭제 확인 창은 저장이 끝날 때까지 기다리고, 예제 추가를 연달아 눌러도 하나만 생깁니다. 다음 업데이트에서 여행 자료를 기기 문서보다 큰 브라우저 저장소(IndexedDB)로 옮기기 위한 준비입니다.</p></section>
+
+        <!-- v2.0.6 -->
         <section class="companion-context"><h3 class="font-bold">v2.0.6 · 기록 사진을 사진 보관소로</h3><p class="text-xs">2026-11-23 · st-shell-v2.0.6</p><p class="text-xs leading-relaxed">하루 회고·일정 기록·순간 기록 사진을 기기 문서 대신 브라우저의 사진 보관소(IndexedDB)에 둡니다. 사진이 15~25장만 쌓여도 저장 공간이 가득 차던 한계가 사라집니다. 처음 옮기기 전에 원래 자료를 따로 보관하고, 보관소의 사진과 똑같은지 확인한 사진만 옮깁니다. 설정 → 데이터에서 저장 공간·영구 보관·마지막 백업을 확인할 수 있고, 백업이 오래되면 알려 드립니다.</p></section>
 
         <!-- v2.0.5 -->
@@ -5696,7 +5701,7 @@
 
       <!-- 모달 푸터 -->
       <div class="pt-3 border-t border-[#e8e2d5] dark:border-stone-800 flex items-center justify-between shrink-0">
-        <span class="text-[11px] text-stone-400 dark:text-stone-500 font-mono">Sulsul Travel Engine v2.0.6</span>
+        <span class="text-[11px] text-stone-400 dark:text-stone-500 font-mono">Sulsul Travel Engine v2.0.7</span>
         <button onclick="closeModal('modal-version-history')" class="px-4 py-2 rounded-xl bg-[#faf8f5] dark:bg-stone-800 hover:bg-[#f0ece1] dark:hover:bg-stone-700 border border-[#e8e2d5] dark:border-stone-700 text-[#1c1917] dark:text-[#ededed] text-xs font-bold transition cursor-pointer shadow-sm">
           닫기
         </button>
@@ -6307,7 +6312,7 @@
     window.showToast = showToast;
 
     // 앱 버전 및 글로벌 네임스페이스 (Sulsul-Travel Invariant Rule R-10, R-11, R-12, R-13, R-14, R-15, R-16)
-    const APP_VER = '2.0.6';
+    const APP_VER = '2.0.7';
 
     // ══════════════════════════════════════════
     // [3-Way Theme System] 모던, 라이트그레이, 딥 블랙 테마 엔진 (v1.6.7)
@@ -6821,11 +6826,12 @@
     };
 
     // 지출 사진과 기록 사진은 IDB 보관본과 대조된 것만 문서에서 빼고(project), 읽을 때 채운다(hydrate).
-    const TripRepository = window.SulsulTravel.LegacyTripRepository ? new window.SulsulTravel.LegacyTripRepository(localStorage,{
+    // 저장은 TripStore의 줄을 지난다(비동기). 저장 결과는 그 작업 안에서 State.trips에 반영되므로 부르는 쪽은 await만 한다.
+    const TripRepository = window.SulsulTravel.LegacyTripRepository && window.SulsulTravel.TripStore ? new window.SulsulTravel.TripStore(new window.SulsulTravel.LegacyTripRepository(localStorage,{
       beforeWrite:guardSharedTravelWrite,
       serialize:trips=>SulsulTravel.recordMediaStore.project(SulsulTravel.expensePhotoRepository.project(trips)),
       restore:trips=>SulsulTravel.recordMediaStore.hydrate(SulsulTravel.expensePhotoRepository.hydrate(trips))
-    }) : null;
+    }),{getTrips:()=>State.trips,setTrips:trips=>{State.trips=trips;}}) : null;
     // 새 사진은 보관이 끝날 때 대조 목록에 들어가 첫 저장부터 문서에서 빠진다(MediaRepository.onStored).
     // 옛 문서의 사진은 부팅 때 한 번 대조·보관하고 initApp의 정규화 저장에서 함께 반영한다. 뒤늦은 백그라운드 저장은 하지 않는다.
     // 백그라운드 저장은 사진 최적화·백업 복원·Gist 복원이 기준으로 잡은 원문을 바꿔 거짓 충돌을 만들기 때문이다.
@@ -6889,7 +6895,7 @@
       // 기록 사진 보관본을 읽어 둔다. 실패해도 문서 안의 사진으로 그대로 동작하고, 아무 사진도 문서에서 빼지 않는다.
       try { State.recordMediaBoot = await prepareRecordMediaAtBoot(localStorage.getItem('st_trips_v2')); }
       catch(error) { State.recordMediaBoot = {error: error?.message || String(error)}; console.warn('[기록 사진 부팅 준비]',error?.message||error); }
-      initApp();
+      await initApp();
       SulsulTravel.MobileNavigation.start();
       SulsulShell.started=true;
       // 백업이 오래됐거나 저장 공간이 거의 찼으면 하루 한 번 알린다. 첫 화면 안내와 겹치지 않게 조금 늦춘다.
@@ -6908,13 +6914,13 @@
       }
     });
 
-    function initApp() {
+    async function initApp() {
       // 0. 컬러 테마 초기화 (3-Way Theme System)
       const savedTheme = localStorage.getItem('st_theme') || 'modern';
       setTheme(savedTheme);
 
       // 1. LocalStorage에서 여행 컬렉션 로드 (하위 호환 마이그레이션)
-      const loadedTrips = TripRepository.loadAll();
+      const loadedTrips = await TripRepository.loadAll();
       State.trips = loadedTrips.trips;
       // 부팅 때 새로 보관한 옛 기록 사진의 mediaId를 붙인다. 아래 정규화 저장이 그 사진을 문서에서 뺀다.
       if (!loadedTrips.recoveredFromCorruption && State.recordMediaBoot?.patches?.length) State.trips = SulsulTravel.recordMediaStore.applyPatches(State.trips, State.recordMediaBoot.patches).trips;
@@ -6930,7 +6936,7 @@
           try {
             const parsedLegacy = JSON.parse(legacyTrip);
             parsedLegacy.id = parsedLegacy.id || 'trip_' + Date.now();
-            State.trips = TripRepository.saveAll([parsedLegacy]);
+            await TripRepository.saveAll([parsedLegacy]);
             try { localStorage.removeItem('st_current_trip'); } catch (_) {}
           } catch(e) {}
         }
@@ -6948,7 +6954,7 @@
       }
 
       // 4. URL 데이터 패킹 공유 임포트 확인 (Zero-Backend)
-      checkUrlShareImportOnStartup();
+      await checkUrlShareImportOnStartup();
 
       // 5. [v1.4.4] 여행 데이터 자동 자가 치유 (Self-Healing Migration): 국가 및 도시 표준 분리·정규화
       if (Array.isArray(State.trips)) {
@@ -6973,7 +6979,7 @@
         State.activeTripId = State.trips[0].id;
       }
 
-      if (!State.storageRecovery && !SulsulTravel.expensePhotoRepository.missingReferences().length) saveTrips({ bump: false });
+      if (!State.storageRecovery && !SulsulTravel.expensePhotoRepository.missingReferences().length) await saveTrips({ bump: false });
       updateHubFilterDropdowns();
       updateHubViewModeButtonUi();
       renderConceptChips();
@@ -7043,7 +7049,7 @@
       if (snapshotNotice) snapshotNotice.hidden = !location.hash.startsWith('#share=');
     }
 
-    function deleteRetiredBuiltInTrip(tripId) {
+    async function deleteRetiredBuiltInTrip(tripId) {
       const trip = State.trips.find(item => item.id === tripId && isRetiredBuiltInTrip(item));
       if (!trip) return false;
       if (State.trips.filter(item => item.id === tripId).length !== 1) {
@@ -7051,7 +7057,7 @@
         return false;
       }
       if (!confirm(`이전 기본 초안 “${trip.title}”을 이 기기에서 삭제할까요?\n\n이 여행에서 편집한 글·사진·지출도 삭제됩니다. 필요한 기록은 먼저 전체 백업하거나 별도 사본을 만드세요. 다른 여행은 유지됩니다.`)) return false;
-      try { State.trips = persistDemoChoice(State.trips.filter(item => item.id !== tripId), 'choose'); }
+      try { await persistDemoChoice(current => current.filter(item => item.id !== tripId), 'choose'); }
       catch (_) { showToast('이전 초안 삭제를 저장하지 못했습니다. 일정·기록은 그대로 유지됩니다.'); return false; }
       if (State.activeTripId === tripId) State.activeTripId = State.trips[0]?.id || null;
       JournalOverflowRepository.deleteTrip(tripId).catch(() => showToast('초안은 삭제했지만 보조 기록 정리를 마치지 못했습니다.'));
@@ -7065,11 +7071,12 @@
       return localStorage.getItem('st_demo_choice_v1') || (localStorage.getItem('st_sa_sample_deleted') === 'true' ? 'dismissed' : '');
     }
 
-    function persistDemoChoice(nextTrips, choice) {
+    // nextTrips는 새 목록 또는 저장 직전 목록을 받아 새 목록을 만드는 함수다. 저장에 실패하면 선택 기록도 되돌린다.
+    async function persistDemoChoice(nextTrips, choice) {
       const previousChoice = localStorage.getItem('st_demo_choice_v1');
       try {
         localStorage.setItem('st_demo_choice_v1', choice);
-        return TripRepository.saveAll(nextTrips);
+        return await TripRepository.saveAll(nextTrips);
       } catch (error) {
         try {
           if (previousChoice === null) localStorage.removeItem('st_demo_choice_v1');
@@ -7098,7 +7105,7 @@
       return true;
     }
 
-    function addDemoTrip() {
+    async function addDemoTrip() {
       const existing = State.trips.find(isDemoTrip);
       if (existing) { openTripWorkspace(existing.id); return true; }
       // 같은 ID의 개인 데이터가 있으면 덮어쓰지 않는다.
@@ -7107,7 +7114,8 @@
       }
       const demo = JSON.parse(JSON.stringify(KB_TRAVEL.templates.demo_travel_5d));
       demo.createdAt = new Date().toISOString();
-      try { State.trips = persistDemoChoice([demo, ...State.trips], 'added'); }
+      // 저장 줄에서 기다리는 사이 같은 예제가 먼저 추가됐으면(연타) 다시 넣지 않는다.
+      try { await persistDemoChoice(current => current.some(trip => trip.id === demo.id) ? current : [demo, ...current], 'added'); }
       catch (_) { showToast('예제를 저장하지 못했습니다. 기존 여행은 유지됩니다.'); return false; }
       State.activeTripId = demo.id;
       updateHubFilterDropdowns(); renderHub(); closeModal('modal-settings', true); openTripWorkspace(demo.id);
@@ -7115,10 +7123,10 @@
       return true;
     }
 
-    function deleteDemoTrips() {
+    async function deleteDemoTrips() {
       const demos = State.trips.filter(isDemoTrip);
       if (demos.length && !confirm('가상 예제 초안을 삭제할까요? 예제에서 편집한 글·사진도 삭제됩니다. 내 여행과 별도로 복사한 여행은 유지됩니다.')) return false;
-      try { State.trips = persistDemoChoice(State.trips.filter(trip => !isDemoTrip(trip)), 'dismissed'); }
+      try { await persistDemoChoice(current => current.filter(trip => !isDemoTrip(trip)), 'dismissed'); }
       catch (_) { showToast('예제 삭제를 저장하지 못했습니다. 기존 여행은 유지됩니다.'); return false; }
       if (!State.trips.some(trip => trip.id === State.activeTripId)) State.activeTripId = State.trips[0]?.id || null;
       demos.forEach(trip => {
@@ -7129,26 +7137,24 @@
       showToast('예제 초안을 제거했습니다. 다시 시작해도 자동 추가되지 않습니다.');
       return true;
     }
-    function saveTrips({ bump = true } = {}) {
+    // 메모리의 State를 직접 고친 경로(부팅 정규화·렌더 중 구조 보정)의 저장. 실패하면 마지막 저장본으로 되돌린다.
+    async function saveTrips({ bump = true } = {}) {
       // 사진 원본을 확인하지 못한 부팅·렌더의 자동 정리는 원문을 다시 쓰지 않는다.
       if (!bump && SulsulTravel.expensePhotoRepository.missingReferences().length) return false;
       try {
-        State.trips = TripRepository.saveAll(State.trips, {
-          bumpTripId: bump ? State.activeTripId : null
+        await TripRepository.saveAll(current => current, {
+          bumpTripId: bump ? State.activeTripId : null,
+          restoreOnFailure: true
         });
         return true;
       } catch (err) {
         if(err?.code==='STORAGE_CONFLICT') {
-          const committed=TripRepository.getCommittedTrips();
-          if(committed)State.trips=committed;
           showToast(err.message,7000);return false;
         }
         if(err?.code==='READ_ONLY_TRIP') {
-          State.trips=TripRepository.loadAll().trips;
+          await TripRepository.reload();
           showToast(err.message,6000);return false;
         }
-        const committed=TripRepository.getCommittedTrips();
-        if(committed)State.trips=committed;
         console.error('[Storage] QuotaExceededError or write failed:', err);
         showToast('⚠️ 로컬 저장 공간이 부족합니다. 오래된 사진이나 데이터를 정리해주세요.');
         return false;
@@ -7159,9 +7165,10 @@
       return error?.code !== 'STORAGE_CONFLICT' && (error?.name === 'QuotaExceededError' || /quota|storage|write/i.test(String(error?.message || error || '')));
     }
 
-    function commitTripCommand({tripId, expectedRevision, change}) {
+    // 저장에 성공하면 true. State.trips는 저장소가 그 저장 작업 안에서 바꾼다.
+    async function commitTripCommand({tripId, expectedRevision, change}) {
       try {
-        State.trips=TripRepository.commit(State.trips,{tripId,expectedRevision,change});
+        await TripRepository.commit({tripId,expectedRevision,change});
         return true;
       } catch(error) {
         showToast(commitFailureMessage(error),7000);
@@ -7174,28 +7181,29 @@
         ?error.message:'저장하지 못했습니다. 기존 내용과 편집 초안을 유지합니다. 저장 공간을 확인하고 다시 시도해 주세요.';
     }
 
-    // 바로 적용하는 조작(토글·확인 후 삭제 등)은 지금의 revision으로 여행 하나를 고친다.
+    // 바로 적용하는 조작(토글·확인 후 삭제 등)은 저장이 실행되는 순간의 revision으로 여행 하나를 고친다.
     // change는 저장소가 만든 복사본을 받는다. 저장에 성공해야 State가 바뀐다.
-    function commitTrip(tripId, change) {
+    async function commitTrip(tripId, change) {
       const trip=State.trips.find(item=>item.id===tripId);
       if(!trip){showToast('여행을 찾지 못했습니다. 목록을 새로 열어 주세요.',5000);return false;}
-      return commitTripCommand({tripId,expectedRevision:trip.revision,change});
+      return commitTripCommand({tripId,expectedRevision:undefined,change});
     }
 
     // 기록 하나(하루 회고·일정 기록·순간 기록)를 쓰는 명령. 충돌은 여행 revision이 아니라 편집을 시작할 때의
     // 그 기록과 지금 기록이 같은지로 판단한다(호출한 화면이 확인). 그래서 다른 일정·기록의 변경은 저장을 막지 않는다.
     // write는 저장소가 만든 복사본을 받는다. 실패하면 예외를 그대로 던지고 State는 바꾸지 않는다. 안내는 호출한 화면이 한다.
-    function commitTripRecord(tripId, write) {
+    async function commitTripRecord(tripId, write) {
       const trip=State.trips.find(item=>item.id===tripId);
       if(!trip)throw new Error('여행을 찾지 못했습니다. 글 파일로 먼저 보관해 주세요.');
-      State.trips=TripRepository.commit(State.trips,{tripId,expectedRevision:trip.revision,change:write});
+      await TripRepository.commit({tripId,expectedRevision:undefined,change:write});
       return State.trips.find(item=>item.id===tripId);
     }
 
     // 여행을 더하거나 빼는 명령. 새 목록을 저장한 뒤에만 State와 활성 여행을 바꾼다.
-    function commitTripsCommand(nextTrips, {bumpTripId=null, activeTripId}={}) {
+    // nextTrips는 저장 직전 목록을 받아 새 목록을 만드는 함수가 안전하다(배열이면 그 사이 다른 저장이 끝났을 때 거절된다).
+    async function commitTripsCommand(nextTrips, {bumpTripId=null, activeTripId}={}) {
       try {
-        State.trips=TripRepository.saveAll(nextTrips,{bumpTripId});
+        await TripRepository.saveAll(nextTrips,{bumpTripId});
         if(activeTripId!==undefined)State.activeTripId=activeTripId;
         return true;
       } catch(error) {
@@ -7255,7 +7263,7 @@
       return pack ? pack.id === 'pack_china_yunnan_13d' : false;
     }
 
-    function applyYunnanGoldenCourse() {
+    async function applyYunnanGoldenCourse() {
       const trip = getActiveTrip();
       if (!trip) return;
       const pack = resolveTripPack(trip);
@@ -7267,7 +7275,7 @@
       const itinerary = (typeof pack.getGoldenItinerary === 'function') 
         ? pack.getGoldenItinerary(13) 
         : (pack.goldenItinerary || []);
-      const applied = commitTrip(trip.id, target => {
+      const applied = await commitTrip(trip.id, target => {
         target.days = JSON.parse(JSON.stringify(itinerary));
         target.durationDays = target.days.length;
         target.countries = ['중국'];
@@ -9834,7 +9842,7 @@
       const reader = new FileReader();
       reader.onload = (e) => {
         const img = new Image();
-        img.onload = () => {
+        img.onload = async () => {
           // 16:9 와이드 비율 중앙 크롭 및 자동 압축 정규화
           const targetW = 800;
           const targetH = 450;
@@ -9862,7 +9870,7 @@
           ctx.drawImage(img, sx, sy, sWidth, sHeight, 0, 0, targetW, targetH);
           const compressedDataUrl = canvas.toDataURL('image/jpeg', 0.82);
 
-          if (commitTrip(tripId, target => { target.coverPhoto = compressedDataUrl; })) {
+          if (await commitTrip(tripId, target => { target.coverPhoto = compressedDataUrl; })) {
             renderTripCards();
             showToast('📷 여행 대표 사진이 등록되었습니다!');
           }
@@ -9872,10 +9880,10 @@
       reader.readAsDataURL(file);
     }
 
-    function removeTripCover(tripId, event) {
+    async function removeTripCover(tripId, event) {
       if (event) event.stopPropagation();
       if (confirm('등록된 대표 사진을 삭제하고 기본 테마로 변경하시겠습니까?')) {
-        if (commitTrip(tripId, target => { delete target.coverPhoto; })) {
+        if (await commitTrip(tripId, target => { delete target.coverPhoto; })) {
           renderTripCards();
           showToast('기본 테마로 복원되었습니다.');
         }
@@ -10669,7 +10677,7 @@
       if (!form.place) { showToast('거점을 입력해 주세요.'); return; }
       const changeSummary = describePlanBlockEditChanges(block, form);
       // 저장에 실패하면 편집 창과 입력을 그대로 두고 State도 바꾸지 않는다.
-      const saved = commitTrip(trip.id, target => {
+      const saved = await commitTrip(trip.id, target => {
         target.planBlockMeta = target.planBlockMeta || {};
         target.planBlockMeta[id] = {
           ...(target.planBlockMeta[id] || {}),
@@ -10730,7 +10738,7 @@
       renderCompanionToday();
     }
 
-    function completeTodaySpot(dayIndex, spotIndex, event) { toggleSpotCompleted(dayIndex, spotIndex, event); renderTodayTab(); }
+    async function completeTodaySpot(dayIndex, spotIndex, event) { await toggleSpotCompleted(dayIndex, spotIndex, event); renderTodayTab(); }
     function skipTodaySpot(dayIndex,spotIndex,event){openScheduleChange(dayIndex,spotIndex,event);}
 
     // 워크스페이스 렌더링
@@ -11607,10 +11615,10 @@
       renderBookingGuides();
     }
 
-    function toggleBookingGuideCompleted(guideId) {
+    async function toggleBookingGuideCompleted(guideId) {
       const trip = getActiveTrip();
       if (!trip) return;
-      commitTrip(trip.id, target => {
+      await commitTrip(trip.id, target => {
         target.bookingStatuses = target.bookingStatuses || {};
         target.bookingStatuses[guideId] = !target.bookingStatuses[guideId];
       });
@@ -12714,9 +12722,9 @@
         '환전 내역을 취소하시겠습니까?',
         `${exch.fromCurr} ${Number(exch.fromAmount).toLocaleString()} ➔ ${exch.toCurr} ${Number(exch.toAmount).toLocaleString()}`,
         '환전이 취소되어 출금 통화 잔액이 복구되고 입금 통화 잔액이 차감됩니다.',
-        () => {
+        async () => {
           // 확인 창을 연 뒤 여행이 바뀌었으면 다른 환전을 지우지 않도록 거절한다. 실패하면 창을 남긴다.
-          const removed = commitTripCommand({tripId: trip.id, expectedRevision, change: target => {
+          const removed = await commitTripCommand({tripId: trip.id, expectedRevision, change: target => {
             const index = (target.exchanges || []).findIndex((item, position) => exch.id ? item.id === exch.id : position === exchIdx);
             if (index >= 0) target.exchanges.splice(index, 1);
           }});
@@ -13011,7 +13019,7 @@
     }
     window.updateInitialFundsPreview = updateInitialFundsPreview;
 
-    function saveInitialFundsAndBudget() {
+    async function saveInitialFundsAndBudget() {
       const trip = getActiveTrip();
       if (!trip) return;
 
@@ -13047,7 +13055,7 @@
         }
       }
 
-      const saved = commitTrip(trip.id, target => {
+      const saved = await commitTrip(trip.id, target => {
         target.currency = baseCurr;
         target.activeCurrencies = modalActiveCurrencies.slice();
         target.initialBalances = target.initialBalances || {};
@@ -13204,14 +13212,14 @@
     }
     window.renderAddCurrencyGrid = renderAddCurrencyGrid;
 
-    function selectAddCurrency(code) {
+    async function selectAddCurrency(code) {
       const trip = getActiveTrip();
       if (!trip) return;
       if ((Array.isArray(trip.activeCurrencies) ? trip.activeCurrencies : ['KRW']).includes(code)) {
         showToast(`ℹ️ 이미 활성화되어 있는 통화입니다: ${code}`);
         return;
       }
-      const added = commitTrip(trip.id, target => {
+      const added = await commitTrip(trip.id, target => {
         if (!Array.isArray(target.activeCurrencies)) target.activeCurrencies = ['KRW'];
         if (!target.activeCurrencies.includes(code)) target.activeCurrencies.push(code);
         if (!target.initialBalances) target.initialBalances = {};
@@ -13413,7 +13421,7 @@
       `;
     }
 
-    function submitAddExchange() {
+    async function submitAddExchange() {
       const fromCurr = document.getElementById('exch-form-from-curr')?.value;
       const toCurr = document.getElementById('exch-form-to-curr')?.value;
       const fromAmt = parseFloat(document.getElementById('exch-form-from-amount')?.value);
@@ -13441,7 +13449,7 @@
         if (!proceed) return;
       }
 
-      const exchanged = commitTrip(trip.id, target => {
+      const exchanged = await commitTrip(trip.id, target => {
         if (!Array.isArray(target.exchanges)) target.exchanges = [];
         target.exchanges.unshift({
           id: 'exch_' + Date.now(),
@@ -13464,12 +13472,12 @@
     }
     window.submitAddExchange = submitAddExchange;
 
-    function toggleMepRate() {
+    async function toggleMepRate() {
       const checkbox = document.getElementById('chk-mep-rate');
       const enabled = checkbox.checked;
       const trip = getActiveTrip();
       if (trip && trip.expenses) {
-        const saved = commitTrip(trip.id, target => {
+        const saved = await commitTrip(trip.id, target => {
           (target.expenses || []).forEach(e => {
             if (e.curr === 'ARS') e.krw = enabled ? Math.round(e.amount * 0.95) : Math.round(e.amount * 1.38);
           });
@@ -13790,7 +13798,7 @@
       renderJournalTab();
     }
 
-    function saveJournalText() {
+    async function saveJournalText() {
       const trip = getActiveTrip();
       if (!trip) return false;
       const dayIndex = State.activeJournalDay;
@@ -13799,7 +13807,7 @@
       rememberJournalDraft();
       try {
         if(input.dataset.tripId && (input.dataset.tripId!==trip.id || input.dataset.dayId!==trip.days?.[dayIndex]?.id))throw new Error('기록을 작성한 날짜가 변경되었습니다.');
-        commitTripRecord(trip.id, target => {
+        await commitTripRecord(trip.id, target => {
           SulsulTravel.TripAdapter.setJournalEntry(target, dayIndex, {...(SulsulTravel.TripAdapter.getJournalEntry(target, dayIndex) || {photos:[]}), text:input.value});
         });
       }
@@ -13845,11 +13853,11 @@
           const key=sourceDraftKey;
           const pending=State.journalPhotoDrafts[key] || {dayId:sourceDayId,date:sourceDate,photos:[]};
           pending.photos.push(prepared);State.journalPhotoDrafts[key]=pending;
-          saveJournalPhotoDraft(sourceTripId,sourceDayIndex,sourceDayId);
+          await saveJournalPhotoDraft(sourceTripId,sourceDayIndex,sourceDayId);
       } catch(error) {showToast('사진을 준비하지 못했습니다. 작성 중인 글은 보존됩니다. '+(error.message || ''),6000);}
     }
 
-    function saveJournalPhotoDraft(sourceTripId,sourceDayIndex,sourceDayId) {
+    async function saveJournalPhotoDraft(sourceTripId,sourceDayIndex,sourceDayId) {
       const sourceTrip=State.trips.find(item=>item.id===sourceTripId);
       sourceDayId=sourceDayId || sourceTrip?.days?.[sourceDayIndex]?.id;
       const key=sourceDayId ? `${sourceTripId}:${sourceDayId}` : SulsulTravel.TripAdapter.journalDraftKey(sourceTrip,sourceDayIndex);
@@ -13858,7 +13866,7 @@
       if(getActiveTrip()?.id===sourceTripId&&State.activeJournalDay===sourceDayIndex)rememberJournalDraft();
       try {
           const textDraft = State.journalTextDrafts?.[key];
-          commitTripRecord(sourceTripId, trip => {
+          await commitTripRecord(sourceTripId, trip => {
             if (trip.days?.[sourceDayIndex]?.date !== pending.date) throw new Error('사진을 선택한 여행 날짜가 변경되었습니다. 초안을 파일로 먼저 보관해 주세요.');
             trip.journals = trip.journals || {};
             const record=SulsulTravel.TripAdapter.setJournalEntry(trip, sourceDayIndex, SulsulTravel.TripAdapter.getJournalEntry(trip, sourceDayIndex) || {text:'',photos:[]});
@@ -13969,10 +13977,10 @@
       renderChecklistTab();
     }
 
-    function checkAllChecklistItems(isComplete) {
+    async function checkAllChecklistItems(isComplete) {
       const trip = getActiveTrip();
       if (!trip || !trip.checklist) return;
-      commitTrip(trip.id, target => {
+      await commitTrip(trip.id, target => {
         (target.checklist || []).forEach(item => { item.checked = isComplete; });
       });
       renderChecklistTab();
@@ -14075,9 +14083,9 @@
       }
     }
 
-    function toggleChecklistItem(idx) {
+    async function toggleChecklistItem(idx) {
       const trip=getActiveTrip(),item=trip?.checklist?.[idx];if(!item||!requireSharedPlanEdit())return;
-      commitTripCommand({tripId:trip.id,expectedRevision:trip.revision,change:draft=>{draft.checklist[idx].checked=!item.checked;}});
+      await commitTripCommand({tripId:trip.id,expectedRevision:trip.revision,change:draft=>{draft.checklist[idx].checked=!item.checked;}});
       renderChecklistTab();
     }
 
@@ -14093,9 +14101,15 @@
       pendingDeleteAction = onConfirm;
       
       const btn = document.getElementById('confirm-delete-btn');
-      btn.onclick = () => {
-          const result = pendingDeleteAction ? pendingDeleteAction() : true;
+      btn.onclick = async () => {
+        if (btn.dataset.busy === 'true') return;
+        btn.dataset.busy = 'true';
+        try {
+          const result = pendingDeleteAction ? await pendingDeleteAction() : true;
           if (result === false) return;
+        } finally {
+          delete btn.dataset.busy;
+        }
         closeModal('modal-confirm-delete', true);
         pendingDeleteAction = null;
       };
@@ -14112,22 +14126,19 @@
         '여행 다이어리를 삭제하시겠습니까?',
         trip.title,
         '이 기기의 여행 일정, 지출, 사진과 기록을 삭제합니다. 다른 사본이 사용하는 사진은 보존하며, 공유 서버와 외부 백업의 여행은 따로 관리해야 합니다.',
-        () => {
-          const previousTrips = State.trips;
+        async () => {
           const previousActiveTripId = State.activeTripId;
-          const nextTrips = previousTrips.filter(t => t.id !== tripId);
-          const nextActiveTripId = nextTrips.some(t => t.id === previousActiveTripId)
-            ? previousActiveTripId
-            : (nextTrips[0]?.id || null);
+          const removeTrip = current => current.filter(t => t.id !== tripId);
           try {
-            State.trips = isDemoTrip(trip) ? persistDemoChoice(nextTrips, 'dismissed') : TripRepository.saveAll(nextTrips);
+            if (isDemoTrip(trip)) await persistDemoChoice(removeTrip, 'dismissed');
+            else await TripRepository.saveAll(removeTrip);
           } catch (error) {
-            State.trips = previousTrips;
-            State.activeTripId = previousActiveTripId;
             showToast('삭제를 저장하지 못했습니다. 저장 공간을 확인하고 다시 시도해 주세요.');
             return false;
           }
-          State.activeTripId = nextActiveTripId;
+          State.activeTripId = State.trips.some(t => t.id === previousActiveTripId)
+            ? previousActiveTripId
+            : (State.trips[0]?.id || null);
           JournalOverflowRepository.deleteTrip(tripId).catch(error => {
             console.warn('[Storage] Deleted trip overflow cleanup failed:', error?.message || error);
             showToast('여행은 삭제했지만 보조 일기 데이터 정리에 실패했습니다. 브라우저 저장소를 확인해 주세요.', 5000);
@@ -14143,7 +14154,7 @@
       );
     }
 
-    function duplicateTrip(tripId, event) {
+    async function duplicateTrip(tripId, event) {
       if (event) event.stopPropagation();
       const trip = State.trips.find(t => t.id === tripId);
       if (!trip) return;
@@ -14168,7 +14179,7 @@
         });
       }
 
-      if (!commitTripsCommand([cloned, ...State.trips], { bumpTripId: cloned.id, activeTripId: cloned.id })) return;
+      if (!await commitTripsCommand(current => [cloned, ...current], { bumpTripId: cloned.id, activeTripId: cloned.id })) return;
       updateHubFilterDropdowns();
       renderHub();
       showToast(`📋 [${cloned.title}] 여정이 성공적으로 복제되었습니다!`);
@@ -14179,8 +14190,8 @@
       event?.stopPropagation();if(!requireSharedPlanEdit())return;
       const trip=getActiveTrip(),day=trip?.days[dayIdx],spot=day?.spots[spotIdx];if(!spot)return;
       const tripId=trip.id,revision=trip.revision,dayId=day.id,itemId=spot.id;
-      showConfirmDelete('일정에서 제거하시겠습니까?',spot.title,'글·사진과 원래 계획은 남습니다. 제거 후 되돌리기 또는 보관 목록에서 복구할 수 있습니다.',()=>{
-        if(!commitLiveSchedule({type:'remove',tripId,dayId,itemId},revision,'일정에서 제거했습니다. 되돌리기로 복구할 수 있습니다.'))return false;
+      showConfirmDelete('일정에서 제거하시겠습니까?',spot.title,'글·사진과 원래 계획은 남습니다. 제거 후 되돌리기 또는 보관 목록에서 복구할 수 있습니다.',async ()=>{
+        if(!await commitLiveSchedule({type:'remove',tripId,dayId,itemId},revision,'일정에서 제거했습니다. 되돌리기로 복구할 수 있습니다.'))return false;
         closeModal('modal-schedule-change',true);return true;
       });
     }
@@ -14197,8 +14208,8 @@
         `${label} 내역을 삭제하시겠습니까?`,
         `${exp.title} (${exp.curr} ${(exp.amount||0).toLocaleString()} · ≈ ₩${(exp.krw||0).toLocaleString()})`,
         '가계부 및 지갑 잔액 통계에서 즉시 제외됩니다.',
-        () => {
-          if(!commitTripCommand({tripId,expectedRevision:revision,change:target=>{
+        async () => {
+          if(!await commitTripCommand({tripId,expectedRevision:revision,change:target=>{
             const index=target.expenses.findIndex(item=>item.id===expenseId);
             if(index<0)throw new Error('삭제할 거래가 변경되었습니다.');
             target.expenses.splice(index,1);
@@ -14219,8 +14230,8 @@
         '사진을 삭제하시겠습니까?',
         `Day ${dayIdx + 1} 등록 사진`,
         '다이어리에서 선택한 사진이 영구 제거됩니다.',
-        () => {
-          if(!commitTripCommand({tripId,expectedRevision:revision,change:target=>{
+        async () => {
+          if(!await commitTripCommand({tripId,expectedRevision:revision,change:target=>{
             const index=target.days.findIndex(day=>day.id===dayId),entry=adapter.getJournalEntry(target,index);
             if(!entry || entry.id!==journalId || JSON.stringify([entry.photos,entry.photoThumbnails,entry.mediaIds])!==photoSnapshot)throw new Error('삭제할 사진이 변경되었습니다. 다시 확인해 주세요.');
             entry.photos.splice(photoIdx,1);entry.photoThumbnails?.splice(photoIdx,1);entry.mediaIds?.splice(photoIdx,1);
@@ -14560,10 +14571,10 @@
 
     function checkUrlShareImportOnStartup() { return importTravelSnapshotHash(); }
 
-    function saveCurrentTripToDevice() {
+    async function saveCurrentTripToDevice() {
       const trip = getActiveTrip();
       if (!trip) return;
-      if (!commitTrip(trip.id, () => {})) return;
+      if (!await commitTrip(trip.id, () => {})) return;
       alert(`[💾 이 기기에 저장 완료]\n[${trip.title}]의 최신 일정과 기록을 현재 브라우저 저장소에 보관했습니다. 다른 기기와 실시간으로 합쳐지지는 않으므로 공유 링크 또는 JSON 백업을 함께 사용하세요.`);
       renderActiveTripWorkspace();
     }
@@ -15839,7 +15850,7 @@
       return result;
     }
 
-    function submitCreateTrip() {
+    async function submitCreateTrip() {
       try {
         const title = document.getElementById('trip-form-title').value.trim();
         const start = document.getElementById('trip-form-start').value;
@@ -16061,7 +16072,7 @@
         };
 
         // 저장하지 못하면 만들기 창과 입력을 그대로 둔다.
-        if (!commitTripsCommand([newTrip, ...State.trips], { bumpTripId: newTrip.id, activeTripId: newTrip.id })) return;
+        if (!await commitTripsCommand(current => [newTrip, ...current], { bumpTripId: newTrip.id, activeTripId: newTrip.id })) return;
         updateHubFilterDropdowns();
         closeModal('modal-create-trip', true);
 
@@ -16405,7 +16416,7 @@ ${JSON.stringify(snapshotDays)}`;
     }
 
     function getReplanDomain() {
-      if (!replanDomainPromise) replanDomainPromise = import('./js/domain/replan.mjs?v=2.0.6');
+      if (!replanDomainPromise) replanDomainPromise = import('./js/domain/replan.mjs?v=2.0.7');
       return replanDomainPromise;
     }
 
@@ -16479,7 +16490,7 @@ ${JSON.stringify(snapshotDays)}`;
         showToast('⚠️ 검토 중 계획이 바뀌어 적용하지 않았습니다. 현재 일정에서 다시 만들어 주세요.', 4500);
         return;
       }
-      const result = TripRepository.applyDraft(State.trips, {
+      const result = await TripRepository.applyDraft({
         tripId: pending.tripId,
         baseRevision: pending.baseRevision,
         jobId: pending.id,
@@ -16489,7 +16500,6 @@ ${JSON.stringify(snapshotDays)}`;
         showToast('⚠️ 변경안을 저장하지 못했습니다. 원래 계획은 유지됩니다.', 4500);
         return;
       }
-      State.trips = result.trips;
       State.pendingReplan = null;
       closeModal('modal-replan-review', true);
       renderActiveTripWorkspace();
@@ -17458,7 +17468,7 @@ ${JSON.stringify(snapshotDays)}`;
 
     async function getAiOrchestrator() {
       if (!aiOrchestratorPromise) {
-        aiOrchestratorPromise = import('./js/application/orchestration.mjs?v=2.0.6').then(({ Orchestrator }) =>
+        aiOrchestratorPromise = import('./js/application/orchestration.mjs?v=2.0.7').then(({ Orchestrator }) =>
           new Orchestrator({
             online: job => Boolean(job?.input?.localDraft) || navigator.onLine,
             timeoutMs: 65000,
@@ -17825,7 +17835,7 @@ ${JSON.stringify(snapshotDays)}`;
         if(getActiveTrip()?.id===job.tripId && State.activeJournalDay===job.input.dayIndex){const input=document.getElementById('journal-text-input');if(input)input.value=job.draft.text;}
       };
       try {
-        result = TripRepository.applyDraft(State.trips, {
+        result = await TripRepository.applyDraft({
           tripId: job.tripId,
           baseRevision: job.baseRevision,
           jobId: job.id,
@@ -17837,19 +17847,24 @@ ${JSON.stringify(snapshotDays)}`;
         // the AI text itself is small. Keep the approved journal in IndexedDB
         // so the user's writing is durable and can be restored on next launch.
         if (job.kind !== 'journal' || !isStorageWriteFailure(error)) throw error;
-        const next = JSON.parse(JSON.stringify(State.trips));
-        const fallbackTrip = next.find(item => item.id === job.tripId);
-        if (!fallbackTrip || fallbackTrip.revision !== job.baseRevision) return 'conflict';
-        mutateDraft(fallbackTrip);
-        fallbackTrip.revision = (Number.isInteger(fallbackTrip.revision) ? fallbackTrip.revision : 0) + 1;
-        fallbackTrip.updatedAt = new Date().toISOString();
-        fallbackTrip.appliedAiJobIds = [...(fallbackTrip.appliedAiJobIds || []), job.id].slice(-50);
-        await saveJournalOverflowEntry(fallbackTrip, job.input.dayIndex, fallbackTrip.journals[job.input.dayIndex], fallbackTrip.revision);
-        State.trips = next;
+        // 보조 보관소에 쓰는 동안 다른 저장이 끼어들지 않게 저장 줄 안에서 한다.
+        const kept = await TripRepository.run(async () => {
+          const next = JSON.parse(JSON.stringify(State.trips));
+          const fallbackTrip = next.find(item => item.id === job.tripId);
+          if (!fallbackTrip || fallbackTrip.revision !== job.baseRevision) return false;
+          mutateDraft(fallbackTrip);
+          fallbackTrip.revision = (Number.isInteger(fallbackTrip.revision) ? fallbackTrip.revision : 0) + 1;
+          fallbackTrip.updatedAt = new Date().toISOString();
+          fallbackTrip.appliedAiJobIds = [...(fallbackTrip.appliedAiJobIds || []), job.id].slice(-50);
+          await saveJournalOverflowEntry(fallbackTrip, job.input.dayIndex, fallbackTrip.journals[job.input.dayIndex], fallbackTrip.revision);
+          State.trips = next;
+          return true;
+        });
+        if (!kept) return 'conflict';
         acceptJournalInEditor();
         return 'applied';
       }
-      if (result.status === 'applied' && result.trips) {State.trips = result.trips;acceptJournalInEditor();}
+      if (result.status === 'applied' && result.trips) acceptJournalInEditor();
       return result.status;
     }
 
@@ -18647,10 +18662,10 @@ ${JSON.stringify(snapshotDays)}`;
         concepts:draftStudioState.concepts.slice(),wishlist:document.getElementById('ai-trip-prompt')?.value.trim()||'',
         hubAllocations:draftStudioState.hubs.map(hub=>({...hub}))};
     }
-    function saveDraftStudioSettingsOnly() {
+    async function saveDraftStudioSettingsOnly() {
       const trip=getActiveTrip();if(!trip||!requireSharedPlanEdit())return false;
       let settings;try{settings=captureDraftStudioSettings(trip);}catch(error){showToast(error.message);return false;}
-      if(!commitTripCommand({tripId:trip.id,expectedRevision:trip.revision,change:target=>Object.assign(target,settings)}))return false;
+      if(!await commitTripCommand({tripId:trip.id,expectedRevision:trip.revision,change:target=>Object.assign(target,settings)}))return false;
       renderActiveTripWorkspace();closeModal('modal-ai-trip',true);
       showToast('여행 설정을 저장했습니다. 기존 일정은 초안 승인 후 변경됩니다.');return true;
     }
@@ -18664,7 +18679,7 @@ ${JSON.stringify(snapshotDays)}`;
       if(button?.disabled)return false;
       let settings;try{settings=captureDraftStudioSettings(trip);}catch(error){showToast(error.message);return false;}
       if(engine!=='smart_local'){
-        if(!commitTripCommand({tripId,expectedRevision:revision,change:target=>Object.assign(target,settings)}))return false;
+        if(!await commitTripCommand({tripId,expectedRevision:revision,change:target=>Object.assign(target,settings)}))return false;
         await generateAiItinerary();return true;
       }
       if(button)button.disabled=true;if(loader)loader.classList.remove('hidden');
@@ -18676,7 +18691,7 @@ ${JSON.stringify(snapshotDays)}`;
           settings.arrivalTime,settings.departureTime,context,settings.hubAllocations);
         // 비동기 생성이 끝나도 처음 캡처한 객체를 수정하지 않는다.
         if(getActiveTrip()?.id!==tripId)throw new Error('다른 여행으로 이동했습니다. 원래 여행에서 다시 생성해 주세요.');
-        if(!commitTripCommand({tripId,expectedRevision:revision,change:target=>Object.assign(target,settings)}))return false;
+        if(!await commitTripCommand({tripId,expectedRevision:revision,change:target=>Object.assign(target,settings)}))return false;
         const current=State.trips.find(item=>item.id===tripId);
         const result=await startAiDraftJob({id:'local-itinerary:'+tripId+':'+Date.now(),tripId,kind:'itinerary',targetId:'itinerary',baseRevision:current.revision,
           input:{preparedDays:days,localDraft:true,expectedDayCount:settings.durationDays,minSpotsPerDay:3,edgeMinSpotsPerDay:2,
@@ -18896,7 +18911,7 @@ JSON 배열만 출력하세요. 각 day는 dayNum, title, city, date, spots를 �
         return;
       }
       const dayIndex = State.activeJournalDay;
-      if (!saveJournalText()) {
+      if (!await saveJournalText()) {
         showToast('⚠️ 원문을 먼저 저장하지 못해 AI 윤문을 시작하지 않았습니다.', 4500);
         return;
       }
@@ -19514,7 +19529,7 @@ JSON 배열만 출력하세요. 각 day는 dayNum, title, city, date, spots를 �
       }
     }
 
-    function addGpsSpotToActiveDay() {
+    async function addGpsSpotToActiveDay() {
       const trip = getActiveTrip();
       if (!trip || !trip.days || trip.days.length === 0) {
         alert('일정이 존재하지 않습니다.');
@@ -19529,7 +19544,7 @@ JSON 배열만 출력하세요. 각 day는 dayNum, title, city, date, spots를 �
       const now = new Date();
       const timeStr = `${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}`;
 
-      const added = commitTrip(trip.id, target => {
+      const added = await commitTrip(trip.id, target => {
         const targetDay = target.days[0];
         if (!targetDay.spots) targetDay.spots = [];
         targetDay.spots.push({

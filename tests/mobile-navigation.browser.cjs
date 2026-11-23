@@ -31,7 +31,7 @@ const server=http.createServer((req,res)=>{
         const api={page,context,errors,dialogs,setConfirm:value=>{allowConfirm=value;},
           async back(){await page.goBack({waitUntil:'domcontentloaded'});},
           async closed(id){await page.waitForFunction(id=>document.getElementById(id).classList.contains('sheet-closed'),id);},
-          async seed(){await page.evaluate(trip=>{State.trips=TripRepository.saveAll([trip]);State.activeTripId=trip.id;switchView('workspace');switchTab('expenses');},fixture());}
+          async seed(){await page.evaluate(async trip=>{State.trips=await TripRepository.saveAll([trip]);State.activeTripId=trip.id;switchView('workspace');switchTab('expenses');},fixture());}
         };
         const details=await run(api);assert.deepEqual(errors,[]);results.push({name,passed:true,details});
       }catch(error){results.push({name,passed:false,error:error.stack||error.message,errors});if(!page.isClosed())await page.screenshot({path:path.join(output,`failure-${results.length}.png`)}).catch(()=>{});}

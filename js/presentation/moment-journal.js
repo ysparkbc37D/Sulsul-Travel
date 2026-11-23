@@ -136,7 +136,7 @@ function refreshMomentSurfaces() {
   try{if(typeof rememberJournalDraft==='function')rememberJournalDraft();if(typeof renderJournalTab==='function')renderJournalTab();return true;}
   catch(error){console.warn('[순간 기록 화면 갱신]',error);return false;}
 }
-function saveMomentRecord({quiet=false}={}) {
+async function saveMomentRecord({quiet=false}={}) {
   const editor=State.momentRecordEditor;if(!editor||editor.loading)return false;rememberMomentDraft();
   if(!editor.draft.text.trim()&&!editor.draft.photos.length){setMomentFeedback('한 줄의 글 또는 사진을 먼저 남겨 주세요.');return false;}
   if(!/^\d{4}-\d{2}-\d{2}$/.test(editor.draft.date)||!Number.isFinite(new Date(`${editor.draft.date}T12:00:00`).getTime())){setMomentFeedback('기록 날짜를 확인해 주세요.');return false;}
@@ -146,7 +146,7 @@ function saveMomentRecord({quiet=false}={}) {
     const trip=State.trips.find(t=>t.id===editor.tripId);if(!trip)throw new Error('여행을 찾지 못했습니다. 글 파일로 먼저 보관해 주세요.');
     const current=momentEntries(trip).find(entry=>entry.id===editor.entryId);if(JSON.stringify(current || null)!==editor.baseEntry)throw new Error('다른 화면에서 이 순간 기록이 변경되었습니다. 글 파일로 보관한 뒤 다시 열어 주세요.');
     const now=new Date().toISOString(),entry={...current,...editor.draft,id:editor.entryId,createdAt:current?.createdAt || now,updatedAt:now};
-    commitTripRecord(trip.id,copy=>{
+    await commitTripRecord(trip.id,copy=>{
       copy.momentEntries=momentEntries(copy);
       const index=copy.momentEntries.findIndex(item=>item.id===editor.entryId);
       if(index>=0)copy.momentEntries[index]=entry;else copy.momentEntries.push(entry);
@@ -155,12 +155,12 @@ function saveMomentRecord({quiet=false}={}) {
   document.getElementById('moment-record-delete').hidden=false;document.getElementById('moment-record-title').textContent='순간 기록 수정';
   const refreshed=refreshMomentSurfaces();setMomentFeedback(refreshed?'이 순간을 기기에 저장했습니다. 다른 기록은 그대로 남아 있습니다.':'이 순간은 저장되었습니다. 일부 화면을 갱신하지 못했습니다. 작성 중인 글을 보관한 뒤 화면을 다시 열어 주세요.');if(!quiet)showToast('순간 기록을 저장했습니다.');return true;
 }
-function deleteMomentRecord() {
+async function deleteMomentRecord() {
   const editor=State.momentRecordEditor;if(!editor||editor.loading)return false;rememberMomentDraft();
   if(!confirm('이 순간의 글과 사진을 삭제할까요? 다른 순간과 하루 회고는 그대로이며 되돌릴 수 없습니다.'))return false;
   try {
     const trip=State.trips.find(t=>t.id===editor.tripId),entry=momentEntries(trip).find(item=>item.id===editor.entryId);if(!trip||JSON.stringify(entry || null)!==editor.baseEntry)throw new Error('기록이 변경되었습니다. 다시 열어 확인한 뒤 삭제해 주세요.');
-    commitTripRecord(trip.id,copy=>{copy.momentEntries=momentEntries(copy).filter(item=>item.id!==editor.entryId);});
+    await commitTripRecord(trip.id,copy=>{copy.momentEntries=momentEntries(copy).filter(item=>item.id!==editor.entryId);});
   }catch(error){setMomentFeedback('삭제하지 못했습니다. 기존 기록과 작성 중인 글은 그대로입니다. '+(error.message || ''));return false;}
   closeMomentJournal(true);refreshMomentSurfaces();showToast('순간 기록을 삭제했습니다.');return true;
 }
@@ -168,7 +168,7 @@ function downloadMomentDraft() { rememberMomentDraft();const editor=State.moment
 async function generateMomentEssay() {
   const editor=State.momentRecordEditor;if(!editor||editor.loading||editor.aiBusy)return;rememberMomentDraft();
   if(!editor.draft.text.trim()){setMomentFeedback('AI가 다듬을 글을 먼저 적어 주세요.');return;}
-  if(!saveMomentRecord({quiet:true}))return;
+  if(!await saveMomentRecord({quiet:true}))return;
   const trip=State.trips.find(t=>t.id===editor.tripId),sourceText=editor.draft.text;editor.aiBusy=true;renderMomentPhotos();setMomentFeedback('원문을 저장했습니다. AI 제안을 준비하고 있습니다…');
   try {
     const result=await startAiDraftJob({id:`moment:${editor.entryId}:${Date.now()}`,tripId:trip.id,targetId:editor.entryId,kind:'moment-journal',baseRevision:trip.revision || 0,input:{entryId:editor.entryId,sourceText,prompt:`당신은 여행 에세이 편집자입니다. 아래 원문만 자연스러운 1인칭 한국어로 다듬으세요. 짧은 글은 짧게 유지하세요. 원문에 없는 장소, 사건, 인물, 감정, 금액은 만들지 마세요. 사진을 분석했다고 말하지 마세요.\n원문: ${sourceText}`}});
@@ -176,14 +176,14 @@ async function generateMomentEssay() {
   }catch(_){if(State.momentRecordEditor===editor)setMomentFeedback('AI 연결을 확인해 주세요. 저장된 원문은 그대로입니다.');}
   finally{editor.aiBusy=false;if(State.momentRecordEditor===editor)renderMomentPhotos();}
 }
-function applyMomentAiDraft(job) {
+async function applyMomentAiDraft(job) {
   const trip=State.trips.find(t=>t.id===job.tripId),entry=momentEntries(trip).find(item=>item.id===job.input.entryId),editor=State.momentRecordEditor;
   if(!entry||entry.text!==job.input.sourceText||(editor?.entryId===entry.id&&editor.tripId===trip.id&&momentEditorDirty()))return 'conflict';
-  const result=TripRepository.applyDraft(State.trips,{tripId:trip.id,baseRevision:job.baseRevision,jobId:job.id,mutate:copy=>{
+  const result=await TripRepository.applyDraft({tripId:trip.id,baseRevision:job.baseRevision,jobId:job.id,mutate:copy=>{
     const record=copy.momentEntries.find(item=>item.id===entry.id);record.originalText=record.originalText || job.input.sourceText;record.text=job.draft.text;record.aiDraftAcceptedAt=new Date().toISOString();record.updatedAt=record.aiDraftAcceptedAt;
   }});
   if(result.status==='applied'){
-    State.trips=result.trips;const accepted=momentEntries(State.trips.find(t=>t.id===trip.id)).find(item=>item.id===entry.id);
+    const accepted=momentEntries(State.trips.find(t=>t.id===trip.id)).find(item=>item.id===entry.id);
     if(editor?.entryId===entry.id&&editor.tripId===trip.id){editor.draft.text=accepted.text;editor.savedDraft=JSON.stringify(editor.draft);editor.baseEntry=JSON.stringify(accepted);document.getElementById('moment-record-text').value=accepted.text;document.getElementById('moment-record-original').textContent=accepted.originalText;document.getElementById('moment-record-original-wrap').hidden=false;}
     refreshMomentSurfaces();
   }

@@ -55,7 +55,7 @@ async function copyTravelSnapshotLink() {
     shareFeedback('여행 사본 링크를 복사했습니다. 이후 수정은 서로 자동 반영되지 않습니다.');
   } catch (error) { shareFeedback('링크를 복사하지 못했습니다. 여행 파일 보내기를 사용해 주세요.'); }
 }
-function acceptTravelSnapshot(payload, {fromUrl = false} = {}) {
+async function acceptTravelSnapshot(payload, {fromUrl = false} = {}) {
   const transfer = SulsulTravel.TripTransfer;
   const parsed = transfer.parse(JSON.stringify(payload));
   if (parsed.shareId && State.trips.some(t => t.importedShareId === parsed.shareId)) {
@@ -69,16 +69,15 @@ function acceptTravelSnapshot(payload, {fromUrl = false} = {}) {
   incoming.title += ' (공유받음)';
   if (parsed.shareId) incoming.importedShareId = parsed.shareId;
   incoming.revision = 0;
-  let next;
-  try { next = TripRepository.saveAll([incoming,...State.trips],{bumpTripId:incoming.id}); }
+  try { await TripRepository.saveAll(current => [incoming,...current],{bumpTripId:incoming.id}); }
   catch (_) { shareFeedback('저장하지 못했습니다. 기존 여행과 원본 링크는 유지됩니다. 공간 확보 후 다시 가져와 주세요.'); return false; }
-  State.trips = next; State.activeTripId = incoming.id;
+  State.activeTripId = incoming.id;
   if (fromUrl) replaceAppUrl(location.pathname+location.search);
   updateHubFilterDropdowns(); switchView('workspace');
   closeModal('modal-share-room',true);
   showToast('여행 사본을 이 기기에 저장했습니다.'); return true;
 }
-function importTravelSnapshotHash() {
+async function importTravelSnapshotHash() {
   if (!location.hash.startsWith('#share=')) return;
   try {
     const packed = location.hash.slice(7);
@@ -86,14 +85,14 @@ function importTravelSnapshotHash() {
     let json = LZString.decompressFromEncodedURIComponent(packed);
     if (!json) { try { json = decodeURIComponent(escape(atob(decodeURIComponent(packed)))); } catch (_) {} }
     if (!json) throw new Error('링크가 잘렸거나 손상되었습니다. 여행 파일을 요청해 주세요.');
-    return acceptTravelSnapshot(SulsulTravel.TripTransfer.parse(json),{fromUrl:true});
+    return await acceptTravelSnapshot(SulsulTravel.TripTransfer.parse(json),{fromUrl:true});
   } catch (error) { shareFeedback(error.message || '공유 링크를 읽지 못했습니다. 원본 링크를 다시 확인해 주세요.'); return false; }
 }
 async function importTravelSnapshotFile(event) {
   const file = event.target.files?.[0]; if (!file) return;
   try {
     if (file.size > SulsulTravel.TripTransfer.MAX_BYTES) throw new Error('20MB 이하의 여행 파일을 선택해 주세요.');
-    acceptTravelSnapshot(SulsulTravel.TripTransfer.parse(await file.text()));
+    await acceptTravelSnapshot(SulsulTravel.TripTransfer.parse(await file.text()));
   } catch (error) { shareFeedback(error.message || '여행 파일을 확인해 주세요.'); }
   finally { event.target.value = ''; }
 }

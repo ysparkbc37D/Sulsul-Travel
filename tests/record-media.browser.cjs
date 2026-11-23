@@ -67,15 +67,16 @@ const photoFingerprint=page => page.evaluate(() => State.trips.flatMap(t => [...
     const context=await newContext();
     const {page,errors}=await open(context);
     await check('사진 많은 장기 여행이 기기 문서 한도를 넘지 않고 새로고침 뒤 같은 사진으로 되살아난다',async() => {
-      await page.evaluate(seed => {State.trips=TripRepository.saveAll([seed]);State.activeTripId=seed.id;},trip('long-trip'));
+      await page.evaluate(async seed => {State.trips=await TripRepository.saveAll([seed]);State.activeTripId=seed.id;},trip('long-trip'));
       const photos=await makePhotos(page,22,'long-trip');
       assert.ok(photos.every(photo => photo.stored),'사진 보관소에 모두 보관된다');
       const total=photos.reduce((sum,photo) => sum+photo.source.length+photo.thumbnail.length,0);
       assert.ok(total>5.3*1024*1024,`사진 문자열 합계 ${total}자는 옛 방식이라면 기기 문서 한도를 넘는다`);
-      const saved=await page.evaluate(photos => photos.map((photo,index) => {
-        try { commitTripRecord('long-trip',copy => {copy.momentEntries=copy.momentEntries||[];copy.momentEntries.push({id:`moment-${index}`,date:`2030-05-${String(index%20+1).padStart(2,'0')}`,time:'09:00',text:`가상 순간 ${index}`,photos:[photo.source],photoThumbnails:[photo.thumbnail],mediaIds:[photo.mediaId],coverIndex:0,activityLink:null,visibility:'private'});}); return true; }
+      // 저장은 차례대로 한다(한 장씩 기다린다).
+      const saved=await page.evaluate(async photos => { const results=[]; for(const [index,photo] of photos.entries()) results.push(await (async () => {
+        try { await commitTripRecord('long-trip',copy => {copy.momentEntries=copy.momentEntries||[];copy.momentEntries.push({id:`moment-${index}`,date:`2030-05-${String(index%20+1).padStart(2,'0')}`,time:'09:00',text:`가상 순간 ${index}`,photos:[photo.source],photoThumbnails:[photo.thumbnail],mediaIds:[photo.mediaId],coverIndex:0,activityLink:null,visibility:'private'});}); return true; }
         catch(error){ return error.name || error.message; }
-      }),photos);
+      })()); return results; },photos);
       assert.ok(saved.every(value => value===true),JSON.stringify(saved));
       const after=await page.evaluate(() => ({raw:localStorage.getItem('st_trips_v2').length,photos:SulsulTravel.TravelRecords.summary(State.trips[0]).photoCount,inState:State.trips[0].momentEntries.every(entry => entry.photos[0].startsWith('data:image/'))}));
       assert.ok(after.raw<200000,`여행 문서 ${after.raw}자`);assert.equal(after.photos,22);assert.equal(after.inState,true);
@@ -149,9 +150,9 @@ const photoFingerprint=page => page.evaluate(() => State.trips.flatMap(t => [...
       let oldResult;
       try {
         const {page:oldPage,errors:oldErrors}=await open(legacyContext);
-        oldResult=await oldPage.evaluate(() => {
+        oldResult=await oldPage.evaluate(async () => {
           const version=APP_VER,blank=State.trips[0].momentEntries.filter(entry => entry.photos[0]==='').length;
-          const saved=commitTripCommand({tripId:'legacy-trip',expectedRevision:State.trips[0].revision,change:copy => {copy.title='구버전에서 바꾼 제목';}});
+          const saved=await commitTripCommand({tripId:'legacy-trip',expectedRevision:State.trips[0].revision,change:copy => {copy.title='구버전에서 바꾼 제목';}});
           const stored=JSON.parse(localStorage.getItem('st_trips_v2'))[0];
           return {version,blank,saved,ids:stored.momentEntries.every(entry => typeof entry.mediaIds[0]==='string' && entry.mediaIds[0]),kept:stored.momentEntries.length};
         });

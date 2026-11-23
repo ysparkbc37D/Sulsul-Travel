@@ -101,7 +101,7 @@ function updateLiveMovePositions() {
   select.value = 'end';
 }
 
-function saveLiveMove() {
+async function saveLiveMove() {
   if (!requireSharedPlanEdit()) return false;
   const session = liveMoveSession, trip = getActiveTrip();
   if (!session || trip?.id !== session.tripId) return liveScheduleError('이동 창을 열었던 여행으로 돌아가 다시 시도해 주세요.', 'live-move-feedback');
@@ -110,7 +110,7 @@ function saveLiveMove() {
   const command = { type: 'move', tripId: session.tripId, dayId: session.dayId, itemId: session.itemId, targetDayId, position: selected === 'end' ? 'end' : 'before' };
   if (selected.startsWith('before:')) command.anchorId = selected.slice(7);
   if (!trip.days.some(day => day.id === targetDayId) || (!selected.startsWith('before:') && selected !== 'end')) return liveScheduleError('옮길 날짜와 위치를 선택해 주세요.', 'live-move-feedback');
-  if (!commitLiveSchedule(command, session.revision, '일정 날짜·위치 이동')) return liveScheduleError('이동을 저장하지 못했습니다. 계획이 바뀌었다면 창을 다시 열고, 저장 공간 문제라면 다시 시도해 주세요.', 'live-move-feedback');
+  if (!await commitLiveSchedule(command, session.revision, '일정 날짜·위치 이동')) return liveScheduleError('이동을 저장하지 못했습니다. 계획이 바뀌었다면 창을 다시 열고, 저장 공간 문제라면 다시 시도해 주세요.', 'live-move-feedback');
   closeModal('modal-live-move', true);
   liveMoveSession = null;
   return true;
@@ -125,15 +125,15 @@ function moveLiveItem(dayIndex, spotIndex, offset) {
   return commitLiveSchedule({ type: 'move', tripId: target.trip.id, dayId: target.day.id, itemId: target.item.id, targetDayId: target.day.id, anchorId: anchor.id, position: offset < 0 ? 'before' : 'after' }, target.trip.revision, '일정 순서 변경');
 }
 
-function changeLiveItemStatus(type, dayIndex, spotIndex) {
+async function changeLiveItemStatus(type, dayIndex, spotIndex) {
   if (!requireSharedPlanEdit()) return false;
   const target = liveScheduleTarget(dayIndex, spotIndex);
   if (!target?.item) return false;
   const command = { type, tripId: target.trip.id, dayId: target.day.id, itemId: target.item.id }, revision = target.trip.revision;
   const label = { remove: '일정 제거', defer: '일정 보류', restore: '일정 복구' }[type];
-  const apply = () => {
+  const apply = async () => {
     if (!requireSharedPlanEdit()) return false;
-    const saved = commitLiveSchedule(command, revision, label);
+    const saved = await commitLiveSchedule(command, revision, label);
     if (saved) closeModal('modal-schedule-change', true);
     return saved;
   };
@@ -162,12 +162,12 @@ function latestLiveScheduleChange(trip) {
   return [...(trip?.planHistory || [])].reverse().find(entry => entry.type !== 'undo' && !entry.undoneBy);
 }
 
-function undoLiveSchedule() {
+async function undoLiveSchedule() {
   if (!requireSharedPlanEdit()) return false;
   const trip = getActiveTrip(), entry = latestLiveScheduleChange(trip);
   if (liveMetadataError(trip)) return liveScheduleError(liveMetadataError(trip));
   if (!entry) return liveScheduleError('되돌릴 일정 변경이 없습니다.');
-  const result = commitLiveSchedule({ type: 'undo', tripId: trip.id, eventId: entry.id }, trip.revision, '마지막 일정 변경 되돌리기');
+  const result = await commitLiveSchedule({ type: 'undo', tripId: trip.id, eventId: entry.id }, trip.revision, '마지막 일정 변경 되돌리기');
   if (result && document.getElementById('modal-live-history') && !document.getElementById('modal-live-history').classList.contains('sheet-closed')) renderLiveHistory();
   return result;
 }

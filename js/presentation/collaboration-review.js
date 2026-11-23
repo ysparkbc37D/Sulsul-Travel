@@ -59,7 +59,7 @@ function reviewRemoteTravelPlan({remote,localTrip,link,source}) {
     if(!SulsulTravel.MobileNavigation?.active&&!history.state?.stCollaborationReview)history.pushState({...history.state,stCollaborationReview:true},'');
   });
 }
-function applyRemoteTravelPlan(asCopy) {
+async function applyRemoteTravelPlan(asCopy) {
   const review=State.collaborationReview;if(!review)return false;
   try {
     const body=SulsulTravel.TripTransfer.parse(JSON.stringify({format:'sulsul-trip',schemaVersion:1,trip:review.remote.body})).trip;
@@ -73,7 +73,7 @@ function applyRemoteTravelPlan(asCopy) {
       Object.assign(target,body,preserved);
       for(const day of target.days || [])for(const spot of day.spots || [])if(localRecords.has(spot.id))spot.recordId=localRecords.get(spot.id);
     }
-    State.trips=TripRepository.saveAll(next,{bumpTripId:target.id,approvedRemoteTripId:target.id});
+    await TripRepository.saveAll(next,{bumpTripId:target.id,approvedRemoteTripId:target.id});
     const resolve=review.resolve;State.collaborationReview=null;closeModal('modal-collaboration-review',true);openTripWorkspace(target.id);resolve({applied:true,tripId:target.id});showToast('검토한 공동 계획을 저장했습니다. 개인 기록은 유지했습니다.');return true;
   } catch(error) {document.getElementById('collaboration-review-feedback').textContent=`저장하지 못했습니다. 기존 여행과 비교 화면은 유지됩니다. ${error.message || ''}`;return false;}
 }

@@ -53,23 +53,23 @@ const otherTrip={id:'other_trip',title:'다른 가상 여행',startDate:'2030-06
       return {workspace:'5편 / 4장',coverFromRecords:true};
     });
     await check('기록을 포함한 공유는 시각 없는 순간 기록이 있어도 만들어지고 확인 창이 순간 기록까지 센다',async() => {
-      const message=await page.evaluate(() => {
+      const message=await page.evaluate(async () => {
         const payload=SulsulTravel.TripTransfer.create(State.trips.find(trip => trip.id==='records_trip'),{journals:true,finances:false});
         let asked='';const original=window.confirm;window.confirm=text => {asked=text;return false;};
-        try{acceptTravelSnapshot(JSON.parse(JSON.stringify(payload)));}finally{window.confirm=original;}
+        try{await acceptTravelSnapshot(JSON.parse(JSON.stringify(payload)));}finally{window.confirm=original;}
         return asked;
       });
       assert.match(message,/기록 5편 · 사진 4장/);
       return {shareCreated:true,confirmCounts:'기록 5편 · 사진 4장'};
     });
     await check('순간 기록 저장은 공통 기록 명령으로 revision을 한 번 올리고, 다른 일정 변경이 있어도 막히지 않는다',async() => {
-      const result=await page.evaluate(() => {
+      const result=await page.evaluate(async () => {
         const before=State.trips.find(trip => trip.id==='records_trip').revision;
         openMomentJournal(1);
         // 편집 창을 연 뒤 다른 화면에서 일정을 바꾼다. 기록 단위 충돌이 아니므로 저장은 막히지 않아야 한다.
-        commitTrip('records_trip',trip => {trip.days[0].spots[0].completed=true;});
+        await commitTrip('records_trip',trip => {trip.days[0].spots[0].completed=true;});
         document.getElementById('moment-record-text').value='둘째 날 새 순간';rememberMomentDraft();
-        const saved=saveMomentRecord({quiet:true});
+        const saved=await saveMomentRecord({quiet:true});
         const stored=JSON.parse(localStorage.getItem('st_trips_v2')).find(trip => trip.id==='records_trip');
         return {saved,before,after:stored.revision,completed:stored.days[0].spots[0].completed,texts:stored.momentEntries.map(entry => entry.text)};
       });

@@ -135,7 +135,7 @@ function resolveActivityEditorTarget(trip,editor) {
   if(candidates.length===1)return candidates[0];
   throw new Error('일정이 변경되어 연결할 수 없습니다. 글 파일로 보관한 뒤 해당 일정을 다시 열어 주세요.');
 }
-function saveActivityRecord({quiet=false}={}) {
+async function saveActivityRecord({quiet=false}={}) {
   const editor=State.activityRecordEditor;if(!editor || editor.loading)return false;
   rememberActivityText();
   if(!editor.draft.text.trim() && !editor.draft.photos.length){setActivityFeedback('짧은 글 또는 사진을 먼저 남겨 주세요.');return false;}
@@ -145,7 +145,7 @@ function saveActivityRecord({quiet=false}={}) {
     if(JSON.stringify(trip.activityRecords?.[editor.recordId] || null)!==editor.baseRecord)throw new Error('다른 화면에서 기록이 변경되었습니다. 현재 글을 파일로 보관한 뒤 다시 열어 주세요.');
     const target=resolveActivityEditorTarget(trip,editor);
     const context=activityRecordContext(trip.activityRecords?.[editor.recordId] || {context:editor.context},target);
-    commitTripRecord(trip.id,copy=>{
+    await commitTripRecord(trip.id,copy=>{
       if(target)copy.days[target.dayIndex].spots[target.spotIndex].recordId=editor.recordId;
       copy.activityRecords=copy.activityRecords || {};
       copy.activityRecords[editor.recordId]={...copy.activityRecords[editor.recordId],id:editor.recordId,...editor.draft,context,updatedAt:new Date().toISOString()};
@@ -160,14 +160,14 @@ function saveActivityRecord({quiet=false}={}) {
   if(!quiet)showToast('사진과 글을 일정 기록에 저장했습니다.');
   return true;
 }
-function deleteActivityRecord() {
+async function deleteActivityRecord() {
   const editor=State.activityRecordEditor;if(!editor||editor.loading)return false;
   rememberActivityText();
   if(!confirm('이 일정 기록의 글과 사진을 삭제할까요? 일정 완료 여부는 그대로이며 되돌릴 수 없습니다.'))return false;
   try {
     const trip=State.trips.find(t=>t.id===editor.tripId);
     if(!trip||JSON.stringify(trip.activityRecords?.[editor.recordId]||null)!==editor.baseRecord)throw new Error('기록이 변경되었습니다. 다시 열어 확인한 뒤 삭제해 주세요.');
-    commitTripRecord(trip.id,copy=>{
+    await commitTripRecord(trip.id,copy=>{
       delete (copy.activityRecords||{})[editor.recordId];
       (copy.days||[]).forEach(day=>(day.spots||[]).forEach(spot=>{if(spot.recordId===editor.recordId)delete spot.recordId;}));
     });
@@ -199,7 +199,7 @@ function refreshActivitySurfaces({rememberJournal=true}={}) {
 async function generateActivityEssay() {
   const editor=State.activityRecordEditor;if(!editor || editor.aiBusy || editor.loading)return;
   rememberActivityText();if(!editor.draft.text.trim()){setActivityFeedback('AI가 다듬을 글을 먼저 적어 주세요.');return;}
-  if(!saveActivityRecord({quiet:true}))return;
+  if(!await saveActivityRecord({quiet:true}))return;
   const trip=State.trips.find(t=>t.id===editor.tripId),sourceText=editor.draft.text;
   editor.aiBusy=true;renderActivityPhotos();
   setActivityFeedback('원문을 저장했습니다. AI 제안을 준비하고 있습니다…');
@@ -210,15 +210,14 @@ async function generateActivityEssay() {
   }catch(_){if(State.activityRecordEditor===editor)setActivityFeedback('AI 연결을 확인해 주세요. 저장된 원문은 그대로입니다.');}
   finally {editor.aiBusy=false;if(State.activityRecordEditor===editor)renderActivityPhotos();}
 }
-function applyActivityAiDraft(job) {
+async function applyActivityAiDraft(job) {
   const trip=State.trips.find(t=>t.id===job.tripId),record=trip?.activityRecords?.[job.input.recordId];
   const editor=State.activityRecordEditor;
   if(!record || record.text!==job.input.sourceText || (editor?.recordId===record.id && editor.tripId===trip.id && activityEditorDirty()))return 'conflict';
-  const result=TripRepository.applyDraft(State.trips,{tripId:job.tripId,baseRevision:job.baseRevision,jobId:job.id,mutate:copy=>{
+  const result=await TripRepository.applyDraft({tripId:job.tripId,baseRevision:job.baseRevision,jobId:job.id,mutate:copy=>{
     const entry=copy.activityRecords[job.input.recordId];entry.originalText=entry.originalText || job.input.sourceText;entry.text=job.draft.text;entry.aiDraftAcceptedAt=new Date().toISOString();entry.updatedAt=entry.aiDraftAcceptedAt;
   }});
   if(result.status==='applied'){
-    State.trips=result.trips;
     if(editor?.recordId===record.id && editor.tripId===trip.id){const accepted=State.trips.find(t=>t.id===trip.id).activityRecords[record.id];editor.draft.text=accepted.text;editor.savedDraft=JSON.stringify(editor.draft);editor.baseRecord=JSON.stringify(accepted);document.getElementById('activity-record-text').value=accepted.text;document.getElementById('activity-record-original').textContent=accepted.originalText;document.getElementById('activity-record-original-wrap').hidden=false;}
   }
   return result.status;

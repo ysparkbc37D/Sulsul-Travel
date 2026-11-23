@@ -22,7 +22,7 @@ const fixture=()=>({id:'structural-trip',title:'구조 검증 가상 여행',sta
       try{
         await page.goto(origin+'/',{waitUntil:'networkidle'});await page.addStyleTag({content:'*,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}'});
         const api={page,context,errors,dialogs,
-          async seed(trip=fixture()){return page.evaluate(trip=>{State.trips=TripRepository.saveAll([trip]);State.activeTripId=trip.id;State.activeJournalDay=0;switchView('workspace');switchTab('journal');renderJournalTab();return State.trips;},trip);},
+          async seed(trip=fixture()){return page.evaluate(async trip=>{State.trips=await TripRepository.saveAll([trip]);State.activeTripId=trip.id;State.activeJournalDay=0;switchView('workspace');switchTab('journal');renderJournalTab();return State.trips;},trip);},
           async state(){return page.evaluate(()=>({trips:State.trips,stored:localStorage.getItem('st_trips_v2')}));},
           async quota(value){return page.evaluate(value=>{if(value){window.structuralSetItem=Storage.prototype.setItem;Storage.prototype.setItem=function(key,value){if(key==='st_trips_v2')throw new DOMException('synthetic quota','QuotaExceededError');return structuralSetItem.call(this,key,value);};}else Storage.prototype.setItem=structuralSetItem;},value);},
           async gistSettings(){await page.evaluate(()=>openSettingsModal('ai'));await page.locator('#cfg-github-pat').fill('synthetic-test-token');await page.locator('#cfg-github-gist').fill('synthetic-gist-id');},
@@ -45,9 +45,9 @@ const fixture=()=>({id:'structural-trip',title:'구조 검증 가상 여행',sta
       await api.saveJournal('첫 번째 탭에서 새로 확정한 원문');
       const latest=await api.state();
       assert.equal(JSON.parse(latest.stored)[0].journals[0].text,'첫 번째 탭에서 새로 확정한 원문','첫 탭의 새 일기가 먼저 저장돼야 충돌 검사가 의미 있다');
-      const result=await second.evaluate(()=>{
-        State.trips[0].title='오래된 두 번째 탭의 제목';const saved=saveTrips();let errorCode=null;
-        try{TripRepository.saveAll(State.trips);}catch(error){errorCode=error.code;}
+      const result=await second.evaluate(async ()=>{
+        State.trips[0].title='오래된 두 번째 탭의 제목';const saved=await saveTrips();let errorCode=null;
+        try{await TripRepository.saveAll(State.trips);}catch(error){errorCode=error.code;}
         return {saved,errorCode,stored:localStorage.getItem('st_trips_v2')};
       });
       assert.equal(result.saved,false);assert.equal(result.errorCode,'STORAGE_CONFLICT');assert.equal(result.stored,latest.stored);
@@ -86,12 +86,12 @@ const fixture=()=>({id:'structural-trip',title:'구조 검증 가상 여행',sta
     const captureToasts=page=>page.evaluate(()=>{window.structuralToasts=[];const original=window.showToast;window.showToast=(message,...rest)=>{window.structuralToasts.push(String(message));return original(message,...rest);};});
     await check('명령 경계로 옮긴 셸 저장은 실패하면 여행과 저장본을 바꾸지 않고 성공을 알리지 않는다',async api=>{
       await api.seed(ledgerTrip());await captureToasts(api.page);const before=await api.state();await api.quota(true);
-      await api.page.evaluate(()=>{checkAllChecklistItems(true);selectAddCurrency('EUR');toggleBookingGuideCompleted('guide-synthetic');duplicateTrip('structural-trip');});
+      await api.page.evaluate(async ()=>{await checkAllChecklistItems(true);await selectAddCurrency('EUR');await toggleBookingGuideCompleted('guide-synthetic');await duplicateTrip('structural-trip');});
       assert.deepEqual(await api.state(),before);
       const failed=await api.page.evaluate(()=>window.structuralToasts);
       assert.equal(failed.some(message=>/지갑이 추가되었습니다|복제되었습니다/.test(message)),false,failed.join(' / '));
       assert.ok(failed.some(message=>/저장하지 못했습니다/.test(message)),'실패를 알린다');
-      await api.quota(false);await api.page.evaluate(()=>{checkAllChecklistItems(true);selectAddCurrency('EUR');duplicateTrip('structural-trip');});
+      await api.quota(false);await api.page.evaluate(async ()=>{await checkAllChecklistItems(true);await selectAddCurrency('EUR');await duplicateTrip('structural-trip');});
       const after=await api.state(),stored=JSON.parse(after.stored),original=stored.find(trip=>trip.id==='structural-trip');
       assert.deepEqual(original.checklist.map(item=>item.checked),[true,true]);assert.ok(original.activeCurrencies.includes('EUR'));assert.equal(before.trips[0].activeCurrencies.includes('EUR'),false);
       assert.equal(original.revision,before.trips[0].revision+2,'바뀐 명령 두 번만 revision을 올린다');
@@ -116,7 +116,7 @@ const fixture=()=>({id:'structural-trip',title:'구조 검증 가상 여행',sta
         const canvas=document.createElement('canvas');canvas.width=120;canvas.height=80;const ctx=canvas.getContext('2d');ctx.fillStyle='#2b6556';ctx.fillRect(0,0,120,80);
         const file=new File([await new Promise(resolve=>canvas.toBlob(resolve))],'synthetic-photo.png',{type:'image/png'}),photo=await SulsulTravel.mediaRepository.prepare(file,{tripId:'structural-trip'}),trip=structuredClone(getActiveTrip());
         trip.journals[0]={...trip.journals[0],text:'기존 <b>합성 글</b><br>x < y',originalText:'처음 쓴 <b>원문</b>',photos:[],mediaIds:[photo.mediaId],photoThumbnails:[photo.thumbnail]};
-        trip.expenses[0].photos=[photo.source];State.trips=TripRepository.saveAll([trip]);
+        trip.expenses[0].photos=[photo.source];State.trips=await TripRepository.saveAll([trip]);
         await JournalOverflowRepository.save({tripId:trip.id,dayIndex:0,dayId:trip.days[0].id,date:trip.days[0].date,revision:9,journal:{text:'IndexedDB 최신 <b>회고</b><br>x < y',originalText:'처음 쓴 <b>원문</b>'}});
         return photo.source;
       });

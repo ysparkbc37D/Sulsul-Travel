@@ -47,7 +47,7 @@
     notify(root.__spotReorderModeActive ? '스팟 순서 편집 모드가 켜졌습니다.' : '스팟 순서 편집 모드가 종료되었습니다.');
   }
 
-  function moveCompanionSpotOrder(dayIndex, spotIndex, direction, event) {
+  async function moveCompanionSpotOrder(dayIndex, spotIndex, direction, event) {
     if (event && typeof event.stopPropagation === 'function') event.stopPropagation();
     const trip = activeTrip();
     const day = trip?.days?.[dayIndex];
@@ -63,7 +63,7 @@
     const dayId = String(day.id || day.dayId || '');
     const currentId = String(currentSpot?.id || '');
     const targetId = String(targetSpot?.id || '');
-    const saved = typeof root.commitTripCommand === 'function' && root.commitTripCommand({
+    const saved = typeof root.commitTripCommand === 'function' && await root.commitTripCommand({
       tripId: trip.id,
       expectedRevision: Number.isInteger(trip.revision) ? trip.revision : 0,
       change: copy => {
@@ -194,7 +194,7 @@
     return trip.days?.[pending.dayIndex] || null;
   }
 
-  function applySpotRealignment() {
+  async function applySpotRealignment() {
     const pending = root.__spotRealignmentPending;
     if (!pending || !pending.changes?.length) return false;
     const trip = appState()?.trips?.find(item => item.id === pending.tripId);
@@ -219,7 +219,7 @@
       }
     }
 
-    const saved = typeof root.commitTripCommand === 'function' && root.commitTripCommand({
+    const saved = typeof root.commitTripCommand === 'function' && await root.commitTripCommand({
       tripId: pending.tripId,
       expectedRevision: pending.baseRevision,
       change: copy => {

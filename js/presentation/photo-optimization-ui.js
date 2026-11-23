@@ -130,7 +130,7 @@ async function applyPhotoOptimization(){
     for(const trip of plan.trips)if(plan.changedTrips.includes(trip.id)){trip.revision=(trip.revision||0)+1;trip.updatedAt=new Date().toISOString();}
     const prepared=await SulsulTravel.expensePhotoRepository.prepare(plan.trips);
     if(!photoOptimizationCurrent())throw new Error('사진을 저장하는 동안 여행이 변경됐습니다. 미리보기를 다시 만들어 주세요.');
-    State.trips=TripRepository.saveAll(prepared,{expectedRaw:PhotoOptimizeUI.baseRaw});committed=true;
+    await TripRepository.saveAll(prepared,{expectedRaw:PhotoOptimizeUI.baseRaw});committed=true;
     PhotoOptimizeUI.cleanup={oldMediaIds:plan.oldMediaIds,oldExpenseArchiveIds:plan.oldExpenseArchiveIds};
     const cleaned=await retryPhotoOptimizationCleanup();
     PhotoOptimizeUI.items=[];photoOptimizeBusy('done');document.getElementById('photo-opt-list').replaceChildren();

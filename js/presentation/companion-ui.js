@@ -23,7 +23,7 @@ function renderCompanionPlan() {
   const trip = getActiveTrip();
   const container = document.getElementById('big-plan-container');
   if (!trip || !container) return;
-  if (ensurePlanBlockStructure(trip)) saveTrips({ bump: false });
+  if (ensurePlanBlockStructure(trip)) void saveTrips({ bump: false });
   const blocks = buildPlanBlocks(trip);
   const spots = (trip.days || []).flatMap(day => day.spots || []).filter(spot=>!SulsulTravel.ScheduleChange.retired(spot));
   const hasSpots = spots.length > 0;
@@ -1487,7 +1487,7 @@ function buildCapsuleEntry(trip, editor, text) {
   };
 }
 
-function saveQuickCapsule() {
+async function saveQuickCapsule() {
   const editor = State.capsuleEditor, trip = capsuleTrip();
   if (!editor || editor.busy) return false;
   if (!trip?.days?.[editor.dayIndex]) { setCapsuleFeedback('여행 날짜를 찾지 못했습니다. 창을 닫고 다시 열어 주세요.'); return false; }
@@ -1496,10 +1496,14 @@ function saveQuickCapsule() {
   if (!text && !editor.photo) { setCapsuleFeedback('음성·메모 또는 사진을 먼저 남겨 주세요.'); return false; }
   stopCapsuleVoice(editor);
   const entry = buildCapsuleEntry(trip, editor, text);
-  const saved = commitTripCommand({ tripId: trip.id, expectedRevision: trip.revision, change: copy => {
+  editor.busy = true;
+  let saved;
+  try {
+    saved = await commitTripCommand({ tripId: trip.id, expectedRevision: trip.revision, change: copy => {
     copy.momentEntries = Array.isArray(copy.momentEntries) ? copy.momentEntries : [];
     copy.momentEntries.push(entry);
   } });
+  } finally { editor.busy = false; }
   if (!saved) {
     // 실패하면 입력·사진을 그대로 두고 성공 안내를 띄우지 않는다.
     setCapsuleFeedback('보관하지 못했습니다. 입력한 글과 사진은 이 창에 그대로 있어요. 저장 공간을 확인한 뒤 다시 눌러 주세요.');
@@ -1515,12 +1519,12 @@ function saveQuickCapsule() {
 }
 window.saveQuickCapsule = saveQuickCapsule;
 
-function deleteQuickCapsule(entryId) {
+async function deleteQuickCapsule(entryId) {
   const editor = State.capsuleEditor, trip = capsuleTrip();
   if (!editor || editor.busy || !trip) return false;
   if (!momentEntries(trip).some(entry => entry.id === entryId)) return false;
   if (!confirm('이 캡슐의 글과 사진을 삭제할까요? 다른 기록은 그대로이며 되돌릴 수 없습니다.')) return false;
-  const saved = commitTripCommand({ tripId: trip.id, expectedRevision: trip.revision, change: copy => {
+  const saved = await commitTripCommand({ tripId: trip.id, expectedRevision: trip.revision, change: copy => {
     copy.momentEntries = momentEntries(copy).filter(entry => entry.id !== entryId);
   } });
   if (!saved) { setCapsuleFeedback('삭제하지 못했습니다. 캡슐은 그대로 남아 있습니다.'); return false; }
@@ -1567,20 +1571,19 @@ ${sourceText}`;
 window.generateDiaryFromCapsules = generateDiaryFromCapsules;
 
 // 승인된 AI 일기를 새 순간 기록으로 저장한다. 그사이 캡슐이 바뀌었으면 적용하지 않는다.
-function applyCapsuleDiaryDraft(job) {
+async function applyCapsuleDiaryDraft(job) {
   const trip = State.trips.find(item => item.id === job.tripId);
   const day = trip?.days?.find(item => item.id === job.input.dayId);
   if (!trip || !day || day.date !== job.input.date) return 'conflict';
   if (capsuleDiarySource(capsuleEntries(trip, day.date)) !== job.input.sourceText) return 'conflict';
   const now = new Date().toISOString();
-  const result = TripRepository.applyDraft(State.trips, { tripId: trip.id, baseRevision: job.baseRevision, jobId: job.id, mutate: copy => {
+  const result = await TripRepository.applyDraft({ tripId: trip.id, baseRevision: job.baseRevision, jobId: job.id, mutate: copy => {
     copy.momentEntries = Array.isArray(copy.momentEntries) ? copy.momentEntries : [];
     copy.momentEntries.push({ id: `moment_${crypto.randomUUID()}`, source: 'capsule-diary', date: day.date, dayIndex: copy.days.findIndex(item => item.id === day.id), time: '',
       title: `${job.input.city} 하루 이야기`, originalText: job.input.sourceText, text: job.draft.text, aiDraftAcceptedAt: now, capsuleIds: job.input.capsuleIds,
       photos: [], photoThumbnails: [], mediaIds: [], coverIndex: 0, activityLink: null, visibility: 'private', createdAt: now, updatedAt: now });
   } });
   if (result.status === 'applied') {
-    State.trips = result.trips;
     if (State.capsuleEditor?.tripId === trip.id) { setCapsuleFeedback('승인한 AI 글을 순간 기록으로 저장했습니다. 원래 메모도 함께 보관됩니다.'); renderQuickCapsuleContent(true); }
   }
   return result.status;
