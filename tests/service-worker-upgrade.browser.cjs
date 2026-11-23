@@ -1,5 +1,5 @@
 /* 실제 v1.9.2 워커의 ignoreSearch 캐시에서 업그레이드한다. 합성 여행만 사용한다. */
-const {chromium}=require(process.env.PLAYWRIGHT_MODULE||'playwright');
+const {chromium}=require('./helpers/playwright.cjs');
 const fs=require('node:fs'),path=require('node:path'),http=require('node:http'),cp=require('node:child_process'),assert=require('node:assert/strict');
 const root=path.resolve(__dirname,'..'),legacyRef=process.env.LEGACY_RELEASE_REF||'ac317b0';
 const publicRoot=path.join(root,'.local-review','sw-upgrade-public-'+Date.now()+'-'+Math.random().toString(36).slice(2));
@@ -104,14 +104,14 @@ const fixture={id:'upgrade-synthetic',title:'가상 도시 여행',startDate:'20
   assert.equal(ai.calls,1);assert.equal(ai.reviewOpen,true);assert.equal(ai.text,'다듬은 합성 일정 기록');assert.equal(ai.original,'업데이트 후 합성 일정 기록');
   await page.evaluate(()=>{closeModal('modal-ai-draft-review',true);openActivityJournal(0,0);});
   await page.locator('#activity-record-text').fill('워커 교체 중에도 보존할 합성 미저장 글');
-  const beforeUpdate=await page.evaluate(()=>({time:performance.timeOrigin,raw:localStorage.getItem('st_trips_v2')}));
+  const beforeUpdate=await page.evaluate(async()=>({time:performance.timeOrigin,raw:await TripRepository.readRaw()}));
   workerGeneration++;
   await page.evaluate(async()=>{
    window.syntheticControllerChanged=false;navigator.serviceWorker.addEventListener('controllerchange',()=>{window.syntheticControllerChanged=true;},{once:true});
    const registration=await navigator.serviceWorker.getRegistration();await registration.update();
   });
   await page.waitForFunction(()=>window.syntheticControllerChanged===true);
-  const afterUpdate=await page.evaluate(()=>({time:performance.timeOrigin,raw:localStorage.getItem('st_trips_v2'),text:document.getElementById('activity-record-text').value,open:!document.getElementById('modal-activity-record').classList.contains('sheet-closed')}));
+  const afterUpdate=await page.evaluate(async()=>({time:performance.timeOrigin,raw:await TripRepository.readRaw(),text:document.getElementById('activity-record-text').value,open:!document.getElementById('modal-activity-record').classList.contains('sheet-closed')}));
   assert.equal(afterUpdate.time,beforeUpdate.time);assert.equal(afterUpdate.raw,beforeUpdate.raw);assert.equal(afterUpdate.text,'워커 교체 중에도 보존할 합성 미저장 글');assert.equal(afterUpdate.open,true);
   assert.equal(await page.locator('#app-update-notice').count(),1);
   await page.evaluate(()=>document.getElementById('app-update-apply').click());
@@ -132,19 +132,19 @@ const fixture={id:'upgrade-synthetic',title:'가상 도시 여행',startDate:'20
   assert.equal(await page.evaluate(()=>State.trips.find(trip=>trip.id==='upgrade-synthetic').activityRecords['upgrade-record'].text),'워커 교체 중에도 보존할 합성 미저장 글');
   // 현재 워커의 같은 자산이 손상되면 새 워커 없이도 명시 재시도로 복구한다.
   const poisoned=await page.evaluate(async version=>{
-   const cache=await caches.open('st-shell-v'+version),raw=localStorage.getItem('st_trips_v2');
+   const cache=await caches.open('st-shell-v'+version),raw=await (()=>new Promise(resolve=>{const request=indexedDB.open('sulsul-travel-trips-v1');request.onsuccess=()=>{const db=request.result;if(!db.objectStoreNames.contains('meta')){db.close();resolve(null);return;}const tx=db.transaction(['meta','trips']),meta=tx.objectStore('meta').get('doc'),all=tx.objectStore('trips').getAll();tx.oncomplete=()=>{db.close();resolve(JSON.stringify({meta:meta.result||null,records:all.result}));};};request.onerror=()=>resolve(null);}))();
    await cache.put('/js/domain/trip-adapter.js?v='+version,new Response('/* 합성 손상 캐시 */',{headers:{'Content-Type':'application/javascript'}}));
    return raw;
   },currentVersion);
   await page.reload({waitUntil:'networkidle'});await page.waitForFunction(()=>window.SulsulShell?.recovering===true);
-  assert.equal(await page.evaluate(()=>localStorage.getItem('st_trips_v2')),poisoned);
+  assert.ok(poisoned,'업데이트한 앱의 여행 자료는 여행 저장소에 있다');assert.equal(await page.evaluate(()=>new Promise(resolve=>{const request=indexedDB.open('sulsul-travel-trips-v1');request.onsuccess=()=>{const db=request.result;if(!db.objectStoreNames.contains('meta')){db.close();resolve(null);return;}const tx=db.transaction(['meta','trips']),meta=tx.objectStore('meta').get('doc'),all=tx.objectStore('trips').getAll();tx.oncomplete=()=>{db.close();resolve(JSON.stringify({meta:meta.result||null,records:all.result}));};};request.onerror=()=>resolve(null);})),poisoned,'복구 화면은 여행 저장소를 쓰지 않는다');
   const blockedTime=await page.evaluate(()=>performance.timeOrigin);
   await context.setOffline(true);await page.waitForFunction(()=>!navigator.onLine);
   await page.locator('#app-shell-retry').click();
   await page.waitForFunction(()=>document.getElementById('app-shell-status').textContent.includes('인터넷 연결'));
   assert.equal(await page.evaluate(()=>performance.timeOrigin),blockedTime);
   assert.equal(await page.evaluate(async version=>(await (await caches.open('st-shell-v'+version)).match('/js/domain/trip-adapter.js?v='+version)).text(),currentVersion),'/* 합성 손상 캐시 */');
-  assert.equal(await page.evaluate(()=>localStorage.getItem('st_trips_v2')),poisoned);
+  assert.equal(await page.evaluate(()=>new Promise(resolve=>{const request=indexedDB.open('sulsul-travel-trips-v1');request.onsuccess=()=>{const db=request.result;if(!db.objectStoreNames.contains('meta')){db.close();resolve(null);return;}const tx=db.transaction(['meta','trips']),meta=tx.objectStore('meta').get('doc'),all=tx.objectStore('trips').getAll();tx.oncomplete=()=>{db.close();resolve(JSON.stringify({meta:meta.result||null,records:all.result}));};};request.onerror=()=>resolve(null);})),poisoned);
   await context.setOffline(false);await page.waitForFunction(()=>navigator.onLine);
   await Promise.all([page.waitForEvent('load'),page.locator('#app-shell-retry').click()]);
   await page.waitForFunction(()=>window.SulsulShell?.started===true);

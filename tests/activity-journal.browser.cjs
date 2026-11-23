@@ -1,5 +1,5 @@
 /* 실제 계정과 분리한 일정 기록·사진·AI 검토·모바일 통합 검사. AI 응답은 고정한다. */
-const {chromium}=require(process.env.PLAYWRIGHT_MODULE || 'playwright');
+const {chromium}=require('./helpers/playwright.cjs');
 const fs=require('node:fs'),path=require('node:path'),http=require('node:http'),assert=require('node:assert/strict');
 const root=path.resolve(__dirname,'..'),output=path.join(root,'.local-review','activity-journal');
 const server=http.createServer((req,res)=>{
@@ -41,7 +41,7 @@ const server=http.createServer((req,res)=>{
    document.getElementById('activity-record-text').value='저장 실패 후 재시도할 원문';rememberActivityText();
    Storage.prototype.setItem=function(k,v){if(k==='st_trips_v2')throw new DOMException('quota','QuotaExceededError');return old.call(this,k,v);};
    let ok;try{ok=await saveActivityRecord();}finally{Storage.prototype.setItem=old;}
-   return {ok,original,persisted:JSON.parse(localStorage.getItem('st_trips_v2'))[0].activityRecords[testRecordId].text,memory:getActiveTrip().activityRecords[testRecordId].text,draft:document.getElementById('activity-record-text').value,retry:await saveActivityRecord()};
+   return {ok,original,persisted:JSON.parse((await TripRepository.readRaw()))[0].activityRecords[testRecordId].text,memory:getActiveTrip().activityRecords[testRecordId].text,draft:document.getElementById('activity-record-text').value,retry:await saveActivityRecord()};
   });assert.equal(failure.ok,false);assert.equal(failure.persisted,failure.original);assert.equal(failure.memory,failure.original);assert.equal(failure.draft,'저장 실패 후 재시도할 원문');assert.equal(failure.retry,true);
   await page.evaluate(async()=>{callGeminiApiWithFallback=async()=> '여행의 시작을 천천히 기록했다.';await generateActivityEssay();});
   assert.equal(await page.locator('#modal-ai-draft-review').evaluate(el=>el.classList.contains('sheet-closed')),false);

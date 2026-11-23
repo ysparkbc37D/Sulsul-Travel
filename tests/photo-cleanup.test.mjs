@@ -71,3 +71,17 @@ test('잘못된 문서·후보 목록은 파괴적 거래 전에 거절한다',a
   await assert.rejects(cleanup({...state,expectedRaw:'{}',mediaIds:['old']}),/INVALID_PHOTO_CLEANUP_DOCUMENT/);
   assert.deepEqual(state.opened,[]);
 });
+
+test('IndexedDB 여행 저장소는 isCurrent로 확인하고, 정리 중 이 창이 다시 저장하면 멈춘다',async()=>{
+  const trips=[{id:'trip',journals:{0:{mediaIds:['kept']}}}];
+  let current=true;
+  const state=runtime(trips,{duringGet:()=>{current=false;}}),media=state.databases.get(MEDIA);
+  for(const id of ['old-a','old-b','kept'])media.set(id,{id});
+  const raw=JSON.stringify(trips);
+  await assert.rejects(cleanup({indexedDB:state.indexedDB,storage:null,expectedRaw:raw,isCurrent:()=>current,mediaIds:['old-a','old-b']}),error=>error.code==='STORAGE_CONFLICT');
+  assert.ok(media.has('kept'),'남은 참조는 지우지 않는다');
+  await assert.rejects(cleanup({indexedDB:state.indexedDB,storage:null,expectedRaw:raw,isCurrent:()=>false,mediaIds:['old-a']}),error=>error.code==='STORAGE_CONFLICT');
+  const ok=runtime(trips);ok.databases.get(MEDIA).set('old-a',{id:'old-a'});
+  const result=await cleanup({indexedDB:ok.indexedDB,storage:null,expectedRaw:raw,isCurrent:()=>true,mediaIds:['old-a']});
+  assert.equal(result.mediaDeleted,1);
+});

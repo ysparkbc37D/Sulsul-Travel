@@ -1,6 +1,6 @@
 /* 누적 사진의 실제 localStorage 한도 실패를 사진 선택·저장 버튼·새 페이지 복원으로 검증한다. */
 'use strict';
-const {chromium}=require(process.env.PLAYWRIGHT_MODULE||'playwright');
+const {chromium}=require('./helpers/playwright.cjs');
 const fs=require('node:fs'),path=require('node:path'),http=require('node:http'),assert=require('node:assert/strict');
 const root=path.resolve(__dirname,'..'),out=path.join(root,'.local-review','expense-photo-quota');
 const mime={'.html':'text/html; charset=utf-8','.js':'application/javascript','.mjs':'application/javascript','.css':'text/css','.json':'application/json','.png':'image/png','.jpg':'image/jpeg','.woff2':'font/woff2','.webmanifest':'application/manifest+json'};
@@ -38,10 +38,10 @@ const server=http.createServer((req,res)=>{
       ctx.putImageData(pixels,0,0);window.syntheticQuotaCanvas=canvas;const photo=canvas.toDataURL('image/jpeg',.8);
       const trips=Array.from({length:4},(_,trip)=>({id:'quota-trip-'+trip,title:'합성 누적 사진 여행 '+trip,revision:0,currency:'KRW',budget:100000,initialBalances:{KRW:100000},activeCurrencies:['KRW'],countries:['대한민국'],cities:['서울'],startDate:'2030-05-01',endDate:'2030-06-14',days:Array.from({length:45},(_,day)=>({id:`quota-day-${trip}-${day}`,dayNum:day+1,title:'합성 하루',date:new Date(Date.UTC(2030,4,day+1)).toISOString().slice(0,10),city:'서울',spots:Array.from({length:8},(_,spot)=>({id:`quota-spot-${trip}-${day}-${spot}`,title:'합성 일정',time:'09:00',cat:'tour'}))})),journals:{},expenses:trip?[]:Array.from({length:4},(_,index)=>({id:'quota-expense-'+index,title:'가상 물건 '+index,amount:1000,curr:'KRW',krw:1000,date:'2030-05-01',time:'09:00',cat:'shopping',type:'expense',photos:[photo,photo,photo,photo],primaryPhotoIndex:0})),checklist:[]}));
       State.trips=await TripRepository.saveAll(trips);State.activeTripId=trips[0].id;switchView('workspace');switchTab('expenses');
-      const raw=localStorage.getItem('st_trips_v2'),over=JSON.parse(JSON.stringify(State.trips));over[0].expenses[0].photos.push(photo,photo,photo,photo);
+      const raw=(await TripRepository.readRaw()),over=JSON.parse(JSON.stringify(State.trips));over[0].expenses[0].photos.push(photo,photo,photo,photo);
       let originalQuotaFailed=false;
       try{localStorage.setItem('st_trips_v2',JSON.stringify(over));}catch(error){originalQuotaFailed=error.name==='QuotaExceededError';}
-      finally{if(localStorage.getItem('st_trips_v2')!==raw)localStorage.setItem('st_trips_v2',raw);}
+      finally{if((await TripRepository.readRaw())!==raw)localStorage.setItem('st_trips_v2',raw);}
       return {initialChars:raw.length,fullTwentyChars:JSON.stringify(over).length,originalQuotaFailed,photoChars:photo.length,initialPhotoCount:State.trips[0].expenses.reduce((sum,expense)=>sum+expense.photos.length,0)};
     });
     assert.equal(baseline.initialPhotoCount,16);assert.equal(baseline.originalQuotaFailed,true);
@@ -53,8 +53,8 @@ const server=http.createServer((req,res)=>{
     await page.locator('#exp-photos-list .expense-photo-tile').last().locator('.expense-primary').click();
     const save=page.locator('#exp-form-submit-btn');await save.click();
     await page.waitForFunction(()=>document.getElementById('modal-expense').classList.contains('sheet-closed'));
-    const saved=await page.evaluate(()=>{
-      const trip=State.trips.find(item=>item.id==='quota-trip-0'),raw=localStorage.getItem('st_trips_v2'),stored=JSON.parse(raw).find(item=>item.id===trip.id);
+    const saved=await page.evaluate(async ()=>{
+      const trip=State.trips.find(item=>item.id==='quota-trip-0'),raw=(await TripRepository.readRaw()),stored=JSON.parse(raw).find(item=>item.id===trip.id);
       return {photoCount:trip.expenses.reduce((sum,expense)=>sum+expense.photos.length,0),primary:trip.expenses[0].primaryPhotoIndex,rawChars:raw.length,storedPhotos:stored.expenses.reduce((sum,expense)=>sum+expense.photos.length,0),archives:stored.expenses.filter(expense=>expense.expensePhotoArchive).length,days:trip.days.length,otherTripTitles:State.trips.slice(1).map(item=>item.title)};
     });
     assert.equal(saved.photoCount,20);assert.equal(saved.primary,7);assert.equal(saved.storedPhotos,0);assert.equal(saved.archives,4);assert.equal(saved.days,45);assert.ok(saved.rawChars<baseline.initialChars/10);
@@ -77,6 +77,7 @@ const server=http.createServer((req,res)=>{
     const read=await other.evaluate(json=>{const trips=SulsulTravel.TravelBackup.parse(json).trips;return {photos:trips[0].expenses.reduce((sum,expense)=>sum+expense.photos.length,0),primary:trips[0].expenses[0].primaryPhotoIndex,trips:trips.length};},standalone.json);
     assert.deepEqual(read,{photos:20,primary:7,trips:4});await separate.close();
     // 누락 보관본의 부팅은 기본값·큰 계획 ID를 보충하는 렌더에서도 원문을 다시 쓰지 않는다.
+    // v2.0.8: 아직 옮기지 않은 기기를 만든다(여행 저장소를 비우고 옛 문서에 둔다). 부팅은 한 번 옮기기만 하고(버전 1) 그 뒤로는 쓰지 않아야 한다.
     const missingPage=await context.newPage();missingPage.on('pageerror',error=>errors.push(error.message));
     await missingPage.addInitScript(()=>{
       window.expenseBootWrites=0;const original=Storage.prototype.setItem;
@@ -84,13 +85,13 @@ const server=http.createServer((req,res)=>{
     });
     await missingPage.goto(`http://127.0.0.1:${server.address().port}/`,{waitUntil:'networkidle'});await readyAndInteractive(missingPage);
     const missingRaw=JSON.stringify([{id:'missing-expense-synthetic',title:'합성 누락 사진 여행',days:[{id:'missing-day',title:'합성 하루',spots:[]}],expenses:[{id:'missing-expense',title:'가상 물건',photos:[],expensePhotoArchive:{id:'not-stored-synthetic',count:1,hash:'1:abc'}}],journals:{0:{text:'누락 사진과 별개로 보존할 합성 원문',photos:[]}}}]);
-    await missingPage.evaluate(raw=>localStorage.setItem('st_trips_v2',raw),missingRaw);
+    await missingPage.evaluate(async raw=>{await new Promise(resolve=>{const request=indexedDB.deleteDatabase('sulsul-travel-trips-v1');request.onsuccess=request.onerror=request.onblocked=resolve;});localStorage.removeItem('st_trip_store_v1');localStorage.setItem('st_trips_v2',raw);},missingRaw);
     await missingPage.reload({waitUntil:'networkidle'});await readyAndInteractive(missingPage);
-    const missing=await missingPage.evaluate(raw=>{
+    const missing=await missingPage.evaluate(async raw=>{
       let backupBlocked=false;try{SulsulTravel.TravelBackup.create(State.trips);}catch(_){backupBlocked=true;}
-      return {rawPreserved:localStorage.getItem('st_trips_v2')===raw,writes:window.expenseBootWrites,missing:SulsulTravel.expensePhotoRepository.missingReferences().length,tripVisible:State.trips[0].title==='합성 누락 사진 여행',recordPreserved:State.trips[0].journals[0].text==='누락 사진과 별개로 보존할 합성 원문',notCorrupt:!State.storageRecovery,backupBlocked};
+      return {rawPreserved:(await TripRepository.readRaw())===raw,writes:await TripRepository.currentToken(),missing:SulsulTravel.expensePhotoRepository.missingReferences().length,tripVisible:State.trips[0].title==='합성 누락 사진 여행',recordPreserved:State.trips[0].journals[0].text==='누락 사진과 별개로 보존할 합성 원문',notCorrupt:!State.storageRecovery,backupBlocked};
     },missingRaw);
-    assert.deepEqual(missing,{rawPreserved:true,writes:0,missing:1,tripVisible:true,recordPreserved:true,notCorrupt:true,backupBlocked:true});
+    assert.deepEqual(missing,{rawPreserved:true,writes:'idb:1',missing:1,tripVisible:true,recordPreserved:true,notCorrupt:true,backupBlocked:true});
     assert.deepEqual(errors,[]);const result={passed:true,baseline,saved,actualFileInput:true,actualSaveButton:true,freshPageHydration:true,independentBackup:true,interactiveBoots,noRecoveryOverlay:true,missingArchiveBoot:missing,runtimeErrors:errors};fs.writeFileSync(path.join(out,'results.json'),JSON.stringify(result,null,2));console.log(JSON.stringify(result,null,2));
   }finally{await browser.close();server.close();}
 })().catch(error=>{console.error(error);process.exitCode=1;server.close();});

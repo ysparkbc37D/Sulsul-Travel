@@ -1,5 +1,5 @@
 /* 실제 서비스워커 격리 검증: 합성 응답만 사용하며 외부 계정이나 여행 데이터를 읽지 않는다. */
-const {chromium}=require(process.env.PLAYWRIGHT_MODULE||'playwright');
+const {chromium}=require('./helpers/playwright.cjs');
 const fs=require('node:fs'),path=require('node:path'),http=require('node:http'),assert=require('node:assert/strict');
 const root=path.resolve(__dirname,'..'),source=fs.readFileSync(path.join(root,'sw.js'),'utf8');
 const cacheName=source.match(/const V = '([^']+)'/)[1],version=source.match(/css\/companion\.css\?v=([^']+)/)[1];

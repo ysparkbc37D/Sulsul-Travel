@@ -1,5 +1,5 @@
 /* 실제 공동 서버를 사용하지 않는 승인·개인 기록 보존·보기 권한 통합 검사. */
-const {chromium}=require(process.env.PLAYWRIGHT_MODULE || 'playwright');
+const {chromium}=require('./helpers/playwright.cjs');
 const fs=require('node:fs'),path=require('node:path'),http=require('node:http'),assert=require('node:assert/strict');
 const root=path.resolve(__dirname,'..');
 const server=http.createServer((req,res)=>{
@@ -39,7 +39,7 @@ const server=http.createServer((req,res)=>{
     assert.equal(await page.evaluate(()=>getActiveTrip().title),'우리의 여행','쓰기 실패 원본 유지');
     assert.equal(await page.locator('#modal-collaboration-review').isVisible(),true);
     assert.match(await page.locator('#collaboration-review-feedback').innerText(),/저장하지 못했습니다/);
-    await page.evaluate(()=>Storage.prototype.setItem=window.storageSet);
+    await page.evaluate(async()=>{await TripRepository.idle();Storage.prototype.setItem=window.storageSet;});
     await page.locator('#collaboration-review-apply').click();
     await page.waitForFunction(()=>window.reviewResult?.applied===true);
     await page.waitForFunction(()=>!history.state?.stCollaborationReview);

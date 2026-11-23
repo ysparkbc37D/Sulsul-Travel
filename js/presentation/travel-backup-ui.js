@@ -97,7 +97,8 @@ async function readTravelBackupFile(event){
   ensureTravelBackupModal().dataset.mode='restore';openModal('modal-travel-backup');
   const token=++TravelBackupUI.token;TravelBackupUI.pending=null;document.getElementById('backup-restore-apply').disabled=true;document.getElementById('backup-restore-summary').replaceChildren();
   travelBackupFeedback('backup-restore-feedback','파일을 읽고 복원할 내용을 확인하고 있습니다…');
-  const baseRaw=localStorage.getItem('st_trips_v2'),baseState=JSON.stringify(State.trips);
+  // 기준은 저장소가 마지막으로 본 식별값(IndexedDB면 버전, 기기 문서면 원문)이다. 다른 창의 변경은 저장할 때 거절된다.
+  const baseRaw=TripRepository.token(),baseState=JSON.stringify(State.trips);
   try{
     if(file.size>SulsulTravel.TravelBackup.MAX_BYTES)throw new Error('전체 백업은 50MB 이하의 JSON 파일을 선택해 주세요.');
     const text=await readTravelBackupText(file);
@@ -108,10 +109,10 @@ async function readTravelBackupFile(event){
   }catch(error){if(token===TravelBackupUI.token)travelBackupFeedback('backup-restore-feedback',`불러오지 못했습니다. 기존 여행은 유지됩니다. ${error.message||'파일을 확인해 주세요.'}`);return false;}
   finally{if(input)input.value='';}
 }
-function previewTravelBackupText(text,{filename='백업 파일',baseRaw=localStorage.getItem('st_trips_v2'),baseState=JSON.stringify(State.trips),source='file'}={}){
+function previewTravelBackupText(text,{filename='백업 파일',baseRaw=TripRepository.token(),baseState=JSON.stringify(State.trips),source='file'}={}){
   ensureTravelBackupModal().dataset.mode='restore';openModal('modal-travel-backup');
   TravelBackupUI.pending=null;document.getElementById('backup-restore-apply').disabled=true;
-  if(localStorage.getItem('st_trips_v2')!==baseRaw||JSON.stringify(State.trips)!==baseState)throw new Error('백업을 읽는 동안 여행이 변경됐습니다. 백업을 다시 불러와 주세요.');
+  if(TripRepository.token()!==baseRaw||JSON.stringify(State.trips)!==baseState)throw new Error('백업을 읽는 동안 여행이 변경됐습니다. 백업을 다시 불러와 주세요.');
   const imported=SulsulTravel.TravelBackup.parse(text);
   TravelBackupUI.pending={imported,baseRaw,baseState,filename,source};
   const summary=document.getElementById('backup-restore-summary');summary.replaceChildren();
@@ -127,10 +128,11 @@ async function applyTravelBackupRestore(){
   let committed=false;
   try{
     const overflow=await loadTravelBackupOverflow();
-    if(localStorage.getItem('st_trips_v2')!==pending.baseRaw||JSON.stringify(State.trips)!==pending.baseState)throw new Error('검토 중 여행 내용이 변경됐습니다. 백업 파일을 다시 선택해 주세요.');
+    if(TripRepository.token()!==pending.baseRaw||JSON.stringify(State.trips)!==pending.baseState)throw new Error('검토 중 여행 내용이 변경됐습니다. 백업 파일을 다시 선택해 주세요.');
     if(!confirm(`백업의 여행 ${pending.imported.trips.length}개로 현재 여행 ${State.trips.length}개를 교체할까요?\n\n현재 여행의 글·사진·지출도 교체됩니다. 필요한 여행은 먼저 백업하세요. 취소하면 현재 여행이 유지됩니다.`)){travelBackupFeedback('backup-restore-feedback','복원을 취소했습니다. 기존 여행은 유지됩니다. 다시 적용하거나 다른 파일을 선택할 수 있습니다.');return false;}
+    // 손상 원문 승인은 기기 문서 저장소에서만 필요하다. IndexedDB 저장소는 손상 문서를 옮기지 않고 비워 둔 채 시작한다.
     let recoveryRaw=null;
-    if(pending.baseRaw!==null){
+    if(TripRepository.kind==='localStorage'&&pending.baseRaw!==null){
       let healthy=false;try{healthy=Array.isArray(JSON.parse(pending.baseRaw));}catch(_){}
       if(State.storageRecovery||!healthy){
         const key=State.storageRecovery?.backupKey||`st_trips_v2_corrupt_restore_${Date.now()}`;

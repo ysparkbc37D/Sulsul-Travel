@@ -1,5 +1,5 @@
 /* 고정 여행으로 PDF/블로그 출력 선택과 페이지 넘김을 검증한다. 외부 통신은 차단한다. */
-const {chromium}=require(process.env.PLAYWRIGHT_MODULE || 'playwright');
+const {chromium}=require('./helpers/playwright.cjs');
 const fs=require('node:fs'),path=require('node:path'),http=require('node:http'),assert=require('node:assert/strict');
 const root=path.resolve(__dirname,'..'),output=path.join(root,'.local-review','travel-story');
 const server=http.createServer((req,res) => {

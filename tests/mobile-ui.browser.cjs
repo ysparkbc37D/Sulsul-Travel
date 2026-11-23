@@ -1,5 +1,5 @@
 /* Run: PLAYWRIGHT_MODULE=<optional absolute module path> node tests/mobile-ui.browser.cjs */
-const { chromium } = require(process.env.PLAYWRIGHT_MODULE || 'playwright');
+const { chromium } = require('./helpers/playwright.cjs');
 const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const path = require('node:path');

@@ -1,5 +1,5 @@
 /* 모바일 개선과 입력 계약의 통합 회귀. 새 브라우저와 고정 여행만 사용한다. */
-const {chromium}=require(process.env.PLAYWRIGHT_MODULE || 'playwright');
+const {chromium}=require('./helpers/playwright.cjs');
 const fs=require('node:fs'),path=require('node:path'),http=require('node:http'),assert=require('node:assert/strict');
 const root=path.resolve(__dirname,'..'),output=path.join(root,'.local-review','companion-refresh');
 const server=http.createServer((req,res) => {

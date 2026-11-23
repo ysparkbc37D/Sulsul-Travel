@@ -16,9 +16,14 @@
   }
 
   class TripStore {
-    constructor(backend, { getTrips, setTrips } = {}) {
+    // fallback: 기본 저장소(IndexedDB)를 쓸 수 없을 때 쓸 저장소(옛 기기 문서). canFallback()이 거짓이면(이미 옮겼으면) 바꾸지 않는다.
+    constructor(backend, { getTrips, setTrips, fallback = null, canFallback = () => true } = {}) {
       if (!backend || typeof backend.saveAll !== 'function') throw new TypeError('A trip storage backend is required');
       this.backend = backend;
+      this.fallback = fallback;
+      this.canFallback = canFallback;
+      this.fallbackReason = null;
+      this.unavailable = null;
       this.getTrips = getTrips || (() => this.current || []);
       this.setTrips = setTrips || (trips => { this.current = trips; });
       this.tail = Promise.resolve();
@@ -46,17 +51,49 @@
 
     get busy() { return this.pending > 0; }
 
+    // 지금 쓰는 저장소 종류('indexedDB' 또는 'localStorage').
+    get kind() { return this.backend.kind || 'unknown'; }
+
+    // 기본 저장소를 쓸 수 없으면, 아직 옮긴 적이 없을 때만 대체 저장소로 바꿔 같은 일을 한다.
+    async _withFallback(work) {
+      try { return await work(this.backend); }
+      catch (error) {
+        if (error?.code !== 'BACKEND_UNAVAILABLE' || !this.fallback || this.backend === this.fallback || !this.canFallback()) throw error;
+        this.fallbackReason = error.message;
+        this.backend = this.fallback;
+        return work(this.backend);
+      }
+    }
+
+    _ensureAvailable() { if (this.unavailable) throw this.unavailable; }
+
     // 이 창이 마지막으로 읽거나 쓴 저장 문서의 식별값. 다른 창의 변경을 미리 감지할 때 비교한다.
     token() { return this.backend.observedRaw ?? null; }
 
     getCommittedTrips() { return this.backend.getCommittedTrips(); }
 
     // 읽기도 줄에 세워 쓰는 도중의 문서를 읽지 않게 한다. 목록 반영은 부르는 쪽(부팅)이 정한다.
-    loadAll() { return this.run(async () => this.backend.loadAll()); }
+    // 저장소를 열 수 없으면 빈 목록과 함께 복구 상태를 돌려주고, 그 뒤의 저장은 모두 거절한다(옛 문서로 몰래 쓰지 않는다).
+    loadAll() {
+      return this.run(() => this._withFallback(backend => backend.loadAll())).catch(error => {
+        if (error?.code !== 'BACKEND_UNAVAILABLE') throw error;
+        this.unavailable = error;
+        return { trips: [], recoveredFromCorruption: true, backupKey: null, storageUnavailable: true, errorCode: 'BACKEND_UNAVAILABLE', message: error.message };
+      });
+    }
+
+    // 저장된 원문(사진을 뺀 직렬화 사본). 처음 부를 때 옛 문서를 새 저장소로 옮긴다.
+    readRaw() { return this.run(() => this._withFallback(backend => backend.readRaw())); }
+
+    // 저장소에 지금 기록된 식별값. 다른 창의 변경을 확인할 때 쓴다.
+    currentToken() { return this.run(async () => this.backend.currentToken()); }
+
+    stats() { return this.backend.stats(); }
 
     // 저장 문서를 다시 읽어 목록을 바꾼다(읽기 전용 여행을 고치려 한 뒤 등).
     reload() {
       return this.run(async () => {
+        this._ensureAvailable();
         const loaded = await this.backend.loadAll();
         if (!loaded.recoveredFromCorruption) this.setTrips(loaded.trips);
         return loaded;
@@ -66,6 +103,7 @@
     // 여행 하나를 고친다. expectedRevision을 주지 않으면 실행하는 순간의 revision을 쓴다(즉시 조작).
     commit({ tripId, expectedRevision, change }) {
       return this.run(async () => {
+        this._ensureAvailable();
         const trips = this.getTrips();
         const revision = expectedRevision === undefined ? trips.find(item => item.id === tripId)?.revision : expectedRevision;
         const next = await this.backend.commit(trips, { tripId, expectedRevision: revision, change });
@@ -82,6 +120,7 @@
       const base = typeof trips === 'function' ? null : this.signature(this.getTrips());
       const { restoreOnFailure = false, ...backendOptions } = options;
       return this.run(async () => {
+        this._ensureAvailable();
         if (base !== null && base !== this.signature(this.getTrips())) throw staleError();
         const input = typeof trips === 'function' ? trips(this.getTrips()) : trips;
         try {
@@ -102,6 +141,7 @@
     // AI 초안 적용. 같은 작업을 두 번 적용하지 않고, revision이 다르면 conflict를 돌려준다.
     applyDraft(options) {
       return this.run(async () => {
+        this._ensureAvailable();
         const result = await this.backend.applyDraft(this.getTrips(), options);
         if (result.status === 'applied') {
           if (!result.duplicate) this.sequence += 1;

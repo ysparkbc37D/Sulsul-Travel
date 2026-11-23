@@ -1,5 +1,5 @@
 /* 격리된 합성 여행과 모의 GitHub 응답으로 실제 저장·복원 경계를 확인한다. */
-const {chromium}=require(process.env.PLAYWRIGHT_MODULE||'playwright');
+const {chromium}=require('./helpers/playwright.cjs');
 const fs=require('node:fs'),path=require('node:path'),http=require('node:http'),assert=require('node:assert/strict');
 const root=path.resolve(__dirname,'..'),output=path.join(root,'.local-review','structural-reliability');
 const server=http.createServer((req,res)=>{
@@ -23,14 +23,14 @@ const fixture=()=>({id:'structural-trip',title:'구조 검증 가상 여행',sta
         await page.goto(origin+'/',{waitUntil:'networkidle'});await page.addStyleTag({content:'*,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}'});
         const api={page,context,errors,dialogs,
           async seed(trip=fixture()){return page.evaluate(async trip=>{State.trips=await TripRepository.saveAll([trip]);State.activeTripId=trip.id;State.activeJournalDay=0;switchView('workspace');switchTab('journal');renderJournalTab();return State.trips;},trip);},
-          async state(){return page.evaluate(()=>({trips:State.trips,stored:localStorage.getItem('st_trips_v2')}));},
+          async state(){return page.evaluate(async ()=>{const stored=await TripRepository.readRaw();return {trips:State.trips,stored};});},
           async quota(value){return page.evaluate(value=>{if(value){window.structuralSetItem=Storage.prototype.setItem;Storage.prototype.setItem=function(key,value){if(key==='st_trips_v2')throw new DOMException('synthetic quota','QuotaExceededError');return structuralSetItem.call(this,key,value);};}else Storage.prototype.setItem=structuralSetItem;},value);},
           async gistSettings(){await page.evaluate(()=>openSettingsModal('ai'));await page.locator('#cfg-github-pat').fill('synthetic-test-token');await page.locator('#cfg-github-gist').fill('synthetic-gist-id');},
           // tap()은 화면 밖 버튼을 스크롤한 직후 터치가 옛 스크롤 위치로 처리돼 다른 요소를 누르는 일이 있다(헤드리스 Chrome).
           // 그러면 저장 자체가 일어나지 않아 뒤 검사가 엉뚱한 이유로 실패하므로 click()으로 누르고 실제 기록을 확인한다.
           async saveJournal(text){
             await page.locator('#journal-text-input').fill(text);await page.locator('button[onclick="saveJournalText()"]').click();
-            await page.waitForFunction(text=>(localStorage.getItem('st_trips_v2')||'').includes(JSON.stringify(text).slice(1,-1)),text,{timeout:3000})
+            await page.waitForFunction(async text=>((await TripRepository.readRaw())||'').includes(JSON.stringify(text).slice(1,-1)),text,{timeout:3000})
               .catch(()=>{throw new Error('일기 저장 버튼을 눌렀지만 저장소에 기록되지 않았다: '+text);});
           },
           async assertDialogOpen(){assert.equal(await page.locator('#modal-confirm-delete').evaluate(element=>element.classList.contains('sheet-closed')),false);}
@@ -48,7 +48,7 @@ const fixture=()=>({id:'structural-trip',title:'구조 검증 가상 여행',sta
       const result=await second.evaluate(async ()=>{
         State.trips[0].title='오래된 두 번째 탭의 제목';const saved=await saveTrips();let errorCode=null;
         try{await TripRepository.saveAll(State.trips);}catch(error){errorCode=error.code;}
-        return {saved,errorCode,stored:localStorage.getItem('st_trips_v2')};
+        return {saved,errorCode,stored:(await TripRepository.readRaw())};
       });
       assert.equal(result.saved,false);assert.equal(result.errorCode,'STORAGE_CONFLICT');assert.equal(result.stored,latest.stored);
       assert.equal(JSON.parse(result.stored)[0].journals[0].text,'첫 번째 탭에서 새로 확정한 원문');await second.close();

@@ -1,5 +1,5 @@
 /* 합성 여행으로 회고 날짜의 UI·저장·보조 저장·에세이 연결을 확인한다. 외부 요청은 차단한다. */
-const {chromium}=require(process.env.PLAYWRIGHT_MODULE || 'playwright');
+const {chromium}=require('./helpers/playwright.cjs');
 const fs=require('node:fs'),path=require('node:path'),http=require('node:http'),assert=require('node:assert/strict');
 const root=path.resolve(__dirname,'..');
 const server=http.createServer((req,res)=>{
@@ -80,30 +80,30 @@ const server=http.createServer((req,res)=>{
     const switched=await page.evaluate(async ()=>{
       await installJournalSafetyFixture();const before=getActiveTrip().journals[0].photos.slice();
       requestDeleteJournalPhoto(0,0);State.activeTripId='journal-safety-b';const otherBefore=getActiveTrip().journals[0].photos.slice();await document.getElementById('confirm-delete-btn').onclick();
-      const stored=JSON.parse(localStorage.getItem('st_trips_v2'));
+      const stored=JSON.parse((await TripRepository.readRaw()));
       return {otherBefore,otherAfter:getActiveTrip().journals[0].photos,otherStored:stored.find(trip=>trip.id==='journal-safety-b').journals[0].photos,originalRemaining:State.trips.find(trip=>trip.id==='journal-safety-a').journals[0].photos.every(photo=>before.includes(photo))};
     });
     assert.deepEqual(switched.otherAfter,switched.otherBefore,'삭제 대기 중 여행을 바꿔도 다른 여행 사진은 유지');assert.deepEqual(switched.otherStored,switched.otherBefore);assert.equal(switched.originalRemaining,true);
     const reordered=await page.evaluate(async ()=>{
       await installJournalSafetyFixture();requestDeleteJournalPhoto(0,1);
       const next=structuredClone(State.trips),photos=next[0].journals[0].photos;next[0].journals[0].photos=[photos[2],photos[0],photos[1]];State.trips=await TripRepository.saveAll(next,{bumpTripId:next[0].id});const expected=getActiveTrip().journals[0].photos.slice();
-      await document.getElementById('confirm-delete-btn').onclick();return {expected,actual:getActiveTrip().journals[0].photos,stored:JSON.parse(localStorage.getItem('st_trips_v2'))[0].journals[0].photos};
+      await document.getElementById('confirm-delete-btn').onclick();return {expected,actual:getActiveTrip().journals[0].photos,stored:JSON.parse((await TripRepository.readRaw()))[0].journals[0].photos};
     });
     assert.deepEqual(reordered.actual,reordered.expected,'확인 전 사진 순서가 바뀌면 오래된 삭제 요청 중단');assert.deepEqual(reordered.stored,reordered.expected);
     const failedDeletion=await page.evaluate(async ()=>{
-      closeModal('modal-confirm-delete',true);await installJournalSafetyFixture();const before=JSON.stringify(getActiveTrip().journals[0]),raw=localStorage.getItem('st_trips_v2');requestDeleteJournalPhoto(0,1);
+      closeModal('modal-confirm-delete',true);await installJournalSafetyFixture();const before=JSON.stringify(getActiveTrip().journals[0]),raw=(await TripRepository.readRaw());requestDeleteJournalPhoto(0,1);
       const original=Storage.prototype.setItem;Storage.prototype.setItem=function(key,value){if(key==='st_trips_v2')throw new DOMException('synthetic journal quota','QuotaExceededError');return original.call(this,key,value);};
       try{await document.getElementById('confirm-delete-btn').onclick();}finally{Storage.prototype.setItem=original;}
-      const retained={memory:JSON.stringify(getActiveTrip().journals[0])===before,persisted:localStorage.getItem('st_trips_v2')===raw,dialog:!document.getElementById('modal-confirm-delete').classList.contains('sheet-closed')};
-      await document.getElementById('confirm-delete-btn').onclick();return {...retained,retryCount:getActiveTrip().journals[0].photos.length,retryPersisted:JSON.parse(localStorage.getItem('st_trips_v2'))[0].journals[0].photos.length};
+      const retained={memory:JSON.stringify(getActiveTrip().journals[0])===before,persisted:(await TripRepository.readRaw())===raw,dialog:!document.getElementById('modal-confirm-delete').classList.contains('sheet-closed')};
+      await document.getElementById('confirm-delete-btn').onclick();return {...retained,retryCount:getActiveTrip().journals[0].photos.length,retryPersisted:JSON.parse((await TripRepository.readRaw()))[0].journals[0].photos.length};
     });
     assert.deepEqual(failedDeletion,{memory:true,persisted:true,dialog:true,retryCount:2,retryPersisted:2},'사진 삭제 저장 실패는 원본과 확인창을 유지하고 재시도');
     await page.evaluate(async ()=>{await installJournalSafetyFixture();});
     await page.locator('#journal-text-input').fill('AI 검토 중에 추가 작성한 새 회고');
     const staleAi=await page.evaluate(async()=>{
-      const trip=getActiveTrip(),raw=localStorage.getItem('st_trips_v2'),entry=SulsulTravel.TripAdapter.getJournalEntry(trip,0);
+      const trip=getActiveTrip(),raw=(await TripRepository.readRaw()),entry=SulsulTravel.TripAdapter.getJournalEntry(trip,0);
       const result=await applyAiDraftPayload({id:'journal-unsaved-conflict',tripId:trip.id,targetId:'journal-day-0',kind:'journal',baseRevision:trip.revision,input:{dayIndex:0,dayId:entry.dayId,date:entry.date,sourceText:'기존 회고'},draft:{text:'검토 중이던 AI 문장'}});
-      return {result,storedUnchanged:localStorage.getItem('st_trips_v2')===raw,savedText:SulsulTravel.TripAdapter.getJournalEntry(getActiveTrip(),0).text,draft:State.journalTextDrafts[SulsulTravel.TripAdapter.journalDraftKey(getActiveTrip(),0)],input:document.getElementById('journal-text-input').value};
+      return {result,storedUnchanged:(await TripRepository.readRaw())===raw,savedText:SulsulTravel.TripAdapter.getJournalEntry(getActiveTrip(),0).text,draft:State.journalTextDrafts[SulsulTravel.TripAdapter.journalDraftKey(getActiveTrip(),0)],input:document.getElementById('journal-text-input').value};
     });
     assert.deepEqual(staleAi,{result:'conflict',storedUnchanged:true,savedText:'기존 회고',draft:'AI 검토 중에 추가 작성한 새 회고',input:'AI 검토 중에 추가 작성한 새 회고'},'AI 검토 중 미저장 회고를 덮어쓰지 않음');
     await page.evaluate(async()=>{
@@ -113,7 +113,7 @@ const server=http.createServer((req,res)=>{
     await page.locator('#journal-text-input').fill('AI에 맡길 합성 회고 원문');
     await page.evaluate(()=>generateAiJournalEssay());
     assert.equal(await page.locator('#ai-draft-review-original').textContent(),'AI에 맡길 합성 회고 원문');
-    assert.equal(await page.evaluate(()=>JSON.parse(localStorage.getItem('st_trips_v2'))[0].journals[0].text),'AI에 맡길 합성 회고 원문');
+    assert.equal(await page.evaluate(async ()=>JSON.parse((await TripRepository.readRaw()))[0].journals[0].text),'AI에 맡길 합성 회고 원문');
     await page.evaluate(()=>approveActiveAiDraft());
     const accepted=await page.evaluate(()=>{const entry=SulsulTravel.TripAdapter.getJournalEntry(getActiveTrip(),0);return {text:entry.text,original:entry.originalText,photos:entry.photos.length,input:document.getElementById('journal-text-input').value};});
     assert.deepEqual(accepted,{text:'합성 AI 회고 승인문',original:'AI에 맡길 합성 회고 원문',photos:3,input:'합성 AI 회고 승인문'});

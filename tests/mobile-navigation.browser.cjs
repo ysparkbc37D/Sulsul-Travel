@@ -1,6 +1,6 @@
 /* 개인 브라우저 대신 새 프로필에서 실제 history.back과 합성 여행만 검사한다. */
 'use strict';
-const {chromium}=require(process.env.PLAYWRIGHT_MODULE||'playwright');
+const {chromium}=require('./helpers/playwright.cjs');
 const fs=require('node:fs'),path=require('node:path'),http=require('node:http'),assert=require('node:assert/strict');
 const root=path.resolve(__dirname,'..'),output=path.join(root,'.local-review','mobile-navigation');
 const fixture=()=>({id:'navigation-synthetic',title:'가상 뒤로가기 검증',currency:'KRW',activeCurrencies:['KRW'],initialBalances:{KRW:100000},countries:['대한민국'],cities:['서울'],startDate:'2030-05-01',endDate:'2030-05-01',days:[{id:'navigation-day',date:'2030-05-01',city:'서울',title:'가상 첫날',planBlockId:'navigation-block',spots:[{id:'navigation-spot',title:'가상 산책',time:'09:00',cat:'tour'}]}],planBlockMeta:{'navigation-block':{title:'가상 거점',place:'서울'}},expenses:[],journals:{},checklist:[]});

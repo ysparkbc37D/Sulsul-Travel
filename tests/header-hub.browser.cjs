@@ -1,5 +1,5 @@
 /* 휴대폰에서 숨은 버전·찢긴 검색을 가로 넘침 검사만으로 놓치지 않는다. 개인 자료 없이 실행한다. */
-const {chromium}=require(process.env.PLAYWRIGHT_MODULE || 'playwright');
+const {chromium}=require('./helpers/playwright.cjs');
 const assert=require('node:assert/strict'),fs=require('node:fs'),http=require('node:http'),path=require('node:path');
 const root=path.resolve(__dirname,'..'),output=path.join(root,'.local-review','header-hub');
 const server=http.createServer((req,res) => {

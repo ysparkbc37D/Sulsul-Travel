@@ -1,6 +1,6 @@
 /* 실제 IndexedDB 거래·새 페이지·독립 파일만 사용하며 개인 브라우저에는 접근하지 않는다. */
 'use strict';
-const {chromium}=require(process.env.PLAYWRIGHT_MODULE||'playwright');
+const {chromium}=require('./helpers/playwright.cjs');
 const fs=require('node:fs'),path=require('node:path'),http=require('node:http'),assert=require('node:assert/strict');
 const root=path.resolve(__dirname,'..'),out=path.join(root,'.local-review','expense-photo-storage');
 const files=['js/domain/trip-adapter.js','js/infrastructure/storage/legacy-trip-repository.js','js/infrastructure/storage/expense-photo-repository.js'];

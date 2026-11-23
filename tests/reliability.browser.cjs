@@ -1,5 +1,5 @@
 /* 합성 데이터 통합 검사: 사용자 프로필, 인증 정보, 클라우드 쓰기 및 AI 호출 없음. */
-const {chromium}=require(process.env.PLAYWRIGHT_MODULE || 'playwright');
+const {chromium}=require('./helpers/playwright.cjs');
 const fs=require('node:fs'),path=require('node:path'),http=require('node:http'),assert=require('node:assert/strict');
 const root=path.resolve(__dirname,'..'),output=path.join(root,'.local-review','v1.8.6');
 const server=http.createServer((req,res)=>{
@@ -22,10 +22,10 @@ const server=http.createServer((req,res)=>{
    const withFailure=async fn=>{const old=Storage.prototype.setItem;Storage.prototype.setItem=function(k,v){if(k==='st_trips_v2')throw new DOMException('test quota','QuotaExceededError');return old.call(this,k,v);};try{return await fn();}finally{Storage.prototype.setItem=old;}};
    document.getElementById('journal-text-input').value='새 원문';
    const failed=await withFailure(()=>saveJournalText());
-   const persistedOnFail=JSON.parse(localStorage.getItem('st_trips_v2'))[0].journals[0].text;
+   const persistedOnFail=JSON.parse((await TripRepository.readRaw()))[0].journals[0].text;
    const memoryOnFail=getActiveTrip().journals[0].text;
    selectJournalDay(1);selectJournalDay(0);const draftRetained=document.getElementById('journal-text-input').value;
-   const retry=await saveJournalText();const saved=JSON.parse(localStorage.getItem('st_trips_v2'))[0].journals[0].text;
+   const retry=await saveJournalText();const saved=JSON.parse((await TripRepository.readRaw()))[0].journals[0].text;
    await withFailure(()=>toggleSpotCompleted(0,2));const completedOnFailure=getActiveTrip().days[0].spots[2].completed===true;
    const payload=SulsulTravel.TripTransfer.create(getActiveTrip(),{journals:true},APP_VER);
    const link=`${location.origin}/#share=${LZString.compressToEncodedURIComponent(JSON.stringify(payload))}`;
@@ -53,7 +53,7 @@ const server=http.createServer((req,res)=>{
    Storage.prototype.setItem=originalSetItem;await new Promise(resolve=>setTimeout(resolve,400));await document.getElementById('confirm-delete-btn').onclick();
    for(let i=0;i<20;i++){if(!(await JournalOverflowRepository.loadAll()).some(item=>item.tripId===deletionTrip.id))break;await new Promise(resolve=>setTimeout(resolve,20));}
    const deletionOverflowCleaned=!(await JournalOverflowRepository.loadAll()).some(item=>item.tripId===deletionTrip.id);
-   const deletionPersists=JSON.parse(localStorage.getItem('st_trips_v2')).every(item=>item.id!==deletionTrip.id);
+   const deletionPersists=JSON.parse((await TripRepository.readRaw())).every(item=>item.id!==deletionTrip.id);
    const lastTripDeletionSafe=State.trips.length===0&&State.activeTripId===null;
    if(priorSampleFlag==null)localStorage.removeItem('st_sa_sample_deleted');else localStorage.setItem('st_sa_sample_deleted',priorSampleFlag);
    State.trips=priorTestTrips;State.activeTripId=priorTestActiveId;

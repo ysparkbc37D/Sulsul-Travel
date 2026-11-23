@@ -1,6 +1,6 @@
 # 술술트래블 개발 가이드
 
-이 문서는 현재 앱 구조와 검증 방식을 설명합니다. 이전 구조를 기술한 문서는 상단에 역사 자료 또는 목표 설계라고 표시합니다. 현재 소스 버전은 `2.0.7`입니다. 원격 저장소와 배포 반영 여부는 별도로 확인합니다.
+이 문서는 현재 앱 구조와 검증 방식을 설명합니다. 이전 구조를 기술한 문서는 상단에 역사 자료 또는 목표 설계라고 표시합니다. 현재 소스 버전은 `2.0.8`입니다. 원격 저장소와 배포 반영 여부는 별도로 확인합니다.
 
 ## 실행 구조
 
@@ -38,6 +38,7 @@
 | `js/presentation/photo-optimization-ui.js` | 절감량·확대 미리보기·선택 적용·실패 재시도 |
 | `js/infrastructure/storage/media-repository.js` | 비율 유지 보관본, 썸네일, IndexedDB Blob과 JSON fallback |
 | `js/infrastructure/storage/expense-photo-repository.js` | 지출 사진 durable 보관·JSON projection·부팅 원본 복원 |
+| `js/infrastructure/storage/idb-trip-repository.js` | 여행 자료의 IndexedDB 저장소(`sulsul-travel-trips-v1`, 여행 하나 = 레코드 하나). 처음 열 때 기기 문서를 원문 보관 → 복사 → 대조 순서로 옮기고, 다른 창 충돌은 meta 버전으로 가른다 |
 | `js/infrastructure/storage/trip-store.js` | 여행 저장의 비동기 명령 경계. 저장을 한 줄로 차례대로 실행하고 성공한 작업 안에서 `State.trips`를 바꾼다. 백엔드(localStorage·IndexedDB)를 바꿔도 부르는 쪽은 같다 |
 | `js/infrastructure/storage/record-media-store.js` | 기록 사진을 IDB 보관본과 대조한 뒤 문서에서 빼기(project)·채우기(hydrate)·부팅 준비(prime)·옛 사진 보관(adopt), 첫 이전 전 원래 문서 보관 |
 | `js/presentation/storage-health-ui.js` | 설정 → 데이터의 저장 공간·사진 보관소·영구 보관·마지막 백업 표시와 하루 한 번 백업 알림 |
@@ -72,7 +73,7 @@
 
 ## 운영 배포
 
-운영 사이트는 [sulsul-travel.vercel.app](https://sulsul-travel.vercel.app/)이며, GitHub 저장소의 `main` 브랜치와 연결된 Vercel 배포를 사용합니다. GitHub Pages는 현재 설정되어 있지 않습니다. 현재 작업 버전 `v2.0.7`의 push와 운영 반영 여부는 이 문서 갱신만으로 확인되지 않습니다.
+운영 사이트는 [sulsul-travel.vercel.app](https://sulsul-travel.vercel.app/)이며, GitHub 저장소의 `main` 브랜치와 연결된 Vercel 배포를 사용합니다. GitHub Pages는 현재 설정되어 있지 않습니다. 현재 작업 버전 `v2.0.8`의 push와 운영 반영 여부는 이 문서 갱신만으로 확인되지 않습니다.
 
 ## 검증
 
@@ -103,6 +104,7 @@ node .\tests\backup-restore.browser.cjs
 node .\tests\field-records.browser.cjs
 node .\tests\records-consistency.browser.cjs
 node .\tests\record-media.browser.cjs
+node .\tests\trip-store-idb.browser.cjs
 .\tools-verify.ps1
 ```
 
@@ -116,10 +118,12 @@ Playwright 브라우저를 내려받지 않은 환경에서는 `PLAYWRIGHT_MODUL
 2. 여행 하나를 고치는 기능은 `commitTripCommand`(편집 시작 때의 revision) 또는 `commitTrip(tripId, change)`(바로 적용하는 조작)를 씁니다. 모든 저장 명령은 비동기입니다(v2.0.7). 반드시 `await`로 결과(true/false)를 받은 뒤 화면을 갱신합니다. `TripRepository`(`js/infrastructure/storage/trip-store.js`의 `TripStore`)는 저장을 한 줄로 차례대로 실행하고, 성공한 저장 작업 안에서 `State.trips`를 바꿉니다. 여행 목록 전체를 저장할 때는 저장 직전 목록을 받는 함수(`current => [...]`)를 넘깁니다. 호출할 때 만든 배열을 넘기면, 그 사이 다른 저장이 여행을 바꿨을 때 `STORAGE_CONFLICT`로 거절됩니다. `tools/lint-boundaries.cjs`의 ASYNC01이 기다리지 않은 저장과 Promise를 조건에 쓴 곳을 막습니다. `change`는 저장소가 만든 복사본을 받으며 저장에 성공해야 `State`가 바뀝니다. 여행을 더하거나 빼는 기능은 `commitTripsCommand`를 씁니다. 셸과 `js/presentation/`에서 `saveTrips(`·`TripRepository.saveAll(`·`st_trips_v2`를 새로 쓰면 `tools/lint-boundaries.cjs`(WRITE01)가 실패합니다. 예외는 `tools/boundary-allowlist.json`에 정확한 개수와 사유로만 둡니다.
 3. 저장 실패 시 초안·확인창·원본 데이터를 유지하고 재시도 가능한 안내를 표시합니다.
 4. 기록(하루 회고·일정 기록·순간 기록)을 세거나 목록·이야기·백업·공유에 보여 줄 때는 `js/domain/travel-records.js`(`TravelRecords.list`·`summary`·`firstPhoto`)만 씁니다. 저장 필드를 직접 세면 화면마다 수가 달라집니다. 글·사진·기분·날씨가 모두 빈 항목은 기록이 아닙니다. 기록을 쓰는 화면은 `commitTripRecord(tripId, write)`를 쓰고, 편집을 시작할 때의 그 기록과 지금 기록이 같은지 먼저 확인합니다(다른 일정·기록 변경은 충돌이 아닙니다).
-5. 기록 사진은 `photos[i]`에 data URL이 있어도 저장 문서에는 빈 문자열과 `mediaIds[i]`만 남을 수 있습니다(v2.0.6). 메모리의 `State`는 늘 사진이 채워져 있으므로 화면은 그대로 `photos`를 읽습니다. 저장 문서(`localStorage`)를 `JSON.stringify(State.trips)`와 비교하지 말고, 원문끼리 비교합니다. 새 사진은 `mediaRepository.prepare`로 만들어야 첫 저장부터 보관소로 갑니다. 그 밖의 경로로 들어온 사진은 다음 부팅 때 보관·대조한 뒤 옮깁니다. 저장 뒤 백그라운드에서 문서를 다시 쓰지 않습니다(사진 최적화·백업 복원이 잡은 원문 기준을 흔들기 때문).
+5. 기록 사진은 `photos[i]`에 data URL이 있어도 저장 원문에는 빈 문자열과 `mediaIds[i]`만 남을 수 있습니다(v2.0.6). 메모리의 `State`는 늘 사진이 채워져 있으므로 화면은 그대로 `photos`를 읽습니다. 저장 원문(`await TripRepository.readRaw()`)을 `JSON.stringify(State.trips)`와 비교하지 말고, 원문끼리 비교합니다. 새 사진은 `mediaRepository.prepare`로 만들어야 첫 저장부터 보관소로 갑니다. 그 밖의 경로로 들어온 사진은 다음 부팅 때 보관·대조한 뒤 옮깁니다. 저장 뒤 백그라운드에서 문서를 다시 쓰지 않습니다(사진 최적화·백업 복원이 잡은 원문 기준을 흔들기 때문).
 6. IDB 보조 데이터와 사진/일기 연결도 삭제·가져오기·여행 ID 변경 때 함께 점검합니다.
 7. 공유 링크·파일은 고정된 사본입니다. 개인 일기와 금액은 명시적 선택 없이 공유하지 않습니다.
 8. Gist 복원은 여행 목록 전체를 교체하므로 덮어쓰기 확인과 실패 시 원본 보존을 유지합니다.
+9. 여행 자료는 IndexedDB `sulsul-travel-trips-v1`에 여행 하나씩 있습니다(v2.0.8). `localStorage['st_trips_v2']`는 v2.0.7까지의 문서이며, 옮긴 뒤에는 이전 버전 창이 덮어쓰지 못하도록 끝에 줄바꿈을 붙인 사본으로 30일 남습니다. 새 코드는 이 키를 읽거나 쓰지 않습니다. 저장된 원문은 `await TripRepository.readRaw()`, 이 창이 마지막으로 본 저장 식별값은 `TripRepository.token()`, 저장소의 지금 식별값은 `await TripRepository.currentToken()`으로 얻습니다. IndexedDB를 열 수 없으면 아직 옮긴 적이 없을 때만 기기 문서로 계속 쓰고(`TripRepository.kind`가 `localStorage`), 옮긴 뒤에는 옛 문서로 돌아가지 않고 저장을 거절합니다.
+10. 브라우저 검사도 `localStorage['st_trips_v2']` 대신 `await TripRepository.readRaw()`로 저장 결과를 확인합니다. 기존 방식의 저장 실패 주입(`Storage.prototype.setItem`을 바꿔 `st_trips_v2` 쓰기를 실패시키기)은 `tests/helpers/playwright.cjs`의 검사용 다리가 IndexedDB 저장에도 같은 실패로 적용합니다. 모든 브라우저 검사는 Playwright를 이 도우미로 불러옵니다. 도우미는 클릭·탭·키 입력·파일 선택 뒤 앱의 저장 줄이 빌 때까지(최대 2초) 기다립니다. 기기 문서 저장은 클릭 이벤트 안에서 끝났지만 IndexedDB 저장은 몇 ms 뒤에 끝나기 때문입니다. 페이지 안에서 `button.click()`으로 누른 뒤 바로 결과를 읽는 검사는 `await button.onclick()`처럼 저장을 직접 기다립니다.
 
 ## PWA와 외부 통신
 

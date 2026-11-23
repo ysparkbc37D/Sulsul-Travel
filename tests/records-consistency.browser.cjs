@@ -1,6 +1,6 @@
 /* 기록 공통 모델 회귀 (v2.0.5). 허브 누적 통계·상세 목록·작업 화면 통계·공유 확인·대표 사진·기록 저장이
  * 같은 기록 수와 사진 수를 보는지 실제 화면에서 확인한다. 합성 여행만 사용한다. */
-const {chromium}=require(process.env.PLAYWRIGHT_MODULE || 'playwright');
+const {chromium}=require('./helpers/playwright.cjs');
 const fs=require('node:fs'),path=require('node:path'),http=require('node:http'),assert=require('node:assert/strict');
 const root=path.resolve(__dirname,'..');
 const types={'.html':'text/html; charset=utf-8','.js':'application/javascript','.mjs':'application/javascript','.css':'text/css','.png':'image/png','.json':'application/json','.woff2':'font/woff2','.ico':'image/x-icon','.webmanifest':'application/manifest+json'};
@@ -70,7 +70,7 @@ const otherTrip={id:'other_trip',title:'다른 가상 여행',startDate:'2030-06
         await commitTrip('records_trip',trip => {trip.days[0].spots[0].completed=true;});
         document.getElementById('moment-record-text').value='둘째 날 새 순간';rememberMomentDraft();
         const saved=await saveMomentRecord({quiet:true});
-        const stored=JSON.parse(localStorage.getItem('st_trips_v2')).find(trip => trip.id==='records_trip');
+        const stored=JSON.parse((await TripRepository.readRaw())).find(trip => trip.id==='records_trip');
         return {saved,before,after:stored.revision,completed:stored.days[0].spots[0].completed,texts:stored.momentEntries.map(entry => entry.text)};
       });
       assert.equal(result.saved,true);assert.equal(result.after,result.before+2,'일정 변경 1번 + 기록 저장 1번');

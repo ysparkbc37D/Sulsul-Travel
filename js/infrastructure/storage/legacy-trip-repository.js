@@ -18,7 +18,16 @@
       this.restore = options.restore || (trips => trips);
       this.observedRaw = this.storage.getItem(this.key);
       this.committedTrips = null;
+      this.kind = 'localStorage';
     }
+
+    // 저장 문서 원문(사진을 뺀 직렬화 사본). 부팅 때 사진 보관본을 준비하는 데 쓴다.
+    async readRaw() { return this.storage.getItem(this.key); }
+
+    async currentToken() { return this.storage.getItem(this.key); }
+
+    // 저장 공간 화면용: 여행 문서가 차지하는 글자 수.
+    async stats() { const raw = this.storage.getItem(this.key); return { kind: this.kind, chars: raw ? raw.length : 0, trips: null }; }
 
     clone(value) {
       return JSON.parse(JSON.stringify(value));
@@ -43,7 +52,7 @@
     loadAll() {
       const raw = this.storage.getItem(this.key);
       this.observedRaw = raw;
-      if (!raw) { this.committedTrips = []; return { trips: [], recoveredFromCorruption: false, backupKey: null }; }
+      if (!raw) { this.committedTrips = []; return { trips: [], recoveredFromCorruption: false, backupKey: null, fresh: raw === null }; }
       try {
         const trips = this.normalize(this.restore(JSON.parse(raw)));
         this.committedTrips = this.clone(trips);
@@ -73,7 +82,8 @@
 
     getCommittedTrips() { return this.committedTrips === null ? null : this.clone(this.committedTrips); }
 
-    commit(trips, {tripId, expectedRevision, change}) {
+    // 저장 백엔드가 달라도 같은 규칙: revision이 맞을 때만 복사본에 change를 적용한다.
+    prepareCommit(trips, {tripId, expectedRevision, change}) {
       const next = this.normalize(trips);
       const trip = next.find(item => item.id === tripId);
       if (!trip || trip.revision !== expectedRevision) {
@@ -82,42 +92,55 @@
       }
       change(trip);
       next[next.indexOf(trip)] = this.normalize([trip])[0];
-      return this.savePrepared(next, {bumpTripId:tripId});
+      return next;
+    }
+
+    commit(trips, options) {
+      return this.savePrepared(this.prepareCommit(trips, options), {bumpTripId:options.tripId});
     }
 
     saveAll(trips, options = {}) {
       return this.savePrepared(this.normalize(trips),options);
     }
 
-    savePrepared(next, options = {}) {
-      const { bumpTripId = null } = options;
-      if (bumpTripId) {
-        const trip = next.find((item) => item.id === bumpTripId);
-        if (trip) {
-          trip.revision += 1;
-          trip.updatedAt = this.now();
-        }
+    bump(next, bumpTripId) {
+      if (!bumpTripId) return;
+      const trip = next.find((item) => item.id === bumpTripId);
+      if (trip) {
+        trip.revision += 1;
+        trip.updatedAt = this.now();
       }
+    }
+
+    savePrepared(next, options = {}) {
+      this.bump(next, options.bumpTripId);
       this.write(next, options);
       return next;
     }
 
-    applyDraft(trips, { tripId, baseRevision, jobId, mutate }) {
+    // AI 초안: 같은 작업은 한 번만, revision이 다르면 쓰지 않는다. 쓸 목록(next)이나 바로 돌려줄 결과(result)를 만든다.
+    prepareDraft(trips, { tripId, baseRevision, jobId, mutate }) {
       if (typeof mutate !== 'function') throw new TypeError('MUTATOR_REQUIRED');
       const next = this.normalize(trips);
       const trip = next.find((item) => item.id === tripId);
-      if (!trip) return { status: 'conflict', reason: 'TRIP_NOT_FOUND' };
-      if (trip.appliedAiJobIds.includes(jobId)) return { status: 'applied', trips: next, duplicate: true };
+      if (!trip) return { result: { status: 'conflict', reason: 'TRIP_NOT_FOUND' } };
+      if (trip.appliedAiJobIds.includes(jobId)) return { result: { status: 'applied', trips: next, duplicate: true } };
       if (trip.revision !== baseRevision) {
-        return { status: 'conflict', reason: 'REVISION_CONFLICT', currentRevision: trip.revision };
+        return { result: { status: 'conflict', reason: 'REVISION_CONFLICT', currentRevision: trip.revision } };
       }
       mutate(trip);
       trip.revision += 1;
       trip.updatedAt = this.now();
       trip.appliedAiJobIds = [...trip.appliedAiJobIds, jobId].slice(-50);
       next[next.indexOf(trip)] = this.normalize([trip])[0];
-      this.write(next);
-      return { status: 'applied', trips: next, duplicate: false };
+      return { next };
+    }
+
+    applyDraft(trips, options) {
+      const prepared = this.prepareDraft(trips, options);
+      if (prepared.result) return prepared.result;
+      this.write(prepared.next);
+      return { status: 'applied', trips: prepared.next, duplicate: false };
     }
   }
 

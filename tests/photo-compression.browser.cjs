@@ -1,7 +1,7 @@
 /* 개인정보 없는 합성 원본으로 실제 브라우저 압축량·전체 프레임·문서 확대를 검증한다.
  * OCR 검사가 아니다. 텍스트 행의 대비와 크기는 판독 정확도를 보장하지 않는다. */
 'use strict';
-const {chromium}=require(process.env.PLAYWRIGHT_MODULE||'playwright');
+const {chromium}=require('./helpers/playwright.cjs');
 const fs=require('node:fs'),path=require('node:path'),http=require('node:http'),assert=require('node:assert/strict');
 const root=path.resolve(__dirname,'..'),out=path.join(root,'.local-review','photo-compression');
 const modulePath='js/infrastructure/storage/photo-compression.js';

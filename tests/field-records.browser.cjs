@@ -1,5 +1,5 @@
 /* 현장 퀵 캡슐·AI 캡슐 일기·SOS·매거진 회귀 (v2.0.2). 가상 예제와 합성 여행만 사용한다. */
-const {chromium}=require(process.env.PLAYWRIGHT_MODULE || 'playwright');
+const {chromium}=require('./helpers/playwright.cjs');
 const fs=require('node:fs'),path=require('node:path'),http=require('node:http'),assert=require('node:assert/strict');
 const root=path.resolve(__dirname,'..');
 const types={'.html':'text/html; charset=utf-8','.js':'application/javascript','.mjs':'application/javascript','.css':'text/css','.png':'image/png','.json':'application/json','.woff2':'font/woff2','.ico':'image/x-icon','.webmanifest':'application/manifest+json'};
@@ -44,9 +44,9 @@ const legacyTrip={id:'legacy_capsule_trip',title:'레거시 캡슐 여행',start
       assert.equal(await page.locator('#capsule-day-select').inputValue(),'2');
       await page.fill('#capsule-text-input','3일차 야시장 메모');
       await page.click('#capsule-save-btn');
-      const result=await page.evaluate(() => {
+      const result=await page.evaluate(async () => {
         const trip=getActiveTrip(),entry=trip.momentEntries.find(item => item.text==='3일차 야시장 메모');
-        const stored=JSON.parse(localStorage.getItem('st_trips_v2')).find(item => item.id===trip.id);
+        const stored=JSON.parse((await TripRepository.readRaw())).find(item => item.id===trip.id);
         const story=SulsulTravel.TravelStory.build(trip,{photoSource:SulsulTravel.MediaRepository.photoSource});
         return {entry,quick:'quickCapsules' in trip,storedHas:stored.momentEntries.some(item => item.text==='3일차 야시장 메모'),inStory:story.days.find(day => day.date==='2030-04-03')?.records.some(record => record.text==='3일차 야시장 메모'),input:document.getElementById('capsule-text-input').value,toasts:window.__toasts};
       });
@@ -75,10 +75,10 @@ const legacyTrip={id:'legacy_capsule_trip',title:'레거시 캡슐 여행',start
         const file=new File([blob],'street.png',{type:'image/png'});
         await handleCapsulePhotoInput({target:{files:[file],value:''}});
         document.getElementById('capsule-text-input').value='사진 캡슐';
-        const before=(localStorage.getItem('st_trips_v2') || '').length,saved=await saveQuickCapsule();
+        const before=((await TripRepository.readRaw()) || '').length,saved=await saveQuickCapsule();
         const entry=getActiveTrip().momentEntries.find(item => item.text==='사진 캡슐');
         const size=async source => {const image=new Image();image.src=source;await image.decode();return [image.naturalWidth,image.naturalHeight];};
-        return {saved,originalBytes:blob.size,photo:entry?.photos?.[0] ? await size(entry.photos[0]) : null,thumb:entry?.photoThumbnails?.[0] ? await size(entry.photoThumbnails[0]) : null,mediaId:entry?.mediaIds?.[0] || null,growth:(localStorage.getItem('st_trips_v2') || '').length-before};
+        return {saved,originalBytes:blob.size,photo:entry?.photos?.[0] ? await size(entry.photos[0]) : null,thumb:entry?.photoThumbnails?.[0] ? await size(entry.photoThumbnails[0]) : null,mediaId:entry?.mediaIds?.[0] || null,growth:((await TripRepository.readRaw()) || '').length-before};
       });
       assert.equal(result.saved,true);assert.ok(result.mediaId,'IndexedDB 보관본 ID');
       // 원본 2400×1800을 그대로 넣지 않고 용도별 압축 결과(장축 1280px 이하)와 작은 썸네일을 쓴다.
@@ -183,7 +183,7 @@ const legacyTrip={id:'legacy_capsule_trip',title:'레거시 캡슐 여행',start
       assert.equal(capsule.date,'2030-04-03');assert.equal(capsule.dayIndex,2);assert.equal(capsule.link,'s3');
       assert.equal(diary.source,'capsule-diary');assert.match(diary.title,/AI 작성·검토 전/);assert.equal(diary.text,'AI가 쓴 글');
       // 다음 저장에서 옮긴 형식이 문서에도 남는다.
-      const persisted=await legacy.evaluate(async () => {const trip=getActiveTrip();await commitTripCommand({tripId:trip.id,expectedRevision:trip.revision,change:copy => {copy.title='레거시 캡슐 여행 (확인)';}});const stored=JSON.parse(localStorage.getItem('st_trips_v2'))[0];return {quick:'quickCapsules' in stored,moments:stored.momentEntries.length};});
+      const persisted=await legacy.evaluate(async () => {const trip=getActiveTrip();await commitTripCommand({tripId:trip.id,expectedRevision:trip.revision,change:copy => {copy.title='레거시 캡슐 여행 (확인)';}});const stored=JSON.parse((await TripRepository.readRaw()))[0];return {quick:'quickCapsules' in stored,moments:stored.momentEntries.length};});
       assert.equal(persisted.quick,false);assert.equal(persisted.moments,2);
       assert.deepEqual(legacyErrors,[],legacyErrors.join('\n'));
       return {loaded,persisted};

@@ -1,5 +1,5 @@
 /* 격리된 브라우저에서 실제 저장/사진 비율/AI 승인/새로고침·JSON 복원을 검사한다. */
-const {chromium}=require(process.env.PLAYWRIGHT_MODULE || 'playwright');
+const {chromium}=require('./helpers/playwright.cjs');
 const fs=require('node:fs'),path=require('node:path'),http=require('node:http'),assert=require('node:assert/strict');
 const root=path.resolve(__dirname,'..'),output=path.join(root,'.local-review','moment-journal');
 const server=http.createServer((req,res)=>{
@@ -39,7 +39,7 @@ const server=http.createServer((req,res)=>{
   const failure=await page.evaluate(async ()=>{
    const old=Storage.prototype.setItem,original=momentEntries(getActiveTrip()).find(item=>item.id===secondMomentId).text;document.getElementById('moment-record-text').value='저장 실패에도 남길 원문';rememberMomentDraft();
    Storage.prototype.setItem=function(key,value){if(key==='st_trips_v2')throw new DOMException('quota','QuotaExceededError');return old.call(this,key,value);};let ok;try{ok=await saveMomentRecord();}finally{Storage.prototype.setItem=old;}
-   return {ok,original,persisted:JSON.parse(localStorage.getItem('st_trips_v2'))[0].momentEntries.find(item=>item.id===secondMomentId).text,memory:momentEntries(getActiveTrip()).find(item=>item.id===secondMomentId).text,draft:document.getElementById('moment-record-text').value,retry:await saveMomentRecord()};
+   return {ok,original,persisted:JSON.parse((await TripRepository.readRaw()))[0].momentEntries.find(item=>item.id===secondMomentId).text,memory:momentEntries(getActiveTrip()).find(item=>item.id===secondMomentId).text,draft:document.getElementById('moment-record-text').value,retry:await saveMomentRecord()};
   });assert.equal(failure.ok,false);assert.equal(failure.persisted,failure.original);assert.equal(failure.memory,failure.original);assert.equal(failure.draft,'저장 실패에도 남길 원문');assert.equal(failure.retry,true);
   const scopeDirty=await page.evaluate(async ()=>{
    document.getElementById('moment-record-visibility').value='private';rememberMomentDraft();window.confirm=()=>false;const closed=closeMomentJournal();const dirty=momentEditorDirty();window.confirm=()=>true;const saved=await saveMomentRecord(),privateSaved=momentEntries(getActiveTrip()).find(entry=>entry.id===secondMomentId).visibility;document.getElementById('moment-record-visibility').value='shared';await saveMomentRecord();return {closed,dirty,saved,privateSaved};
@@ -83,7 +83,7 @@ const server=http.createServer((req,res)=>{
    State.activeJournalDay=0;renderJournalTab();document.getElementById('journal-text-input').value='사진 실패에도 보존할 하루 회고';rememberJournalDraft();
    const canvas=document.createElement('canvas');canvas.width=2400;canvas.height=1200;canvas.getContext('2d').fillRect(0,0,2400,1200);const file=new File([await new Promise(resolve=>canvas.toBlob(resolve))],'daily.png',{type:'image/png'}),old=Storage.prototype.setItem,id=getActiveTrip().id;
    Storage.prototype.setItem=function(key,value){if(key==='st_trips_v2')throw new DOMException('quota','QuotaExceededError');return old.call(this,key,value);};try{await handleJournalPhotoUpload({target:{files:[file],value:'daily.png'}});}finally{Storage.prototype.setItem=old;}
-   const pending=State.journalPhotoDrafts[SulsulTravel.TripAdapter.journalDraftKey(getActiveTrip(),0)],image=new Image();image.src=pending.photos[0].source;await image.decode();const original=getActiveTrip().journals[0].text,persisted=JSON.parse(localStorage.getItem('st_trips_v2')).find(trip=>trip.id===id).journals[0].text;
+   const pending=State.journalPhotoDrafts[SulsulTravel.TripAdapter.journalDraftKey(getActiveTrip(),0)],image=new Image();image.src=pending.photos[0].source;await image.decode();const original=getActiveTrip().journals[0].text,persisted=JSON.parse((await TripRepository.readRaw())).find(trip=>trip.id===id).journals[0].text;
    selectJournalDay(1);selectJournalDay(0);return {pending:pending.photos.length,size:[image.width,image.height],original,persisted,draft:document.getElementById('journal-text-input').value,visible:document.querySelectorAll('.journal-photo-pending img').length};
   });assert.deepEqual(dailyFailure,{pending:1,size:[1280,640],original:'기존 하루 회고',persisted:'기존 하루 회고',draft:'사진 실패에도 보존할 하루 회고',visible:1});
   const dailySaved=await page.evaluate(async ()=>{const id=getActiveTrip().id,ok=await saveJournalPhotoDraft(id,0),trip=getActiveTrip();window.dailyPhotoBackup=JSON.stringify(SulsulTravel.TripTransfer.create(trip,{journals:true}));return {ok,text:trip.journals[0].text,photos:trip.journals[0].photos.length,thumbs:trip.journals[0].photoThumbnails.length,moments:momentEntries(trip).length,pending:!!State.journalPhotoDrafts[SulsulTravel.TripAdapter.journalDraftKey(trip,0)],backupPhotos:SulsulTravel.TripTransfer.parse(dailyPhotoBackup).trip.journals[0].photos.length};});
@@ -95,13 +95,13 @@ const server=http.createServer((req,res)=>{
    const base=structuredClone(State.trips.find(trip=>trip.id==='moment-test')),entry=structuredClone(base.momentEntries[1]);
    const owner={...structuredClone(base),id:'media-cleanup-owner',title:'사진 원본 여행',journals:{},activityRecords:{},momentEntries:[{...entry,id:'cleanup-moment',photos:[shared.source,orphan.source],photoThumbnails:[shared.thumbnail,orphan.thumbnail],mediaIds:[shared.mediaId,orphan.mediaId],coverIndex:0}]};
    const copy={...structuredClone(base),id:'media-cleanup-copy',title:'같은 사진을 참조하는 사본',momentEntries:[],activityRecords:{},journals:{0:{text:'사본의 사진 원문',photos:[shared.source],photoThumbnails:[shared.thumbnail],mediaIds:[shared.mediaId],coverIndex:0}}};
-   State.trips=await TripRepository.saveAll([...State.trips,owner,copy]);window.cleanupMedia={shared:shared.mediaId,orphan:orphan.mediaId,other:other.mediaId};window.cleanupBefore=JSON.stringify(State.trips);window.cleanupRaw=localStorage.getItem('st_trips_v2');window.cleanupCalls=[];
+   State.trips=await TripRepository.saveAll([...State.trips,owner,copy]);window.cleanupMedia={shared:shared.mediaId,orphan:orphan.mediaId,other:other.mediaId};window.cleanupBefore=JSON.stringify(State.trips);window.cleanupRaw=(await TripRepository.readRaw());window.cleanupCalls=[];
    const original=repo.prune.bind(repo);repo.prune=async(...args)=>{cleanupCalls.push(args[1]?.tripId||'*');return original(...args);};
    const stored=await Promise.all(Object.values(cleanupMedia).map(id=>repo.get(id)));return {allStored:stored.every(value=>value.original instanceof Blob&&value.thumbnail instanceof Blob),ids:stored.length};
   });assert.deepEqual(cleanupSetup,{allStored:true,ids:3});
   const deleteStorageFailure=await page.evaluate(async()=>{
    const old=Storage.prototype.setItem;requestDeleteTrip('media-cleanup-owner');Storage.prototype.setItem=function(key,value){if(key==='st_trips_v2')throw new DOMException('quota','QuotaExceededError');return old.call(this,key,value);};try{await document.getElementById('confirm-delete-btn').onclick();}finally{Storage.prototype.setItem=old;}
-   return {memory:JSON.stringify(State.trips)===cleanupBefore,persisted:localStorage.getItem('st_trips_v2')===cleanupRaw,pruneCalls:cleanupCalls.length,blobs:(await Promise.all(Object.values(cleanupMedia).map(id=>SulsulTravel.mediaRepository.get(id)))).every(Boolean)};
+   return {memory:JSON.stringify(State.trips)===cleanupBefore,persisted:(await TripRepository.readRaw())===cleanupRaw,pruneCalls:cleanupCalls.length,blobs:(await Promise.all(Object.values(cleanupMedia).map(id=>SulsulTravel.mediaRepository.get(id)))).every(Boolean)};
   });assert.deepEqual(deleteStorageFailure,{memory:true,persisted:true,pruneCalls:0,blobs:true});
   await page.waitForTimeout(400);await page.locator('#confirm-delete-btn').click();
   await page.waitForFunction(async()=>!(await SulsulTravel.mediaRepository.get(cleanupMedia.orphan)));
@@ -112,12 +112,12 @@ const server=http.createServer((req,res)=>{
    return {failures,blob:!!(await SulsulTravel.mediaRepository.get(cleanupMedia.other))};
   });assert.deepEqual(invalidCleanup,{failures:['INVALID_RETAINED_TRIPS','INVALID_MEDIA_TRIP_ID'],blob:true});
   await page.evaluate(async()=>{
-   const copy=structuredClone(State.trips.find(trip=>trip.id==='media-cleanup-copy'));copy.journals[0].mediaIds=[];window.cleanupRestoreJson=JSON.stringify({trips:[copy]});window.cleanupRestoreBefore=JSON.stringify(State.trips);window.cleanupRestoreRaw=localStorage.getItem('st_trips_v2');window.cleanupOldSetItem=Storage.prototype.setItem;
+   const copy=structuredClone(State.trips.find(trip=>trip.id==='media-cleanup-copy'));copy.journals[0].mediaIds=[];window.cleanupRestoreJson=JSON.stringify({trips:[copy]});window.cleanupRestoreBefore=JSON.stringify(State.trips);window.cleanupRestoreRaw=(await TripRepository.readRaw());window.cleanupOldSetItem=Storage.prototype.setItem;
    Storage.prototype.setItem=function(key,value){if(key==='st_trips_v2')throw new DOMException('quota','QuotaExceededError');return cleanupOldSetItem.call(this,key,value);};window.cleanupRestoreInput={files:[new File([cleanupRestoreJson],'restore.json',{type:'application/json'})],value:'restore.json'};window.confirm=()=>true;await importDataFromJson({target:cleanupRestoreInput});await applyTravelBackupRestore();
   });
   await page.waitForFunction(()=>cleanupRestoreInput.value==='');
   const restoreStorageFailure=await page.evaluate(async()=>{
-   Storage.prototype.setItem=cleanupOldSetItem;return {memory:JSON.stringify(State.trips)===cleanupRestoreBefore,persisted:localStorage.getItem('st_trips_v2')===cleanupRestoreRaw,calls:cleanupCalls.slice(),blobs:(await Promise.all([cleanupMedia.shared,cleanupMedia.other].map(id=>SulsulTravel.mediaRepository.get(id)))).every(Boolean)};
+   Storage.prototype.setItem=cleanupOldSetItem;return {memory:JSON.stringify(State.trips)===cleanupRestoreBefore,persisted:(await TripRepository.readRaw())===cleanupRestoreRaw,calls:cleanupCalls.slice(),blobs:(await Promise.all([cleanupMedia.shared,cleanupMedia.other].map(id=>SulsulTravel.mediaRepository.get(id)))).every(Boolean)};
   });assert.deepEqual(restoreStorageFailure,{memory:true,persisted:true,calls:['media-cleanup-owner'],blobs:true});
   await page.evaluate(async()=>{cleanupRestoreInput={files:[new File([cleanupRestoreJson],'restore.json',{type:'application/json'})],value:'restore.json'};await importDataFromJson({target:cleanupRestoreInput});await applyTravelBackupRestore();});
   await page.waitForFunction(()=>cleanupRestoreInput.value==='');await page.waitForFunction(async()=>!(await SulsulTravel.mediaRepository.get(cleanupMedia.shared))&&!(await SulsulTravel.mediaRepository.get(cleanupMedia.other)));

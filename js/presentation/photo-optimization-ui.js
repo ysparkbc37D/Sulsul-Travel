@@ -45,7 +45,7 @@ function invalidatePhotoOptimizationPreview(){
   document.getElementById('photo-opt-list').replaceChildren();document.getElementById('photo-opt-summary').textContent='';
   photoOptimizeFeedback('대상이나 읽기 기준이 바뀌었습니다. 절감 용량 미리보기를 다시 눌러 주세요.');
 }
-function photoOptimizationCurrent(){return localStorage.getItem('st_trips_v2')===PhotoOptimizeUI.baseRaw&&JSON.stringify(State.trips)===PhotoOptimizeUI.baseState;}
+function photoOptimizationCurrent(){return TripRepository.token()===PhotoOptimizeUI.baseRaw&&JSON.stringify(State.trips)===PhotoOptimizeUI.baseState;}
 function renderPhotoOptimizationPreview(){
   const list=document.getElementById('photo-opt-list');list.replaceChildren();
   const names={expense:'지출 사진',journal:'하루 회고',activity:'일정 기록',moment:'순간 기록'};
@@ -75,7 +75,7 @@ async function previewPhotoOptimization(){
   try{
     await restoreJournalOverflowEntries();
     if(token!==PhotoOptimizeUI.token)return false;
-    PhotoOptimizeUI.baseRaw=localStorage.getItem('st_trips_v2');PhotoOptimizeUI.baseState=JSON.stringify(State.trips);
+    PhotoOptimizeUI.baseRaw=TripRepository.token();PhotoOptimizeUI.baseState=JSON.stringify(State.trips);
     const selected=document.getElementById('photo-opt-scope').value,entries=SulsulTravel.PhotoOptimization.enumerate(State.trips,selected?{scopeTripId:selected}:{}),policy=document.getElementById('photo-opt-policy').value;
     let failed=0,unchanged=0;
     for(let index=0;index<entries.length;index++){
@@ -116,7 +116,10 @@ async function retryPhotoOptimizationCleanup(){
   try{
     const pendingIds=new Set(),pending=[State.journalPhotoDrafts,State.activityRecordEditor?.draft,State.momentRecordEditor?.draft],seen=new WeakSet();
     while(pending.length){const value=pending.pop();if(!value||typeof value!=='object'||seen.has(value))continue;seen.add(value);for(const [key,child]of Object.entries(value)){if(key==='mediaId'&&typeof child==='string')pendingIds.add(child);if(key==='mediaIds'&&Array.isArray(child))child.forEach(id=>pendingIds.add(id));if(child&&typeof child==='object')pending.push(child);}}
-    await SulsulTravel.PhotoCleanup.cleanup({expectedRaw:localStorage.getItem('st_trips_v2'),mediaIds:candidates.oldMediaIds.filter(id=>!pendingIds.has(id)),expenseArchiveIds:candidates.oldExpenseArchiveIds,onExpenseDeleted:id=>SulsulTravel.expensePhotoRepository.cache.delete(id)});
+    // 정리 기준은 지금 저장된 원문이다. 정리하는 동안 이 창이 다시 저장하면 멈춘다(다른 창의 저장은 버전 충돌로 이미 막힌다).
+    const token=TripRepository.token(),storedRaw=await TripRepository.readRaw();
+    if(TripRepository.token()!==token)throw new Error('사진 정리 전에 여행이 변경되었습니다. 다시 시도해 주세요.');
+    await SulsulTravel.PhotoCleanup.cleanup({expectedRaw:storedRaw,isCurrent:()=>TripRepository.token()===token,mediaIds:candidates.oldMediaIds.filter(id=>!pendingIds.has(id)),expenseArchiveIds:candidates.oldExpenseArchiveIds,onExpenseDeleted:id=>SulsulTravel.expensePhotoRepository.cache.delete(id)});
     PhotoOptimizeUI.cleanup=null;document.getElementById('photo-opt-cleanup').hidden=true;return true;
   }catch(error){document.getElementById('photo-opt-cleanup').hidden=false;photoOptimizeFeedback(`사진은 저장했습니다. 이전 보관본 정리를 마치지 못했습니다. ${error.message||''}`);return false;}
 }

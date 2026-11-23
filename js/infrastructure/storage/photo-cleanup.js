@@ -22,9 +22,10 @@
     }
     return {mediaIds,expenseArchiveIds};
   }
-  async function cleanup({indexedDB = root.indexedDB,storage = root.localStorage,expectedRaw,mediaIds = [],expenseArchiveIds = [],onExpenseDeleted,timeoutMs = 5000} = {}) {
-    if (!storage || typeof storage.getItem !== 'function' || typeof expectedRaw !== 'string') throw new TypeError('INVALID_PHOTO_CLEANUP_DOCUMENT');
-    const verify = () => { if (storage.getItem('st_trips_v2') !== expectedRaw) throw conflict(); };
+  // isCurrent: 저장된 여행 자료가 expectedRaw 그대로인지 동기로 답하는 함수(IndexedDB 저장소). 없으면 기기 문서 원문과 비교한다.
+  async function cleanup({indexedDB = root.indexedDB,storage = root.localStorage,expectedRaw,isCurrent = null,mediaIds = [],expenseArchiveIds = [],onExpenseDeleted,timeoutMs = 5000} = {}) {
+    if (typeof expectedRaw !== 'string' || (typeof isCurrent !== 'function' && (!storage || typeof storage.getItem !== 'function'))) throw new TypeError('INVALID_PHOTO_CLEANUP_DOCUMENT');
+    const verify = () => { if (typeof isCurrent === 'function' ? !isCurrent() : storage.getItem('st_trips_v2') !== expectedRaw) throw conflict(); };
     verify();
     let trips;
     try { trips = JSON.parse(expectedRaw); } catch (_) { throw new TypeError('INVALID_PHOTO_CLEANUP_DOCUMENT'); }

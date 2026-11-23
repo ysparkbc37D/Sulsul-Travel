@@ -15,7 +15,7 @@ function settleMediaIds(actual, reference) {
   });
   return copy;
 }
-const { chromium } = require(process.env.PLAYWRIGHT_MODULE || 'playwright');
+const { chromium } = require('./helpers/playwright.cjs');
 const fs = require('node:fs');
 const path = require('node:path');
 const http = require('node:http');
@@ -124,7 +124,7 @@ function content(trip) {
       },
       // v2.0.6부터 저장 문서는 대조된 기록 사진을 빼고 보관본 ID만 둔다. 문서와 메모리 비교는 사진을 채운 문서(hydrated)로 한다.
       async snapshot() {
-        return page.evaluate(key => { const raw = localStorage.getItem(key); return { trips: State.trips, raw, hydrated: raw ? SulsulTravel.recordMediaStore.hydrate(JSON.parse(raw)) : null }; }, storageKey);
+        return page.evaluate(async () => { const raw = await TripRepository.readRaw(); return { trips: State.trips, raw, hydrated: raw ? SulsulTravel.recordMediaStore.hydrate(JSON.parse(raw)) : null }; }, storageKey);
       },
       async trip() { return (await this.snapshot()).trips.find(trip => trip.id === tripId); },
       async quota(enabled) {
@@ -458,7 +458,7 @@ function content(trip) {
       await restarted.evaluate(id => { State.activeTripId = id; switchView('workspace'); switchTab('today'); selectCompanionTodayDay(1); }, tripId);
       assert.deepEqual(await restarted.locator('#today-overview-container > .companion-timeline > article[data-spot-id]').evaluateAll(cards => cards.map(card => card.dataset.spotId)), pendingIds(saved.trips[0].days[1]));
       assert.equal(await restarted.evaluate(id => commitLiveSchedule({ type: 'defer', tripId: id, dayId: 'live-day-02', itemId: 'record' }, getActiveTrip().revision, '합성 오프라인 변경'), tripId), true);
-      const changed = await restarted.evaluate(() => { const raw = localStorage.getItem('st_trips_v2'); return { trips: State.trips, raw, hydrated: SulsulTravel.recordMediaStore.hydrate(JSON.parse(raw)) }; });
+      const changed = await restarted.evaluate(async () => { const raw = (await TripRepository.readRaw()); return { trips: State.trips, raw, hydrated: SulsulTravel.recordMediaStore.hydrate(JSON.parse(raw)) }; });
       assert.deepEqual(content(settleMediaIds(changed.trips, saved.trips)[0]), content(saved.trips[0])); assert.equal(changed.trips[0].planHistory.length, saved.trips[0].planHistory.length + 1);
       assert.equal(changed.trips[0].days[1].spots.find(spot => spot.id === 'record').deferred, true);
       assert.deepEqual(changed.hydrated, changed.trips); await restarted.close();

@@ -3,8 +3,9 @@
  * 2) 옛 문서의 사진은 부팅 때 원래 문서를 보관한 뒤 옮긴다.
  * 3) 사진 포함 백업을 새 기기(빈 프로필)에 복원해도 문서 한도에 걸리지 않는다.
  * 4) 보관본이 사라지면 자리와 ID를 그대로 두고 알리며, 불완전한 백업 파일을 만들지 않는다.
- * 5) 이전된 문서를 구버전(v2.0.5) 앱이 열어도 사진 참조를 지우지 않고, 새 버전에서 다시 모두 보인다. */
-const {chromium}=require(process.env.PLAYWRIGHT_MODULE || 'playwright');
+ * 5) (v2.0.8) 여행 자료를 옮긴 뒤 구버전(v2.0.5) 앱은 옮기기 전의 옛 문서(사진 포함)로 열리고, 그 변경은 새 버전이 따로 보관한다. 새 버전의 사진은 그대로다.
+ *    (이전 설명) 이전된 문서를 구버전(v2.0.5) 앱이 열어도 사진 참조를 지우지 않고, 새 버전에서 다시 모두 보인다. */
+const {chromium}=require('./helpers/playwright.cjs');
 const fs=require('node:fs'),path=require('node:path'),http=require('node:http'),assert=require('node:assert/strict'),{execFileSync}=require('node:child_process');
 const root=path.resolve(__dirname,'..');
 const types={'.html':'text/html; charset=utf-8','.js':'application/javascript','.mjs':'application/javascript','.css':'text/css','.png':'image/png','.json':'application/json','.woff2':'font/woff2','.ico':'image/x-icon','.webmanifest':'application/manifest+json'};
@@ -78,7 +79,7 @@ const photoFingerprint=page => page.evaluate(() => State.trips.flatMap(t => [...
         catch(error){ return error.name || error.message; }
       })()); return results; },photos);
       assert.ok(saved.every(value => value===true),JSON.stringify(saved));
-      const after=await page.evaluate(() => ({raw:localStorage.getItem('st_trips_v2').length,photos:SulsulTravel.TravelRecords.summary(State.trips[0]).photoCount,inState:State.trips[0].momentEntries.every(entry => entry.photos[0].startsWith('data:image/'))}));
+      const after=await page.evaluate(async () => ({raw:(await TripRepository.readRaw()).length,photos:SulsulTravel.TravelRecords.summary(State.trips[0]).photoCount,inState:State.trips[0].momentEntries.every(entry => entry.photos[0].startsWith('data:image/'))}));
       assert.ok(after.raw<200000,`여행 문서 ${after.raw}자`);assert.equal(after.photos,22);assert.equal(after.inState,true);
       expectedPhotos=await photoFingerprint(page);
       const started=Date.now();await page.reload({waitUntil:'networkidle'});await page.waitForFunction(() => window.SulsulShell?.started);const bootMs=Date.now()-started;
@@ -92,10 +93,10 @@ const photoFingerprint=page => page.evaluate(() => State.trips.flatMap(t => [...
       return {photoChars:total,documentChars:after.raw,bootMs,backupMB:+(backupJson.length/1024/1024).toFixed(2)};
     });
     await check('보관본을 잃으면 자리와 ID를 그대로 두고 알리며 불완전한 백업 파일을 만들지 않는다',async() => {
-      const rawBefore=await page.evaluate(() => localStorage.getItem('st_trips_v2'));
+      const rawBefore=await page.evaluate(async () => (await TripRepository.readRaw()));
       await page.evaluate(() => new Promise((resolve,reject) => {const request=indexedDB.deleteDatabase('sulsul-travel-media-v1');request.onsuccess=resolve;request.onerror=reject;request.onblocked=resolve;}));
       await page.reload({waitUntil:'networkidle'});await page.waitForFunction(() => window.SulsulShell?.started);
-      const state=await page.evaluate(async() => ({missing:SulsulTravel.recordMediaStore.missingReferences().length,raw:localStorage.getItem('st_trips_v2'),ids:State.trips[0].momentEntries.every(entry => entry.mediaIds[0] && entry.photos[0]===''),health:(await SulsulTravel.StorageHealth.collect()).photos}));
+      const state=await page.evaluate(async() => ({missing:SulsulTravel.recordMediaStore.missingReferences().length,raw:(await TripRepository.readRaw()),ids:State.trips[0].momentEntries.every(entry => entry.mediaIds[0] && entry.photos[0]===''),health:(await SulsulTravel.StorageHealth.collect()).photos}));
       assert.equal(state.missing,22);assert.equal(state.ids,true);assert.equal(state.raw,rawBefore,'부팅이 저장 문서를 바꾸지 않는다');
       assert.equal(state.health.missing,22);
       const backup=await page.evaluate(async() => {try{await collectTravelBackup();return 'created';}catch(error){return error.message;}});
@@ -113,7 +114,7 @@ const photoFingerprint=page => page.evaluate(() => State.trips.flatMap(t => [...
         await importDataFromJson({target:input});await applyTravelBackupRestore();
       },backupJson);
       await restore.waitForFunction(() => State.trips.some(trip => trip.id==='long-trip'),null,{timeout:120000});
-      const restored=await restore.evaluate(() => ({raw:localStorage.getItem('st_trips_v2').length,photos:SulsulTravel.TravelRecords.summary(State.trips.find(trip => trip.id==='long-trip')).photoCount}));
+      const restored=await restore.evaluate(async () => ({raw:(await TripRepository.readRaw()).length,photos:SulsulTravel.TravelRecords.summary(State.trips.find(trip => trip.id==='long-trip')).photoCount}));
       assert.ok(restored.raw<200000,`복원 뒤 여행 문서 ${restored.raw}자`);assert.equal(restored.photos,22);
       assert.equal(await photoFingerprint(restore),expectedPhotos);
       await restore.reload({waitUntil:'networkidle'});await restore.waitForFunction(() => window.SulsulShell?.started);
@@ -122,7 +123,7 @@ const photoFingerprint=page => page.evaluate(() => State.trips.flatMap(t => [...
       return {restoredDocumentChars:restored.raw,photos:22};
     });
 
-    await check('옛 문서의 사진은 부팅 때 원래 문서를 보관한 뒤 옮기고, 구버전 앱이 열어도 참조를 지우지 않는다',async() => {
+    await check('옛 문서의 사진은 부팅 때 원래 문서를 보관한 뒤 옮기고, 구버전 앱이 연 옛 문서의 변경은 따로 보관한다',async() => {
       const legacyContext=await newContext(),seedPage=await legacyContext.newPage();
       await seedPage.route('**/*',route => new URL(route.request().url()).hostname==='127.0.0.1' ? route.continue() : route.abort());
       await seedPage.goto(url,{waitUntil:'networkidle'});await seedPage.waitForFunction(() => window.SulsulShell?.started);
@@ -131,14 +132,15 @@ const photoFingerprint=page => page.evaluate(() => State.trips.flatMap(t => [...
       const legacy={...trip('legacy-trip',3),title:'옛 형식 가상 여행',momentEntries:photos.map((photo,index) => ({id:`old-${index}`,date:'2030-05-02',time:'10:00',text:`옛 순간 ${index}`,photos:[photo.source],photoThumbnails:[photo.thumbnail],mediaIds:[null],coverIndex:0,activityLink:null,visibility:'private'}))};
       const legacyRaw=JSON.stringify([legacy]);
       await seedPage.evaluate(async raw => {
-        await new Promise(resolve => {const request=indexedDB.deleteDatabase('sulsul-travel-media-v1');request.onsuccess=request.onerror=request.onblocked=resolve;});
-        localStorage.setItem('st_trips_v2',raw);
+        for(const name of ['sulsul-travel-media-v1','sulsul-travel-trips-v1'])await new Promise(resolve => {const request=indexedDB.deleteDatabase(name);request.onsuccess=request.onerror=request.onblocked=resolve;});
+        localStorage.removeItem('st_trip_store_v1');localStorage.setItem('st_trips_v2',raw);
       },legacyRaw);
       await seedPage.close();
       const {page:migrated,errors:migrateErrors}=await open(legacyContext);
-      const after=await migrated.evaluate(async() => ({raw:localStorage.getItem('st_trips_v2'),snapshot:(await SulsulTravel.recordMediaStore.getSnapshot())?.raw||null,state:State.trips[0].momentEntries.map(entry => ({photo:entry.photos[0],id:entry.mediaIds[0]}))}));
+      const after=await migrated.evaluate(async() => ({raw:(await TripRepository.readRaw()),snapshot:(await SulsulTravel.recordMediaStore.getSnapshot())?.raw||null,state:State.trips[0].momentEntries.map(entry => ({photo:entry.photos[0],id:entry.mediaIds[0]}))}));
       assert.equal(after.snapshot,legacyRaw,'처음 옮기기 전의 원래 문서를 그대로 보관한다');
-      assert.ok(after.raw.length<legacyRaw.length/5,`옮긴 뒤 문서 ${after.raw.length}자 (옮기기 전 ${legacyRaw.length}자)`);
+      assert.ok(after.raw.length<legacyRaw.length/5,`옮긴 뒤 저장 원문 ${after.raw.length}자 (옮기기 전 ${legacyRaw.length}자)`);
+      assert.equal(await migrated.evaluate(() => TripRepository.kind),'indexedDB');
       assert.deepEqual(after.state.map(item => item.photo),photos.map(photo => photo.source),'화면의 사진은 그대로');
       assert.ok(after.state.every(item => typeof item.id==='string' && item.id),'새 보관본 ID를 붙인다');
       const migratedFingerprint=await photoFingerprint(migrated);
@@ -154,17 +156,18 @@ const photoFingerprint=page => page.evaluate(() => State.trips.flatMap(t => [...
           const version=APP_VER,blank=State.trips[0].momentEntries.filter(entry => entry.photos[0]==='').length;
           const saved=await commitTripCommand({tripId:'legacy-trip',expectedRevision:State.trips[0].revision,change:copy => {copy.title='구버전에서 바꾼 제목';}});
           const stored=JSON.parse(localStorage.getItem('st_trips_v2'))[0];
-          return {version,blank,saved,ids:stored.momentEntries.every(entry => typeof entry.mediaIds[0]==='string' && entry.mediaIds[0]),kept:stored.momentEntries.length};
+          return {version,blank,saved,title:stored.title,kept:stored.momentEntries.length};
         });
         assert.deepEqual(oldErrors,[]);await oldPage.close();
       } finally { serveRoot=root; }
-      assert.equal(oldResult.version,'2.0.5');assert.equal(oldResult.saved,true);assert.equal(oldResult.ids,true,'구버전 저장도 사진 참조를 지우지 않는다');assert.equal(oldResult.kept,6);
+      assert.equal(oldResult.version,'2.0.5');assert.equal(oldResult.blank,0,'구버전은 옮기기 전 문서로 열려 사진이 빈칸이 아니다');assert.equal(oldResult.saved,true);assert.equal(oldResult.title,'구버전에서 바꾼 제목');assert.equal(oldResult.kept,6);
       const {page:back,errors:backErrors}=await open(legacyContext);
       assert.equal(await photoFingerprint(back),migratedFingerprint,'새 버전으로 돌아오면 사진이 모두 다시 보인다');
-      assert.equal(await back.evaluate(() => State.trips[0].title),'구버전에서 바꾼 제목');
+      const backState=await back.evaluate(async() => {const stats=await TripRepository.stats();const snapshot=await TripRepository.backend.getSnapshot(stats.legacySnapshots.at(-1));return {title:State.trips[0].title,saved:JSON.parse(snapshot.raw)[0].title};});
+      assert.deepEqual(backState,{title:'옛 형식 가상 여행',saved:'구버전에서 바꾼 제목'},'새 버전은 새 저장소의 자료를 쓰고, 구버전의 변경은 따로 보관한다');
       assert.deepEqual([...migrateErrors,...backErrors],[]);
       await legacyContext.close();
-      return {migrated:true,snapshotKept:true,oldVersionBlankPhotos:oldResult.blank,oldVersionKeptReferences:true};
+      return {migrated:true,snapshotKept:true,oldVersionBlankPhotos:oldResult.blank,oldVersionChangeKeptSeparately:true};
     });
   } finally {
     await browser.close();server.close();

@@ -1,5 +1,5 @@
 /* 개인 자료와 실제 외부 AI 없이 현장 변경·한 줄 헤더·잘린 글 상세를 확인한다. */
-const {chromium}=require(process.env.PLAYWRIGHT_MODULE||'playwright');
+const {chromium}=require('./helpers/playwright.cjs');
 const fs=require('node:fs'),path=require('node:path'),http=require('node:http'),assert=require('node:assert/strict');
 const root=path.resolve(__dirname,'..'),output=path.join(root,'.local-review','schedule-change');
 const server=http.createServer((req,res)=>{const file=path.resolve(root,'.'+new URL(req.url,'http://localhost').pathname.replace(/\/$/,'/index.html'));if(!file.startsWith(root+path.sep))return res.writeHead(403).end();fs.readFile(file,(e,b)=>{if(e)return res.writeHead(404).end();res.setHeader('Content-Type',({'.html':'text/html','.css':'text/css','.js':'application/javascript','.mjs':'application/javascript','.png':'image/png','.woff2':'font/woff2'})[path.extname(file)]||'application/octet-stream');res.end(b);});});
@@ -12,7 +12,7 @@ const fixture=()=>({id:'field-trip',title:'[가상 검증] 아주 긴 여행 제
    try{await page.goto(origin+'/',{waitUntil:'networkidle'});await page.addStyleTag({content:'*,*::before,*::after{transition:none!important;animation:none!important;scroll-behavior:auto!important}'});await page.evaluate(async t=>{State.trips=await TripRepository.saveAll([t]);State.activeTripId=t.id;switchView('workspace');switchTab('today');},fixture());await run(page);assert.deepEqual(errors,[]);results.push({name,passed:true});}
    catch(e){results.push({name,passed:false,error:e.stack,errors});await page.screenshot({path:path.join(output,'failure-'+results.length+'.png')}).catch(()=>{});}finally{console.log(results.at(-1).passed?'PASS '+name:'FAIL '+name);await context.close();}}
   const settle=p=>p.evaluate(()=>new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r))));
-  const state=p=>p.evaluate(()=>({trips:State.trips,raw:localStorage.getItem('st_trips_v2')}));
+  const state=p=>p.evaluate(async ()=>{const raw=await TripRepository.readRaw();return {trips:State.trips,raw};});
   const quota=(p,value)=>p.evaluate(value=>{if(value){window.fieldSetItem=Storage.prototype.setItem;Storage.prototype.setItem=function(k,v){if(k==='st_trips_v2')throw new DOMException('합성','QuotaExceededError');return fieldSetItem.call(this,k,v);};}else Storage.prototype.setItem=fieldSetItem;},value);
   for(const width of [320,360,390,430])await check(width+'px 한 줄 헤더 순서·실제 클릭·긴 제목',async p=>{
    await p.setViewportSize({width,height:844});for(const view of ['hub','workspace']){

@@ -17,7 +17,8 @@
       shell.compatible = () => !shell.failedAssets.length &&
         ['getJournalEntry','setJournalEntry','pinJournalIdentity','journalDraftKey'].every(name => typeof window.SulsulTravel?.TripAdapter?.[name] === 'function') &&
         typeof window.SulsulTravel?.LegacyTripRepository?.prototype.getCommittedTrips === 'function' &&
-        typeof window.SulsulTravel?.TripStore?.prototype.commit === 'function';
+        typeof window.SulsulTravel?.TripStore?.prototype.commit === 'function' &&
+        typeof window.SulsulTravel?.IdbTripRepository?.prototype.readRaw === 'function';
       shell.reload = () => {if(!shell.reloading){shell.reloading=true;location.reload();}};
       shell.canReload = () => {
         if(!shell.started)return true;
@@ -136,17 +137,17 @@
   </script>
 
   <!-- PWA Meta & Icons -->
-  <link rel="manifest" href="manifest.webmanifest?v=2.0.7">
+  <link rel="manifest" href="manifest.webmanifest?v=2.0.8">
   <meta name="theme-color" content="#F7F5F0">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <meta name="apple-mobile-web-app-title" content="술술트래블">
-  <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192-v115.png?v=2.0.7">
-  <link rel="icon" type="image/png" sizes="32x32" href="favicon.png?v=2.0.7">
+  <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192-v115.png?v=2.0.8">
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon.png?v=2.0.8">
   <link rel="shortcut icon" href="favicon.ico">
-  <link rel="apple-touch-icon" sizes="180x180" href="icons/apple-touch-icon-v115.png?v=2.0.7">
-  <link rel="apple-touch-icon" href="icons/apple-touch-icon-v115.png?v=2.0.7">
+  <link rel="apple-touch-icon" sizes="180x180" href="icons/apple-touch-icon-v115.png?v=2.0.8">
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon-v115.png?v=2.0.8">
 
   <!-- Google Fonts: Great Vibes, Dancing Script (Cursive Calligraphy), Cormorant Garamond, Noto Serif KR, Playfair Display -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -154,7 +155,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Great+Vibes&family=Cormorant+Garamond:wght@600;700;800&family=Noto+Serif+KR:wght@500;600;700;900&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
 
   <!-- Local Utilities Bundle (CDN fallback & tailwind utilities) -->
-  <link rel="stylesheet" href="css/utilities.css?v=2.0.7" integrity="sha384-HMVB4SH6xwwGITkNyT8ARmHegAYSuTMocPGl4bpl0JywMIe2PqYrUxqZOgEuZjmP">
+  <link rel="stylesheet" href="css/utilities.css?v=2.0.8" integrity="sha384-HMVB4SH6xwwGITkNyT8ARmHegAYSuTMocPGl4bpl0JywMIe2PqYrUxqZOgEuZjmP">
   <link rel="stylesheet" href="vendor/fontawesome/css/all.min.css" integrity="sha384-t1nt8BQoYMLFN5p42tRAtuAAFQaCQODekUVeKKZrEnEyp4H2R0RHFz0KWpmj7i8g">
 
   <!-- Leaflet Map CSS & JS -->
@@ -1496,57 +1497,58 @@
     }
   </style>
 
-  <link rel="stylesheet" href="css/companion.css?v=2.0.7" integrity="sha384-Syant7HB0IYUZUU2saRSYUDkM71WKVuK2JtHM+kAluFdw3VvWv9gSglgJh4utHv/">
-  <link rel="stylesheet" href="css/companion-refresh.css?v=2.0.7" integrity="sha384-g1MzsPxYgFA1G2Ba189anhZCcQnMwkNSt6MlFXiazIHGO0Kqp2sbMXQZ2kjr3p4u">
-  <link rel="stylesheet" href="css/live-itinerary.css?v=2.0.7" integrity="sha384-e/V9wyJ/Gi6baSHcWzBeNGjdn/eKDQIvKWyiYmByLE7C7nYJaQOA+GshtUMcCR72">
-  <link rel="stylesheet" href="css/expense-mobile.css?v=2.0.7" integrity="sha384-QZFtKrU/YvkTaEKv0oJ2ZQi1Zry8RgEFaHzTckwuPFsMDDmadYBH7UuYgTVS7281">
-  <link rel="stylesheet" href="css/moment-journal.css?v=2.0.7" integrity="sha384-g1EihgfyPDJ5o5eWSsQgT1WDTRKDtUfzVatlx6T/t+DhApDBY8dznSrwmelasv91">
-  <script src="js/domain/trip-adapter.js?v=2.0.7" integrity="sha384-JHU/NkAlxwR9G9/49TaFK4sTvg9xKGsSVd3re8rLivtiXcSNdnQA9gRIfvVWUtG7"></script>
-  <script src="js/domain/ai-draft-validation.js?v=2.0.7" integrity="sha384-OTRAiX7YaOiiNrpMWDjkOyH0bTbbL3KrGwGp1RmIkgvd15pErNTTKVTJkoesmpfi"></script>
-  <script src="js/domain/live-itinerary.js?v=2.0.7" integrity="sha384-cwMH5i2F5Mve7Z9cKeWrP7uLU5plcu6c7xvTf4Lyz3Xkb6GlNCI14lnEWzw46cVg"></script>
-  <script src="js/presentation/live-itinerary-ui.js?v=2.0.7" integrity="sha384-SLjn2QhNBI6VfrG3siiRZqfs51VnmqyRCTMGjMN25fIyHhYwf4LnECXOOiQ4arog"></script>
-  <script src="js/presentation/live-itinerary-bridge.js?v=2.0.7" integrity="sha384-lRoX8rvtVNC3rl6v9tCVjTLCSBjLmTH3EhNiq6OPizV+6GvspGEUIpH00HoPTgEn"></script>
-  <script src="js/domain/schedule-change.js?v=2.0.7" integrity="sha384-v7zQ2iSY9DIrsztq758NvV0o6vbsguJn70NviXT6itT6YcuNaCvSW2beDogcMbD7"></script>
-  <script src="js/presentation/schedule-change-ui.js?v=2.0.7" integrity="sha384-fOItr8fMYWgvB5eWBN7rYfZwI39HhAcWCn8j9+oJjijLWEYZjccXKl2D7mt1VF+T"></script>
-  <script src="js/domain/spot-realignment.js?v=2.0.7" integrity="sha384-gCFPNcD1aD3UegqTLtFPCU7Xqm7CtRN0yjQx2QnWe1ee0i3cZu8pzZic7YzBJLKt"></script>
-  <script src="js/presentation/spot-realignment-ui.js?v=2.0.7" integrity="sha384-GKlSQQKluvxcnRhJmQVQL4lZIFXbqf8ac/0BnxPiWNWcLjFJWYx/IZU3+5fZI7dk"></script>
-  <script src="js/domain/travel-records.js?v=2.0.7" integrity="sha384-qhkfkF1xKTuPtBvsB5Gwpz631xTkyy2tS1BU9Hixd2L1t+oobsXBMJnFv1pBHNnW"></script>
-  <script src="js/domain/travel-story.js?v=2.0.7" integrity="sha384-vjuGNDpytM6vG8SuZbKLW7qTTV1L33j48P1KSwNQnvca7uxo5EYkBM2X0IOdn/Qa"></script>
-  <script src="js/infrastructure/storage/photo-compression.js?v=2.0.7" integrity="sha384-MeOApXBzhg++Rcq/Lfjwb04/MA1U6wmwHppDgFZvKA4ZfdPC4oR2Hv1BhPFNU7Ig"></script>
-  <link rel="stylesheet" href="css/photo-optimization.css?v=2.0.7" integrity="sha384-9sgcirlxZs5tcmp/22RdH56B3bZla/q4DVH7x8W+fO8P4neR4WJMDDtQNK4WPq+/">
-  <script src="js/domain/photo-optimization.js?v=2.0.7" integrity="sha384-fpPZ4nJ383bIJaSHvmuZg+9BYd5LQ8YuVtEEMjtJnQr2Fod/mawAoB5SYMdtvBRU"></script>
-  <script src="js/infrastructure/storage/photo-cleanup.js?v=2.0.7" integrity="sha384-hws5SGtCziHhqp8Y2hysTXIAd0s1vfgNY0xU5/1LSw8G/D0LtlmWtrQZRaFuC7Q5"></script>
-  <script src="js/presentation/photo-optimization-ui.js?v=2.0.7" integrity="sha384-sNDBh1Yg+XPxZQQUpYuT0VZVdIK34vTEaNH2itk/XO2oOS5iRzjhXrAQkLWO46TU"></script>
-  <script src="js/infrastructure/storage/media-repository.js?v=2.0.7" integrity="sha384-q0IPoo86aU2ruB130X1HAh01dr4hpI0IAXeMVCoa7Jy/2pIB09f7WbSKPm8vowhw"></script>
-  <script src="js/infrastructure/storage/record-media-store.js?v=2.0.7" integrity="sha384-vNu5tI/i1vWsxi2/3aQYW+9zYfivBNB2ewaUTRlwhnGwRbv9dpR4bu/sqzv1D2jm"></script>
-  <script src="js/infrastructure/storage/expense-photo-repository.js?v=2.0.7" integrity="sha384-gdumvFYkJqEbRPJlK4mffCsUjPsnKCXLg6/1fLMR8kUuU1QDMeLLOYmMVSRTGNSy"></script>
-  <script src="js/presentation/companion-ui.js?v=2.0.7" integrity="sha384-hZkc18DoCwXe/Uwp1EN1dw8rSLnSOlHqBPalNvKlsZGhYlnbYSMqsApQV5Z+cLLK"></script>
-  <script src="js/domain/trip-transfer.js?v=2.0.7" integrity="sha384-VD9q1co1+bJzdS4i19rvfkQN/4KvzfnNdHUjbbucghcxzjmPim+kWF93qv5DaXSu"></script>
-  <script src="js/domain/travel-backup.js?v=2.0.7" integrity="sha384-4zE43uWlz5y3eP7g98tEL3HqAsw08/XvINQ+RhLLt4wz+cnySMWiy3Eu1m7BaBbK"></script>
-  <script src="js/presentation/travel-backup-ui.js?v=2.0.7" integrity="sha384-G22/sODve5h2jDPECkmpvn3ce0MyfayfnWrclJ3d5CY9rtkH+9fkIve2Ox5dfybO"></script>
-  <script src="js/presentation/storage-health-ui.js?v=2.0.7" integrity="sha384-E/ReLeCv1g4D0UVOP8GSAZN6sbTcFzg6/yzIKez71U0Y67OCPt4oym71uJMvHXrv"></script>
-  <script src="js/presentation/trip-transfer-ui.js?v=2.0.7" integrity="sha384-alWNP5q7xJLSbe8GlkYNmHLw8G9jbXGLNSi28LERcPAb1pESASALcV/HOiFWa12h"></script>
-  <script src="js/presentation/mobile-navigation.js?v=2.0.7" integrity="sha384-siDaTMxmkO/lATIBC8kqJzq3boL1P4OuIdM1qnxNZW7qiG+dz9+jJ2+tI1KSvzWd"></script>
-  <script src="js/presentation/activity-journal.js?v=2.0.7" integrity="sha384-xg0gGQRxITo6qu1Qwq78dzoaLc/GPU6FR5pbr9cd+cxEkEILIgj1iChOJnmkzgkI"></script>
-  <script src="js/presentation/moment-journal.js?v=2.0.7" integrity="sha384-W5tYJI4BKLYXNY8oGs8jMcPaIahgrr6X+qsEVq+6ITXa2iYeZdCUMIylgzaumNeJ"></script>
-  <script src="js/presentation/travel-story-ui.js?v=2.0.7" integrity="sha384-s9HZ4A1/X3tCfe4rBfB6nzEwAC7i2U1YVfradgxnQPX5X4tnFszIOPeMsLPfXnfq"></script>
-  <script src="js/config/collaboration-config.js?v=2.0.7" integrity="sha384-ipxhKB+fQ4s3OThYo3p6IWFvP6BbstXYDW6jZWWiPHB4qomo64w7r8/wRvdsi47w"></script>
-  <script src="js/infrastructure/collaboration/supabase-travel-service.js?v=2.0.7" integrity="sha384-+SDvVJ0CNqCMvFlOBOA+nfA1k6/sN6GlaKDhTQo4SgX8x3EwPXyJlvMfJj0D6Bt/"></script>
-  <script src="js/presentation/collaboration-ui.js?v=2.0.7" integrity="sha384-KvnYI6ym2/deKsOtKryWJS5tljPjqYRx67JGGgWVRNyWHEC470iPDg3+fdw0OHX0"></script>
-  <script src="js/presentation/collaboration-review.js?v=2.0.7" integrity="sha384-cbND/rT26DaIY2hR++LBuByF9L/ACu5TDl0b85EN2zsk/sTapWGm2BPQqZgN6GzI"></script>
-  <script src="js/presentation/expense-editor.js?v=2.0.7" integrity="sha384-fEJndy5orED9wsO98Oxn+qSaV4z93C+AY7GTwh2cvMdQw36+fpP9L1URxs7x3HsG"></script>
+  <link rel="stylesheet" href="css/companion.css?v=2.0.8" integrity="sha384-Syant7HB0IYUZUU2saRSYUDkM71WKVuK2JtHM+kAluFdw3VvWv9gSglgJh4utHv/">
+  <link rel="stylesheet" href="css/companion-refresh.css?v=2.0.8" integrity="sha384-g1MzsPxYgFA1G2Ba189anhZCcQnMwkNSt6MlFXiazIHGO0Kqp2sbMXQZ2kjr3p4u">
+  <link rel="stylesheet" href="css/live-itinerary.css?v=2.0.8" integrity="sha384-e/V9wyJ/Gi6baSHcWzBeNGjdn/eKDQIvKWyiYmByLE7C7nYJaQOA+GshtUMcCR72">
+  <link rel="stylesheet" href="css/expense-mobile.css?v=2.0.8" integrity="sha384-QZFtKrU/YvkTaEKv0oJ2ZQi1Zry8RgEFaHzTckwuPFsMDDmadYBH7UuYgTVS7281">
+  <link rel="stylesheet" href="css/moment-journal.css?v=2.0.8" integrity="sha384-g1EihgfyPDJ5o5eWSsQgT1WDTRKDtUfzVatlx6T/t+DhApDBY8dznSrwmelasv91">
+  <script src="js/domain/trip-adapter.js?v=2.0.8" integrity="sha384-JHU/NkAlxwR9G9/49TaFK4sTvg9xKGsSVd3re8rLivtiXcSNdnQA9gRIfvVWUtG7"></script>
+  <script src="js/domain/ai-draft-validation.js?v=2.0.8" integrity="sha384-OTRAiX7YaOiiNrpMWDjkOyH0bTbbL3KrGwGp1RmIkgvd15pErNTTKVTJkoesmpfi"></script>
+  <script src="js/domain/live-itinerary.js?v=2.0.8" integrity="sha384-cwMH5i2F5Mve7Z9cKeWrP7uLU5plcu6c7xvTf4Lyz3Xkb6GlNCI14lnEWzw46cVg"></script>
+  <script src="js/presentation/live-itinerary-ui.js?v=2.0.8" integrity="sha384-SLjn2QhNBI6VfrG3siiRZqfs51VnmqyRCTMGjMN25fIyHhYwf4LnECXOOiQ4arog"></script>
+  <script src="js/presentation/live-itinerary-bridge.js?v=2.0.8" integrity="sha384-lRoX8rvtVNC3rl6v9tCVjTLCSBjLmTH3EhNiq6OPizV+6GvspGEUIpH00HoPTgEn"></script>
+  <script src="js/domain/schedule-change.js?v=2.0.8" integrity="sha384-v7zQ2iSY9DIrsztq758NvV0o6vbsguJn70NviXT6itT6YcuNaCvSW2beDogcMbD7"></script>
+  <script src="js/presentation/schedule-change-ui.js?v=2.0.8" integrity="sha384-fOItr8fMYWgvB5eWBN7rYfZwI39HhAcWCn8j9+oJjijLWEYZjccXKl2D7mt1VF+T"></script>
+  <script src="js/domain/spot-realignment.js?v=2.0.8" integrity="sha384-gCFPNcD1aD3UegqTLtFPCU7Xqm7CtRN0yjQx2QnWe1ee0i3cZu8pzZic7YzBJLKt"></script>
+  <script src="js/presentation/spot-realignment-ui.js?v=2.0.8" integrity="sha384-GKlSQQKluvxcnRhJmQVQL4lZIFXbqf8ac/0BnxPiWNWcLjFJWYx/IZU3+5fZI7dk"></script>
+  <script src="js/domain/travel-records.js?v=2.0.8" integrity="sha384-qhkfkF1xKTuPtBvsB5Gwpz631xTkyy2tS1BU9Hixd2L1t+oobsXBMJnFv1pBHNnW"></script>
+  <script src="js/domain/travel-story.js?v=2.0.8" integrity="sha384-vjuGNDpytM6vG8SuZbKLW7qTTV1L33j48P1KSwNQnvca7uxo5EYkBM2X0IOdn/Qa"></script>
+  <script src="js/infrastructure/storage/photo-compression.js?v=2.0.8" integrity="sha384-MeOApXBzhg++Rcq/Lfjwb04/MA1U6wmwHppDgFZvKA4ZfdPC4oR2Hv1BhPFNU7Ig"></script>
+  <link rel="stylesheet" href="css/photo-optimization.css?v=2.0.8" integrity="sha384-9sgcirlxZs5tcmp/22RdH56B3bZla/q4DVH7x8W+fO8P4neR4WJMDDtQNK4WPq+/">
+  <script src="js/domain/photo-optimization.js?v=2.0.8" integrity="sha384-fpPZ4nJ383bIJaSHvmuZg+9BYd5LQ8YuVtEEMjtJnQr2Fod/mawAoB5SYMdtvBRU"></script>
+  <script src="js/infrastructure/storage/photo-cleanup.js?v=2.0.8" integrity="sha384-qPUCnJe7spP79MZLfOuzscYXTD6cW+7dzsf0xxvDip9hIj+yBvbBK6KhAouz5BC/"></script>
+  <script src="js/presentation/photo-optimization-ui.js?v=2.0.8" integrity="sha384-9QsQz7hvv3HVSOtRVjrMPr6G9w59E//utEWpshSg+awbBA4xBBcO/BGw/WhZNI8Z"></script>
+  <script src="js/infrastructure/storage/media-repository.js?v=2.0.8" integrity="sha384-q0IPoo86aU2ruB130X1HAh01dr4hpI0IAXeMVCoa7Jy/2pIB09f7WbSKPm8vowhw"></script>
+  <script src="js/infrastructure/storage/record-media-store.js?v=2.0.8" integrity="sha384-vNu5tI/i1vWsxi2/3aQYW+9zYfivBNB2ewaUTRlwhnGwRbv9dpR4bu/sqzv1D2jm"></script>
+  <script src="js/infrastructure/storage/expense-photo-repository.js?v=2.0.8" integrity="sha384-gdumvFYkJqEbRPJlK4mffCsUjPsnKCXLg6/1fLMR8kUuU1QDMeLLOYmMVSRTGNSy"></script>
+  <script src="js/presentation/companion-ui.js?v=2.0.8" integrity="sha384-hZkc18DoCwXe/Uwp1EN1dw8rSLnSOlHqBPalNvKlsZGhYlnbYSMqsApQV5Z+cLLK"></script>
+  <script src="js/domain/trip-transfer.js?v=2.0.8" integrity="sha384-VD9q1co1+bJzdS4i19rvfkQN/4KvzfnNdHUjbbucghcxzjmPim+kWF93qv5DaXSu"></script>
+  <script src="js/domain/travel-backup.js?v=2.0.8" integrity="sha384-4zE43uWlz5y3eP7g98tEL3HqAsw08/XvINQ+RhLLt4wz+cnySMWiy3Eu1m7BaBbK"></script>
+  <script src="js/presentation/travel-backup-ui.js?v=2.0.8" integrity="sha384-2MeiLmNhd6dsStzYdF4LhB3OrNegW5vZSkbRojImg5IQ9LLjrkbdcd+LP2rpbB1h"></script>
+  <script src="js/presentation/storage-health-ui.js?v=2.0.8" integrity="sha384-RE6+R72VELSfi1r8PD78apYbhVxYYIoTv01ZuM57aymyMcQ+s17brLU8E1KwEt8b"></script>
+  <script src="js/presentation/trip-transfer-ui.js?v=2.0.8" integrity="sha384-alWNP5q7xJLSbe8GlkYNmHLw8G9jbXGLNSi28LERcPAb1pESASALcV/HOiFWa12h"></script>
+  <script src="js/presentation/mobile-navigation.js?v=2.0.8" integrity="sha384-siDaTMxmkO/lATIBC8kqJzq3boL1P4OuIdM1qnxNZW7qiG+dz9+jJ2+tI1KSvzWd"></script>
+  <script src="js/presentation/activity-journal.js?v=2.0.8" integrity="sha384-xg0gGQRxITo6qu1Qwq78dzoaLc/GPU6FR5pbr9cd+cxEkEILIgj1iChOJnmkzgkI"></script>
+  <script src="js/presentation/moment-journal.js?v=2.0.8" integrity="sha384-W5tYJI4BKLYXNY8oGs8jMcPaIahgrr6X+qsEVq+6ITXa2iYeZdCUMIylgzaumNeJ"></script>
+  <script src="js/presentation/travel-story-ui.js?v=2.0.8" integrity="sha384-s9HZ4A1/X3tCfe4rBfB6nzEwAC7i2U1YVfradgxnQPX5X4tnFszIOPeMsLPfXnfq"></script>
+  <script src="js/config/collaboration-config.js?v=2.0.8" integrity="sha384-ipxhKB+fQ4s3OThYo3p6IWFvP6BbstXYDW6jZWWiPHB4qomo64w7r8/wRvdsi47w"></script>
+  <script src="js/infrastructure/collaboration/supabase-travel-service.js?v=2.0.8" integrity="sha384-+SDvVJ0CNqCMvFlOBOA+nfA1k6/sN6GlaKDhTQo4SgX8x3EwPXyJlvMfJj0D6Bt/"></script>
+  <script src="js/presentation/collaboration-ui.js?v=2.0.8" integrity="sha384-KvnYI6ym2/deKsOtKryWJS5tljPjqYRx67JGGgWVRNyWHEC470iPDg3+fdw0OHX0"></script>
+  <script src="js/presentation/collaboration-review.js?v=2.0.8" integrity="sha384-cbND/rT26DaIY2hR++LBuByF9L/ACu5TDl0b85EN2zsk/sTapWGm2BPQqZgN6GzI"></script>
+  <script src="js/presentation/expense-editor.js?v=2.0.8" integrity="sha384-fEJndy5orED9wsO98Oxn+qSaV4z93C+AY7GTwh2cvMdQw36+fpP9L1URxs7x3HsG"></script>
 
   <!-- Knowledge Base Seed & Destination Knowledge Packs (DKP) -->
-  <script src="kb-travel.js?v=2.0.7" integrity="sha384-zxXc7MUMbmXkiaF3ymeLmVSiCyPRVfkUjSZetDVx41zrHGyPeSCN4TFpy5f1jNUd"></script>
+  <script src="kb-travel.js?v=2.0.8" integrity="sha384-zxXc7MUMbmXkiaF3ymeLmVSiCyPRVfkUjSZetDVx41zrHGyPeSCN4TFpy5f1jNUd"></script>
   <script src="js/destinations/destination-registry.js" integrity="sha384-PV7EnpqZusutqYxhFc0vICq72coA/C+TMYaBkk+BFy52dmgfk/RDzf/DAgW7dmvC"></script>
   <script src="js/destinations/pack-default.js" integrity="sha384-mCe4oKfrN+8fbLFCJJexsHJXBZkw6b6q1bOg5skoupZ9hXUrhZ92sTRRTF831vDt"></script>
-  <script src="js/destinations/pack-south-america.js?v=2.0.7" integrity="sha384-p6i8pSXkYDEndehBEqNlXK7ZIZia6Tsxw4TD2LUf7TJPUSlPd2AzXbp3wyyAvDG7"></script>
+  <script src="js/destinations/pack-south-america.js?v=2.0.8" integrity="sha384-p6i8pSXkYDEndehBEqNlXK7ZIZia6Tsxw4TD2LUf7TJPUSlPd2AzXbp3wyyAvDG7"></script>
   <script src="js/destinations/pack-yunnan.js" integrity="sha384-MIgviqt+QV/b06eH6w7DO42JTPFr7Q2kFTi8TRQT4MCouBcFBGiC7x1jnKgVatOX"></script>
-  <script src="js/destinations/emergency-contacts.js?v=2.0.7" integrity="sha384-q3IUPhGWY99DNBNM269wiapa6eQYahcwaro/PvPILVtAgkUM0pE23GI5E63eMLlN"></script>
-  <script src="js/infrastructure/storage/legacy-trip-repository.js?v=2.0.7" integrity="sha384-liSoIp8m7N4UlEs/b2uz0MImyE8U7WAZwZa8JAbXpPlz6W0RW2Xg/JTukexxz/n4"></script>
-  <script src="js/infrastructure/storage/trip-store.js?v=2.0.7" integrity="sha384-WdKcx5F2YF+J30txACXDR6Jtab6dZ46yFh5xpn7TJpA/OZe2V0VQBes+adlQjpj6"></script>
-  <script src="js/infrastructure/storage/settings-repository.js?v=2.0.7" integrity="sha384-fp7ck757BhOA+Y2i/VoW21KRCkeMyb/G78wxwhZuReB2JbzcyTxBrLxGldhvw3n3"></script>
-  <script src="js/infrastructure/storage/journal-overflow-repository.js?v=2.0.7" integrity="sha384-uRxi9B+oBHCQ+aa8a6Wp72RAAeEuslXu5kZ+gf9Kvo22B3N6fr1XSkVnAV1X42yO"></script>
+  <script src="js/destinations/emergency-contacts.js?v=2.0.8" integrity="sha384-q3IUPhGWY99DNBNM269wiapa6eQYahcwaro/PvPILVtAgkUM0pE23GI5E63eMLlN"></script>
+  <script src="js/infrastructure/storage/legacy-trip-repository.js?v=2.0.8" integrity="sha384-Jf2y8z7h6bwxOdkwZP0zMyhyG/ntcCrFco7a+mzgiFAtiCUE2uXU8Cc/MSjunorP"></script>
+  <script src="js/infrastructure/storage/idb-trip-repository.js?v=2.0.8" integrity="sha384-n7ndWoPUE3bipL9HvWWTfW8XPNZbDRmAWocUpRIyVM5HtGIIEqbkOK1e6InJY8c4"></script>
+  <script src="js/infrastructure/storage/trip-store.js?v=2.0.8" integrity="sha384-ftpferQ+1NXFRqMRZuHlz2wGUfEKk4GKeXEZzAs3FlsUmGfFdxcsSG6U5t4/B1Rb"></script>
+  <script src="js/infrastructure/storage/settings-repository.js?v=2.0.8" integrity="sha384-fp7ck757BhOA+Y2i/VoW21KRCkeMyb/G78wxwhZuReB2JbzcyTxBrLxGldhvw3n3"></script>
+  <script src="js/infrastructure/storage/journal-overflow-repository.js?v=2.0.8" integrity="sha384-uRxi9B+oBHCQ+aa8a6Wp72RAAeEuslXu5kZ+gf9Kvo22B3N6fr1XSkVnAV1X42yO"></script>
 </head>
 <body class="min-h-screen flex flex-col font-sans transition-colors duration-200">
 
@@ -1559,7 +1561,7 @@
       <div class="app-brand flex items-center gap-2 sm:gap-2.5 min-w-0 cursor-pointer select-none" onclick="switchView('hub')">
         <img src="icons/sulsul_bear_mascot.png" class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl object-cover border border-[#e6e2d8] dark:border-stone-800 shadow-sm shrink-0" alt="Sulsul Travel">
           <h1 class="font-brand-script text-xl sm:text-2xl md:text-3xl font-bold tracking-normal text-[#1E2B24] dark:text-[#ededed] whitespace-nowrap leading-tight">Sulsul Travel</h1>
-            <button id="app-ver-badge" type="button" onclick="event.stopPropagation(); openVersionHistoryModal()" class="theme-card-subtle font-mono" title="앱 버전과 업데이트 기록 보기">v2.0.7</button>
+            <button id="app-ver-badge" type="button" onclick="event.stopPropagation(); openVersionHistoryModal()" class="theme-card-subtle font-mono" title="앱 버전과 업데이트 기록 보기">v2.0.8</button>
             <p id="header-trip-name" class="sr-only">A Deep Life Essay</p>
       </div>
 
@@ -4770,7 +4772,10 @@
 
       <!-- 버전 목록 스크롤 영역 (독립 스크롤 컨테이너로 Flexbox 압축 버그 영구 척결) -->
       <div class="overflow-y-auto flex-1 min-h-0 space-y-3.5 pr-1.5 custom-scrollbar">
-        <!-- v2.0.7 (Current) -->
+        <!-- v2.0.8 (Current) -->
+        <section class="companion-context"><h3 class="font-bold">v2.0.8 · 여행 자료를 브라우저 저장소로</h3><p class="text-xs">2026-11-23 · st-shell-v2.0.8</p><p class="text-xs leading-relaxed">여행·일정·기록·지출을 기기 문서(약 5MB 한도) 대신 브라우저 저장소(IndexedDB)에 여행 하나씩 둡니다. 처음 열 때 원래 문서를 따로 보관하고, 옮긴 결과가 원문과 같은지 확인한 뒤에만 새 저장소를 씁니다. 업데이트 중 열려 있던 이전 버전 창은 새 자료를 덮지 못하고, 이전 버전이 남긴 변경은 따로 보관해 설정 → 데이터 → 저장 공간에서 내려받을 수 있습니다.</p></section>
+
+        <!-- v2.0.7 -->
         <section class="companion-context"><h3 class="font-bold">v2.0.7 · 저장을 차례대로, 끝난 뒤에 화면으로</h3><p class="text-xs">2026-11-23 · st-shell-v2.0.7</p><p class="text-xs leading-relaxed">여행 저장을 비동기 명령으로 바꿨습니다. 모든 저장은 한 줄로 차례대로 실행되고, 저장이 끝난 뒤에만 화면과 안내가 바뀝니다. 삭제 확인 창은 저장이 끝날 때까지 기다리고, 예제 추가를 연달아 눌러도 하나만 생깁니다. 다음 업데이트에서 여행 자료를 기기 문서보다 큰 브라우저 저장소(IndexedDB)로 옮기기 위한 준비입니다.</p></section>
 
         <!-- v2.0.6 -->
@@ -5701,7 +5706,7 @@
 
       <!-- 모달 푸터 -->
       <div class="pt-3 border-t border-[#e8e2d5] dark:border-stone-800 flex items-center justify-between shrink-0">
-        <span class="text-[11px] text-stone-400 dark:text-stone-500 font-mono">Sulsul Travel Engine v2.0.7</span>
+        <span class="text-[11px] text-stone-400 dark:text-stone-500 font-mono">Sulsul Travel Engine v2.0.8</span>
         <button onclick="closeModal('modal-version-history')" class="px-4 py-2 rounded-xl bg-[#faf8f5] dark:bg-stone-800 hover:bg-[#f0ece1] dark:hover:bg-stone-700 border border-[#e8e2d5] dark:border-stone-700 text-[#1c1917] dark:text-[#ededed] text-xs font-bold transition cursor-pointer shadow-sm">
           닫기
         </button>
@@ -6212,7 +6217,9 @@
                 <tr><th class="p-2">저장 키</th><th class="p-2">내용</th></tr>
               </thead>
               <tbody class="divide-y divide-stone-200 dark:divide-stone-800 text-stone-600 dark:text-stone-400">
-                <tr><td class="p-2 font-mono">localStorage: st_trips_v2</td><td class="p-2">전체 여행·일정·기록·지출·첨부 사진</td></tr>
+                <tr><td class="p-2 font-mono">IndexedDB: sulsul-travel-trips-v1</td><td class="p-2">전체 여행·일정·기록·지출(v2.0.8부터, 여행 하나씩). 사진은 아래 사진 보관소에 둡니다</td></tr>
+                <tr><td class="p-2 font-mono">localStorage: st_trips_v2</td><td class="p-2">v2.0.7까지의 여행 문서. 새 저장소로 옮긴 뒤 30일 동안 이전 버전용 사본으로 남깁니다</td></tr>
+                <tr><td class="p-2 font-mono">IndexedDB: sulsul-travel-migration-v1</td><td class="p-2">저장 구조를 옮기기 전의 원래 문서 보관본</td></tr>
                 <tr><td class="p-2 font-mono">IndexedDB: sulsul-travel-overflow-v1</td><td class="p-2">저장 공간 초과 시 보관하는 하루 일기 텍스트</td></tr>
                 <tr><td class="p-2 font-mono">IndexedDB: sulsul-travel-media-v1</td><td class="p-2">사진 보관본 Blob·썸네일. JSON 보관본도 유지합니다.</td></tr>
                 <tr><td class="p-2 font-mono">st_collaboration_config_v1 / st_collaboration_session_v1</td><td class="p-2">선택한 서버 주소·공개 키·암호화되지 않은 임시 로그인 세션</td></tr>
@@ -6312,7 +6319,7 @@
     window.showToast = showToast;
 
     // 앱 버전 및 글로벌 네임스페이스 (Sulsul-Travel Invariant Rule R-10, R-11, R-12, R-13, R-14, R-15, R-16)
-    const APP_VER = '2.0.7';
+    const APP_VER = '2.0.8';
 
     // ══════════════════════════════════════════
     // [3-Way Theme System] 모던, 라이트그레이, 딥 블랙 테마 엔진 (v1.6.7)
@@ -6827,11 +6834,19 @@
 
     // 지출 사진과 기록 사진은 IDB 보관본과 대조된 것만 문서에서 빼고(project), 읽을 때 채운다(hydrate).
     // 저장은 TripStore의 줄을 지난다(비동기). 저장 결과는 그 작업 안에서 State.trips에 반영되므로 부르는 쪽은 await만 한다.
-    const TripRepository = window.SulsulTravel.LegacyTripRepository && window.SulsulTravel.TripStore ? new window.SulsulTravel.TripStore(new window.SulsulTravel.LegacyTripRepository(localStorage,{
-      beforeWrite:guardSharedTravelWrite,
+    // 여행 자료는 IndexedDB(sulsul-travel-trips-v1)에 둔다(v2.0.8). 처음 열 때 기기 문서(st_trips_v2)를 옮긴다.
+    // IndexedDB를 쓸 수 없으면 아직 옮긴 적이 없을 때만 기기 문서로 계속 쓴다. 옮긴 뒤에는 옛 문서로 돌아가지 않는다.
+    const tripStorageOptions = {
+      beforeWrite:options=>guardSharedTravelWrite(options),
       serialize:trips=>SulsulTravel.recordMediaStore.project(SulsulTravel.expensePhotoRepository.project(trips)),
       restore:trips=>SulsulTravel.recordMediaStore.hydrate(SulsulTravel.expensePhotoRepository.hydrate(trips))
-    }),{getTrips:()=>State.trips,setTrips:trips=>{State.trips=trips;}}) : null;
+    };
+    const TripRepository = window.SulsulTravel.IdbTripRepository && window.SulsulTravel.TripStore ? new window.SulsulTravel.TripStore(
+      new window.SulsulTravel.IdbTripRepository(localStorage,tripStorageOptions),{
+        getTrips:()=>State.trips,setTrips:trips=>{State.trips=trips;},
+        fallback:new window.SulsulTravel.LegacyTripRepository(localStorage,tripStorageOptions),
+        canFallback:()=>localStorage.getItem(window.SulsulTravel.IdbTripRepository.ADOPTED_KEY)!=='indexeddb'
+      }) : null;
     // 새 사진은 보관이 끝날 때 대조 목록에 들어가 첫 저장부터 문서에서 빠진다(MediaRepository.onStored).
     // 옛 문서의 사진은 부팅 때 한 번 대조·보관하고 initApp의 정규화 저장에서 함께 반영한다. 뒤늦은 백그라운드 저장은 하지 않는다.
     // 백그라운드 저장은 사진 최적화·백업 복원·Gist 복원이 기준으로 잡은 원문을 바꿔 거짓 충돌을 만들기 때문이다.
@@ -6890,10 +6905,14 @@
       if(!SulsulShell.compatible()){SulsulShell.recover();return;}
       SulsulShell.initializing=true;
       try {
-      try { await SulsulTravel.expensePhotoRepository.prime(localStorage.getItem('st_trips_v2')); }
+      // 여행 저장소의 원문(사진을 뺀 사본)을 먼저 읽는다. 처음 열면 이때 기기 문서를 IndexedDB로 옮긴다.
+      let storedRaw = null;
+      try { storedRaw = await TripRepository.readRaw(); }
+      catch(error) { console.warn('[여행 저장소 준비]',error?.message||error); }
+      try { await SulsulTravel.expensePhotoRepository.prime(storedRaw); }
       catch(error) { console.warn('[지출 사진 부팅 준비]',error?.message||error); }
       // 기록 사진 보관본을 읽어 둔다. 실패해도 문서 안의 사진으로 그대로 동작하고, 아무 사진도 문서에서 빼지 않는다.
-      try { State.recordMediaBoot = await prepareRecordMediaAtBoot(localStorage.getItem('st_trips_v2')); }
+      try { State.recordMediaBoot = await prepareRecordMediaAtBoot(storedRaw); }
       catch(error) { State.recordMediaBoot = {error: error?.message || String(error)}; console.warn('[기록 사진 부팅 준비]',error?.message||error); }
       await initApp();
       SulsulTravel.MobileNavigation.start();
@@ -6930,7 +6949,7 @@
       }
 
       // 구버전은 새 저장 문서가 없는 경우에만 이관한다. 명시적 빈 목록은 삭제 상태다.
-      if (localStorage.getItem('st_trips_v2') === null && !State.storageRecovery) {
+      if (loadedTrips.fresh && !State.storageRecovery) {
         const legacyTrip = localStorage.getItem('st_current_trip');
         if (legacyTrip) {
           try {
@@ -6989,9 +7008,23 @@
       checkStartupInstallOnboarding();
       populateCreateTripCurrencyOptions();
       restoreJournalOverflowEntries();
-      if (State.storageRecovery) {
+      if (State.storageRecovery?.storageUnavailable) {
+        showToast('⚠️ 여행 저장소(IndexedDB)를 열지 못했습니다. 이 상태에서는 저장하지 않습니다. 다른 창을 닫고 앱을 다시 열어 주세요. '+(State.storageRecovery.message||''), 10000);
+      } else if (State.storageRecovery) {
         showToast('⚠️ 손상된 여행 데이터를 별도 백업하고 복구 모드로 시작했습니다.', 5000);
       }
+      reportTripStorageAtBoot(loadedTrips);
+    }
+
+    // 저장소 이전·옛 문서 변경·읽지 못한 여행을 알린다. 자료는 지우지 않고 따로 보관했다는 것을 함께 알린다.
+    function reportTripStorageAtBoot(loaded) {
+      if (loaded?.legacy?.changed) {
+        showToast('이전 버전 앱이 기기 문서에 남긴 여행 변경을 찾아 따로 보관했습니다. 지금 여행 목록은 새 저장소의 자료입니다. 설정 → 데이터 → 저장 공간에서 내려받을 수 있습니다.', 10000);
+      }
+      if (loaded?.skipped?.length) {
+        showToast(`여행 ${loaded.skipped.length}개를 읽지 못해 원문을 따로 보관했습니다. 백업 파일이 있으면 복원해 주세요.`, 10000);
+      }
+      if (TripRepository?.fallbackReason) console.warn('[여행 저장소] 기기 문서로 계속 씁니다:', TripRepository.fallbackReason);
     }
 
     // 예제는 명시 선택으로만 추가한다. 삭제·거절 상태와 개인 여행을 분리한다.
@@ -16416,7 +16449,7 @@ ${JSON.stringify(snapshotDays)}`;
     }
 
     function getReplanDomain() {
-      if (!replanDomainPromise) replanDomainPromise = import('./js/domain/replan.mjs?v=2.0.7');
+      if (!replanDomainPromise) replanDomainPromise = import('./js/domain/replan.mjs?v=2.0.8');
       return replanDomainPromise;
     }
 
@@ -17468,7 +17501,7 @@ ${JSON.stringify(snapshotDays)}`;
 
     async function getAiOrchestrator() {
       if (!aiOrchestratorPromise) {
-        aiOrchestratorPromise = import('./js/application/orchestration.mjs?v=2.0.7').then(({ Orchestrator }) =>
+        aiOrchestratorPromise = import('./js/application/orchestration.mjs?v=2.0.8').then(({ Orchestrator }) =>
           new Orchestrator({
             online: job => Boolean(job?.input?.localDraft) || navigator.onLine,
             timeoutMs: 65000,
@@ -19076,7 +19109,7 @@ JSON 배열만 출력하세요. 각 day는 dayNum, title, city, date, spots를 �
       if(TravelBackupUI.busy){showToast('현재 복원 처리를 마친 뒤 다시 불러와 주세요.');return false;}
       const button=document.getElementById('btn-gist-pull'),original=button?.innerHTML;
       if(button?.disabled)return false;
-      const baseRaw=localStorage.getItem('st_trips_v2'),baseState=JSON.stringify(State.trips);
+      const baseRaw=TripRepository.token(),baseState=JSON.stringify(State.trips);
       const previewToken=TravelBackupUI.token;
       if(button){button.disabled=true;button.textContent='불러오는 중…';}
       try {

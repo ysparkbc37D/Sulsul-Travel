@@ -1,5 +1,5 @@
 /* 실제 페이지 AI 계약·검토 소유권 검사. 별도 프로필의 가상 여행만 사용하고 외부 요청은 차단한다. */
-const {chromium} = require(process.env.PLAYWRIGHT_MODULE || 'playwright');
+const {chromium} = require('./helpers/playwright.cjs');
 const fs = require('node:fs'), path = require('node:path'), http = require('node:http'), assert = require('node:assert/strict');
 const root = path.resolve(__dirname, '..');
 const server = http.createServer((req,res) => {
@@ -32,7 +32,7 @@ const server = http.createServer((req,res) => {
       const job = {id:'bad-replan',kind:'replan',tripId:trip.id,targetId:'replan',baseRevision:getActiveTrip().revision,input:{snapshotDays,targetDayVal:'1',offsetMinutes:30,reason:'가상 지연'}};
       const invalid = structuredClone(snapshotDays); invalid[1].spots.shift();
       // 화면을 그릴 때 맡긴 구조 보정 저장이 끝난 뒤의 원문을 기준으로 삼는다.
-      await TripRepository.idle(); const raw = localStorage.getItem('st_trips_v2'); let directError;
+      await TripRepository.idle(); const raw = (await TripRepository.readRaw()); let directError;
       try { await applyAiDraftPayload({...job,draft:{days:invalid}}); } catch (error) { directError = error.message; }
       const originalProvider = callGeminiApiWithFallback;
       callGeminiApiWithFallback = async () => { throw new Error('INVALID_API_KEY'); };
@@ -44,7 +44,7 @@ const server = http.createServer((req,res) => {
       callGeminiApiWithFallback = originalProvider;
       return {
         sparseAccepted:validateAiDraftPayload({days:[{spots:[]}]},{kind:'itinerary',input:{expectedDayCount:9}}),
-        invalidProtectedAccepted:validateAiDraftPayload({days:invalid},job),directError,unchanged:raw === localStorage.getItem('st_trips_v2'),
+        invalidProtectedAccepted:validateAiDraftPayload({days:invalid},job),directError,unchanged:raw === (await TripRepository.readRaw()),
         normalizedProtected:JSON.stringify(normalizeAiDraftDays(snapshotDays,job)) === JSON.stringify(snapshotDays),
         fallbackSource:fallback.source,fallbackValid:validateAiDraftPayload(fallback,job),fallbackOutside:JSON.stringify(fallback.days[0]) === JSON.stringify(snapshotDays[0]),
         protectedTime:fallback.days[1].spots.find(spot => spot.id === 'anchor-2').time,flexibleTime:fallback.days[1].spots.find(spot => spot.id === 'walk-2').time,
@@ -74,7 +74,7 @@ const server = http.createServer((req,res) => {
     const applied = await page.evaluate(async () => {
       await approveActiveAiDraft();
       const journal = SulsulTravel.TripAdapter.getJournalEntry(getActiveTrip(),0);
-      return {text:journal.text,original:journal.originalText,dayId:journal.dayId,date:journal.date,review:State.reviewAiJobId,active:State.activeAiJobId,providerCalls:aiProviderCalls,persisted:JSON.parse(localStorage.getItem('st_trips_v2'))[0].journals[0].text};
+      return {text:journal.text,original:journal.originalText,dayId:journal.dayId,date:journal.date,review:State.reviewAiJobId,active:State.activeAiJobId,providerCalls:aiProviderCalls,persisted:JSON.parse((await TripRepository.readRaw()))[0].journals[0].text};
     });
     assert.deepEqual(applied,{text:'검토할 글 owner-a',original:'원래 글',dayId:'ai-day-1',date:'2026-10-09',review:null,active:null,providerCalls:1,persisted:'검토할 글 owner-a'});
     const studio = await page.evaluate(async () => {
