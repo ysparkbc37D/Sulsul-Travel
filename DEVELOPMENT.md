@@ -25,7 +25,7 @@
 | `js/presentation/live-itinerary-bridge.js` | 기존 폼과 저장 경계 연결·영향 범위 적용 |
 | `js/presentation/live-itinerary-ui.js` | 삽입·순서·날짜 이동·보류·복구·변경 이력 UI |
 | `js/domain/schedule-change.js` | 취소·보호 일정 판정, 시간 범위와 자정 지연 미리보기 |
-| `js/presentation/schedule-change-ui.js` | 수동 변경·취소·복구·대체·지연 검토, 준비물 전문 보기 |
+| `js/presentation/schedule-change-ui.js` | 수동 변경·취소·복구·대체·지연 검토, 긴 글 전문 보기(`openReadableText`) |
 | `js/domain/replan.mjs` | 보호 일정과 날짜/범위 RePlan 규칙 |
 | `js/application/orchestration.mjs` | AI 작업 큐, 취소·재시도·승인 흐름 |
 | `js/domain/ai-draft-validation.js` | 생성·승인의 동일 초안 계약과 보호 일정·범위 검증 |
@@ -56,6 +56,8 @@
 | `js/presentation/trip-transfer-ui.js` | 사본 링크·파일 공유와 가져오기 |
 | `js/destinations/` | 국가/도시 목적지 지식 팩과 레지스트리 |
 | `js/destinations/emergency-contacts.js` | 출처·확인일이 있는 국가별 긴급 번호와 오늘 도시 기준 국가 판별. 확인하지 못한 국가는 추정하지 않음 |
+| `js/presentation/ui-actions.js` | 화면 동작 위임(v2.0.9). `data-on-click`·`data-on-change`·`data-on-input`의 동작 이름을 문서 한 곳에서 받아 `UiActions.define`으로 등록된 처리기로 넘긴다. 등록되지 않은 이름은 오류 |
+| `js/presentation/checklist-tab.js` | 준비물 화면(v2.0.9, 4단계 첫 분리): 분류·D-Day 보기, 체크·전체 완료, 추가·상세·안전 삭제, 예약 가이드의 준비물 체크 |
 | `js/presentation/companion-ui.js` | 오늘 화면·큰 계획 카드, SOS, 퀵 캡슐(순간 기록 입력), 매거진(TravelStory 보기) |
 | `sw.js` | 앱 셸 및 오프라인 에셋 캐시 |
 
@@ -105,6 +107,7 @@ node .\tests\field-records.browser.cjs
 node .\tests\records-consistency.browser.cjs
 node .\tests\record-media.browser.cjs
 node .\tests\trip-store-idb.browser.cjs
+node .\tests\checklist-tab.browser.cjs
 .\tools-verify.ps1
 ```
 
@@ -124,6 +127,7 @@ Playwright 브라우저를 내려받지 않은 환경에서는 `PLAYWRIGHT_MODUL
 8. Gist 복원은 여행 목록 전체를 교체하므로 덮어쓰기 확인과 실패 시 원본 보존을 유지합니다.
 9. 여행 자료는 IndexedDB `sulsul-travel-trips-v1`에 여행 하나씩 있습니다(v2.0.8). `localStorage['st_trips_v2']`는 v2.0.7까지의 문서이며, 옮긴 뒤에는 이전 버전 창이 덮어쓰지 못하도록 끝에 줄바꿈을 붙인 사본으로 30일 남습니다. 새 코드는 이 키를 읽거나 쓰지 않습니다. 저장된 원문은 `await TripRepository.readRaw()`, 이 창이 마지막으로 본 저장 식별값은 `TripRepository.token()`, 저장소의 지금 식별값은 `await TripRepository.currentToken()`으로 얻습니다. IndexedDB를 열 수 없으면 아직 옮긴 적이 없을 때만 기기 문서로 계속 쓰고(`TripRepository.kind`가 `localStorage`), 옮긴 뒤에는 옛 문서로 돌아가지 않고 저장을 거절합니다.
 10. 브라우저 검사도 `localStorage['st_trips_v2']` 대신 `await TripRepository.readRaw()`로 저장 결과를 확인합니다. 기존 방식의 저장 실패 주입(`Storage.prototype.setItem`을 바꿔 `st_trips_v2` 쓰기를 실패시키기)은 `tests/helpers/playwright.cjs`의 검사용 다리가 IndexedDB 저장에도 같은 실패로 적용합니다. 모든 브라우저 검사는 Playwright를 이 도우미로 불러옵니다. 도우미는 클릭·탭·키 입력·파일 선택 뒤 앱의 저장 줄이 빌 때까지(최대 2초) 기다립니다. 기기 문서 저장은 클릭 이벤트 안에서 끝났지만 IndexedDB 저장은 몇 ms 뒤에 끝나기 때문입니다. 페이지 안에서 `button.click()`으로 누른 뒤 바로 결과를 읽는 검사는 `await button.onclick()`처럼 저장을 직접 기다립니다.
+11. 화면을 옮기거나 새 버튼을 만들 때는 인라인 `onclick="이름(…)"`을 쓰지 않습니다(v2.0.9, 4단계). 요소에 `data-on-click="이름공간.동작"`(change·input은 `data-on-change`·`data-on-input`)을 적고, 값은 다른 `data-*` 속성에 둡니다. 처리기는 `js/presentation`의 화면 파일에서 `SulsulTravel.UiActions.define('이름공간', {동작(요소, 이벤트){…}})`으로 등록합니다. 등록하는 파일은 불러올 때 문서를 건드리지 않습니다(경계 검사가 Node에서 불러 등록 목록을 읽습니다). `data-action`은 오늘 화면의 CSS 표식이므로 쓰지 않습니다. 경계 검사 UI01은 파일별 인라인 처리기 수가 늘지 않게, UI02는 없는 함수·등록되지 않은 이름·없는 창을 부르는 버튼을 막습니다.
 
 ## PWA와 외부 통신
 

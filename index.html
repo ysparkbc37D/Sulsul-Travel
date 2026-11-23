@@ -18,7 +18,9 @@
         ['getJournalEntry','setJournalEntry','pinJournalIdentity','journalDraftKey'].every(name => typeof window.SulsulTravel?.TripAdapter?.[name] === 'function') &&
         typeof window.SulsulTravel?.LegacyTripRepository?.prototype.getCommittedTrips === 'function' &&
         typeof window.SulsulTravel?.TripStore?.prototype.commit === 'function' &&
-        typeof window.SulsulTravel?.IdbTripRepository?.prototype.readRaw === 'function';
+        typeof window.SulsulTravel?.IdbTripRepository?.prototype.readRaw === 'function' &&
+        typeof window.SulsulTravel?.UiActions?.define === 'function' &&
+        typeof window.SulsulTravel?.ChecklistTab?.render === 'function';
       shell.reload = () => {if(!shell.reloading){shell.reloading=true;location.reload();}};
       shell.canReload = () => {
         if(!shell.started)return true;
@@ -137,17 +139,17 @@
   </script>
 
   <!-- PWA Meta & Icons -->
-  <link rel="manifest" href="manifest.webmanifest?v=2.0.8">
+  <link rel="manifest" href="manifest.webmanifest?v=2.0.9">
   <meta name="theme-color" content="#F7F5F0">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <meta name="apple-mobile-web-app-title" content="술술트래블">
-  <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192-v115.png?v=2.0.8">
-  <link rel="icon" type="image/png" sizes="32x32" href="favicon.png?v=2.0.8">
+  <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192-v115.png?v=2.0.9">
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon.png?v=2.0.9">
   <link rel="shortcut icon" href="favicon.ico">
-  <link rel="apple-touch-icon" sizes="180x180" href="icons/apple-touch-icon-v115.png?v=2.0.8">
-  <link rel="apple-touch-icon" href="icons/apple-touch-icon-v115.png?v=2.0.8">
+  <link rel="apple-touch-icon" sizes="180x180" href="icons/apple-touch-icon-v115.png?v=2.0.9">
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon-v115.png?v=2.0.9">
 
   <!-- Google Fonts: Great Vibes, Dancing Script (Cursive Calligraphy), Cormorant Garamond, Noto Serif KR, Playfair Display -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -155,7 +157,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Great+Vibes&family=Cormorant+Garamond:wght@600;700;800&family=Noto+Serif+KR:wght@500;600;700;900&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
 
   <!-- Local Utilities Bundle (CDN fallback & tailwind utilities) -->
-  <link rel="stylesheet" href="css/utilities.css?v=2.0.8" integrity="sha384-HMVB4SH6xwwGITkNyT8ARmHegAYSuTMocPGl4bpl0JywMIe2PqYrUxqZOgEuZjmP">
+  <link rel="stylesheet" href="css/utilities.css?v=2.0.9" integrity="sha384-HMVB4SH6xwwGITkNyT8ARmHegAYSuTMocPGl4bpl0JywMIe2PqYrUxqZOgEuZjmP">
   <link rel="stylesheet" href="vendor/fontawesome/css/all.min.css" integrity="sha384-t1nt8BQoYMLFN5p42tRAtuAAFQaCQODekUVeKKZrEnEyp4H2R0RHFz0KWpmj7i8g">
 
   <!-- Leaflet Map CSS & JS -->
@@ -1497,58 +1499,60 @@
     }
   </style>
 
-  <link rel="stylesheet" href="css/companion.css?v=2.0.8" integrity="sha384-Syant7HB0IYUZUU2saRSYUDkM71WKVuK2JtHM+kAluFdw3VvWv9gSglgJh4utHv/">
-  <link rel="stylesheet" href="css/companion-refresh.css?v=2.0.8" integrity="sha384-g1MzsPxYgFA1G2Ba189anhZCcQnMwkNSt6MlFXiazIHGO0Kqp2sbMXQZ2kjr3p4u">
-  <link rel="stylesheet" href="css/live-itinerary.css?v=2.0.8" integrity="sha384-e/V9wyJ/Gi6baSHcWzBeNGjdn/eKDQIvKWyiYmByLE7C7nYJaQOA+GshtUMcCR72">
-  <link rel="stylesheet" href="css/expense-mobile.css?v=2.0.8" integrity="sha384-QZFtKrU/YvkTaEKv0oJ2ZQi1Zry8RgEFaHzTckwuPFsMDDmadYBH7UuYgTVS7281">
-  <link rel="stylesheet" href="css/moment-journal.css?v=2.0.8" integrity="sha384-g1EihgfyPDJ5o5eWSsQgT1WDTRKDtUfzVatlx6T/t+DhApDBY8dznSrwmelasv91">
-  <script src="js/domain/trip-adapter.js?v=2.0.8" integrity="sha384-JHU/NkAlxwR9G9/49TaFK4sTvg9xKGsSVd3re8rLivtiXcSNdnQA9gRIfvVWUtG7"></script>
-  <script src="js/domain/ai-draft-validation.js?v=2.0.8" integrity="sha384-OTRAiX7YaOiiNrpMWDjkOyH0bTbbL3KrGwGp1RmIkgvd15pErNTTKVTJkoesmpfi"></script>
-  <script src="js/domain/live-itinerary.js?v=2.0.8" integrity="sha384-cwMH5i2F5Mve7Z9cKeWrP7uLU5plcu6c7xvTf4Lyz3Xkb6GlNCI14lnEWzw46cVg"></script>
-  <script src="js/presentation/live-itinerary-ui.js?v=2.0.8" integrity="sha384-SLjn2QhNBI6VfrG3siiRZqfs51VnmqyRCTMGjMN25fIyHhYwf4LnECXOOiQ4arog"></script>
-  <script src="js/presentation/live-itinerary-bridge.js?v=2.0.8" integrity="sha384-lRoX8rvtVNC3rl6v9tCVjTLCSBjLmTH3EhNiq6OPizV+6GvspGEUIpH00HoPTgEn"></script>
-  <script src="js/domain/schedule-change.js?v=2.0.8" integrity="sha384-v7zQ2iSY9DIrsztq758NvV0o6vbsguJn70NviXT6itT6YcuNaCvSW2beDogcMbD7"></script>
-  <script src="js/presentation/schedule-change-ui.js?v=2.0.8" integrity="sha384-fOItr8fMYWgvB5eWBN7rYfZwI39HhAcWCn8j9+oJjijLWEYZjccXKl2D7mt1VF+T"></script>
-  <script src="js/domain/spot-realignment.js?v=2.0.8" integrity="sha384-gCFPNcD1aD3UegqTLtFPCU7Xqm7CtRN0yjQx2QnWe1ee0i3cZu8pzZic7YzBJLKt"></script>
-  <script src="js/presentation/spot-realignment-ui.js?v=2.0.8" integrity="sha384-GKlSQQKluvxcnRhJmQVQL4lZIFXbqf8ac/0BnxPiWNWcLjFJWYx/IZU3+5fZI7dk"></script>
-  <script src="js/domain/travel-records.js?v=2.0.8" integrity="sha384-qhkfkF1xKTuPtBvsB5Gwpz631xTkyy2tS1BU9Hixd2L1t+oobsXBMJnFv1pBHNnW"></script>
-  <script src="js/domain/travel-story.js?v=2.0.8" integrity="sha384-vjuGNDpytM6vG8SuZbKLW7qTTV1L33j48P1KSwNQnvca7uxo5EYkBM2X0IOdn/Qa"></script>
-  <script src="js/infrastructure/storage/photo-compression.js?v=2.0.8" integrity="sha384-MeOApXBzhg++Rcq/Lfjwb04/MA1U6wmwHppDgFZvKA4ZfdPC4oR2Hv1BhPFNU7Ig"></script>
-  <link rel="stylesheet" href="css/photo-optimization.css?v=2.0.8" integrity="sha384-9sgcirlxZs5tcmp/22RdH56B3bZla/q4DVH7x8W+fO8P4neR4WJMDDtQNK4WPq+/">
-  <script src="js/domain/photo-optimization.js?v=2.0.8" integrity="sha384-fpPZ4nJ383bIJaSHvmuZg+9BYd5LQ8YuVtEEMjtJnQr2Fod/mawAoB5SYMdtvBRU"></script>
-  <script src="js/infrastructure/storage/photo-cleanup.js?v=2.0.8" integrity="sha384-qPUCnJe7spP79MZLfOuzscYXTD6cW+7dzsf0xxvDip9hIj+yBvbBK6KhAouz5BC/"></script>
-  <script src="js/presentation/photo-optimization-ui.js?v=2.0.8" integrity="sha384-9QsQz7hvv3HVSOtRVjrMPr6G9w59E//utEWpshSg+awbBA4xBBcO/BGw/WhZNI8Z"></script>
-  <script src="js/infrastructure/storage/media-repository.js?v=2.0.8" integrity="sha384-q0IPoo86aU2ruB130X1HAh01dr4hpI0IAXeMVCoa7Jy/2pIB09f7WbSKPm8vowhw"></script>
-  <script src="js/infrastructure/storage/record-media-store.js?v=2.0.8" integrity="sha384-vNu5tI/i1vWsxi2/3aQYW+9zYfivBNB2ewaUTRlwhnGwRbv9dpR4bu/sqzv1D2jm"></script>
-  <script src="js/infrastructure/storage/expense-photo-repository.js?v=2.0.8" integrity="sha384-gdumvFYkJqEbRPJlK4mffCsUjPsnKCXLg6/1fLMR8kUuU1QDMeLLOYmMVSRTGNSy"></script>
-  <script src="js/presentation/companion-ui.js?v=2.0.8" integrity="sha384-hZkc18DoCwXe/Uwp1EN1dw8rSLnSOlHqBPalNvKlsZGhYlnbYSMqsApQV5Z+cLLK"></script>
-  <script src="js/domain/trip-transfer.js?v=2.0.8" integrity="sha384-VD9q1co1+bJzdS4i19rvfkQN/4KvzfnNdHUjbbucghcxzjmPim+kWF93qv5DaXSu"></script>
-  <script src="js/domain/travel-backup.js?v=2.0.8" integrity="sha384-4zE43uWlz5y3eP7g98tEL3HqAsw08/XvINQ+RhLLt4wz+cnySMWiy3Eu1m7BaBbK"></script>
-  <script src="js/presentation/travel-backup-ui.js?v=2.0.8" integrity="sha384-2MeiLmNhd6dsStzYdF4LhB3OrNegW5vZSkbRojImg5IQ9LLjrkbdcd+LP2rpbB1h"></script>
-  <script src="js/presentation/storage-health-ui.js?v=2.0.8" integrity="sha384-RE6+R72VELSfi1r8PD78apYbhVxYYIoTv01ZuM57aymyMcQ+s17brLU8E1KwEt8b"></script>
-  <script src="js/presentation/trip-transfer-ui.js?v=2.0.8" integrity="sha384-alWNP5q7xJLSbe8GlkYNmHLw8G9jbXGLNSi28LERcPAb1pESASALcV/HOiFWa12h"></script>
-  <script src="js/presentation/mobile-navigation.js?v=2.0.8" integrity="sha384-siDaTMxmkO/lATIBC8kqJzq3boL1P4OuIdM1qnxNZW7qiG+dz9+jJ2+tI1KSvzWd"></script>
-  <script src="js/presentation/activity-journal.js?v=2.0.8" integrity="sha384-xg0gGQRxITo6qu1Qwq78dzoaLc/GPU6FR5pbr9cd+cxEkEILIgj1iChOJnmkzgkI"></script>
-  <script src="js/presentation/moment-journal.js?v=2.0.8" integrity="sha384-W5tYJI4BKLYXNY8oGs8jMcPaIahgrr6X+qsEVq+6ITXa2iYeZdCUMIylgzaumNeJ"></script>
-  <script src="js/presentation/travel-story-ui.js?v=2.0.8" integrity="sha384-s9HZ4A1/X3tCfe4rBfB6nzEwAC7i2U1YVfradgxnQPX5X4tnFszIOPeMsLPfXnfq"></script>
-  <script src="js/config/collaboration-config.js?v=2.0.8" integrity="sha384-ipxhKB+fQ4s3OThYo3p6IWFvP6BbstXYDW6jZWWiPHB4qomo64w7r8/wRvdsi47w"></script>
-  <script src="js/infrastructure/collaboration/supabase-travel-service.js?v=2.0.8" integrity="sha384-+SDvVJ0CNqCMvFlOBOA+nfA1k6/sN6GlaKDhTQo4SgX8x3EwPXyJlvMfJj0D6Bt/"></script>
-  <script src="js/presentation/collaboration-ui.js?v=2.0.8" integrity="sha384-KvnYI6ym2/deKsOtKryWJS5tljPjqYRx67JGGgWVRNyWHEC470iPDg3+fdw0OHX0"></script>
-  <script src="js/presentation/collaboration-review.js?v=2.0.8" integrity="sha384-cbND/rT26DaIY2hR++LBuByF9L/ACu5TDl0b85EN2zsk/sTapWGm2BPQqZgN6GzI"></script>
-  <script src="js/presentation/expense-editor.js?v=2.0.8" integrity="sha384-fEJndy5orED9wsO98Oxn+qSaV4z93C+AY7GTwh2cvMdQw36+fpP9L1URxs7x3HsG"></script>
+  <link rel="stylesheet" href="css/companion.css?v=2.0.9" integrity="sha384-Syant7HB0IYUZUU2saRSYUDkM71WKVuK2JtHM+kAluFdw3VvWv9gSglgJh4utHv/">
+  <link rel="stylesheet" href="css/companion-refresh.css?v=2.0.9" integrity="sha384-2KIp4VI8qsP6dGnz0cm/vehjLjr6GxpZ9yWTbbIXBPWi25XHg6XUOtNbp7W8KMd3">
+  <link rel="stylesheet" href="css/live-itinerary.css?v=2.0.9" integrity="sha384-e/V9wyJ/Gi6baSHcWzBeNGjdn/eKDQIvKWyiYmByLE7C7nYJaQOA+GshtUMcCR72">
+  <link rel="stylesheet" href="css/expense-mobile.css?v=2.0.9" integrity="sha384-QZFtKrU/YvkTaEKv0oJ2ZQi1Zry8RgEFaHzTckwuPFsMDDmadYBH7UuYgTVS7281">
+  <link rel="stylesheet" href="css/moment-journal.css?v=2.0.9" integrity="sha384-g1EihgfyPDJ5o5eWSsQgT1WDTRKDtUfzVatlx6T/t+DhApDBY8dznSrwmelasv91">
+  <script src="js/domain/trip-adapter.js?v=2.0.9" integrity="sha384-JHU/NkAlxwR9G9/49TaFK4sTvg9xKGsSVd3re8rLivtiXcSNdnQA9gRIfvVWUtG7"></script>
+  <script src="js/domain/ai-draft-validation.js?v=2.0.9" integrity="sha384-OTRAiX7YaOiiNrpMWDjkOyH0bTbbL3KrGwGp1RmIkgvd15pErNTTKVTJkoesmpfi"></script>
+  <script src="js/domain/live-itinerary.js?v=2.0.9" integrity="sha384-cwMH5i2F5Mve7Z9cKeWrP7uLU5plcu6c7xvTf4Lyz3Xkb6GlNCI14lnEWzw46cVg"></script>
+  <script src="js/presentation/live-itinerary-ui.js?v=2.0.9" integrity="sha384-SLjn2QhNBI6VfrG3siiRZqfs51VnmqyRCTMGjMN25fIyHhYwf4LnECXOOiQ4arog"></script>
+  <script src="js/presentation/live-itinerary-bridge.js?v=2.0.9" integrity="sha384-lRoX8rvtVNC3rl6v9tCVjTLCSBjLmTH3EhNiq6OPizV+6GvspGEUIpH00HoPTgEn"></script>
+  <script src="js/domain/schedule-change.js?v=2.0.9" integrity="sha384-v7zQ2iSY9DIrsztq758NvV0o6vbsguJn70NviXT6itT6YcuNaCvSW2beDogcMbD7"></script>
+  <script src="js/presentation/schedule-change-ui.js?v=2.0.9" integrity="sha384-gOcWGnLVFR2omdZ0auRzZsmihk9RXi9hfoitu+RvbRV//kOtuILV+xDhdu0ImRgb"></script>
+  <script src="js/domain/spot-realignment.js?v=2.0.9" integrity="sha384-gCFPNcD1aD3UegqTLtFPCU7Xqm7CtRN0yjQx2QnWe1ee0i3cZu8pzZic7YzBJLKt"></script>
+  <script src="js/presentation/spot-realignment-ui.js?v=2.0.9" integrity="sha384-GKlSQQKluvxcnRhJmQVQL4lZIFXbqf8ac/0BnxPiWNWcLjFJWYx/IZU3+5fZI7dk"></script>
+  <script src="js/domain/travel-records.js?v=2.0.9" integrity="sha384-qhkfkF1xKTuPtBvsB5Gwpz631xTkyy2tS1BU9Hixd2L1t+oobsXBMJnFv1pBHNnW"></script>
+  <script src="js/domain/travel-story.js?v=2.0.9" integrity="sha384-vjuGNDpytM6vG8SuZbKLW7qTTV1L33j48P1KSwNQnvca7uxo5EYkBM2X0IOdn/Qa"></script>
+  <script src="js/infrastructure/storage/photo-compression.js?v=2.0.9" integrity="sha384-MeOApXBzhg++Rcq/Lfjwb04/MA1U6wmwHppDgFZvKA4ZfdPC4oR2Hv1BhPFNU7Ig"></script>
+  <link rel="stylesheet" href="css/photo-optimization.css?v=2.0.9" integrity="sha384-9sgcirlxZs5tcmp/22RdH56B3bZla/q4DVH7x8W+fO8P4neR4WJMDDtQNK4WPq+/">
+  <script src="js/domain/photo-optimization.js?v=2.0.9" integrity="sha384-fpPZ4nJ383bIJaSHvmuZg+9BYd5LQ8YuVtEEMjtJnQr2Fod/mawAoB5SYMdtvBRU"></script>
+  <script src="js/infrastructure/storage/photo-cleanup.js?v=2.0.9" integrity="sha384-qPUCnJe7spP79MZLfOuzscYXTD6cW+7dzsf0xxvDip9hIj+yBvbBK6KhAouz5BC/"></script>
+  <script src="js/presentation/photo-optimization-ui.js?v=2.0.9" integrity="sha384-9QsQz7hvv3HVSOtRVjrMPr6G9w59E//utEWpshSg+awbBA4xBBcO/BGw/WhZNI8Z"></script>
+  <script src="js/infrastructure/storage/media-repository.js?v=2.0.9" integrity="sha384-q0IPoo86aU2ruB130X1HAh01dr4hpI0IAXeMVCoa7Jy/2pIB09f7WbSKPm8vowhw"></script>
+  <script src="js/infrastructure/storage/record-media-store.js?v=2.0.9" integrity="sha384-vNu5tI/i1vWsxi2/3aQYW+9zYfivBNB2ewaUTRlwhnGwRbv9dpR4bu/sqzv1D2jm"></script>
+  <script src="js/infrastructure/storage/expense-photo-repository.js?v=2.0.9" integrity="sha384-gdumvFYkJqEbRPJlK4mffCsUjPsnKCXLg6/1fLMR8kUuU1QDMeLLOYmMVSRTGNSy"></script>
+  <script src="js/presentation/companion-ui.js?v=2.0.9" integrity="sha384-hZkc18DoCwXe/Uwp1EN1dw8rSLnSOlHqBPalNvKlsZGhYlnbYSMqsApQV5Z+cLLK"></script>
+  <script src="js/domain/trip-transfer.js?v=2.0.9" integrity="sha384-VD9q1co1+bJzdS4i19rvfkQN/4KvzfnNdHUjbbucghcxzjmPim+kWF93qv5DaXSu"></script>
+  <script src="js/domain/travel-backup.js?v=2.0.9" integrity="sha384-4zE43uWlz5y3eP7g98tEL3HqAsw08/XvINQ+RhLLt4wz+cnySMWiy3Eu1m7BaBbK"></script>
+  <script src="js/presentation/travel-backup-ui.js?v=2.0.9" integrity="sha384-2MeiLmNhd6dsStzYdF4LhB3OrNegW5vZSkbRojImg5IQ9LLjrkbdcd+LP2rpbB1h"></script>
+  <script src="js/presentation/storage-health-ui.js?v=2.0.9" integrity="sha384-yhLee1WlZBu7vZL8qquRuBbYdW2RIBPIkjKQqjgT5iNw7FRWOlw7POGkpMar7IkT"></script>
+  <script src="js/presentation/trip-transfer-ui.js?v=2.0.9" integrity="sha384-alWNP5q7xJLSbe8GlkYNmHLw8G9jbXGLNSi28LERcPAb1pESASALcV/HOiFWa12h"></script>
+  <script src="js/presentation/mobile-navigation.js?v=2.0.9" integrity="sha384-siDaTMxmkO/lATIBC8kqJzq3boL1P4OuIdM1qnxNZW7qiG+dz9+jJ2+tI1KSvzWd"></script>
+  <script src="js/presentation/activity-journal.js?v=2.0.9" integrity="sha384-xg0gGQRxITo6qu1Qwq78dzoaLc/GPU6FR5pbr9cd+cxEkEILIgj1iChOJnmkzgkI"></script>
+  <script src="js/presentation/moment-journal.js?v=2.0.9" integrity="sha384-W5tYJI4BKLYXNY8oGs8jMcPaIahgrr6X+qsEVq+6ITXa2iYeZdCUMIylgzaumNeJ"></script>
+  <script src="js/presentation/travel-story-ui.js?v=2.0.9" integrity="sha384-s9HZ4A1/X3tCfe4rBfB6nzEwAC7i2U1YVfradgxnQPX5X4tnFszIOPeMsLPfXnfq"></script>
+  <script src="js/config/collaboration-config.js?v=2.0.9" integrity="sha384-ipxhKB+fQ4s3OThYo3p6IWFvP6BbstXYDW6jZWWiPHB4qomo64w7r8/wRvdsi47w"></script>
+  <script src="js/infrastructure/collaboration/supabase-travel-service.js?v=2.0.9" integrity="sha384-+SDvVJ0CNqCMvFlOBOA+nfA1k6/sN6GlaKDhTQo4SgX8x3EwPXyJlvMfJj0D6Bt/"></script>
+  <script src="js/presentation/collaboration-ui.js?v=2.0.9" integrity="sha384-KvnYI6ym2/deKsOtKryWJS5tljPjqYRx67JGGgWVRNyWHEC470iPDg3+fdw0OHX0"></script>
+  <script src="js/presentation/collaboration-review.js?v=2.0.9" integrity="sha384-cbND/rT26DaIY2hR++LBuByF9L/ACu5TDl0b85EN2zsk/sTapWGm2BPQqZgN6GzI"></script>
+  <script src="js/presentation/ui-actions.js?v=2.0.9" integrity="sha384-86E6+vWuYSS4ldFWIpwfcJMnPW2jUnvL9CJGWeJHDKHEXnQsNWTDB0skpvkRBm9K"></script>
+  <script src="js/presentation/checklist-tab.js?v=2.0.9" integrity="sha384-xARSN5JIjxVkI1EZOvfWCAKvl6L9RCW/uvf5FmpRTgoED72y+KY9+NYXQlaARlTc"></script>
+  <script src="js/presentation/expense-editor.js?v=2.0.9" integrity="sha384-fEJndy5orED9wsO98Oxn+qSaV4z93C+AY7GTwh2cvMdQw36+fpP9L1URxs7x3HsG"></script>
 
   <!-- Knowledge Base Seed & Destination Knowledge Packs (DKP) -->
-  <script src="kb-travel.js?v=2.0.8" integrity="sha384-zxXc7MUMbmXkiaF3ymeLmVSiCyPRVfkUjSZetDVx41zrHGyPeSCN4TFpy5f1jNUd"></script>
+  <script src="kb-travel.js?v=2.0.9" integrity="sha384-zxXc7MUMbmXkiaF3ymeLmVSiCyPRVfkUjSZetDVx41zrHGyPeSCN4TFpy5f1jNUd"></script>
   <script src="js/destinations/destination-registry.js" integrity="sha384-PV7EnpqZusutqYxhFc0vICq72coA/C+TMYaBkk+BFy52dmgfk/RDzf/DAgW7dmvC"></script>
   <script src="js/destinations/pack-default.js" integrity="sha384-mCe4oKfrN+8fbLFCJJexsHJXBZkw6b6q1bOg5skoupZ9hXUrhZ92sTRRTF831vDt"></script>
-  <script src="js/destinations/pack-south-america.js?v=2.0.8" integrity="sha384-p6i8pSXkYDEndehBEqNlXK7ZIZia6Tsxw4TD2LUf7TJPUSlPd2AzXbp3wyyAvDG7"></script>
+  <script src="js/destinations/pack-south-america.js?v=2.0.9" integrity="sha384-p6i8pSXkYDEndehBEqNlXK7ZIZia6Tsxw4TD2LUf7TJPUSlPd2AzXbp3wyyAvDG7"></script>
   <script src="js/destinations/pack-yunnan.js" integrity="sha384-MIgviqt+QV/b06eH6w7DO42JTPFr7Q2kFTi8TRQT4MCouBcFBGiC7x1jnKgVatOX"></script>
-  <script src="js/destinations/emergency-contacts.js?v=2.0.8" integrity="sha384-q3IUPhGWY99DNBNM269wiapa6eQYahcwaro/PvPILVtAgkUM0pE23GI5E63eMLlN"></script>
-  <script src="js/infrastructure/storage/legacy-trip-repository.js?v=2.0.8" integrity="sha384-Jf2y8z7h6bwxOdkwZP0zMyhyG/ntcCrFco7a+mzgiFAtiCUE2uXU8Cc/MSjunorP"></script>
-  <script src="js/infrastructure/storage/idb-trip-repository.js?v=2.0.8" integrity="sha384-n7ndWoPUE3bipL9HvWWTfW8XPNZbDRmAWocUpRIyVM5HtGIIEqbkOK1e6InJY8c4"></script>
-  <script src="js/infrastructure/storage/trip-store.js?v=2.0.8" integrity="sha384-ftpferQ+1NXFRqMRZuHlz2wGUfEKk4GKeXEZzAs3FlsUmGfFdxcsSG6U5t4/B1Rb"></script>
-  <script src="js/infrastructure/storage/settings-repository.js?v=2.0.8" integrity="sha384-fp7ck757BhOA+Y2i/VoW21KRCkeMyb/G78wxwhZuReB2JbzcyTxBrLxGldhvw3n3"></script>
-  <script src="js/infrastructure/storage/journal-overflow-repository.js?v=2.0.8" integrity="sha384-uRxi9B+oBHCQ+aa8a6Wp72RAAeEuslXu5kZ+gf9Kvo22B3N6fr1XSkVnAV1X42yO"></script>
+  <script src="js/destinations/emergency-contacts.js?v=2.0.9" integrity="sha384-q3IUPhGWY99DNBNM269wiapa6eQYahcwaro/PvPILVtAgkUM0pE23GI5E63eMLlN"></script>
+  <script src="js/infrastructure/storage/legacy-trip-repository.js?v=2.0.9" integrity="sha384-Jf2y8z7h6bwxOdkwZP0zMyhyG/ntcCrFco7a+mzgiFAtiCUE2uXU8Cc/MSjunorP"></script>
+  <script src="js/infrastructure/storage/idb-trip-repository.js?v=2.0.9" integrity="sha384-n7ndWoPUE3bipL9HvWWTfW8XPNZbDRmAWocUpRIyVM5HtGIIEqbkOK1e6InJY8c4"></script>
+  <script src="js/infrastructure/storage/trip-store.js?v=2.0.9" integrity="sha384-ftpferQ+1NXFRqMRZuHlz2wGUfEKk4GKeXEZzAs3FlsUmGfFdxcsSG6U5t4/B1Rb"></script>
+  <script src="js/infrastructure/storage/settings-repository.js?v=2.0.9" integrity="sha384-fp7ck757BhOA+Y2i/VoW21KRCkeMyb/G78wxwhZuReB2JbzcyTxBrLxGldhvw3n3"></script>
+  <script src="js/infrastructure/storage/journal-overflow-repository.js?v=2.0.9" integrity="sha384-uRxi9B+oBHCQ+aa8a6Wp72RAAeEuslXu5kZ+gf9Kvo22B3N6fr1XSkVnAV1X42yO"></script>
 </head>
 <body class="min-h-screen flex flex-col font-sans transition-colors duration-200">
 
@@ -1561,7 +1565,7 @@
       <div class="app-brand flex items-center gap-2 sm:gap-2.5 min-w-0 cursor-pointer select-none" onclick="switchView('hub')">
         <img src="icons/sulsul_bear_mascot.png" class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl object-cover border border-[#e6e2d8] dark:border-stone-800 shadow-sm shrink-0" alt="Sulsul Travel">
           <h1 class="font-brand-script text-xl sm:text-2xl md:text-3xl font-bold tracking-normal text-[#1E2B24] dark:text-[#ededed] whitespace-nowrap leading-tight">Sulsul Travel</h1>
-            <button id="app-ver-badge" type="button" onclick="event.stopPropagation(); openVersionHistoryModal()" class="theme-card-subtle font-mono" title="앱 버전과 업데이트 기록 보기">v2.0.8</button>
+            <button id="app-ver-badge" type="button" onclick="event.stopPropagation(); openVersionHistoryModal()" class="theme-card-subtle font-mono" title="앱 버전과 업데이트 기록 보기">v2.0.9</button>
             <p id="header-trip-name" class="sr-only">A Deep Life Essay</p>
       </div>
 
@@ -2346,22 +2350,25 @@
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pt-1 border-t border-[#e8e2d5] dark:border-stone-800/80">
           <!-- 보기 모드 토글 (카테고리별 vs D-Day 시점별) -->
           <div class="flex items-center p-1 rounded-xl bg-stone-100 dark:bg-[#0f1422] border border-stone-200 dark:border-[#1e263c] gap-1 shrink-0">
-            <button id="btn-chk-mode-cat" onclick="setChecklistViewMode('category')" class="px-2.5 py-1 rounded-lg text-xs font-bold subtab-active cursor-pointer">
+            <button type="button" id="btn-chk-mode-cat" data-on-click="checklist.viewMode" data-mode="category" aria-pressed="true" class="px-2.5 py-1 rounded-lg text-xs font-bold subtab-active cursor-pointer">
               <i class="fa-solid fa-tags text-[10px]"></i> 카테고리별
             </button>
-            <button id="btn-chk-mode-dday" onclick="setChecklistViewMode('dday')" class="px-2.5 py-1 rounded-lg text-xs font-bold subtab-inactive cursor-pointer">
+            <button type="button" id="btn-chk-mode-dday" data-on-click="checklist.viewMode" data-mode="dday" aria-pressed="false" class="px-2.5 py-1 rounded-lg text-xs font-bold subtab-inactive cursor-pointer">
               <i class="fa-solid fa-clock-rotate-left text-[10px]"></i> D-Day 시점별
             </button>
           </div>
 
           <!-- 미완료 토글 & 빠른 체크 버튼 -->
           <div class="flex items-center gap-1.5 flex-wrap">
-            <button onclick="toggleChecklistOnlyUnchecked()" id="btn-chk-uncompleted" class="px-2.5 py-1 rounded-lg theme-card-subtle text-[11px] font-bold flex items-center gap-1 transition cursor-pointer">
+            <button type="button" data-on-click="checklist.onlyUnchecked" id="btn-chk-uncompleted" aria-pressed="false" class="px-2.5 py-1 rounded-lg theme-card-subtle text-[11px] font-bold flex items-center gap-1 transition cursor-pointer">
               <i class="fa-regular fa-square"></i>
               <span>미완료만 보기</span>
             </button>
-            <button onclick="checkAllChecklistItems(true)" class="px-2.5 py-1 rounded-lg theme-card-subtle text-[11px] font-bold text-emerald-600 dark:text-emerald-400 hover:bg-emerald-500/10 transition cursor-pointer">
+            <button type="button" data-on-click="checklist.checkAll" class="px-2.5 py-1 rounded-lg theme-card-subtle text-[11px] font-bold text-emerald-600 dark:text-emerald-400 hover:bg-emerald-500/10 transition cursor-pointer">
               전체 완료
+            </button>
+            <button type="button" id="btn-chk-add" data-on-click="checklist.add" class="px-2.5 py-1 rounded-lg sulsul-badge-amber text-[11px] font-bold flex items-center gap-1 transition cursor-pointer">
+              <i class="fa-solid fa-plus text-[10px]" aria-hidden="true"></i> <span>준비물 추가</span>
             </button>
           </div>
         </div>
@@ -4772,7 +4779,10 @@
 
       <!-- 버전 목록 스크롤 영역 (독립 스크롤 컨테이너로 Flexbox 압축 버그 영구 척결) -->
       <div class="overflow-y-auto flex-1 min-h-0 space-y-3.5 pr-1.5 custom-scrollbar">
-        <!-- v2.0.8 (Current) -->
+        <!-- v2.0.9 (Current) -->
+        <section class="companion-context"><h3 class="font-bold">v2.0.9 · 준비물 화면 정리와 먹통 버튼 수리</h3><p class="text-xs">2026-11-24 · st-shell-v2.0.9</p><p class="text-xs leading-relaxed">화면 분리 첫 단계로 준비물 화면을 별도 파일로 옮겼습니다. 눌러도 반응이 없던 '카테고리별·D-Day 시점별' 보기 전환과, 계획의 예약 가이드에서 준비물을 체크해도 저장되지 않던 문제를 고쳤습니다. 예약 가이드의 '준비물 추가'가 아무 창도 열지 못하던 것을 실제 추가 창으로 바꾸고, 준비물 화면에서도 추가하고 상세 창에서 삭제할 수 있습니다. 설정 → 데이터 → 저장 공간의 브라우저 사용량 줄은 앱 전체 사용량이라고 바르게 표시합니다.</p></section>
+
+        <!-- v2.0.8 -->
         <section class="companion-context"><h3 class="font-bold">v2.0.8 · 여행 자료를 브라우저 저장소로</h3><p class="text-xs">2026-11-23 · st-shell-v2.0.8</p><p class="text-xs leading-relaxed">여행·일정·기록·지출을 기기 문서(약 5MB 한도) 대신 브라우저 저장소(IndexedDB)에 여행 하나씩 둡니다. 처음 열 때 원래 문서를 따로 보관하고, 옮긴 결과가 원문과 같은지 확인한 뒤에만 새 저장소를 씁니다. 업데이트 중 열려 있던 이전 버전 창은 새 자료를 덮지 못하고, 이전 버전이 남긴 변경은 따로 보관해 설정 → 데이터 → 저장 공간에서 내려받을 수 있습니다.</p></section>
 
         <!-- v2.0.7 -->
@@ -5706,7 +5716,7 @@
 
       <!-- 모달 푸터 -->
       <div class="pt-3 border-t border-[#e8e2d5] dark:border-stone-800 flex items-center justify-between shrink-0">
-        <span class="text-[11px] text-stone-400 dark:text-stone-500 font-mono">Sulsul Travel Engine v2.0.8</span>
+        <span class="text-[11px] text-stone-400 dark:text-stone-500 font-mono">Sulsul Travel Engine v2.0.9</span>
         <button onclick="closeModal('modal-version-history')" class="px-4 py-2 rounded-xl bg-[#faf8f5] dark:bg-stone-800 hover:bg-[#f0ece1] dark:hover:bg-stone-700 border border-[#e8e2d5] dark:border-stone-700 text-[#1c1917] dark:text-[#ededed] text-xs font-bold transition cursor-pointer shadow-sm">
           닫기
         </button>
@@ -6319,7 +6329,7 @@
     window.showToast = showToast;
 
     // 앱 버전 및 글로벌 네임스페이스 (Sulsul-Travel Invariant Rule R-10, R-11, R-12, R-13, R-14, R-15, R-16)
-    const APP_VER = '2.0.8';
+    const APP_VER = '2.0.9';
 
     // ══════════════════════════════════════════
     // [3-Way Theme System] 모던, 라이트그레이, 딥 블랙 테마 엔진 (v1.6.7)
@@ -10921,7 +10931,7 @@
       renderTimelineTab();
       renderExpensesTab();
       renderJournalTab();
-      renderChecklistTab();
+      SulsulTravel.ChecklistTab.render();
       renderGpsRadar();
 
       // 활성 서브탭 내용 재동기화
@@ -10968,7 +10978,7 @@
           refreshLiveExchangeRates(false);
         }
       }
-      if (tabId === 'checklist') renderChecklistTab();
+      if (tabId === 'checklist') SulsulTravel.ChecklistTab.render();
       if (tabId === 'journal') renderJournalTab();
       document.querySelector('.travel-tools')?.removeAttribute('open');
       requestAnimationFrame(() => window.scrollTo({ top: positions[tabId] || 0, behavior: 'instant' }));
@@ -11835,7 +11845,7 @@
       const checklistCardsHtml = checklist.map((item, idx) => `
         <div class="p-3.5 rounded-xl theme-card-subtle flex items-center justify-between gap-3 hover:border-amber-500/40 transition">
           <div class="flex items-center gap-2.5 flex-1 min-w-0">
-            <input type="checkbox" ${item.checked ? 'checked' : ''} onchange="toggleTripChecklistItem(${idx})" class="w-4 h-4 rounded text-amber-500 bg-[#141c2e] border-[#23304c] focus:ring-amber-500 focus:ring-offset-0 cursor-pointer shrink-0">
+            <input type="checkbox" ${item.checked ? 'checked' : ''} data-on-change="checklist.toggle" data-index="${idx}" aria-label="${escapeHtml(item.text)} 준비 완료" class="w-4 h-4 rounded text-amber-500 bg-[#141c2e] border-[#23304c] focus:ring-amber-500 focus:ring-offset-0 cursor-pointer shrink-0">
             <span class="text-xs ${item.checked ? 'line-through opacity-50' : 'text-[#1c1917] dark:text-[#ededed] font-bold'} truncate">${escapeHtml(item.text)}</span>
           </div>
           <span class="px-2.5 py-0.5 rounded-full text-[10px] font-black shrink-0 ${item.urgent ? 'sulsul-badge-rose' : 'bg-stone-100 text-stone-700 border border-stone-300 dark:bg-slate-800 dark:text-slate-400 dark:border-slate-700'}">
@@ -11848,7 +11858,7 @@
         ${specialAdviceHtml}
         <div class="col-span-1 md:col-span-2 flex items-center justify-between pt-1">
           <span class="text-xs font-bold text-[#1c1917] dark:text-slate-300">📋 준비 항목 점검 (${checklist.filter(c => c.checked).length}/${checklist.length} 완료)</span>
-          <button onclick="openModal('modal-checklist-add')" class="sulsul-badge-amber px-2.5 py-1 text-xs font-bold rounded-lg transition flex items-center gap-1 cursor-pointer">
+          <button type="button" data-on-click="checklist.add" class="sulsul-badge-amber px-2.5 py-1 text-xs font-bold rounded-lg transition flex items-center gap-1 cursor-pointer">
             <i class="fa-solid fa-plus text-[10px]"></i> 준비물 추가
           </button>
         </div>
@@ -13931,196 +13941,7 @@
       document.getElementById('journal-full-photo').src=source;openModal('modal-journal-photo');
     }
 
-    // ==========================================
-    // [7] 체크리스트 & 스마트 패킹 매트릭스 렌더링 (v1.8.4)
-    // ==========================================
-    const CHECKLIST_CATEGORIES = ['전체', '🚨 필수', '📄 서류', '💳 금융', '🧥 의류/방한', '🥾 트레킹', '💊 의약품', '🔌 전자기기', '위생', '보안', '잡화'];
-
-    const DDAY_BUCKETS = [
-      { id: 'd30', name: 'D-30 이전', desc: '여권 · eTA · 핵심 바우처 · 등산화 길들이기', icon: 'fa-solid fa-calendar-check' },
-      { id: 'd7', name: 'D-7', desc: '달러 신권 · 트래블카드 · eSIM · 고산병약', icon: 'fa-solid fa-clock-rotate-left' },
-      { id: 'd1', name: 'D-1', desc: '방한복 · 고어텍스 · 배터리 · 보안용품 패킹', icon: 'fa-solid fa-box-archive' },
-      { id: 'local', name: '현지 휴대', desc: '1박용 서브 배낭 · 행동식 · 수시 소지품', icon: 'fa-solid fa-person-hiking' }
-    ];
-
-    function getItemDDayBucket(item) {
-      const t = (item.text || '').toLowerCase();
-      if (t.includes('여권') || t.includes('eta') || t.includes('황열병') || t.includes('입장권') || t.includes('바우처') || t.includes('보험') || t.includes('중등산화')) {
-        return 'd30';
-      }
-      if (t.includes('달러') || t.includes('신권') || t.includes('트래블') || t.includes('esim') || t.includes('다이아목스') || t.includes('상비약') || t.includes('어댑터') || t.includes('플러그')) {
-        return 'd7';
-      }
-      if (t.includes('방한') || t.includes('고어텍스') || t.includes('패딩') || t.includes('보조배터리') || t.includes('핫팩') || t.includes('복대') || t.includes('와이어') || t.includes('스트랩') || t.includes('샤워기') || t.includes('비타민')) {
-        return 'd1';
-      }
-      return 'local';
-    }
-
-    function isItemMatchingCategory(item, catFilter) {
-      if (!catFilter || catFilter === '전체') return true;
-      if (catFilter === '🚨 필수') return Boolean(item.urgent || item.cat === '필수');
-      const cleanCat = catFilter.replace(/^[^\w가-힣]+/, '').trim();
-      if (item.cat && item.cat.includes(cleanCat)) return true;
-      const t = (item.text || '').toLowerCase();
-      if (cleanCat.includes('서류') && (t.includes('여권') || t.includes('eta') || t.includes('바우처') || t.includes('보험') || t.includes('증명서'))) return true;
-      if (cleanCat.includes('금융') && (t.includes('달러') || t.includes('카드') || t.includes('환전') || t.includes('페소') || t.includes('트래블'))) return true;
-      if (cleanCat.includes('의류') && (t.includes('의류') || t.includes('패딩') || t.includes('자켓') || t.includes('플리스') || t.includes('비니') || t.includes('모자') || t.includes('장갑') || t.includes('핫팩') || t.includes('수영복'))) return true;
-      if (cleanCat.includes('트레킹') && (t.includes('등산') || t.includes('스틱') || t.includes('하이킹'))) return true;
-      if (cleanCat.includes('의약품') && (t.includes('약') || t.includes('다이아목스') || t.includes('황열병') || t.includes('비타민'))) return true;
-      if (cleanCat.includes('전자기기') && (t.includes('배터리') || t.includes('어댑터') || t.includes('충전') || t.includes('케이블'))) return true;
-      if (cleanCat.includes('위생') && (t.includes('선크림') || t.includes('티슈') || t.includes('샤워') || t.includes('립밤') || t.includes('인공눈물') || t.includes('선글라스'))) return true;
-      if (cleanCat.includes('보안') && (t.includes('복대') || t.includes('자물쇠') || t.includes('스트랩'))) return true;
-      return false;
-    }
-
-    function switchChecklistViewMode(mode) {
-      State.checklistViewMode = mode || 'category';
-      const btnCat = document.getElementById('btn-chk-mode-cat');
-      const btnDday = document.getElementById('btn-chk-mode-dday');
-      if (btnCat && btnDday) {
-        if (State.checklistViewMode === 'category') {
-          btnCat.className = 'px-2.5 py-1 rounded-lg text-[11px] font-bold sulsul-chip is-active cursor-pointer';
-          btnDday.className = 'px-2.5 py-1 rounded-lg text-[11px] font-bold theme-card-subtle text-slate-400 hover:text-white cursor-pointer';
-        } else {
-          btnCat.className = 'px-2.5 py-1 rounded-lg text-[11px] font-bold theme-card-subtle text-slate-400 hover:text-white cursor-pointer';
-          btnDday.className = 'px-2.5 py-1 rounded-lg text-[11px] font-bold sulsul-chip is-active cursor-pointer';
-        }
-      }
-      renderChecklistTab();
-    }
-
-    function toggleChecklistOnlyUnchecked() {
-      State.checklistOnlyUnchecked = !State.checklistOnlyUnchecked;
-      const btn = document.getElementById('btn-chk-uncompleted');
-      if (btn) {
-        if (State.checklistOnlyUnchecked) {
-          btn.className = 'px-2.5 py-1 rounded-lg bg-amber-500 text-slate-950 text-[11px] font-black flex items-center gap-1 transition cursor-pointer shadow-xs';
-          btn.innerHTML = '<i class="fa-solid fa-square-check"></i> <span>미완료만 보는 중</span>';
-        } else {
-          btn.className = 'px-2.5 py-1 rounded-lg theme-card-subtle text-[11px] font-bold flex items-center gap-1 transition cursor-pointer';
-          btn.innerHTML = '<i class="fa-regular fa-square"></i> <span>미완료만 보기</span>';
-        }
-      }
-      renderChecklistTab();
-    }
-
-    function setChecklistCategoryFilter(cat) {
-      State.checklistCategoryFilter = cat || '전체';
-      renderChecklistTab();
-    }
-
-    async function checkAllChecklistItems(isComplete) {
-      const trip = getActiveTrip();
-      if (!trip || !trip.checklist) return;
-      await commitTrip(trip.id, target => {
-        (target.checklist || []).forEach(item => { item.checked = isComplete; });
-      });
-      renderChecklistTab();
-    }
-
-    function renderChecklistTab() {
-      const trip = getActiveTrip();
-      const container = document.getElementById('checklist-container');
-      const chipsContainer = document.getElementById('checklist-category-chips');
-      const progressBadge = document.getElementById('checklist-progress-badge');
-      const progressBar = document.getElementById('checklist-progress-bar');
-      const items = trip.checklist || [];
-      if (!container) return;
-
-      const checkedCount = items.filter(i => i.checked).length;
-      const pct = items.length > 0 ? Math.round((checkedCount / items.length) * 100) : 0;
-      if (progressBadge) progressBadge.innerText = `${pct}% 준비됨 (${checkedCount}/${items.length})`;
-      if (progressBar) progressBar.style.width = `${pct}%`;
-
-      // 1. 카테고리 칩 바 렌더링
-      if (chipsContainer) {
-        const activeCat = State.checklistCategoryFilter || '전체';
-        chipsContainer.innerHTML = CHECKLIST_CATEGORIES.map(c => {
-          const isActive = activeCat === c;
-          return `
-            <button onclick="setChecklistCategoryFilter('${c}')" class="px-2.5 py-1 rounded-xl text-xs font-bold shrink-0 whitespace-nowrap transition cursor-pointer ${isActive ? 'bg-amber-500 text-slate-950 font-black shadow-xs' : 'theme-card-subtle text-slate-300 hover:text-white'}">
-              ${c}
-            </button>
-          `;
-        }).join('');
-      }
-
-      // 2. 필터링된 항목 리스트 추출
-      const activeCat = State.checklistCategoryFilter || '전체';
-      const onlyUnchecked = Boolean(State.checklistOnlyUnchecked);
-
-      const filteredItems = items.map((item, idx) => ({ ...item, originalIdx: idx })).filter(item => {
-        if (onlyUnchecked && item.checked) return false;
-        return isItemMatchingCategory(item, activeCat);
-      });
-
-      if (filteredItems.length === 0) {
-        container.innerHTML = `
-          <div class="col-span-1 sm:col-span-2 text-center py-10 text-xs text-slate-400 theme-card-subtle rounded-2xl space-y-1">
-            <span class="text-2xl block mb-1">📋</span>
-            <div class="font-bold text-slate-300">해당 조건에 맞는 준비물이 없습니다.</div>
-            <p class="text-[11px] text-slate-500">카테고리 필터나 '미완료만 보기' 설정을 변경해 보세요.</p>
-          </div>
-        `;
-        return;
-      }
-
-      // 3. 뷰 모드에 따른 렌더링
-      const viewMode = State.checklistViewMode || 'category';
-
-      if (viewMode === 'dday') {
-        // D-Day 시점별 그룹핑 렌더링
-        let ddayHtml = '';
-        DDAY_BUCKETS.forEach(bucket => {
-          const bucketItems = filteredItems.filter(item => getItemDDayBucket(item) === bucket.id);
-          if (bucketItems.length === 0) return;
-
-          const bucketDone = bucketItems.filter(i => i.checked).length;
-          const bucketPct = Math.round((bucketDone / bucketItems.length) * 100);
-
-          ddayHtml += `
-            <div class="col-span-1 sm:col-span-2 p-3.5 sm:p-4 rounded-2xl bg-[#090d17] border border-[#1e263c] space-y-3">
-              <div class="flex items-center justify-between border-b border-[#1b2336] pb-2.5">
-                <div class="flex items-center gap-2">
-                  <span class="w-7 h-7 rounded-lg bg-amber-500/20 text-amber-400 flex items-center justify-center text-xs">
-                    <i class="${bucket.icon}"></i>
-                  </span>
-                  <div>
-                    <h4 class="text-xs sm:text-sm font-black text-white flex items-center gap-2">
-                      <span>${bucket.name}</span>
-                      <span class="text-[10px] text-slate-400 font-medium">${bucket.desc}</span>
-                    </h4>
-                  </div>
-                </div>
-                <span class="px-2 py-0.5 rounded-full text-[10px] font-black ${bucketPct === 100 ? 'sulsul-badge-emerald' : 'sulsul-badge-amber'}">
-                  ${bucketDone}/${bucketItems.length} (${bucketPct}%)
-                </span>
-              </div>
-
-              <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-                ${bucketItems.map(checklistRowHtml).join('')}
-              </div>
-            </div>
-          `;
-        });
-
-        container.innerHTML = ddayHtml || `
-          <div class="col-span-1 sm:col-span-2 text-center py-10 text-xs text-slate-400 theme-card-subtle rounded-2xl">
-            표시할 준비물이 없습니다.
-          </div>
-        `;
-      } else {
-        // 일반 카테고리 그리드 뷰
-        container.innerHTML = filteredItems.map(checklistRowHtml).join('');
-      }
-    }
-
-    async function toggleChecklistItem(idx) {
-      const trip=getActiveTrip(),item=trip?.checklist?.[idx];if(!item||!requireSharedPlanEdit())return;
-      await commitTripCommand({tripId:trip.id,expectedRevision:trip.revision,change:draft=>{draft.checklist[idx].checked=!item.checked;}});
-      renderChecklistTab();
-    }
+    // [7] 준비물 화면은 js/presentation/checklist-tab.js(SulsulTravel.ChecklistTab)로 옮겼다(v2.0.9, 4단계).
 
     // ==========================================
     // [8] 안전 삭제 확인 모달 시스템 (Sulsul Safe Deletion Rule)
@@ -16449,7 +16270,7 @@ ${JSON.stringify(snapshotDays)}`;
     }
 
     function getReplanDomain() {
-      if (!replanDomainPromise) replanDomainPromise = import('./js/domain/replan.mjs?v=2.0.8');
+      if (!replanDomainPromise) replanDomainPromise = import('./js/domain/replan.mjs?v=2.0.9');
       return replanDomainPromise;
     }
 
@@ -17501,7 +17322,7 @@ ${JSON.stringify(snapshotDays)}`;
 
     async function getAiOrchestrator() {
       if (!aiOrchestratorPromise) {
-        aiOrchestratorPromise = import('./js/application/orchestration.mjs?v=2.0.8').then(({ Orchestrator }) =>
+        aiOrchestratorPromise = import('./js/application/orchestration.mjs?v=2.0.9').then(({ Orchestrator }) =>
           new Orchestrator({
             online: job => Boolean(job?.input?.localDraft) || navigator.onLine,
             timeoutMs: 65000,
@@ -20199,10 +20020,6 @@ JSON 배열만 출력하세요. 각 day는 dayNum, title, city, date, spots를 �
       addQuickCalcAmount: addQuickCalcAmount,
       setBookingGuideFilter: setBookingGuideFilter,
       toggleBookingGuideCompleted: toggleBookingGuideCompleted,
-      switchChecklistViewMode: switchChecklistViewMode,
-      toggleChecklistOnlyUnchecked: toggleChecklistOnlyUnchecked,
-      setChecklistCategoryFilter: setChecklistCategoryFilter,
-      checkAllChecklistItems: checkAllChecklistItems,
       getDayAltitudeAndOutfitInfo: getDayAltitudeAndOutfitInfo,
       showConfirmDelete: showConfirmDelete,
       requestCurrentGpsLocation: requestCurrentGpsLocation,

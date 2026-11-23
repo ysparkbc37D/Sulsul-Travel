@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {createRequire} from 'node:module';
-import {mkdtempSync, mkdirSync, writeFileSync, rmSync} from 'node:fs';
+import {mkdtempSync, mkdirSync, writeFileSync, rmSync, readFileSync, copyFileSync} from 'node:fs';
 import {tmpdir} from 'node:os';
 import path from 'node:path';
 
@@ -115,4 +115,76 @@ test('the scanner ignores comments, strings and regex literals when finding call
   assert.equal(templates[0].exprs[0].text, 'x');
   for (const expr of ['escapeHtml(x)', "ok ? 'a' : 'b'", 'items.length', 'dayIndex + 1', "rows.map(row => `<td>${escapeHtml(row)}</td>`).join('')", 'Number(x).toLocaleString()', 'badgeHtml']) assert.equal(isSafe(expr), true, expr);
   for (const expr of ['trip.title', "ok ? trip.title : ''", 'formatName(trip)', 'a + b']) assert.equal(isSafe(expr), false, expr);
+});
+
+// ---- UI01·UI02 (v2.0.9, 4단계) ----
+const uiActionsSource = new URL('../js/presentation/ui-actions.js', import.meta.url);
+function uiFixture(files) {
+  const dir = fixture({});
+  mkdirSync(path.join(dir, 'js', 'presentation'), {recursive: true});
+  copyFileSync(uiActionsSource, path.join(dir, 'js', 'presentation', 'ui-actions.js'));
+  for (const [file, text] of Object.entries(files)) { mkdirSync(path.dirname(path.join(dir, file)), {recursive: true}); writeFileSync(path.join(dir, file), text); }
+  return dir;
+}
+const uiRules = result => result.violations.filter(v => /^UI0/.test(v.rule));
+
+test('인라인 이벤트 처리기 수는 파일별 기준값을 넘지 않고, 줄면 기준값을 낮춘다 (UI01)', () => {
+  const dir = uiFixture({'js/presentation/feature.js': "function card(){ return `<button onclick=\"go(1)\">a</button><input onchange='go(2)'><button data-on-click=\"x.y\">`; }\nfunction go(){}\n// onclick=\"go()\" 주석은 세지 않는다"});
+  try {
+    const none = lint({rootDir: dir, allowlist: empty});
+    assert.equal(none.handlers['js/presentation/feature.js'], 2, 'data-on-click·주석은 세지 않는다');
+    assert.match(none.violations.find(v => v.rule === 'UI01').message, /feature\.js: 인라인 이벤트 처리기 2곳\(기준 0\)/);
+    assert.deepEqual(rules(lint({rootDir: dir, allowlist: {...empty, inlineHandlers: {'js/presentation/feature.js': 2}}})).filter(r => r === 'UI01'), []);
+    assert.match(lint({rootDir: dir, allowlist: {...empty, inlineHandlers: {'js/presentation/feature.js': 5}}}).violations.find(v => v.rule === 'UI01').message, /5곳에서 2곳으로 줄었다/);
+  } finally { rmSync(dir, {recursive: true, force: true}); }
+});
+
+test('없는 함수를 부르는 인라인 처리기와 없는 창을 여는 버튼은 실패한다 (UI02)', () => {
+  const dir = uiFixture({'js/presentation/feature.js': [
+    "function card(){ return `<button onclick=\"renamedLongAgo(1)\">a</button><button onclick=\"show('모의 GPS (가상)')\">b</button><button onclick=\"event.stopPropagation(); show(1)\">c</button>`; }",
+    "function show(){ openModal('modal-real'); }",
+    "function ghost(){ openModal('modal-ghost'); }",
+    "function made(){ const id='modal-made'; ensure(id); openModal('modal-made'); }"
+  ].join('\n')});
+  writeFileSync(path.join(dir, 'index.html'), '<!doctype html><div id="modal-real"></div><script></script>');
+  try {
+    const result = lint({rootDir: dir, allowlist: {...empty, inlineHandlers: {'js/presentation/feature.js': 3}}});
+    const places = uiRules(result).flatMap(v => v.places).join('\n');
+    assert.match(places, /renamedLongAgo\(\)/);
+    assert.doesNotMatch(places, /GPS|show\(\)|stopPropagation/, '문자열 안 글자·정의된 함수·브라우저 기본 이름은 통과');
+    assert.match(places, /openModal\('modal-ghost'\)/);
+    assert.doesNotMatch(places, /modal-real|modal-made/, '마크업 id나 코드에서 만드는 창은 통과');
+  } finally { rmSync(dir, {recursive: true, force: true}); }
+});
+
+test('data-on-* 이름은 실제로 등록된 이름이어야 하고 문자열 그대로 적는다 (UI02)', () => {
+  const dir = uiFixture({
+    'js/presentation/demo-tab.js': "(function(root){ root.SulsulTravel.UiActions.define('demo', { go(){}, save: () => {} }); })(window);",
+    'js/presentation/feature.js': "function card(kind){ return `<button data-on-click=\"demo.go\"></button><input data-on-change=\"demo.save\"><button data-on-click=\"demo.missing\"></button><button data-on-click=\"demo.${kind}\"></button>`; }"
+  });
+  try {
+    const result = lint({rootDir: dir, allowlist: empty});
+    assert.deepEqual(result.actions.sort(), ['demo.go', 'demo.save']);
+    const messages = uiRules(result).map(v => `${v.message}\n${v.places.join('\n')}`).join('\n');
+    assert.match(messages, /등록되지 않은 화면 동작 이름[\s\S]*demo\.missing/);
+    assert.match(messages, /문자열 그대로[\s\S]*demo\.\$\{kind\}/);
+    assert.doesNotMatch(messages, /demo\.go|demo\.save/);
+  } finally { rmSync(dir, {recursive: true, force: true}); }
+});
+
+test('화면 동작을 등록하는 파일이 불러올 때 문서를 건드리거나 index.html에서 등록하면 실패한다 (UI02)', () => {
+  const dir = uiFixture({'js/presentation/bad-tab.js': "document.getElementById('x'); SulsulTravel.UiActions.define('bad', { go(){} });"});
+  writeFileSync(path.join(dir, 'index.html'), "<!doctype html><script>SulsulTravel.UiActions.define('shell', { go(){} });</script>");
+  try {
+    const messages = uiRules(lint({rootDir: dir, allowlist: empty})).map(v => `${v.message} ${v.places.join(' ')}`).join('\n');
+    assert.match(messages, /bad-tab\.js: 불러올 때 오류/);
+    assert.match(messages, /index\.html 안에서 화면 동작을 등록했다/);
+  } finally { rmSync(dir, {recursive: true, force: true}); }
+});
+
+test('실제 저장소의 화면 동작 등록 목록과 위임 모듈', () => {
+  const result = lint();
+  assert.deepEqual(result.actions.filter(name => name.startsWith('checklist.')).sort(), ['checklist.add', 'checklist.category', 'checklist.checkAll', 'checklist.close', 'checklist.details', 'checklist.onlyUnchecked', 'checklist.remove', 'checklist.saveNew', 'checklist.toggle', 'checklist.viewMode']);
+  const source = readFileSync(uiActionsSource, 'utf8');
+  assert.doesNotMatch(source.replace(/\/\*[\s\S]*?\*\//g, ''), /\[data-action\]|'data-action'/, '오늘 화면의 data-action 표식과 섞지 않는다');
 });

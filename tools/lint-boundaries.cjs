@@ -4,9 +4,14 @@
  * GLOBAL01 window.__ 전역 상태는 허용 목록의 이름만 쓴다.
  * ASYNC01  저장 명령(commitTrip* 등)은 await·return으로 끝을 기다리고, 셸·presentation의 async 함수 결과를 조건·대입에 바로 쓰지 않는다.
  * HTML01   HTML 템플릿에 escape하지 않은 값을 넣는 곳의 수가 파일별 기준값을 넘지 않는다(줄어들면 기준값도 낮춘다).
+ * UI01     인라인 이벤트 처리기(onclick="…" 등)의 수가 파일별 기준값을 넘지 않는다(줄어들면 기준값도 낮춘다).
+ *          새 화면은 data-on-click·data-on-change·data-on-input과 SulsulTravel.UiActions.define을 쓴다(4단계).
+ * UI02     눌러도 아무 일이 없는 버튼을 막는다. 인라인 처리기가 부르는 함수가 어디에도 없거나, data-on-* 이름이
+ *          등록되지 않았거나(이름은 문자열 그대로 적는다), openModal('id')의 창이 어디에도 없으면 실패한다.
+ *          (v1.1.7·v1.8.4부터 준비물 보기 전환·예약 가이드 체크·준비물 추가가 이렇게 죽어 있었다.)
  * 허용 목록: tools/boundary-allowlist.json. 수치는 손으로 고치고 사유를 남긴다. */
 'use strict';
-const fs = require('node:fs'), path = require('node:path');
+const fs = require('node:fs'), path = require('node:path'), vm = require('node:vm');
 const root = path.resolve(__dirname, '..');
 
 // ---- 소스 스캐너: 주석을 지우고 템플릿 리터럴과 ${} 식을 찾는다 ----
@@ -218,6 +223,59 @@ function sourceFiles(rootDir) {
 }
 const writeScope = file => file === 'index.html' || file.startsWith('js/presentation/');
 
+// ---- UI01·UI02: 인라인 처리기와 화면 동작 이름 ----
+const INLINE_HANDLER = /(?<![\w$.-])on(?:click|dblclick|change|input|keydown|keyup|keypress|submit|blur|focus|focusin|focusout|mouseover|mouseout|mouseenter|mouseleave|pointerdown|pointerup|touchstart|touchend|load|error|scroll|toggle)\s*=\s*\\?(["'])/g;
+// 처리기 문자열 안에서 바로 부르는 이름(a.b(의 a, 문자열 안 글자는 빼고). 브라우저 기본 이름은 검사하지 않는다.
+const HANDLER_BUILTINS = new Set(['if', 'return', 'typeof', 'void', 'new', 'await', 'async', 'function', 'alert', 'confirm', 'prompt', 'print', 'open', 'close', 'setTimeout', 'clearTimeout', 'requestAnimationFrame', 'scrollTo', 'fetch', 'Number', 'String', 'Boolean', 'parseInt', 'parseFloat', 'isNaN', 'encodeURIComponent', 'decodeURIComponent', 'escape', 'unescape']);
+// 주석을 같은 길이의 공백으로 지운 원문(줄 번호 유지). JS 파일은 // · /* */, index.html은 <!-- -->와 인라인 스크립트의 JS 주석.
+function withoutComments(file, text) {
+  const blankOut = s => s.replace(/[^\r\n]/g, ' ');
+  if (!file.endsWith('.html')) return scan(text).code;
+  let out = text.replace(/<!--[\s\S]*?-->/g, blankOut);
+  for (const region of codeRegions(file, out)) out = out.slice(0, region.offset) + scan(region.text).code + out.slice(region.offset + region.text.length);
+  return out;
+}
+function inlineHandlers(text) {
+  const found = []; let m; INLINE_HANDLER.lastIndex = 0;
+  while ((m = INLINE_HANDLER.exec(text))) {
+    const quote = m[1], start = INLINE_HANDLER.lastIndex;
+    let end = start;
+    while (end < text.length && text[end] !== quote && text[end] !== '\n') end++;
+    found.push({ index: m.index, code: text.slice(start, end).replace(/\\$/, '') });
+  }
+  return found;
+}
+function handlerCalls(code) {
+  const stripped = code.replace(/\\?'(?:\\.|[^'\\])*\\?'/g, "''").replace(/&quot;(?:(?!&quot;).)*&quot;/g, "''");
+  const names = []; let m; const re = /(?:^|[^\w$.])([A-Za-z_$][\w$]*)\s*\(/g;
+  while ((m = re.exec(stripped))) if (!HANDLER_BUILTINS.has(m[1])) names.push(m[1]);
+  return names;
+}
+function definedNames(texts) {
+  const names = new Set();
+  for (const text of texts) {
+    for (const m of text.matchAll(/\bfunction\s*\*?\s+([A-Za-z_$][\w$]*)\s*\(/g)) names.add(m[1]);
+    for (const m of text.matchAll(/\b(?:const|let|var)\s+([A-Za-z_$][\w$]*)\s*=/g)) names.add(m[1]);
+    for (const m of text.matchAll(/\b(?:window|globalThis|root)\s*\.\s*([A-Za-z_$][\w$]*)\s*=/g)) names.add(m[1]);
+  }
+  return names;
+}
+// 등록 목록은 실제 코드를 Node vm에서 불러 읽는다(정규식으로 등록 표를 해석하지 않는다).
+// 등록하는 파일은 불러올 때 문서를 건드리지 않아야 한다. 실패하면 UI02로 알린다.
+function registeredActions(files) {
+  const context = vm.createContext({ console, setTimeout, clearTimeout });
+  context.window = context; context.globalThis = context;
+  const core = files.find(f => f.file === 'js/presentation/ui-actions.js');
+  const definers = files.filter(f => f.file !== 'index.html' && f !== core && /\bUiActions\s*\.\s*define\s*\(/.test(f.text));
+  const errors = [];
+  for (const { file, text } of [core, ...definers].filter(Boolean)) {
+    try { vm.runInContext(text, context, { filename: file, timeout: 2000 }); }
+    catch (error) { errors.push(`${file}: 불러올 때 오류 — ${error.message}`); }
+  }
+  const api = context.SulsulTravel && context.SulsulTravel.UiActions;
+  return { names: new Set(api ? api.names() : []), errors, available: Boolean(api) };
+}
+
 function lint({ rootDir = root, allowlist } = {}) {
   allowlist = allowlist || JSON.parse(fs.readFileSync(path.join(rootDir, 'tools', 'boundary-allowlist.json'), 'utf8'));
   const writes = {}, globals = {}, html = {}, htmlSamples = {}, asyncCalls = {}, violations = [];
@@ -317,7 +375,51 @@ function lint({ rootDir = root, allowlist } = {}) {
     if (actual > allowed) violations.push({ rule: 'HTML01', message: `${file}: escape하지 않은 HTML 삽입 ${actual}곳(기준 ${allowed}). 값은 escapeHtml()로 감싼다`, places: htmlSamples[file].slice(-Math.min(10, actual - allowed)) });
     else if (actual < allowed) violations.push({ rule: 'HTML01', message: `${file}: escape하지 않은 HTML 삽입이 ${allowed}곳에서 ${actual}곳으로 줄었다. 기준값을 ${actual}로 낮춘다`, places: [] });
   }
-  return { violations, writes, globals, html, htmlSamples, asyncCalls };
+
+  // UI01: 인라인 처리기 수는 늘지 않는다
+  const handlers = {}, deadCalls = [], extraTexts = ['kb-travel.js'].map(f => path.join(rootDir, f)).filter(fs.existsSync).map(p => fs.readFileSync(p, 'utf8'));
+  const uiFiles = files.map(({ file, text }) => ({ file, text: withoutComments(file, text) }));
+  const defined = definedNames([...uiFiles.map(f => f.text), ...extraTexts]);
+  for (const { file, text } of uiFiles) {
+    for (const h of inlineHandlers(text)) {
+      handlers[file] = (handlers[file] || 0) + 1;
+      for (const name of handlerCalls(h.code)) if (!defined.has(name)) deadCalls.push(`${file}:${lineOf(text, h.index)} ${name}() — 이 이름의 함수가 앱 어디에도 없다`);
+    }
+  }
+  const handlerBaseline = allowlist.inlineHandlers || {};
+  for (const file of new Set([...Object.keys(handlers), ...Object.keys(handlerBaseline)])) {
+    const actual = handlers[file] || 0, allowed = handlerBaseline[file] || 0;
+    if (actual > allowed) violations.push({ rule: 'UI01', message: `${file}: 인라인 이벤트 처리기 ${actual}곳(기준 ${allowed}). 새 동작은 data-on-click 등과 SulsulTravel.UiActions.define으로 잇는다`, places: [] });
+    else if (actual < allowed) violations.push({ rule: 'UI01', message: `${file}: 인라인 이벤트 처리기가 ${allowed}곳에서 ${actual}곳으로 줄었다. 기준값을 ${actual}로 낮춘다`, places: [] });
+  }
+
+  // UI02: 눌러도 아무 일이 없는 버튼
+  if (deadCalls.length) violations.push({ rule: 'UI02', message: '인라인 처리기가 없는 함수를 부른다', places: deadCalls });
+  const registry = registeredActions(files);
+  if (registry.errors.length) violations.push({ rule: 'UI02', message: '화면 동작을 등록하는 파일을 불러오지 못했다', places: registry.errors });
+  const unknown = [], dynamic = [];
+  for (const { file, text } of uiFiles) {
+    for (const m of text.matchAll(/data-on-(?:click|change|input)\s*=\s*\\?["']([^"'\\]*)/g)) {
+      const where = `${file}:${lineOf(text, m.index)}`;
+      if (/[${}]/.test(m[1])) dynamic.push(`${where} ${m[1]}`);
+      else if (!registry.names.has(m[1])) unknown.push(`${where} ${m[1]}`);
+    }
+    if (file === 'index.html' && /\bUiActions\s*\.\s*define\s*\(/.test(text)) violations.push({ rule: 'UI02', message: 'index.html 안에서 화면 동작을 등록했다. 등록은 js/presentation 파일에서 한다(경계 검사가 불러 읽을 수 있게)', places: [] });
+  }
+  if (unknown.length) violations.push({ rule: 'UI02', message: `등록되지 않은 화면 동작 이름(등록된 이름 ${registry.names.size}개)`, places: unknown });
+  if (dynamic.length) violations.push({ rule: 'UI02', message: '화면 동작 이름은 문자열 그대로 적는다. 바뀌는 값은 다른 data-* 속성에 둔다', places: dynamic });
+  const all = uiFiles.map(f => f.text).join('\n'), missingModals = [];
+  for (const { file, text } of uiFiles) {
+    for (const m of text.matchAll(/\bopenModal\(\s*(['"])([\w-]+)\1/g)) {
+      const id = m[2], esc = id.replace(/[-]/g, '\\-');
+      const markup = new RegExp(`\\bid\\s*=\\s*\\\\?["']${esc}\\\\?["']|\\.id\\s*=\\s*['"]${esc}['"]`).test(all);
+      const mentions = (all.match(new RegExp(`["'\`]${esc}["'\`]`, 'g')) || []).length;
+      const viaCalls = (all.match(new RegExp(`\\b(?:openModal|closeModal|safeCloseModal|getElementById)\\(\\s*["'\`]${esc}["'\`]`, 'g')) || []).length;
+      if (!markup && mentions <= viaCalls) missingModals.push(`${file}:${lineOf(text, m.index)} openModal('${id}') — 이 창이 어디에도 없다`);
+    }
+  }
+  if (missingModals.length) violations.push({ rule: 'UI02', message: '없는 창을 여는 버튼', places: missingModals });
+  return { violations, writes, globals, html, htmlSamples, asyncCalls, handlers, actions: [...registry.names] };
 }
 
 module.exports = { lint, scan, isSafe };
@@ -325,7 +427,8 @@ if (require.main === module) {
   const result = lint();
   if (process.argv.includes('--html-samples')) for (const [file, list] of Object.entries(result.htmlSamples)) { console.log(`# ${file} (${list.length})`); list.forEach(line => console.log('  ' + line)); }
   if (process.argv.includes('--writes')) for (const [key, list] of Object.entries(result.writes)) console.log(`${key}\t${list.length}\t${list.join(' ')}`);
-  if (!result.violations.length) { console.log(`경계 검사 통과: 허용 목록의 직접 접근 ${Object.keys(result.writes).length}건, 전역 ${Object.keys(result.globals).length}개, HTML 기준 ${JSON.stringify(result.html)}`); process.exit(0); }
+  if (process.argv.includes('--handlers')) console.log(JSON.stringify(result.handlers, null, 1));
+  if (!result.violations.length) { console.log(`경계 검사 통과: 허용 목록의 직접 접근 ${Object.keys(result.writes).length}건, 전역 ${Object.keys(result.globals).length}개, HTML 기준 ${JSON.stringify(result.html)}, 인라인 처리기 ${Object.values(result.handlers).reduce((a, b) => a + b, 0)}곳, 화면 동작 ${result.actions.length}개`); process.exit(0); }
   for (const v of result.violations) { console.error(`[${v.rule}] ${v.message}`); v.places.forEach(place => console.error(`    ${place}`)); }
   process.exit(1);
 }

@@ -75,7 +75,7 @@
     }
     if (store?.legacySnapshots?.length) legacyRow(list, store.legacySnapshots);
     if (health.photos) row(list, '기록 사진', `${health.photos.total}장 · 사진 보관소 ${health.photos.stored}장 · 문서 안 ${health.photos.inline}장${health.photos.missing ? ` · 찾지 못함 ${health.photos.missing}장` : ''}`);
-    row(list, '사진 보관소(브라우저)', health.estimate ? `${bytes(health.estimate.usage || 0)} 사용 / 약 ${bytes(health.estimate.quota || 0)}` : '이 브라우저에서 확인할 수 없음');
+    row(list, '브라우저 저장 공간(앱 전체)', health.estimate ? `${bytes(health.estimate.usage || 0)} 사용 / 약 ${bytes(health.estimate.quota || 0)}` : '이 브라우저에서 확인할 수 없음');
     row(list, '영구 보관', health.persisted === true ? '허용됨' : health.persisted === false ? '요청하지 않음 또는 거절됨' : '이 브라우저에서 확인할 수 없음');
     row(list, '마지막 백업', health.lastBackup ? `${new Date(health.lastBackup.at).toLocaleString('ko-KR')} (${daysSince(health.lastBackup.at)}일 전 · ${health.lastBackup.kind === 'gist' ? 'Gist' : health.lastBackup.kind === 'share' ? '휴대폰 공유' : '파일'})` : '기록 없음');
     const notes = advice(health);

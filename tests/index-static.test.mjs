@@ -10,6 +10,7 @@ const companion = readFileSync(new URL('../js/presentation/companion-ui.js', imp
 const companionCss = readFileSync(new URL('../css/companion.css', import.meta.url), 'utf8');
 const utilitiesCss = readFileSync(new URL('../css/utilities.css', import.meta.url), 'utf8');
 const kbTravel = readFileSync(new URL('../kb-travel.js', import.meta.url), 'utf8');
+const checklistTab = readFileSync(new URL('../js/presentation/checklist-tab.js', import.meta.url), 'utf8');
 const packSa = readFileSync(new URL('../js/destinations/pack-south-america.js', import.meta.url), 'utf8');
 const packageMetadata = JSON.parse(readFileSync(new URL('../package.json', import.meta.url), 'utf8'));
 const backupUi = readFileSync(new URL('../js/presentation/travel-backup-ui.js', import.meta.url), 'utf8');
@@ -401,11 +402,12 @@ test('v1.8.4 6 key UI/UX convenience features remain available', () => {
   assert.match(html, /activity-timeline-spot/);
   assert.match(html, /google\.com\/maps\/dir/);
 
-  // 6. Checklist D-Day & smart packing matrix
+  // 6. Checklist D-Day & smart packing matrix (v2.0.9부터 js/presentation/checklist-tab.js)
   assert.match(html, /checklist-category-chips/);
-  assert.match(html, /switchChecklistViewMode/);
-  assert.match(html, /toggleChecklistOnlyUnchecked/);
-  assert.match(html, /getItemDDayBucket/);
+  assert.match(html, /data-on-click="checklist\.viewMode" data-mode="dday"/);
+  assert.match(html, /data-on-click="checklist\.onlyUnchecked"/);
+  assert.match(checklistTab, /function ddayBucket\(item\)/);
+  assert.match(checklistTab, /UiActions\.define\('checklist'/);
 });
 
 test('release version is synchronized', () => {
