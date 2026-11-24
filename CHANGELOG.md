@@ -26,6 +26,17 @@
 - [ ] 항공권/호텔 예약 바우처 PDF 자동 파싱 일정 등록
 - [ ] 여행 동행자 실시간 음성 메모 AI 다이어리 자동 변환
 
+## [v2.2.0] - 2026-11-25
+
+- 화면 분리(4단계) 12차(내 여행 허브 화면)입니다. 오도미터 순차 올림 원칙(`v2.1.9 → v2.2.0`)에 따라 버전을 올리고, `index.html`의 허브 필터·검색·정렬·보기 전환·대표 사진·D-Day 배지·목록/히어로/표준 카드 렌더링(약 970줄)을 `js/presentation/hub-view.js`(`SulsulTravel.HubView`)로 옮겼습니다.
+- 허브 카드 예산 표시와 예산 정렬이 여행 통화(`trip.currency`)를 무시한 채 외화 숫자를 원화(`₩2,000`)로 표시하고, 예산이 0원인 여행에 임의 기본값(`₩5,000,000` / `₩500만`)을 지어내던 결함을 고쳤습니다(v2.1.9에서 EUR 2,000 여행 `₩1,500,000 / ₩2,000 (100%)`·0원 여행 `₩500만` 재현). `LifetimeAnalytics.tripBudgetKrw(trip)`로 원화 환산해 표시·정렬하며 0원 예산은 `'미설정'`으로 표시합니다.
+- 목록 카드가 `durationDays`가 없는 여행에 옛 22일 하드코딩(`(22일)`)을 표시하던 결함을 고쳐 실제 `days.length`·날짜 차이를 계산합니다(v2.1.9에서 4일 파리 여행 `(22일)` 재현).
+- **보안**: 목록·격자 카드가 `coverEmoji`·`startDate`·`endDate`를 escape 없이 HTML로 넣고, `trip.id`를 `onclick="openTripWorkspace('${trip.id}')"` 문자열에 그대로 끼워 따옴표가 든 ID의 클릭이 깨졌으며, `resolveTripCover`가 `trip.coverPhoto`의 안전한 래스터 이미지 스킴을 검사하지 않았습니다(v2.1.9에서 `<img id="hubxss-*">` DOM 생성 및 따옴표 구문 파손 재현). 모든 값을 `escapeHtml`로 넣고 `isSafeCoverUrl`로 커버 이미지 주소를 검증하며, 모든 카드 동작을 `data-on-click="hub.*"`·`data-trip-id`로 전환했습니다.
+- 선택한 국가의 마지막 여행이 삭제된 뒤 `updateHubFilterDropdowns()`가 `State.hubFilters.country`를 초기화하지 않아 국가 선택창이 비고 나머지 여행이 모두 숨겨지던 결함을 고쳤습니다(v2.1.9에서 재현).
+- 허브 필터 바·활성 칩·빈 상태·커버 배너·카드 액션의 인라인 처리기 35곳을 `hub.*` 동작으로 옮겼습니다(UI01 444 → 409곳, `index.html` 294 → 259곳). `index.html`의 HTML01은 147 → 69곳(-78), 새 파일은 0곳입니다.
+- 회귀 검사: `tests/hub-view.browser.cjs`(통화 환산 예산·미설정 예산·정확한 일수·원화 기준 예산 정렬, 필터/칩 개별 해제·따옴표 ID 카드 열기·삭제된 국가 필터 자동 초기화, 공유 사본 HTML·위험 `coverPhoto` 차단·등록된 동작·320px). 위 결함들은 v2.1.9 코드에서 재현했습니다.
+- 알려진 한계: 허브 온보딩(`renderDemoOnboarding`), 여행 삭제(`requestDeleteTrip`), 여행 복제(`duplicateTrip`)는 셸 저장 경계로 남겼으며 설정·공유 분리(A-5)와 함께 정리합니다. 실제 휴대폰에서 확인하지 않았습니다.
+
 ## [v2.1.9] - 2026-11-25
 
 - 화면 분리(4단계) 11차(평생 여행 통계 대시보드)입니다. `index.html`의 `#modal-analytics` 열기·탭 전환(`openAnalyticsModal`·`switchAnalyticsTab`·`toggleAnalyticsView`)과 `renderLifetimeAnalytics`·6대 지표 드릴다운(`toggleStatDrilldown`·`closeStatDrilldown`·`renderStatDrilldown`, 약 540줄)을 `js/presentation/lifetime-analytics.js`(`SulsulTravel.LifetimeAnalytics`)로 옮겼습니다.

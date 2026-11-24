@@ -138,7 +138,7 @@ async function applyPhotoOptimization(){
     const cleaned=await retryPhotoOptimizationCleanup();
     PhotoOptimizeUI.items=[];photoOptimizeBusy('done');document.getElementById('photo-opt-list').replaceChildren();
     if(cleaned)photoOptimizeFeedback(`${plan.changedPhotos}장 최적화와 이전 보관본 정리를 완료했습니다. 확대 보기와 백업에 최적화한 사진이 사용됩니다.`);
-    try{renderHub();renderActiveTripWorkspace();}catch(error){console.warn('[사진 최적화 후 화면 갱신]',error);}
+    try{SulsulTravel.HubView.render();renderActiveTripWorkspace();}catch(error){console.warn('[사진 최적화 후 화면 갱신]',error);}
     return true;
   }catch(error){photoOptimizeBusy(committed?'done':'ready');photoOptimizeFeedback(committed?'사진은 저장했습니다. 화면을 다시 열어 확인해 주세요.':`저장하지 못했습니다. 원본과 미리보기를 유지합니다. ${error.message||''}`);return false;}
 }

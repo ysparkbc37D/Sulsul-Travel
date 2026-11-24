@@ -73,7 +73,7 @@ async function acceptTravelSnapshot(payload, {fromUrl = false} = {}) {
   catch (_) { shareFeedback('저장하지 못했습니다. 기존 여행과 원본 링크는 유지됩니다. 공간 확보 후 다시 가져와 주세요.'); return false; }
   State.activeTripId = incoming.id;
   if (fromUrl) replaceAppUrl(location.pathname+location.search);
-  updateHubFilterDropdowns(); switchView('workspace');
+  SulsulTravel.HubView.updateFilterDropdowns(); switchView('workspace');
   closeModal('modal-share-room',true);
   showToast('여행 사본을 이 기기에 저장했습니다.'); return true;
 }

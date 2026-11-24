@@ -377,7 +377,7 @@ new Promise(function(resolve) {
     // 1. Switch to list mode and force render
     if (typeof State !== 'undefined') {
       State.hubViewMode = 'list';
-      if (typeof renderTripCards === 'function') renderTripCards();
+      if (window.SulsulTravel && SulsulTravel.HubView) SulsulTravel.HubView.renderCards();
     }
     setTimeout(function() {
       var winW = window.innerWidth;
@@ -423,7 +423,7 @@ new Promise(function(resolve) {
       // 2. Also verify grid mode
       if (typeof State !== 'undefined') {
         State.hubViewMode = 'grid';
-        if (typeof renderTripCards === 'function') renderTripCards();
+        if (window.SulsulTravel && SulsulTravel.HubView) SulsulTravel.HubView.renderCards();
       }
       var gridDocW = document.documentElement.scrollWidth;
       var gridOverflow = gridDocW > winW;

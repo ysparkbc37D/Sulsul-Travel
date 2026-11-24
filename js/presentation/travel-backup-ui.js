@@ -160,7 +160,7 @@ async function applyTravelBackupRestore(){
     let cleaned=true;
     try{await JournalOverflowRepository.clearAll();}catch(_){cleaned=false;}
     try{await SulsulTravel.mediaRepository.prune(next);}catch(_){cleaned=false;}
-    updateHubFilterDropdowns();switchView('hub');closeModal('modal-settings',true);
+    SulsulTravel.HubView.updateFilterDropdowns();switchView('hub');closeModal('modal-settings',true);
     document.getElementById('backup-restore-summary').textContent=travelBackupSummaryText(next);
     travelBackupFeedback('backup-restore-feedback',cleaned?'백업을 이 기기에 복원했습니다. 내 여행 목록에서 확인하세요.':'백업은 복원했습니다. 이전 보조 저장소 정리는 완료하지 못했지만 이전 일기가 복원 내용을 덮어쓰지 않도록 처리했습니다.');return true;
   }catch(error){travelBackupFeedback('backup-restore-feedback',committed?`백업 저장은 완료됐습니다. 화면 갱신을 마치지 못했습니다. 새로고침해 내 여행을 확인하세요. ${error.message||''}`:`복원하지 못했습니다. 기존 여행은 유지됩니다. ${error.name==='QuotaExceededError'?'기기 저장 공간이 부족합니다. 기존 자료를 백업하고 사진·여행을 정리한 뒤 다시 시도해 주세요.':error.message||'다시 시도해 주세요.'}`);return false;}

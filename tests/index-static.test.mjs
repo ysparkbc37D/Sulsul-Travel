@@ -16,6 +16,7 @@ const planBlocks = readFileSync(new URL('../js/presentation/plan-blocks.js', imp
 const planTimeline = readFileSync(new URL('../js/presentation/plan-timeline.js', import.meta.url), 'utf8');
 const planMap = readFileSync(new URL('../js/presentation/plan-map.js', import.meta.url), 'utf8');
 const routeMap = readFileSync(new URL('../js/presentation/route-map.js', import.meta.url), 'utf8');
+const hubView = readFileSync(new URL('../js/presentation/hub-view.js', import.meta.url), 'utf8');
 const packSa = readFileSync(new URL('../js/destinations/pack-south-america.js', import.meta.url), 'utf8');
 const packageMetadata = JSON.parse(readFileSync(new URL('../package.json', import.meta.url), 'utf8'));
 const backupUi = readFileSync(new URL('../js/presentation/travel-backup-ui.js', import.meta.url), 'utf8');
@@ -152,12 +153,12 @@ test('hub filter has 3-column single row and card actions are streamlined to 4 b
   assert.doesNotMatch(html, /id=["']hub-filter-city["'][^>]*class=["'][^"']*\bhidden\b/);
 
   // Cards must NOT have duplicateTrip buttons in markup
-  assert.doesNotMatch(html, /onclick=["']duplicateTrip\(/);
+  assert.doesNotMatch(html + hubView, /onclick=["']duplicateTrip\(/);
 
   // List card must feature the streamlined 4-button action cluster
-  assert.match(html, /title=["']대표 사진 등록["']/);
-  assert.match(html, /title=["']PDF 여행 에세이 리포트["']/);
-  assert.match(html, /title=["']여행 삭제["']/);
+  assert.match(hubView, /title=["']대표 사진 등록["']/);
+  assert.match(hubView, /title=["']PDF 여행 에세이 리포트["']/);
+  assert.match(hubView, /title=["']여행 삭제["']/);
 });
 
 test('card touch swipe handlers and hidden drawers are purged for mobile stability (v1.7.0)', () => {
@@ -193,7 +194,7 @@ test('sulsul-diary card status gradients and bottom progress bar are wired (v1.7
   assert.match(html, /\.trip-st-completed/);
   assert.match(html, /\.trip-st-bucket/);
   assert.match(html, /\.trip-bottom-bar/);
-  assert.match(html, /class="trip-bottom-bar"/);
+  assert.match(hubView, /class="trip-bottom-bar"/);
 });
 
 test('editorial footer, donation modal, guides, and copyright are complete (v1.7.2)', () => {
@@ -479,8 +480,8 @@ test('전역 함수 중복 선언이 실제 검증과 화면 동작을 덮어쓰
 test('latest travel itinerary is placed at the top and compareTripsLatestFirst works (v1.8.8)', () => {
   assert.match(html, /function compareTripsLatestFirst\(a, b\)/);
   assert.match(html, /State\.trips\.sort\(compareTripsLatestFirst\)/);
-  assert.match(html, /filtered\.sort\(compareTripsLatestFirst\)/);
+  assert.match(hubView, /filtered\.sort\(compareTripsLatestFirst\)/);
   assert.match(html, /compareTripsLatestFirst: compareTripsLatestFirst/);
-  assert.match(html, /filtered\.unshift\(heroItem\)/);
+  assert.match(hubView, /filtered\.unshift\(heroItem\)/);
 });
 

@@ -57,7 +57,7 @@ const server=http.createServer((req,res)=>{
    const lastTripDeletionSafe=State.trips.length===0&&State.activeTripId===null;
    if(priorSampleFlag==null)localStorage.removeItem('st_sa_sample_deleted');else localStorage.setItem('st_sa_sample_deleted',priorSampleFlag);
    State.trips=priorTestTrips;State.activeTripId=priorTestActiveId;
-   const host=document.createElement('div');host.id='status-test';host.innerHTML=renderDDayBadge(t,new Date('2026-09-14T12:00:00Z'));document.body.appendChild(host);
+   const host=document.createElement('div');host.id='status-test';host.innerHTML=SulsulTravel.HubView.renderDDayBadge(t,new Date('2026-09-14T12:00:00Z'));document.body.appendChild(host);
    return {failed,persistedOnFail,memoryOnFail,draftRetained,retry,saved,completedOnFailure,before,failedImport,hashRetained,countOnFail,successfulImport,after,duplicateCount,metadata,fileImported,reportSafe,reportText,localhostWarning,failedDeleteRetained,failedDeleteDialogRetained,deletionOverflowCleaned,deletionPersists,lastTripDeletionSafe};
   });
   assert.equal(result.failed,false);assert.equal(result.persistedOnFail,'원문');assert.equal(result.memoryOnFail,'원문');assert.equal(result.draftRetained,'새 원문');assert.equal(result.retry,true);assert.equal(result.saved,'새 원문');assert.equal(result.completedOnFailure,false);

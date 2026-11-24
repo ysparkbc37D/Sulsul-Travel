@@ -48,7 +48,7 @@ const otherTrip={id:'other_trip',title:'다른 가상 여행',startDate:'2030-06
     await check('작업 화면 통계와 대표 사진이 같은 기록 모델을 쓴다',async() => {
       await page.evaluate(() => openTripWorkspace('records_trip'));
       assert.equal(await page.locator('#stat-ws-diaries').innerText(),'5편 / 4장');
-      const cover=await page.evaluate(() => resolveTripCover(State.trips.find(trip => trip.id==='records_trip')));
+      const cover=await page.evaluate(() => SulsulTravel.HubView.resolveCover(State.trips.find(trip => trip.id==='records_trip')));
       assert.equal(cover.type,'journal');assert.ok(cover.url.startsWith('data:image/png'));
       return {workspace:'5편 / 4장',coverFromRecords:true};
     });

@@ -27,7 +27,7 @@ const server=http.createServer((req,res) => {
       const adapter=SulsulTravel.TripAdapter,today=adapter.localDateKey(new Date(),'Asia/Seoul');
       const makeTrip=(id,title,city,startDate,endDate) => adapter.normalizeTrip({id,title,countries:['일본'],cities:[city],currency:'JPY',budget:12345000,startDate,endDate,timeZone:'Asia/Seoul',days:Array.from({length:id==='header-live' ? 12 : 2},(_,index) => ({date:adapter.dateForDay(startDate,index),city,title:`${city}의 ${index+1}일 가상 일정`,spots:[{title:'가상 산책',time:'09:00',cat:'tour'}]})),journals:{},momentEntries:[],activityRecords:{},expenses:[{title:'가상 식사',amount:50000,currency:'JPY',krw:5350000,cat:'food',date:startDate}]});
       State.trips=[makeTrip('header-live','가상 교토 산책, 골목마다 함께 남기는 열두 날의 가족 여행','교토',adapter.dateForDay(today,-1),adapter.dateForDay(today,10)),makeTrip('header-future','가상 오사카 맛집, 오래 기억할 음식과 이야기를 찾아 떠나는 여행','오사카','2035-04-01','2035-04-02'),makeTrip('header-past','가상 도쿄 회상','도쿄','2020-04-01','2020-04-02')];
-      State.activeTripId=null;State.hubViewMode='list';switchView('hub');resetHubFilters();setTheme('modern');
+      State.activeTripId=null;State.hubViewMode='list';switchView('hub');SulsulTravel.HubView.resetFilters();setTheme('modern');
     });await settle();
     for(const width of [320,360,390,430])for(const view of ['hub','workspace']){
       await check(`${width}px ${view} 버전·브랜드·설정·이동 버튼 실제 노출과 터치 경계`,async() => {
@@ -90,7 +90,7 @@ const server=http.createServer((req,res) => {
     }
     for(const width of [320,360,390,430])for(const mode of ['list','grid']){
       await check(`${width}px ${mode} 카드의 모든 버튼이 카드 안 44px이고 실제 선택 가능`,async() => {
-        await page.setViewportSize({width,height:844});await page.evaluate(mode => {switchView('hub');resetHubFilters();State.hubViewMode=mode;renderTripCards();},mode);await settle();
+        await page.setViewportSize({width,height:844});await page.evaluate(mode => {switchView('hub');SulsulTravel.HubView.resetFilters();State.hubViewMode=mode;SulsulTravel.HubView.renderCards();},mode);await settle();
         const cards=page.locator('#trip-cards-grid .trip-st-card'),measurements=[];
         assert.equal(await cards.count(),3);
         for(let cardIndex=0;cardIndex<await cards.count();cardIndex++){
@@ -111,7 +111,7 @@ const server=http.createServer((req,res) => {
     }
     for(const mode of ['list','grid']){
       await check(`${mode} 카드 제목을 키보드 Enter로 열어 여행 화면 진입`,async() => {
-        await page.setViewportSize({width:390,height:844});await page.evaluate(mode => {switchView('hub');resetHubFilters();State.hubViewMode=mode;renderTripCards();},mode);await settle();
+        await page.setViewportSize({width:390,height:844});await page.evaluate(mode => {switchView('hub');SulsulTravel.HubView.resetFilters();State.hubViewMode=mode;SulsulTravel.HubView.renderCards();},mode);await settle();
         const button=page.locator('#trip-cards-grid .hub-trip-open').first(),title=(await button.innerText()).trim();
         assert.equal(await button.evaluate(element => element.tagName),'BUTTON');
         await button.focus();assert.equal(await button.evaluate(element => element===document.activeElement),true);await button.press('Enter');await settle();
@@ -120,7 +120,7 @@ const server=http.createServer((req,res) => {
     }
     for(const width of [320,360,390,430]){
       await check(`${width}px 검색은 전체 입력을 위한 공간과 접근 이름·터치 높이 확보`,async() => {
-        await page.setViewportSize({width,height:844});await page.evaluate(() => {switchView('hub');resetHubFilters();});await settle();
+        await page.setViewportSize({width,height:844});await page.evaluate(() => {switchView('hub');SulsulTravel.HubView.resetFilters();});await settle();
         const controls=await page.evaluate(() => ['hub-search-input','hub-filter-sort','btn-hub-view-mode'].map(id => {
           const element=document.getElementById(id),rect=element.getBoundingClientRect();
           const name=element.getAttribute('aria-label') || [...(element.labels||[])].map(label => label.textContent.trim()).join(' ') || element.title;
@@ -133,13 +133,13 @@ const server=http.createServer((req,res) => {
         assert.match(await page.locator('#trip-cards-grid').textContent(),/가상 교토 산책/);
         await page.locator('#hub-search-input').fill('검색 결과 없는 가상 도시');await settle();
         assert.equal(await page.locator('#trip-cards-grid .trip-st-card').count(),0);
-        await page.evaluate(() => resetHubFilters());await settle();assert.equal(await page.locator('#trip-cards-grid .trip-st-card').count(),3);return controls;
+        await page.evaluate(() => SulsulTravel.HubView.resetFilters());await settle();assert.equal(await page.locator('#trip-cards-grid .trip-st-card').count(),3);return controls;
       });
     }
     await page.setViewportSize({width:390,height:844});
     for(const theme of ['modern','deepblack','lightgray']){
       await check(`${theme} 버전·진행 상태·검색·필터 글자 대비 4.5 이상`,async() => {
-        await page.evaluate(theme => {switchView('hub');resetHubFilters();setTheme(theme);},theme);await settle();
+        await page.evaluate(theme => {switchView('hub');SulsulTravel.HubView.resetFilters();setTheme(theme);},theme);await settle();
         const samples=await contrast(page,['#app-ver-badge','#hub-search-input','#hub-filter-sort','#tab-filter-all','#tab-filter-ongoing','.travel-status[data-status="ongoing"]']);
         assert.equal(samples.length,6,'진행 여행을 포함한 모든 대비 대상을 실제로 렌더링합니다.');
         const failures=samples.filter(sample => sample.ratio<4.5);assert.deepEqual(failures,[],JSON.stringify(failures));
@@ -147,7 +147,7 @@ const server=http.createServer((req,res) => {
       });
     }
     await check('허브 상태 필터가 여행 중·완료·예정 결과를 각각 표시',async() => {
-      await page.evaluate(() => {switchView('hub');resetHubFilters();});
+      await page.evaluate(() => {switchView('hub');SulsulTravel.HubView.resetFilters();});
       const selected=[];
       for(const [status,title] of [['ongoing','가상 교토 산책'],['planned','가상 오사카 맛집'],['completed','가상 도쿄 회상']]){
         await page.locator(`#tab-filter-${status}`).click();await settle();assert.equal(await page.locator('#trip-cards-grid .trip-st-card').count(),1);assert.match(await page.locator('#trip-cards-grid').textContent(),new RegExp(title));assert.equal(await page.locator(`#tab-filter-${status}`).getAttribute('aria-pressed'),'true');assert.equal(await page.locator('#tab-filter-all').getAttribute('aria-pressed'),'false');selected.push({status,title});
@@ -155,7 +155,7 @@ const server=http.createServer((req,res) => {
       return selected;
     });
     await check('상세 필터는 접어서 시작하고 선택 후 접어도 조건과 해제 칩 유지',async() => {
-      await page.evaluate(() => {switchView('hub');resetHubFilters();});await settle();
+      await page.evaluate(() => {switchView('hub');SulsulTravel.HubView.resetFilters();});await settle();
       assert.equal(await page.locator('#hub-filter-details').evaluate(element => element.open),false);
       assert.equal(await page.locator('#hub-filter-city').isVisible(),false);
       await page.locator('#hub-filter-details > summary').click();await settle();
@@ -172,13 +172,13 @@ const server=http.createServer((req,res) => {
       assert.equal(await page.locator('#hub-active-chips').isVisible(),true);assert.match(await page.locator('#hub-active-chips').textContent(),/교토/);
       await page.locator('#hub-search-input').fill('산책');await settle();
       assert.equal(await page.locator('#trip-cards-grid .trip-st-card').count(),1);
-      await page.evaluate(() => resetHubFilters());await settle();assert.equal(await page.locator('#trip-cards-grid .trip-st-card').count(),3);assert.equal(await page.locator('#hub-active-chips').isVisible(),false);
+      await page.evaluate(() => SulsulTravel.HubView.resetFilters());await settle();assert.equal(await page.locator('#trip-cards-grid .trip-st-card').count(),3);assert.equal(await page.locator('#hub-active-chips').isVisible(),false);
       return {selectedCity:'교토',retainedWhileCollapsed:true,searchUsesSelectedFilter:true,resetRestores:3};
     });
     await check('구 초안 안내는 가상 식별자로만 재현하고 설명 접기·개인 일정 보존',async() => {
       const before=await page.evaluate(() => {
         const legacy=SulsulTravel.TripAdapter.normalizeTrip({...JSON.parse(JSON.stringify(State.trips[0])),id:'trip_sa_showcase_22d',title:'[가상] 이전 기본 초안 안내 검사',legacyExampleRetired:true});
-        State.trips.push(legacy);switchView('hub');resetHubFilters();return JSON.stringify(State.trips.find(trip => trip.id===legacy.id));
+        State.trips.push(legacy);switchView('hub');SulsulTravel.HubView.resetFilters();return JSON.stringify(State.trips.find(trip => trip.id===legacy.id));
       });await settle();
       assert.equal(await page.locator('#legacy-demo-hub-notice').isVisible(),true);
       assert.equal(await page.locator('#legacy-demo-hub-notice details').evaluate(element => element.open),false);
@@ -187,11 +187,11 @@ const server=http.createServer((req,res) => {
       assert.match(await page.locator('#legacy-demo-hub-notice p').textContent(),/편집한 기록|자동으로 교체하지/);
       assert.equal(await page.evaluate(() => JSON.stringify(State.trips.find(trip => trip.id==='trip_sa_showcase_22d'))),before);
       await page.locator('#legacy-demo-hub-notice summary').click();
-      await page.evaluate(() => {State.trips=State.trips.filter(trip => trip.id!=='trip_sa_showcase_22d');switchView('hub');resetHubFilters();});await settle();
+      await page.evaluate(() => {State.trips=State.trips.filter(trip => trip.id!=='trip_sa_showcase_22d');switchView('hub');SulsulTravel.HubView.resetFilters();});await settle();
       return {syntheticLegacyOnly:true,collapsedByDefault:true,originalUnchanged:true};
     });
     for(const [width,theme] of [[320,'modern'],[390,'modern'],[390,'deepblack']]){
-      await page.setViewportSize({width,height:844});await page.evaluate(theme => {switchView('hub');resetHubFilters();State.hubViewMode='list';renderTripCards();setTheme(theme);window.scrollTo({top:0,behavior:'instant'});},theme);await settle();
+      await page.setViewportSize({width,height:844});await page.evaluate(theme => {switchView('hub');SulsulTravel.HubView.resetFilters();State.hubViewMode='list';SulsulTravel.HubView.renderCards();setTheme(theme);window.scrollTo({top:0,behavior:'instant'});},theme);await settle();
       await page.screenshot({path:path.join(output,`${theme}-${width}.png`)});
     }
     await check('사용자 동작 중 JavaScript 오류 없음',async() => {assert.deepEqual(errors,[]);return errors;});

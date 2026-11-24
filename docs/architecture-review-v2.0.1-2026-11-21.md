@@ -196,6 +196,13 @@ flowchart TD
 - **검증**: 단위 257개(새 `trip-store.test.mjs` 8개 — 느린 비동기 백엔드에서 연달아 맡긴 저장이 모두 남는지 포함), 브라우저 회귀 27종, `tools-verify.ps1` 통과. 저장 실패를 일부러 만드는 브라우저 검사 세 곳은 결과를 저장보다 먼저 읽어, 실패 경로를 검사하지 않은 채 통과하고 있었다. 저장을 기다리게 고쳤다(실록 112호).
 - **남은 3b(2차)**: 여행 자료를 IndexedDB로 옮기는 일. 백엔드를 `TripStore` 아래에서 바꾸고, 원문 보관 → 이전 → 다시 읽어 대조 → 채택 순서로 옮긴다. 옛 문서는 다른 창의 구버전이 덮어쓰지 못하게 표시만 바꿔 남긴다. 다른 창 충돌 판정은 문서 원문 비교 대신 저장소의 버전 번호로 한다. 브라우저 검사의 `localStorage` 직접 읽기를 저장소 읽기로 바꾸는 작업이 함께 필요하다.
 
+## 28. 4단계 진행 결과 (v2.2.0) — 화면 분리 12차: 내 여행 허브 화면
+
+- **옮긴 것**: `index.html`의 허브 필터·검색·정렬·보기 전환·대표 사진·D-Day 배지·목록/히어로/표준 여행 카드 렌더링(약 970줄)을 `js/presentation/hub-view.js`(`SulsulTravel.HubView`)로 옮겼다. 인라인 처리기 35곳 → `hub.*`(UI01 444 → 409곳, `index.html` 294 → 259곳). `index.html`의 HTML01은 147 → 69곳(-78), 새 파일은 0곳이다.
+- **검증에서 고친 것**: 외화 예산 원화 오표시 및 0원 예산 `₩500만` 하드코딩과 통화 무시 예산 정렬, 목록 카드 `(22일)` 하드코딩, `coverEmoji`·`startDate`·`endDate` HTML escape 누락·따옴표 ID `onclick` 파손·`coverPhoto` 스킴 미검증, 삭제된 국가 필터 잔류(실록 125호). 모두 v2.1.9 코드에서 재현한 뒤 고쳤다.
+- **허브·통계 분리 완료**: 평생 여행 통계 대시보드(v2.1.9), 내 여행 허브 화면(v2.2.0).
+- **다음**: 설정·공유·설치(A-5) → 여행 만들기·일정 튜닝(A-6) → 나머지 셸 구역(A-7) → `companion-ui.js` 분리(A-8).
+
 ## 27. 4단계 진행 결과 (v2.1.9) — 화면 분리 11차: 평생 여행 통계 대시보드
 
 - **옮긴 것**: `index.html`의 `#modal-analytics` 열기·탭 전환과 `renderLifetimeAnalytics`·6대 지표 드릴다운(약 540줄)을 `js/presentation/lifetime-analytics.js`(`SulsulTravel.LifetimeAnalytics`)로 옮겼다. 인라인 처리기 20곳 → `lifetimeAnalytics.*`·`shell.closeModal`(UI01 464 → 444곳, `index.html` 314 → 294곳). `index.html`의 HTML01은 188 → 147곳(-41), 새 파일은 0곳이다.
