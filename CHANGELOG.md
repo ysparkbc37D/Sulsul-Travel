@@ -26,6 +26,16 @@
 - [ ] 항공권/호텔 예약 바우처 PDF 자동 파싱 일정 등록
 - [ ] 여행 동행자 실시간 음성 메모 AI 다이어리 자동 변환
 
+## [v2.1.9] - 2026-11-25
+
+- 화면 분리(4단계) 11차(평생 여행 통계 대시보드)입니다. `index.html`의 `#modal-analytics` 열기·탭 전환(`openAnalyticsModal`·`switchAnalyticsTab`·`toggleAnalyticsView`)과 `renderLifetimeAnalytics`·6대 지표 드릴다운(`toggleStatDrilldown`·`closeStatDrilldown`·`renderStatDrilldown`, 약 540줄)을 `js/presentation/lifetime-analytics.js`(`SulsulTravel.LifetimeAnalytics`)로 옮겼습니다.
+- 요약 비교표·총 여정 드릴다운·지출 랭킹 드릴다운이 앱에서 쓰지 않는 `t.budgetKrw || 0`만 읽어 모든 여행의 목표 예산이 `₩0만`, 소진율이 `0%`로 표시되던 결함을 고쳤습니다(v2.1.8에서 KRW 200만·EUR 1,000 여행 모두 `₩0만 / 0%` 재현). 여행의 `budget`과 `currency`를 `getCurrencyRate`로 원화 환산해 표시합니다.
+- 상태 분포 바·범례는 `TripAdapter.resolveTripStage(t)`로 날짜 기준 단계를 계산하면서, 바로 아래 요약 비교표와 여정 드릴다운은 `t.status || 'planned'`를 읽어 과거 완료 여행과 날짜 없는 버킷리스트가 모두 `'예정'`으로 표시되던 불일치를 고쳤습니다(v2.1.8에서 범례 `완료 1 · 버킷 1` 대비 표 `예정` 재현).
+- **보안**: 요약표와 여정 드릴다운이 `startDate`·`endDate`를 escape 없이 HTML로 넣고, 여행 ID를 `onclick="...openTripWorkspace('${t.id}')"` 문자열에 그대로 끼워 따옴표가 든 ID가 동작을 깨뜨리고 공유 사본 날짜 HTML이 요소가 됐습니다(v2.1.8에서 `<img id="laxss-date">` 생성 및 따옴표 구문 파손 재현). 모든 값을 `escapeHtml` 또는 `textContent`로 넣고 `data-on-click="lifetimeAnalytics.openTrip"`·`data-trip-id`로 전환했습니다. 여정 이동 시 `closeModal('modal-analytics', true)`로 350ms 연타 가드에 막히지 않고 닫히며, 6대 지표 카드를 `<button type="button" aria-expanded>`로 개선했습니다.
+- 통계 진입 버튼·모달 닫기·6대 지표 카드·드릴다운·워크스페이스 통계 액션의 인라인 처리기 20곳을 `lifetimeAnalytics.*`·`shell.closeModal`로 옮겼습니다(UI01 464 → 444곳, `index.html` 314 → 294곳). `index.html`의 HTML01은 188 → 147곳(-41), 새 파일은 0곳입니다.
+- 회귀 검사: `tests/lifetime-analytics.browser.cjs`(헤더 통계 버튼 실클릭·KRW 환산 예산·`resolveTripStage` 상태 배지 일관성, 6대 드릴다운 실클릭·`aria-expanded`·소진율·따옴표 ID 및 가계부 이동, 워크스페이스 통계 패널·공유 사본 HTML 안전성·등록된 동작·320px). 위 결함 세 가지는 v2.1.8 코드에서 재현했습니다.
+- 알려진 한계: 허브 목록·검색·필터·카드·스와이프는 다음 릴리스(v2.2.0)에서 옮깁니다. 실제 휴대폰에서 확인하지 않았습니다.
+
 ## [v2.1.8] - 2026-11-25
 
 - 화면 분리(4단계) 10차(계획 탭 4차 — 큰 계획·구간 상세·서브탭)입니다. `index.html`의 큰 계획 구조 해석·구간 상세 열기/닫기·큰 계획 편집 모달·`switchPlanSubTab`(약 350줄)과 `js/presentation/companion-ui.js`의 보기 방식 전환(`setPlanPresentation`·`openPlanPresentation`)을 `js/presentation/plan-blocks.js`(`SulsulTravel.PlanBlocks`)로 옮겼습니다.

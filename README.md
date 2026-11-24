@@ -1,6 +1,6 @@
 # 술술트래블 (Sulsul Travel)
 
-> 현재 작업 버전: **v2.1.8** · 함께 계획하고 현장의 순간을 이어 쓰는 오프라인 우선 여행 다이어리.
+> 현재 작업 버전: **v2.1.9** · 함께 계획하고 현장의 순간을 이어 쓰는 오프라인 우선 여행 다이어리.
 
 술술트래블은 개인 브라우저에 여행 데이터를 저장하는 정적 웹 앱입니다. Gemini AI는 사용자가 요청할 때 계획·기록 초안을 돕고, 최종 일정과 기록은 사용자가 검토하고 저장합니다.
 
@@ -52,6 +52,7 @@ js/presentation/                    동행 화면, 기록 편집, 지출 편집,
                                    가계부 탭(expenses-tab.js)·환전과 환율(exchange-ui.js)·셸 공통 동작(shell-actions.js),
                                    초기 자산과 통화 선택(budget-ui.js)·사용내역 통계(expense-analytics.js)·지출 입력창(expense-editor.js),
                                    계획 탭 큰 계획·구간 상세·서브탭(plan-blocks.js)·예약·도시 가이드(plan-guides.js)·일정표(plan-timeline.js)·지도(plan-map.js)·노선도(route-map.js),
+                                   평생 여행 통계 대시보드(lifetime-analytics.js),
                                    화면 동작 위임(ui-actions.js: data-on-click 등 → UiActions.define)
 js/destinations/                    기본·남미·원난 목적지 지식 팩
 kb-travel.js                       예시 여행·초기 여행 템플릿
@@ -91,6 +92,7 @@ node tests/plan-timeline.browser.cjs
 node tests/plan-map.browser.cjs
 node tests/route-map.browser.cjs
 node tests/plan-blocks.browser.cjs
+node tests/lifetime-analytics.browser.cjs
 .\tools-verify.ps1
 ```
 

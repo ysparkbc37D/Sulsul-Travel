@@ -102,7 +102,7 @@ async function check(name, run) {
     });
 
     await check('통계 국가 포커스·커넥터 순서·전체 보기 초기화·위성 줌·여정 열기·통계 복귀가 동작한다', async () => {
-      await page.evaluate(() => openAnalyticsModal('lifetime'));
+      await page.evaluate(() => SulsulTravel.LifetimeAnalytics.open('lifetime'));
       await page.locator('#stat-lt-countries-grid [data-on-click="routeMap.focusCountry"]', { hasText: '스페인' }).click();
       await page.waitForTimeout(150);
       assert.equal(await isOpen('modal-route-map'), true);

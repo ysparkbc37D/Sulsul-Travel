@@ -36,7 +36,7 @@ const otherTrip={id:'other_trip',title:'다른 가상 여행',startDate:'2030-06
     await page.waitForFunction(() => typeof State!=='undefined' && window.SulsulShell?.started);
 
     await check('허브 누적 통계와 상세 목록이 같은 기록 수를 보이고 날짜·종류로 표시한다',async() => {
-      await page.evaluate(() => {switchView('hub');renderLifetimeAnalytics();renderStatDrilldown('diaries');});
+      await page.evaluate(() => {switchView('hub');SulsulTravel.LifetimeAnalytics.render();SulsulTravel.LifetimeAnalytics.renderDrilldown('diaries');});
       assert.equal(await page.locator('#stat-lt-diaries').innerText(),'6편','기록 5편 + 다른 여행 1편, 빈 회고 제외');
       assert.equal(await page.locator('#stat-drilldown-badge').innerText(),'총 6편');
       const detail=await page.locator('#stat-drilldown-content').innerText();

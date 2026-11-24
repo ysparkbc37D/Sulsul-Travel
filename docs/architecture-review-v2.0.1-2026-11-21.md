@@ -196,6 +196,12 @@ flowchart TD
 - **검증**: 단위 257개(새 `trip-store.test.mjs` 8개 — 느린 비동기 백엔드에서 연달아 맡긴 저장이 모두 남는지 포함), 브라우저 회귀 27종, `tools-verify.ps1` 통과. 저장 실패를 일부러 만드는 브라우저 검사 세 곳은 결과를 저장보다 먼저 읽어, 실패 경로를 검사하지 않은 채 통과하고 있었다. 저장을 기다리게 고쳤다(실록 112호).
 - **남은 3b(2차)**: 여행 자료를 IndexedDB로 옮기는 일. 백엔드를 `TripStore` 아래에서 바꾸고, 원문 보관 → 이전 → 다시 읽어 대조 → 채택 순서로 옮긴다. 옛 문서는 다른 창의 구버전이 덮어쓰지 못하게 표시만 바꿔 남긴다. 다른 창 충돌 판정은 문서 원문 비교 대신 저장소의 버전 번호로 한다. 브라우저 검사의 `localStorage` 직접 읽기를 저장소 읽기로 바꾸는 작업이 함께 필요하다.
 
+## 27. 4단계 진행 결과 (v2.1.9) — 화면 분리 11차: 평생 여행 통계 대시보드
+
+- **옮긴 것**: `index.html`의 `#modal-analytics` 열기·탭 전환과 `renderLifetimeAnalytics`·6대 지표 드릴다운(약 540줄)을 `js/presentation/lifetime-analytics.js`(`SulsulTravel.LifetimeAnalytics`)로 옮겼다. 인라인 처리기 20곳 → `lifetimeAnalytics.*`·`shell.closeModal`(UI01 464 → 444곳, `index.html` 314 → 294곳). `index.html`의 HTML01은 188 → 147곳(-41), 새 파일은 0곳이다.
+- **검증에서 고친 것**: 쓰지 않는 `t.budgetKrw` 필드로 인해 모든 여행의 목표 예산·소진율이 `₩0만 / 0%`로 나오던 문제, 상태 분포 범례(`resolveTripStage`)와 표·드릴다운(`t.status`)이 불일치하던 문제, `startDate`·`endDate` escape 누락과 따옴표 ID `onclick` 구문 파손(실록 124호). 세 가지 모두 v2.1.8 코드에서 재현한 뒤 고쳤다.
+- **다음**: 허브 목록·필터·카드·스와이프(v2.2.0) → 설정·공유·설치 → 여행 만들기·일정 튜닝 → 나머지 셸 구역 → `companion-ui.js` 분리.
+
 ## 26. 4단계 진행 결과 (v2.1.8) — 화면 분리 10차: 계획 탭 4차(큰 계획·구간 상세·서브탭)
 
 - **옮긴 것**: `index.html`의 큰 계획 구조·구간 상세·편집 모달·`switchPlanSubTab`(약 350줄)과 `companion-ui.js`의 `setPlanPresentation`·`openPlanPresentation`을 `js/presentation/plan-blocks.js`(`SulsulTravel.PlanBlocks`)로 옮겼다. 인라인 처리기 25곳 → `planBlocks.*`·`shell.closeModal`(UI01 489 → 464곳, `index.html` 334 → 314곳, `companion-ui.js` 82 → 77곳, 새 파일 HTML01 0곳).

@@ -192,7 +192,7 @@ function refreshActivitySurfaces({rememberJournal=true}={}) {
     const summary=SulsulTravel.TravelRecords.summary(getActiveTrip()),element=document.getElementById('stat-ws-diaries');
     if(element)element.textContent=`${summary.count}편 / ${summary.photoCount}장`;
   });
-  refresh('누적 통계',()=>renderLifetimeAnalytics());
+  refresh('누적 통계',()=>SulsulTravel.LifetimeAnalytics.render());
   State.recordSurfaceErrors=failed;
   return failed.length===0;
 }

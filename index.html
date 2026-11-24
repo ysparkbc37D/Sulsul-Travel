@@ -31,7 +31,8 @@
         typeof window.SulsulTravel?.PlanBlocks?.render === 'function' &&
         typeof window.SulsulTravel?.PlanTimeline?.render === 'function' &&
         typeof window.SulsulTravel?.PlanMap?.render === 'function' &&
-        typeof window.SulsulTravel?.RouteMap?.open === 'function';
+        typeof window.SulsulTravel?.RouteMap?.open === 'function' &&
+        typeof window.SulsulTravel?.LifetimeAnalytics?.render === 'function';
       shell.reload = () => {if(!shell.reloading){shell.reloading=true;location.reload();}};
       shell.canReload = () => {
         if(!shell.started)return true;
@@ -150,17 +151,17 @@
   </script>
 
   <!-- PWA Meta & Icons -->
-  <link rel="manifest" href="manifest.webmanifest?v=2.1.8">
+  <link rel="manifest" href="manifest.webmanifest?v=2.1.9">
   <meta name="theme-color" content="#F7F5F0">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <meta name="apple-mobile-web-app-title" content="술술트래블">
-  <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192-v115.png?v=2.1.8">
-  <link rel="icon" type="image/png" sizes="32x32" href="favicon.png?v=2.1.8">
+  <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192-v115.png?v=2.1.9">
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon.png?v=2.1.9">
   <link rel="shortcut icon" href="favicon.ico">
-  <link rel="apple-touch-icon" sizes="180x180" href="icons/apple-touch-icon-v115.png?v=2.1.8">
-  <link rel="apple-touch-icon" href="icons/apple-touch-icon-v115.png?v=2.1.8">
+  <link rel="apple-touch-icon" sizes="180x180" href="icons/apple-touch-icon-v115.png?v=2.1.9">
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon-v115.png?v=2.1.9">
 
   <!-- Google Fonts: Great Vibes, Dancing Script (Cursive Calligraphy), Cormorant Garamond, Noto Serif KR, Playfair Display -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -168,7 +169,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Great+Vibes&family=Cormorant+Garamond:wght@600;700;800&family=Noto+Serif+KR:wght@500;600;700;900&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
 
   <!-- Local Utilities Bundle (CDN fallback & tailwind utilities) -->
-  <link rel="stylesheet" href="css/utilities.css?v=2.1.8" integrity="sha384-HMVB4SH6xwwGITkNyT8ARmHegAYSuTMocPGl4bpl0JywMIe2PqYrUxqZOgEuZjmP">
+  <link rel="stylesheet" href="css/utilities.css?v=2.1.9" integrity="sha384-HMVB4SH6xwwGITkNyT8ARmHegAYSuTMocPGl4bpl0JywMIe2PqYrUxqZOgEuZjmP">
   <link rel="stylesheet" href="vendor/fontawesome/css/all.min.css" integrity="sha384-t1nt8BQoYMLFN5p42tRAtuAAFQaCQODekUVeKKZrEnEyp4H2R0RHFz0KWpmj7i8g">
 
   <!-- Leaflet Map CSS & JS -->
@@ -1510,71 +1511,72 @@
     }
   </style>
 
-  <link rel="stylesheet" href="css/companion.css?v=2.1.8" integrity="sha384-Syant7HB0IYUZUU2saRSYUDkM71WKVuK2JtHM+kAluFdw3VvWv9gSglgJh4utHv/">
-  <link rel="stylesheet" href="css/companion-refresh.css?v=2.1.8" integrity="sha384-2KIp4VI8qsP6dGnz0cm/vehjLjr6GxpZ9yWTbbIXBPWi25XHg6XUOtNbp7W8KMd3">
-  <link rel="stylesheet" href="css/live-itinerary.css?v=2.1.8" integrity="sha384-e/V9wyJ/Gi6baSHcWzBeNGjdn/eKDQIvKWyiYmByLE7C7nYJaQOA+GshtUMcCR72">
-  <link rel="stylesheet" href="css/expense-mobile.css?v=2.1.8" integrity="sha384-QZFtKrU/YvkTaEKv0oJ2ZQi1Zry8RgEFaHzTckwuPFsMDDmadYBH7UuYgTVS7281">
-  <link rel="stylesheet" href="css/moment-journal.css?v=2.1.8" integrity="sha384-g1EihgfyPDJ5o5eWSsQgT1WDTRKDtUfzVatlx6T/t+DhApDBY8dznSrwmelasv91">
-  <script src="js/domain/trip-adapter.js?v=2.1.8" integrity="sha384-JHU/NkAlxwR9G9/49TaFK4sTvg9xKGsSVd3re8rLivtiXcSNdnQA9gRIfvVWUtG7"></script>
-  <script src="js/domain/ai-draft-validation.js?v=2.1.8" integrity="sha384-OTRAiX7YaOiiNrpMWDjkOyH0bTbbL3KrGwGp1RmIkgvd15pErNTTKVTJkoesmpfi"></script>
-  <script src="js/domain/live-itinerary.js?v=2.1.8" integrity="sha384-cwMH5i2F5Mve7Z9cKeWrP7uLU5plcu6c7xvTf4Lyz3Xkb6GlNCI14lnEWzw46cVg"></script>
-  <script src="js/presentation/live-itinerary-ui.js?v=2.1.8" integrity="sha384-SLjn2QhNBI6VfrG3siiRZqfs51VnmqyRCTMGjMN25fIyHhYwf4LnECXOOiQ4arog"></script>
-  <script src="js/presentation/live-itinerary-bridge.js?v=2.1.8" integrity="sha384-lRoX8rvtVNC3rl6v9tCVjTLCSBjLmTH3EhNiq6OPizV+6GvspGEUIpH00HoPTgEn"></script>
-  <script src="js/domain/schedule-change.js?v=2.1.8" integrity="sha384-v7zQ2iSY9DIrsztq758NvV0o6vbsguJn70NviXT6itT6YcuNaCvSW2beDogcMbD7"></script>
-  <script src="js/presentation/schedule-change-ui.js?v=2.1.8" integrity="sha384-DcmUeBgzRXnC2DuzuFjF4cgUfQzHPJkPFRMGt6IjV+ElSdmxrmyVdcasWSVnkQsn"></script>
-  <script src="js/domain/spot-realignment.js?v=2.1.8" integrity="sha384-gCFPNcD1aD3UegqTLtFPCU7Xqm7CtRN0yjQx2QnWe1ee0i3cZu8pzZic7YzBJLKt"></script>
-  <script src="js/presentation/spot-realignment-ui.js?v=2.1.8" integrity="sha384-GKlSQQKluvxcnRhJmQVQL4lZIFXbqf8ac/0BnxPiWNWcLjFJWYx/IZU3+5fZI7dk"></script>
-  <script src="js/domain/travel-records.js?v=2.1.8" integrity="sha384-qhkfkF1xKTuPtBvsB5Gwpz631xTkyy2tS1BU9Hixd2L1t+oobsXBMJnFv1pBHNnW"></script>
-  <script src="js/domain/travel-story.js?v=2.1.8" integrity="sha384-vjuGNDpytM6vG8SuZbKLW7qTTV1L33j48P1KSwNQnvca7uxo5EYkBM2X0IOdn/Qa"></script>
-  <script src="js/infrastructure/storage/photo-compression.js?v=2.1.8" integrity="sha384-MeOApXBzhg++Rcq/Lfjwb04/MA1U6wmwHppDgFZvKA4ZfdPC4oR2Hv1BhPFNU7Ig"></script>
-  <link rel="stylesheet" href="css/photo-optimization.css?v=2.1.8" integrity="sha384-9sgcirlxZs5tcmp/22RdH56B3bZla/q4DVH7x8W+fO8P4neR4WJMDDtQNK4WPq+/">
-  <script src="js/domain/photo-optimization.js?v=2.1.8" integrity="sha384-fpPZ4nJ383bIJaSHvmuZg+9BYd5LQ8YuVtEEMjtJnQr2Fod/mawAoB5SYMdtvBRU"></script>
-  <script src="js/infrastructure/storage/photo-cleanup.js?v=2.1.8" integrity="sha384-qPUCnJe7spP79MZLfOuzscYXTD6cW+7dzsf0xxvDip9hIj+yBvbBK6KhAouz5BC/"></script>
-  <script src="js/presentation/photo-optimization-ui.js?v=2.1.8" integrity="sha384-9QsQz7hvv3HVSOtRVjrMPr6G9w59E//utEWpshSg+awbBA4xBBcO/BGw/WhZNI8Z"></script>
-  <script src="js/infrastructure/storage/media-repository.js?v=2.1.8" integrity="sha384-q0IPoo86aU2ruB130X1HAh01dr4hpI0IAXeMVCoa7Jy/2pIB09f7WbSKPm8vowhw"></script>
-  <script src="js/infrastructure/storage/record-media-store.js?v=2.1.8" integrity="sha384-vNu5tI/i1vWsxi2/3aQYW+9zYfivBNB2ewaUTRlwhnGwRbv9dpR4bu/sqzv1D2jm"></script>
-  <script src="js/infrastructure/storage/expense-photo-repository.js?v=2.1.8" integrity="sha384-gdumvFYkJqEbRPJlK4mffCsUjPsnKCXLg6/1fLMR8kUuU1QDMeLLOYmMVSRTGNSy"></script>
-  <script src="js/presentation/companion-ui.js?v=2.1.8" integrity="sha384-FYQu/PpwY6jyVnnaEcVzbTl/UuclRS+qCCWytiF6BeSHiFZUW9+KezOAAv6gURR2"></script>
-  <script src="js/domain/trip-transfer.js?v=2.1.8" integrity="sha384-VD9q1co1+bJzdS4i19rvfkQN/4KvzfnNdHUjbbucghcxzjmPim+kWF93qv5DaXSu"></script>
-  <script src="js/domain/travel-backup.js?v=2.1.8" integrity="sha384-4zE43uWlz5y3eP7g98tEL3HqAsw08/XvINQ+RhLLt4wz+cnySMWiy3Eu1m7BaBbK"></script>
-  <script src="js/presentation/travel-backup-ui.js?v=2.1.8" integrity="sha384-2MeiLmNhd6dsStzYdF4LhB3OrNegW5vZSkbRojImg5IQ9LLjrkbdcd+LP2rpbB1h"></script>
-  <script src="js/presentation/storage-health-ui.js?v=2.1.8" integrity="sha384-yhLee1WlZBu7vZL8qquRuBbYdW2RIBPIkjKQqjgT5iNw7FRWOlw7POGkpMar7IkT"></script>
-  <script src="js/presentation/trip-transfer-ui.js?v=2.1.8" integrity="sha384-alWNP5q7xJLSbe8GlkYNmHLw8G9jbXGLNSi28LERcPAb1pESASALcV/HOiFWa12h"></script>
-  <script src="js/presentation/mobile-navigation.js?v=2.1.8" integrity="sha384-eQghbRiQF5vWbbzIWcYjk+nJ9Hb0Mc8LqeDBvGptxDqMieJnQstf/shr6UQf2kad"></script>
-  <script src="js/presentation/activity-journal.js?v=2.1.8" integrity="sha384-HCkSwytp5sxhwjQ5Tqal+9I0CuGFMyF/2XzvnDx3pq7vooDMwR93aIjpT0OQYIgp"></script>
-  <script src="js/presentation/moment-journal.js?v=2.1.8" integrity="sha384-r/heV0A2E+VDwxEE7joC1tw0UPcWIWSdZHDvU0rQs6c+LzY5zCEBLYiF4KIKQo5u"></script>
-  <script src="js/presentation/travel-story-ui.js?v=2.1.8" integrity="sha384-s9HZ4A1/X3tCfe4rBfB6nzEwAC7i2U1YVfradgxnQPX5X4tnFszIOPeMsLPfXnfq"></script>
-  <script src="js/config/collaboration-config.js?v=2.1.8" integrity="sha384-ipxhKB+fQ4s3OThYo3p6IWFvP6BbstXYDW6jZWWiPHB4qomo64w7r8/wRvdsi47w"></script>
-  <script src="js/infrastructure/collaboration/supabase-travel-service.js?v=2.1.8" integrity="sha384-+SDvVJ0CNqCMvFlOBOA+nfA1k6/sN6GlaKDhTQo4SgX8x3EwPXyJlvMfJj0D6Bt/"></script>
-  <script src="js/presentation/collaboration-ui.js?v=2.1.8" integrity="sha384-KvnYI6ym2/deKsOtKryWJS5tljPjqYRx67JGGgWVRNyWHEC470iPDg3+fdw0OHX0"></script>
-  <script src="js/presentation/collaboration-review.js?v=2.1.8" integrity="sha384-cbND/rT26DaIY2hR++LBuByF9L/ACu5TDl0b85EN2zsk/sTapWGm2BPQqZgN6GzI"></script>
-  <script src="js/presentation/ui-actions.js?v=2.1.8" integrity="sha384-86E6+vWuYSS4ldFWIpwfcJMnPW2jUnvL9CJGWeJHDKHEXnQsNWTDB0skpvkRBm9K"></script>
-  <script src="js/presentation/shell-actions.js?v=2.1.8" integrity="sha384-ec2zNqB35MYVfgVf448ukoOrIy6FFwUow/h7S8z0W47OS7F+tloHdR8w4+Mmw4Zy"></script>
-  <script src="js/presentation/exchange-ui.js?v=2.1.8" integrity="sha384-21MA/m/6rg1LsIZFsoAuqvhmWN3Y8seM2ZdIZHKOGEZ70CAjaeulE8mmIbSKmb1h"></script>
-  <script src="js/presentation/plan-blocks.js?v=2.1.8" integrity="sha384-9L3ReY65vVOLocj/bo9HlbUTj0ZFMo1Cxq3Jtu+Q3j6mL3+BCwDaEuPJCBk4L0D6"></script>
-  <script src="js/presentation/plan-timeline.js?v=2.1.8" integrity="sha384-47MFhIy5AILe78Oj2efg0Sdhl0enRNIn/dZrGuxcyLqQG3Ht9dC4kLDicaNOJe9C"></script>
-  <script src="js/presentation/plan-map.js?v=2.1.8" integrity="sha384-moJ8fpaMtEe644aLUgtZGuvdUoG/ax/MK9VlZPw4TCtT/XomX3xjobLrKtRnm94d"></script>
-  <script src="js/presentation/route-map.js?v=2.1.8" integrity="sha384-j87WAiWOdi7HTCFWm0XWLG7jV7KT9R2JLOGoKKmEiPJh3CsZCYfDmI7hO896ksUY"></script>
-  <script src="js/presentation/plan-guides.js?v=2.1.8" integrity="sha384-Eg0ooJHXflNMCbbk5sEJIg4VX2WigAkFB9GzPI7iT7q57s8L2TdNMYQxc9BWHb87"></script>
-  <script src="js/presentation/budget-ui.js?v=2.1.8" integrity="sha384-p+A7x64rZuPWhGaUzTMoNYo60aTQzp7UXhZzMfXABMyWqrG32b4LDPZ/SGwoEKjs"></script>
-  <script src="js/presentation/expense-analytics.js?v=2.1.8" integrity="sha384-GOo/a/N9uE2yr6Aw2Ju6sXiBr5VTaDbPb1nth/ElR4GDT1yPI0CfghLOB7DaN1Yp"></script>
-  <script src="js/presentation/expenses-tab.js?v=2.1.8" integrity="sha384-dFoKIs/B5CCctW17/wd1Kp0Kr6v9LXykyt/8yOknSEs3G9C7rnYam3VrTKE9ZaFg"></script>
-  <script src="js/presentation/journal-tab.js?v=2.1.8" integrity="sha384-Hhgx7Hra1MAb8tvQIMdF9khAJjZHC3SqpdqWrAXEVAbGHvgFLOf+bREOM6jyvFoc"></script>
-  <script src="js/presentation/checklist-tab.js?v=2.1.8" integrity="sha384-ENgqtNcHd59KKTorCEZx/H/zUSfXi47RIM1X1F1E6tNPe5U4DKXginat44x1SDbL"></script>
-  <script src="js/presentation/expense-editor.js?v=2.1.8" integrity="sha384-PosLZVGcia3FlNTeQCWVw+mtgPsGaCJjpHKtrdFVXpaw5LYD+iQ/M5FYwMYy/HVY"></script>
+  <link rel="stylesheet" href="css/companion.css?v=2.1.9" integrity="sha384-Syant7HB0IYUZUU2saRSYUDkM71WKVuK2JtHM+kAluFdw3VvWv9gSglgJh4utHv/">
+  <link rel="stylesheet" href="css/companion-refresh.css?v=2.1.9" integrity="sha384-2KIp4VI8qsP6dGnz0cm/vehjLjr6GxpZ9yWTbbIXBPWi25XHg6XUOtNbp7W8KMd3">
+  <link rel="stylesheet" href="css/live-itinerary.css?v=2.1.9" integrity="sha384-e/V9wyJ/Gi6baSHcWzBeNGjdn/eKDQIvKWyiYmByLE7C7nYJaQOA+GshtUMcCR72">
+  <link rel="stylesheet" href="css/expense-mobile.css?v=2.1.9" integrity="sha384-QZFtKrU/YvkTaEKv0oJ2ZQi1Zry8RgEFaHzTckwuPFsMDDmadYBH7UuYgTVS7281">
+  <link rel="stylesheet" href="css/moment-journal.css?v=2.1.9" integrity="sha384-g1EihgfyPDJ5o5eWSsQgT1WDTRKDtUfzVatlx6T/t+DhApDBY8dznSrwmelasv91">
+  <script src="js/domain/trip-adapter.js?v=2.1.9" integrity="sha384-JHU/NkAlxwR9G9/49TaFK4sTvg9xKGsSVd3re8rLivtiXcSNdnQA9gRIfvVWUtG7"></script>
+  <script src="js/domain/ai-draft-validation.js?v=2.1.9" integrity="sha384-OTRAiX7YaOiiNrpMWDjkOyH0bTbbL3KrGwGp1RmIkgvd15pErNTTKVTJkoesmpfi"></script>
+  <script src="js/domain/live-itinerary.js?v=2.1.9" integrity="sha384-cwMH5i2F5Mve7Z9cKeWrP7uLU5plcu6c7xvTf4Lyz3Xkb6GlNCI14lnEWzw46cVg"></script>
+  <script src="js/presentation/live-itinerary-ui.js?v=2.1.9" integrity="sha384-SLjn2QhNBI6VfrG3siiRZqfs51VnmqyRCTMGjMN25fIyHhYwf4LnECXOOiQ4arog"></script>
+  <script src="js/presentation/live-itinerary-bridge.js?v=2.1.9" integrity="sha384-lRoX8rvtVNC3rl6v9tCVjTLCSBjLmTH3EhNiq6OPizV+6GvspGEUIpH00HoPTgEn"></script>
+  <script src="js/domain/schedule-change.js?v=2.1.9" integrity="sha384-v7zQ2iSY9DIrsztq758NvV0o6vbsguJn70NviXT6itT6YcuNaCvSW2beDogcMbD7"></script>
+  <script src="js/presentation/schedule-change-ui.js?v=2.1.9" integrity="sha384-DcmUeBgzRXnC2DuzuFjF4cgUfQzHPJkPFRMGt6IjV+ElSdmxrmyVdcasWSVnkQsn"></script>
+  <script src="js/domain/spot-realignment.js?v=2.1.9" integrity="sha384-gCFPNcD1aD3UegqTLtFPCU7Xqm7CtRN0yjQx2QnWe1ee0i3cZu8pzZic7YzBJLKt"></script>
+  <script src="js/presentation/spot-realignment-ui.js?v=2.1.9" integrity="sha384-GKlSQQKluvxcnRhJmQVQL4lZIFXbqf8ac/0BnxPiWNWcLjFJWYx/IZU3+5fZI7dk"></script>
+  <script src="js/domain/travel-records.js?v=2.1.9" integrity="sha384-qhkfkF1xKTuPtBvsB5Gwpz631xTkyy2tS1BU9Hixd2L1t+oobsXBMJnFv1pBHNnW"></script>
+  <script src="js/domain/travel-story.js?v=2.1.9" integrity="sha384-vjuGNDpytM6vG8SuZbKLW7qTTV1L33j48P1KSwNQnvca7uxo5EYkBM2X0IOdn/Qa"></script>
+  <script src="js/infrastructure/storage/photo-compression.js?v=2.1.9" integrity="sha384-MeOApXBzhg++Rcq/Lfjwb04/MA1U6wmwHppDgFZvKA4ZfdPC4oR2Hv1BhPFNU7Ig"></script>
+  <link rel="stylesheet" href="css/photo-optimization.css?v=2.1.9" integrity="sha384-9sgcirlxZs5tcmp/22RdH56B3bZla/q4DVH7x8W+fO8P4neR4WJMDDtQNK4WPq+/">
+  <script src="js/domain/photo-optimization.js?v=2.1.9" integrity="sha384-fpPZ4nJ383bIJaSHvmuZg+9BYd5LQ8YuVtEEMjtJnQr2Fod/mawAoB5SYMdtvBRU"></script>
+  <script src="js/infrastructure/storage/photo-cleanup.js?v=2.1.9" integrity="sha384-qPUCnJe7spP79MZLfOuzscYXTD6cW+7dzsf0xxvDip9hIj+yBvbBK6KhAouz5BC/"></script>
+  <script src="js/presentation/photo-optimization-ui.js?v=2.1.9" integrity="sha384-9QsQz7hvv3HVSOtRVjrMPr6G9w59E//utEWpshSg+awbBA4xBBcO/BGw/WhZNI8Z"></script>
+  <script src="js/infrastructure/storage/media-repository.js?v=2.1.9" integrity="sha384-q0IPoo86aU2ruB130X1HAh01dr4hpI0IAXeMVCoa7Jy/2pIB09f7WbSKPm8vowhw"></script>
+  <script src="js/infrastructure/storage/record-media-store.js?v=2.1.9" integrity="sha384-vNu5tI/i1vWsxi2/3aQYW+9zYfivBNB2ewaUTRlwhnGwRbv9dpR4bu/sqzv1D2jm"></script>
+  <script src="js/infrastructure/storage/expense-photo-repository.js?v=2.1.9" integrity="sha384-gdumvFYkJqEbRPJlK4mffCsUjPsnKCXLg6/1fLMR8kUuU1QDMeLLOYmMVSRTGNSy"></script>
+  <script src="js/presentation/companion-ui.js?v=2.1.9" integrity="sha384-FYQu/PpwY6jyVnnaEcVzbTl/UuclRS+qCCWytiF6BeSHiFZUW9+KezOAAv6gURR2"></script>
+  <script src="js/domain/trip-transfer.js?v=2.1.9" integrity="sha384-VD9q1co1+bJzdS4i19rvfkQN/4KvzfnNdHUjbbucghcxzjmPim+kWF93qv5DaXSu"></script>
+  <script src="js/domain/travel-backup.js?v=2.1.9" integrity="sha384-4zE43uWlz5y3eP7g98tEL3HqAsw08/XvINQ+RhLLt4wz+cnySMWiy3Eu1m7BaBbK"></script>
+  <script src="js/presentation/travel-backup-ui.js?v=2.1.9" integrity="sha384-2MeiLmNhd6dsStzYdF4LhB3OrNegW5vZSkbRojImg5IQ9LLjrkbdcd+LP2rpbB1h"></script>
+  <script src="js/presentation/storage-health-ui.js?v=2.1.9" integrity="sha384-yhLee1WlZBu7vZL8qquRuBbYdW2RIBPIkjKQqjgT5iNw7FRWOlw7POGkpMar7IkT"></script>
+  <script src="js/presentation/trip-transfer-ui.js?v=2.1.9" integrity="sha384-alWNP5q7xJLSbe8GlkYNmHLw8G9jbXGLNSi28LERcPAb1pESASALcV/HOiFWa12h"></script>
+  <script src="js/presentation/mobile-navigation.js?v=2.1.9" integrity="sha384-eQghbRiQF5vWbbzIWcYjk+nJ9Hb0Mc8LqeDBvGptxDqMieJnQstf/shr6UQf2kad"></script>
+  <script src="js/presentation/activity-journal.js?v=2.1.9" integrity="sha384-yfWY1V0BnjH3KiQRcQhSUSk+yFtzEHdTrHFa9impeFfcJfhekTfeXeCZvzbgv4he"></script>
+  <script src="js/presentation/moment-journal.js?v=2.1.9" integrity="sha384-r/heV0A2E+VDwxEE7joC1tw0UPcWIWSdZHDvU0rQs6c+LzY5zCEBLYiF4KIKQo5u"></script>
+  <script src="js/presentation/travel-story-ui.js?v=2.1.9" integrity="sha384-s9HZ4A1/X3tCfe4rBfB6nzEwAC7i2U1YVfradgxnQPX5X4tnFszIOPeMsLPfXnfq"></script>
+  <script src="js/config/collaboration-config.js?v=2.1.9" integrity="sha384-ipxhKB+fQ4s3OThYo3p6IWFvP6BbstXYDW6jZWWiPHB4qomo64w7r8/wRvdsi47w"></script>
+  <script src="js/infrastructure/collaboration/supabase-travel-service.js?v=2.1.9" integrity="sha384-+SDvVJ0CNqCMvFlOBOA+nfA1k6/sN6GlaKDhTQo4SgX8x3EwPXyJlvMfJj0D6Bt/"></script>
+  <script src="js/presentation/collaboration-ui.js?v=2.1.9" integrity="sha384-KvnYI6ym2/deKsOtKryWJS5tljPjqYRx67JGGgWVRNyWHEC470iPDg3+fdw0OHX0"></script>
+  <script src="js/presentation/collaboration-review.js?v=2.1.9" integrity="sha384-cbND/rT26DaIY2hR++LBuByF9L/ACu5TDl0b85EN2zsk/sTapWGm2BPQqZgN6GzI"></script>
+  <script src="js/presentation/ui-actions.js?v=2.1.9" integrity="sha384-86E6+vWuYSS4ldFWIpwfcJMnPW2jUnvL9CJGWeJHDKHEXnQsNWTDB0skpvkRBm9K"></script>
+  <script src="js/presentation/shell-actions.js?v=2.1.9" integrity="sha384-ec2zNqB35MYVfgVf448ukoOrIy6FFwUow/h7S8z0W47OS7F+tloHdR8w4+Mmw4Zy"></script>
+  <script src="js/presentation/exchange-ui.js?v=2.1.9" integrity="sha384-21MA/m/6rg1LsIZFsoAuqvhmWN3Y8seM2ZdIZHKOGEZ70CAjaeulE8mmIbSKmb1h"></script>
+  <script src="js/presentation/plan-blocks.js?v=2.1.9" integrity="sha384-9L3ReY65vVOLocj/bo9HlbUTj0ZFMo1Cxq3Jtu+Q3j6mL3+BCwDaEuPJCBk4L0D6"></script>
+  <script src="js/presentation/plan-timeline.js?v=2.1.9" integrity="sha384-47MFhIy5AILe78Oj2efg0Sdhl0enRNIn/dZrGuxcyLqQG3Ht9dC4kLDicaNOJe9C"></script>
+  <script src="js/presentation/plan-map.js?v=2.1.9" integrity="sha384-moJ8fpaMtEe644aLUgtZGuvdUoG/ax/MK9VlZPw4TCtT/XomX3xjobLrKtRnm94d"></script>
+  <script src="js/presentation/route-map.js?v=2.1.9" integrity="sha384-j87WAiWOdi7HTCFWm0XWLG7jV7KT9R2JLOGoKKmEiPJh3CsZCYfDmI7hO896ksUY"></script>
+  <script src="js/presentation/lifetime-analytics.js?v=2.1.9" integrity="sha384-wSyGWne4T8RC9AEQuhHrfWZrQ4ulSh4zZYD7ekFBnlo3nUdEurMhOIk2++IALbi4"></script>
+  <script src="js/presentation/plan-guides.js?v=2.1.9" integrity="sha384-Eg0ooJHXflNMCbbk5sEJIg4VX2WigAkFB9GzPI7iT7q57s8L2TdNMYQxc9BWHb87"></script>
+  <script src="js/presentation/budget-ui.js?v=2.1.9" integrity="sha384-p+A7x64rZuPWhGaUzTMoNYo60aTQzp7UXhZzMfXABMyWqrG32b4LDPZ/SGwoEKjs"></script>
+  <script src="js/presentation/expense-analytics.js?v=2.1.9" integrity="sha384-GOo/a/N9uE2yr6Aw2Ju6sXiBr5VTaDbPb1nth/ElR4GDT1yPI0CfghLOB7DaN1Yp"></script>
+  <script src="js/presentation/expenses-tab.js?v=2.1.9" integrity="sha384-dFoKIs/B5CCctW17/wd1Kp0Kr6v9LXykyt/8yOknSEs3G9C7rnYam3VrTKE9ZaFg"></script>
+  <script src="js/presentation/journal-tab.js?v=2.1.9" integrity="sha384-Hhgx7Hra1MAb8tvQIMdF9khAJjZHC3SqpdqWrAXEVAbGHvgFLOf+bREOM6jyvFoc"></script>
+  <script src="js/presentation/checklist-tab.js?v=2.1.9" integrity="sha384-ENgqtNcHd59KKTorCEZx/H/zUSfXi47RIM1X1F1E6tNPe5U4DKXginat44x1SDbL"></script>
+  <script src="js/presentation/expense-editor.js?v=2.1.9" integrity="sha384-PosLZVGcia3FlNTeQCWVw+mtgPsGaCJjpHKtrdFVXpaw5LYD+iQ/M5FYwMYy/HVY"></script>
 
   <!-- Knowledge Base Seed & Destination Knowledge Packs (DKP) -->
-  <script src="kb-travel.js?v=2.1.8" integrity="sha384-zxXc7MUMbmXkiaF3ymeLmVSiCyPRVfkUjSZetDVx41zrHGyPeSCN4TFpy5f1jNUd"></script>
+  <script src="kb-travel.js?v=2.1.9" integrity="sha384-zxXc7MUMbmXkiaF3ymeLmVSiCyPRVfkUjSZetDVx41zrHGyPeSCN4TFpy5f1jNUd"></script>
   <script src="js/destinations/destination-registry.js" integrity="sha384-PV7EnpqZusutqYxhFc0vICq72coA/C+TMYaBkk+BFy52dmgfk/RDzf/DAgW7dmvC"></script>
   <script src="js/destinations/pack-default.js" integrity="sha384-mCe4oKfrN+8fbLFCJJexsHJXBZkw6b6q1bOg5skoupZ9hXUrhZ92sTRRTF831vDt"></script>
-  <script src="js/destinations/pack-south-america.js?v=2.1.8" integrity="sha384-p6i8pSXkYDEndehBEqNlXK7ZIZia6Tsxw4TD2LUf7TJPUSlPd2AzXbp3wyyAvDG7"></script>
+  <script src="js/destinations/pack-south-america.js?v=2.1.9" integrity="sha384-p6i8pSXkYDEndehBEqNlXK7ZIZia6Tsxw4TD2LUf7TJPUSlPd2AzXbp3wyyAvDG7"></script>
   <script src="js/destinations/pack-yunnan.js" integrity="sha384-MIgviqt+QV/b06eH6w7DO42JTPFr7Q2kFTi8TRQT4MCouBcFBGiC7x1jnKgVatOX"></script>
-  <script src="js/destinations/emergency-contacts.js?v=2.1.8" integrity="sha384-q3IUPhGWY99DNBNM269wiapa6eQYahcwaro/PvPILVtAgkUM0pE23GI5E63eMLlN"></script>
-  <script src="js/infrastructure/storage/legacy-trip-repository.js?v=2.1.8" integrity="sha384-Jf2y8z7h6bwxOdkwZP0zMyhyG/ntcCrFco7a+mzgiFAtiCUE2uXU8Cc/MSjunorP"></script>
-  <script src="js/infrastructure/storage/idb-trip-repository.js?v=2.1.8" integrity="sha384-n7ndWoPUE3bipL9HvWWTfW8XPNZbDRmAWocUpRIyVM5HtGIIEqbkOK1e6InJY8c4"></script>
-  <script src="js/infrastructure/storage/trip-store.js?v=2.1.8" integrity="sha384-ftpferQ+1NXFRqMRZuHlz2wGUfEKk4GKeXEZzAs3FlsUmGfFdxcsSG6U5t4/B1Rb"></script>
-  <script src="js/infrastructure/storage/settings-repository.js?v=2.1.8" integrity="sha384-fp7ck757BhOA+Y2i/VoW21KRCkeMyb/G78wxwhZuReB2JbzcyTxBrLxGldhvw3n3"></script>
-  <script src="js/infrastructure/storage/journal-overflow-repository.js?v=2.1.8" integrity="sha384-uRxi9B+oBHCQ+aa8a6Wp72RAAeEuslXu5kZ+gf9Kvo22B3N6fr1XSkVnAV1X42yO"></script>
+  <script src="js/destinations/emergency-contacts.js?v=2.1.9" integrity="sha384-q3IUPhGWY99DNBNM269wiapa6eQYahcwaro/PvPILVtAgkUM0pE23GI5E63eMLlN"></script>
+  <script src="js/infrastructure/storage/legacy-trip-repository.js?v=2.1.9" integrity="sha384-Jf2y8z7h6bwxOdkwZP0zMyhyG/ntcCrFco7a+mzgiFAtiCUE2uXU8Cc/MSjunorP"></script>
+  <script src="js/infrastructure/storage/idb-trip-repository.js?v=2.1.9" integrity="sha384-n7ndWoPUE3bipL9HvWWTfW8XPNZbDRmAWocUpRIyVM5HtGIIEqbkOK1e6InJY8c4"></script>
+  <script src="js/infrastructure/storage/trip-store.js?v=2.1.9" integrity="sha384-ftpferQ+1NXFRqMRZuHlz2wGUfEKk4GKeXEZzAs3FlsUmGfFdxcsSG6U5t4/B1Rb"></script>
+  <script src="js/infrastructure/storage/settings-repository.js?v=2.1.9" integrity="sha384-fp7ck757BhOA+Y2i/VoW21KRCkeMyb/G78wxwhZuReB2JbzcyTxBrLxGldhvw3n3"></script>
+  <script src="js/infrastructure/storage/journal-overflow-repository.js?v=2.1.9" integrity="sha384-uRxi9B+oBHCQ+aa8a6Wp72RAAeEuslXu5kZ+gf9Kvo22B3N6fr1XSkVnAV1X42yO"></script>
 </head>
 <body class="min-h-screen flex flex-col font-sans transition-colors duration-200">
 
@@ -1587,13 +1589,13 @@
       <div class="app-brand flex items-center gap-2 sm:gap-2.5 min-w-0 cursor-pointer select-none" onclick="switchView('hub')">
         <img src="icons/sulsul_bear_mascot.png" class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl object-cover border border-[#e6e2d8] dark:border-stone-800 shadow-sm shrink-0" alt="Sulsul Travel">
           <h1 class="font-brand-script text-xl sm:text-2xl md:text-3xl font-bold tracking-normal text-[#1E2B24] dark:text-[#ededed] whitespace-nowrap leading-tight">Sulsul Travel</h1>
-            <button id="app-ver-badge" type="button" onclick="event.stopPropagation(); openVersionHistoryModal()" class="theme-card-subtle font-mono" title="앱 버전과 업데이트 기록 보기">v2.1.8</button>
+            <button id="app-ver-badge" type="button" onclick="event.stopPropagation(); openVersionHistoryModal()" class="theme-card-subtle font-mono" title="앱 버전과 업데이트 기록 보기">v2.1.9</button>
             <p id="header-trip-name" class="sr-only">A Deep Life Essay</p>
       </div>
 
       <!-- 왼쪽부터 통계·설정·추가 순서로 한 줄에 배치한다. -->
       <div class="app-header-actions flex items-center gap-1 sm:gap-1.5 shrink-0">
-        <button id="header-btn-analytics" type="button" onclick="openAnalyticsModal('lifetime')" class="companion-header-analytics theme-card-subtle flex items-center justify-center shrink-0" aria-label="누적 여행 통계" title="누적 여행 통계"><i class="fa-solid fa-chart-pie text-xs" aria-hidden="true"></i></button>
+        <button id="header-btn-analytics" type="button" data-on-click="lifetimeAnalytics.open" data-tab="lifetime" class="companion-header-analytics theme-card-subtle flex items-center justify-center shrink-0" aria-label="누적 여행 통계" title="누적 여행 통계"><i class="fa-solid fa-chart-pie text-xs" aria-hidden="true"></i></button>
         <!-- 3. 설정 버튼 (⚙️ - 원형 버튼) -->
         <button id="header-btn-settings" onclick="openSettingsModal()" class="w-7 h-7 sm:w-8 sm:h-8 rounded-full theme-card-subtle flex items-center justify-center text-[#44403c] dark:text-stone-300 hover:border-amber-500/60 transition shadow-xs cursor-pointer shrink-0" aria-label="앱 설정" title="앱 설정 & AI & 백업">
           <i class="fa-solid fa-sliders text-xs" aria-hidden="true"></i>
@@ -1828,7 +1830,7 @@
           <i class="fa-solid fa-newspaper text-[12px]"></i>
           <span>매거진</span>
         </button>
-        <button onclick="openAnalyticsModal('workspace')" class="px-2.5 sm:px-3 py-1.5 rounded-xl theme-card-subtle text-xs font-bold flex items-center gap-1.5 shadow-sm transition cursor-pointer" title="여정 정밀 통계 열람">
+        <button type="button" data-on-click="lifetimeAnalytics.open" data-tab="workspace" class="px-2.5 sm:px-3 py-1.5 rounded-xl theme-card-subtle text-xs font-bold flex items-center gap-1.5 shadow-sm transition cursor-pointer" title="여정 정밀 통계 열람">
           <i class="fa-solid fa-chart-pie text-amber-500 text-[12px]"></i>
           <span>통계</span>
         </button>
@@ -4443,7 +4445,7 @@
   <!-- 7.55 술술 통계 대시보드 모달 (MODAL-ANALYTICS) -->
   <!-- ========================================== -->
   <div id="modal-analytics" class="sheet-container sheet-closed">
-    <div class="sheet-scrim" onclick="closeModal('modal-analytics')"></div>
+    <div class="sheet-scrim" data-on-click="shell.closeModal" data-modal="modal-analytics"></div>
     <div class="sheet-box max-w-2xl p-5 sm:p-6 space-y-4 max-h-[90vh] flex flex-col bg-white dark:bg-[#16181d] text-[#1c1917] dark:text-[#ededed]">
       <!-- 헤더 -->
       <div class="flex items-center justify-between border-b border-[#e8e2d5] dark:border-stone-800 pb-3 shrink-0">
@@ -4456,7 +4458,7 @@
             <p class="text-[11px] text-[#78716c] dark:text-stone-400">나의 모든 여정 누적 아카이브 & 상세 분석</p>
           </div>
         </div>
-        <button onclick="closeModal('modal-analytics')" class="w-7 h-7 rounded-lg bg-[#faf8f5] dark:bg-stone-800 hover:bg-[#f0ece1] dark:hover:bg-stone-700 text-[#78716c] dark:text-stone-300 flex items-center justify-center text-sm transition cursor-pointer" title="닫기">✕</button>
+        <button type="button" data-on-click="shell.closeModal" data-modal="modal-analytics" class="w-7 h-7 rounded-lg bg-[#faf8f5] dark:bg-stone-800 hover:bg-[#f0ece1] dark:hover:bg-stone-700 text-[#78716c] dark:text-stone-300 flex items-center justify-center text-sm transition cursor-pointer" title="닫기">✕</button>
       </div>
 
       <!-- 숨김 보존: R-10 DOM ID 및 하위 호환을 위한 레거시 탭 홀더 -->
@@ -4486,48 +4488,48 @@
 
             <!-- 6대 누적 스펙 그리드 (터치 시 상세 랭킹 및 목록 드릴다운 전개) -->
             <div class="grid grid-cols-3 sm:grid-cols-6 gap-2 text-center">
-              <div id="stat-card-trips" onclick="toggleStatDrilldown('trips')" class="stat-lt-card p-2.5 rounded-xl bg-[#faf8f5] dark:bg-[#121316] border border-[#e8e2d5] dark:border-stone-800 hover:border-amber-500/60 hover:bg-amber-500/5 transition cursor-pointer select-none group" title="총 여정 상세 목록 보기">
+              <button type="button" id="stat-card-trips" data-on-click="lifetimeAnalytics.drilldown" data-metric="trips" aria-expanded="false" class="stat-lt-card p-2.5 rounded-xl bg-[#faf8f5] dark:bg-[#121316] border border-[#e8e2d5] dark:border-stone-800 hover:border-amber-500/60 hover:bg-amber-500/5 transition cursor-pointer select-none group" title="총 여정 상세 목록 보기">
                 <div class="text-[10px] text-[#78716c] dark:text-stone-400 font-medium flex items-center justify-center gap-1">
                   <span>총 여정</span>
                   <i class="fa-solid fa-chevron-down text-[8px] opacity-40 group-hover:opacity-100 transition"></i>
                 </div>
                 <div id="stat-lt-trips" class="text-base sm:text-lg font-black text-[#a2601b] dark:text-[#d4af37] mt-0.5">0개</div>
-              </div>
-              <div id="stat-card-countries" onclick="toggleStatDrilldown('countries')" class="stat-lt-card p-2.5 rounded-xl bg-[#faf8f5] dark:bg-[#121316] border border-[#e8e2d5] dark:border-stone-800 hover:border-emerald-500/60 hover:bg-emerald-500/5 transition cursor-pointer select-none group" title="방문 국가 목록 보기">
+              </button>
+              <button type="button" id="stat-card-countries" data-on-click="lifetimeAnalytics.drilldown" data-metric="countries" aria-expanded="false" class="stat-lt-card p-2.5 rounded-xl bg-[#faf8f5] dark:bg-[#121316] border border-[#e8e2d5] dark:border-stone-800 hover:border-emerald-500/60 hover:bg-emerald-500/5 transition cursor-pointer select-none group" title="방문 국가 목록 보기">
                 <div class="text-[10px] text-[#78716c] dark:text-stone-400 font-medium flex items-center justify-center gap-1">
                   <span>방문 국가</span>
                   <i class="fa-solid fa-chevron-down text-[8px] opacity-40 group-hover:opacity-100 transition"></i>
                 </div>
                 <div id="stat-lt-countries" class="text-base sm:text-lg font-black text-emerald-600 dark:text-emerald-400 mt-0.5">0개국</div>
-              </div>
-              <div id="stat-card-cities" onclick="toggleStatDrilldown('cities')" class="stat-lt-card p-2.5 rounded-xl bg-[#faf8f5] dark:bg-[#121316] border border-[#e8e2d5] dark:border-stone-800 hover:border-sky-500/60 hover:bg-sky-500/5 transition cursor-pointer select-none group" title="방문 도시 목록 보기">
+              </button>
+              <button type="button" id="stat-card-cities" data-on-click="lifetimeAnalytics.drilldown" data-metric="cities" aria-expanded="false" class="stat-lt-card p-2.5 rounded-xl bg-[#faf8f5] dark:bg-[#121316] border border-[#e8e2d5] dark:border-stone-800 hover:border-sky-500/60 hover:bg-sky-500/5 transition cursor-pointer select-none group" title="방문 도시 목록 보기">
                 <div class="text-[10px] text-[#78716c] dark:text-stone-400 font-medium flex items-center justify-center gap-1">
                   <span>방문 도시</span>
                   <i class="fa-solid fa-chevron-down text-[8px] opacity-40 group-hover:opacity-100 transition"></i>
                 </div>
                 <div id="stat-lt-cities" class="text-base sm:text-lg font-black text-sky-600 dark:text-sky-400 mt-0.5">0개</div>
-              </div>
-              <div id="stat-card-days" onclick="toggleStatDrilldown('days')" class="stat-lt-card p-2.5 rounded-xl bg-[#faf8f5] dark:bg-[#121316] border border-[#e8e2d5] dark:border-stone-800 hover:border-indigo-500/60 hover:bg-indigo-500/5 transition cursor-pointer select-none group" title="여정별 체류 일수 랭킹 보기">
+              </button>
+              <button type="button" id="stat-card-days" data-on-click="lifetimeAnalytics.drilldown" data-metric="days" aria-expanded="false" class="stat-lt-card p-2.5 rounded-xl bg-[#faf8f5] dark:bg-[#121316] border border-[#e8e2d5] dark:border-stone-800 hover:border-indigo-500/60 hover:bg-indigo-500/5 transition cursor-pointer select-none group" title="여정별 체류 일수 랭킹 보기">
                 <div class="text-[10px] text-[#78716c] dark:text-stone-400 font-medium flex items-center justify-center gap-1">
                   <span>여행 일수</span>
                   <i class="fa-solid fa-chevron-down text-[8px] opacity-40 group-hover:opacity-100 transition"></i>
                 </div>
                 <div id="stat-lt-days" class="text-base sm:text-lg font-black text-indigo-600 dark:text-indigo-400 mt-0.5">0일</div>
-              </div>
-              <div id="stat-card-expenses" onclick="toggleStatDrilldown('expenses')" class="stat-lt-card p-2.5 rounded-xl bg-[#faf8f5] dark:bg-[#121316] border border-[#e8e2d5] dark:border-stone-800 hover:border-rose-500/60 hover:bg-rose-500/5 transition cursor-pointer select-none group" title="여정별 누적 지출 랭킹 보기">
+              </button>
+              <button type="button" id="stat-card-expenses" data-on-click="lifetimeAnalytics.drilldown" data-metric="expenses" aria-expanded="false" class="stat-lt-card p-2.5 rounded-xl bg-[#faf8f5] dark:bg-[#121316] border border-[#e8e2d5] dark:border-stone-800 hover:border-rose-500/60 hover:bg-rose-500/5 transition cursor-pointer select-none group" title="여정별 누적 지출 랭킹 보기">
                 <div class="text-[10px] text-[#78716c] dark:text-stone-400 font-medium flex items-center justify-center gap-1">
                   <span>누적 지출</span>
                   <i class="fa-solid fa-chevron-down text-[8px] opacity-40 group-hover:opacity-100 transition"></i>
                 </div>
                 <div id="stat-lt-expenses" class="text-base sm:text-lg font-black text-rose-600 dark:text-rose-400 mt-0.5">₩0</div>
-              </div>
-              <div id="stat-card-diaries" onclick="toggleStatDrilldown('diaries')" class="stat-lt-card p-2.5 rounded-xl bg-[#faf8f5] dark:bg-[#121316] border border-[#e8e2d5] dark:border-stone-800 hover:border-purple-500/60 hover:bg-purple-500/5 transition cursor-pointer select-none group" title="여정별 기록 일기 목록 보기">
+              </button>
+              <button type="button" id="stat-card-diaries" data-on-click="lifetimeAnalytics.drilldown" data-metric="diaries" aria-expanded="false" class="stat-lt-card p-2.5 rounded-xl bg-[#faf8f5] dark:bg-[#121316] border border-[#e8e2d5] dark:border-stone-800 hover:border-purple-500/60 hover:bg-purple-500/5 transition cursor-pointer select-none group" title="여정별 기록 일기 목록 보기">
                 <div class="text-[10px] text-[#78716c] dark:text-stone-400 font-medium flex items-center justify-center gap-1">
                   <span>기록 일기</span>
                   <i class="fa-solid fa-chevron-down text-[8px] opacity-40 group-hover:opacity-100 transition"></i>
                 </div>
                 <div id="stat-lt-diaries" class="text-base sm:text-lg font-black text-purple-600 dark:text-purple-400 mt-0.5">0편</div>
-              </div>
+              </button>
             </div>
 
             <!-- 신규: 6대 지표 인터랙티브 드릴다운 상세 리스트 컨테이너 -->
@@ -4538,7 +4540,7 @@
                   <span id="stat-drilldown-title" class="text-xs font-black text-[#1c1917] dark:text-[#ededed] truncate">세부 목록</span>
                   <span id="stat-drilldown-badge" class="px-1.5 py-0.2 rounded-full text-[10px] font-bold bg-amber-500/15 text-[#a2601b] dark:text-amber-300 shrink-0">0건</span>
                 </div>
-                <button onclick="closeStatDrilldown()" class="text-[11px] text-[#78716c] hover:text-[#1c1917] dark:hover:text-white font-bold flex items-center gap-1 px-2 py-0.5 rounded-md hover:bg-stone-200 dark:hover:bg-stone-800 transition cursor-pointer shrink-0">
+                <button type="button" data-on-click="lifetimeAnalytics.closeDrilldown" class="text-[11px] text-[#78716c] hover:text-[#1c1917] dark:hover:text-white font-bold flex items-center gap-1 px-2 py-0.5 rounded-md hover:bg-stone-200 dark:hover:bg-stone-800 transition cursor-pointer shrink-0">
                   <span>접기</span>
                   <i class="fa-solid fa-chevron-up text-[9px]"></i>
                 </button>
@@ -4665,7 +4667,7 @@
 
             <!-- 요약 지표 카드 3종 -->
             <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 text-center">
-              <div onclick="closeModal('modal-analytics', true); switchTab('expenses');" class="p-2.5 rounded-xl bg-[#faf8f5] dark:bg-[#121316] border border-[#e8e2d5] dark:border-stone-800 hover:border-amber-500/60 hover:bg-amber-500/5 transition cursor-pointer group" title="가계부로 이동하여 지출 입력 및 예산 관리">
+              <div data-on-click="lifetimeAnalytics.goWorkspaceExpenses" class="p-2.5 rounded-xl bg-[#faf8f5] dark:bg-[#121316] border border-[#e8e2d5] dark:border-stone-800 hover:border-amber-500/60 hover:bg-amber-500/5 transition cursor-pointer group" title="가계부로 이동하여 지출 입력 및 예산 관리">
                 <div class="text-[10px] text-[#78716c] dark:text-stone-400 font-medium flex items-center justify-center gap-1">
                   <span>총 지출 / 목표 예산</span>
                   <i class="fa-solid fa-arrow-up-right-from-square text-[9px] opacity-0 group-hover:opacity-100 text-amber-500 transition"></i>
@@ -4687,16 +4689,16 @@
 
             <!-- 액션 버튼 (가계부 / 경로 지도 / 완주 보고서) -->
             <div class="flex items-center justify-between gap-2 pt-2 border-t border-[#e8e2d5] dark:border-stone-800 flex-wrap">
-              <button onclick="closeModal('modal-analytics', true); switchTab('expenses');" class="px-3 py-1.5 rounded-xl bg-amber-500/10 hover:bg-amber-500/20 text-[#a2601b] dark:text-amber-300 border border-amber-500/30 text-xs font-bold flex items-center gap-1.5 shadow-sm transition cursor-pointer" title="가계부로 이동하여 지출 관리">
+              <button type="button" data-on-click="lifetimeAnalytics.goWorkspaceExpenses" class="px-3 py-1.5 rounded-xl bg-amber-500/10 hover:bg-amber-500/20 text-[#a2601b] dark:text-amber-300 border border-amber-500/30 text-xs font-bold flex items-center gap-1.5 shadow-sm transition cursor-pointer" title="가계부로 이동하여 지출 관리">
                 <i class="fa-solid fa-wallet text-amber-500"></i>
                 <span>가계부 관리</span>
               </button>
               <div class="flex items-center gap-2 ml-auto">
-                <button onclick="closeModal('modal-analytics', true); navigateToInteractiveMap();" class="px-3 py-1.5 rounded-xl theme-card-subtle text-xs font-bold flex items-center gap-1.5 shadow-sm transition cursor-pointer" title="인터랙티브 지도 바로가기">
+                <button type="button" data-on-click="lifetimeAnalytics.goWorkspaceMap" class="px-3 py-1.5 rounded-xl theme-card-subtle text-xs font-bold flex items-center gap-1.5 shadow-sm transition cursor-pointer" title="인터랙티브 지도 바로가기">
                   <i class="fa-solid fa-map-location-dot text-amber-500"></i>
                   <span>경로 지도</span>
                 </button>
-                <button onclick="closeModal('modal-analytics', true); openPdfReportModal();" class="px-3 py-1.5 rounded-xl btn-gold text-xs font-bold flex items-center gap-1.5 shadow-sm transition cursor-pointer">
+                <button type="button" data-on-click="lifetimeAnalytics.goWorkspaceReport" class="px-3 py-1.5 rounded-xl btn-gold text-xs font-bold flex items-center gap-1.5 shadow-sm transition cursor-pointer">
                   <i class="fa-solid fa-file-pdf text-rose-500"></i>
                   <span>완주 보고서</span>
                 </button>
@@ -4792,7 +4794,9 @@
 
       <!-- 버전 목록 스크롤 영역 (독립 스크롤 컨테이너로 Flexbox 압축 버그 영구 척결) -->
       <div class="overflow-y-auto flex-1 min-h-0 space-y-3.5 pr-1.5 custom-scrollbar">
-        <!-- v2.1.8 (Current) -->
+        <!-- v2.1.9 (Current) -->
+        <section class="companion-context"><h3 class="font-bold">v2.1.9 · 평생 여행 통계 대시보드 정리</h3><p class="text-xs">2026-11-25 · st-shell-v2.1.9</p><p class="text-xs leading-relaxed">평생 여행 통계 모달과 6대 지표 드릴다운을 별도 파일로 옮겼습니다. 요약표와 지출 랭킹에서 목표 예산이 ₩0만·소진율 0%로 나오던 오류를 고쳐 여행 통화 기준 예산을 원화로 정확히 환산해 표시하고, 요약표와 여정 목록의 상태 배지도 날짜 기준 단계(진행중·예정·완료·버킷)로 통일했습니다. 공유 사본의 날짜·제목 HTML은 글자로만 표시하며 6대 지표 카드를 키보드·접근성 버튼으로 개선했습니다.</p></section>
+        <!-- v2.1.8 -->
         <section class="companion-context"><h3 class="font-bold">v2.1.8 · 큰 계획·구간 상세·일정 서브탭 정리</h3><p class="text-xs">2026-11-25 · st-shell-v2.1.8</p><p class="text-xs leading-relaxed">큰 계획 카드, 구간 상세 화면, 편집 모달과 계획 탭의 보기 방식·서브탭 전환을 별도 파일로 옮겼습니다. 하루 구간에서 시작일을 바꾸면 잠긴 종료일도 함께 맞춰져 날짜가 거꾸로 저장되지 않으며, 저장 직후 상단 도시 수와 일정표도 즉시 갱신됩니다. 잘못된 서브탭 호출이나 빈 여행 목록에서도 화면이 비거나 오류가 나지 않고, 탭과 확정 상태 버튼의 선택 상태를 접근성 속성으로 알립니다.</p></section>
         <!-- v2.1.7 -->
         <section class="companion-context"><h3 class="font-bold">v2.1.7 · 노선도 모달 정리</h3><p class="text-xs">2026-11-24 · st-shell-v2.1.7</p><p class="text-xs leading-relaxed">관광 일러스트 노선도와 위성 궤적 모달을 별도 파일로 옮기고 전역 상태 3종을 정리했습니다. 노선도의 '일정보기'를 누르면 해당 날짜의 일정표가 바로 펼쳐지고, 통계에서 국가를 골라 열었을 때 여행 간 비행 연결 표시와 '전체 보기' 초기화가 정확히 동작합니다. 공유받은 여행의 국가·도시·장소·이모지 HTML은 글자로만 표시합니다.</p></section>
@@ -5755,7 +5759,7 @@
 
       <!-- 모달 푸터 -->
       <div class="pt-3 border-t border-[#e8e2d5] dark:border-stone-800 flex items-center justify-between shrink-0">
-        <span class="text-[11px] text-stone-400 dark:text-stone-500 font-mono">Sulsul Travel Engine v2.1.8</span>
+        <span class="text-[11px] text-stone-400 dark:text-stone-500 font-mono">Sulsul Travel Engine v2.1.9</span>
         <button onclick="closeModal('modal-version-history')" class="px-4 py-2 rounded-xl bg-[#faf8f5] dark:bg-stone-800 hover:bg-[#f0ece1] dark:hover:bg-stone-700 border border-[#e8e2d5] dark:border-stone-700 text-[#1c1917] dark:text-[#ededed] text-xs font-bold transition cursor-pointer shadow-sm">
           닫기
         </button>
@@ -6368,7 +6372,7 @@
     window.showToast = showToast;
 
     // 앱 버전 및 글로벌 네임스페이스 (Sulsul-Travel Invariant Rule R-10, R-11, R-12, R-13, R-14, R-15, R-16)
-    const APP_VER = '2.1.8';
+    const APP_VER = '2.1.9';
 
     // ══════════════════════════════════════════
     // [3-Way Theme System] 모던, 라이트그레이, 딥 블랙 테마 엔진 (v1.6.7)
@@ -7441,47 +7445,8 @@
     }
 
     // ==========================================
-    // 전용 통계 모달 창 및 상단 액션 (v1.1.3)
+    // 전용 통계 모달 창 및 상단 액션 — js/presentation/lifetime-analytics.js(SulsulTravel.LifetimeAnalytics)로 옮겼다(v2.1.9, 4단계).
     // ==========================================
-    function openAnalyticsModal(defaultTab) {
-      if (typeof renderLifetimeAnalytics === 'function') {
-        renderLifetimeAnalytics();
-      }
-      const activeTrip = getActiveTrip();
-      const tabWsTitle = document.getElementById('tab-stat-ws-title');
-      if (tabWsTitle) {
-        tabWsTitle.innerText = activeTrip ? `${activeTrip.title.slice(0, 10)}... 분석` : '현재 여정 분석';
-      }
-
-      switchAnalyticsTab(defaultTab || 'lifetime');
-      openModal('modal-analytics');
-    }
-
-    function switchAnalyticsTab(tab) {
-      const btnLifetime = document.getElementById('btn-tab-stat-lifetime');
-      const btnWorkspace = document.getElementById('btn-tab-stat-workspace');
-      const panelLifetime = document.getElementById('stat-panel-lifetime');
-      const panelWorkspace = document.getElementById('stat-panel-workspace');
-
-      const activeClass = "flex-1 py-1.5 px-3 rounded-lg text-xs font-bold transition flex items-center justify-center gap-1.5 shadow-sm bg-white dark:bg-[#16181d] text-[#1c1917] dark:text-white cursor-pointer";
-      const inactiveClass = "flex-1 py-1.5 px-3 rounded-lg text-xs font-bold transition flex items-center justify-center gap-1.5 text-stone-500 hover:text-stone-800 dark:hover:text-stone-300 cursor-pointer";
-
-      if (tab === 'workspace') {
-        if (btnWorkspace) btnWorkspace.className = activeClass;
-        if (btnLifetime) btnLifetime.className = inactiveClass;
-        if (panelWorkspace) panelWorkspace.classList.remove('hidden');
-        if (panelLifetime) panelLifetime.classList.add('hidden');
-      } else {
-        if (btnLifetime) btnLifetime.className = activeClass;
-        if (btnWorkspace) btnWorkspace.className = inactiveClass;
-        if (panelLifetime) panelLifetime.classList.remove('hidden');
-        if (panelWorkspace) panelWorkspace.classList.add('hidden');
-      }
-    }
-
-    function toggleAnalyticsView() {
-      openAnalyticsModal();
-    }
 
     // [4.5] 동적 관광 일러스트 노선도·위성 궤적 뷰어·공용 좌표 해석은 js/presentation/route-map.js(SulsulTravel.RouteMap)로 옮겼다(v2.1.7, 4단계).
 
@@ -7850,513 +7815,11 @@
     // ==========================================
     function renderHub() {
       renderDemoOnboarding();
-      renderLifetimeAnalytics();
+      SulsulTravel.LifetimeAnalytics.render();
       renderTripCards();
     }
 
-    function renderLifetimeAnalytics() {
-      const trips = State.trips || [];
-      let totalTrips = trips.length;
-      let totalDays = 0;
-      let totalExpensesKrw = 0;
-      let totalDiaries = 0;
-      const countriesMap = {};
-      const citiesSet = new Set();
-      const conceptsMap = {};
-      const statusCounts = { ongoing: 0, planned: 0, completed: 0, bucketlist: 0 };
-
-      trips.forEach(t => {
-        let dur = t.durationDays || (t.days ? t.days.length : 0);
-        if (!dur && t.startDate && t.endDate) {
-          dur = Math.max(1, Math.ceil((new Date(t.endDate) - new Date(t.startDate)) / (1000 * 60 * 60 * 24)) + 1);
-        }
-        totalDays += dur;
-        (t.countries || []).forEach(c => {
-          countriesMap[c] = (countriesMap[c] || 0) + 1;
-        });
-        (t.cities || []).forEach(ct => citiesSet.add(ct));
-        (t.concepts || []).forEach(cp => {
-          conceptsMap[cp] = (conceptsMap[cp] || 0) + 1;
-        });
-
-        const st = SulsulTravel.TripAdapter.resolveTripStage(t);
-        if (statusCounts[st] !== undefined) statusCounts[st]++;
-        else statusCounts.planned++;
-
-        (t.expenses || []).forEach(e => {
-          if (e.type !== 'income') {
-            const val = e.krw !== undefined ? Number(e.krw) : (e.amountKrw !== undefined ? Number(e.amountKrw) : (Number(e.amount) || 0));
-            totalExpensesKrw += val;
-          }
-        });
-
-        // 세 종류 기록을 공통 기록 모델로 센다. 빈 항목은 기록이 아니다.
-        totalDiaries += SulsulTravel.TravelRecords.summary(t).count + (!t.journals && Array.isArray(t.diaries) ? t.diaries.length : 0);
-      });
-
-      const ltTripsEl = document.getElementById('stat-lt-trips');
-      if (ltTripsEl) ltTripsEl.innerText = `${totalTrips}개`;
-      const ltCountriesEl = document.getElementById('stat-lt-countries');
-      if (ltCountriesEl) ltCountriesEl.innerText = `${Object.keys(countriesMap).length}개국`;
-      const ltCitiesEl = document.getElementById('stat-lt-cities');
-      if (ltCitiesEl) ltCitiesEl.innerText = `${citiesSet.size}개`;
-      const ltDaysEl = document.getElementById('stat-lt-days');
-      if (ltDaysEl) ltDaysEl.innerText = `${totalDays}일`;
-      
-      const expStr = totalExpensesKrw >= 1000000 ? 
-        `₩${(totalExpensesKrw / 10000).toFixed(0)}만` : 
-        `₩${totalExpensesKrw.toLocaleString()}`;
-      const ltExpensesEl = document.getElementById('stat-lt-expenses');
-      if (ltExpensesEl) ltExpensesEl.innerText = expStr;
-      const ltDiariesEl = document.getElementById('stat-lt-diaries');
-      if (ltDiariesEl) ltDiariesEl.innerText = `${totalDiaries}편`;
-      const badgeCountEl = document.getElementById('badge-trips-count');
-      if (badgeCountEl) badgeCountEl.innerText = totalTrips;
-
-      // 1. 여정 상태별 시각적 세그먼트 프로그레스 바 & 범례
-      const statusBar = document.getElementById('stat-lt-status-bar');
-      const statusLegend = document.getElementById('stat-lt-status-legend');
-      const statusRatioTxt = document.getElementById('stat-lt-status-ratio-txt');
-      if (statusBar && statusLegend) {
-        if (totalTrips === 0) {
-          statusBar.innerHTML = '<div class="w-full h-full bg-stone-200 dark:bg-stone-700"></div>';
-          statusLegend.innerHTML = '<span class="text-stone-400 font-normal">등록된 여정이 없습니다.</span>';
-          if (statusRatioTxt) statusRatioTxt.innerText = '0%';
-        } else {
-          const pctOngoing = Math.round((statusCounts.ongoing / totalTrips) * 100);
-          const pctPlanned = Math.round((statusCounts.planned / totalTrips) * 100);
-          const pctCompleted = Math.round((statusCounts.completed / totalTrips) * 100);
-          const pctBucket = 100 - pctOngoing - pctPlanned - pctCompleted;
-
-          statusBar.innerHTML = `
-            ${statusCounts.ongoing > 0 ? `<div style="width:${pctOngoing}%" class="h-full bg-emerald-500" title="진행중: ${statusCounts.ongoing}개 (${pctOngoing}%)"></div>` : ''}
-            ${statusCounts.planned > 0 ? `<div style="width:${pctPlanned}%" class="h-full bg-sky-500" title="예정: ${statusCounts.planned}개 (${pctPlanned}%)"></div>` : ''}
-            ${statusCounts.completed > 0 ? `<div style="width:${pctCompleted}%" class="h-full bg-indigo-500" title="완료: ${statusCounts.completed}개 (${pctCompleted}%)"></div>` : ''}
-            ${statusCounts.bucketlist > 0 ? `<div style="width:${pctBucket}%" class="h-full bg-amber-500" title="버킷리스트: ${statusCounts.bucketlist}개 (${pctBucket}%)"></div>` : ''}
-          `;
-
-          statusLegend.innerHTML = `
-            <span class="inline-flex items-center gap-1.5 px-2 py-1 rounded-lg bg-emerald-500/10 text-emerald-700 dark:text-emerald-300 border border-emerald-500/20"><span class="w-2 h-2 rounded-full bg-emerald-500"></span> 진행중 ${statusCounts.ongoing}</span>
-            <span class="inline-flex items-center gap-1.5 px-2 py-1 rounded-lg bg-sky-500/10 text-sky-700 dark:text-sky-300 border border-sky-500/20"><span class="w-2 h-2 rounded-full bg-sky-500"></span> 예정 ${statusCounts.planned}</span>
-            <span class="inline-flex items-center gap-1.5 px-2 py-1 rounded-lg bg-indigo-500/10 text-indigo-700 dark:text-indigo-300 border border-indigo-500/20"><span class="w-2 h-2 rounded-full bg-indigo-500"></span> 완료 ${statusCounts.completed}</span>
-            <span class="inline-flex items-center gap-1.5 px-2 py-1 rounded-lg bg-amber-500/10 text-amber-700 dark:text-amber-300 border border-amber-500/20"><span class="w-2 h-2 rounded-full bg-amber-500"></span> 버킷 ${statusCounts.bucketlist}</span>
-          `;
-          if (statusRatioTxt) statusRatioTxt.innerText = `총 ${totalTrips}개 여정`;
-        }
-      }
-
-      // 2. 발자취를 남긴 국가 칩 그리드
-      const countriesGrid = document.getElementById('stat-lt-countries-grid');
-      const countriesSummary = document.getElementById('stat-lt-countries-summary');
-      if (countriesGrid) {
-        const cEntries = Object.entries(countriesMap).sort((a, b) => b[1] - a[1]);
-        if (cEntries.length === 0) {
-          countriesGrid.innerHTML = '<span class="text-xs text-stone-400">아직 등록된 방문 국가가 없습니다.</span>';
-          if (countriesSummary) countriesSummary.innerText = '0개국';
-        } else {
-          if (countriesSummary) countriesSummary.innerText = `총 ${cEntries.length}개국 발자취`;
-          countriesGrid.innerHTML = cEntries.map(([countryName, cnt]) => {
-            const cInfo = resolveCountryInfo(countryName);
-            const flag = cInfo ? cInfo.flag : '🌎';
-            return `
-              <button type="button" data-on-click="routeMap.focusCountry" data-country="${escapeHtml(countryName)}" class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-xl bg-[#faf8f5] dark:bg-[#121316] hover:bg-amber-500/10 hover:border-amber-500/40 border border-[#e8e2d5] dark:border-stone-800 text-xs font-bold text-[#44403c] dark:text-stone-200 shadow-xs cursor-pointer transition" title="${escapeHtml(countryName)} 발자취 노선도 확인">
-                <span>${flag}</span>
-                <span>${escapeHtml(countryName)}</span>
-                <span class="px-1.5 py-0.2 rounded-full bg-amber-500/15 text-[#a2601b] dark:text-amber-300 text-[10px] font-mono">${cnt}회</span>
-                <i class="fa-solid fa-arrow-up-right-from-square text-[9px] opacity-60 text-amber-600 dark:text-amber-400"></i>
-              </button>
-            `;
-          }).join('');
-        }
-      }
-
-      // 3. 등록된 여행 종합 비교 요약표
-      const tripsTbody = document.getElementById('stat-lt-trips-tbody');
-      if (tripsTbody) {
-        if (trips.length === 0) {
-          tripsTbody.innerHTML = '<tr><td colspan="5" class="py-4 text-center text-stone-400">등록된 여행이 없습니다.</td></tr>';
-        } else {
-          const sortedTrips = [...trips].sort(compareTripsLatestFirst);
-          tripsTbody.innerHTML = sortedTrips.map(t => {
-            const days = t.durationDays || (t.days ? t.days.length : 0);
-            const dates = (t.startDate && t.endDate) ? `${t.startDate.slice(5)} ~ ${t.endDate.slice(5)}` : (t.startDate ? `${t.startDate.slice(5)}~` : '-');
-            const place = (t.countries && t.countries.length > 0) ? t.countries.join(', ') : (t.country || '-');
-            const budget = t.budgetKrw || 0;
-            let spent = 0;
-            (t.expenses || []).forEach(e => { if (e.type !== 'income') spent += (e.krw || 0); });
-            const spentPct = budget > 0 ? Math.min(100, Math.round((spent / budget) * 100)) : 0;
-            
-            const statusBadgeMap = {
-              ongoing: '<span class="px-1.5 py-0.5 rounded text-[10px] font-bold bg-emerald-500/15 text-emerald-700 dark:text-emerald-300 border border-emerald-500/30">여행중</span>',
-              planned: '<span class="px-1.5 py-0.5 rounded text-[10px] font-bold bg-sky-500/15 text-sky-700 dark:text-sky-300 border border-sky-500/30">예정</span>',
-              completed: '<span class="px-1.5 py-0.5 rounded text-[10px] font-bold bg-stone-500/15 text-stone-700 dark:text-stone-300 border border-stone-500/30">완료</span>',
-              bucketlist: '<span class="px-1.5 py-0.5 rounded text-[10px] font-bold bg-amber-500/15 text-amber-700 dark:text-amber-300 border border-amber-500/30">버킷</span>'
-            };
-            const sBadge = statusBadgeMap[t.status || 'planned'] || statusBadgeMap.planned;
-
-            return `
-              <tr onclick="closeModal('modal-analytics'); openTripWorkspace('${t.id}');" class="hover:bg-amber-500/10 dark:hover:bg-amber-500/15 transition cursor-pointer" title="${escapeHtml(t.title)} 여정 열기">
-                <td class="py-2 px-2 font-bold text-[#1c1917] dark:text-[#ededed] max-w-[120px] truncate" title="${escapeHtml(t.title)}">
-                  ${escapeHtml(t.title)}
-                </td>
-                <td class="py-2 px-2 text-[#78716c] dark:text-stone-400 whitespace-nowrap">
-                  <div>${dates}</div>
-                  <div class="text-[10px] text-amber-600 dark:text-amber-400 font-bold">${days}일간</div>
-                </td>
-                <td class="py-2 px-2 text-[#44403c] dark:text-stone-300 max-w-[90px] truncate" title="${escapeHtml(place)}">
-                  ${escapeHtml(place)}
-                </td>
-                <td class="py-2 px-2 text-right whitespace-nowrap">
-                  <div class="font-mono font-bold text-[#1c1917] dark:text-stone-200">₩${(spent / 10000).toFixed(0)}만 <span class="text-stone-400 font-normal">/ ₩${(budget / 10000).toFixed(0)}만</span></div>
-                  <div class="w-16 ml-auto bg-stone-200 dark:bg-stone-700 rounded-full h-1 mt-1 overflow-hidden">
-                    <div class="bg-amber-500 h-full rounded-full" style="width:${spentPct}%"></div>
-                  </div>
-                </td>
-                <td class="py-2 px-2 text-center whitespace-nowrap">
-                  ${sBadge}
-                </td>
-              </tr>
-            `;
-          }).join('');
-        }
-      }
-
-      // 4. 선호하는 여행 테마 및 컨셉 태그
-      const conceptsGrid = document.getElementById('stat-lt-concepts-grid');
-      if (conceptsGrid) {
-        const cpEntries = Object.entries(conceptsMap).sort((a, b) => b[1] - a[1]);
-        if (cpEntries.length === 0) {
-          conceptsGrid.innerHTML = '<span class="text-xs text-stone-400">등록된 여행 컨셉 태그가 없습니다.</span>';
-        } else {
-          conceptsGrid.innerHTML = cpEntries.map(([cp, cnt]) => `
-            <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-xl bg-amber-500/10 text-[#a2601b] dark:text-amber-300 border border-amber-500/20 text-xs font-bold shadow-xs">
-              <span>#${escapeHtml(cp)}</span>
-              <span class="px-1.5 py-0.2 rounded-full bg-amber-500/20 text-[10px] font-mono">${cnt}개</span>
-            </span>
-          `).join('');
-        }
-      }
-
-      if (currentDrilldownMetric) {
-        renderStatDrilldown(currentDrilldownMetric);
-      }
-    }
-
-    // ==========================================
-    // 6대 평생 통계 지표 인터랙티브 드릴다운 엔진 (v1.6.0)
-    // ==========================================
-    let currentDrilldownMetric = null;
-
-    function toggleStatDrilldown(metric) {
-      if (currentDrilldownMetric === metric) {
-        closeStatDrilldown();
-        return;
-      }
-      currentDrilldownMetric = metric;
-      renderStatDrilldown(metric);
-    }
-    window.toggleStatDrilldown = toggleStatDrilldown;
-
-    function closeStatDrilldown() {
-      currentDrilldownMetric = null;
-      const container = document.getElementById('stat-drilldown-container');
-      if (container) container.classList.add('hidden');
-      document.querySelectorAll('.stat-lt-card').forEach(el => {
-        el.classList.remove('ring-2', 'ring-amber-500', 'bg-amber-500/10', 'dark:bg-amber-500/15');
-      });
-    }
-    window.closeStatDrilldown = closeStatDrilldown;
-
-    function renderStatDrilldown(metric) {
-      const container = document.getElementById('stat-drilldown-container');
-      const iconEl = document.getElementById('stat-drilldown-icon');
-      const titleEl = document.getElementById('stat-drilldown-title');
-      const badgeEl = document.getElementById('stat-drilldown-badge');
-      const contentEl = document.getElementById('stat-drilldown-content');
-      if (!container || !contentEl) return;
-
-      const trips = State.trips || [];
-
-      // 선택된 카드 하이라이트
-      document.querySelectorAll('.stat-lt-card').forEach(el => {
-        el.classList.remove('ring-2', 'ring-amber-500', 'bg-amber-500/10', 'dark:bg-amber-500/15');
-      });
-      const activeCard = document.getElementById(`stat-card-${metric}`);
-      if (activeCard) {
-        activeCard.classList.add('ring-2', 'ring-amber-500', 'bg-amber-500/10', 'dark:bg-amber-500/15');
-      }
-
-      container.classList.remove('hidden');
-
-      const meta = {
-        trips: { icon: '✈️', title: '총 여정 상세 목록' },
-        countries: { icon: '🌎', title: '방문 국가별 아카이브' },
-        cities: { icon: '🏙️', title: '방문 도시별 목록' },
-        days: { icon: '📅', title: '여정별 체류 일수 랭킹' },
-        expenses: { icon: '💰', title: '여정별 누적 지출 랭킹' },
-        diaries: { icon: '📖', title: '여정별 기록 일기 목록' }
-      };
-
-      const mInfo = meta[metric] || { icon: '📋', title: '상세 목록' };
-      if (iconEl) iconEl.innerText = mInfo.icon;
-      if (titleEl) titleEl.innerText = mInfo.title;
-
-      let html = '';
-
-      if (metric === 'trips') {
-        if (badgeEl) badgeEl.innerText = `${trips.length}개 여정`;
-        if (trips.length === 0) {
-          html = '<div class="text-xs text-stone-400 py-3 text-center">등록된 여정이 없습니다.</div>';
-        } else {
-          const sortedTrips = [...trips].sort(compareTripsLatestFirst);
-          html = sortedTrips.map((t, idx) => {
-            const days = t.durationDays || (t.days ? t.days.length : 0);
-            const dates = (t.startDate && t.endDate) ? `${t.startDate} ~ ${t.endDate}` : (t.startDate || '일정 미정');
-            const countries = (t.countries && t.countries.length > 0) ? t.countries.join(', ') : (t.country || '-');
-            const budget = t.budgetKrw || 0;
-            let spent = 0;
-            (t.expenses || []).forEach(e => { if (e.type !== 'income') spent += (e.krw || 0); });
-            const sBadge = t.status === 'ongoing' ? '<span class="text-emerald-500 font-bold text-[10px]">여행중</span>' :
-                          t.status === 'completed' ? '<span class="text-stone-400 font-bold text-[10px]">완료</span>' :
-                          t.status === 'bucketlist' ? '<span class="text-amber-500 font-bold text-[10px]">버킷</span>' :
-                          '<span class="text-sky-500 font-bold text-[10px]">예정</span>';
-
-            return `
-              <div onclick="closeModal('modal-analytics'); openTripWorkspace('${t.id}');" class="p-2.5 rounded-xl bg-white dark:bg-[#181a20] border border-[#e8e2d5] dark:border-stone-800 hover:border-amber-500/50 hover:bg-amber-500/5 transition cursor-pointer flex items-center justify-between gap-2 shadow-xs group">
-                <div class="min-w-0 flex-1">
-                  <div class="flex items-center gap-1.5">
-                    <span class="w-5 h-5 rounded-md bg-stone-100 dark:bg-stone-800 text-[10px] font-black flex items-center justify-center text-stone-600 dark:text-stone-300 font-mono">${idx + 1}</span>
-                    <span class="text-xs font-black text-[#1c1917] dark:text-[#ededed] truncate group-hover:text-amber-600 dark:group-hover:text-amber-400 transition">${escapeHtml(t.title)}</span>
-                    ${sBadge}
-                  </div>
-                  <div class="text-[10px] text-[#78716c] dark:text-stone-400 mt-1 flex items-center gap-2 flex-wrap">
-                    <span>📅 ${dates} (${days}일간)</span>
-                    <span>📍 ${escapeHtml(countries)}</span>
-                  </div>
-                </div>
-                <div class="text-right shrink-0">
-                  <div class="text-xs font-mono font-bold text-amber-600 dark:text-amber-400">₩${spent.toLocaleString()}</div>
-                  <div class="text-[10px] text-stone-400">목표 ₩${(budget / 10000).toFixed(0)}만</div>
-                </div>
-              </div>
-            `;
-          }).join('');
-        }
-      } else if (metric === 'countries') {
-        const countryMap = {};
-        trips.forEach(t => {
-          (t.countries || (t.country ? [t.country] : [])).forEach(c => {
-            if (!countryMap[c]) countryMap[c] = { count: 0, trips: [] };
-            countryMap[c].count++;
-            if (!countryMap[c].trips.includes(t.title)) countryMap[c].trips.push(t.title);
-          });
-        });
-        const entries = Object.entries(countryMap).sort((a, b) => b[1].count - a[1].count);
-        if (badgeEl) badgeEl.innerText = `${entries.length}개국`;
-
-        if (entries.length === 0) {
-          html = '<div class="text-xs text-stone-400 py-3 text-center">방문 국가 데이터가 없습니다.</div>';
-        } else {
-          html = entries.map(([countryName, info]) => {
-            const cInfo = resolveCountryInfo(countryName);
-            const flag = cInfo ? cInfo.flag : '🌎';
-            return `
-              <div class="p-2.5 rounded-xl bg-white dark:bg-[#181a20] border border-[#e8e2d5] dark:border-stone-800 flex items-center justify-between gap-2 shadow-xs">
-                <div class="min-w-0 flex-1">
-                  <div class="flex items-center gap-2">
-                    <span class="text-base">${flag}</span>
-                    <span class="text-xs font-black text-[#1c1917] dark:text-[#ededed]">${escapeHtml(countryName)}</span>
-                    <span class="px-1.5 py-0.2 rounded-full bg-emerald-500/15 text-emerald-700 dark:text-emerald-300 text-[10px] font-mono font-bold">${info.count}회 방문</span>
-                  </div>
-                  <div class="text-[10px] text-[#78716c] dark:text-stone-400 mt-1 truncate">
-                    관련 여정: ${info.trips.map(escapeHtml).join(' · ')}
-                  </div>
-                </div>
-                <button type="button" data-on-click="routeMap.focusCountry" data-country="${escapeHtml(countryName)}" class="px-2.5 py-1 rounded-lg btn-gold text-[10px] font-bold shrink-0 shadow-xs cursor-pointer flex items-center gap-1">
-                  <i class="fa-solid fa-map-location-dot"></i>
-                  <span>노선도</span>
-                </button>
-              </div>
-            `;
-          }).join('');
-        }
-      } else if (metric === 'cities') {
-        const cityMap = {};
-        trips.forEach(t => {
-          (t.cities || []).forEach(ct => {
-            if (!cityMap[ct]) cityMap[ct] = { count: 0, country: t.country || (t.countries ? t.countries[0] : ''), trips: [] };
-            cityMap[ct].count++;
-            if (!cityMap[ct].trips.includes(t.title)) cityMap[ct].trips.push(t.title);
-          });
-        });
-        const entries = Object.entries(cityMap).sort((a, b) => b[1].count - a[1].count);
-        if (badgeEl) badgeEl.innerText = `${entries.length}개 도시`;
-
-        if (entries.length === 0) {
-          html = '<div class="text-xs text-stone-400 py-3 text-center">방문 도시 데이터가 없습니다.</div>';
-        } else {
-          html = entries.map(([cityName, info]) => {
-            const flag = info.country ? (resolveCountryInfo(info.country)?.flag || '📍') : '📍';
-            return `
-              <div class="p-2.5 rounded-xl bg-white dark:bg-[#181a20] border border-[#e8e2d5] dark:border-stone-800 flex items-center justify-between gap-2 shadow-xs">
-                <div class="min-w-0 flex-1">
-                  <div class="flex items-center gap-1.5">
-                    <span class="text-xs">${flag}</span>
-                    <span class="text-xs font-black text-[#1c1917] dark:text-[#ededed]">${escapeHtml(cityName)}</span>
-                    <span class="text-[10px] text-stone-400">(${escapeHtml(info.country || '거점')})</span>
-                  </div>
-                  <div class="text-[9px] text-[#78716c] dark:text-stone-400 truncate mt-0.5">
-                    ${info.trips.map(escapeHtml).join(' · ')}
-                  </div>
-                </div>
-                <span class="px-2 py-0.5 rounded-full bg-sky-500/15 text-sky-700 dark:text-sky-300 text-[10px] font-mono font-bold shrink-0">${info.count}회</span>
-              </div>
-            `;
-          }).join('');
-        }
-      } else if (metric === 'days') {
-        // 여정별 체류 일수 랭킹 & 점유율 바
-        let totalDays = 0;
-        const tripDays = trips.map(t => {
-          let days = t.durationDays || (t.days ? t.days.length : 0);
-          if (!days && t.startDate && t.endDate) {
-            days = Math.max(1, Math.ceil((new Date(t.endDate) - new Date(t.startDate)) / (1000 * 60 * 60 * 24)) + 1);
-          }
-          totalDays += days;
-          return { trip: t, days };
-        }).sort((a, b) => b.days - a.days);
-
-        if (badgeEl) badgeEl.innerText = `총 ${totalDays}일 누적`;
-
-        if (tripDays.length === 0 || totalDays === 0) {
-          html = '<div class="text-xs text-stone-400 py-3 text-center">등록된 일정 일수가 없습니다.</div>';
-        } else {
-          html = tripDays.map((item, idx) => {
-            const pct = totalDays > 0 ? ((item.days / totalDays) * 100).toFixed(1) : 0;
-            const rankEmoji = idx === 0 ? '🥇 1위' : idx === 1 ? '🥈 2위' : idx === 2 ? '🥉 3위' : `${idx + 1}위`;
-            return `
-              <div onclick="closeModal('modal-analytics'); openTripWorkspace('${item.trip.id}');" class="p-2.5 rounded-xl bg-white dark:bg-[#181a20] border border-[#e8e2d5] dark:border-stone-800 hover:border-indigo-500/50 hover:bg-indigo-500/5 transition cursor-pointer space-y-1.5 shadow-xs group">
-                <div class="flex items-center justify-between gap-2">
-                  <div class="flex items-center gap-2 min-w-0">
-                    <span class="text-[10px] font-black font-mono text-indigo-600 dark:text-indigo-400">${rankEmoji}</span>
-                    <span class="text-xs font-black text-[#1c1917] dark:text-[#ededed] truncate group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition">${escapeHtml(item.trip.title)}</span>
-                  </div>
-                  <div class="text-right shrink-0">
-                    <span class="text-xs font-mono font-black text-indigo-600 dark:text-indigo-400">${item.days}일간</span>
-                    <span class="text-[10px] text-stone-400 font-mono">(${pct}%)</span>
-                  </div>
-                </div>
-                <div class="w-full bg-stone-100 dark:bg-stone-800 rounded-full h-1.5 overflow-hidden">
-                  <div class="bg-indigo-500 h-full rounded-full transition-all duration-300" style="width: ${pct}%"></div>
-                </div>
-              </div>
-            `;
-          }).join('');
-        }
-      } else if (metric === 'expenses') {
-        // 여정별 누적 지출 랭킹 & 예산 집행률
-        let totalExpenses = 0;
-        const tripExpenses = trips.map(t => {
-          let spent = 0;
-          (t.expenses || []).forEach(e => {
-            if (e.type !== 'income') {
-              const val = e.krw !== undefined ? Number(e.krw) : (e.amountKrw !== undefined ? Number(e.amountKrw) : (Number(e.amount) || 0));
-              spent += val;
-            }
-          });
-          totalExpenses += spent;
-          return { trip: t, spent, budget: t.budgetKrw || 0 };
-        }).sort((a, b) => b.spent - a.spent);
-
-        const expStr = totalExpenses >= 1000000 ? `₩${(totalExpenses / 10000).toFixed(0)}만원` : `₩${totalExpenses.toLocaleString()}`;
-        if (badgeEl) badgeEl.innerText = `총 ${expStr}`;
-
-        if (tripExpenses.length === 0) {
-          html = '<div class="text-xs text-stone-400 py-3 text-center">등록된 지출 데이터가 없습니다.</div>';
-        } else {
-          html = tripExpenses.map((item, idx) => {
-            const rankEmoji = idx === 0 ? '🥇 1위' : idx === 1 ? '🥈 2위' : idx === 2 ? '🥉 3위' : `${idx + 1}위`;
-            const spentPct = item.budget > 0 ? Math.min(100, Math.round((item.spent / item.budget) * 100)) : 0;
-            return `
-              <div class="p-2.5 rounded-xl bg-white dark:bg-[#181a20] border border-[#e8e2d5] dark:border-stone-800 space-y-1.5 shadow-xs">
-                <div class="flex items-center justify-between gap-2">
-                  <div class="flex items-center gap-2 min-w-0">
-                    <span class="text-[10px] font-black font-mono text-rose-600 dark:text-rose-400">${rankEmoji}</span>
-                    <span class="text-xs font-black text-[#1c1917] dark:text-[#ededed] truncate">${escapeHtml(item.trip.title)}</span>
-                  </div>
-                  <div class="flex items-center gap-1.5 shrink-0">
-                    <span class="text-xs font-mono font-black text-rose-600 dark:text-rose-400">₩${item.spent.toLocaleString()}</span>
-                    <button onclick="closeModal('modal-analytics'); openTripWorkspace('${item.trip.id}'); switchTab('expenses');" class="px-2 py-0.5 rounded-md bg-amber-500/15 hover:bg-amber-500/25 text-[#a2601b] dark:text-amber-300 text-[10px] font-bold transition cursor-pointer" title="가계부로 이동">
-                      가계부 ➔
-                    </button>
-                  </div>
-                </div>
-                <div class="flex items-center justify-between text-[10px] text-stone-400 font-mono">
-                  <span>목표 ₩${(item.budget / 10000).toFixed(0)}만원</span>
-                  <span>소진율 ${spentPct}%</span>
-                </div>
-                <div class="w-full bg-stone-100 dark:bg-stone-800 rounded-full h-1.5 overflow-hidden">
-                  <div class="bg-rose-500 h-full rounded-full transition-all duration-300" style="width: ${spentPct}%"></div>
-                </div>
-              </div>
-            `;
-          }).join('');
-        }
-      } else if (metric === 'diaries') {
-        // 여정별 기록 일기 목록 및 편수
-        let totalDiaries = 0;
-        const tripDiaries = trips.map(t => {
-          // 통계 카드와 같은 기록 모델에서 날짜순으로 보여 준다(하루 회고·일정 기록·순간 기록).
-          const recordSummary = SulsulTravel.TravelRecords.summary(t);
-          const legacyDiaries = !t.journals && Array.isArray(t.diaries) ? t.diaries : [];
-          const entries = [
-            ...SulsulTravel.TravelRecords.chronological(recordSummary.records).map(record => ({
-              label: `${record.occurredDate || '날짜 미상'} · ${SulsulTravel.TravelRecords.KIND_LABELS[record.kind]}`,
-              title: (record.text || record.originalText || '').slice(0, 30) || (record.photoCount ? `사진 ${record.photoCount}장` : '기록')
-            })),
-            ...legacyDiaries.map((d, i) => ({
-              label: d.date || `Day ${i + 1}`,
-              title: d.title || d.content?.slice(0, 30) || '일기 기록'
-            }))
-          ];
-          const count = entries.length;
-          totalDiaries += count;
-          return { trip: t, count, entries };
-        }).sort((a, b) => b.count - a.count);
-
-        if (badgeEl) badgeEl.innerText = `총 ${totalDiaries}편`;
-
-        if (totalDiaries === 0) {
-          html = '<div class="text-xs text-stone-400 py-3 text-center">작성된 여행 일기/기록이 아직 없습니다.</div>';
-        } else {
-          html = tripDiaries.map((item) => {
-            const jList = item.entries.slice(0, 3).map(entry => `
-              <div class="text-[10px] text-[#78716c] dark:text-stone-400 truncate">
-                • <span class="font-mono">${escapeHtml(entry.label)}</span>: ${escapeHtml(entry.title)}
-              </div>
-            `).join('');
-
-            return `
-              <div class="p-2.5 rounded-xl bg-white dark:bg-[#181a20] border border-[#e8e2d5] dark:border-stone-800 space-y-1 shadow-xs">
-                <div class="flex items-center justify-between gap-2">
-                  <span class="text-xs font-black text-[#1c1917] dark:text-[#ededed] truncate">${escapeHtml(item.trip.title)}</span>
-                  <div class="flex items-center gap-1.5 shrink-0">
-                    <span class="px-2 py-0.5 rounded-full bg-purple-500/15 text-purple-700 dark:text-purple-300 text-[10px] font-bold font-mono">${item.count}편</span>
-                    <button onclick="closeModal('modal-analytics'); openTripWorkspace('${item.trip.id}'); switchTab('journal');" class="px-2 py-0.5 rounded-md bg-purple-500/15 hover:bg-purple-500/25 text-purple-700 dark:text-purple-300 text-[10px] font-bold transition cursor-pointer" title="다이어리로 이동">
-                      다이어리 ➔
-                    </button>
-                  </div>
-                </div>
-                ${jList ? `<div class="pl-1 pt-1 border-t border-stone-100 dark:border-stone-800/60">${jList}</div>` : ''}
-              </div>
-            `;
-          }).join('');
-        }
-      }
-
-      contentEl.innerHTML = html;
-    }
-    window.renderStatDrilldown = renderStatDrilldown;
+    // 평생 여행 통계 대시보드와 6대 지표 드릴다운은 js/presentation/lifetime-analytics.js(SulsulTravel.LifetimeAnalytics)로 옮겼다(v2.1.9, 4단계).
 
     function setHubStatusFilter(status) {
       State.hubFilters.status = status;
@@ -12183,7 +11646,7 @@ ${JSON.stringify(snapshotDays)}`;
     }
 
     function getReplanDomain() {
-      if (!replanDomainPromise) replanDomainPromise = import('./js/domain/replan.mjs?v=2.1.8');
+      if (!replanDomainPromise) replanDomainPromise = import('./js/domain/replan.mjs?v=2.1.9');
       return replanDomainPromise;
     }
 
@@ -12394,7 +11857,7 @@ ${JSON.stringify(snapshotDays)}`;
 
     async function getAiOrchestrator() {
       if (!aiOrchestratorPromise) {
-        aiOrchestratorPromise = import('./js/application/orchestration.mjs?v=2.1.8').then(({ Orchestrator }) =>
+        aiOrchestratorPromise = import('./js/application/orchestration.mjs?v=2.1.9').then(({ Orchestrator }) =>
           new Orchestrator({
             online: job => Boolean(job?.input?.localDraft) || navigator.onLine,
             timeoutMs: 65000,
@@ -15113,9 +14576,6 @@ JSON 배열만 출력하세요. 각 day는 dayNum, title, city, date, spots를 �
       handleHubFilterChange: handleHubFilterChange,
       resetHubFilters: resetHubFilters,
       toggleHubViewMode: toggleHubViewMode,
-      toggleAnalyticsView: toggleAnalyticsView,
-      openAnalyticsModal: openAnalyticsModal,
-      switchAnalyticsTab: switchAnalyticsTab,
       navigateToInteractiveMap: navigateToInteractiveMap,
       openVersionHistoryModal: openVersionHistoryModal,
       openSettingsModal: openSettingsModal,

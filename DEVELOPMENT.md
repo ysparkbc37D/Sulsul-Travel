@@ -63,6 +63,7 @@
 | `js/presentation/plan-timeline.js` | 계획 탭 일정표(v2.1.5, `SulsulTravel.PlanTimeline`): 일자 아코디언, 장소·이동 카드, 완료·고정·편집·삭제·튜닝·스팟 추가 버튼(셸 함수를 부름). `dayConditions(day)`는 아는 장소일 때만 고도·날씨·복장을 돌려주고 모르면 null이다(오늘 화면도 이것을 쓴다) |
 | `js/presentation/plan-map.js` | 계획 탭 인터랙티브 지도(v2.1.6, `SulsulTravel.PlanMap`): Leaflet 단일 여행 지도·거점 칩·도시 카드·구글 지도 쿼리·전체 보기와 워크스페이스 전체 여행 궤적 보기(`planMap.*`). 모든 여행 자료 값을 escape하고, 단일 갱신 시 `extraPolylines`와 토글 상태를 함께 초기화한다 |
 | `js/presentation/route-map.js` | 노선도 모달·공용 여행 좌표 해석(v2.1.7, `SulsulTravel.RouteMap`): 단일·전체 관광 일러스트 노선도, 위성 궤적(Leaflet), 통계 국가 포커스·복귀, `CITY_GEO_COORDS`·`getTripGeoData`(`routeMap.*`). 노선도 전역 3종을 모듈 변수로 옮겼고 모든 여행 자료 값을 escape한다 |
+| `js/presentation/lifetime-analytics.js` | 평생 여행 통계 대시보드(v2.1.9, `SulsulTravel.LifetimeAnalytics`): `#modal-analytics` 열기·탭 전환, 6대 지표 요약·상태 분포·국가/컨셉 아카이브·종합 비교표·6대 드릴다운(`lifetimeAnalytics.*`). 여행 `budget`/`currency`를 원화 환산하고 `TripAdapter.resolveTripStage`로 상태 배지를 통일하며 모든 값을 escape한다 |
 | `js/presentation/plan-guides.js` | 계획 탭 예약 가이드·도시 가이드(v2.1.4, `SulsulTravel.PlanGuides`): 남미 팩 예약 체크리스트(팩 `bookings.items`, 완료는 `bookingStatuses`), 그 밖의 여행은 준비물 점검(`checklist.*` 동작), 남미·운남 거점 도시, 스팟 모아보기. 그리는 동안 여행 자료를 바꾸지 않고 모든 값을 escape한다 |
 | `js/presentation/budget-ui.js` | 초기 자산·예산 창과 전세계 통화 선택 창(v2.1.2). 창의 입력과 통화 목록은 파일 안의 초안에만 두고 저장 버튼의 `commitTrip` 한 번으로 쓴다. 통화 추가는 바로 저장하고 열린 초기 자산 창·지출 입력창을 갱신한다 |
 | `js/presentation/expense-analytics.js` | 사용내역 통계(v2.1.2): 카드·현금, 카테고리, 수지와 SVG 도넛 차트. 지출 카테고리 목록(`SulsulTravel.ExpenseAnalytics.CATEGORIES`)의 유일한 정의 |
@@ -128,6 +129,7 @@ node .\tests\plan-timeline.browser.cjs
 node .\tests\plan-map.browser.cjs
 node .\tests\route-map.browser.cjs
 node .\tests\plan-blocks.browser.cjs
+node .\tests\lifetime-analytics.browser.cjs
 .\tools-verify.ps1
 ```
 
