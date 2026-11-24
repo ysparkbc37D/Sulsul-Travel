@@ -18,7 +18,7 @@ const server=http.createServer((req,res)=>{
   await page.evaluate(async ()=>{
    window.alert=()=>{};window.confirm=()=>true;
    document.querySelectorAll('.sheet-container').forEach(el=>el.classList.add('sheet-closed'));
-   State.trips=[{id:'activity-test',title:'마드리드 산책',startDate:'2026-09-09',endDate:'2026-09-10',countries:['스페인'],cities:['마드리드'],currency:'EUR',budget:0,journals:{},expenses:[],checklist:[],days:[{dayNum:1,date:'2026-09-09',city:'마드리드',title:'도착한 날',spots:[{time:'14:00',title:'마드리드 공항 도착',desc:'공항철도로 이동',completed:false},{time:'16:00',title:'오래된 광장 산책',completed:false}]},{dayNum:2,date:'2026-09-10',city:'마드리드',title:'둘째 날',spots:[]}]}];State.activeTripId='activity-test';State.activeJournalDay=0;await saveTrips();switchView('workspace');setTheme('modern');State.allTimelinesExpanded=true;switchPlanSubTab('timeline');SulsulTravel.PlanTimeline.render();
+   State.trips=[{id:'activity-test',title:'마드리드 산책',startDate:'2026-09-09',endDate:'2026-09-10',countries:['스페인'],cities:['마드리드'],currency:'EUR',budget:0,journals:{},expenses:[],checklist:[],days:[{dayNum:1,date:'2026-09-09',city:'마드리드',title:'도착한 날',spots:[{time:'14:00',title:'마드리드 공항 도착',desc:'공항철도로 이동',completed:false},{time:'16:00',title:'오래된 광장 산책',completed:false}]},{dayNum:2,date:'2026-09-10',city:'마드리드',title:'둘째 날',spots:[]}]}];State.activeTripId='activity-test';State.activeJournalDay=0;await saveTrips();switchView('workspace');setTheme('modern');State.allTimelinesExpanded=true;SulsulTravel.PlanBlocks.switchSubTab('timeline');SulsulTravel.PlanTimeline.render();
    openActivityJournal(0,0);
   });
   await page.locator('#activity-record-text').fill('공항에 내려 따뜻한 햇살을 맞았다. 새로운 여행이 설렜다.');

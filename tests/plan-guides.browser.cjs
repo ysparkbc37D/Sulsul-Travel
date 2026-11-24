@@ -37,7 +37,7 @@ async function check(name,run){try{results.push({name,passed:true,details:await 
   page.on('dialog',dialog=>dialog.accept());
   await page.route('**/*',route=>new URL(route.request().url()).hostname==='127.0.0.1'?route.continue():route.abort());
   const stored=id=>page.evaluate(async id=>JSON.parse(await TripRepository.readRaw()).find(t=>t.id===id),id);
-  const show=(id,sub)=>page.evaluate(([id,sub])=>{document.querySelectorAll('.sheet-container').forEach(e=>{if(!e.classList.contains('sheet-closed'))closeModal(e.id,true);});openTripWorkspace(id);switchTab('plan');switchPlanSubTab(sub);},[id,sub]);
+  const show=(id,sub)=>page.evaluate(([id,sub])=>{document.querySelectorAll('.sheet-container').forEach(e=>{if(!e.classList.contains('sheet-closed'))closeModal(e.id,true);});openTripWorkspace(id);switchTab('plan');SulsulTravel.PlanBlocks.switchSubTab(sub);},[id,sub]);
   try{
     await page.goto(origin+'/',{waitUntil:'networkidle'});
     await page.waitForFunction(()=>window.SulsulShell?.started);

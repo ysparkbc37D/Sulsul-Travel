@@ -69,7 +69,7 @@ const server=http.createServer((req,res)=>{
     });
     await check('실제로 연 모달 순서로 복귀하고 상세·내 여행 뒤에만 종료 확인',async api=>{
       const {page}=api;await api.seed();
-      await page.evaluate(()=>{switchTab('plan');openPlanBlock(0);openModal('modal-settings');openModal('modal-quick-currency');});
+      await page.evaluate(()=>{switchTab('plan');SulsulTravel.PlanBlocks.openBlock(0);openModal('modal-settings');openModal('modal-quick-currency');});
       await api.back();await api.closed('modal-quick-currency');
       assert.equal(await page.locator('#modal-settings').evaluate(e=>!e.classList.contains('sheet-closed')),true);
       assert.equal(await page.locator('#plan-block-detail-page').evaluate(e=>!e.classList.contains('hidden')),true);

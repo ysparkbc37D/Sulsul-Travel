@@ -59,6 +59,7 @@
 | `js/presentation/ui-actions.js` | 화면 동작 위임(v2.0.9). `data-on-click`·`data-on-change`·`data-on-input`의 동작 이름을 문서 한 곳에서 받아 `UiActions.define`으로 등록된 처리기로 넘긴다. 등록되지 않은 이름은 오류 |
 | `js/presentation/expenses-tab.js` | 가계부 탭 본문(v2.1.1): 지갑 보드, 빠른 환율 계산기, 지출·환전 목록과 보기 전환, 환전 기록 안전 삭제. 공용 환율 계산(`CURRENCY_INFO`·`getCurrencyRate`·`calculateTripWallets`)은 셸에 있다 |
 | `js/presentation/exchange-ui.js` | 환전 창과 환율 관리(v2.1.1): 금액·환율 계산과 저장, 실시간 환율 갱신(open.er-api.com), 맞춤 환율(`st_custom_rates`), 아르헨티나 MEP 스위치 |
+| `js/presentation/plan-blocks.js` | 계획 탭 큰 계획·구간 상세·서브탭(v2.1.8, `SulsulTravel.PlanBlocks`): 거점 추론(`inferPlace`), 블록 구조화(`buildBlocks`), 구간 상세 열기/닫기, 큰 계획 편집 모달(1일 구간 종료일 동기화·확정 상태 칩 `aria-pressed`·저장 후 워크스페이스 갱신), 보기 방식·4대 서브탭 전환(`planBlocks.*`) |
 | `js/presentation/plan-timeline.js` | 계획 탭 일정표(v2.1.5, `SulsulTravel.PlanTimeline`): 일자 아코디언, 장소·이동 카드, 완료·고정·편집·삭제·튜닝·스팟 추가 버튼(셸 함수를 부름). `dayConditions(day)`는 아는 장소일 때만 고도·날씨·복장을 돌려주고 모르면 null이다(오늘 화면도 이것을 쓴다) |
 | `js/presentation/plan-map.js` | 계획 탭 인터랙티브 지도(v2.1.6, `SulsulTravel.PlanMap`): Leaflet 단일 여행 지도·거점 칩·도시 카드·구글 지도 쿼리·전체 보기와 워크스페이스 전체 여행 궤적 보기(`planMap.*`). 모든 여행 자료 값을 escape하고, 단일 갱신 시 `extraPolylines`와 토글 상태를 함께 초기화한다 |
 | `js/presentation/route-map.js` | 노선도 모달·공용 여행 좌표 해석(v2.1.7, `SulsulTravel.RouteMap`): 단일·전체 관광 일러스트 노선도, 위성 궤적(Leaflet), 통계 국가 포커스·복귀, `CITY_GEO_COORDS`·`getTripGeoData`(`routeMap.*`). 노선도 전역 3종을 모듈 변수로 옮겼고 모든 여행 자료 값을 escape한다 |
@@ -126,6 +127,7 @@ node .\tests\plan-guides.browser.cjs
 node .\tests\plan-timeline.browser.cjs
 node .\tests\plan-map.browser.cjs
 node .\tests\route-map.browser.cjs
+node .\tests\plan-blocks.browser.cjs
 .\tools-verify.ps1
 ```
 

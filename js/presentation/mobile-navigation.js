@@ -124,7 +124,7 @@
       return 'modal';
     }
     const detail=document.getElementById('plan-block-detail-page');
-    if(detail&&!detail.classList.contains('hidden')){root.hidePlanBlockDetail();return 'detail';}
+    if(detail&&!detail.classList.contains('hidden')){root.SulsulTravel.PlanBlocks.hideDetail();return 'detail';}
     if(typeof State!=='undefined'&&State.currentView==='workspace'){root.switchView('hub');return 'hub';}
     requestExit();return 'exit';
   }

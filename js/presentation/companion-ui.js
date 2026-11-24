@@ -4,27 +4,12 @@ function companionDate(value) {
   return match ? `${Number(match[2])}.${Number(match[3])}` : String(value || '날짜 미정');
 }
 
-function setPlanPresentation(mode = 'overview') {
-  const panel = document.getElementById('tab-content-plan');
-  if (!panel) return;
-  panel.dataset.presentation = mode;
-  document.querySelectorAll('[data-plan-presentation]').forEach(button => {
-    const selected = mode === 'booking' || mode === 'cityguide' ? 'map' : mode;
-    button.setAttribute('aria-pressed', String(button.dataset.planPresentation === selected));
-  });
-}
-
-function openPlanPresentation(mode) {
-  if (mode === 'overview') setPlanPresentation(mode);
-  else switchPlanSubTab(mode);
-}
-
 function renderCompanionPlan() {
   const trip = getActiveTrip();
   const container = document.getElementById('big-plan-container');
   if (!trip || !container) return;
-  if (ensurePlanBlockStructure(trip)) void saveTrips({ bump: false });
-  const blocks = buildPlanBlocks(trip);
+  if (SulsulTravel.PlanBlocks.ensureStructure(trip)) void saveTrips({ bump: false });
+  const blocks = SulsulTravel.PlanBlocks.buildBlocks(trip);
   const spots = (trip.days || []).flatMap(day => day.spots || []).filter(spot=>!SulsulTravel.ScheduleChange.retired(spot));
   const hasSpots = spots.length > 0;
   const aiButtonHtml = hasSpots
@@ -49,19 +34,19 @@ function renderCompanionPlan() {
       const first = block.days[0].dayIndex + 1;
       const last = block.days[block.days.length - 1].dayIndex + 1;
       return `<article class="companion-block" id="companion-block-${index}">
-        <button class="companion-block-open" onclick="openPlanBlock(${index})" aria-label="${escapeHtml(block.title || block.place)} 세부 계획 열기">
+        <button type="button" class="companion-block-open" data-on-click="planBlocks.open" data-block-index="${index}" aria-label="${escapeHtml(block.title || block.place)} 세부 계획 열기">
           <span class="companion-number">${String(index + 1).padStart(2, '0')}</span>
           <span class="companion-block-copy"><span class="companion-block-meta">DAY ${first}${last !== first ? `–${last}` : ''} <span>· ${escapeHtml(companionDate(block.startDate))}${last !== first ? ` – ${escapeHtml(companionDate(block.endDate))}` : ''}</span></span>
             <span class="companion-block-heading">${escapeHtml(block.title || block.place)}</span>
             ${block.title && block.title !== block.place ? `<span class="companion-muted">${escapeHtml(block.place)}</span>` : ''}
             <span class="companion-block-summary">${escapeHtml(highlights.join(' · ') || '아직 빈 하루예요. 첫 일정을 채워 보세요.')}</span>
-            <span class="companion-block-bottom"><span class="companion-status">${planBlockStatusLabel(block.status)}</span><span>${block.days.length}일 체류 · ${items.length ? `${done}/${items.length} 완료` : '일정 미정'}</span></span>
+            <span class="companion-block-bottom"><span class="companion-status">${SulsulTravel.PlanBlocks.statusLabel(block.status)}</span><span>${block.days.length}일 체류 · ${items.length ? `${done}/${items.length} 완료` : '일정 미정'}</span></span>
           </span><i class="fa-solid fa-chevron-right companion-chevron" aria-hidden="true"></i>
         </button>
-        <div class="companion-block-actions"><button onclick="openPlanBlockEditByIndex(${index})"><i class="fa-solid fa-pen" aria-hidden="true"></i> 큰 계획 편집</button><button onclick="regeneratePlanBlockByIndex(${index})"><i class="fa-solid fa-wand-magic-sparkles" aria-hidden="true"></i> 이 구간 AI 재생성</button></div>
+        <div class="companion-block-actions"><button type="button" data-on-click="planBlocks.editByIndex" data-block-index="${index}"><i class="fa-solid fa-pen" aria-hidden="true"></i> 큰 계획 편집</button><button type="button" data-on-click="planBlocks.regenerateByIndex" data-block-index="${index}"><i class="fa-solid fa-wand-magic-sparkles" aria-hidden="true"></i> 이 구간 AI 재생성</button></div>
       </article>`;
     }).join('') || '<div class="companion-empty">아직 계획이 없어요. AI와 첫 여정을 만들어 보세요.</div>'}</div>`;
-  setPlanPresentation(document.getElementById('tab-content-plan').dataset.presentation || 'overview');
+  SulsulTravel.PlanBlocks.setPresentation(document.getElementById('tab-content-plan').dataset.presentation || 'overview');
 }
 
 function companionDayPicker(days, selected, action) {
@@ -69,10 +54,10 @@ function companionDayPicker(days, selected, action) {
 }
 
 function selectCompanionDetailDay(dayIndex) {
-  const block = getActivePlanBlock();
+  const block = SulsulTravel.PlanBlocks.getActive();
   if (!block?.days.some(item => item.dayIndex === dayIndex)) return;
   State.companionDetailSelection = { blockId: block.id, dayIndex };
-  renderPlanBlockDetail();
+  SulsulTravel.PlanBlocks.renderDetail();
   document.getElementById('plan-block-detail-scroll').scrollTop = 0;
   document.querySelector('#plan-block-detail-container .companion-day-picker [aria-pressed="true"]')?.focus({preventScroll:true});
 }
@@ -240,7 +225,7 @@ function adjustCompanionDay(dayIndex,reason) {
 }
 
 function renderCompanionDetail() {
-  const block = getActivePlanBlock();
+  const block = SulsulTravel.PlanBlocks.getActive();
   const container = document.getElementById('plan-block-detail-container');
   if (!block || !container) return;
   const selection = State.companionDetailSelection;
@@ -255,10 +240,10 @@ function renderCompanionDetail() {
     ${renderLiveToolbar(selected)}
     ${block.lodging || block.notes || block.priorities.length ? `<details class="companion-context"><summary>숙소·꼭 하고 싶은 일·메모 <i class="fa-solid fa-chevron-down" aria-hidden="true"></i></summary><div>${block.lodging ? `<p><b>숙소</b> ${escapeHtml(block.lodging)}</p>` : ''}${block.priorities.length ? `<p>${block.priorities.map(escapeHtml).join(' · ')}</p>` : ''}${block.notes ? `<p>${escapeHtml(block.notes)}</p>` : ''}</div></details>` : ''}
     <div class="companion-day-heading"><div><p class="companion-eyebrow">DAY ${day.dayNum || selected + 1} · ${escapeHtml(companionDate(day.date))}</p><h3>${escapeHtml(day.title || day.city || block.place)}</h3><p class="companion-muted">${pending.length}개 예정 · ${completed.length}개 완료</p></div><button class="companion-button" onclick="openScheduleTuningModal(${selected})">이 날 조정</button></div>
-    <div class="companion-timeline">${companionTimeline(pending,selected) || `<div class="companion-bento-empty"><div class="empty-icon-wrap"><i class="fa-regular fa-compass"></i></div><h4 class="companion-empty-title">${completed.length ? '이 날의 계획을 모두 마쳤어요 🎉' : '아직 일정이 비어있는 하루예요'}</h4><p class="companion-empty-desc">${completed.length ? '오늘 하루의 소중한 기억을 일기로 남겨 볼까요?' : '가고 싶은 장소를 추가하여 알찬 일정을 완성해 보세요.'}</p><div class="empty-actions"><button class="companion-button companion-primary" onclick="openAddSpotToDay(${selected})"><i class="fa-solid fa-plus"></i> 일정 추가하기</button><button class="companion-button" onclick="openJournalFromPlanBlock(${selected})"><i class="fa-solid fa-book-open"></i> 기억 남기기</button></div></div>`}</div>
+    <div class="companion-timeline">${companionTimeline(pending,selected) || `<div class="companion-bento-empty"><div class="empty-icon-wrap"><i class="fa-regular fa-compass"></i></div><h4 class="companion-empty-title">${completed.length ? '이 날의 계획을 모두 마쳤어요 🎉' : '아직 일정이 비어있는 하루예요'}</h4><p class="companion-empty-desc">${completed.length ? '오늘 하루의 소중한 기억을 일기로 남겨 볼까요?' : '가고 싶은 장소를 추가하여 알찬 일정을 완성해 보세요.'}</p><div class="empty-actions"><button class="companion-button companion-primary" onclick="openAddSpotToDay(${selected})"><i class="fa-solid fa-plus"></i> 일정 추가하기</button><button type="button" class="companion-button" data-on-click="planBlocks.openJournal" data-day-index="${selected}"><i class="fa-solid fa-book-open"></i> 기억 남기기</button></div></div>`}</div>
     ${completed.length ? `<details class="companion-completed"><summary>완료한 일정 ${completed.length}개 보기 <i class="fa-solid fa-chevron-down" aria-hidden="true"></i></summary>${completed.map(item => companionSpot(item.spot, selected, item.spotIndex)).join('')}</details>` : ''}
     ${(day.spots||[]).some(spot=>SulsulTravel.ScheduleChange.retired(spot))?`<details class="companion-cancelled"><summary>보관·취소·나중에 갈 곳 ${day.spots.filter(spot=>SulsulTravel.ScheduleChange.retired(spot)).length}개 보기</summary>${day.spots.map((spot,spotIndex)=>({spot,spotIndex})).filter(item=>SulsulTravel.ScheduleChange.retired(item.spot)).map(item=>companionSpot(item.spot,selected,item.spotIndex)).join('')}</details>`:''}
-    <button class="companion-button companion-record" onclick="openJournalFromPlanBlock(${selected})"><i class="fa-solid fa-book-open" aria-hidden="true"></i> 이 날의 기억 남기기</button>`;
+    <button type="button" class="companion-button companion-record" data-on-click="planBlocks.openJournal" data-day-index="${selected}"><i class="fa-solid fa-book-open" aria-hidden="true"></i> 이 날의 기억 남기기</button>`;
 }
 
 function selectCompanionTodayDay(dayIndex) {
@@ -676,8 +661,8 @@ function scrollToPlanBlock(blockIndex) {
     el.scrollIntoView({ behavior: 'smooth', block: 'start' });
     el.classList.add('companion-block-focus');
     setTimeout(() => el.classList.remove('companion-block-focus'), 1400);
-  } else if (typeof openPlanBlock === 'function') {
-    openPlanBlock(blockIndex);
+  } else {
+    SulsulTravel.PlanBlocks.openBlock(blockIndex);
   }
 }
 window.scrollToPlanBlock = scrollToPlanBlock;

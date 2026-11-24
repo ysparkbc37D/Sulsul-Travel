@@ -26,6 +26,16 @@
 - [ ] 항공권/호텔 예약 바우처 PDF 자동 파싱 일정 등록
 - [ ] 여행 동행자 실시간 음성 메모 AI 다이어리 자동 변환
 
+## [v2.1.8] - 2026-11-25
+
+- 화면 분리(4단계) 10차(계획 탭 4차 — 큰 계획·구간 상세·서브탭)입니다. `index.html`의 큰 계획 구조 해석·구간 상세 열기/닫기·큰 계획 편집 모달·`switchPlanSubTab`(약 350줄)과 `js/presentation/companion-ui.js`의 보기 방식 전환(`setPlanPresentation`·`openPlanPresentation`)을 `js/presentation/plan-blocks.js`(`SulsulTravel.PlanBlocks`)로 옮겼습니다.
+- 하루 구간(`block.days.length === 1`)을 편집할 때 잠긴 종료일(`#plan-block-edit-end-date`)이 옛 날짜로 남아, 시작일을 바꾼 뒤 저장하면 `planBlockMeta[id]`에 종료일이 시작일보다 과거로 저장되고 구간 상세 헤더가 `4.15 – 4.10 · 1일 체류`로 깨지던 문제를 고쳤습니다(v2.1.7에서 재현). 시작일 입력 시 잠긴 종료일을 실시간으로 맞추고 저장 시에도 1일 구간의 `endDate`를 `startDate`로 동기화합니다.
+- 큰 계획 편집 저장 뒤 워크스페이스 상단 도시 수(`#stat-ws-places`)와 일정표 날짜가 갱신되지 않던 문제(v2.1.7에서 `그라나다, 톨레도` 저장 뒤 `1개국 1도시` 잔류 재현)를 고쳐 `renderActiveTripWorkspace()`로 전체 워크스페이스를 동기화하고, 저장 시점 공동 계획 편집 권한(`requireSharedPlanEdit`)과 중복 저장 방지 가드를 추가했습니다.
+- 활성 여행이 없을 때 `buildPlanBlocks`·`openPlanBlock`이 `TypeError: Cannot read properties of undefined (reading 'days')`를 던지던 문제와, 잘못된 서브탭 ID 전달 시 4개 서브탭 뷰가 모두 숨겨지던 문제를 고쳤습니다(모두 v2.1.7에서 재현). `#btn-subtab-*` 4종과 확정 상태 칩 4종에 `aria-pressed`를 동기화합니다.
+- `#companion-plan-nav`, `#plan-subtabs-nav`, `#plan-block-detail-page`, `#modal-plan-block-edit`과 `companion-ui.js` 큰 계획 카드·상세 일기 버튼의 인라인 처리기 25곳을 `planBlocks.*`·`shell.closeModal` 동작으로 옮겼습니다(UI01 489 → 464곳, `index.html` 334 → 314곳, `companion-ui.js` 82 → 77곳). 새 파일의 HTML01은 0곳입니다.
+- 회귀 검사: `tests/plan-blocks.browser.cjs`(보기 방식·4대 서브탭 실클릭·미지 ID 폴백, 1일 구간 시작일 편집 `endDate` 동기화·상태 칩 `aria-pressed`·IndexedDB 저장·상단 도시 수 갱신, 다일 구간 저장 실패 시 입력·원본 보존·미저장 이탈 감지·날짜 동기화, 상세→일기 이동·공유 사본 HTML 안전성·빈 여행 방어·320px). 위 결함 네 가지는 v2.1.7 코드에서 재현했습니다.
+- 알려진 한계: 큰 계획 카드 본문(`renderCompanionPlan`·`renderCompanionDetail`)의 HTML 렌더는 오늘 화면과 공용 도우미를 함께 쓰고 있어 `companion-ui.js`에 남아 있으며 A-8에서 분리합니다. 실제 휴대폰에서 확인하지 않았습니다.
+
 ## [v2.1.7] - 2026-11-24
 
 - 화면 분리(4단계) 9차(계획·통계 노선도)입니다. `index.html`의 [4.5] 동적 관광 일러스트 노선도·위성 궤적 뷰어·공용 여행 좌표 해석(`CITY_GEO_COORDS`·`getTripGeoData`, 약 1,000줄)을 `js/presentation/route-map.js`(`SulsulTravel.RouteMap`)로 옮겼습니다.

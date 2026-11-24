@@ -15,7 +15,7 @@ const server=http.createServer((req,res) => {
 (async() => {
   fs.mkdirSync(output,{recursive:true});await new Promise(resolve => server.listen(0,'127.0.0.1',resolve));
   const browser=await chromium.launch({headless:true,...(process.env.CHROME_PATH ? {executablePath:process.env.CHROME_PATH} : {})}),results=[];let page;
-  async function check(name,operation){try{results.push({name,passed:true,details:await operation()});}catch(error){results.push({name,passed:false,error:error.message});}finally{console.log(`${results.at(-1).passed ? 'PASS' : 'FAIL'} ${name}`);if(page)await page.evaluate(() => {closeModal('modal-version-history',true);hidePlanBlockDetail({restoreScroll:false});});}}
+  async function check(name,operation){try{results.push({name,passed:true,details:await operation()});}catch(error){results.push({name,passed:false,error:error.message});}finally{console.log(`${results.at(-1).passed ? 'PASS' : 'FAIL'} ${name}`);if(page)await page.evaluate(() => {closeModal('modal-version-history',true);SulsulTravel.PlanBlocks.hideDetail({restoreScroll:false});});}}
   try{
     const context=await browser.newContext({viewport:{width:390,height:844},timezoneId:'Asia/Seoul',serviceWorkers:'block'}),errors=[];page=await context.newPage();
     page.setDefaultTimeout(8000);page.on('pageerror',error => errors.push(error.message));
@@ -31,7 +31,7 @@ const server=http.createServer((req,res) => {
     });await settle();
     for(const width of [320,360,390,430])for(const view of ['hub','workspace']){
       await check(`${width}px ${view} 버전·브랜드·설정·이동 버튼 실제 노출과 터치 경계`,async() => {
-        await page.setViewportSize({width,height:844});await page.evaluate(view => {if(view==='hub')switchView('hub');else{openTripWorkspace('header-live');if(view==='detail')openPlanBlock(0);}},view);await settle();
+        await page.setViewportSize({width,height:844});await page.evaluate(view => {if(view==='hub')switchView('hub');else{openTripWorkspace('header-live');if(view==='detail')SulsulTravel.PlanBlocks.openBlock(0);}},view);await settle();
         const geometry=await page.evaluate(() => {
           const header=document.querySelector('.companion-app-header'),badge=document.getElementById('app-ver-badge'),brand=header.querySelector('h1');
           const buttons=[badge,document.getElementById('header-btn-analytics'),header.querySelector('button[onclick="openSettingsModal()"]'),document.getElementById(State.currentView==='hub' ? 'header-btn-create-trip' : 'header-btn-back-hub')];
@@ -48,7 +48,7 @@ const server=http.createServer((req,res) => {
         assert.ok(geometry.buttons[0].fontSize>=10,'버전 글자는 최소 10px');
         await page.locator('#app-ver-badge').click();await settle();
         assert.equal(await page.locator('#modal-version-history').evaluate(element => element.classList.contains('sheet-closed')),false,'버전 배지가 이력을 엽니다.');
-        await page.evaluate(view => {closeModal('modal-version-history',true);if(view==='workspace'){switchTab('plan');openPlanPresentation('timeline');}},view);await settle();
+        await page.evaluate(view => {closeModal('modal-version-history',true);if(view==='workspace'){switchTab('plan');SulsulTravel.PlanBlocks.openPresentation('timeline');}},view);await settle();
         await page.evaluate(() => window.scrollTo({top:250,behavior:'instant'}));await settle();
         geometry.scrolled=await page.evaluate(() => {
           const badge=document.getElementById('app-ver-badge'),rect=badge.getBoundingClientRect(),header=document.querySelector('.companion-app-header').getBoundingClientRect();
@@ -61,7 +61,7 @@ const server=http.createServer((req,res) => {
     }
     for(const width of [320,360,390,430]){
       await check(`${width}px 상세 화면 독립 헤더·하단 행동 경계와 돌아온 버전 접근`,async() => {
-        await page.setViewportSize({width,height:844});await page.evaluate(() => {openTripWorkspace('header-live');openPlanBlock(0);});await settle();
+        await page.setViewportSize({width,height:844});await page.evaluate(() => {openTripWorkspace('header-live');SulsulTravel.PlanBlocks.openBlock(0);});await settle();
         const geometry=await page.evaluate(() => {
           const container=document.getElementById('plan-block-detail-container'),buttons=[...document.querySelectorAll('.plan-detail-header button,.plan-detail-actions button')];
           return {contentOverflow:container.scrollWidth>container.clientWidth,width:innerWidth,height:innerHeight,buttons:buttons.map(button => {const rect=button.getBoundingClientRect();return {name:button.getAttribute('aria-label')||button.title||button.textContent.trim(),width:rect.width,height:rect.height,left:rect.left,right:rect.right,top:rect.top,bottom:rect.bottom,hittable:button.contains(document.elementFromPoint(rect.left+rect.width/2,rect.top+rect.height/2))};})};
@@ -76,7 +76,7 @@ const server=http.createServer((req,res) => {
     }
     for(const width of [768,1280]){
       await check(`${width}px 데스크톱 스크롤 시 내비게이션은 헤더 아래에서 클릭 가능`,async() => {
-        await page.setViewportSize({width,height:844});await page.evaluate(() => {openTripWorkspace('header-live');switchTab('plan');openPlanPresentation('timeline');});await settle();
+        await page.setViewportSize({width,height:844});await page.evaluate(() => {openTripWorkspace('header-live');switchTab('plan');SulsulTravel.PlanBlocks.openPresentation('timeline');});await settle();
         await page.evaluate(() => window.scrollTo({top:400,behavior:'instant'}));await settle();
         const geometry=await page.evaluate(() => {
           const header=document.querySelector('.companion-app-header').getBoundingClientRect(),nav=document.getElementById('companion-main-nav').getBoundingClientRect();

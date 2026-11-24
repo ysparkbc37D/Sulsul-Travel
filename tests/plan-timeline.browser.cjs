@@ -46,7 +46,7 @@ async function check(name,run){try{results.push({name,passed:true,details:await 
   const stored=id=>page.evaluate(async id=>JSON.parse(await TripRepository.readRaw()).find(t=>t.id===id),id);
   const isOpen=id=>page.evaluate(id=>{const m=document.getElementById(id);return !!m&&!m.classList.contains('sheet-closed');},id);
   const closeAll=()=>page.evaluate(()=>document.querySelectorAll('.sheet-container').forEach(e=>{if(!e.classList.contains('sheet-closed'))closeModal(e.id,true);}));
-  const show=id=>page.evaluate(id=>{document.querySelectorAll('.sheet-container').forEach(e=>{if(!e.classList.contains('sheet-closed'))closeModal(e.id,true);});State.allTimelinesExpanded=false;openTripWorkspace(id);switchTab('plan');switchPlanSubTab('timeline');},id);
+  const show=id=>page.evaluate(id=>{document.querySelectorAll('.sheet-container').forEach(e=>{if(!e.classList.contains('sheet-closed'))closeModal(e.id,true);});State.allTimelinesExpanded=false;openTripWorkspace(id);switchTab('plan');SulsulTravel.PlanBlocks.switchSubTab('timeline');},id);
   try{
     await page.goto(origin+'/',{waitUntil:'networkidle'});
     await page.waitForFunction(()=>window.SulsulShell?.started);

@@ -74,7 +74,7 @@ async function check(name,run){try{results.push({name,passed:true,details:await 
     });
 
     await check('예약 가이드의 준비물 체크가 저장되고, 예약 가이드의 준비물 추가가 창을 연다',async()=>{
-      await page.evaluate(()=>{switchTab('plan');switchPlanSubTab('booking');});
+      await page.evaluate(()=>{switchTab('plan');SulsulTravel.PlanBlocks.switchSubTab('booking');});
       const box=page.locator('#booking-cards-container input[data-on-change="checklist.toggle"][data-index="0"]');
       await box.scrollIntoViewIfNeeded();await box.click();
       assert.deepEqual((await stored()).map(item=>item.checked),[true,true,true],'예약 가이드에서 체크');
@@ -128,7 +128,7 @@ async function check(name,run){try{results.push({name,passed:true,details:await 
     });
 
     await check('화면의 모든 동작 이름이 등록되어 있고, 등록되지 않은 이름은 오류로 드러난다',async()=>{
-      await page.evaluate(()=>{switchTab('plan');switchPlanSubTab('booking');});
+      await page.evaluate(()=>{switchTab('plan');SulsulTravel.PlanBlocks.switchSubTab('booking');});
       const fromBooking=await page.evaluate(()=>[...document.querySelectorAll('[data-on-click],[data-on-change],[data-on-input]')].map(e=>e.dataset.onClick||e.dataset.onChange||e.dataset.onInput));
       await openChecklist();
       await page.click('#checklist-container [data-on-click="checklist.details"][data-index="0"]');

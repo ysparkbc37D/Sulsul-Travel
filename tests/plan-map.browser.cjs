@@ -76,7 +76,7 @@ async function check(name, run) {
     document.querySelectorAll('.sheet-container').forEach(e => { if (!e.classList.contains('sheet-closed')) closeModal(e.id, true); });
     openTripWorkspace(id);
     switchTab('plan');
-    switchPlanSubTab('map');
+    SulsulTravel.PlanBlocks.switchSubTab('map');
   }, id);
 
   try {

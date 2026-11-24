@@ -114,7 +114,7 @@ const server=http.createServer((req,res) => {
     await page.setViewportSize({width:390,height:844});
     for(const theme of ['modern','deepblack','lightgray']) {
       await check(`${theme} 주요 본문·보조 글자 실제 대비 4.5 이상`,async() => {
-        await page.evaluate(theme => {setTheme(theme);switchTab('plan');openPlanPresentation('overview');},theme);await settle();
+        await page.evaluate(theme => {setTheme(theme);switchTab('plan');SulsulTravel.PlanBlocks.openPresentation('overview');},theme);await settle();
         const plan=await contrast(page,['.companion-muted','.companion-block-meta > span','.companion-block-summary','.companion-block-bottom > span','.companion-metrics > span','.companion-section-title > span']);
         await page.evaluate(() => switchTab('today'));await settle();
         const today=await contrast(page,['.companion-next h3','.companion-next > p','.companion-day-picker small','.companion-spot h4','.companion-spot > p','.companion-spot-time time','.companion-preview']);
@@ -126,14 +126,14 @@ const server=http.createServer((req,res) => {
     await check('탭 사이 이동 후 선택 날짜와 스크롤 복원',async() => {
       await page.evaluate(() => {setTheme('modern');switchTab('today');selectCompanionTodayDay(2);});await settle();
       await page.evaluate(() => window.scrollTo({top:330,behavior:'instant'}));await settle();const todayY=await page.evaluate(() => scrollY);assert.ok(todayY>=300);
-      await page.evaluate(() => {switchTab('plan');openPlanPresentation('timeline');});await settle();
+      await page.evaluate(() => {switchTab('plan');SulsulTravel.PlanBlocks.openPresentation('timeline');});await settle();
       await page.evaluate(() => window.scrollTo({top:240,behavior:'instant'}));await settle();const planY=await page.evaluate(() => scrollY);
       await page.evaluate(() => switchTab('today'));await settle();
       const restored=await page.evaluate(() => ({scroll:scrollY,day:State.activeTodayDayIndex}));assert.ok(Math.abs(restored.scroll-todayY)<2);assert.equal(restored.day,2);
       await page.evaluate(() => switchTab('plan'));await settle();assert.ok(Math.abs(await page.evaluate(() => scrollY)-planY)<2);return {todayY,planY,restored};
     });
     await check('허브와 다른 여행을 거친 뒤 탭·날짜·계획 보기·스크롤 복원',async() => {
-      await page.evaluate(() => {openPlanPresentation('timeline');switchTab('journal');SulsulTravel.JournalTab.selectDay(3);});await settle();
+      await page.evaluate(() => {SulsulTravel.PlanBlocks.openPresentation('timeline');switchTab('journal');SulsulTravel.JournalTab.selectDay(3);});await settle();
       await page.evaluate(() => window.scrollTo({top:130,behavior:'instant'}));await settle();const before=await page.evaluate(() => scrollY);
       await page.evaluate(() => {switchView('hub');openTripWorkspace('refresh-b');});await settle();
       await page.evaluate(() => {switchTab('today');selectCompanionTodayDay(1);switchView('hub');openTripWorkspace('refresh-a');});await settle();
@@ -143,7 +143,7 @@ const server=http.createServer((req,res) => {
     await check('모바일 핵심 탭 전체 문서 가로 넘침 없음',async() => {
       const geometries=[];
       for(const width of [320,360,390,430])for(const tab of ['plan','today','journal']) {
-        await page.setViewportSize({width,height:844});await page.evaluate(tab => {switchTab(tab);if(tab==='plan')openPlanPresentation('overview');},tab);await settle();
+        await page.setViewportSize({width,height:844});await page.evaluate(tab => {switchTab(tab);if(tab==='plan')SulsulTravel.PlanBlocks.openPresentation('overview');},tab);await settle();
         const overflow=await page.evaluate(() => document.documentElement.scrollWidth>innerWidth);geometries.push({width,tab,overflow});assert.equal(overflow,false,`${width} ${tab}`);
       }
       return geometries;

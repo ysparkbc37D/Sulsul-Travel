@@ -12,6 +12,7 @@ const utilitiesCss = readFileSync(new URL('../css/utilities.css', import.meta.ur
 const kbTravel = readFileSync(new URL('../kb-travel.js', import.meta.url), 'utf8');
 const checklistTab = readFileSync(new URL('../js/presentation/checklist-tab.js', import.meta.url), 'utf8');
 const planGuides = readFileSync(new URL('../js/presentation/plan-guides.js', import.meta.url), 'utf8');
+const planBlocks = readFileSync(new URL('../js/presentation/plan-blocks.js', import.meta.url), 'utf8');
 const planTimeline = readFileSync(new URL('../js/presentation/plan-timeline.js', import.meta.url), 'utf8');
 const planMap = readFileSync(new URL('../js/presentation/plan-map.js', import.meta.url), 'utf8');
 const routeMap = readFileSync(new URL('../js/presentation/route-map.js', import.meta.url), 'utf8');
@@ -49,12 +50,12 @@ test('travel-stage navigation and reviewed RePlan are wired', () => {
   }
   assert.match(html, /function applyPendingReplan\(/);
   assert.match(html, /protectedSpotsMatch/);
-  assert.match(html, /function inferPlanBlockPlace\(day\)/);
-  assert.match(html, /function submitPlanBlockEdit\(\{ regenerate = false \} = \{\}\)/);
-  assert.match(html, /function openActivePlanBlockReplan\(\)/);
+  assert.match(planBlocks, /function inferPlace\(day\)/);
+  assert.match(planBlocks, /async function submitEdit\(\{ regenerate = false \} = \{\}\)/);
+  assert.match(planBlocks, /function openActiveReplan\(\)/);
   assert.match(html, /range:\$\{dayIdx\}:\$\{rangeEndIdx\}/);
   assert.match(html, /window\.addEventListener\('popstate'/);
-  assert.match(html, /day\.loc, day\.cityName, day\.city, day\.route, day\.title/);
+  assert.match(planBlocks, /day\.loc, day\.cityName, day\.city, day\.route, day\.title/);
   assert.match(sw, /const CACHE_PREFIX = 'st-shell-'/);
 });
 
@@ -86,11 +87,11 @@ test('AI itinerary approval updates day identity, rebuilds initial plan blocks, 
 
 test('big plan edits can trigger scoped AI regeneration without a free-travel fallback', () => {
   assert.match(html, /id=["']btn-save-plan-block-ai["']/);
-  assert.match(html, /submitPlanBlockEdit\(\{ regenerate: true \}\)/);
+  assert.match(html, /data-on-click="planBlocks\.submitEdit" data-regenerate="true"/);
   assert.match(html, /function startPlanBlockAiRegeneration\(blockId, reason\)/);
   assert.match(html, /function buildAiReplanPrompt\(/);
   assert.match(html, /사용자가 편집하고 저장한 큰 계획/);
-  assert.match(companion, /regeneratePlanBlockByIndex\(\$\{index\}\)/);
+  assert.match(companion, /data-on-click="planBlocks\.regenerateByIndex"/);
   assert.doesNotMatch(html, /countriesStr \? splitTravelList\(countriesStr\) : \['자유여행'\]/);
   assert.doesNotMatch(html, /State\.createTripSelectedConcepts\.slice\(\)\s*:\s*\['자유여행'\]/);
 });

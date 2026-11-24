@@ -196,6 +196,13 @@ flowchart TD
 - **검증**: 단위 257개(새 `trip-store.test.mjs` 8개 — 느린 비동기 백엔드에서 연달아 맡긴 저장이 모두 남는지 포함), 브라우저 회귀 27종, `tools-verify.ps1` 통과. 저장 실패를 일부러 만드는 브라우저 검사 세 곳은 결과를 저장보다 먼저 읽어, 실패 경로를 검사하지 않은 채 통과하고 있었다. 저장을 기다리게 고쳤다(실록 112호).
 - **남은 3b(2차)**: 여행 자료를 IndexedDB로 옮기는 일. 백엔드를 `TripStore` 아래에서 바꾸고, 원문 보관 → 이전 → 다시 읽어 대조 → 채택 순서로 옮긴다. 옛 문서는 다른 창의 구버전이 덮어쓰지 못하게 표시만 바꿔 남긴다. 다른 창 충돌 판정은 문서 원문 비교 대신 저장소의 버전 번호로 한다. 브라우저 검사의 `localStorage` 직접 읽기를 저장소 읽기로 바꾸는 작업이 함께 필요하다.
 
+## 26. 4단계 진행 결과 (v2.1.8) — 화면 분리 10차: 계획 탭 4차(큰 계획·구간 상세·서브탭)
+
+- **옮긴 것**: `index.html`의 큰 계획 구조·구간 상세·편집 모달·`switchPlanSubTab`(약 350줄)과 `companion-ui.js`의 `setPlanPresentation`·`openPlanPresentation`을 `js/presentation/plan-blocks.js`(`SulsulTravel.PlanBlocks`)로 옮겼다. 인라인 처리기 25곳 → `planBlocks.*`·`shell.closeModal`(UI01 489 → 464곳, `index.html` 334 → 314곳, `companion-ui.js` 82 → 77곳, 새 파일 HTML01 0곳).
+- **검증에서 고친 것**: 1일 구간 시작일 편집 시 잠긴 종료일이 옛 날짜로 저장되어 상세 헤더가 `4.15 – 4.10`으로 어긋나던 문제, 편집 저장 뒤 워크스페이스 상단 도시 수(`#stat-ws-places`)와 일정표가 갱신되지 않던 문제, 활성 여행이 없을 때 `buildBlocks`가 `TypeError`를 던지던 문제, 미지 서브탭 ID 전달 시 4개 뷰가 모두 숨겨지고 서브탭·상태 칩에 `aria-pressed`가 없던 문제(실록 123호). 네 가지 모두 v2.1.7 코드에서 재현한 뒤 고쳤다.
+- **계획 탭 분리 완료**: 예약·도시 가이드(v2.1.4), 일정표(v2.1.5), 지도(v2.1.6), 노선도 모달(v2.1.7), 큰 계획·구간 상세·서브탭(v2.1.8). (`renderCompanionPlan`·`renderCompanionDetail` 마크업은 `companion-ui.js` 분리 시 함께 정리한다.)
+- **다음**: 허브·평생 통계(복수 릴리스 분할) → 설정·공유·설치 → 여행 만들기·일정 튜닝 → 나머지 셸 구역 → `companion-ui.js` 분리.
+
 ## 25. 4단계 진행 결과 (v2.1.7) — 화면 분리 9차: 노선도 모달과 전역 3종 제거
 
 - **옮긴 것**: `index.html`의 [4.5] 동적 관광 일러스트 노선도·위성 궤적 뷰어·공용 좌표 해석(`CITY_GEO_COORDS`·`getTripGeoData`, 약 1,000줄)을 `js/presentation/route-map.js`(`SulsulTravel.RouteMap`)로 옮겼다. 전역 `__routeMapIsGlobalAllTrips`·`__routeMapFocusCountry`·`__globalTripBoundsMap` 3종을 모듈 변수로 옮겨 `GLOBAL01` 허용 목록에서 지웠다(전역 8 → 5개). 인라인 처리기 17곳 → `routeMap.*`·`shell.closeModal`(UI01 506 → 489곳, HTML01 `index.html` 233 → 188곳, 새 파일 0곳).

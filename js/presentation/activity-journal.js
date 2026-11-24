@@ -184,8 +184,8 @@ function refreshActivitySurfaces({rememberJournal=true}={}) {
   const refresh=(name,run)=>{try{run();}catch(error){failed.push(name);console.warn(`[기록 화면 갱신] ${name}`,error);}};
   // 일정 기록 저장으로 하루 회고 입력창을 다시 그리기 전에 미저장 글을 먼저 기억한다.
   if(rememberJournal&&SulsulTravel.JournalTab)refresh('하루 회고 초안',()=>SulsulTravel.JournalTab.rememberDraft());
-  refresh('시간표',()=>SulsulTravel.PlanTimeline.render());refresh('큰 계획',()=>renderBigPlanTab());refresh('오늘',()=>renderTodayTab());
-  if(State.activePlanBlockId)refresh('구간 상세',()=>renderPlanBlockDetail());
+  refresh('시간표',()=>SulsulTravel.PlanTimeline.render());refresh('큰 계획',()=>SulsulTravel.PlanBlocks.render());refresh('오늘',()=>renderTodayTab());
+  if(State.activePlanBlockId)refresh('구간 상세',()=>SulsulTravel.PlanBlocks.renderDetail());
   refresh('여행 기록',()=>SulsulTravel.JournalTab.render());
   refresh('기록 통계',()=>{
     // 작업 화면 첫 렌더와 같은 공통 기록 모델로 센다(빈 항목 제외).

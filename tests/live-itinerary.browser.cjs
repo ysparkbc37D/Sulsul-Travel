@@ -285,10 +285,10 @@ function content(trip) {
       trip = await verify(); assert.equal(!!trip.days[0].spots.find(spot => spot.id === 'record').deferred, false);
 
       // 똑같은 저장 배열이 거점 상세와 오늘 화면 양쪽에서 유지되어야 한다.
-      await page.evaluate(() => openPlanBlock(0));
+      await page.evaluate(() => SulsulTravel.PlanBlocks.openBlock(0));
       await api.assertDom(0, pendingIds(trip.days[0]), '#plan-block-detail-container');
       await api.assertDom(1, pendingIds(trip.days[1]), '#plan-block-detail-container');
-      await page.evaluate(() => hidePlanBlockDetail({ restoreScroll: false }));
+      await page.evaluate(() => SulsulTravel.PlanBlocks.hideDetail({ restoreScroll: false }));
       await api.selectDay(0);
       const beforeHistory = await api.snapshot();
       await page.locator('#today-overview-container [data-live-toolbar="history"]').click();

@@ -2,7 +2,7 @@
  * index.html 인라인 스크립트의 [4.5] 구역(약 1,000줄)을 옮기고 전역 상태 3종(__routeMapIsGlobalAllTrips·__routeMapFocusCountry·__globalTripBoundsMap)을
  * 모듈 안 변수로 옮겼다.
  * 셸 함수(getActiveTrip·resolveTripPack·isYunnanTrip·isSouthAmericaTrip·escapeHtml·openModal·closeModal·openTripWorkspace·switchView·switchTab·
- * switchPlanSubTab·navigateToInteractiveMap·showToast)와 전역 State·L·KB_TRAVEL·SulsulGeo는 부를 때 찾는다.
+ * navigateToInteractiveMap·showToast)와 전역 State·L·KB_TRAVEL·SulsulGeo는 부를 때 찾는다.
  * 여행 자료 값(국가·도시·장소·제목·커버 이모지)은 모두 escapeHtml 또는 textContent로 넣는다.
  * 동작은 data-on-click="routeMap.*"로 잇는다. 불러올 때는 등록만 하고 문서를 건드리지 않는다. */
 (function (root) {
@@ -328,7 +328,7 @@
     } else {
       switchTab('plan');
     }
-    switchPlanSubTab('timeline');
+    T.PlanBlocks.switchSubTab('timeline');
     setTimeout(() => {
       const trip = getActiveTrip();
       const days = trip?.days || [];
