@@ -11,6 +11,7 @@ const companionCss = readFileSync(new URL('../css/companion.css', import.meta.ur
 const utilitiesCss = readFileSync(new URL('../css/utilities.css', import.meta.url), 'utf8');
 const kbTravel = readFileSync(new URL('../kb-travel.js', import.meta.url), 'utf8');
 const checklistTab = readFileSync(new URL('../js/presentation/checklist-tab.js', import.meta.url), 'utf8');
+const planGuides = readFileSync(new URL('../js/presentation/plan-guides.js', import.meta.url), 'utf8');
 const packSa = readFileSync(new URL('../js/destinations/pack-south-america.js', import.meta.url), 'utf8');
 const packageMetadata = JSON.parse(readFileSync(new URL('../package.json', import.meta.url), 'utf8'));
 const backupUi = readFileSync(new URL('../js/presentation/travel-backup-ui.js', import.meta.url), 'utf8');
@@ -380,8 +381,12 @@ test('v1.8.4 6 key UI/UX convenience features remain available', () => {
   // 1. D-Day time-attack booking dashboard
   assert.match(html, /booking-timeline-dashboard/);
   assert.match(html, /booking-progress-badge/);
-  assert.match(html, /toggleBookingGuideCompleted/);
-  assert.match(html, /setBookingGuideFilter/);
+  // v2.1.4: 예약 가이드는 js/presentation/plan-guides.js로 옮겼다.
+  assert.match(planGuides, /function toggleBooking[(]/);
+  assert.match(planGuides, /function setBookingFilter[(]/);
+  assert.match(html, /data-on-click="guides.bookingFilter"/);
+  // v1.9.0 공개 경계: 개인 일정의 고정 날짜가 화면 코드에 다시 들어오지 않는다(v2.1.4에서 도시 가이드 배너 제거).
+  assert.doesNotMatch(planGuides + html, /10\/1[0-9]~10\/2[0-9]|10\/28~29|귀국 전날\(10\/29\)/);
 
   // 2. High-altitude profile & care card
   assert.match(html, /getDayAltitudeAndOutfitInfo/);

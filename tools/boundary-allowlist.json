@@ -29,15 +29,15 @@
     "__companionHudTimer": "오늘 화면 HUD 갱신 타이머의 중복 등록 방지"
   },
   "html": {
-    "index.html": 316,
+    "index.html": 284,
     "js/presentation/companion-ui.js": 96,
     "js/presentation/live-itinerary-ui.js": 3,
     "js/presentation/activity-journal.js": 1,
     "js/presentation/moment-journal.js": 1
   },
-  "_inlineHandlers": "UI01 기준값(v2.0.9 658곳 → v2.1.0 643곳 → v2.1.1 594곳 → v2.1.2 564곳 → v2.1.3 539곳). 4단계 화면 분리 때 화면마다 data-on-*로 옮기며 낮춘다. 늘리지 않는다",
+  "_inlineHandlers": "UI01 기준값(v2.0.9 658곳 → v2.1.0 643곳 → v2.1.1 594곳 → v2.1.2 564곳 → v2.1.3 539곳 → v2.1.4 534곳). 4단계 화면 분리 때 화면마다 data-on-*로 옮기며 낮춘다. 늘리지 않는다",
   "inlineHandlers": {
-    "index.html": 384,
+    "index.html": 379,
     "js/presentation/activity-journal.js": 5,
     "js/presentation/collaboration-review.js": 4,
     "js/presentation/companion-ui.js": 82,

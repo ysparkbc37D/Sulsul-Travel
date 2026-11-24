@@ -86,7 +86,7 @@ const fixture=()=>({id:'structural-trip',title:'구조 검증 가상 여행',sta
     const captureToasts=page=>page.evaluate(()=>{window.structuralToasts=[];const original=window.showToast;window.showToast=(message,...rest)=>{window.structuralToasts.push(String(message));return original(message,...rest);};});
     await check('명령 경계로 옮긴 셸 저장은 실패하면 여행과 저장본을 바꾸지 않고 성공을 알리지 않는다',async api=>{
       await api.seed(ledgerTrip());await captureToasts(api.page);const before=await api.state();await api.quota(true);
-      await api.page.evaluate(async ()=>{await SulsulTravel.ChecklistTab.checkAll(true);await SulsulTravel.BudgetUI.addCurrency('EUR');await toggleBookingGuideCompleted('guide-synthetic');await duplicateTrip('structural-trip');});
+      await api.page.evaluate(async ()=>{await SulsulTravel.ChecklistTab.checkAll(true);await SulsulTravel.BudgetUI.addCurrency('EUR');await SulsulTravel.PlanGuides.toggleBooking('guide-synthetic');await duplicateTrip('structural-trip');});
       assert.deepEqual(await api.state(),before);
       const failed=await api.page.evaluate(()=>window.structuralToasts);
       assert.equal(failed.some(message=>/지갑이 추가되었습니다|복제되었습니다/.test(message)),false,failed.join(' / '));

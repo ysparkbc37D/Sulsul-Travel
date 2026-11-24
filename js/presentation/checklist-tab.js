@@ -152,7 +152,8 @@
   // 준비물 상태는 준비물 화면과 계획의 예약 가이드 두 곳에 보인다. 저장 뒤 둘 다 다시 그린다.
   function refreshViews() {
     render();
-    if (document.getElementById('booking-guides-container') && typeof renderBookingGuides === 'function') renderBookingGuides();
+    // 예약 가이드가 열려 있으면 완료 수·줄긋기도 다시 그린다. (v2.1.4 전에는 없는 id를 확인해 다시 그리지 않았다.)
+    if (!document.getElementById('subtab-view-booking')?.classList.contains('hidden')) root.SulsulTravel.PlanGuides?.renderBookings();
   }
 
   function setViewMode(mode) {

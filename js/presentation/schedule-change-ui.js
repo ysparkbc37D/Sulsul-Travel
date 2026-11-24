@@ -24,7 +24,7 @@ function refreshScheduleViews(){
     if(State.activeTab==='plan'&&document.getElementById('tab-content-plan').dataset.presentation==='timeline'&&!detailOpen)renderTimelineTab();
     if(detailOpen&&State.activePlanBlockId)renderPlanBlockDetail();
     if(State.activeTab==='plan'&&State.planSubTab==='map'){initOrUpdateLeafletMap();}
-    if(State.activeTab==='plan'&&State.planSubTab==='cityguide')renderCityGuides();
+    if(State.activeTab==='plan'&&State.planSubTab==='cityguide')SulsulTravel.PlanGuides.renderCityGuides();
     window.scrollTo({top:y,behavior:'instant'});if(detail)detail.scrollTop=detailY;
     requestAnimationFrame(()=>{window.scrollTo({top:y,behavior:'instant'});if(detail)detail.scrollTop=detailY;});
   }catch(error){console.warn('[일정 화면 갱신]',error);showToast('변경은 저장했습니다. 화면을 다시 열어 확인해 주세요.');}

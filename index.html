@@ -26,7 +26,8 @@
         typeof window.SulsulTravel?.ExchangeUI?.open === 'function' &&
         typeof window.SulsulTravel?.BudgetUI?.openInitialFunds === 'function' &&
         typeof window.SulsulTravel?.ExpenseAnalytics?.open === 'function' &&
-        typeof window.SulsulTravel?.ExpenseEditor?.openAdd === 'function';
+        typeof window.SulsulTravel?.ExpenseEditor?.openAdd === 'function' &&
+        typeof window.SulsulTravel?.PlanGuides?.renderBookings === 'function';
       shell.reload = () => {if(!shell.reloading){shell.reloading=true;location.reload();}};
       shell.canReload = () => {
         if(!shell.started)return true;
@@ -145,17 +146,17 @@
   </script>
 
   <!-- PWA Meta & Icons -->
-  <link rel="manifest" href="manifest.webmanifest?v=2.1.3">
+  <link rel="manifest" href="manifest.webmanifest?v=2.1.4">
   <meta name="theme-color" content="#F7F5F0">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <meta name="apple-mobile-web-app-title" content="술술트래블">
-  <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192-v115.png?v=2.1.3">
-  <link rel="icon" type="image/png" sizes="32x32" href="favicon.png?v=2.1.3">
+  <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192-v115.png?v=2.1.4">
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon.png?v=2.1.4">
   <link rel="shortcut icon" href="favicon.ico">
-  <link rel="apple-touch-icon" sizes="180x180" href="icons/apple-touch-icon-v115.png?v=2.1.3">
-  <link rel="apple-touch-icon" href="icons/apple-touch-icon-v115.png?v=2.1.3">
+  <link rel="apple-touch-icon" sizes="180x180" href="icons/apple-touch-icon-v115.png?v=2.1.4">
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon-v115.png?v=2.1.4">
 
   <!-- Google Fonts: Great Vibes, Dancing Script (Cursive Calligraphy), Cormorant Garamond, Noto Serif KR, Playfair Display -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -163,7 +164,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Great+Vibes&family=Cormorant+Garamond:wght@600;700;800&family=Noto+Serif+KR:wght@500;600;700;900&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
 
   <!-- Local Utilities Bundle (CDN fallback & tailwind utilities) -->
-  <link rel="stylesheet" href="css/utilities.css?v=2.1.3" integrity="sha384-HMVB4SH6xwwGITkNyT8ARmHegAYSuTMocPGl4bpl0JywMIe2PqYrUxqZOgEuZjmP">
+  <link rel="stylesheet" href="css/utilities.css?v=2.1.4" integrity="sha384-HMVB4SH6xwwGITkNyT8ARmHegAYSuTMocPGl4bpl0JywMIe2PqYrUxqZOgEuZjmP">
   <link rel="stylesheet" href="vendor/fontawesome/css/all.min.css" integrity="sha384-t1nt8BQoYMLFN5p42tRAtuAAFQaCQODekUVeKKZrEnEyp4H2R0RHFz0KWpmj7i8g">
 
   <!-- Leaflet Map CSS & JS -->
@@ -1505,66 +1506,67 @@
     }
   </style>
 
-  <link rel="stylesheet" href="css/companion.css?v=2.1.3" integrity="sha384-Syant7HB0IYUZUU2saRSYUDkM71WKVuK2JtHM+kAluFdw3VvWv9gSglgJh4utHv/">
-  <link rel="stylesheet" href="css/companion-refresh.css?v=2.1.3" integrity="sha384-2KIp4VI8qsP6dGnz0cm/vehjLjr6GxpZ9yWTbbIXBPWi25XHg6XUOtNbp7W8KMd3">
-  <link rel="stylesheet" href="css/live-itinerary.css?v=2.1.3" integrity="sha384-e/V9wyJ/Gi6baSHcWzBeNGjdn/eKDQIvKWyiYmByLE7C7nYJaQOA+GshtUMcCR72">
-  <link rel="stylesheet" href="css/expense-mobile.css?v=2.1.3" integrity="sha384-QZFtKrU/YvkTaEKv0oJ2ZQi1Zry8RgEFaHzTckwuPFsMDDmadYBH7UuYgTVS7281">
-  <link rel="stylesheet" href="css/moment-journal.css?v=2.1.3" integrity="sha384-g1EihgfyPDJ5o5eWSsQgT1WDTRKDtUfzVatlx6T/t+DhApDBY8dznSrwmelasv91">
-  <script src="js/domain/trip-adapter.js?v=2.1.3" integrity="sha384-JHU/NkAlxwR9G9/49TaFK4sTvg9xKGsSVd3re8rLivtiXcSNdnQA9gRIfvVWUtG7"></script>
-  <script src="js/domain/ai-draft-validation.js?v=2.1.3" integrity="sha384-OTRAiX7YaOiiNrpMWDjkOyH0bTbbL3KrGwGp1RmIkgvd15pErNTTKVTJkoesmpfi"></script>
-  <script src="js/domain/live-itinerary.js?v=2.1.3" integrity="sha384-cwMH5i2F5Mve7Z9cKeWrP7uLU5plcu6c7xvTf4Lyz3Xkb6GlNCI14lnEWzw46cVg"></script>
-  <script src="js/presentation/live-itinerary-ui.js?v=2.1.3" integrity="sha384-SLjn2QhNBI6VfrG3siiRZqfs51VnmqyRCTMGjMN25fIyHhYwf4LnECXOOiQ4arog"></script>
-  <script src="js/presentation/live-itinerary-bridge.js?v=2.1.3" integrity="sha384-lRoX8rvtVNC3rl6v9tCVjTLCSBjLmTH3EhNiq6OPizV+6GvspGEUIpH00HoPTgEn"></script>
-  <script src="js/domain/schedule-change.js?v=2.1.3" integrity="sha384-v7zQ2iSY9DIrsztq758NvV0o6vbsguJn70NviXT6itT6YcuNaCvSW2beDogcMbD7"></script>
-  <script src="js/presentation/schedule-change-ui.js?v=2.1.3" integrity="sha384-gOcWGnLVFR2omdZ0auRzZsmihk9RXi9hfoitu+RvbRV//kOtuILV+xDhdu0ImRgb"></script>
-  <script src="js/domain/spot-realignment.js?v=2.1.3" integrity="sha384-gCFPNcD1aD3UegqTLtFPCU7Xqm7CtRN0yjQx2QnWe1ee0i3cZu8pzZic7YzBJLKt"></script>
-  <script src="js/presentation/spot-realignment-ui.js?v=2.1.3" integrity="sha384-GKlSQQKluvxcnRhJmQVQL4lZIFXbqf8ac/0BnxPiWNWcLjFJWYx/IZU3+5fZI7dk"></script>
-  <script src="js/domain/travel-records.js?v=2.1.3" integrity="sha384-qhkfkF1xKTuPtBvsB5Gwpz631xTkyy2tS1BU9Hixd2L1t+oobsXBMJnFv1pBHNnW"></script>
-  <script src="js/domain/travel-story.js?v=2.1.3" integrity="sha384-vjuGNDpytM6vG8SuZbKLW7qTTV1L33j48P1KSwNQnvca7uxo5EYkBM2X0IOdn/Qa"></script>
-  <script src="js/infrastructure/storage/photo-compression.js?v=2.1.3" integrity="sha384-MeOApXBzhg++Rcq/Lfjwb04/MA1U6wmwHppDgFZvKA4ZfdPC4oR2Hv1BhPFNU7Ig"></script>
-  <link rel="stylesheet" href="css/photo-optimization.css?v=2.1.3" integrity="sha384-9sgcirlxZs5tcmp/22RdH56B3bZla/q4DVH7x8W+fO8P4neR4WJMDDtQNK4WPq+/">
-  <script src="js/domain/photo-optimization.js?v=2.1.3" integrity="sha384-fpPZ4nJ383bIJaSHvmuZg+9BYd5LQ8YuVtEEMjtJnQr2Fod/mawAoB5SYMdtvBRU"></script>
-  <script src="js/infrastructure/storage/photo-cleanup.js?v=2.1.3" integrity="sha384-qPUCnJe7spP79MZLfOuzscYXTD6cW+7dzsf0xxvDip9hIj+yBvbBK6KhAouz5BC/"></script>
-  <script src="js/presentation/photo-optimization-ui.js?v=2.1.3" integrity="sha384-9QsQz7hvv3HVSOtRVjrMPr6G9w59E//utEWpshSg+awbBA4xBBcO/BGw/WhZNI8Z"></script>
-  <script src="js/infrastructure/storage/media-repository.js?v=2.1.3" integrity="sha384-q0IPoo86aU2ruB130X1HAh01dr4hpI0IAXeMVCoa7Jy/2pIB09f7WbSKPm8vowhw"></script>
-  <script src="js/infrastructure/storage/record-media-store.js?v=2.1.3" integrity="sha384-vNu5tI/i1vWsxi2/3aQYW+9zYfivBNB2ewaUTRlwhnGwRbv9dpR4bu/sqzv1D2jm"></script>
-  <script src="js/infrastructure/storage/expense-photo-repository.js?v=2.1.3" integrity="sha384-gdumvFYkJqEbRPJlK4mffCsUjPsnKCXLg6/1fLMR8kUuU1QDMeLLOYmMVSRTGNSy"></script>
-  <script src="js/presentation/companion-ui.js?v=2.1.3" integrity="sha384-UyvSw87RO90PyeLYpa6foQaePaX3jbKzZwxj8UTKf703kjMsPMwyGhvVx6zB6Pf3"></script>
-  <script src="js/domain/trip-transfer.js?v=2.1.3" integrity="sha384-VD9q1co1+bJzdS4i19rvfkQN/4KvzfnNdHUjbbucghcxzjmPim+kWF93qv5DaXSu"></script>
-  <script src="js/domain/travel-backup.js?v=2.1.3" integrity="sha384-4zE43uWlz5y3eP7g98tEL3HqAsw08/XvINQ+RhLLt4wz+cnySMWiy3Eu1m7BaBbK"></script>
-  <script src="js/presentation/travel-backup-ui.js?v=2.1.3" integrity="sha384-2MeiLmNhd6dsStzYdF4LhB3OrNegW5vZSkbRojImg5IQ9LLjrkbdcd+LP2rpbB1h"></script>
-  <script src="js/presentation/storage-health-ui.js?v=2.1.3" integrity="sha384-yhLee1WlZBu7vZL8qquRuBbYdW2RIBPIkjKQqjgT5iNw7FRWOlw7POGkpMar7IkT"></script>
-  <script src="js/presentation/trip-transfer-ui.js?v=2.1.3" integrity="sha384-alWNP5q7xJLSbe8GlkYNmHLw8G9jbXGLNSi28LERcPAb1pESASALcV/HOiFWa12h"></script>
-  <script src="js/presentation/mobile-navigation.js?v=2.1.3" integrity="sha384-qUtkWs7/ForvUZzC3hkzt5+AkF3u00dJVZ09uCkv6x93wLDQgiqYNXPLTbuHU9bz"></script>
-  <script src="js/presentation/activity-journal.js?v=2.1.3" integrity="sha384-5g6xHa7e47oPUeFBGeImpMSyv9V03hKS7XhQ5kYz8uB2CCfq6IAsTFDSS3F83F4U"></script>
-  <script src="js/presentation/moment-journal.js?v=2.1.3" integrity="sha384-r/heV0A2E+VDwxEE7joC1tw0UPcWIWSdZHDvU0rQs6c+LzY5zCEBLYiF4KIKQo5u"></script>
-  <script src="js/presentation/travel-story-ui.js?v=2.1.3" integrity="sha384-s9HZ4A1/X3tCfe4rBfB6nzEwAC7i2U1YVfradgxnQPX5X4tnFszIOPeMsLPfXnfq"></script>
-  <script src="js/config/collaboration-config.js?v=2.1.3" integrity="sha384-ipxhKB+fQ4s3OThYo3p6IWFvP6BbstXYDW6jZWWiPHB4qomo64w7r8/wRvdsi47w"></script>
-  <script src="js/infrastructure/collaboration/supabase-travel-service.js?v=2.1.3" integrity="sha384-+SDvVJ0CNqCMvFlOBOA+nfA1k6/sN6GlaKDhTQo4SgX8x3EwPXyJlvMfJj0D6Bt/"></script>
-  <script src="js/presentation/collaboration-ui.js?v=2.1.3" integrity="sha384-KvnYI6ym2/deKsOtKryWJS5tljPjqYRx67JGGgWVRNyWHEC470iPDg3+fdw0OHX0"></script>
-  <script src="js/presentation/collaboration-review.js?v=2.1.3" integrity="sha384-cbND/rT26DaIY2hR++LBuByF9L/ACu5TDl0b85EN2zsk/sTapWGm2BPQqZgN6GzI"></script>
-  <script src="js/presentation/ui-actions.js?v=2.1.3" integrity="sha384-86E6+vWuYSS4ldFWIpwfcJMnPW2jUnvL9CJGWeJHDKHEXnQsNWTDB0skpvkRBm9K"></script>
-  <script src="js/presentation/shell-actions.js?v=2.1.3" integrity="sha384-ec2zNqB35MYVfgVf448ukoOrIy6FFwUow/h7S8z0W47OS7F+tloHdR8w4+Mmw4Zy"></script>
-  <script src="js/presentation/exchange-ui.js?v=2.1.3" integrity="sha384-21MA/m/6rg1LsIZFsoAuqvhmWN3Y8seM2ZdIZHKOGEZ70CAjaeulE8mmIbSKmb1h"></script>
-  <script src="js/presentation/budget-ui.js?v=2.1.3" integrity="sha384-p+A7x64rZuPWhGaUzTMoNYo60aTQzp7UXhZzMfXABMyWqrG32b4LDPZ/SGwoEKjs"></script>
-  <script src="js/presentation/expense-analytics.js?v=2.1.3" integrity="sha384-GOo/a/N9uE2yr6Aw2Ju6sXiBr5VTaDbPb1nth/ElR4GDT1yPI0CfghLOB7DaN1Yp"></script>
-  <script src="js/presentation/expenses-tab.js?v=2.1.3" integrity="sha384-dFoKIs/B5CCctW17/wd1Kp0Kr6v9LXykyt/8yOknSEs3G9C7rnYam3VrTKE9ZaFg"></script>
-  <script src="js/presentation/journal-tab.js?v=2.1.3" integrity="sha384-Hhgx7Hra1MAb8tvQIMdF9khAJjZHC3SqpdqWrAXEVAbGHvgFLOf+bREOM6jyvFoc"></script>
-  <script src="js/presentation/checklist-tab.js?v=2.1.3" integrity="sha384-xARSN5JIjxVkI1EZOvfWCAKvl6L9RCW/uvf5FmpRTgoED72y+KY9+NYXQlaARlTc"></script>
-  <script src="js/presentation/expense-editor.js?v=2.1.3" integrity="sha384-PosLZVGcia3FlNTeQCWVw+mtgPsGaCJjpHKtrdFVXpaw5LYD+iQ/M5FYwMYy/HVY"></script>
+  <link rel="stylesheet" href="css/companion.css?v=2.1.4" integrity="sha384-Syant7HB0IYUZUU2saRSYUDkM71WKVuK2JtHM+kAluFdw3VvWv9gSglgJh4utHv/">
+  <link rel="stylesheet" href="css/companion-refresh.css?v=2.1.4" integrity="sha384-2KIp4VI8qsP6dGnz0cm/vehjLjr6GxpZ9yWTbbIXBPWi25XHg6XUOtNbp7W8KMd3">
+  <link rel="stylesheet" href="css/live-itinerary.css?v=2.1.4" integrity="sha384-e/V9wyJ/Gi6baSHcWzBeNGjdn/eKDQIvKWyiYmByLE7C7nYJaQOA+GshtUMcCR72">
+  <link rel="stylesheet" href="css/expense-mobile.css?v=2.1.4" integrity="sha384-QZFtKrU/YvkTaEKv0oJ2ZQi1Zry8RgEFaHzTckwuPFsMDDmadYBH7UuYgTVS7281">
+  <link rel="stylesheet" href="css/moment-journal.css?v=2.1.4" integrity="sha384-g1EihgfyPDJ5o5eWSsQgT1WDTRKDtUfzVatlx6T/t+DhApDBY8dznSrwmelasv91">
+  <script src="js/domain/trip-adapter.js?v=2.1.4" integrity="sha384-JHU/NkAlxwR9G9/49TaFK4sTvg9xKGsSVd3re8rLivtiXcSNdnQA9gRIfvVWUtG7"></script>
+  <script src="js/domain/ai-draft-validation.js?v=2.1.4" integrity="sha384-OTRAiX7YaOiiNrpMWDjkOyH0bTbbL3KrGwGp1RmIkgvd15pErNTTKVTJkoesmpfi"></script>
+  <script src="js/domain/live-itinerary.js?v=2.1.4" integrity="sha384-cwMH5i2F5Mve7Z9cKeWrP7uLU5plcu6c7xvTf4Lyz3Xkb6GlNCI14lnEWzw46cVg"></script>
+  <script src="js/presentation/live-itinerary-ui.js?v=2.1.4" integrity="sha384-SLjn2QhNBI6VfrG3siiRZqfs51VnmqyRCTMGjMN25fIyHhYwf4LnECXOOiQ4arog"></script>
+  <script src="js/presentation/live-itinerary-bridge.js?v=2.1.4" integrity="sha384-lRoX8rvtVNC3rl6v9tCVjTLCSBjLmTH3EhNiq6OPizV+6GvspGEUIpH00HoPTgEn"></script>
+  <script src="js/domain/schedule-change.js?v=2.1.4" integrity="sha384-v7zQ2iSY9DIrsztq758NvV0o6vbsguJn70NviXT6itT6YcuNaCvSW2beDogcMbD7"></script>
+  <script src="js/presentation/schedule-change-ui.js?v=2.1.4" integrity="sha384-pq3ua7E0lno9F58TPXELQpLfiAHIDkLhneOGxAlgoApu8LHQfnw2hGzskFv430Dp"></script>
+  <script src="js/domain/spot-realignment.js?v=2.1.4" integrity="sha384-gCFPNcD1aD3UegqTLtFPCU7Xqm7CtRN0yjQx2QnWe1ee0i3cZu8pzZic7YzBJLKt"></script>
+  <script src="js/presentation/spot-realignment-ui.js?v=2.1.4" integrity="sha384-GKlSQQKluvxcnRhJmQVQL4lZIFXbqf8ac/0BnxPiWNWcLjFJWYx/IZU3+5fZI7dk"></script>
+  <script src="js/domain/travel-records.js?v=2.1.4" integrity="sha384-qhkfkF1xKTuPtBvsB5Gwpz631xTkyy2tS1BU9Hixd2L1t+oobsXBMJnFv1pBHNnW"></script>
+  <script src="js/domain/travel-story.js?v=2.1.4" integrity="sha384-vjuGNDpytM6vG8SuZbKLW7qTTV1L33j48P1KSwNQnvca7uxo5EYkBM2X0IOdn/Qa"></script>
+  <script src="js/infrastructure/storage/photo-compression.js?v=2.1.4" integrity="sha384-MeOApXBzhg++Rcq/Lfjwb04/MA1U6wmwHppDgFZvKA4ZfdPC4oR2Hv1BhPFNU7Ig"></script>
+  <link rel="stylesheet" href="css/photo-optimization.css?v=2.1.4" integrity="sha384-9sgcirlxZs5tcmp/22RdH56B3bZla/q4DVH7x8W+fO8P4neR4WJMDDtQNK4WPq+/">
+  <script src="js/domain/photo-optimization.js?v=2.1.4" integrity="sha384-fpPZ4nJ383bIJaSHvmuZg+9BYd5LQ8YuVtEEMjtJnQr2Fod/mawAoB5SYMdtvBRU"></script>
+  <script src="js/infrastructure/storage/photo-cleanup.js?v=2.1.4" integrity="sha384-qPUCnJe7spP79MZLfOuzscYXTD6cW+7dzsf0xxvDip9hIj+yBvbBK6KhAouz5BC/"></script>
+  <script src="js/presentation/photo-optimization-ui.js?v=2.1.4" integrity="sha384-9QsQz7hvv3HVSOtRVjrMPr6G9w59E//utEWpshSg+awbBA4xBBcO/BGw/WhZNI8Z"></script>
+  <script src="js/infrastructure/storage/media-repository.js?v=2.1.4" integrity="sha384-q0IPoo86aU2ruB130X1HAh01dr4hpI0IAXeMVCoa7Jy/2pIB09f7WbSKPm8vowhw"></script>
+  <script src="js/infrastructure/storage/record-media-store.js?v=2.1.4" integrity="sha384-vNu5tI/i1vWsxi2/3aQYW+9zYfivBNB2ewaUTRlwhnGwRbv9dpR4bu/sqzv1D2jm"></script>
+  <script src="js/infrastructure/storage/expense-photo-repository.js?v=2.1.4" integrity="sha384-gdumvFYkJqEbRPJlK4mffCsUjPsnKCXLg6/1fLMR8kUuU1QDMeLLOYmMVSRTGNSy"></script>
+  <script src="js/presentation/companion-ui.js?v=2.1.4" integrity="sha384-UyvSw87RO90PyeLYpa6foQaePaX3jbKzZwxj8UTKf703kjMsPMwyGhvVx6zB6Pf3"></script>
+  <script src="js/domain/trip-transfer.js?v=2.1.4" integrity="sha384-VD9q1co1+bJzdS4i19rvfkQN/4KvzfnNdHUjbbucghcxzjmPim+kWF93qv5DaXSu"></script>
+  <script src="js/domain/travel-backup.js?v=2.1.4" integrity="sha384-4zE43uWlz5y3eP7g98tEL3HqAsw08/XvINQ+RhLLt4wz+cnySMWiy3Eu1m7BaBbK"></script>
+  <script src="js/presentation/travel-backup-ui.js?v=2.1.4" integrity="sha384-2MeiLmNhd6dsStzYdF4LhB3OrNegW5vZSkbRojImg5IQ9LLjrkbdcd+LP2rpbB1h"></script>
+  <script src="js/presentation/storage-health-ui.js?v=2.1.4" integrity="sha384-yhLee1WlZBu7vZL8qquRuBbYdW2RIBPIkjKQqjgT5iNw7FRWOlw7POGkpMar7IkT"></script>
+  <script src="js/presentation/trip-transfer-ui.js?v=2.1.4" integrity="sha384-alWNP5q7xJLSbe8GlkYNmHLw8G9jbXGLNSi28LERcPAb1pESASALcV/HOiFWa12h"></script>
+  <script src="js/presentation/mobile-navigation.js?v=2.1.4" integrity="sha384-qUtkWs7/ForvUZzC3hkzt5+AkF3u00dJVZ09uCkv6x93wLDQgiqYNXPLTbuHU9bz"></script>
+  <script src="js/presentation/activity-journal.js?v=2.1.4" integrity="sha384-5g6xHa7e47oPUeFBGeImpMSyv9V03hKS7XhQ5kYz8uB2CCfq6IAsTFDSS3F83F4U"></script>
+  <script src="js/presentation/moment-journal.js?v=2.1.4" integrity="sha384-r/heV0A2E+VDwxEE7joC1tw0UPcWIWSdZHDvU0rQs6c+LzY5zCEBLYiF4KIKQo5u"></script>
+  <script src="js/presentation/travel-story-ui.js?v=2.1.4" integrity="sha384-s9HZ4A1/X3tCfe4rBfB6nzEwAC7i2U1YVfradgxnQPX5X4tnFszIOPeMsLPfXnfq"></script>
+  <script src="js/config/collaboration-config.js?v=2.1.4" integrity="sha384-ipxhKB+fQ4s3OThYo3p6IWFvP6BbstXYDW6jZWWiPHB4qomo64w7r8/wRvdsi47w"></script>
+  <script src="js/infrastructure/collaboration/supabase-travel-service.js?v=2.1.4" integrity="sha384-+SDvVJ0CNqCMvFlOBOA+nfA1k6/sN6GlaKDhTQo4SgX8x3EwPXyJlvMfJj0D6Bt/"></script>
+  <script src="js/presentation/collaboration-ui.js?v=2.1.4" integrity="sha384-KvnYI6ym2/deKsOtKryWJS5tljPjqYRx67JGGgWVRNyWHEC470iPDg3+fdw0OHX0"></script>
+  <script src="js/presentation/collaboration-review.js?v=2.1.4" integrity="sha384-cbND/rT26DaIY2hR++LBuByF9L/ACu5TDl0b85EN2zsk/sTapWGm2BPQqZgN6GzI"></script>
+  <script src="js/presentation/ui-actions.js?v=2.1.4" integrity="sha384-86E6+vWuYSS4ldFWIpwfcJMnPW2jUnvL9CJGWeJHDKHEXnQsNWTDB0skpvkRBm9K"></script>
+  <script src="js/presentation/shell-actions.js?v=2.1.4" integrity="sha384-ec2zNqB35MYVfgVf448ukoOrIy6FFwUow/h7S8z0W47OS7F+tloHdR8w4+Mmw4Zy"></script>
+  <script src="js/presentation/exchange-ui.js?v=2.1.4" integrity="sha384-21MA/m/6rg1LsIZFsoAuqvhmWN3Y8seM2ZdIZHKOGEZ70CAjaeulE8mmIbSKmb1h"></script>
+  <script src="js/presentation/plan-guides.js?v=2.1.4" integrity="sha384-Eg0ooJHXflNMCbbk5sEJIg4VX2WigAkFB9GzPI7iT7q57s8L2TdNMYQxc9BWHb87"></script>
+  <script src="js/presentation/budget-ui.js?v=2.1.4" integrity="sha384-p+A7x64rZuPWhGaUzTMoNYo60aTQzp7UXhZzMfXABMyWqrG32b4LDPZ/SGwoEKjs"></script>
+  <script src="js/presentation/expense-analytics.js?v=2.1.4" integrity="sha384-GOo/a/N9uE2yr6Aw2Ju6sXiBr5VTaDbPb1nth/ElR4GDT1yPI0CfghLOB7DaN1Yp"></script>
+  <script src="js/presentation/expenses-tab.js?v=2.1.4" integrity="sha384-dFoKIs/B5CCctW17/wd1Kp0Kr6v9LXykyt/8yOknSEs3G9C7rnYam3VrTKE9ZaFg"></script>
+  <script src="js/presentation/journal-tab.js?v=2.1.4" integrity="sha384-Hhgx7Hra1MAb8tvQIMdF9khAJjZHC3SqpdqWrAXEVAbGHvgFLOf+bREOM6jyvFoc"></script>
+  <script src="js/presentation/checklist-tab.js?v=2.1.4" integrity="sha384-ENgqtNcHd59KKTorCEZx/H/zUSfXi47RIM1X1F1E6tNPe5U4DKXginat44x1SDbL"></script>
+  <script src="js/presentation/expense-editor.js?v=2.1.4" integrity="sha384-PosLZVGcia3FlNTeQCWVw+mtgPsGaCJjpHKtrdFVXpaw5LYD+iQ/M5FYwMYy/HVY"></script>
 
   <!-- Knowledge Base Seed & Destination Knowledge Packs (DKP) -->
-  <script src="kb-travel.js?v=2.1.3" integrity="sha384-zxXc7MUMbmXkiaF3ymeLmVSiCyPRVfkUjSZetDVx41zrHGyPeSCN4TFpy5f1jNUd"></script>
+  <script src="kb-travel.js?v=2.1.4" integrity="sha384-zxXc7MUMbmXkiaF3ymeLmVSiCyPRVfkUjSZetDVx41zrHGyPeSCN4TFpy5f1jNUd"></script>
   <script src="js/destinations/destination-registry.js" integrity="sha384-PV7EnpqZusutqYxhFc0vICq72coA/C+TMYaBkk+BFy52dmgfk/RDzf/DAgW7dmvC"></script>
   <script src="js/destinations/pack-default.js" integrity="sha384-mCe4oKfrN+8fbLFCJJexsHJXBZkw6b6q1bOg5skoupZ9hXUrhZ92sTRRTF831vDt"></script>
-  <script src="js/destinations/pack-south-america.js?v=2.1.3" integrity="sha384-p6i8pSXkYDEndehBEqNlXK7ZIZia6Tsxw4TD2LUf7TJPUSlPd2AzXbp3wyyAvDG7"></script>
+  <script src="js/destinations/pack-south-america.js?v=2.1.4" integrity="sha384-p6i8pSXkYDEndehBEqNlXK7ZIZia6Tsxw4TD2LUf7TJPUSlPd2AzXbp3wyyAvDG7"></script>
   <script src="js/destinations/pack-yunnan.js" integrity="sha384-MIgviqt+QV/b06eH6w7DO42JTPFr7Q2kFTi8TRQT4MCouBcFBGiC7x1jnKgVatOX"></script>
-  <script src="js/destinations/emergency-contacts.js?v=2.1.3" integrity="sha384-q3IUPhGWY99DNBNM269wiapa6eQYahcwaro/PvPILVtAgkUM0pE23GI5E63eMLlN"></script>
-  <script src="js/infrastructure/storage/legacy-trip-repository.js?v=2.1.3" integrity="sha384-Jf2y8z7h6bwxOdkwZP0zMyhyG/ntcCrFco7a+mzgiFAtiCUE2uXU8Cc/MSjunorP"></script>
-  <script src="js/infrastructure/storage/idb-trip-repository.js?v=2.1.3" integrity="sha384-n7ndWoPUE3bipL9HvWWTfW8XPNZbDRmAWocUpRIyVM5HtGIIEqbkOK1e6InJY8c4"></script>
-  <script src="js/infrastructure/storage/trip-store.js?v=2.1.3" integrity="sha384-ftpferQ+1NXFRqMRZuHlz2wGUfEKk4GKeXEZzAs3FlsUmGfFdxcsSG6U5t4/B1Rb"></script>
-  <script src="js/infrastructure/storage/settings-repository.js?v=2.1.3" integrity="sha384-fp7ck757BhOA+Y2i/VoW21KRCkeMyb/G78wxwhZuReB2JbzcyTxBrLxGldhvw3n3"></script>
-  <script src="js/infrastructure/storage/journal-overflow-repository.js?v=2.1.3" integrity="sha384-uRxi9B+oBHCQ+aa8a6Wp72RAAeEuslXu5kZ+gf9Kvo22B3N6fr1XSkVnAV1X42yO"></script>
+  <script src="js/destinations/emergency-contacts.js?v=2.1.4" integrity="sha384-q3IUPhGWY99DNBNM269wiapa6eQYahcwaro/PvPILVtAgkUM0pE23GI5E63eMLlN"></script>
+  <script src="js/infrastructure/storage/legacy-trip-repository.js?v=2.1.4" integrity="sha384-Jf2y8z7h6bwxOdkwZP0zMyhyG/ntcCrFco7a+mzgiFAtiCUE2uXU8Cc/MSjunorP"></script>
+  <script src="js/infrastructure/storage/idb-trip-repository.js?v=2.1.4" integrity="sha384-n7ndWoPUE3bipL9HvWWTfW8XPNZbDRmAWocUpRIyVM5HtGIIEqbkOK1e6InJY8c4"></script>
+  <script src="js/infrastructure/storage/trip-store.js?v=2.1.4" integrity="sha384-ftpferQ+1NXFRqMRZuHlz2wGUfEKk4GKeXEZzAs3FlsUmGfFdxcsSG6U5t4/B1Rb"></script>
+  <script src="js/infrastructure/storage/settings-repository.js?v=2.1.4" integrity="sha384-fp7ck757BhOA+Y2i/VoW21KRCkeMyb/G78wxwhZuReB2JbzcyTxBrLxGldhvw3n3"></script>
+  <script src="js/infrastructure/storage/journal-overflow-repository.js?v=2.1.4" integrity="sha384-uRxi9B+oBHCQ+aa8a6Wp72RAAeEuslXu5kZ+gf9Kvo22B3N6fr1XSkVnAV1X42yO"></script>
 </head>
 <body class="min-h-screen flex flex-col font-sans transition-colors duration-200">
 
@@ -1577,7 +1579,7 @@
       <div class="app-brand flex items-center gap-2 sm:gap-2.5 min-w-0 cursor-pointer select-none" onclick="switchView('hub')">
         <img src="icons/sulsul_bear_mascot.png" class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl object-cover border border-[#e6e2d8] dark:border-stone-800 shadow-sm shrink-0" alt="Sulsul Travel">
           <h1 class="font-brand-script text-xl sm:text-2xl md:text-3xl font-bold tracking-normal text-[#1E2B24] dark:text-[#ededed] whitespace-nowrap leading-tight">Sulsul Travel</h1>
-            <button id="app-ver-badge" type="button" onclick="event.stopPropagation(); openVersionHistoryModal()" class="theme-card-subtle font-mono" title="앱 버전과 업데이트 기록 보기">v2.1.3</button>
+            <button id="app-ver-badge" type="button" onclick="event.stopPropagation(); openVersionHistoryModal()" class="theme-card-subtle font-mono" title="앱 버전과 업데이트 기록 보기">v2.1.4</button>
             <p id="header-trip-name" class="sr-only">A Deep Life Essay</p>
       </div>
 
@@ -1890,7 +1892,7 @@
           </button>
           <button id="btn-subtab-booking" onclick="switchPlanSubTab('booking')" class="px-3 py-1.5 rounded-lg text-xs font-bold subtab-inactive flex items-center gap-1.5 shrink-0 whitespace-nowrap cursor-pointer">
             <i id="icon-subtab-booking" class="fa-solid fa-ticket text-[11px]"></i>
-            <span id="label-subtab-booking">14대 필수 예약</span>
+            <span id="label-subtab-booking">예약 체크</span>
           </button>
           <button id="btn-subtab-cityguide" onclick="switchPlanSubTab('cityguide')" class="px-3 py-1.5 rounded-lg text-xs font-bold subtab-inactive flex items-center gap-1.5 shrink-0 whitespace-nowrap cursor-pointer">
             <i id="icon-subtab-cityguide" class="fa-solid fa-city text-[11px]"></i>
@@ -2077,17 +2079,17 @@
         </div>
       </div>
 
-      <!-- [SUBTAB 3] 14대 필수 공식 예약 가이드 뷰 (또는 여행 필수 체크/예약) (v1.8.4) -->
+      <!-- [SUBTAB 3] 예약 가이드 뷰(팩의 예약 체크리스트 또는 여행 준비물 점검) — js/presentation/plan-guides.js가 그린다 -->
       <div id="subtab-view-booking" class="hidden space-y-3">
         <div id="booking-timeline-dashboard" class="p-4 rounded-2xl bg-[#0f1422] border border-[#1e263c] space-y-3">
           <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
             <div>
               <h3 class="text-sm font-black text-white flex items-center gap-2">
                 <i id="booking-header-icon" class="fa-solid fa-ticket text-amber-400"></i>
-                <span id="booking-header-title">14대 핵심 사전 예약 타임어택 대시보드</span>
-                <span id="booking-progress-badge" class="sulsul-badge-emerald px-2 py-0.5 rounded-full text-[10px] font-black">0/14 완료 (0%)</span>
+                <span id="booking-header-title">여행 예약 체크리스트</span>
+                <span id="booking-progress-badge" class="sulsul-badge-emerald px-2 py-0.5 rounded-full text-[10px] font-black">0/0 완료 (0%)</span>
               </h3>
-              <p id="booking-header-desc" class="text-xs text-slate-400 mt-0.5">마추픽추 입장권, 파노라마 열차, 국립공원 등 매진되기 전 공식 사이트에서 직접 예약해야 하는 필수 리스트입니다.</p>
+              <p id="booking-header-desc" class="text-xs text-slate-400 mt-0.5">예약 여부와 일정에 맞는 항목을 확인하세요.</p>
             </div>
             <div id="booking-dday-badge-container" class="shrink-0 flex items-center gap-1.5">
               <span class="px-2.5 py-1 rounded-xl bg-amber-500/20 text-amber-300 border border-amber-500/30 text-xs font-black" id="booking-dday-badge">D-Day 계산 중</span>
@@ -2101,10 +2103,10 @@
           </div>
 
           <div class="flex items-center gap-1.5 overflow-x-auto no-scrollbar pt-1">
-            <button id="btn-booking-filter-all" onclick="setBookingGuideFilter('all')" class="sulsul-chip is-active text-xs">전체 (14)</button>
-            <button id="btn-booking-filter-urgent" onclick="setBookingGuideFilter('urgent')" class="sulsul-chip text-xs">🚨 긴급 타임어택</button>
-            <button id="btn-booking-filter-scheduled" onclick="setBookingGuideFilter('scheduled')" class="sulsul-chip text-xs">📅 오픈 예정</button>
-            <button id="btn-booking-filter-completed" onclick="setBookingGuideFilter('completed')" class="sulsul-chip text-xs">✅ 완료됨</button>
+            <button type="button" id="btn-booking-filter-all" data-on-click="guides.bookingFilter" data-filter="all" aria-pressed="true" class="sulsul-chip is-active text-xs">전체</button>
+            <button type="button" id="btn-booking-filter-urgent" data-on-click="guides.bookingFilter" data-filter="urgent" aria-pressed="false" class="sulsul-chip text-xs">🚨 마감 임박</button>
+            <button type="button" id="btn-booking-filter-scheduled" data-on-click="guides.bookingFilter" data-filter="scheduled" aria-pressed="false" class="sulsul-chip text-xs">📋 예약 전</button>
+            <button type="button" id="btn-booking-filter-completed" data-on-click="guides.bookingFilter" data-filter="completed" aria-pressed="false" class="sulsul-chip text-xs">✅ 완료됨</button>
           </div>
         </div>
         <div id="booking-cards-container" class="grid grid-cols-1 md:grid-cols-2 gap-3">
@@ -2112,12 +2114,12 @@
         </div>
       </div>
 
-      <!-- [SUBTAB 4] 8대 거점 도시 가이드 뷰 (또는 여행지 스팟 모아보기) -->
+      <!-- [SUBTAB 4] 도시 가이드 뷰(팩의 거점 도시 또는 여행지 스팟 모아보기) — js/presentation/plan-guides.js가 그린다 -->
       <div id="subtab-view-cityguide" class="hidden space-y-3">
         <div id="cityguide-header-card" class="p-4 rounded-2xl bg-[#0f1422] border border-[#1e263c]">
           <h3 class="text-sm font-black text-white flex items-center gap-2 mb-1">
             <i id="cityguide-header-icon" class="fa-solid fa-city text-amber-400"></i>
-            <span id="cityguide-header-title">8대 거점 도시 가이드</span>
+            <span id="cityguide-header-title">거점 도시 가이드</span>
           </h3>
           <p id="cityguide-header-desc" class="text-xs text-slate-400">여행 거점 도시별 주요 랜드마크, 현지 필수 미식 및 고산병/안전 실전 팁을 안내합니다.</p>
         </div>
@@ -4791,7 +4793,10 @@
 
       <!-- 버전 목록 스크롤 영역 (독립 스크롤 컨테이너로 Flexbox 압축 버그 영구 척결) -->
       <div class="overflow-y-auto flex-1 min-h-0 space-y-3.5 pr-1.5 custom-scrollbar">
-        <!-- v2.1.3 (Current) -->
+        <!-- v2.1.4 (Current) -->
+        <section class="companion-context"><h3 class="font-bold">v2.1.4 · 예약·도시 가이드 정리</h3><p class="text-xs">2026-11-24 · st-shell-v2.1.4</p><p class="text-xs leading-relaxed">계획 탭의 예약 가이드와 도시 가이드를 별도 파일로 옮겼습니다. 남미 여행의 예약 체크리스트가 다시 항목을 보여 주고, 예약 가이드에서 준비물을 체크하면 완료 수가 바로 바뀝니다. 공유받은 여행의 장소 시간·비용에 들어 있던 HTML은 글자로만 표시합니다.</p></section>
+
+        <!-- v2.1.3 -->
         <section class="companion-context"><h3 class="font-bold">v2.1.3 · 지출 입력창 정리</h3><p class="text-xs">2026-11-24 · st-shell-v2.1.3</p><p class="text-xs leading-relaxed">지출·수입 입력창을 한 파일로 합쳤습니다. 영수증 자동 입력의 통화가 여행 통화 목록에 없어도 그 통화로 저장하고(예전에는 원화로 저장될 수 있었습니다), 카드·현금을 바꾸면 지갑 카드 표시도 함께 바뀝니다. 결제수단이 없는 예전 내역을 고쳐도 결제수단이 비지 않습니다.</p></section>
 
         <!-- v2.1.2 -->
@@ -5740,7 +5745,7 @@
 
       <!-- 모달 푸터 -->
       <div class="pt-3 border-t border-[#e8e2d5] dark:border-stone-800 flex items-center justify-between shrink-0">
-        <span class="text-[11px] text-stone-400 dark:text-stone-500 font-mono">Sulsul Travel Engine v2.1.3</span>
+        <span class="text-[11px] text-stone-400 dark:text-stone-500 font-mono">Sulsul Travel Engine v2.1.4</span>
         <button onclick="closeModal('modal-version-history')" class="px-4 py-2 rounded-xl bg-[#faf8f5] dark:bg-stone-800 hover:bg-[#f0ece1] dark:hover:bg-stone-700 border border-[#e8e2d5] dark:border-stone-700 text-[#1c1917] dark:text-[#ededed] text-xs font-bold transition cursor-pointer shadow-sm">
           닫기
         </button>
@@ -6353,7 +6358,7 @@
     window.showToast = showToast;
 
     // 앱 버전 및 글로벌 네임스페이스 (Sulsul-Travel Invariant Rule R-10, R-11, R-12, R-13, R-14, R-15, R-16)
-    const APP_VER = '2.1.3';
+    const APP_VER = '2.1.4';
 
     // ══════════════════════════════════════════
     // [3-Way Theme System] 모던, 라이트그레이, 딥 블랙 테마 엔진 (v1.6.7)
@@ -10960,9 +10965,9 @@
 
       // 활성 서브탭 내용 재동기화
       if (State.planSubTab === 'booking') {
-        renderBookingGuides();
+        SulsulTravel.PlanGuides.renderBookings();
       } else if (State.planSubTab === 'cityguide') {
-        renderCityGuides();
+        SulsulTravel.PlanGuides.renderCityGuides();
       } else if (State.planSubTab === 'map') {
         initOrUpdateLeafletMap();
       }
@@ -11028,9 +11033,9 @@
       if (subTabId === 'map') {
         initOrUpdateLeafletMap();
       } else if (subTabId === 'booking') {
-        renderBookingGuides();
+        SulsulTravel.PlanGuides.renderBookings();
       } else if (subTabId === 'cityguide') {
-        renderCityGuides();
+        SulsulTravel.PlanGuides.renderCityGuides();
       }
     }
 
@@ -11658,460 +11663,7 @@
       State.map.flyTo(center, zoom, { animate: true, duration: 1.2 });
     }
 
-    // ==========================================
-    // [3] 14대 핵심 사전 예약 타임어택 대시보드 및 가이드 렌더링 (v1.8.4)
-    // ==========================================
-    function setBookingGuideFilter(filter) {
-      State.bookingGuideFilter = filter || 'all';
-      const btns = [
-        { id: 'btn-booking-filter-all', key: 'all' },
-        { id: 'btn-booking-filter-urgent', key: 'urgent' },
-        { id: 'btn-booking-filter-scheduled', key: 'scheduled' },
-        { id: 'btn-booking-filter-completed', key: 'completed' }
-      ];
-      btns.forEach(b => {
-        const el = document.getElementById(b.id);
-        if (el) {
-          if (b.key === State.bookingGuideFilter) {
-            el.className = 'sulsul-chip is-active text-xs cursor-pointer';
-          } else {
-            el.className = 'sulsul-chip text-xs cursor-pointer';
-          }
-        }
-      });
-      renderBookingGuides();
-    }
-
-    async function toggleBookingGuideCompleted(guideId) {
-      const trip = getActiveTrip();
-      if (!trip) return;
-      await commitTrip(trip.id, target => {
-        target.bookingStatuses = target.bookingStatuses || {};
-        target.bookingStatuses[guideId] = !target.bookingStatuses[guideId];
-      });
-      renderBookingGuides();
-    }
-
-    function getBookingGuideUrl(b) {
-      if (b.url) return b.url;
-      const t = (b.target || b.title || '').toLowerCase();
-      if (t.includes('aircanada') || t.includes('에어캐나다')) return 'https://www.aircanada.com';
-      if (t.includes('tuboleto') || t.includes('cultura.pe') || t.includes('마추픽추')) return 'https://tuboleto.cultura.pe';
-      if (t.includes('incarail') || t.includes('잉카레일')) return 'https://incarail.com';
-      if (t.includes('aerolineas') || t.includes('아르헨티나 항공')) return 'https://www.aerolineas.com.ar';
-      if (t.includes('latam') || t.includes('라탐')) return 'https://www.latamairlines.com';
-      if (t.includes('chalten') || t.includes('plataforma10')) return 'https://www.plataforma10.com.ar';
-      if (t.includes('bus-sur') || t.includes('bussur')) return 'https://www.bussur.com';
-      if (t.includes('parquesnacionales') || t.includes('국립공원')) return 'https://www.argentina.gob.ar/parquesnacionales/glaciares';
-      if (t.includes('별빛') || t.includes('stargazing')) return 'https://www.sanpedroatacama.com';
-      if (t.includes('ventana') || t.includes('탱고')) return 'https://www.laventanaweb.com';
-      if (t.includes('eta') || t.includes('캐나다')) return 'https://www.canada.ca/en/immigration-refugees-citizenship/services/visit-canada/eta.html';
-      if (t.includes('esim') || t.includes('airalo')) return 'https://www.airalo.com';
-      return `https://www.google.com/search?q=${encodeURIComponent(b.target || b.title)}`;
-    }
-
-    function renderBookingGuides() {
-      const trip = getActiveTrip();
-      const isSA = isSouthAmericaTrip(trip);
-      const headerTitle = document.getElementById('booking-header-title');
-      const headerDesc = document.getElementById('booking-header-desc');
-      const headerIcon = document.getElementById('booking-header-icon');
-      const container = document.getElementById('booking-cards-container');
-      const ddayBadge = document.getElementById('booking-dday-badge');
-      const progressBadge = document.getElementById('booking-progress-badge');
-      const progressBar = document.getElementById('booking-progress-bar');
-      if (!container) return;
-
-      if (isSA) {
-        if (headerTitle) headerTitle.innerText = '14대 핵심 사전 예약 타임어택 대시보드';
-        if (headerDesc) headerDesc.innerText = '마추픽추 입장권, 파노라마 열차, 국립공원 등 매진되기 전 공식 사이트에서 직접 예약해야 하는 필수 리스트입니다.';
-        if (headerIcon) headerIcon.className = 'fa-solid fa-ticket text-amber-400';
-
-        const rawGuides = (window.KB_TRAVEL && window.KB_TRAVEL.bookingGuides) ? window.KB_TRAVEL.bookingGuides : [];
-        trip.bookingStatuses = trip.bookingStatuses || {};
-
-        // 오늘 기준 D-Day 계산
-        const today = new Date();
-        today.setHours(0, 0, 0, 0);
-        let tripStart = trip.startDate ? new Date(trip.startDate) : new Date();
-        if (isNaN(tripStart.getTime())) tripStart = new Date();
-        tripStart.setHours(0, 0, 0, 0);
-        const diffDays = Math.ceil((tripStart.getTime() - today.getTime()) / (1000 * 60 * 60 * 24));
-
-        if (ddayBadge) {
-          ddayBadge.innerText = diffDays > 0 ? `출발 D-${diffDays}일` : (diffDays === 0 ? '오늘 출발 (D-Day)!' : `출발 D+${Math.abs(diffDays)}일`);
-        }
-
-        const totalCount = rawGuides.length;
-        const completedCount = rawGuides.filter((b, idx) => {
-          const id = b.id || `bg_${idx}`;
-          return Boolean(trip.bookingStatuses[id]);
-        }).length;
-        const pct = totalCount > 0 ? Math.round((completedCount / totalCount) * 100) : 0;
-
-        if (progressBadge) progressBadge.innerText = `${completedCount}/${totalCount} 완료 (${pct}%)`;
-        if (progressBar) progressBar.style.width = `${pct}%`;
-
-        // 필터링 적용
-        const activeFilter = State.bookingGuideFilter || 'all';
-        const filtered = rawGuides.map((b, idx) => {
-          const id = b.id || `bg_${idx}`;
-          const isCompleted = Boolean(trip.bookingStatuses[id]);
-          const dNum = parseInt((b.dDay || 'D-30').replace(/\D/g, ''), 10) || 30;
-          const isUrgent = !isCompleted && (b.status === 'urgent' || diffDays <= dNum);
-          const isScheduled = !isCompleted && !isUrgent;
-          return { ...b, id, isCompleted, dNum, isUrgent, isScheduled };
-        }).filter(item => {
-          if (activeFilter === 'urgent') return item.isUrgent;
-          if (activeFilter === 'scheduled') return item.isScheduled;
-          if (activeFilter === 'completed') return item.isCompleted;
-          return true;
-        });
-
-        // 필터 탭 버튼 건수 갱신
-        const btnAll = document.getElementById('btn-booking-filter-all');
-        if (btnAll) btnAll.innerText = `전체 (${totalCount})`;
-
-        if (filtered.length === 0) {
-          container.innerHTML = `
-            <div class="col-span-1 md:col-span-2 text-center py-8 text-xs text-slate-400 theme-card-subtle rounded-xl">
-              선택한 필터 조건에 해당하는 예약 항목이 없습니다.
-            </div>
-          `;
-          return;
-        }
-
-        container.innerHTML = filtered.map(b => {
-          const statusBadge = b.isCompleted
-            ? `<span class="sulsul-badge-emerald px-2 py-0.5 rounded text-[10px] font-black flex items-center gap-1"><i class="fa-solid fa-check"></i> 예약 완료</span>`
-            : (b.isUrgent
-              ? `<span class="sulsul-badge-rose px-2 py-0.5 rounded text-[10px] font-black animate-pulse flex items-center gap-1"><i class="fa-solid fa-triangle-exclamation"></i> 지금 즉시 예약 (타임어택)</span>`
-              : `<span class="sulsul-badge-indigo px-2 py-0.5 rounded text-[10px] font-black flex items-center gap-1"><i class="fa-solid fa-clock"></i> D-${b.dNum} 오픈 예정</span>`);
-
-          const portalUrl = getBookingGuideUrl(b);
-
-          return `
-            <div class="p-4 rounded-xl ${b.isCompleted ? 'bg-[#080b12]/60 border-emerald-500/30' : 'bg-[#080b12] border-[#1e263c]'} border space-y-3 flex flex-col justify-between hover:border-amber-500/40 transition">
-              <div class="space-y-2">
-                <div class="flex items-center justify-between gap-2 flex-wrap">
-                  <div class="flex items-center gap-2">
-                    <label class="flex items-center gap-1.5 cursor-pointer">
-                      <input type="checkbox" ${b.isCompleted ? 'checked' : ''} onchange="toggleBookingGuideCompleted('${b.id}')" class="w-4 h-4 rounded text-amber-500 bg-[#141c2e] border-[#23304c] focus:ring-amber-500 cursor-pointer">
-                      <span class="text-[10px] font-bold ${b.isCompleted ? 'text-emerald-400' : 'text-slate-400'}">완료 체크</span>
-                    </label>
-                    ${statusBadge}
-                  </div>
-                  <span class="text-xs font-mono font-black text-amber-400 px-2 py-0.5 rounded bg-amber-500/10 border border-amber-500/20">${b.dDay}</span>
-                </div>
-
-                <h4 class="text-xs sm:text-sm font-black ${b.isCompleted ? 'line-through text-slate-500' : 'text-white'} leading-snug">${b.title}</h4>
-                <div class="text-[11px] text-amber-300 font-medium">
-                  <i class="fa-solid fa-compass text-[10px]"></i> 예약처: <span class="text-slate-200">${b.target || '공식 사이트'}</span>
-                </div>
-                <div class="text-[10px] text-slate-400">
-                  예상 비용: <span class="text-emerald-400 font-mono font-bold">${b.cost}</span>
-                </div>
-                <div class="tip-box text-[10px] text-amber-900 dark:text-amber-300 bg-amber-100 dark:bg-amber-500/10 p-2.5 rounded-lg border border-amber-300 dark:border-amber-500/20 font-medium leading-relaxed">
-                  💡 ${b.tip}
-                </div>
-              </div>
-
-              <div class="pt-2">
-                <a href="${portalUrl}" target="_blank" rel="noopener noreferrer" class="w-full py-2 bg-[#141c2e] hover:bg-[#1e2a44] border border-[#23304c] hover:border-amber-500/40 text-amber-400 rounded-lg text-xs font-bold flex items-center justify-center gap-1.5 transition">
-                  <span>공식 포털 바로가기</span>
-                  <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i>
-                </a>
-              </div>
-            </div>
-          `;
-        }).join('');
-      } else {
-        renderDynamicTripBookings(trip);
-      }
-    }
-
-    function renderDynamicTripBookings(trip) {
-      const headerTitle = document.getElementById('booking-header-title');
-      const headerDesc = document.getElementById('booking-header-desc');
-      const headerIcon = document.getElementById('booking-header-icon');
-      const container = document.getElementById('booking-cards-container');
-      if (!container) return;
-
-      if (headerTitle) headerTitle.innerText = `${trip.title} 필수 준비 & 예약 체크리스트`;
-      if (headerDesc) headerDesc.innerText = '항공권, 숙소, 현지 교통 및 필수 예약 항목을 사전에 점검하고 체크하세요.';
-      if (headerIcon) headerIcon.className = 'fa-solid fa-clipboard-check text-amber-400';
-
-      const pack = resolveTripPack(trip);
-      let specialAdviceHtml = '';
-      if (pack && pack.bookings && pack.bookings.specialNotice) {
-        const sn = pack.bookings.specialNotice;
-        specialAdviceHtml = `
-          <div class="col-span-1 md:col-span-2 p-4 rounded-xl bg-gradient-to-r from-amber-500/10 via-emerald-500/10 to-sky-500/10 border border-amber-500/30 space-y-2">
-            <div class="flex items-center gap-2">
-              <span class="text-base">${pack.flag || '📌'}</span>
-              <h4 class="text-xs sm:text-sm font-black text-amber-950 dark:text-amber-300">${sn.title}</h4>
-            </div>
-            <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 text-[11px] text-slate-600 dark:text-slate-300 pt-1">
-              ${(sn.tips || []).map(t => `
-                <div class="p-2.5 rounded-lg theme-card-subtle">
-                  <div class="font-bold text-amber-800 dark:text-amber-300 flex items-center gap-1 mb-1">
-                    <i class="fa-solid fa-check text-[10px]"></i> ${escapeHtml(t.title)}
-                  </div>
-                  <div class="text-[#57534e] dark:text-slate-400 leading-relaxed">${t.desc}</div>
-                </div>
-              `).join('')}
-            </div>
-          </div>
-        `;
-      }
-
-      const checklist = trip.checklist || [];
-      const checklistCardsHtml = checklist.map((item, idx) => `
-        <div class="p-3.5 rounded-xl theme-card-subtle flex items-center justify-between gap-3 hover:border-amber-500/40 transition">
-          <div class="flex items-center gap-2.5 flex-1 min-w-0">
-            <input type="checkbox" ${item.checked ? 'checked' : ''} data-on-change="checklist.toggle" data-index="${idx}" aria-label="${escapeHtml(item.text)} 준비 완료" class="w-4 h-4 rounded text-amber-500 bg-[#141c2e] border-[#23304c] focus:ring-amber-500 focus:ring-offset-0 cursor-pointer shrink-0">
-            <span class="text-xs ${item.checked ? 'line-through opacity-50' : 'text-[#1c1917] dark:text-[#ededed] font-bold'} truncate">${escapeHtml(item.text)}</span>
-          </div>
-          <span class="px-2.5 py-0.5 rounded-full text-[10px] font-black shrink-0 ${item.urgent ? 'sulsul-badge-rose' : 'bg-stone-100 text-stone-700 border border-stone-300 dark:bg-slate-800 dark:text-slate-400 dark:border-slate-700'}">
-            ${item.urgent ? '🚨 필수' : '일반'}
-          </span>
-        </div>
-      `).join('');
-
-      container.innerHTML = `
-        ${specialAdviceHtml}
-        <div class="col-span-1 md:col-span-2 flex items-center justify-between pt-1">
-          <span class="text-xs font-bold text-[#1c1917] dark:text-slate-300">📋 준비 항목 점검 (${checklist.filter(c => c.checked).length}/${checklist.length} 완료)</span>
-          <button type="button" data-on-click="checklist.add" class="sulsul-badge-amber px-2.5 py-1 text-xs font-bold rounded-lg transition flex items-center gap-1 cursor-pointer">
-            <i class="fa-solid fa-plus text-[10px]"></i> 준비물 추가
-          </button>
-        </div>
-        ${checklistCardsHtml || '<div class="col-span-2 text-xs text-stone-400 dark:text-slate-500 py-4 text-center">등록된 사전 예약/준비물이 없습니다.</div>'}
-      `;
-    }
-
-    // ==========================================
-    // [4] 도시 가이드 & 스팟 요약 렌더링 (v1.1.7)
-    // ==========================================
-    function renderCityGuides() {
-      const trip = getActiveTrip();
-      const pack = resolveTripPack(trip);
-      const isSA = isSouthAmericaTrip(trip);
-      const isYN = isYunnanTrip(trip);
-      const headerTitle = document.getElementById('cityguide-header-title');
-      const headerDesc = document.getElementById('cityguide-header-desc');
-      const headerIcon = document.getElementById('cityguide-header-icon');
-      const container = document.getElementById('cityguide-cards-container');
-      if (!container) return;
-
-      if (isSA) {
-        if (headerTitle) headerTitle.innerText = '10대 거점 도시 가이드';
-        if (headerDesc) headerDesc.innerText = '남미 4개국 10대 거점 도시별 주요 랜드마크, 대표 미식, 고산병/안전 수칙 및 긴급 연락망을 안내합니다.';
-        if (headerIcon) headerIcon.className = 'fa-solid fa-city text-amber-400';
-
-        const destList = (pack && pack.cities && Array.isArray(pack.cities.items) && pack.cities.items.length > 0)
-          ? pack.cities.items
-          : ((pack && pack.geo && Array.isArray(pack.geo.destinations) && pack.geo.destinations.length > 0)
-            ? pack.geo.destinations
-            : Object.values(window.KB_TRAVEL?.destinations || {}));
-
-        const rulesBannerHtml = `
-          <div class="col-span-1 md:col-span-2 p-4 rounded-xl bg-gradient-to-r from-amber-500/10 via-emerald-500/10 to-sky-500/10 border border-amber-500/30 space-y-2.5 mb-2">
-            <div class="flex items-center gap-2">
-              <span class="text-base sm:text-lg">🎒</span>
-              <h4 class="text-xs sm:text-sm font-black text-amber-950 dark:text-amber-300">수하물 23kg 통제 & 여행 경비 수호 3대 골든룰</h4>
-            </div>
-            <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5 text-[11px]">
-              <div class="p-3 rounded-lg theme-card-subtle space-y-1">
-                <div class="font-bold text-rose-700 dark:text-rose-400 flex items-center gap-1">
-                  <i class="fa-solid fa-ban text-[10px]"></i> 제 1원칙 (초반 구매 금지)
-                </div>
-                <div class="text-[#57534e] dark:text-slate-400 leading-relaxed">
-                  10/13~10/24 아르헨/칠레 여정 중 무거운 와인·잼 대량 구매 절대 금지 (국내선 5회 23kg 초과 요금 수십만 원 폭탄 방지).
-                </div>
-              </div>
-              <div class="p-3 rounded-lg theme-card-subtle space-y-1">
-                <div class="font-bold text-emerald-700 dark:text-emerald-400 flex items-center gap-1">
-                  <i class="fa-solid fa-feather text-[10px]"></i> 제 2원칙 (쿠스코 경량 의류)
-                </div>
-                <div class="text-[#57534e] dark:text-slate-400 leading-relaxed">
-                  10/28~29 페루 쿠스코 산페드로 시장에서 장당 150g 베이비 알파카 목도리 구매 (5장 사도 0.75kg, 배낭 쏙 수납).
-                </div>
-              </div>
-              <div class="p-3 rounded-lg theme-card-subtle space-y-1">
-                <div class="font-bold text-sky-700 dark:text-sky-400 flex items-center gap-1">
-                  <i class="fa-solid fa-wine-bottle text-[10px]"></i> 제 3원칙 (리마 액체류 올인)
-                </div>
-                <div class="text-[#57534e] dark:text-slate-400 leading-relaxed">
-                  귀국 전날(10/29) 리마 대형마트(Metro/Wong)에서 피스코·잼·과자 몰아 구매 후 국제선(1인 23kg 무료) 위탁 패킹!
-                </div>
-              </div>
-            </div>
-          </div>
-        `;
-
-        const cardsHtml = destList.map(d => {
-          const kbDest = (window.KB_TRAVEL && window.KB_TRAVEL.destinations && window.KB_TRAVEL.destinations[d.id])
-            ? window.KB_TRAVEL.destinations[d.id]
-            : {};
-          const emergencyNum = d.emergency || kbDest.emergency;
-          const embassyNum = d.embassy || kbDest.embassy;
-          const altitudeText = d.altitude || '해발 정보';
-          const isHighAltitude = /2,[4-9]\d\d|3,\d\d\d|4,\d\d\d|[2-4]\d{3}\s*m/.test(altitudeText);
-
-          return `
-            <div class="p-4 rounded-xl bg-[#080b12] border border-[#1e263c] space-y-3 flex flex-col justify-between hover:border-amber-500/40 transition">
-              <div class="space-y-2.5">
-                <div class="flex items-center justify-between gap-2">
-                  <div class="flex items-center gap-2 min-w-0">
-                    <span class="text-xl shrink-0">${d.flag || '🌎'}</span>
-                    <div class="min-w-0">
-                      <h4 class="text-xs sm:text-sm font-black text-white truncate">${d.name}</h4>
-                      ${d.nameEn ? `<div class="text-[10px] text-slate-400 truncate">${d.nameEn} · ${d.country || ''}</div>` : ''}
-                    </div>
-                  </div>
-                  <div class="flex items-center gap-1.5 shrink-0">
-                    <span class="text-[10px] font-bold px-2 py-0.5 rounded ${isHighAltitude ? 'bg-rose-500/20 text-rose-300 border border-rose-500/40' : 'bg-purple-500/20 text-purple-300 border border-purple-500/40'}">${altitudeText}</span>
-                  </div>
-                </div>
-
-                <div class="text-xs text-slate-300 space-y-2">
-                  <div>
-                    <div class="text-amber-400 text-[11px] font-bold flex items-center gap-1 mb-1">
-                      <i class="fa-solid fa-location-dot text-[10px]"></i> 핵심 랜드마크 & 명소
-                    </div>
-                    <ul class="text-[11px] text-slate-300 pl-2 space-y-0.5 leading-relaxed">
-                      ${(d.highlights || []).slice(0, 4).map(h => `<li>• ${h}</li>`).join('')}
-                    </ul>
-                  </div>
-
-                  <div>
-                    <div class="text-emerald-400 text-[11px] font-bold flex items-center gap-1 mb-0.5">
-                      <i class="fa-solid fa-utensils text-[10px]"></i> 대표 시그니처 미식
-                    </div>
-                    <div class="text-[11px] text-slate-300 pl-2 leading-relaxed">${(d.foods || []).join(', ')}</div>
-                  </div>
-
-                  ${d.tips ? `
-                    <div class="tip-box text-[10px] text-amber-900 dark:text-amber-300 bg-amber-100 dark:bg-amber-500/10 p-2.5 rounded-lg border border-amber-300 dark:border-amber-500/20 font-medium leading-relaxed">
-                      💡 ${d.tips}
-                    </div>
-                  ` : ''}
-
-                  ${(emergencyNum || embassyNum) ? `
-                    <div class="flex items-center justify-between text-[10px] text-slate-400 px-2 py-1 rounded bg-[#101626] border border-[#1b243b]">
-                      ${emergencyNum ? `<span class="text-rose-400 font-bold"><i class="fa-solid fa-phone-volume text-[9px]"></i> 긴급 ${emergencyNum}</span>` : ''}
-                      ${embassyNum ? `<span class="text-sky-300 font-bold"><i class="fa-solid fa-building-columns text-[9px]"></i> 대사관 ${embassyNum}</span>` : ''}
-                    </div>
-                  ` : ''}
-                </div>
-              </div>
-
-              <div class="pt-2">
-                <a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(d.googleMapsQuery || (d.name + ' ' + (d.country || '')))}" target="_blank" rel="noopener noreferrer" class="w-full py-2 bg-[#141c2e] hover:bg-[#1e2a44] border border-[#23304c] hover:border-amber-500/40 text-amber-400 rounded-lg text-xs font-bold flex items-center justify-center gap-1.5 transition">
-                  <i class="fa-solid fa-map-location-dot text-[10px]"></i>
-                  <span>구글 지도에서 ${d.name.split(' ')[0]} 보기</span>
-                  <i class="fa-solid fa-arrow-up-right-from-square text-[9px] text-stone-400"></i>
-                </a>
-              </div>
-            </div>
-          `;
-        }).join('');
-
-        container.innerHTML = rulesBannerHtml + cardsHtml;
-      } else if (isYN && pack) {
-        if (headerTitle) headerTitle.innerText = pack.cities.headerTitle;
-        if (headerDesc) headerDesc.innerText = pack.cities.headerDesc;
-        if (headerIcon) headerIcon.className = 'fa-solid fa-mountain-sun text-amber-400';
-
-        const destList = pack.cities.items || [];
-        container.innerHTML = destList.map(d => `
-          <div class="p-4 rounded-xl bg-[#080b12] border border-[#1e263c] space-y-2">
-            <div class="flex items-center justify-between">
-              <div class="flex items-center gap-2">
-                <span class="text-xl">${pack.flag || '🇨🇳'}</span>
-                <h4 class="text-xs sm:text-sm font-black text-white">${d.name}</h4>
-              </div>
-              <span class="text-[10px] text-emerald-300 px-2 py-0.5 rounded bg-emerald-500/20 border border-emerald-500/30">${d.badge || '거점 도시'}</span>
-            </div>
-
-            <div class="text-xs text-slate-300 space-y-1">
-              <p class="text-[11px] text-slate-400">${d.intro}</p>
-              <div class="text-emerald-400 text-[11px] font-bold pt-1">🍽️ 대표 먹거리</div>
-              <div class="text-[11px] text-slate-400">${d.food}</div>
-              <div class="tip-box text-amber-900 dark:text-amber-300 text-[10px] bg-amber-100 dark:bg-amber-500/10 p-2 rounded-lg border border-amber-300 dark:border-amber-500/20 mt-1.5 font-medium leading-relaxed">
-                💡 ${d.caution}
-              </div>
-            </div>
-
-            <div class="pt-2">
-              <a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(d.name)}" target="_blank" rel="noopener noreferrer" class="w-full py-1.5 bg-[#141c2e] hover:bg-[#1e2a44] border border-[#23304c] text-sky-400 rounded-lg text-xs font-bold flex items-center justify-center gap-1.5 transition">
-                <i class="fa-solid fa-map-location-dot text-[10px]"></i>
-                <span>구글 지도에서 ${d.name.split(' ')[0]} 보기</span>
-              </a>
-            </div>
-          </div>
-        `).join('');
-      } else {
-        renderDynamicTripSpotsSummary(trip);
-      }
-    }
-
-    function renderDynamicTripSpotsSummary(trip) {
-      const headerTitle = document.getElementById('cityguide-header-title');
-      const headerDesc = document.getElementById('cityguide-header-desc');
-      const headerIcon = document.getElementById('cityguide-header-icon');
-      const container = document.getElementById('cityguide-cards-container');
-      if (!container) return;
-
-      if (headerTitle) headerTitle.innerText = `${trip.title} 여행지 스팟 모아보기`;
-      if (headerDesc) headerDesc.innerText = '등록된 전체 일자별 스팟들을 한눈에 확인하고 바로 구글 지도로 이동할 수 있습니다.';
-      if (headerIcon) headerIcon.className = 'fa-solid fa-map-pin text-amber-400';
-
-      let allSpots = [];
-      (trip.days || []).forEach(d => {
-        (d.spots || []).forEach(s => {
-          if(SulsulTravel.LiveItinerary.active(s))allSpots.push({ ...s, dayTitle: d.title, dayNum: d.dayNum, city: d.city });
-        });
-      });
-
-      if (allSpots.length === 0) {
-        container.innerHTML = `
-          <div class="col-span-2 p-8 text-center rounded-2xl bg-[#080b12] border border-[#1e263c] space-y-2">
-            <span class="text-3xl">📍</span>
-            <div class="text-sm font-bold text-white">등록된 여행 스팟이 없습니다.</div>
-            <p class="text-xs text-slate-400">일정 탭에서 스팟을 추가하거나 AI 추천 일정을 생성해 보세요.</p>
-          </div>
-        `;
-        return;
-      }
-
-      container.innerHTML = allSpots.map(s => {
-        const gmapUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(s.title + ' ' + (s.city || ''))}`;
-        return `
-          <div class="p-3.5 rounded-xl bg-[#080b12] border border-[#1e263c] space-y-2 flex flex-col justify-between">
-            <div>
-              <div class="flex items-center justify-between gap-2">
-                <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-[#141c2e] text-amber-400 border border-[#23304c]">
-                  Day ${s.dayNum} · ${s.time}
-                </span>
-                ${s.cost ? `<span class="text-[10px] text-emerald-400 font-semibold">${s.cost}</span>` : ''}
-              </div>
-              <h4 class="text-xs font-black text-white mt-1.5">${escapeHtml(s.title)}</h4>
-              ${s.desc ? `<p class="text-[11px] text-slate-400 mt-1 leading-relaxed">${escapeHtml(s.desc)}</p>` : ''}
-              ${s.tip ? `<div class="tip-box text-[10px] text-amber-900 dark:text-amber-300 bg-amber-100 dark:bg-amber-500/10 p-2 rounded-lg border border-amber-300 dark:border-amber-500/20 mt-1.5 font-medium leading-relaxed">💡 ${escapeHtml(s.tip)}</div>` : ''}
-            </div>
-
-            <div class="pt-2">
-              <a href="${gmapUrl}" target="_blank" rel="noopener noreferrer" class="w-full py-1.5 bg-[#141c2e] hover:bg-[#1e2a44] border border-[#23304c] text-sky-400 rounded-lg text-xs font-bold flex items-center justify-center gap-1.5 transition">
-                <i class="fa-solid fa-map-location-dot text-[10px]"></i>
-                <span>구글 지도 길찾기</span>
-              </a>
-            </div>
-          </div>
-        `;
-      }).join('');
-    }
+    // [3] 사전 예약 대시보드·여행 필수 준비 점검과 [4] 거점 도시 가이드·스팟 모아보기는 js/presentation/plan-guides.js(SulsulTravel.PlanGuides)로 옮겼다(v2.1.4, 4단계).
 
     // ==========================================
     // [5] 다통화 지갑 & 환전·가계부 렌더링 엔진 (v1.4.9)
@@ -14729,7 +14281,7 @@ ${JSON.stringify(snapshotDays)}`;
     }
 
     function getReplanDomain() {
-      if (!replanDomainPromise) replanDomainPromise = import('./js/domain/replan.mjs?v=2.1.3');
+      if (!replanDomainPromise) replanDomainPromise = import('./js/domain/replan.mjs?v=2.1.4');
       return replanDomainPromise;
     }
 
@@ -14940,7 +14492,7 @@ ${JSON.stringify(snapshotDays)}`;
 
     async function getAiOrchestrator() {
       if (!aiOrchestratorPromise) {
-        aiOrchestratorPromise = import('./js/application/orchestration.mjs?v=2.1.3').then(({ Orchestrator }) =>
+        aiOrchestratorPromise = import('./js/application/orchestration.mjs?v=2.1.4').then(({ Orchestrator }) =>
           new Orchestrator({
             online: job => Boolean(job?.input?.localDraft) || navigator.onLine,
             timeoutMs: 65000,
@@ -17633,8 +17185,6 @@ JSON 배열만 출력하세요. 각 day는 dayNum, title, city, date, spots를 �
       handleQuickCalcInput: handleQuickCalcInput,
       clearQuickCalcInput: clearQuickCalcInput,
       addQuickCalcAmount: addQuickCalcAmount,
-      setBookingGuideFilter: setBookingGuideFilter,
-      toggleBookingGuideCompleted: toggleBookingGuideCompleted,
       getDayAltitudeAndOutfitInfo: getDayAltitudeAndOutfitInfo,
       showConfirmDelete: showConfirmDelete,
       requestCurrentGpsLocation: requestCurrentGpsLocation,
