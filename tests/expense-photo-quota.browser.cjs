@@ -49,7 +49,7 @@ const server=http.createServer((req,res)=>{
     const png=await page.evaluate(()=>window.syntheticQuotaCanvas.toDataURL('image/png'));
     const buffer=Buffer.from(png.split(',')[1],'base64');
     await page.locator('#exp-photo-file-input').setInputFiles(Array.from({length:4},(_,index)=>({name:`합성추가-${index+1}.png`,mimeType:'image/png',buffer})));
-    await page.waitForFunction(()=>ExpenseFormState.photos.length===8&&!ExpenseFormState.photosLoading);
+    await page.waitForFunction(()=>SulsulTravel.ExpenseEditor.state.photos.length===8&&!SulsulTravel.ExpenseEditor.state.photosLoading);
     await page.locator('#exp-photos-list .expense-photo-tile').last().locator('.expense-primary').click();
     const save=page.locator('#exp-form-submit-btn');await save.click();
     await page.waitForFunction(()=>document.getElementById('modal-expense').classList.contains('sheet-closed'));

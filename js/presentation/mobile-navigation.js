@@ -105,17 +105,17 @@
   }
   function closePhoto(top){
     for(const [modal,viewer,close] of [
-      ['modal-expense','expense-photo-viewer','closeExpensePhotoViewer'],
-      ['modal-activity-record','activity-record-viewer','closeActivityPhotoViewer'],
-      ['modal-moment-record','moment-record-viewer','closeMomentPhotoViewer']
-    ])if(modal===top&&isOpen(modal)&&document.getElementById(viewer)&&!document.getElementById(viewer).hidden){root[close]();return true;}
+      ['modal-expense','expense-photo-viewer',()=>root.SulsulTravel.ExpenseEditor.closePhotoViewer()],
+      ['modal-activity-record','activity-record-viewer',()=>root.closeActivityPhotoViewer()],
+      ['modal-moment-record','moment-record-viewer',()=>root.closeMomentPhotoViewer()]
+    ])if(modal===top&&isOpen(modal)&&document.getElementById(viewer)&&!document.getElementById(viewer).hidden){close();return true;}
     return false;
   }
   async function goBack(){
     const modal=topModal();
     if(closePhoto(modal))return 'photo';
     if(modal){
-      if(modal==='modal-expense'&&typeof ExpenseFormState!=='undefined'&&ExpenseFormState.saving){root.showToast('지출 저장을 마친 뒤 닫아 주세요.');return 'busy';}
+      if(modal==='modal-expense'&&root.SulsulTravel?.ExpenseEditor?.state.saving){root.showToast('지출 저장을 마친 뒤 닫아 주세요.');return 'busy';}
       if(modal==='modal-travel-backup'){root.closeTravelBackupModal();return 'modal';}
       if(modal==='modal-replan-review'){root.rejectPendingReplan();return 'modal';}
       if(modal==='modal-ai-draft-review'){await root.rejectActiveAiDraft();return 'modal';}
@@ -158,7 +158,7 @@
   },true);
   root.addEventListener('beforeunload',event=>{
     if(approvedExit)return;
-    const expensePending=typeof ExpenseFormState!=='undefined'&&(ExpenseFormState.saving||isOpen('modal-expense')&&root.isModalFormDirty?.('modal-expense'));
+    const expenseForm=root.SulsulTravel?.ExpenseEditor?.state,expensePending=!!expenseForm&&(expenseForm.saving||isOpen('modal-expense')&&root.isModalFormDirty?.('modal-expense'));
     if(expensePending||pendingTravelRecords()){event.preventDefault();event.returnValue='';}
   });
   root.addEventListener('pagehide',()=>clearTimeout(exitTimer));

@@ -51,7 +51,7 @@ const server=http.createServer((req,res)=>{
     });
     await check('지출 사진→편집창 순으로 닫고 저장중에는 이탈하지 않는다',async api=>{
       const {page}=api;await api.seed();
-      await page.evaluate(()=>{openAddExpenseModal();ExpenseFormState.photos=['data:image/png;base64,AAAA'];renderExpensePhotos();viewExpensePhoto(0);});
+      await page.evaluate(()=>{SulsulTravel.ExpenseEditor.openAdd();SulsulTravel.ExpenseEditor.state.photos=['data:image/png;base64,AAAA'];SulsulTravel.ExpenseEditor.renderPhotos();SulsulTravel.ExpenseEditor.viewPhoto(0);});
       await page.evaluate(()=>openModal('modal-settings'));await api.back();await api.closed('modal-settings');
       assert.equal(await page.locator('#expense-photo-viewer').isVisible(),true);
       await api.back();await page.waitForFunction(()=>document.getElementById('expense-photo-viewer').hidden);
@@ -60,10 +60,10 @@ const server=http.createServer((req,res)=>{
       api.setConfirm(false);await api.back();await page.waitForFunction(()=>history.state?.stAppNavigation?.kind==='guard');
       assert.equal(await page.locator('#exp-form-title').inputValue(),'보존할 가상 지출');
       assert.equal(await page.locator('#modal-expense').evaluate(e=>!e.classList.contains('sheet-closed')),true);
-      api.setConfirm(true);await page.evaluate(()=>{ExpenseFormState.saving=true;});await api.back();
+      api.setConfirm(true);await page.evaluate(()=>{SulsulTravel.ExpenseEditor.state.saving=true;});await api.back();
       await page.waitForFunction(()=>history.state?.stAppNavigation?.kind==='guard');
       assert.equal(await page.locator('#modal-expense').evaluate(e=>!e.classList.contains('sheet-closed')),true);
-      await page.evaluate(()=>{ExpenseFormState.saving=false;});await api.back();await api.closed('modal-expense');
+      await page.evaluate(()=>{SulsulTravel.ExpenseEditor.state.saving=false;});await api.back();await api.closed('modal-expense');
       assert.equal(api.dialogs.length,2);assert.equal(await page.evaluate(()=>getActiveTrip().expenses.length),0);
       return {photoFirst:true,dirtyCancelPreserved:true,saveInProgressProtected:true,discardNoWrite:true};
     });
@@ -106,17 +106,17 @@ const server=http.createServer((req,res)=>{
       return {busyRestoreProtected:true,reviewCancelledThroughOwnBoundary:true};
     });
     await check('새로고침도 작성중 지출과 저장중인 거래를 네이티브 확인으로 보호',async api=>{
-      const {page}=api;await api.seed();await page.evaluate(()=>openAddExpenseModal());
+      const {page}=api;await api.seed();await page.evaluate(()=>SulsulTravel.ExpenseEditor.openAdd());
       await page.locator('#exp-form-title').click();await page.locator('#exp-form-title').fill('재시작 전 보존할 초안');
       await page.waitForFunction(()=>history.state?.stAppNavigation?.activated===true);
       api.setConfirm(false);
       await page.reload({waitUntil:'domcontentloaded',timeout:3000}).catch(()=>{});
       assert.equal(await page.locator('#exp-form-title').inputValue(),'재시작 전 보존할 초안');
-      await page.evaluate(()=>{ExpenseFormState.baseline=expenseFormSnapshot();ExpenseFormState.saving=true;});
+      await page.evaluate(()=>{SulsulTravel.ExpenseEditor.state.baseline=SulsulTravel.ExpenseEditor.snapshot();SulsulTravel.ExpenseEditor.state.saving=true;});
       await page.reload({waitUntil:'domcontentloaded',timeout:3000}).catch(()=>{});
-      assert.equal(await page.evaluate(()=>ExpenseFormState.saving),true);
+      assert.equal(await page.evaluate(()=>SulsulTravel.ExpenseEditor.state.saving),true);
       assert.equal(api.dialogs.length,2);
-      await page.evaluate(()=>{ExpenseFormState.saving=false;closeModal('modal-expense',true);});
+      await page.evaluate(()=>{SulsulTravel.ExpenseEditor.state.saving=false;closeModal('modal-expense',true);});
       return {nativeBeforeUnloadDirtyProtected:true,nativeBeforeUnloadSavingProtected:true};
     });
     await check('종료 확인 버튼을 누르면 이전 문서로 한 번만 돌아간다',async api=>{

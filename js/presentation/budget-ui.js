@@ -1,7 +1,7 @@
 /* 초기 자산·예산 창과 통화 선택 창 (v2.1.2, 계획 4단계 세 번째 화면 분리의 2차).
  * index.html 인라인 스크립트의 [11.2] 초기 자산 및 총 예산 관리 창과 [11.3] 전세계 통화 선택 창을 옮겼다.
  * 공용 환율 계산(CURRENCY_INFO·getCurrencyRate·getCurrencySymbol·calculateTripWallets)과 셸 함수(getActiveTrip·commitTrip·
- * renderActiveTripWorkspace·openModal·closeModal·showToast·showConfirmDelete·escapeHtml), 지출 입력창의 selectExpenseCurrency는 부를 때 찾는다.
+ * renderActiveTripWorkspace·openModal·closeModal·showToast·showConfirmDelete·escapeHtml), 지출 입력창(SulsulTravel.ExpenseEditor)은 부를 때 찾는다.
  * 초기 자산 창은 저장 전까지 여행 자료를 바꾸지 않는다. 입력과 통화 목록은 이 파일의 초안(draft)에만 두고, 저장할 때 commitTrip으로 한 번에 쓴다.
  * 동작은 data-on-click·data-on-change·data-on-input="budget.*"로 잇는다. 불러올 때는 등록만 하고 문서를 건드리지 않는다. */
 (function (root) {
@@ -347,7 +347,7 @@
       renderInitialFunds();
     }
     // 지출 입력창이 열려 있으면 새 통화를 바로 고른다.
-    if (isOpen('modal-expense') && typeof selectExpenseCurrency === 'function') selectExpenseCurrency(code);
+    if (isOpen('modal-expense')) T.ExpenseEditor?.selectCurrency(code);
     return true;
   }
 

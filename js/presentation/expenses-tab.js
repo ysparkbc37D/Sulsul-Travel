@@ -2,7 +2,7 @@
  * index.html 인라인 스크립트 [5]의 화면 부분(지갑 보드, 빠른 환율 계산기, 지출·환전 목록과 보기 전환, 환전 기록 삭제)을 옮겼다.
  * 공용 환율 계산(CURRENCY_INFO·getCurrencyRate·calculateTripWallets)은 오늘 화면·지출 편집기도 쓰므로 셸에 남는다.
  * 셸·다른 화면의 함수(getActiveTrip·commitTripCommand·renderActiveTripWorkspace·showConfirmDelete·showToast·escapeHtml·getCategoryIcon,
- * openAddExpenseModal·openEditExpenseModal·requestDeleteExpense·renderExpenseCurrencyChips·updateExpenseInlineKrwPreview,
+ * requestDeleteExpense, 지출 입력창 SulsulTravel.ExpenseEditor,
  * triggerReceiptScan·handleReceiptScan)는 부를 때 찾는다.
  * 환전 창과 환율 관리는 exchange-ui.js(SulsulTravel.ExchangeUI), 초기 자산·통화 선택 창은 budget-ui.js(SulsulTravel.BudgetUI),
  * 사용내역 통계는 expense-analytics.js(SulsulTravel.ExpenseAnalytics)다.
@@ -117,11 +117,12 @@
     const amount = Number(document.getElementById('quick-calc-input')?.value) || 0;
     const curr = document.getElementById('quick-calc-curr')?.value || 'KRW';
     if (amount <= 0) { showToast('계산기에 금액을 먼저 입력해 주세요.'); return; }
-    openAddExpenseModal();
+    const editor = SulsulTravel.ExpenseEditor;
+    editor.openAdd();
     const amountInput = document.getElementById('exp-form-amount');
     if (amountInput) amountInput.value = amount;
-    renderExpenseCurrencyChips(curr);
-    updateExpenseInlineKrwPreview();
+    // 통화를 고르면 원화 미리보기와 지갑 선택지가 함께 바뀐다.
+    editor.selectCurrency(curr);
   }
 
   // ---- 지출·환전 목록 ----
@@ -301,8 +302,8 @@
   const index = element => Number(element.dataset.index);
   T.UiActions.define('expenses', {
     view: element => switchView(element.dataset.view),
-    add: () => openAddExpenseModal(),
-    edit: (element, event) => openEditExpenseModal(index(element), event),
+    add: () => SulsulTravel.ExpenseEditor.openAdd(),
+    edit: (element, event) => SulsulTravel.ExpenseEditor.openEdit(index(element), event),
     remove: (element, event) => requestDeleteExpense(index(element), event),
     removeExchange: (element, event) => removeExchange(index(element), event),
     exchange: () => SulsulTravel.ExchangeUI.open(),

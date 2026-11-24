@@ -52,7 +52,7 @@
 | `js/infrastructure/collaboration/` | 공개 키 REST 연결, 계획 전송·초대·권한·대기 변경 |
 | `js/presentation/collaboration-*.js` | 공동 계획 연결·비교·승인·보기 전용 저장 경계 |
 | `backend/supabase-travel.sql` | RLS 읽기와 권한 검증 RPC, 초대·변경 이력 |
-| `js/presentation/expense-editor.js` | 지출 거래 편집, 사진과 지갑 반영 |
+| `js/presentation/expense-editor.js` | 지출·수입 입력창 전체(v2.1.3, `SulsulTravel.ExpenseEditor`): 간편·상세, 카드·현금, 지출·수입, 카테고리, 통화 칩, 출금 지갑 카드, 사진, 편집·저장·초안 파일. 폼 상태는 `SulsulTravel.ExpenseEditor.state`. 얼리지 않으며 안에서도 `api.compressPhoto`를 불러 검사가 사진 준비를 바꿔 끼울 수 있다 |
 | `js/presentation/trip-transfer-ui.js` | 사본 링크·파일 공유와 가져오기 |
 | `js/destinations/` | 국가/도시 목적지 지식 팩과 레지스트리 |
 | `js/destinations/emergency-contacts.js` | 출처·확인일이 있는 국가별 긴급 번호와 오늘 도시 기준 국가 판별. 확인하지 못한 국가는 추정하지 않음 |
@@ -117,6 +117,7 @@ node .\tests\checklist-tab.browser.cjs
 node .\tests\journal-tab.browser.cjs
 node .\tests\expenses-tab.browser.cjs
 node .\tests\budget-analytics.browser.cjs
+node .\tests\expense-form.browser.cjs
 .\tools-verify.ps1
 ```
 
