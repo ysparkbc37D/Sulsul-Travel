@@ -23,7 +23,7 @@ function refreshScheduleViews(){
     renderBigPlanTab();renderTodayTab();
     if(State.activeTab==='plan'&&document.getElementById('tab-content-plan').dataset.presentation==='timeline'&&!detailOpen)SulsulTravel.PlanTimeline.render();
     if(detailOpen&&State.activePlanBlockId)renderPlanBlockDetail();
-    if(State.activeTab==='plan'&&State.planSubTab==='map'){initOrUpdateLeafletMap();}
+    if(State.activeTab==='plan'&&State.planSubTab==='map'){SulsulTravel.PlanMap.render();}
     if(State.activeTab==='plan'&&State.planSubTab==='cityguide')SulsulTravel.PlanGuides.renderCityGuides();
     window.scrollTo({top:y,behavior:'instant'});if(detail)detail.scrollTop=detailY;
     requestAnimationFrame(()=>{window.scrollTo({top:y,behavior:'instant'});if(detail)detail.scrollTop=detailY;});

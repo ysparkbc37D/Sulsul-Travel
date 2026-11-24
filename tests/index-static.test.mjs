@@ -13,6 +13,7 @@ const kbTravel = readFileSync(new URL('../kb-travel.js', import.meta.url), 'utf8
 const checklistTab = readFileSync(new URL('../js/presentation/checklist-tab.js', import.meta.url), 'utf8');
 const planGuides = readFileSync(new URL('../js/presentation/plan-guides.js', import.meta.url), 'utf8');
 const planTimeline = readFileSync(new URL('../js/presentation/plan-timeline.js', import.meta.url), 'utf8');
+const planMap = readFileSync(new URL('../js/presentation/plan-map.js', import.meta.url), 'utf8');
 const packSa = readFileSync(new URL('../js/destinations/pack-south-america.js', import.meta.url), 'utf8');
 const packageMetadata = JSON.parse(readFileSync(new URL('../package.json', import.meta.url), 'utf8'));
 const backupUi = readFileSync(new URL('../js/presentation/travel-backup-ui.js', import.meta.url), 'utf8');
@@ -329,10 +330,10 @@ test('global geocoding engine and Spain Toledo precision mapping are supported (
   assert.match(dkpDefault, /-4\.0273/);
   assert.match(dkpDefault, /window\.SulsulGeo/);
 
-  // 2. Safe Google Maps query helper and fitBounds in index.html
-  assert.match(html, /function getSafeGoogleMapsQuery\(dest, trip\)/);
-  assert.match(html, /State\.map\.fitBounds\(L\.latLngBounds\(validCoords\)/);
-  assert.match(html, /State\.map\.flyToBounds\(L\.latLngBounds\(validCoords\)/);
+  // 2. Safe Google Maps query helper and fitBounds (v2.1.6부터 js/presentation/plan-map.js)
+  assert.match(planMap, /function getSafeGoogleMapsQuery\(dest, trip\)/);
+  assert.match(planMap, /State\.map\.fitBounds\(L\.latLngBounds\(validCoords\)/);
+  assert.match(planMap, /State\.map\.flyToBounds\(L\.latLngBounds\(validCoords\)/);
 
   // 3. Spain Toledo and Seville registered in index.html CITY_GEO_COORDS
   assert.match(html, /'톨레도': \[39\.8628, -4\.0273\]/);

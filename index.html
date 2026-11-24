@@ -28,7 +28,8 @@
         typeof window.SulsulTravel?.ExpenseAnalytics?.open === 'function' &&
         typeof window.SulsulTravel?.ExpenseEditor?.openAdd === 'function' &&
         typeof window.SulsulTravel?.PlanGuides?.renderBookings === 'function' &&
-        typeof window.SulsulTravel?.PlanTimeline?.render === 'function';
+        typeof window.SulsulTravel?.PlanTimeline?.render === 'function' &&
+        typeof window.SulsulTravel?.PlanMap?.render === 'function';
       shell.reload = () => {if(!shell.reloading){shell.reloading=true;location.reload();}};
       shell.canReload = () => {
         if(!shell.started)return true;
@@ -147,17 +148,17 @@
   </script>
 
   <!-- PWA Meta & Icons -->
-  <link rel="manifest" href="manifest.webmanifest?v=2.1.5">
+  <link rel="manifest" href="manifest.webmanifest?v=2.1.6">
   <meta name="theme-color" content="#F7F5F0">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <meta name="apple-mobile-web-app-title" content="술술트래블">
-  <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192-v115.png?v=2.1.5">
-  <link rel="icon" type="image/png" sizes="32x32" href="favicon.png?v=2.1.5">
+  <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192-v115.png?v=2.1.6">
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon.png?v=2.1.6">
   <link rel="shortcut icon" href="favicon.ico">
-  <link rel="apple-touch-icon" sizes="180x180" href="icons/apple-touch-icon-v115.png?v=2.1.5">
-  <link rel="apple-touch-icon" href="icons/apple-touch-icon-v115.png?v=2.1.5">
+  <link rel="apple-touch-icon" sizes="180x180" href="icons/apple-touch-icon-v115.png?v=2.1.6">
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon-v115.png?v=2.1.6">
 
   <!-- Google Fonts: Great Vibes, Dancing Script (Cursive Calligraphy), Cormorant Garamond, Noto Serif KR, Playfair Display -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -165,7 +166,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Great+Vibes&family=Cormorant+Garamond:wght@600;700;800&family=Noto+Serif+KR:wght@500;600;700;900&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
 
   <!-- Local Utilities Bundle (CDN fallback & tailwind utilities) -->
-  <link rel="stylesheet" href="css/utilities.css?v=2.1.5" integrity="sha384-HMVB4SH6xwwGITkNyT8ARmHegAYSuTMocPGl4bpl0JywMIe2PqYrUxqZOgEuZjmP">
+  <link rel="stylesheet" href="css/utilities.css?v=2.1.6" integrity="sha384-HMVB4SH6xwwGITkNyT8ARmHegAYSuTMocPGl4bpl0JywMIe2PqYrUxqZOgEuZjmP">
   <link rel="stylesheet" href="vendor/fontawesome/css/all.min.css" integrity="sha384-t1nt8BQoYMLFN5p42tRAtuAAFQaCQODekUVeKKZrEnEyp4H2R0RHFz0KWpmj7i8g">
 
   <!-- Leaflet Map CSS & JS -->
@@ -1507,68 +1508,69 @@
     }
   </style>
 
-  <link rel="stylesheet" href="css/companion.css?v=2.1.5" integrity="sha384-Syant7HB0IYUZUU2saRSYUDkM71WKVuK2JtHM+kAluFdw3VvWv9gSglgJh4utHv/">
-  <link rel="stylesheet" href="css/companion-refresh.css?v=2.1.5" integrity="sha384-2KIp4VI8qsP6dGnz0cm/vehjLjr6GxpZ9yWTbbIXBPWi25XHg6XUOtNbp7W8KMd3">
-  <link rel="stylesheet" href="css/live-itinerary.css?v=2.1.5" integrity="sha384-e/V9wyJ/Gi6baSHcWzBeNGjdn/eKDQIvKWyiYmByLE7C7nYJaQOA+GshtUMcCR72">
-  <link rel="stylesheet" href="css/expense-mobile.css?v=2.1.5" integrity="sha384-QZFtKrU/YvkTaEKv0oJ2ZQi1Zry8RgEFaHzTckwuPFsMDDmadYBH7UuYgTVS7281">
-  <link rel="stylesheet" href="css/moment-journal.css?v=2.1.5" integrity="sha384-g1EihgfyPDJ5o5eWSsQgT1WDTRKDtUfzVatlx6T/t+DhApDBY8dznSrwmelasv91">
-  <script src="js/domain/trip-adapter.js?v=2.1.5" integrity="sha384-JHU/NkAlxwR9G9/49TaFK4sTvg9xKGsSVd3re8rLivtiXcSNdnQA9gRIfvVWUtG7"></script>
-  <script src="js/domain/ai-draft-validation.js?v=2.1.5" integrity="sha384-OTRAiX7YaOiiNrpMWDjkOyH0bTbbL3KrGwGp1RmIkgvd15pErNTTKVTJkoesmpfi"></script>
-  <script src="js/domain/live-itinerary.js?v=2.1.5" integrity="sha384-cwMH5i2F5Mve7Z9cKeWrP7uLU5plcu6c7xvTf4Lyz3Xkb6GlNCI14lnEWzw46cVg"></script>
-  <script src="js/presentation/live-itinerary-ui.js?v=2.1.5" integrity="sha384-SLjn2QhNBI6VfrG3siiRZqfs51VnmqyRCTMGjMN25fIyHhYwf4LnECXOOiQ4arog"></script>
-  <script src="js/presentation/live-itinerary-bridge.js?v=2.1.5" integrity="sha384-lRoX8rvtVNC3rl6v9tCVjTLCSBjLmTH3EhNiq6OPizV+6GvspGEUIpH00HoPTgEn"></script>
-  <script src="js/domain/schedule-change.js?v=2.1.5" integrity="sha384-v7zQ2iSY9DIrsztq758NvV0o6vbsguJn70NviXT6itT6YcuNaCvSW2beDogcMbD7"></script>
-  <script src="js/presentation/schedule-change-ui.js?v=2.1.5" integrity="sha384-7BNN82ITVgyCFy8UDv8/D3xguo+UsGpp1tqGM8GYd4yncDRIUgvwrIH4hYWV1ZWj"></script>
-  <script src="js/domain/spot-realignment.js?v=2.1.5" integrity="sha384-gCFPNcD1aD3UegqTLtFPCU7Xqm7CtRN0yjQx2QnWe1ee0i3cZu8pzZic7YzBJLKt"></script>
-  <script src="js/presentation/spot-realignment-ui.js?v=2.1.5" integrity="sha384-GKlSQQKluvxcnRhJmQVQL4lZIFXbqf8ac/0BnxPiWNWcLjFJWYx/IZU3+5fZI7dk"></script>
-  <script src="js/domain/travel-records.js?v=2.1.5" integrity="sha384-qhkfkF1xKTuPtBvsB5Gwpz631xTkyy2tS1BU9Hixd2L1t+oobsXBMJnFv1pBHNnW"></script>
-  <script src="js/domain/travel-story.js?v=2.1.5" integrity="sha384-vjuGNDpytM6vG8SuZbKLW7qTTV1L33j48P1KSwNQnvca7uxo5EYkBM2X0IOdn/Qa"></script>
-  <script src="js/infrastructure/storage/photo-compression.js?v=2.1.5" integrity="sha384-MeOApXBzhg++Rcq/Lfjwb04/MA1U6wmwHppDgFZvKA4ZfdPC4oR2Hv1BhPFNU7Ig"></script>
-  <link rel="stylesheet" href="css/photo-optimization.css?v=2.1.5" integrity="sha384-9sgcirlxZs5tcmp/22RdH56B3bZla/q4DVH7x8W+fO8P4neR4WJMDDtQNK4WPq+/">
-  <script src="js/domain/photo-optimization.js?v=2.1.5" integrity="sha384-fpPZ4nJ383bIJaSHvmuZg+9BYd5LQ8YuVtEEMjtJnQr2Fod/mawAoB5SYMdtvBRU"></script>
-  <script src="js/infrastructure/storage/photo-cleanup.js?v=2.1.5" integrity="sha384-qPUCnJe7spP79MZLfOuzscYXTD6cW+7dzsf0xxvDip9hIj+yBvbBK6KhAouz5BC/"></script>
-  <script src="js/presentation/photo-optimization-ui.js?v=2.1.5" integrity="sha384-9QsQz7hvv3HVSOtRVjrMPr6G9w59E//utEWpshSg+awbBA4xBBcO/BGw/WhZNI8Z"></script>
-  <script src="js/infrastructure/storage/media-repository.js?v=2.1.5" integrity="sha384-q0IPoo86aU2ruB130X1HAh01dr4hpI0IAXeMVCoa7Jy/2pIB09f7WbSKPm8vowhw"></script>
-  <script src="js/infrastructure/storage/record-media-store.js?v=2.1.5" integrity="sha384-vNu5tI/i1vWsxi2/3aQYW+9zYfivBNB2ewaUTRlwhnGwRbv9dpR4bu/sqzv1D2jm"></script>
-  <script src="js/infrastructure/storage/expense-photo-repository.js?v=2.1.5" integrity="sha384-gdumvFYkJqEbRPJlK4mffCsUjPsnKCXLg6/1fLMR8kUuU1QDMeLLOYmMVSRTGNSy"></script>
-  <script src="js/presentation/companion-ui.js?v=2.1.5" integrity="sha384-wP9pcTujLyRdcH36R6ZsBQpYpjjt50uKqcmYxt0tQmcHNbPpBslaVtCSLjJoIjin"></script>
-  <script src="js/domain/trip-transfer.js?v=2.1.5" integrity="sha384-VD9q1co1+bJzdS4i19rvfkQN/4KvzfnNdHUjbbucghcxzjmPim+kWF93qv5DaXSu"></script>
-  <script src="js/domain/travel-backup.js?v=2.1.5" integrity="sha384-4zE43uWlz5y3eP7g98tEL3HqAsw08/XvINQ+RhLLt4wz+cnySMWiy3Eu1m7BaBbK"></script>
-  <script src="js/presentation/travel-backup-ui.js?v=2.1.5" integrity="sha384-2MeiLmNhd6dsStzYdF4LhB3OrNegW5vZSkbRojImg5IQ9LLjrkbdcd+LP2rpbB1h"></script>
-  <script src="js/presentation/storage-health-ui.js?v=2.1.5" integrity="sha384-yhLee1WlZBu7vZL8qquRuBbYdW2RIBPIkjKQqjgT5iNw7FRWOlw7POGkpMar7IkT"></script>
-  <script src="js/presentation/trip-transfer-ui.js?v=2.1.5" integrity="sha384-alWNP5q7xJLSbe8GlkYNmHLw8G9jbXGLNSi28LERcPAb1pESASALcV/HOiFWa12h"></script>
-  <script src="js/presentation/mobile-navigation.js?v=2.1.5" integrity="sha384-qUtkWs7/ForvUZzC3hkzt5+AkF3u00dJVZ09uCkv6x93wLDQgiqYNXPLTbuHU9bz"></script>
-  <script src="js/presentation/activity-journal.js?v=2.1.5" integrity="sha384-hrVv/1H+IiAjfuKq7MWCvPpNNVrqpEYxVYOBE97auljbLPQPyTjQ5PCabuvnnozP"></script>
-  <script src="js/presentation/moment-journal.js?v=2.1.5" integrity="sha384-r/heV0A2E+VDwxEE7joC1tw0UPcWIWSdZHDvU0rQs6c+LzY5zCEBLYiF4KIKQo5u"></script>
-  <script src="js/presentation/travel-story-ui.js?v=2.1.5" integrity="sha384-s9HZ4A1/X3tCfe4rBfB6nzEwAC7i2U1YVfradgxnQPX5X4tnFszIOPeMsLPfXnfq"></script>
-  <script src="js/config/collaboration-config.js?v=2.1.5" integrity="sha384-ipxhKB+fQ4s3OThYo3p6IWFvP6BbstXYDW6jZWWiPHB4qomo64w7r8/wRvdsi47w"></script>
-  <script src="js/infrastructure/collaboration/supabase-travel-service.js?v=2.1.5" integrity="sha384-+SDvVJ0CNqCMvFlOBOA+nfA1k6/sN6GlaKDhTQo4SgX8x3EwPXyJlvMfJj0D6Bt/"></script>
-  <script src="js/presentation/collaboration-ui.js?v=2.1.5" integrity="sha384-KvnYI6ym2/deKsOtKryWJS5tljPjqYRx67JGGgWVRNyWHEC470iPDg3+fdw0OHX0"></script>
-  <script src="js/presentation/collaboration-review.js?v=2.1.5" integrity="sha384-cbND/rT26DaIY2hR++LBuByF9L/ACu5TDl0b85EN2zsk/sTapWGm2BPQqZgN6GzI"></script>
-  <script src="js/presentation/ui-actions.js?v=2.1.5" integrity="sha384-86E6+vWuYSS4ldFWIpwfcJMnPW2jUnvL9CJGWeJHDKHEXnQsNWTDB0skpvkRBm9K"></script>
-  <script src="js/presentation/shell-actions.js?v=2.1.5" integrity="sha384-ec2zNqB35MYVfgVf448ukoOrIy6FFwUow/h7S8z0W47OS7F+tloHdR8w4+Mmw4Zy"></script>
-  <script src="js/presentation/exchange-ui.js?v=2.1.5" integrity="sha384-21MA/m/6rg1LsIZFsoAuqvhmWN3Y8seM2ZdIZHKOGEZ70CAjaeulE8mmIbSKmb1h"></script>
-  <script src="js/presentation/plan-timeline.js?v=2.1.5" integrity="sha384-47MFhIy5AILe78Oj2efg0Sdhl0enRNIn/dZrGuxcyLqQG3Ht9dC4kLDicaNOJe9C"></script>
-  <script src="js/presentation/plan-guides.js?v=2.1.5" integrity="sha384-Eg0ooJHXflNMCbbk5sEJIg4VX2WigAkFB9GzPI7iT7q57s8L2TdNMYQxc9BWHb87"></script>
-  <script src="js/presentation/budget-ui.js?v=2.1.5" integrity="sha384-p+A7x64rZuPWhGaUzTMoNYo60aTQzp7UXhZzMfXABMyWqrG32b4LDPZ/SGwoEKjs"></script>
-  <script src="js/presentation/expense-analytics.js?v=2.1.5" integrity="sha384-GOo/a/N9uE2yr6Aw2Ju6sXiBr5VTaDbPb1nth/ElR4GDT1yPI0CfghLOB7DaN1Yp"></script>
-  <script src="js/presentation/expenses-tab.js?v=2.1.5" integrity="sha384-dFoKIs/B5CCctW17/wd1Kp0Kr6v9LXykyt/8yOknSEs3G9C7rnYam3VrTKE9ZaFg"></script>
-  <script src="js/presentation/journal-tab.js?v=2.1.5" integrity="sha384-Hhgx7Hra1MAb8tvQIMdF9khAJjZHC3SqpdqWrAXEVAbGHvgFLOf+bREOM6jyvFoc"></script>
-  <script src="js/presentation/checklist-tab.js?v=2.1.5" integrity="sha384-ENgqtNcHd59KKTorCEZx/H/zUSfXi47RIM1X1F1E6tNPe5U4DKXginat44x1SDbL"></script>
-  <script src="js/presentation/expense-editor.js?v=2.1.5" integrity="sha384-PosLZVGcia3FlNTeQCWVw+mtgPsGaCJjpHKtrdFVXpaw5LYD+iQ/M5FYwMYy/HVY"></script>
+  <link rel="stylesheet" href="css/companion.css?v=2.1.6" integrity="sha384-Syant7HB0IYUZUU2saRSYUDkM71WKVuK2JtHM+kAluFdw3VvWv9gSglgJh4utHv/">
+  <link rel="stylesheet" href="css/companion-refresh.css?v=2.1.6" integrity="sha384-2KIp4VI8qsP6dGnz0cm/vehjLjr6GxpZ9yWTbbIXBPWi25XHg6XUOtNbp7W8KMd3">
+  <link rel="stylesheet" href="css/live-itinerary.css?v=2.1.6" integrity="sha384-e/V9wyJ/Gi6baSHcWzBeNGjdn/eKDQIvKWyiYmByLE7C7nYJaQOA+GshtUMcCR72">
+  <link rel="stylesheet" href="css/expense-mobile.css?v=2.1.6" integrity="sha384-QZFtKrU/YvkTaEKv0oJ2ZQi1Zry8RgEFaHzTckwuPFsMDDmadYBH7UuYgTVS7281">
+  <link rel="stylesheet" href="css/moment-journal.css?v=2.1.6" integrity="sha384-g1EihgfyPDJ5o5eWSsQgT1WDTRKDtUfzVatlx6T/t+DhApDBY8dznSrwmelasv91">
+  <script src="js/domain/trip-adapter.js?v=2.1.6" integrity="sha384-JHU/NkAlxwR9G9/49TaFK4sTvg9xKGsSVd3re8rLivtiXcSNdnQA9gRIfvVWUtG7"></script>
+  <script src="js/domain/ai-draft-validation.js?v=2.1.6" integrity="sha384-OTRAiX7YaOiiNrpMWDjkOyH0bTbbL3KrGwGp1RmIkgvd15pErNTTKVTJkoesmpfi"></script>
+  <script src="js/domain/live-itinerary.js?v=2.1.6" integrity="sha384-cwMH5i2F5Mve7Z9cKeWrP7uLU5plcu6c7xvTf4Lyz3Xkb6GlNCI14lnEWzw46cVg"></script>
+  <script src="js/presentation/live-itinerary-ui.js?v=2.1.6" integrity="sha384-SLjn2QhNBI6VfrG3siiRZqfs51VnmqyRCTMGjMN25fIyHhYwf4LnECXOOiQ4arog"></script>
+  <script src="js/presentation/live-itinerary-bridge.js?v=2.1.6" integrity="sha384-lRoX8rvtVNC3rl6v9tCVjTLCSBjLmTH3EhNiq6OPizV+6GvspGEUIpH00HoPTgEn"></script>
+  <script src="js/domain/schedule-change.js?v=2.1.6" integrity="sha384-v7zQ2iSY9DIrsztq758NvV0o6vbsguJn70NviXT6itT6YcuNaCvSW2beDogcMbD7"></script>
+  <script src="js/presentation/schedule-change-ui.js?v=2.1.6" integrity="sha384-SuKgxPyV+Sb1vXBx2pAEIHZJwYO9nSwYF8dxfwOrCH5b90LPrin9B8zJ9QN1xsjL"></script>
+  <script src="js/domain/spot-realignment.js?v=2.1.6" integrity="sha384-gCFPNcD1aD3UegqTLtFPCU7Xqm7CtRN0yjQx2QnWe1ee0i3cZu8pzZic7YzBJLKt"></script>
+  <script src="js/presentation/spot-realignment-ui.js?v=2.1.6" integrity="sha384-GKlSQQKluvxcnRhJmQVQL4lZIFXbqf8ac/0BnxPiWNWcLjFJWYx/IZU3+5fZI7dk"></script>
+  <script src="js/domain/travel-records.js?v=2.1.6" integrity="sha384-qhkfkF1xKTuPtBvsB5Gwpz631xTkyy2tS1BU9Hixd2L1t+oobsXBMJnFv1pBHNnW"></script>
+  <script src="js/domain/travel-story.js?v=2.1.6" integrity="sha384-vjuGNDpytM6vG8SuZbKLW7qTTV1L33j48P1KSwNQnvca7uxo5EYkBM2X0IOdn/Qa"></script>
+  <script src="js/infrastructure/storage/photo-compression.js?v=2.1.6" integrity="sha384-MeOApXBzhg++Rcq/Lfjwb04/MA1U6wmwHppDgFZvKA4ZfdPC4oR2Hv1BhPFNU7Ig"></script>
+  <link rel="stylesheet" href="css/photo-optimization.css?v=2.1.6" integrity="sha384-9sgcirlxZs5tcmp/22RdH56B3bZla/q4DVH7x8W+fO8P4neR4WJMDDtQNK4WPq+/">
+  <script src="js/domain/photo-optimization.js?v=2.1.6" integrity="sha384-fpPZ4nJ383bIJaSHvmuZg+9BYd5LQ8YuVtEEMjtJnQr2Fod/mawAoB5SYMdtvBRU"></script>
+  <script src="js/infrastructure/storage/photo-cleanup.js?v=2.1.6" integrity="sha384-qPUCnJe7spP79MZLfOuzscYXTD6cW+7dzsf0xxvDip9hIj+yBvbBK6KhAouz5BC/"></script>
+  <script src="js/presentation/photo-optimization-ui.js?v=2.1.6" integrity="sha384-9QsQz7hvv3HVSOtRVjrMPr6G9w59E//utEWpshSg+awbBA4xBBcO/BGw/WhZNI8Z"></script>
+  <script src="js/infrastructure/storage/media-repository.js?v=2.1.6" integrity="sha384-q0IPoo86aU2ruB130X1HAh01dr4hpI0IAXeMVCoa7Jy/2pIB09f7WbSKPm8vowhw"></script>
+  <script src="js/infrastructure/storage/record-media-store.js?v=2.1.6" integrity="sha384-vNu5tI/i1vWsxi2/3aQYW+9zYfivBNB2ewaUTRlwhnGwRbv9dpR4bu/sqzv1D2jm"></script>
+  <script src="js/infrastructure/storage/expense-photo-repository.js?v=2.1.6" integrity="sha384-gdumvFYkJqEbRPJlK4mffCsUjPsnKCXLg6/1fLMR8kUuU1QDMeLLOYmMVSRTGNSy"></script>
+  <script src="js/presentation/companion-ui.js?v=2.1.6" integrity="sha384-wP9pcTujLyRdcH36R6ZsBQpYpjjt50uKqcmYxt0tQmcHNbPpBslaVtCSLjJoIjin"></script>
+  <script src="js/domain/trip-transfer.js?v=2.1.6" integrity="sha384-VD9q1co1+bJzdS4i19rvfkQN/4KvzfnNdHUjbbucghcxzjmPim+kWF93qv5DaXSu"></script>
+  <script src="js/domain/travel-backup.js?v=2.1.6" integrity="sha384-4zE43uWlz5y3eP7g98tEL3HqAsw08/XvINQ+RhLLt4wz+cnySMWiy3Eu1m7BaBbK"></script>
+  <script src="js/presentation/travel-backup-ui.js?v=2.1.6" integrity="sha384-2MeiLmNhd6dsStzYdF4LhB3OrNegW5vZSkbRojImg5IQ9LLjrkbdcd+LP2rpbB1h"></script>
+  <script src="js/presentation/storage-health-ui.js?v=2.1.6" integrity="sha384-yhLee1WlZBu7vZL8qquRuBbYdW2RIBPIkjKQqjgT5iNw7FRWOlw7POGkpMar7IkT"></script>
+  <script src="js/presentation/trip-transfer-ui.js?v=2.1.6" integrity="sha384-alWNP5q7xJLSbe8GlkYNmHLw8G9jbXGLNSi28LERcPAb1pESASALcV/HOiFWa12h"></script>
+  <script src="js/presentation/mobile-navigation.js?v=2.1.6" integrity="sha384-qUtkWs7/ForvUZzC3hkzt5+AkF3u00dJVZ09uCkv6x93wLDQgiqYNXPLTbuHU9bz"></script>
+  <script src="js/presentation/activity-journal.js?v=2.1.6" integrity="sha384-hrVv/1H+IiAjfuKq7MWCvPpNNVrqpEYxVYOBE97auljbLPQPyTjQ5PCabuvnnozP"></script>
+  <script src="js/presentation/moment-journal.js?v=2.1.6" integrity="sha384-r/heV0A2E+VDwxEE7joC1tw0UPcWIWSdZHDvU0rQs6c+LzY5zCEBLYiF4KIKQo5u"></script>
+  <script src="js/presentation/travel-story-ui.js?v=2.1.6" integrity="sha384-s9HZ4A1/X3tCfe4rBfB6nzEwAC7i2U1YVfradgxnQPX5X4tnFszIOPeMsLPfXnfq"></script>
+  <script src="js/config/collaboration-config.js?v=2.1.6" integrity="sha384-ipxhKB+fQ4s3OThYo3p6IWFvP6BbstXYDW6jZWWiPHB4qomo64w7r8/wRvdsi47w"></script>
+  <script src="js/infrastructure/collaboration/supabase-travel-service.js?v=2.1.6" integrity="sha384-+SDvVJ0CNqCMvFlOBOA+nfA1k6/sN6GlaKDhTQo4SgX8x3EwPXyJlvMfJj0D6Bt/"></script>
+  <script src="js/presentation/collaboration-ui.js?v=2.1.6" integrity="sha384-KvnYI6ym2/deKsOtKryWJS5tljPjqYRx67JGGgWVRNyWHEC470iPDg3+fdw0OHX0"></script>
+  <script src="js/presentation/collaboration-review.js?v=2.1.6" integrity="sha384-cbND/rT26DaIY2hR++LBuByF9L/ACu5TDl0b85EN2zsk/sTapWGm2BPQqZgN6GzI"></script>
+  <script src="js/presentation/ui-actions.js?v=2.1.6" integrity="sha384-86E6+vWuYSS4ldFWIpwfcJMnPW2jUnvL9CJGWeJHDKHEXnQsNWTDB0skpvkRBm9K"></script>
+  <script src="js/presentation/shell-actions.js?v=2.1.6" integrity="sha384-ec2zNqB35MYVfgVf448ukoOrIy6FFwUow/h7S8z0W47OS7F+tloHdR8w4+Mmw4Zy"></script>
+  <script src="js/presentation/exchange-ui.js?v=2.1.6" integrity="sha384-21MA/m/6rg1LsIZFsoAuqvhmWN3Y8seM2ZdIZHKOGEZ70CAjaeulE8mmIbSKmb1h"></script>
+  <script src="js/presentation/plan-timeline.js?v=2.1.6" integrity="sha384-47MFhIy5AILe78Oj2efg0Sdhl0enRNIn/dZrGuxcyLqQG3Ht9dC4kLDicaNOJe9C"></script>
+  <script src="js/presentation/plan-map.js?v=2.1.6" integrity="sha384-Ch6XeaNzoJ2lMJjkyBZXf3YmDvext1usx8NpldaG+6lC9f0wXsaNwn9o+dkvO6Aw"></script>
+  <script src="js/presentation/plan-guides.js?v=2.1.6" integrity="sha384-Eg0ooJHXflNMCbbk5sEJIg4VX2WigAkFB9GzPI7iT7q57s8L2TdNMYQxc9BWHb87"></script>
+  <script src="js/presentation/budget-ui.js?v=2.1.6" integrity="sha384-p+A7x64rZuPWhGaUzTMoNYo60aTQzp7UXhZzMfXABMyWqrG32b4LDPZ/SGwoEKjs"></script>
+  <script src="js/presentation/expense-analytics.js?v=2.1.6" integrity="sha384-GOo/a/N9uE2yr6Aw2Ju6sXiBr5VTaDbPb1nth/ElR4GDT1yPI0CfghLOB7DaN1Yp"></script>
+  <script src="js/presentation/expenses-tab.js?v=2.1.6" integrity="sha384-dFoKIs/B5CCctW17/wd1Kp0Kr6v9LXykyt/8yOknSEs3G9C7rnYam3VrTKE9ZaFg"></script>
+  <script src="js/presentation/journal-tab.js?v=2.1.6" integrity="sha384-Hhgx7Hra1MAb8tvQIMdF9khAJjZHC3SqpdqWrAXEVAbGHvgFLOf+bREOM6jyvFoc"></script>
+  <script src="js/presentation/checklist-tab.js?v=2.1.6" integrity="sha384-ENgqtNcHd59KKTorCEZx/H/zUSfXi47RIM1X1F1E6tNPe5U4DKXginat44x1SDbL"></script>
+  <script src="js/presentation/expense-editor.js?v=2.1.6" integrity="sha384-PosLZVGcia3FlNTeQCWVw+mtgPsGaCJjpHKtrdFVXpaw5LYD+iQ/M5FYwMYy/HVY"></script>
 
   <!-- Knowledge Base Seed & Destination Knowledge Packs (DKP) -->
-  <script src="kb-travel.js?v=2.1.5" integrity="sha384-zxXc7MUMbmXkiaF3ymeLmVSiCyPRVfkUjSZetDVx41zrHGyPeSCN4TFpy5f1jNUd"></script>
+  <script src="kb-travel.js?v=2.1.6" integrity="sha384-zxXc7MUMbmXkiaF3ymeLmVSiCyPRVfkUjSZetDVx41zrHGyPeSCN4TFpy5f1jNUd"></script>
   <script src="js/destinations/destination-registry.js" integrity="sha384-PV7EnpqZusutqYxhFc0vICq72coA/C+TMYaBkk+BFy52dmgfk/RDzf/DAgW7dmvC"></script>
   <script src="js/destinations/pack-default.js" integrity="sha384-mCe4oKfrN+8fbLFCJJexsHJXBZkw6b6q1bOg5skoupZ9hXUrhZ92sTRRTF831vDt"></script>
-  <script src="js/destinations/pack-south-america.js?v=2.1.5" integrity="sha384-p6i8pSXkYDEndehBEqNlXK7ZIZia6Tsxw4TD2LUf7TJPUSlPd2AzXbp3wyyAvDG7"></script>
+  <script src="js/destinations/pack-south-america.js?v=2.1.6" integrity="sha384-p6i8pSXkYDEndehBEqNlXK7ZIZia6Tsxw4TD2LUf7TJPUSlPd2AzXbp3wyyAvDG7"></script>
   <script src="js/destinations/pack-yunnan.js" integrity="sha384-MIgviqt+QV/b06eH6w7DO42JTPFr7Q2kFTi8TRQT4MCouBcFBGiC7x1jnKgVatOX"></script>
-  <script src="js/destinations/emergency-contacts.js?v=2.1.5" integrity="sha384-q3IUPhGWY99DNBNM269wiapa6eQYahcwaro/PvPILVtAgkUM0pE23GI5E63eMLlN"></script>
-  <script src="js/infrastructure/storage/legacy-trip-repository.js?v=2.1.5" integrity="sha384-Jf2y8z7h6bwxOdkwZP0zMyhyG/ntcCrFco7a+mzgiFAtiCUE2uXU8Cc/MSjunorP"></script>
-  <script src="js/infrastructure/storage/idb-trip-repository.js?v=2.1.5" integrity="sha384-n7ndWoPUE3bipL9HvWWTfW8XPNZbDRmAWocUpRIyVM5HtGIIEqbkOK1e6InJY8c4"></script>
-  <script src="js/infrastructure/storage/trip-store.js?v=2.1.5" integrity="sha384-ftpferQ+1NXFRqMRZuHlz2wGUfEKk4GKeXEZzAs3FlsUmGfFdxcsSG6U5t4/B1Rb"></script>
-  <script src="js/infrastructure/storage/settings-repository.js?v=2.1.5" integrity="sha384-fp7ck757BhOA+Y2i/VoW21KRCkeMyb/G78wxwhZuReB2JbzcyTxBrLxGldhvw3n3"></script>
-  <script src="js/infrastructure/storage/journal-overflow-repository.js?v=2.1.5" integrity="sha384-uRxi9B+oBHCQ+aa8a6Wp72RAAeEuslXu5kZ+gf9Kvo22B3N6fr1XSkVnAV1X42yO"></script>
+  <script src="js/destinations/emergency-contacts.js?v=2.1.6" integrity="sha384-q3IUPhGWY99DNBNM269wiapa6eQYahcwaro/PvPILVtAgkUM0pE23GI5E63eMLlN"></script>
+  <script src="js/infrastructure/storage/legacy-trip-repository.js?v=2.1.6" integrity="sha384-Jf2y8z7h6bwxOdkwZP0zMyhyG/ntcCrFco7a+mzgiFAtiCUE2uXU8Cc/MSjunorP"></script>
+  <script src="js/infrastructure/storage/idb-trip-repository.js?v=2.1.6" integrity="sha384-n7ndWoPUE3bipL9HvWWTfW8XPNZbDRmAWocUpRIyVM5HtGIIEqbkOK1e6InJY8c4"></script>
+  <script src="js/infrastructure/storage/trip-store.js?v=2.1.6" integrity="sha384-ftpferQ+1NXFRqMRZuHlz2wGUfEKk4GKeXEZzAs3FlsUmGfFdxcsSG6U5t4/B1Rb"></script>
+  <script src="js/infrastructure/storage/settings-repository.js?v=2.1.6" integrity="sha384-fp7ck757BhOA+Y2i/VoW21KRCkeMyb/G78wxwhZuReB2JbzcyTxBrLxGldhvw3n3"></script>
+  <script src="js/infrastructure/storage/journal-overflow-repository.js?v=2.1.6" integrity="sha384-uRxi9B+oBHCQ+aa8a6Wp72RAAeEuslXu5kZ+gf9Kvo22B3N6fr1XSkVnAV1X42yO"></script>
 </head>
 <body class="min-h-screen flex flex-col font-sans transition-colors duration-200">
 
@@ -1581,7 +1583,7 @@
       <div class="app-brand flex items-center gap-2 sm:gap-2.5 min-w-0 cursor-pointer select-none" onclick="switchView('hub')">
         <img src="icons/sulsul_bear_mascot.png" class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl object-cover border border-[#e6e2d8] dark:border-stone-800 shadow-sm shrink-0" alt="Sulsul Travel">
           <h1 class="font-brand-script text-xl sm:text-2xl md:text-3xl font-bold tracking-normal text-[#1E2B24] dark:text-[#ededed] whitespace-nowrap leading-tight">Sulsul Travel</h1>
-            <button id="app-ver-badge" type="button" onclick="event.stopPropagation(); openVersionHistoryModal()" class="theme-card-subtle font-mono" title="앱 버전과 업데이트 기록 보기">v2.1.5</button>
+            <button id="app-ver-badge" type="button" onclick="event.stopPropagation(); openVersionHistoryModal()" class="theme-card-subtle font-mono" title="앱 버전과 업데이트 기록 보기">v2.1.6</button>
             <p id="header-trip-name" class="sr-only">A Deep Life Essay</p>
       </div>
 
@@ -2008,27 +2010,18 @@
               <p id="map-view-header-desc" class="text-[11px] text-slate-400 mt-0.5">거점 핀을 클릭하면 해당 도시로 카메라가 줌인되며 상세 지도와 구글 지도 연동이 활성화됩니다.</p>
             </div>
             <div class="flex items-center gap-1.5 self-start sm:self-auto flex-wrap">
-              <button onclick="resetMapToWorldView()" class="px-2.5 py-1 bg-[#141c2e] hover:bg-[#1a263e] border border-[#23304c] text-slate-300 rounded-lg text-xs font-semibold cursor-pointer transition">
-                <i class="fa-solid fa-globe text-[11px] mr-1"></i> 전체 보기
+              <button type="button" data-on-click="planMap.resetView" class="px-2.5 py-1 bg-[#141c2e] hover:bg-[#1a263e] border border-[#23304c] text-slate-300 rounded-lg text-xs font-semibold cursor-pointer transition">
+                <i class="fa-solid fa-globe text-[11px] mr-1" aria-hidden="true"></i> 전체 보기
               </button>
-              <button id="btn-toggle-all-trips-map" onclick="toggleAllTripsOnWorkspaceMap()" class="px-2.5 py-1 bg-[#141c2e] hover:bg-[#1a263e] border border-[#23304c] text-amber-400 hover:text-amber-300 rounded-lg text-xs font-semibold flex items-center gap-1 cursor-pointer transition" title="등록된 모든 여행의 궤적과 거점을 함께 표시합니다">
-                <i class="fa-solid fa-earth-americas text-[11px]"></i>
+              <button id="btn-toggle-all-trips-map" type="button" data-on-click="planMap.toggleAllTrips" aria-pressed="false" class="px-2.5 py-1 bg-[#141c2e] hover:bg-[#1a263e] border border-[#23304c] text-amber-400 hover:text-amber-300 rounded-lg text-xs font-semibold flex items-center gap-1 cursor-pointer transition" title="등록된 모든 여행의 궤적과 거점을 함께 표시합니다">
+                <i class="fa-solid fa-earth-americas text-[11px]" aria-hidden="true"></i>
                 <span id="btn-toggle-all-trips-label">🌐 전체 여행 궤적</span>
               </button>
             </div>
           </div>
 
-          <!-- 상단 빠른 도시 선택 탭 바 (Pills) -->
-          <div id="map-quick-cities" class="flex items-center gap-1.5 overflow-x-auto pb-1 no-scrollbar text-xs">
-            <button onclick="focusCityOnMap('lax')" class="px-2.5 py-1 rounded-lg bg-[#141c2e] hover:bg-[#1e2a44] border border-[#23304c] text-slate-200 font-bold shrink-0">🇺🇸 LA</button>
-            <button onclick="focusCityOnMap('lim')" class="px-2.5 py-1 rounded-lg bg-[#141c2e] hover:bg-[#1e2a44] border border-[#23304c] text-slate-200 font-bold shrink-0">🇵🇪 리마</button>
-            <button onclick="focusCityOnMap('desert')" class="px-2.5 py-1 rounded-lg bg-[#141c2e] hover:bg-[#1e2a44] border border-[#23304c] text-slate-200 font-bold shrink-0">🏜️ 이카/와카치나</button>
-            <button onclick="focusCityOnMap('cuz')" class="px-2.5 py-1 rounded-lg bg-[#141c2e] hover:bg-[#1e2a44] border border-[#23304c] text-slate-200 font-bold shrink-0">🦙 쿠스코</button>
-            <button onclick="focusCityOnMap('mp')" class="px-2.5 py-1 rounded-lg bg-[#141c2e] hover:bg-[#1e2a44] border border-[#23304c] text-slate-200 font-bold shrink-0">⛰️ 마추픽추</button>
-            <button onclick="focusCityOnMap('bue')" class="px-2.5 py-1 rounded-lg bg-[#141c2e] hover:bg-[#1e2a44] border border-[#23304c] text-slate-200 font-bold shrink-0">🇦🇷 부에노스아이레스</button>
-            <button onclick="focusCityOnMap('igu')" class="px-2.5 py-1 rounded-lg bg-[#141c2e] hover:bg-[#1e2a44] border border-[#23304c] text-slate-200 font-bold shrink-0">🌊 이과수 폭포</button>
-            <button onclick="focusCityOnMap('rio')" class="px-2.5 py-1 rounded-lg bg-[#141c2e] hover:bg-[#1e2a44] border border-[#23304c] text-slate-200 font-bold shrink-0">🇧🇷 리우데자네이루</button>
-          </div>
+          <!-- 상단 빠른 도시 선택 탭 바 (Pills) — js/presentation/plan-map.js가 채운다 -->
+          <div id="map-quick-cities" class="flex items-center gap-1.5 overflow-x-auto pb-1 no-scrollbar text-xs"></div>
 
           <!-- Leaflet 인터랙티브 지도 컨테이너 -->
           <div id="leaflet-route-map"></div>
@@ -4795,7 +4788,10 @@
 
       <!-- 버전 목록 스크롤 영역 (독립 스크롤 컨테이너로 Flexbox 압축 버그 영구 척결) -->
       <div class="overflow-y-auto flex-1 min-h-0 space-y-3.5 pr-1.5 custom-scrollbar">
-        <!-- v2.1.5 (Current) -->
+        <!-- v2.1.6 (Current) -->
+        <section class="companion-context"><h3 class="font-bold">v2.1.6 · 인터랙티브 지도 정리</h3><p class="text-xs">2026-11-24 · st-shell-v2.1.6</p><p class="text-xs leading-relaxed">계획 탭의 인터랙티브 지도와 전체 여행 궤적 보기를 별도 파일로 옮겼습니다. 전체 여행 궤적을 끄거나 다른 여행으로 옮겨도 이전 궤적 선이 지도에 남지 않고 버튼 표시도 함께 맞춥니다. 전체 여행 궤적에서 다른 여행의 도시 칩을 누르면 그 도시 정보로 바로 이동하며, 공유받은 여행의 도시·이모지 HTML은 글자로만 표시합니다.</p></section>
+
+        <!-- v2.1.5 -->
         <section class="companion-context"><h3 class="font-bold">v2.1.5 · 일정표 정리</h3><p class="text-xs">2026-11-24 · st-shell-v2.1.5</p><p class="text-xs leading-relaxed">계획 탭의 일정표를 별도 파일로 옮겼습니다. 고도·날씨·복장 안내는 알고 있는 장소에서만 보여 주고, 모르는 장소에 맑은 날씨나 평지 고도를 지어 보여 주지 않습니다. 오늘 화면의 날씨 칩도 같습니다. 이동 구간의 항공 표시가 더 정확해졌고, 펼침 버튼으로 하루 일정을 열고 닫을 수 있습니다.</p></section>
 
         <!-- v2.1.4 -->
@@ -5750,7 +5746,7 @@
 
       <!-- 모달 푸터 -->
       <div class="pt-3 border-t border-[#e8e2d5] dark:border-stone-800 flex items-center justify-between shrink-0">
-        <span class="text-[11px] text-stone-400 dark:text-stone-500 font-mono">Sulsul Travel Engine v2.1.5</span>
+        <span class="text-[11px] text-stone-400 dark:text-stone-500 font-mono">Sulsul Travel Engine v2.1.6</span>
         <button onclick="closeModal('modal-version-history')" class="px-4 py-2 rounded-xl bg-[#faf8f5] dark:bg-stone-800 hover:bg-[#f0ece1] dark:hover:bg-stone-700 border border-[#e8e2d5] dark:border-stone-700 text-[#1c1917] dark:text-[#ededed] text-xs font-bold transition cursor-pointer shadow-sm">
           닫기
         </button>
@@ -6363,7 +6359,7 @@
     window.showToast = showToast;
 
     // 앱 버전 및 글로벌 네임스페이스 (Sulsul-Travel Invariant Rule R-10, R-11, R-12, R-13, R-14, R-15, R-16)
-    const APP_VER = '2.1.5';
+    const APP_VER = '2.1.6';
 
     // ══════════════════════════════════════════
     // [3-Way Theme System] 모던, 라이트그레이, 딥 블랙 테마 엔진 (v1.6.7)
@@ -8454,8 +8450,8 @@
         if (State.map) {
           State.map.invalidateSize();
         }
-        if (focusCityId && typeof focusCityOnMap === 'function') {
-          focusCityOnMap(focusCityId);
+        if (focusCityId) {
+          SulsulTravel.PlanMap.focusCity(focusCityId);
         }
       }, 100);
     }
@@ -8509,138 +8505,7 @@
     }
     window.focusCountryFromAnalytics = focusCountryFromAnalytics;
 
-    let isAllTripsWorkspaceMapActive = false;
-
-    function toggleAllTripsOnWorkspaceMap() {
-      if (!State.map) return;
-      isAllTripsWorkspaceMapActive = !isAllTripsWorkspaceMapActive;
-      const btn = document.getElementById('btn-toggle-all-trips-map');
-      const label = document.getElementById('btn-toggle-all-trips-label');
-
-      if (isAllTripsWorkspaceMapActive) {
-        if (btn) {
-          btn.className = 'px-2.5 py-1 bg-amber-500/20 hover:bg-amber-500/30 border border-amber-500/50 text-amber-300 rounded-lg text-xs font-bold flex items-center gap-1 cursor-pointer transition shadow-sm';
-        }
-        if (label) label.innerText = '🎯 현재 여정만 보기';
-
-        renderAllTripsOnWorkspaceMap();
-      } else {
-        if (btn) {
-          btn.className = 'px-2.5 py-1 bg-[#141c2e] hover:bg-[#1a263e] border border-[#23304c] text-amber-400 hover:text-amber-300 rounded-lg text-xs font-semibold flex items-center gap-1 cursor-pointer transition';
-        }
-        if (label) label.innerText = '🌐 전체 여행 궤적';
-
-        initOrUpdateLeafletMap();
-      }
-    }
-
-    function renderAllTripsOnWorkspaceMap() {
-      if (!State.map) return;
-
-      // 1. 기존 마커 및 폴리라인 정리
-      State.mapMarkers.forEach(m => State.map.removeLayer(m));
-      State.mapMarkers = [];
-      if (State.mapPolyline) {
-        State.map.removeLayer(State.mapPolyline);
-        State.mapPolyline = null;
-      }
-      if (State.extraPolylines) {
-        State.extraPolylines.forEach(p => State.map.removeLayer(p));
-      }
-      State.extraPolylines = [];
-
-      const allTrips = (State.trips && State.trips.length > 0) ? State.trips : [getActiveTrip()].filter(Boolean);
-      const allCoords = [];
-      const pillsContainer = document.getElementById('map-quick-cities');
-
-      // 2. 상단 퀵 버튼을 여행별 거점으로 재구성
-      if (pillsContainer) {
-        let pillsHtml = '';
-        allTrips.forEach(trip => {
-          const pack = resolveTripPack(trip);
-          const flag = (pack && pack.flag) || trip.coverEmoji || '📍';
-          const dests = (pack && pack.geo && pack.geo.destinations) ? 
-            (Array.isArray(pack.geo.destinations) ? pack.geo.destinations : Object.values(pack.geo.destinations)) : [];
-          if (dests.length > 0) {
-            dests.slice(0, 4).forEach(d => {
-              pillsHtml += `
-                <button onclick="focusCityOnMap('${d.id}')" class="px-2.5 py-1 rounded-lg bg-[#141c2e] hover:bg-[#1e2a44] border border-[#23304c] text-slate-200 font-bold shrink-0">
-                  ${d.flag || flag} ${d.nameKo || (d.name ? d.name.split(' ')[0] : d.id)}
-                </button>
-              `;
-            });
-          } else {
-            (trip.cities || [trip.title]).slice(0, 3).forEach(c => {
-              pillsHtml += `
-                <button class="px-2.5 py-1 rounded-lg bg-[#141c2e] border border-[#23304c] text-slate-200 font-bold shrink-0">
-                  ${flag} ${c}
-                </button>
-              `;
-            });
-          }
-        });
-        pillsContainer.innerHTML = pillsHtml;
-      }
-
-      // 3. 여행별 궤적 및 핀 렌더링
-      const TRIP_PALETTES = [
-        { stroke: '#f59e0b', fill: '#f59e0b', border: '#fbbf24', text: '#fef3c7' },
-        { stroke: '#10b981', fill: '#10b981', border: '#34d399', text: '#d1fae5' },
-        { stroke: '#0284c7', fill: '#0284c7', border: '#38bdf8', text: '#e0f2fe' },
-        { stroke: '#f43f5e', fill: '#f43f5e', border: '#fb7185', text: '#ffe4e6' },
-        { stroke: '#8b5cf6', fill: '#8b5cf6', border: '#a78bfa', text: '#ede9fe' }
-      ];
-
-      allTrips.forEach((trip, tIdx) => {
-        let palette = TRIP_PALETTES[tIdx % TRIP_PALETTES.length];
-        if (isSouthAmericaTrip(trip)) palette = TRIP_PALETTES[0];
-        else if (isYunnanTrip(trip)) palette = TRIP_PALETTES[1];
-
-        const geo = getTripGeoData(trip);
-        if (geo.latlngs.length > 0) {
-          geo.latlngs.forEach(l => allCoords.push(l.latlng));
-
-          if (geo.latlngs.length > 1) {
-            const poly = L.polyline(geo.latlngs.map(l => l.latlng), {
-              color: palette.stroke,
-              weight: 3.5,
-              dashArray: '6, 8',
-              opacity: 0.88
-            }).addTo(State.map);
-            State.extraPolylines.push(poly);
-          }
-
-          geo.latlngs.forEach(l => {
-            const iconHtml = `<div class="gold-marker-pin" style="background:${palette.fill};border-color:${palette.border};">${l.idx}</div>`;
-            const customIcon = L.divIcon({ html: iconHtml, className: 'custom-gold-pin', iconSize: [32, 32], iconAnchor: [16, 16] });
-            const marker = L.marker(l.latlng, { icon: customIcon })
-              .addTo(State.map)
-              .bindPopup(`
-                <div class="text-xs p-1">
-                  <div class="font-black text-amber-400 text-sm">${trip.coverEmoji || '📍'} ${l.name}</div>
-                  <div class="text-slate-300 text-[11px] mt-0.5">${escapeHtml(trip.title)} (정거장 #${l.idx})</div>
-                  <div class="mt-2 flex items-center gap-1">
-                    <a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(l.name + ' ' + trip.title)}" target="_blank" rel="noopener noreferrer" class="sulsul-badge-sky px-2 py-1 bg-sky-100 hover:bg-sky-200 border border-sky-300 text-sky-800 dark:bg-sky-950/50 dark:hover:bg-sky-900/50 dark:border-sky-800 dark:text-sky-300 rounded text-[10px] font-bold">구글 지도 길찾기</a>
-                  </div>
-                </div>
-              `);
-            State.mapMarkers.push(marker);
-          });
-        }
-      });
-
-      // 4. 지도 줌을 모든 여행을 포괄하도록 자동 조정
-      if (allCoords.length > 1) {
-        const bounds = L.latLngBounds(allCoords);
-        State.map.fitBounds(bounds, { padding: [50, 50], maxZoom: 6 });
-      }
-
-      // 5. 헤더 설명 업데이트
-      const mapHDesc = document.getElementById('map-view-header-desc');
-      if (mapHDesc) {
-        mapHDesc.innerText = `총 ${allTrips.length}개 여정의 전 세계 비행 궤적 및 거점을 동시 표시 중입니다. (골드: 남미 / 에메랄드: 운남)`;
-      }
-    }
+    // 워크스페이스 전체 여행 궤적 지도는 js/presentation/plan-map.js(SulsulTravel.PlanMap)로 옮겼다(v2.1.6, 4단계).
 
     function updateAiChatStatusBadge() {
       const pill = document.getElementById('ai-chat-status-pill');
@@ -10974,7 +10839,7 @@
       } else if (State.planSubTab === 'cityguide') {
         SulsulTravel.PlanGuides.renderCityGuides();
       } else if (State.planSubTab === 'map') {
-        initOrUpdateLeafletMap();
+        SulsulTravel.PlanMap.render();
       }
       const detailPage = document.getElementById('plan-block-detail-page');
       if (State.activePlanBlockId && detailPage && !detailPage.classList.contains('hidden')) renderPlanBlockDetail();
@@ -11036,7 +10901,7 @@
 
       if (subTabId === 'timeline')SulsulTravel.PlanTimeline.render();
       if (subTabId === 'map') {
-        initOrUpdateLeafletMap();
+        SulsulTravel.PlanMap.render();
       } else if (subTabId === 'booking') {
         SulsulTravel.PlanGuides.renderBookings();
       } else if (subTabId === 'cityguide') {
@@ -11045,233 +10910,7 @@
     }
 
     // [1.1] 일차별 고도·날씨·복장 안내와 [1] 일정 타임라인은 js/presentation/plan-timeline.js(SulsulTravel.PlanTimeline)로 옮겼다(v2.1.5, 4단계).
-
-    // ==========================================
-    // [2] Leaflet 인터랙티브 지도 엔진 (World & Drill-Down) (v1.7.8)
-    // ==========================================
-    function getSafeGoogleMapsQuery(dest, trip) {
-      if (dest && dest.googleMapsQuery) return dest.googleMapsQuery;
-      const cName = (dest && (dest.nameKo || dest.name)) || (trip && trip.cities && trip.cities[0]) || (trip && trip.title) || '';
-      const country = (dest && dest.country) || (trip && trip.countries && trip.countries[0]) || '';
-      if (country && cName && !cName.includes(country)) {
-        return `${cName}, ${country}`;
-      }
-      return cName;
-    }
-
-    function initOrUpdateLeafletMap() {
-      const mapContainer = document.getElementById('leaflet-route-map');
-      if (!mapContainer) return;
-
-      const trip = getActiveTrip();
-      const pack = resolveTripPack(trip);
-
-      // 지도 뷰 헤더 타이틀 및 설명 동적 갱신 (v1.7.8)
-      const mapHFlag = document.getElementById('map-view-header-flag');
-      const mapHTitle = document.getElementById('map-view-header-title');
-      const mapHDesc = document.getElementById('map-view-header-desc');
-      if (mapHTitle) {
-        if (isYunnanTrip(trip)) {
-          if (mapHFlag) mapHFlag.innerText = '🇨🇳';
-          mapHTitle.innerText = '중국 운남 13일 황금 코스 인터랙티브 궤적 & 거점 가이드';
-          if (mapHDesc) mapHDesc.innerText = '쿤밍·석림·따리·리장·옥룡설산·호도협·샹그릴라 거점 핀을 터치하면 상세 가이드와 구글 지도 길찾기가 연동됩니다.';
-        } else if (isSouthAmericaTrip(trip)) {
-          if (mapHFlag) mapHFlag.innerText = '🌎';
-          mapHTitle.innerText = '남미 4개국 22일 대종단 인터랙티브 궤적 & 도시 가이드';
-          if (mapHDesc) mapHDesc.innerText = '도시 핀을 클릭하면 해당 도시로 카메라가 줌인되며 상세 지도와 구글 지도 연동이 활성화됩니다.';
-        } else {
-          if (mapHFlag) mapHFlag.innerText = (pack && pack.flag) || trip.coverEmoji || '🗺️';
-          mapHTitle.innerText = `${trip.title || '여정'} 인터랙티브 궤적 & 거점 가이드`;
-          if (mapHDesc) mapHDesc.innerText = '거점 핀을 클릭하면 해당 도시로 카메라가 줌인되며 상세 가이드가 활성화됩니다.';
-        }
-      }
-
-      const centerCoord = (pack && pack.geo && pack.geo.centerCoord) ? pack.geo.centerCoord : [20.0, 0.0];
-      const initialZoom = (pack && pack.geo && pack.geo.defaultZoom) ? pack.geo.defaultZoom : 2;
-
-      if (!State.map) {
-        State.map = L.map('leaflet-route-map', {
-          zoomControl: true,
-          attributionControl: false,
-          scrollWheelZoom: false
-        }).setView(centerCoord, initialZoom);
-
-        // OpenStreetMap 표준 타일 레이어 (워터마크 없는 글로벌 고화질 타일)
-        L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-          maxZoom: 18,
-          attribution: '&copy; OpenStreetMap'
-        }).addTo(State.map);
-      } else {
-        State.map.setView(centerCoord, initialZoom);
-      }
-
-      // 기존 마커 & 폴리라인 초기화
-      State.mapMarkers.forEach(m => State.map.removeLayer(m));
-      State.mapMarkers = [];
-      if (State.mapPolyline) State.map.removeLayer(State.mapPolyline);
-
-      const pillsContainer = document.getElementById('map-quick-cities');
-      const dests = (pack && pack.geo && pack.geo.destinations) ? 
-        (Array.isArray(pack.geo.destinations) ? pack.geo.destinations : Object.values(pack.geo.destinations)) : [];
-
-      if (dests.length > 0) {
-        if (pillsContainer) {
-          pillsContainer.innerHTML = dests.map(d => `
-            <button onclick="focusCityOnMap('${d.id}')" class="px-2.5 py-1 rounded-lg bg-[#141c2e] hover:bg-[#1e2a44] border border-[#23304c] text-slate-200 font-bold shrink-0">
-              ${d.flag || pack.flag || '📍'} ${d.nameKo || (d.name ? d.name.split(' ')[0] : d.id)}
-            </button>
-          `).join('');
-        }
-
-        // 경로 폴리라인
-        if (pack.geo.flightRoutes && pack.geo.flightRoutes.length > 0) {
-          const polyColor = (pack.id && pack.id.includes('yunnan')) ? '#10b981' : '#f59e0b';
-          State.mapPolyline = L.polyline(pack.geo.flightRoutes, {
-            color: pack.geo.polylineColor || polyColor,
-            weight: 3, opacity: 0.8, dashArray: '6, 8', smoothFactor: 1
-          }).addTo(State.map);
-        }
-
-        // 마커 생성
-        const pinColor = (pack.id && pack.id.includes('yunnan')) ? '#10b981' : '#f59e0b';
-        const pinBorder = (pack.id && pack.id.includes('yunnan')) ? '#34d399' : '#fbbf24';
-        const validCoords = [];
-        dests.forEach((d, idx) => {
-          if (typeof d.lat === 'number' && typeof d.lng === 'number' && !(d.lat === 20.0 && d.lng === 0.0)) {
-            validCoords.push([d.lat, d.lng]);
-            const gQuery = getSafeGoogleMapsQuery(d, trip);
-            const iconHtml = `<div class="gold-marker-pin" style="background:${pinColor};border-color:${pinBorder};">${idx + 1}</div>`;
-            const customIcon = L.divIcon({ html: iconHtml, className: 'custom-gold-pin', iconSize: [32, 32], iconAnchor: [16, 16] });
-            const marker = L.marker([d.lat, d.lng], { icon: customIcon })
-              .addTo(State.map)
-              .bindPopup(`
-                <div class="text-xs p-1">
-                  <div class="font-black text-amber-400 text-sm">${d.name}</div>
-                  <div class="text-slate-300 text-[11px] mt-0.5">${d.altitude || d.badge || ''}</div>
-                  <div class="mt-2 flex items-center gap-1">
-                    <a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(gQuery)}" target="_blank" rel="noopener noreferrer" class="sulsul-badge-sky px-2 py-1 bg-sky-100 hover:bg-sky-200 border border-sky-300 text-sky-800 dark:bg-sky-950/50 dark:hover:bg-sky-900/50 dark:border-sky-800 dark:text-sky-300 rounded text-[10px] font-bold">구글 지도 길찾기</a>
-                  </div>
-                </div>
-              `);
-            marker.on('click', () => { focusCityOnMap(d.id); });
-            State.mapMarkers.push(marker);
-          }
-        });
-
-        // ★ [핵심] 목적지 거점들이 한 화면에 모두 보이도록 자동 영역 맞춤 (fitBounds)
-        if (validCoords.length > 1) {
-          State.map.fitBounds(L.latLngBounds(validCoords), { padding: [40, 40], maxZoom: 12 });
-        } else if (validCoords.length === 1) {
-          State.map.setView(validCoords[0], dests[0].zoom || 11);
-        } else {
-          State.map.setView(centerCoord, initialZoom);
-        }
-
-        const initialFocus = pack.geo.initialFocusCity || dests[0].id;
-        focusCityOnMap(initialFocus);
-      } else {
-        if (pillsContainer) {
-          pillsContainer.innerHTML = (trip.cities || [trip.title]).map(c => `
-            <button class="px-2.5 py-1 rounded-lg bg-[#141c2e] border border-[#23304c] text-slate-200 font-bold shrink-0">📍 ${c}</button>
-          `).join('');
-        }
-        const flagEl = document.getElementById('map-city-flag');
-        const nameEl = document.getElementById('map-city-name');
-        const altEl = document.getElementById('map-city-altitude');
-        const currEl = document.getElementById('map-city-currency');
-        const spotsList = document.getElementById('map-city-spots');
-        const foodsList = document.getElementById('map-city-foods');
-        const tipsEl = document.getElementById('map-city-tips');
-        const gmapBtn = document.getElementById('btn-google-maps-link');
-
-        if (flagEl) flagEl.innerText = (pack && pack.flag) || trip.coverEmoji || '📍';
-        if (nameEl) nameEl.innerText = (trip.cities && trip.cities[0]) || trip.title || '여행 거점';
-        if (altEl) altEl.innerText = '맞춤 여정';
-        if (currEl) currEl.innerText = (pack && pack.currency) ? `통화: ${pack.currency}` : (trip.currency ? `통화: ${trip.currency}` : '');
-        if (spotsList) {
-          const firstSpots = (trip.days && trip.days[0] && trip.days[0].spots) ? trip.days[0].spots : [];
-          spotsList.innerHTML = firstSpots.length > 0 ? firstSpots.slice(0, 4).map(s => `<li>• ${escapeHtml(s.title)}</li>`).join('') : '<li>• 자유 일정 등록 중</li>';
-        }
-        if (foodsList) foodsList.innerText = '현지 로컬 미식 및 랜드마크 탐방';
-        if (tipsEl) tipsEl.innerText = '현지 치안 및 필수 준비물을 사전에 점검하세요.';
-        if (gmapBtn) {
-          const fallbackQ = getSafeGoogleMapsQuery(null, trip);
-          gmapBtn.href = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(fallbackQ)}`;
-        }
-      }
-
-      // 지도 리사이징 강제 갱신
-      setTimeout(() => {
-        if (State.map) State.map.invalidateSize();
-      }, 200);
-    }
-
-    function focusCityOnMap(cityKey) {
-      const trip = getActiveTrip();
-      const pack = resolveTripPack(trip);
-      if (!pack || !pack.geo) return;
-
-      let d = null;
-      if (Array.isArray(pack.geo.destinations)) {
-        d = pack.geo.destinations.find(x => x.id === cityKey);
-      } else if (pack.geo.destinations && typeof pack.geo.destinations === 'object') {
-        d = pack.geo.destinations[cityKey];
-      }
-      if (!d && window.KB_TRAVEL && window.KB_TRAVEL.destinations) {
-        d = window.KB_TRAVEL.destinations[cityKey];
-      }
-      if (!d) return;
-
-      if (State.map && d.lat && d.lng && !(d.lat === 20.0 && d.lng === 0.0)) {
-        State.map.flyTo([d.lat, d.lng], d.zoom || 12, {
-          animate: true,
-          duration: 1.2
-        });
-      }
-
-      // 하단 카드 업데이트
-      const flagEl = document.getElementById('map-city-flag');
-      const nameEl = document.getElementById('map-city-name');
-      const altEl = document.getElementById('map-city-altitude');
-      const currEl = document.getElementById('map-city-currency');
-      const spotsList = document.getElementById('map-city-spots');
-      const foodsList = document.getElementById('map-city-foods');
-      const tipsEl = document.getElementById('map-city-tips');
-      const gmapBtn = document.getElementById('btn-google-maps-link');
-
-      if (flagEl) flagEl.innerText = d.flag || pack.flag || '📍';
-      if (nameEl) nameEl.innerText = d.name;
-      if (altEl) altEl.innerText = d.altitude || d.badge || '';
-      if (currEl) currEl.innerText = d.currency ? `통화: ${d.currency}` : (pack.currency ? `통화: ${pack.currency}` : (trip.currency ? `통화: ${trip.currency}` : ''));
-      
-      const highlights = d.highlights || (d.intro ? [d.intro] : []);
-      if (spotsList) spotsList.innerHTML = highlights.map(h => `<li>• ${h}</li>`).join('');
-      
-      const foodsStr = Array.isArray(d.foods) ? d.foods.join(', ') : (d.food || d.foods || '로컬 시그니처 미식 탐방');
-      if (foodsList) foodsList.innerText = foodsStr;
-      
-      if (tipsEl) tipsEl.innerText = d.tips || d.caution || '안전 수칙을 준수하세요.';
-      if (gmapBtn) {
-        const safeQ = getSafeGoogleMapsQuery(d, trip);
-        gmapBtn.href = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(safeQ)}`;
-      }
-    }
-
-    function resetMapToWorldView() {
-      if (!State.map) return;
-      const trip = getActiveTrip();
-      const pack = resolveTripPack(trip);
-      const dests = (pack && pack.geo && pack.geo.destinations) ? 
-        (Array.isArray(pack.geo.destinations) ? pack.geo.destinations : Object.values(pack.geo.destinations)) : [];
-      const validCoords = dests.filter(d => typeof d.lat === 'number' && typeof d.lng === 'number' && !(d.lat === 20.0 && d.lng === 0.0)).map(d => [d.lat, d.lng]);
-      if (validCoords.length > 1) {
-        State.map.flyToBounds(L.latLngBounds(validCoords), { padding: [40, 40], duration: 1.2, maxZoom: 12 });
-        return;
-      }
-      const center = (pack && pack.geo && pack.geo.centerCoord) ? pack.geo.centerCoord : [20.0, 0.0];
-      const zoom = (pack && pack.geo && pack.geo.defaultZoom) ? pack.geo.defaultZoom : 2;
-      State.map.flyTo(center, zoom, { animate: true, duration: 1.2 });
-    }
+    // [2] Leaflet 인터랙티브 지도 엔진과 워크스페이스 전체 여행 궤적 보기는 js/presentation/plan-map.js(SulsulTravel.PlanMap)로 옮겼다(v2.1.6, 4단계).
 
     // [3] 사전 예약 대시보드·여행 필수 준비 점검과 [4] 거점 도시 가이드·스팟 모아보기는 js/presentation/plan-guides.js(SulsulTravel.PlanGuides)로 옮겼다(v2.1.4, 4단계).
 
@@ -13891,7 +13530,7 @@ ${JSON.stringify(snapshotDays)}`;
     }
 
     function getReplanDomain() {
-      if (!replanDomainPromise) replanDomainPromise = import('./js/domain/replan.mjs?v=2.1.5');
+      if (!replanDomainPromise) replanDomainPromise = import('./js/domain/replan.mjs?v=2.1.6');
       return replanDomainPromise;
     }
 
@@ -14102,7 +13741,7 @@ ${JSON.stringify(snapshotDays)}`;
 
     async function getAiOrchestrator() {
       if (!aiOrchestratorPromise) {
-        aiOrchestratorPromise = import('./js/application/orchestration.mjs?v=2.1.5').then(({ Orchestrator }) =>
+        aiOrchestratorPromise = import('./js/application/orchestration.mjs?v=2.1.6').then(({ Orchestrator }) =>
           new Orchestrator({
             online: job => Boolean(job?.input?.localDraft) || navigator.onLine,
             timeoutMs: 65000,
