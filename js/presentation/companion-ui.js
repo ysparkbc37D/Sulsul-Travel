@@ -403,26 +403,16 @@ function getTripTimeInfo(timeZone) {
   return { localTime, seoulTime, diffHours, diffLabel };
 }
 
-function getTodayWeatherInfo(day, trip) {
-  let weatherBadge = '🌤️ 쾌청 온화';
-  let altitude = '해발 0~50m (평지)';
-  let isCareNeeded = false;
-  let detail = '';
-
-  if (typeof getDayAltitudeAndOutfitInfo === 'function') {
-    try {
-      const info = getDayAltitudeAndOutfitInfo(day, trip);
-      if (info) {
-        weatherBadge = info.weatherBadge || weatherBadge;
-        altitude = info.altitude || altitude;
-        isCareNeeded = !!info.isCareNeeded;
-        detail = [info.weatherDetail, info.outfitSummary].filter(Boolean).join(' · ');
-      }
-    } catch (e) {
-      // fallback
-    }
-  }
-  return { weatherBadge, altitude, isCareNeeded, detail };
+// 아는 장소일 때만 날씨·고도를 알려 준다(SulsulTravel.PlanTimeline.dayConditions). 모르면 값이 null이고 칩을 그리지 않는다.
+// v2.1.5 전에는 모르는 장소에도 맑은 날씨와 평지 고도를 기본값으로 지어 보여 줬다.
+function getTodayWeatherInfo(day) {
+  const info = SulsulTravel.PlanTimeline.dayConditions(day);
+  return {
+    weatherBadge: info.weatherBadge,
+    altitude: info.altitude,
+    isCareNeeded: !!info.isCareNeeded,
+    detail: [info.weatherDetail, info.outfitSummary].filter(Boolean).join(' · ')
+  };
 }
 
 function renderTodaySmartHud(trip, day, dayIndex, today) {
@@ -519,10 +509,10 @@ function renderTodaySmartHud(trip, day, dayIndex, today) {
             <div class="hud-progress-fill" style="width:${pct}%"></div>
           </div>
         </div>
-        <div class="hud-weather-chip ${weatherInfo.isCareNeeded ? 'is-care-needed' : ''}" title="${escapeHtml(weatherInfo.detail || '')}">
-          <span class="hud-weather-main"><i class="fa-solid fa-cloud-sun text-amber-400" aria-hidden="true"></i> ${escapeHtml(weatherInfo.weatherBadge)}</span>
-          <span class="hud-weather-extra">${escapeHtml(weatherInfo.altitude)}</span>
-        </div>
+        ${(weatherInfo.weatherBadge || weatherInfo.altitude) ? `<div class="hud-weather-chip ${weatherInfo.isCareNeeded ? 'is-care-needed' : ''}" title="${escapeHtml(weatherInfo.detail || '')}">
+          ${weatherInfo.weatherBadge ? `<span class="hud-weather-main"><i class="fa-solid fa-cloud-sun text-amber-400" aria-hidden="true"></i> ${escapeHtml(weatherInfo.weatherBadge)}</span>` : ''}
+          ${weatherInfo.altitude ? `<span class="hud-weather-extra">${escapeHtml(weatherInfo.altitude)}</span>` : ''}
+        </div>` : ''}
       </div>
     </section>
   `;

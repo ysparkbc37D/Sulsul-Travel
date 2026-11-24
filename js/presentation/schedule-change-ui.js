@@ -21,7 +21,7 @@ function refreshScheduleViews(){
   const page=document.getElementById('plan-block-detail-page'),detailOpen=page&&!page.classList.contains('hidden');
   try{
     renderBigPlanTab();renderTodayTab();
-    if(State.activeTab==='plan'&&document.getElementById('tab-content-plan').dataset.presentation==='timeline'&&!detailOpen)renderTimelineTab();
+    if(State.activeTab==='plan'&&document.getElementById('tab-content-plan').dataset.presentation==='timeline'&&!detailOpen)SulsulTravel.PlanTimeline.render();
     if(detailOpen&&State.activePlanBlockId)renderPlanBlockDetail();
     if(State.activeTab==='plan'&&State.planSubTab==='map'){initOrUpdateLeafletMap();}
     if(State.activeTab==='plan'&&State.planSubTab==='cityguide')SulsulTravel.PlanGuides.renderCityGuides();

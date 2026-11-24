@@ -12,6 +12,7 @@ const utilitiesCss = readFileSync(new URL('../css/utilities.css', import.meta.ur
 const kbTravel = readFileSync(new URL('../kb-travel.js', import.meta.url), 'utf8');
 const checklistTab = readFileSync(new URL('../js/presentation/checklist-tab.js', import.meta.url), 'utf8');
 const planGuides = readFileSync(new URL('../js/presentation/plan-guides.js', import.meta.url), 'utf8');
+const planTimeline = readFileSync(new URL('../js/presentation/plan-timeline.js', import.meta.url), 'utf8');
 const packSa = readFileSync(new URL('../js/destinations/pack-south-america.js', import.meta.url), 'utf8');
 const packageMetadata = JSON.parse(readFileSync(new URL('../package.json', import.meta.url), 'utf8'));
 const backupUi = readFileSync(new URL('../js/presentation/travel-backup-ui.js', import.meta.url), 'utf8');
@@ -388,13 +389,14 @@ test('v1.8.4 6 key UI/UX convenience features remain available', () => {
   // v1.9.0 공개 경계: 개인 일정의 고정 날짜가 화면 코드에 다시 들어오지 않는다(v2.1.4에서 도시 가이드 배너 제거).
   assert.doesNotMatch(planGuides + html, /10\/1[0-9]~10\/2[0-9]|10\/28~29|귀국 전날\(10\/29\)/);
 
-  // 2. High-altitude profile & care card
-  assert.match(html, /getDayAltitudeAndOutfitInfo/);
-  assert.match(html, /안데스 고산병\(Soroche\) 안심 케어 수칙/);
+  // 2. High-altitude profile & care card (v2.1.5부터 js/presentation/plan-timeline.js)
+  assert.match(planTimeline, /function dayConditions\(/);
+  assert.match(planTimeline, /안데스 고산병\(Soroche\) 안심 케어 수칙/);
 
-  // 3. Weather & 3-tier layered outfit guide badge
-  assert.match(html, /추천 복장/);
-  assert.match(html, /3단 레이어드/);
+  // 3. Weather & 3-tier layered outfit guide badge — 아는 장소일 때만 보이고 기본 날씨를 지어내지 않는다.
+  assert.match(planTimeline, /추천 복장/);
+  assert.match(planTimeline, /3단 레이어드/);
+  assert.doesNotMatch(planTimeline + companion, /쾌청 18~24°C|쾌청 온화|해발 0~50m/);
 
   // 4. Quick currency calculator remains available from the workspace action
   assert.match(html, /onclick="openQuickCurrencyCalc\(\)"[\s\S]{0,500}<i class="fa-solid fa-calculator/);
@@ -404,8 +406,8 @@ test('v1.8.4 6 key UI/UX convenience features remain available', () => {
   assert.match(html, /quick-calc-chk-mep/);
 
   // 5. Transit segment card & Google Maps directions
-  assert.match(html, /activity-timeline-spot/);
-  assert.match(html, /google\.com\/maps\/dir/);
+  assert.match(planTimeline, /activity-timeline-spot/);
+  assert.match(planTimeline, /google\.com\/maps\/dir/);
 
   // 6. Checklist D-Day & smart packing matrix (v2.0.9부터 js/presentation/checklist-tab.js)
   assert.match(html, /checklist-category-chips/);
