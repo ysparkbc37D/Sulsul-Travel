@@ -26,6 +26,17 @@
 - [ ] 항공권/호텔 예약 바우처 PDF 자동 파싱 일정 등록
 - [ ] 여행 동행자 실시간 음성 메모 AI 다이어리 자동 변환
 
+## [v2.1.7] - 2026-11-24
+
+- 화면 분리(4단계) 9차(계획·통계 노선도)입니다. `index.html`의 [4.5] 동적 관광 일러스트 노선도·위성 궤적 뷰어·공용 여행 좌표 해석(`CITY_GEO_COORDS`·`getTripGeoData`, 약 1,000줄)을 `js/presentation/route-map.js`(`SulsulTravel.RouteMap`)로 옮겼습니다.
+- 전역 상태 3종(`window.__routeMapIsGlobalAllTrips`·`window.__routeMapFocusCountry`·`window.__globalTripBoundsMap`)을 모듈 안 변수로 옮겨 `GLOBAL01` 허용 목록에서 지웠습니다(전역 8 → 5개).
+- **보안**: 단일·전체 노선도와 위성 팝업·하단 링크가 여행 자료의 국가·도시·장소·제목·커버 이모지를 escape 없이 HTML로 넣었습니다. 공유 사본의 태그가 모달 안에서 그대로 요소가 됐습니다(v2.1.6에서 단일 메트로·전체 위성 DOM 생성 재현). 옮긴 화면의 모든 값을 `escapeHtml` 또는 `textContent`로 넣습니다.
+- 노선도의 `'일정보기'` 버튼(`jumpToTripDay`)이 일정표의 예전 DOM ID(`day-header-*`·`day-content-*`)를 찾아 해당 일차 아코디언을 열지 못했습니다(v2.1.6에서 Day 2 아코디언 미열림 재현). 실제 일정표 ID(`day-body-*`·`PlanTimeline.toggleDay`)로 펼쳐 이동합니다.
+- 통계에서 국가를 골라 전체 노선도를 열었을 때 두 가지 어긋남을 고쳤습니다(모두 v2.1.6에서 재현): ① 정렬된 `displayTrips` 대신 원본 `allTrips[tIdx + 1]`을 읽어 `[스페인] ➔ [스페인]`처럼 자기 자신을 다음 여행으로 연결하던 문제 → `displayTrips[tIdx + 1]`을 읽습니다. ② 하이라이트 배너의 `'전체 보기'`를 눌러도 `focusCountry`가 비워지지 않아 위성 탭을 다녀오면 하이라이트가 되살아나던 문제 → `resetFocusCountry`가 상태를 비웁니다.
+- 노선도 모달·설정·통계 진입 버튼과 내부 동적 버튼의 인라인 처리기 17곳을 `routeMap.*`·`shell.closeModal` 동작으로 바꿨습니다(UI01 506 → 489곳). `index.html`의 escape 없는 삽입은 233 → 188곳, 새 파일은 0곳입니다.
+- 회귀 검사: `tests/route-map.browser.cjs`(단일 노선도·탭 전환·'일정보기' 아코디언 열림, 통계 국가 포커스·커넥터 순서·'전체 보기' 초기화·위성 줌·여정 열기·통계 복귀, 공유 사본 HTML, 등록된 동작 이름, 320px). 위 결함 네 가지는 v2.1.6 코드에서 같은 조작으로 재현했습니다.
+- 알려진 한계: 계획 탭의 큰 계획 카드·계획 블록 상세·하위 탭 전환은 다음 릴리스에서 옮깁니다. 실제 휴대폰에서 확인하지 않았습니다.
+
 ## [v2.1.6] - 2026-11-24
 
 - 화면 분리(4단계) 네 번째 화면인 계획 탭의 3차입니다. `index.html`의 [2] Leaflet 인터랙티브 지도 엔진과 워크스페이스 전체 여행 궤적 보기(약 360줄)를 `js/presentation/plan-map.js`(`SulsulTravel.PlanMap`)로 옮겼습니다.

@@ -315,7 +315,7 @@
       const allTrips = (State.trips && State.trips.length > 0) ? State.trips : [getActiveTrip()].filter(Boolean);
       const allCoords = [];
       allTrips.forEach(t => {
-        const geo = getTripGeoData(t);
+        const geo = T.RouteMap.getTripGeoData(t);
         geo.latlngs.forEach(l => allCoords.push(l.latlng));
       });
       if (allCoords.length > 1) {
@@ -368,7 +368,7 @@
       if (isSouthAmericaTrip(trip)) palette = TRIP_PALETTES[0];
       else if (isYunnanTrip(trip)) palette = TRIP_PALETTES[1];
 
-      const geo = getTripGeoData(trip);
+      const geo = T.RouteMap.getTripGeoData(trip);
       if (geo.latlngs.length > 0) {
         geo.latlngs.forEach(l => allCoords.push(l.latlng));
 
