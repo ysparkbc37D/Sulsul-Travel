@@ -59,6 +59,8 @@
 | `js/presentation/ui-actions.js` | 화면 동작 위임(v2.0.9). `data-on-click`·`data-on-change`·`data-on-input`의 동작 이름을 문서 한 곳에서 받아 `UiActions.define`으로 등록된 처리기로 넘긴다. 등록되지 않은 이름은 오류 |
 | `js/presentation/expenses-tab.js` | 가계부 탭 본문(v2.1.1): 지갑 보드, 빠른 환율 계산기, 지출·환전 목록과 보기 전환, 환전 기록 안전 삭제. 공용 환율 계산(`CURRENCY_INFO`·`getCurrencyRate`·`calculateTripWallets`)은 셸에 있다 |
 | `js/presentation/exchange-ui.js` | 환전 창과 환율 관리(v2.1.1): 금액·환율 계산과 저장, 실시간 환율 갱신(open.er-api.com), 맞춤 환율(`st_custom_rates`), 아르헨티나 MEP 스위치 |
+| `js/presentation/budget-ui.js` | 초기 자산·예산 창과 전세계 통화 선택 창(v2.1.2). 창의 입력과 통화 목록은 파일 안의 초안에만 두고 저장 버튼의 `commitTrip` 한 번으로 쓴다. 통화 추가는 바로 저장하고 열린 초기 자산 창·지출 입력창을 갱신한다 |
+| `js/presentation/expense-analytics.js` | 사용내역 통계(v2.1.2): 카드·현금, 카테고리, 수지와 SVG 도넛 차트. 지출 카테고리 목록(`SulsulTravel.ExpenseAnalytics.CATEGORIES`)의 유일한 정의 |
 | `js/presentation/shell-actions.js` | 여러 화면이 함께 쓰는 셸 동작(v2.1.1): `shell.closeModal`(`data-modal`) |
 | `js/presentation/journal-tab.js` | 기록 탭(v2.1.0): 날짜 고르기, 하루 회고 글·사진 저장, 사진 크게 보기·안전 삭제, 저장 대기 사진 재시도, 글·사진 초안 파일. 순간 기록 목록은 `moment-journal.js`가 그린다 |
 | `js/presentation/checklist-tab.js` | 준비물 화면(v2.0.9, 4단계 첫 분리): 분류·D-Day 보기, 체크·전체 완료, 추가·상세·안전 삭제, 예약 가이드의 준비물 체크 |
@@ -114,6 +116,7 @@ node .\tests\trip-store-idb.browser.cjs
 node .\tests\checklist-tab.browser.cjs
 node .\tests\journal-tab.browser.cjs
 node .\tests\expenses-tab.browser.cjs
+node .\tests\budget-analytics.browser.cjs
 .\tools-verify.ps1
 ```
 

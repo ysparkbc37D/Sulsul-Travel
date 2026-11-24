@@ -86,12 +86,12 @@ const fixture=()=>({id:'structural-trip',title:'구조 검증 가상 여행',sta
     const captureToasts=page=>page.evaluate(()=>{window.structuralToasts=[];const original=window.showToast;window.showToast=(message,...rest)=>{window.structuralToasts.push(String(message));return original(message,...rest);};});
     await check('명령 경계로 옮긴 셸 저장은 실패하면 여행과 저장본을 바꾸지 않고 성공을 알리지 않는다',async api=>{
       await api.seed(ledgerTrip());await captureToasts(api.page);const before=await api.state();await api.quota(true);
-      await api.page.evaluate(async ()=>{await SulsulTravel.ChecklistTab.checkAll(true);await selectAddCurrency('EUR');await toggleBookingGuideCompleted('guide-synthetic');await duplicateTrip('structural-trip');});
+      await api.page.evaluate(async ()=>{await SulsulTravel.ChecklistTab.checkAll(true);await SulsulTravel.BudgetUI.addCurrency('EUR');await toggleBookingGuideCompleted('guide-synthetic');await duplicateTrip('structural-trip');});
       assert.deepEqual(await api.state(),before);
       const failed=await api.page.evaluate(()=>window.structuralToasts);
       assert.equal(failed.some(message=>/지갑이 추가되었습니다|복제되었습니다/.test(message)),false,failed.join(' / '));
       assert.ok(failed.some(message=>/저장하지 못했습니다/.test(message)),'실패를 알린다');
-      await api.quota(false);await api.page.evaluate(async ()=>{await SulsulTravel.ChecklistTab.checkAll(true);await selectAddCurrency('EUR');await duplicateTrip('structural-trip');});
+      await api.quota(false);await api.page.evaluate(async ()=>{await SulsulTravel.ChecklistTab.checkAll(true);await SulsulTravel.BudgetUI.addCurrency('EUR');await duplicateTrip('structural-trip');});
       const after=await api.state(),stored=JSON.parse(after.stored),original=stored.find(trip=>trip.id==='structural-trip');
       assert.deepEqual(original.checklist.map(item=>item.checked),[true,true]);assert.ok(original.activeCurrencies.includes('EUR'));assert.equal(before.trips[0].activeCurrencies.includes('EUR'),false);
       assert.equal(original.revision,before.trips[0].revision+2,'바뀐 명령 두 번만 revision을 올린다');

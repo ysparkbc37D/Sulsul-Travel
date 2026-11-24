@@ -3,8 +3,9 @@
  * 공용 환율 계산(CURRENCY_INFO·getCurrencyRate·calculateTripWallets)은 오늘 화면·지출 편집기도 쓰므로 셸에 남는다.
  * 셸·다른 화면의 함수(getActiveTrip·commitTripCommand·renderActiveTripWorkspace·showConfirmDelete·showToast·escapeHtml·getCategoryIcon,
  * openAddExpenseModal·openEditExpenseModal·requestDeleteExpense·renderExpenseCurrencyChips·updateExpenseInlineKrwPreview,
- * openInitialFundsModal·openAddCurrencyModal·openExpenseAnalyticsModal·triggerReceiptScan·handleReceiptScan)는 부를 때 찾는다.
- * 환전 창과 환율 관리는 exchange-ui.js(SulsulTravel.ExchangeUI)다.
+ * triggerReceiptScan·handleReceiptScan)는 부를 때 찾는다.
+ * 환전 창과 환율 관리는 exchange-ui.js(SulsulTravel.ExchangeUI), 초기 자산·통화 선택 창은 budget-ui.js(SulsulTravel.BudgetUI),
+ * 사용내역 통계는 expense-analytics.js(SulsulTravel.ExpenseAnalytics)다.
  * 여행 자료 값(통화 코드·날짜·메모·이름)은 모두 escapeHtml로 넣는다. 옮기기 전에는 일부가 그대로 들어갔다(공유 사본 자료도 여기에 그려진다).
  * SulsulTravel.ExpensesTab은 얼리지 않는다. 검사가 render를 바꿔 '저장 뒤 화면 오류'를 재현하므로 안에서 다시 그릴 때도 api.render()를 부른다. */
 (function (root) {
@@ -312,9 +313,9 @@
     quickCalcApply: () => applyQuickCalcToExpense(),
     refreshRates: () => SulsulTravel.ExchangeUI.refreshLiveRates(true),
     ratesManager: () => SulsulTravel.ExchangeUI.openRatesManager(),
-    initialFunds: () => openInitialFundsModal(),
-    addCurrency: () => openAddCurrencyModal(),
-    analytics: () => openExpenseAnalyticsModal(),
+    initialFunds: () => SulsulTravel.BudgetUI.openInitialFunds(),
+    addCurrency: () => SulsulTravel.BudgetUI.openAddCurrency(),
+    analytics: () => SulsulTravel.ExpenseAnalytics.open(),
     receiptScan: () => triggerReceiptScan(),
     receiptPick: element => { if (RECEIPT_INPUTS.includes(element.dataset.target)) document.getElementById(element.dataset.target)?.click(); },
     receiptFile: (element, event) => handleReceiptScan(event)

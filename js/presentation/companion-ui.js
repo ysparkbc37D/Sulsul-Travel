@@ -1270,7 +1270,7 @@ function updateBudgetPacingHud(trip, walletData) {
           <i class="fa-solid fa-gauge-high text-amber-400"></i>
           <span>일일 예산 소진 속도 (Burn-Rate)</span>
         </span>
-        <button type="button" onclick="openInitialFundsModal()" class="text-[10px] text-amber-400 hover:text-amber-300 font-bold px-2 py-0.5 rounded bg-amber-500/15 border border-amber-500/30 transition flex items-center gap-1 cursor-pointer">
+        <button type="button" data-on-click="budget.initialFunds" class="text-[10px] text-amber-400 hover:text-amber-300 font-bold px-2 py-0.5 rounded bg-amber-500/15 border border-amber-500/30 transition flex items-center gap-1 cursor-pointer">
           <i class="fa-solid fa-plus text-[9px]"></i> 목표 예산 설정하기
         </button>
       </div>

@@ -23,7 +23,9 @@
         typeof window.SulsulTravel?.ChecklistTab?.render === 'function' &&
         typeof window.SulsulTravel?.JournalTab?.render === 'function' &&
         typeof window.SulsulTravel?.ExpensesTab?.render === 'function' &&
-        typeof window.SulsulTravel?.ExchangeUI?.open === 'function';
+        typeof window.SulsulTravel?.ExchangeUI?.open === 'function' &&
+        typeof window.SulsulTravel?.BudgetUI?.openInitialFunds === 'function' &&
+        typeof window.SulsulTravel?.ExpenseAnalytics?.open === 'function';
       shell.reload = () => {if(!shell.reloading){shell.reloading=true;location.reload();}};
       shell.canReload = () => {
         if(!shell.started)return true;
@@ -142,17 +144,17 @@
   </script>
 
   <!-- PWA Meta & Icons -->
-  <link rel="manifest" href="manifest.webmanifest?v=2.1.1">
+  <link rel="manifest" href="manifest.webmanifest?v=2.1.2">
   <meta name="theme-color" content="#F7F5F0">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <meta name="apple-mobile-web-app-title" content="술술트래블">
-  <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192-v115.png?v=2.1.1">
-  <link rel="icon" type="image/png" sizes="32x32" href="favicon.png?v=2.1.1">
+  <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192-v115.png?v=2.1.2">
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon.png?v=2.1.2">
   <link rel="shortcut icon" href="favicon.ico">
-  <link rel="apple-touch-icon" sizes="180x180" href="icons/apple-touch-icon-v115.png?v=2.1.1">
-  <link rel="apple-touch-icon" href="icons/apple-touch-icon-v115.png?v=2.1.1">
+  <link rel="apple-touch-icon" sizes="180x180" href="icons/apple-touch-icon-v115.png?v=2.1.2">
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon-v115.png?v=2.1.2">
 
   <!-- Google Fonts: Great Vibes, Dancing Script (Cursive Calligraphy), Cormorant Garamond, Noto Serif KR, Playfair Display -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -160,7 +162,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Great+Vibes&family=Cormorant+Garamond:wght@600;700;800&family=Noto+Serif+KR:wght@500;600;700;900&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
 
   <!-- Local Utilities Bundle (CDN fallback & tailwind utilities) -->
-  <link rel="stylesheet" href="css/utilities.css?v=2.1.1" integrity="sha384-HMVB4SH6xwwGITkNyT8ARmHegAYSuTMocPGl4bpl0JywMIe2PqYrUxqZOgEuZjmP">
+  <link rel="stylesheet" href="css/utilities.css?v=2.1.2" integrity="sha384-HMVB4SH6xwwGITkNyT8ARmHegAYSuTMocPGl4bpl0JywMIe2PqYrUxqZOgEuZjmP">
   <link rel="stylesheet" href="vendor/fontawesome/css/all.min.css" integrity="sha384-t1nt8BQoYMLFN5p42tRAtuAAFQaCQODekUVeKKZrEnEyp4H2R0RHFz0KWpmj7i8g">
 
   <!-- Leaflet Map CSS & JS -->
@@ -1502,64 +1504,66 @@
     }
   </style>
 
-  <link rel="stylesheet" href="css/companion.css?v=2.1.1" integrity="sha384-Syant7HB0IYUZUU2saRSYUDkM71WKVuK2JtHM+kAluFdw3VvWv9gSglgJh4utHv/">
-  <link rel="stylesheet" href="css/companion-refresh.css?v=2.1.1" integrity="sha384-2KIp4VI8qsP6dGnz0cm/vehjLjr6GxpZ9yWTbbIXBPWi25XHg6XUOtNbp7W8KMd3">
-  <link rel="stylesheet" href="css/live-itinerary.css?v=2.1.1" integrity="sha384-e/V9wyJ/Gi6baSHcWzBeNGjdn/eKDQIvKWyiYmByLE7C7nYJaQOA+GshtUMcCR72">
-  <link rel="stylesheet" href="css/expense-mobile.css?v=2.1.1" integrity="sha384-QZFtKrU/YvkTaEKv0oJ2ZQi1Zry8RgEFaHzTckwuPFsMDDmadYBH7UuYgTVS7281">
-  <link rel="stylesheet" href="css/moment-journal.css?v=2.1.1" integrity="sha384-g1EihgfyPDJ5o5eWSsQgT1WDTRKDtUfzVatlx6T/t+DhApDBY8dznSrwmelasv91">
-  <script src="js/domain/trip-adapter.js?v=2.1.1" integrity="sha384-JHU/NkAlxwR9G9/49TaFK4sTvg9xKGsSVd3re8rLivtiXcSNdnQA9gRIfvVWUtG7"></script>
-  <script src="js/domain/ai-draft-validation.js?v=2.1.1" integrity="sha384-OTRAiX7YaOiiNrpMWDjkOyH0bTbbL3KrGwGp1RmIkgvd15pErNTTKVTJkoesmpfi"></script>
-  <script src="js/domain/live-itinerary.js?v=2.1.1" integrity="sha384-cwMH5i2F5Mve7Z9cKeWrP7uLU5plcu6c7xvTf4Lyz3Xkb6GlNCI14lnEWzw46cVg"></script>
-  <script src="js/presentation/live-itinerary-ui.js?v=2.1.1" integrity="sha384-SLjn2QhNBI6VfrG3siiRZqfs51VnmqyRCTMGjMN25fIyHhYwf4LnECXOOiQ4arog"></script>
-  <script src="js/presentation/live-itinerary-bridge.js?v=2.1.1" integrity="sha384-lRoX8rvtVNC3rl6v9tCVjTLCSBjLmTH3EhNiq6OPizV+6GvspGEUIpH00HoPTgEn"></script>
-  <script src="js/domain/schedule-change.js?v=2.1.1" integrity="sha384-v7zQ2iSY9DIrsztq758NvV0o6vbsguJn70NviXT6itT6YcuNaCvSW2beDogcMbD7"></script>
-  <script src="js/presentation/schedule-change-ui.js?v=2.1.1" integrity="sha384-gOcWGnLVFR2omdZ0auRzZsmihk9RXi9hfoitu+RvbRV//kOtuILV+xDhdu0ImRgb"></script>
-  <script src="js/domain/spot-realignment.js?v=2.1.1" integrity="sha384-gCFPNcD1aD3UegqTLtFPCU7Xqm7CtRN0yjQx2QnWe1ee0i3cZu8pzZic7YzBJLKt"></script>
-  <script src="js/presentation/spot-realignment-ui.js?v=2.1.1" integrity="sha384-GKlSQQKluvxcnRhJmQVQL4lZIFXbqf8ac/0BnxPiWNWcLjFJWYx/IZU3+5fZI7dk"></script>
-  <script src="js/domain/travel-records.js?v=2.1.1" integrity="sha384-qhkfkF1xKTuPtBvsB5Gwpz631xTkyy2tS1BU9Hixd2L1t+oobsXBMJnFv1pBHNnW"></script>
-  <script src="js/domain/travel-story.js?v=2.1.1" integrity="sha384-vjuGNDpytM6vG8SuZbKLW7qTTV1L33j48P1KSwNQnvca7uxo5EYkBM2X0IOdn/Qa"></script>
-  <script src="js/infrastructure/storage/photo-compression.js?v=2.1.1" integrity="sha384-MeOApXBzhg++Rcq/Lfjwb04/MA1U6wmwHppDgFZvKA4ZfdPC4oR2Hv1BhPFNU7Ig"></script>
-  <link rel="stylesheet" href="css/photo-optimization.css?v=2.1.1" integrity="sha384-9sgcirlxZs5tcmp/22RdH56B3bZla/q4DVH7x8W+fO8P4neR4WJMDDtQNK4WPq+/">
-  <script src="js/domain/photo-optimization.js?v=2.1.1" integrity="sha384-fpPZ4nJ383bIJaSHvmuZg+9BYd5LQ8YuVtEEMjtJnQr2Fod/mawAoB5SYMdtvBRU"></script>
-  <script src="js/infrastructure/storage/photo-cleanup.js?v=2.1.1" integrity="sha384-qPUCnJe7spP79MZLfOuzscYXTD6cW+7dzsf0xxvDip9hIj+yBvbBK6KhAouz5BC/"></script>
-  <script src="js/presentation/photo-optimization-ui.js?v=2.1.1" integrity="sha384-9QsQz7hvv3HVSOtRVjrMPr6G9w59E//utEWpshSg+awbBA4xBBcO/BGw/WhZNI8Z"></script>
-  <script src="js/infrastructure/storage/media-repository.js?v=2.1.1" integrity="sha384-q0IPoo86aU2ruB130X1HAh01dr4hpI0IAXeMVCoa7Jy/2pIB09f7WbSKPm8vowhw"></script>
-  <script src="js/infrastructure/storage/record-media-store.js?v=2.1.1" integrity="sha384-vNu5tI/i1vWsxi2/3aQYW+9zYfivBNB2ewaUTRlwhnGwRbv9dpR4bu/sqzv1D2jm"></script>
-  <script src="js/infrastructure/storage/expense-photo-repository.js?v=2.1.1" integrity="sha384-gdumvFYkJqEbRPJlK4mffCsUjPsnKCXLg6/1fLMR8kUuU1QDMeLLOYmMVSRTGNSy"></script>
-  <script src="js/presentation/companion-ui.js?v=2.1.1" integrity="sha384-YvoOvPoQH4welBVtgyXGnskcTRrpmHvuqXgCmI2WRtlYsj6Pswwx9hJRD+oLfDVX"></script>
-  <script src="js/domain/trip-transfer.js?v=2.1.1" integrity="sha384-VD9q1co1+bJzdS4i19rvfkQN/4KvzfnNdHUjbbucghcxzjmPim+kWF93qv5DaXSu"></script>
-  <script src="js/domain/travel-backup.js?v=2.1.1" integrity="sha384-4zE43uWlz5y3eP7g98tEL3HqAsw08/XvINQ+RhLLt4wz+cnySMWiy3Eu1m7BaBbK"></script>
-  <script src="js/presentation/travel-backup-ui.js?v=2.1.1" integrity="sha384-2MeiLmNhd6dsStzYdF4LhB3OrNegW5vZSkbRojImg5IQ9LLjrkbdcd+LP2rpbB1h"></script>
-  <script src="js/presentation/storage-health-ui.js?v=2.1.1" integrity="sha384-yhLee1WlZBu7vZL8qquRuBbYdW2RIBPIkjKQqjgT5iNw7FRWOlw7POGkpMar7IkT"></script>
-  <script src="js/presentation/trip-transfer-ui.js?v=2.1.1" integrity="sha384-alWNP5q7xJLSbe8GlkYNmHLw8G9jbXGLNSi28LERcPAb1pESASALcV/HOiFWa12h"></script>
-  <script src="js/presentation/mobile-navigation.js?v=2.1.1" integrity="sha384-siDaTMxmkO/lATIBC8kqJzq3boL1P4OuIdM1qnxNZW7qiG+dz9+jJ2+tI1KSvzWd"></script>
-  <script src="js/presentation/activity-journal.js?v=2.1.1" integrity="sha384-5g6xHa7e47oPUeFBGeImpMSyv9V03hKS7XhQ5kYz8uB2CCfq6IAsTFDSS3F83F4U"></script>
-  <script src="js/presentation/moment-journal.js?v=2.1.1" integrity="sha384-r/heV0A2E+VDwxEE7joC1tw0UPcWIWSdZHDvU0rQs6c+LzY5zCEBLYiF4KIKQo5u"></script>
-  <script src="js/presentation/travel-story-ui.js?v=2.1.1" integrity="sha384-s9HZ4A1/X3tCfe4rBfB6nzEwAC7i2U1YVfradgxnQPX5X4tnFszIOPeMsLPfXnfq"></script>
-  <script src="js/config/collaboration-config.js?v=2.1.1" integrity="sha384-ipxhKB+fQ4s3OThYo3p6IWFvP6BbstXYDW6jZWWiPHB4qomo64w7r8/wRvdsi47w"></script>
-  <script src="js/infrastructure/collaboration/supabase-travel-service.js?v=2.1.1" integrity="sha384-+SDvVJ0CNqCMvFlOBOA+nfA1k6/sN6GlaKDhTQo4SgX8x3EwPXyJlvMfJj0D6Bt/"></script>
-  <script src="js/presentation/collaboration-ui.js?v=2.1.1" integrity="sha384-KvnYI6ym2/deKsOtKryWJS5tljPjqYRx67JGGgWVRNyWHEC470iPDg3+fdw0OHX0"></script>
-  <script src="js/presentation/collaboration-review.js?v=2.1.1" integrity="sha384-cbND/rT26DaIY2hR++LBuByF9L/ACu5TDl0b85EN2zsk/sTapWGm2BPQqZgN6GzI"></script>
-  <script src="js/presentation/ui-actions.js?v=2.1.1" integrity="sha384-86E6+vWuYSS4ldFWIpwfcJMnPW2jUnvL9CJGWeJHDKHEXnQsNWTDB0skpvkRBm9K"></script>
-  <script src="js/presentation/shell-actions.js?v=2.1.1" integrity="sha384-ec2zNqB35MYVfgVf448ukoOrIy6FFwUow/h7S8z0W47OS7F+tloHdR8w4+Mmw4Zy"></script>
-  <script src="js/presentation/exchange-ui.js?v=2.1.1" integrity="sha384-21MA/m/6rg1LsIZFsoAuqvhmWN3Y8seM2ZdIZHKOGEZ70CAjaeulE8mmIbSKmb1h"></script>
-  <script src="js/presentation/expenses-tab.js?v=2.1.1" integrity="sha384-nNkwhxb8G/vM+atsT9wEQCJ4OORV4PtVpdU/xCiSylRqNcIUd8Y6SoxaR8yR7i4B"></script>
-  <script src="js/presentation/journal-tab.js?v=2.1.1" integrity="sha384-Hhgx7Hra1MAb8tvQIMdF9khAJjZHC3SqpdqWrAXEVAbGHvgFLOf+bREOM6jyvFoc"></script>
-  <script src="js/presentation/checklist-tab.js?v=2.1.1" integrity="sha384-xARSN5JIjxVkI1EZOvfWCAKvl6L9RCW/uvf5FmpRTgoED72y+KY9+NYXQlaARlTc"></script>
-  <script src="js/presentation/expense-editor.js?v=2.1.1" integrity="sha384-KIIi0zCFF4awBbz3FDmp4K6apy5Fz8RhIPC19n2Tq0LwdxQ+3C1YaiVouOBpIlKX"></script>
+  <link rel="stylesheet" href="css/companion.css?v=2.1.2" integrity="sha384-Syant7HB0IYUZUU2saRSYUDkM71WKVuK2JtHM+kAluFdw3VvWv9gSglgJh4utHv/">
+  <link rel="stylesheet" href="css/companion-refresh.css?v=2.1.2" integrity="sha384-2KIp4VI8qsP6dGnz0cm/vehjLjr6GxpZ9yWTbbIXBPWi25XHg6XUOtNbp7W8KMd3">
+  <link rel="stylesheet" href="css/live-itinerary.css?v=2.1.2" integrity="sha384-e/V9wyJ/Gi6baSHcWzBeNGjdn/eKDQIvKWyiYmByLE7C7nYJaQOA+GshtUMcCR72">
+  <link rel="stylesheet" href="css/expense-mobile.css?v=2.1.2" integrity="sha384-QZFtKrU/YvkTaEKv0oJ2ZQi1Zry8RgEFaHzTckwuPFsMDDmadYBH7UuYgTVS7281">
+  <link rel="stylesheet" href="css/moment-journal.css?v=2.1.2" integrity="sha384-g1EihgfyPDJ5o5eWSsQgT1WDTRKDtUfzVatlx6T/t+DhApDBY8dznSrwmelasv91">
+  <script src="js/domain/trip-adapter.js?v=2.1.2" integrity="sha384-JHU/NkAlxwR9G9/49TaFK4sTvg9xKGsSVd3re8rLivtiXcSNdnQA9gRIfvVWUtG7"></script>
+  <script src="js/domain/ai-draft-validation.js?v=2.1.2" integrity="sha384-OTRAiX7YaOiiNrpMWDjkOyH0bTbbL3KrGwGp1RmIkgvd15pErNTTKVTJkoesmpfi"></script>
+  <script src="js/domain/live-itinerary.js?v=2.1.2" integrity="sha384-cwMH5i2F5Mve7Z9cKeWrP7uLU5plcu6c7xvTf4Lyz3Xkb6GlNCI14lnEWzw46cVg"></script>
+  <script src="js/presentation/live-itinerary-ui.js?v=2.1.2" integrity="sha384-SLjn2QhNBI6VfrG3siiRZqfs51VnmqyRCTMGjMN25fIyHhYwf4LnECXOOiQ4arog"></script>
+  <script src="js/presentation/live-itinerary-bridge.js?v=2.1.2" integrity="sha384-lRoX8rvtVNC3rl6v9tCVjTLCSBjLmTH3EhNiq6OPizV+6GvspGEUIpH00HoPTgEn"></script>
+  <script src="js/domain/schedule-change.js?v=2.1.2" integrity="sha384-v7zQ2iSY9DIrsztq758NvV0o6vbsguJn70NviXT6itT6YcuNaCvSW2beDogcMbD7"></script>
+  <script src="js/presentation/schedule-change-ui.js?v=2.1.2" integrity="sha384-gOcWGnLVFR2omdZ0auRzZsmihk9RXi9hfoitu+RvbRV//kOtuILV+xDhdu0ImRgb"></script>
+  <script src="js/domain/spot-realignment.js?v=2.1.2" integrity="sha384-gCFPNcD1aD3UegqTLtFPCU7Xqm7CtRN0yjQx2QnWe1ee0i3cZu8pzZic7YzBJLKt"></script>
+  <script src="js/presentation/spot-realignment-ui.js?v=2.1.2" integrity="sha384-GKlSQQKluvxcnRhJmQVQL4lZIFXbqf8ac/0BnxPiWNWcLjFJWYx/IZU3+5fZI7dk"></script>
+  <script src="js/domain/travel-records.js?v=2.1.2" integrity="sha384-qhkfkF1xKTuPtBvsB5Gwpz631xTkyy2tS1BU9Hixd2L1t+oobsXBMJnFv1pBHNnW"></script>
+  <script src="js/domain/travel-story.js?v=2.1.2" integrity="sha384-vjuGNDpytM6vG8SuZbKLW7qTTV1L33j48P1KSwNQnvca7uxo5EYkBM2X0IOdn/Qa"></script>
+  <script src="js/infrastructure/storage/photo-compression.js?v=2.1.2" integrity="sha384-MeOApXBzhg++Rcq/Lfjwb04/MA1U6wmwHppDgFZvKA4ZfdPC4oR2Hv1BhPFNU7Ig"></script>
+  <link rel="stylesheet" href="css/photo-optimization.css?v=2.1.2" integrity="sha384-9sgcirlxZs5tcmp/22RdH56B3bZla/q4DVH7x8W+fO8P4neR4WJMDDtQNK4WPq+/">
+  <script src="js/domain/photo-optimization.js?v=2.1.2" integrity="sha384-fpPZ4nJ383bIJaSHvmuZg+9BYd5LQ8YuVtEEMjtJnQr2Fod/mawAoB5SYMdtvBRU"></script>
+  <script src="js/infrastructure/storage/photo-cleanup.js?v=2.1.2" integrity="sha384-qPUCnJe7spP79MZLfOuzscYXTD6cW+7dzsf0xxvDip9hIj+yBvbBK6KhAouz5BC/"></script>
+  <script src="js/presentation/photo-optimization-ui.js?v=2.1.2" integrity="sha384-9QsQz7hvv3HVSOtRVjrMPr6G9w59E//utEWpshSg+awbBA4xBBcO/BGw/WhZNI8Z"></script>
+  <script src="js/infrastructure/storage/media-repository.js?v=2.1.2" integrity="sha384-q0IPoo86aU2ruB130X1HAh01dr4hpI0IAXeMVCoa7Jy/2pIB09f7WbSKPm8vowhw"></script>
+  <script src="js/infrastructure/storage/record-media-store.js?v=2.1.2" integrity="sha384-vNu5tI/i1vWsxi2/3aQYW+9zYfivBNB2ewaUTRlwhnGwRbv9dpR4bu/sqzv1D2jm"></script>
+  <script src="js/infrastructure/storage/expense-photo-repository.js?v=2.1.2" integrity="sha384-gdumvFYkJqEbRPJlK4mffCsUjPsnKCXLg6/1fLMR8kUuU1QDMeLLOYmMVSRTGNSy"></script>
+  <script src="js/presentation/companion-ui.js?v=2.1.2" integrity="sha384-UyvSw87RO90PyeLYpa6foQaePaX3jbKzZwxj8UTKf703kjMsPMwyGhvVx6zB6Pf3"></script>
+  <script src="js/domain/trip-transfer.js?v=2.1.2" integrity="sha384-VD9q1co1+bJzdS4i19rvfkQN/4KvzfnNdHUjbbucghcxzjmPim+kWF93qv5DaXSu"></script>
+  <script src="js/domain/travel-backup.js?v=2.1.2" integrity="sha384-4zE43uWlz5y3eP7g98tEL3HqAsw08/XvINQ+RhLLt4wz+cnySMWiy3Eu1m7BaBbK"></script>
+  <script src="js/presentation/travel-backup-ui.js?v=2.1.2" integrity="sha384-2MeiLmNhd6dsStzYdF4LhB3OrNegW5vZSkbRojImg5IQ9LLjrkbdcd+LP2rpbB1h"></script>
+  <script src="js/presentation/storage-health-ui.js?v=2.1.2" integrity="sha384-yhLee1WlZBu7vZL8qquRuBbYdW2RIBPIkjKQqjgT5iNw7FRWOlw7POGkpMar7IkT"></script>
+  <script src="js/presentation/trip-transfer-ui.js?v=2.1.2" integrity="sha384-alWNP5q7xJLSbe8GlkYNmHLw8G9jbXGLNSi28LERcPAb1pESASALcV/HOiFWa12h"></script>
+  <script src="js/presentation/mobile-navigation.js?v=2.1.2" integrity="sha384-siDaTMxmkO/lATIBC8kqJzq3boL1P4OuIdM1qnxNZW7qiG+dz9+jJ2+tI1KSvzWd"></script>
+  <script src="js/presentation/activity-journal.js?v=2.1.2" integrity="sha384-5g6xHa7e47oPUeFBGeImpMSyv9V03hKS7XhQ5kYz8uB2CCfq6IAsTFDSS3F83F4U"></script>
+  <script src="js/presentation/moment-journal.js?v=2.1.2" integrity="sha384-r/heV0A2E+VDwxEE7joC1tw0UPcWIWSdZHDvU0rQs6c+LzY5zCEBLYiF4KIKQo5u"></script>
+  <script src="js/presentation/travel-story-ui.js?v=2.1.2" integrity="sha384-s9HZ4A1/X3tCfe4rBfB6nzEwAC7i2U1YVfradgxnQPX5X4tnFszIOPeMsLPfXnfq"></script>
+  <script src="js/config/collaboration-config.js?v=2.1.2" integrity="sha384-ipxhKB+fQ4s3OThYo3p6IWFvP6BbstXYDW6jZWWiPHB4qomo64w7r8/wRvdsi47w"></script>
+  <script src="js/infrastructure/collaboration/supabase-travel-service.js?v=2.1.2" integrity="sha384-+SDvVJ0CNqCMvFlOBOA+nfA1k6/sN6GlaKDhTQo4SgX8x3EwPXyJlvMfJj0D6Bt/"></script>
+  <script src="js/presentation/collaboration-ui.js?v=2.1.2" integrity="sha384-KvnYI6ym2/deKsOtKryWJS5tljPjqYRx67JGGgWVRNyWHEC470iPDg3+fdw0OHX0"></script>
+  <script src="js/presentation/collaboration-review.js?v=2.1.2" integrity="sha384-cbND/rT26DaIY2hR++LBuByF9L/ACu5TDl0b85EN2zsk/sTapWGm2BPQqZgN6GzI"></script>
+  <script src="js/presentation/ui-actions.js?v=2.1.2" integrity="sha384-86E6+vWuYSS4ldFWIpwfcJMnPW2jUnvL9CJGWeJHDKHEXnQsNWTDB0skpvkRBm9K"></script>
+  <script src="js/presentation/shell-actions.js?v=2.1.2" integrity="sha384-ec2zNqB35MYVfgVf448ukoOrIy6FFwUow/h7S8z0W47OS7F+tloHdR8w4+Mmw4Zy"></script>
+  <script src="js/presentation/exchange-ui.js?v=2.1.2" integrity="sha384-21MA/m/6rg1LsIZFsoAuqvhmWN3Y8seM2ZdIZHKOGEZ70CAjaeulE8mmIbSKmb1h"></script>
+  <script src="js/presentation/budget-ui.js?v=2.1.2" integrity="sha384-fSB8t294PI0yhCpjZ/flcffZT9xOOpWeTgMuivQGdPWe2eJZA+G8TJu6l7w0vyJL"></script>
+  <script src="js/presentation/expense-analytics.js?v=2.1.2" integrity="sha384-GOo/a/N9uE2yr6Aw2Ju6sXiBr5VTaDbPb1nth/ElR4GDT1yPI0CfghLOB7DaN1Yp"></script>
+  <script src="js/presentation/expenses-tab.js?v=2.1.2" integrity="sha384-lwcNOGNKd/w1vsVbOy1GJ4LWOtg8VjuyzKwORX1iSn5HccAQIPA/FOU5JoNrSpDg"></script>
+  <script src="js/presentation/journal-tab.js?v=2.1.2" integrity="sha384-Hhgx7Hra1MAb8tvQIMdF9khAJjZHC3SqpdqWrAXEVAbGHvgFLOf+bREOM6jyvFoc"></script>
+  <script src="js/presentation/checklist-tab.js?v=2.1.2" integrity="sha384-xARSN5JIjxVkI1EZOvfWCAKvl6L9RCW/uvf5FmpRTgoED72y+KY9+NYXQlaARlTc"></script>
+  <script src="js/presentation/expense-editor.js?v=2.1.2" integrity="sha384-KIIi0zCFF4awBbz3FDmp4K6apy5Fz8RhIPC19n2Tq0LwdxQ+3C1YaiVouOBpIlKX"></script>
 
   <!-- Knowledge Base Seed & Destination Knowledge Packs (DKP) -->
-  <script src="kb-travel.js?v=2.1.1" integrity="sha384-zxXc7MUMbmXkiaF3ymeLmVSiCyPRVfkUjSZetDVx41zrHGyPeSCN4TFpy5f1jNUd"></script>
+  <script src="kb-travel.js?v=2.1.2" integrity="sha384-zxXc7MUMbmXkiaF3ymeLmVSiCyPRVfkUjSZetDVx41zrHGyPeSCN4TFpy5f1jNUd"></script>
   <script src="js/destinations/destination-registry.js" integrity="sha384-PV7EnpqZusutqYxhFc0vICq72coA/C+TMYaBkk+BFy52dmgfk/RDzf/DAgW7dmvC"></script>
   <script src="js/destinations/pack-default.js" integrity="sha384-mCe4oKfrN+8fbLFCJJexsHJXBZkw6b6q1bOg5skoupZ9hXUrhZ92sTRRTF831vDt"></script>
-  <script src="js/destinations/pack-south-america.js?v=2.1.1" integrity="sha384-p6i8pSXkYDEndehBEqNlXK7ZIZia6Tsxw4TD2LUf7TJPUSlPd2AzXbp3wyyAvDG7"></script>
+  <script src="js/destinations/pack-south-america.js?v=2.1.2" integrity="sha384-p6i8pSXkYDEndehBEqNlXK7ZIZia6Tsxw4TD2LUf7TJPUSlPd2AzXbp3wyyAvDG7"></script>
   <script src="js/destinations/pack-yunnan.js" integrity="sha384-MIgviqt+QV/b06eH6w7DO42JTPFr7Q2kFTi8TRQT4MCouBcFBGiC7x1jnKgVatOX"></script>
-  <script src="js/destinations/emergency-contacts.js?v=2.1.1" integrity="sha384-q3IUPhGWY99DNBNM269wiapa6eQYahcwaro/PvPILVtAgkUM0pE23GI5E63eMLlN"></script>
-  <script src="js/infrastructure/storage/legacy-trip-repository.js?v=2.1.1" integrity="sha384-Jf2y8z7h6bwxOdkwZP0zMyhyG/ntcCrFco7a+mzgiFAtiCUE2uXU8Cc/MSjunorP"></script>
-  <script src="js/infrastructure/storage/idb-trip-repository.js?v=2.1.1" integrity="sha384-n7ndWoPUE3bipL9HvWWTfW8XPNZbDRmAWocUpRIyVM5HtGIIEqbkOK1e6InJY8c4"></script>
-  <script src="js/infrastructure/storage/trip-store.js?v=2.1.1" integrity="sha384-ftpferQ+1NXFRqMRZuHlz2wGUfEKk4GKeXEZzAs3FlsUmGfFdxcsSG6U5t4/B1Rb"></script>
-  <script src="js/infrastructure/storage/settings-repository.js?v=2.1.1" integrity="sha384-fp7ck757BhOA+Y2i/VoW21KRCkeMyb/G78wxwhZuReB2JbzcyTxBrLxGldhvw3n3"></script>
-  <script src="js/infrastructure/storage/journal-overflow-repository.js?v=2.1.1" integrity="sha384-uRxi9B+oBHCQ+aa8a6Wp72RAAeEuslXu5kZ+gf9Kvo22B3N6fr1XSkVnAV1X42yO"></script>
+  <script src="js/destinations/emergency-contacts.js?v=2.1.2" integrity="sha384-q3IUPhGWY99DNBNM269wiapa6eQYahcwaro/PvPILVtAgkUM0pE23GI5E63eMLlN"></script>
+  <script src="js/infrastructure/storage/legacy-trip-repository.js?v=2.1.2" integrity="sha384-Jf2y8z7h6bwxOdkwZP0zMyhyG/ntcCrFco7a+mzgiFAtiCUE2uXU8Cc/MSjunorP"></script>
+  <script src="js/infrastructure/storage/idb-trip-repository.js?v=2.1.2" integrity="sha384-n7ndWoPUE3bipL9HvWWTfW8XPNZbDRmAWocUpRIyVM5HtGIIEqbkOK1e6InJY8c4"></script>
+  <script src="js/infrastructure/storage/trip-store.js?v=2.1.2" integrity="sha384-ftpferQ+1NXFRqMRZuHlz2wGUfEKk4GKeXEZzAs3FlsUmGfFdxcsSG6U5t4/B1Rb"></script>
+  <script src="js/infrastructure/storage/settings-repository.js?v=2.1.2" integrity="sha384-fp7ck757BhOA+Y2i/VoW21KRCkeMyb/G78wxwhZuReB2JbzcyTxBrLxGldhvw3n3"></script>
+  <script src="js/infrastructure/storage/journal-overflow-repository.js?v=2.1.2" integrity="sha384-uRxi9B+oBHCQ+aa8a6Wp72RAAeEuslXu5kZ+gf9Kvo22B3N6fr1XSkVnAV1X42yO"></script>
 </head>
 <body class="min-h-screen flex flex-col font-sans transition-colors duration-200">
 
@@ -1572,7 +1576,7 @@
       <div class="app-brand flex items-center gap-2 sm:gap-2.5 min-w-0 cursor-pointer select-none" onclick="switchView('hub')">
         <img src="icons/sulsul_bear_mascot.png" class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl object-cover border border-[#e6e2d8] dark:border-stone-800 shadow-sm shrink-0" alt="Sulsul Travel">
           <h1 class="font-brand-script text-xl sm:text-2xl md:text-3xl font-bold tracking-normal text-[#1E2B24] dark:text-[#ededed] whitespace-nowrap leading-tight">Sulsul Travel</h1>
-            <button id="app-ver-badge" type="button" onclick="event.stopPropagation(); openVersionHistoryModal()" class="theme-card-subtle font-mono" title="앱 버전과 업데이트 기록 보기">v2.1.1</button>
+            <button id="app-ver-badge" type="button" onclick="event.stopPropagation(); openVersionHistoryModal()" class="theme-card-subtle font-mono" title="앱 버전과 업데이트 기록 보기">v2.1.2</button>
             <p id="header-trip-name" class="sr-only">A Deep Life Essay</p>
       </div>
 
@@ -3327,18 +3331,18 @@
 
   <!-- 사용내역 통계 모달 (v1.5.1 고도화) -->
   <div id="modal-expense-analytics" class="sheet-container sheet-closed">
-    <div class="sheet-scrim" onclick="closeModal('modal-expense-analytics')"></div>
+    <div class="sheet-scrim" data-on-click="shell.closeModal" data-modal="modal-expense-analytics"></div>
     <div class="sheet-box p-4 sm:p-6 space-y-4 max-h-[90vh] overflow-y-auto">
       <div class="flex items-center justify-between border-b border-stone-200 dark:border-stone-800 pb-3">
         <div class="flex items-center gap-2">
-          <button onclick="closeModal('modal-expense-analytics')" class="w-8 h-8 rounded-xl exp-btn-cancel flex items-center justify-center text-xs">
+          <button type="button" data-on-click="shell.closeModal" data-modal="modal-expense-analytics" aria-label="사용내역 통계 닫기" class="w-8 h-8 rounded-xl exp-btn-cancel flex items-center justify-center text-xs">
             <i class="fa-solid fa-arrow-left"></i>
           </button>
           <h3 class="text-base font-black exp-heading flex items-center gap-2">
             <i class="fa-solid fa-chart-pie text-amber-500 dark:text-amber-400"></i> 사용내역 통계
           </h3>
         </div>
-        <button onclick="closeModal('modal-expense-analytics')" class="text-slate-400 hover:text-slate-700 dark:hover:text-white text-base ml-1 p-1">✕</button>
+        <button type="button" data-on-click="shell.closeModal" data-modal="modal-expense-analytics" aria-label="사용내역 통계 닫기" class="text-slate-400 hover:text-slate-700 dark:hover:text-white text-base ml-1 p-1">✕</button>
       </div>
 
       <!-- 상단 총 지출 금액 카드 -->
@@ -3350,13 +3354,13 @@
 
       <!-- 3대 분석 탭: [지출 구분] [지출 카테고리] [지출 및 수입 구분] -->
       <div class="exp-pill-tray">
-        <button id="exp-stat-tab-method" onclick="switchExpenseAnalyticsTab('method')" class="flex-1 py-1.5 exp-pill-btn active-card">
+        <button type="button" id="exp-stat-tab-method" data-on-click="analytics.tab" data-tab="method" aria-pressed="true" class="flex-1 py-1.5 exp-pill-btn active-card">
           지출 구분
         </button>
-        <button id="exp-stat-tab-cat" onclick="switchExpenseAnalyticsTab('cat')" class="flex-1 py-1.5 exp-pill-btn">
+        <button type="button" id="exp-stat-tab-cat" data-on-click="analytics.tab" data-tab="cat" aria-pressed="false" class="flex-1 py-1.5 exp-pill-btn">
           지출 카테고리
         </button>
-        <button id="exp-stat-tab-type" onclick="switchExpenseAnalyticsTab('type')" class="flex-1 py-1.5 exp-pill-btn">
+        <button type="button" id="exp-stat-tab-type" data-on-click="analytics.tab" data-tab="type" aria-pressed="false" class="flex-1 py-1.5 exp-pill-btn">
           지출 및 수입 구분
         </button>
       </div>
@@ -3526,13 +3530,13 @@
 
   <!-- 초기 현금 및 총 예산 설정 모달 (v1.5.3) -->
   <div id="modal-initial-funds" class="sheet-container sheet-closed">
-    <div class="sheet-scrim" onclick="closeModal('modal-initial-funds')"></div>
+    <div class="sheet-scrim" data-on-click="shell.closeModal" data-modal="modal-initial-funds"></div>
     <div class="sheet-box p-5 sm:p-6 space-y-4 max-h-[92vh] flex flex-col w-full max-w-lg mx-auto">
       <div class="flex items-center justify-between border-b border-stone-200 dark:border-[#1e263c] pb-3 shrink-0">
         <h3 class="text-base font-black text-stone-900 dark:text-white flex items-center gap-2">
           <i class="fa-solid fa-coins text-amber-500 dark:text-amber-400"></i> 초기 자산 및 여행 예산 설정
         </h3>
-        <button onclick="closeModal('modal-initial-funds')" class="text-stone-400 hover:text-stone-700 dark:hover:text-white text-base cursor-pointer">✕</button>
+        <button type="button" data-on-click="shell.closeModal" data-modal="modal-initial-funds" aria-label="초기 자산 창 닫기" class="text-stone-400 hover:text-stone-700 dark:hover:text-white text-base cursor-pointer">✕</button>
       </div>
 
       <!-- 상단 총 자산 요약 배너 -->
@@ -3543,7 +3547,7 @@
         </div>
         <div class="pt-2 border-t border-amber-500/20 dark:border-[#1e263c] flex items-center justify-between">
           <label class="flex items-center gap-2 cursor-pointer text-xs text-stone-800 dark:text-slate-200 select-none">
-            <input type="checkbox" id="chk-sync-initial-budget" checked onchange="handleSyncBudgetToggle()" class="rounded accent-amber-500 w-4 h-4 cursor-pointer">
+            <input type="checkbox" id="chk-sync-initial-budget" checked data-on-change="budget.syncBudget" class="rounded accent-amber-500 w-4 h-4 cursor-pointer">
             <span class="font-bold">초기 총 자산을 여행 총 예산으로 자동 적용</span>
           </label>
         </div>
@@ -3560,23 +3564,23 @@
 
       <!-- 통화별 입력 목록 (스크롤) -->
       <div class="flex-1 overflow-y-auto pr-1 space-y-2.5 max-h-[46vh]" id="initial-funds-list">
-        <!-- Dynamically rendered via renderInitialFundsList() -->
+        <!-- SulsulTravel.BudgetUI.renderInitialFunds()가 그린다 -->
       </div>
 
       <!-- 모달 하단 3대 액션 버튼 바 (추가 / 취소 / 저장) (v1.5.4) -->
       <div class="pt-3 border-t border-stone-200 dark:border-[#1e263c] grid grid-cols-3 gap-2 shrink-0">
         <!-- 1. 통화 추가 -->
-        <button type="button" onclick="openAddCurrencyModal()" class="py-2.5 px-1.5 rounded-xl btn-funds-add text-xs font-bold transition flex items-center justify-center gap-1.5 cursor-pointer shadow-sm">
+        <button type="button" data-on-click="budget.addCurrency" class="py-2.5 px-1.5 rounded-xl btn-funds-add text-xs font-bold transition flex items-center justify-center gap-1.5 cursor-pointer shadow-sm">
           <i class="fa-solid fa-plus text-[10px]"></i>
           <span>통화 추가</span>
         </button>
         <!-- 2. 취소 -->
-        <button type="button" onclick="closeModal('modal-initial-funds')" class="py-2.5 px-1.5 rounded-xl btn-funds-close text-xs font-bold transition flex items-center justify-center gap-1.5 cursor-pointer shadow-sm">
+        <button type="button" data-on-click="shell.closeModal" data-modal="modal-initial-funds" class="py-2.5 px-1.5 rounded-xl btn-funds-close text-xs font-bold transition flex items-center justify-center gap-1.5 cursor-pointer shadow-sm">
           <i class="fa-solid fa-xmark text-[10px]"></i>
           <span>취소</span>
         </button>
         <!-- 3. 저장 및 적용 -->
-        <button type="button" onclick="saveInitialFundsAndBudget()" class="py-2.5 px-1.5 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-stone-950 font-black text-xs transition flex items-center justify-center gap-1.5 cursor-pointer shadow-md">
+        <button type="button" data-on-click="budget.save" class="py-2.5 px-1.5 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-stone-950 font-black text-xs transition flex items-center justify-center gap-1.5 cursor-pointer shadow-md">
           <i class="fa-solid fa-check text-[10px]"></i>
           <span>저장</span>
         </button>
@@ -3586,7 +3590,7 @@
 
   <!-- 전세계 통화 선택 모달 (v1.5.2) -->
   <div id="modal-add-currency" class="sheet-container sheet-closed">
-    <div class="sheet-scrim" onclick="closeModal('modal-add-currency')"></div>
+    <div class="sheet-scrim" data-on-click="shell.closeModal" data-modal="modal-add-currency"></div>
     <div class="sheet-box p-5 sm:p-6 space-y-3.5 max-h-[88vh] flex flex-col w-full max-w-xl mx-auto">
       <div class="flex items-center justify-between border-b border-[#1e263c] pb-3 shrink-0">
         <div>
@@ -3595,29 +3599,29 @@
           </h3>
           <p class="text-[11px] text-slate-400 mt-0.5">터치 한 번으로 가계부에 새 통화 지갑을 활성화합니다.</p>
         </div>
-        <button onclick="closeModal('modal-add-currency')" class="text-slate-400 hover:text-white text-base">✕</button>
+        <button type="button" data-on-click="shell.closeModal" data-modal="modal-add-currency" aria-label="통화 선택 창 닫기" class="text-slate-400 hover:text-white text-base">✕</button>
       </div>
 
       <!-- 실시간 검색 입력창 -->
       <div class="relative shrink-0">
         <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
-        <input type="text" id="add-curr-search-input" oninput="filterAddCurrencyList()" placeholder="통화명, 국가명, 영문 코드 검색 (예: 달러, 엔, 유로, THB, 베트남...)" class="w-full pl-8 pr-8 py-2 bg-[#080b12] border border-[#1e263c] rounded-xl text-xs text-white placeholder-slate-500 focus:outline-none focus:border-sky-400 transition">
-        <button type="button" onclick="clearAddCurrencySearch()" id="btn-clear-add-curr-search" class="hidden absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-200 text-xs">✕</button>
+        <input type="search" id="add-curr-search-input" data-on-input="budget.search" aria-label="통화 검색" placeholder="통화명, 국가명, 영문 코드 검색 (예: 달러, 엔, 유로, THB, 베트남...)" class="w-full pl-8 pr-8 py-2 bg-[#080b12] border border-[#1e263c] rounded-xl text-xs text-white placeholder-slate-500 focus:outline-none focus:border-sky-400 transition">
+        <button type="button" data-on-click="budget.clearSearch" id="btn-clear-add-curr-search" aria-label="검색어 지우기" class="hidden absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-200 text-xs">✕</button>
       </div>
 
       <!-- 대륙/지역별 빠른 필터 탭 -->
       <div class="flex items-center gap-1.5 overflow-x-auto pb-1 shrink-0 no-scrollbar text-[11px]" id="add-curr-region-filters">
-        <button type="button" onclick="filterAddCurrencyRegion('ALL')" data-region="ALL" class="add-curr-filter-btn px-2.5 py-1 rounded-lg font-bold sulsul-badge-sky bg-sky-100 text-sky-800 border border-sky-300 dark:bg-sky-950/50 dark:text-sky-300 dark:border-sky-800 cursor-pointer">전체</button>
-        <button type="button" onclick="filterAddCurrencyRegion('ASIA')" data-region="ASIA" class="add-curr-filter-btn px-2.5 py-1 rounded-lg font-medium bg-[#080b12] text-slate-400 border border-[#1e263c] hover:text-white cursor-pointer">아시아</button>
-        <button type="button" onclick="filterAddCurrencyRegion('EUROPE')" data-region="EUROPE" class="add-curr-filter-btn px-2.5 py-1 rounded-lg font-medium bg-[#080b12] text-slate-400 border border-[#1e263c] hover:text-white cursor-pointer">유럽</button>
-        <button type="button" onclick="filterAddCurrencyRegion('AMERICAS')" data-region="AMERICAS" class="add-curr-filter-btn px-2.5 py-1 rounded-lg font-medium bg-[#080b12] text-slate-400 border border-[#1e263c] hover:text-white cursor-pointer">아메리카</button>
-        <button type="button" onclick="filterAddCurrencyRegion('OCEANIA')" data-region="OCEANIA" class="add-curr-filter-btn px-2.5 py-1 rounded-lg font-medium bg-[#080b12] text-slate-400 border border-[#1e263c] hover:text-white cursor-pointer">오세아니아</button>
-        <button type="button" onclick="filterAddCurrencyRegion('MEA')" data-region="MEA" class="add-curr-filter-btn px-2.5 py-1 rounded-lg font-medium bg-[#080b12] text-slate-400 border border-[#1e263c] hover:text-white cursor-pointer">중동/아프리카</button>
+        <button type="button" data-on-click="budget.region" data-region="ALL" aria-pressed="true" class="add-curr-filter-btn px-2.5 py-1 rounded-lg font-bold sulsul-badge-sky bg-sky-100 text-sky-800 border border-sky-300 dark:bg-sky-950/50 dark:text-sky-300 dark:border-sky-800 cursor-pointer">전체</button>
+        <button type="button" data-on-click="budget.region" data-region="ASIA" aria-pressed="false" class="add-curr-filter-btn px-2.5 py-1 rounded-lg font-medium bg-[#080b12] text-slate-400 border border-[#1e263c] hover:text-white cursor-pointer">아시아</button>
+        <button type="button" data-on-click="budget.region" data-region="EUROPE" aria-pressed="false" class="add-curr-filter-btn px-2.5 py-1 rounded-lg font-medium bg-[#080b12] text-slate-400 border border-[#1e263c] hover:text-white cursor-pointer">유럽</button>
+        <button type="button" data-on-click="budget.region" data-region="AMERICAS" aria-pressed="false" class="add-curr-filter-btn px-2.5 py-1 rounded-lg font-medium bg-[#080b12] text-slate-400 border border-[#1e263c] hover:text-white cursor-pointer">아메리카</button>
+        <button type="button" data-on-click="budget.region" data-region="OCEANIA" aria-pressed="false" class="add-curr-filter-btn px-2.5 py-1 rounded-lg font-medium bg-[#080b12] text-slate-400 border border-[#1e263c] hover:text-white cursor-pointer">오세아니아</button>
+        <button type="button" data-on-click="budget.region" data-region="MEA" aria-pressed="false" class="add-curr-filter-btn px-2.5 py-1 rounded-lg font-medium bg-[#080b12] text-slate-400 border border-[#1e263c] hover:text-white cursor-pointer">중동/아프리카</button>
       </div>
 
       <!-- 통화 선택 그리드 (스크롤) -->
       <div class="flex-1 overflow-y-auto pr-1 grid grid-cols-1 sm:grid-cols-2 gap-2 max-h-[48vh]" id="add-currency-grid">
-        <!-- Dynamically rendered via renderAddCurrencyGrid() -->
+        <!-- SulsulTravel.BudgetUI.renderCurrencyGrid()가 그린다 -->
       </div>
     </div>
   </div>
@@ -4786,7 +4790,10 @@
 
       <!-- 버전 목록 스크롤 영역 (독립 스크롤 컨테이너로 Flexbox 압축 버그 영구 척결) -->
       <div class="overflow-y-auto flex-1 min-h-0 space-y-3.5 pr-1.5 custom-scrollbar">
-        <!-- v2.1.1 (Current) -->
+        <!-- v2.1.2 (Current) -->
+        <section class="companion-context"><h3 class="font-bold">v2.1.2 · 가계부 화면 분리 2차</h3><p class="text-xs">2026-11-24 · st-shell-v2.1.2</p><p class="text-xs leading-relaxed">초기 자산·예산 창, 통화 추가 창, 사용내역 통계를 별도 파일로 옮겼습니다. 초기 자산 창에서 기준 통화를 바꾸거나 통화를 빼도 입력한 금액이 남고, 저장을 누르기 전에는 여행 자료가 바뀌지 않습니다. 사용내역 통계의 카테고리 막대가 실제 비율대로 그려지고, 공유 사본의 금액도 바르게 더합니다.</p></section>
+
+        <!-- v2.1.1 -->
         <section class="companion-context"><h3 class="font-bold">v2.1.1 · 가계부 화면 분리 1차</h3><p class="text-xs">2026-11-24 · st-shell-v2.1.1</p><p class="text-xs leading-relaxed">가계부 탭 본문(지갑, 빠른 환율 계산기, 지출·환전 목록)과 환전 창, 환율 관리를 별도 파일로 옮겼습니다. 목록에 그리던 여행 자료 값(통화·날짜·메모)을 모두 안전하게 표시합니다. 사용하는 방법은 그대로입니다.</p></section>
 
         <!-- v2.1.0 -->
@@ -5729,7 +5736,7 @@
 
       <!-- 모달 푸터 -->
       <div class="pt-3 border-t border-[#e8e2d5] dark:border-stone-800 flex items-center justify-between shrink-0">
-        <span class="text-[11px] text-stone-400 dark:text-stone-500 font-mono">Sulsul Travel Engine v2.1.1</span>
+        <span class="text-[11px] text-stone-400 dark:text-stone-500 font-mono">Sulsul Travel Engine v2.1.2</span>
         <button onclick="closeModal('modal-version-history')" class="px-4 py-2 rounded-xl bg-[#faf8f5] dark:bg-stone-800 hover:bg-[#f0ece1] dark:hover:bg-stone-700 border border-[#e8e2d5] dark:border-stone-700 text-[#1c1917] dark:text-[#ededed] text-xs font-bold transition cursor-pointer shadow-sm">
           닫기
         </button>
@@ -6342,7 +6349,7 @@
     window.showToast = showToast;
 
     // 앱 버전 및 글로벌 네임스페이스 (Sulsul-Travel Invariant Rule R-10, R-11, R-12, R-13, R-14, R-15, R-16)
-    const APP_VER = '2.1.1';
+    const APP_VER = '2.1.2';
 
     // ══════════════════════════════════════════
     // [3-Way Theme System] 모던, 라이트그레이, 딥 블랙 테마 엔진 (v1.6.7)
@@ -12254,6 +12261,12 @@
     }
     window.getCurrencyRate = getCurrencyRate;
 
+    function getCurrencySymbol(curr) {
+      if (!curr) return '₩';
+      return CURRENCY_INFO[curr]?.symbol || curr;
+    }
+    window.getCurrencySymbol = getCurrencySymbol;
+
     function calculateTripWallets(trip) {
       if (!trip) return { wallets: {}, totalAssetKrw: 0, totalAssetBase: 0, baseCurrency: 'KRW', activeCurrencies: ['KRW'] };
 
@@ -12400,522 +12413,7 @@
 
     // 가계부 탭 본문(지갑 보드·빠른 계산기·지출/환전 목록·환전 삭제)은 js/presentation/expenses-tab.js(SulsulTravel.ExpensesTab)로 옮겼다(v2.1.1, 4단계).
 
-    // ==========================================
-    // [11.2] 초기 자산 및 총 예산 일원화 관리 모달 (v1.5.3)
-    // ==========================================
-    let isInitialBudgetSyncEnabled = true;
-    let modalBaseCurrency = 'KRW';
-    let modalActiveCurrencies = ['KRW'];
-
-    function getCurrencySymbol(curr) {
-      if (!curr) return '₩';
-      return CURRENCY_INFO[curr]?.symbol || curr;
-    }
-    window.getCurrencySymbol = getCurrencySymbol;
-
-    function openInitialFundsModal() {
-      const trip = getActiveTrip();
-      if (!trip) return;
-
-      modalBaseCurrency = (trip.currency && CURRENCY_INFO[trip.currency]) ? trip.currency : 'KRW';
-
-      if (Array.isArray(trip.activeCurrencies) && trip.activeCurrencies.length > 0) {
-        modalActiveCurrencies = trip.activeCurrencies.filter(c => CURRENCY_INFO[c]);
-        if (!modalActiveCurrencies.includes(modalBaseCurrency)) {
-          modalActiveCurrencies.unshift(modalBaseCurrency);
-        }
-      } else {
-        const walletData = calculateTripWallets(trip);
-        modalActiveCurrencies = walletData.activeCurrencies.slice();
-        if (!modalActiveCurrencies.includes(modalBaseCurrency)) {
-          modalActiveCurrencies.unshift(modalBaseCurrency);
-        }
-      }
-
-      if (!trip.initialBalances) {
-        trip.initialBalances = { [modalBaseCurrency]: Number(trip.budget) || 0 };
-      }
-
-      isInitialBudgetSyncEnabled = true;
-      const chkSync = document.getElementById('chk-sync-initial-budget');
-      if (chkSync) chkSync.checked = true;
-      const customRow = document.getElementById('init-funds-custom-budget-row');
-      if (customRow) customRow.classList.add('hidden');
-
-      renderInitialFundsList();
-      openModal('modal-initial-funds');
-    }
-    window.openInitialFundsModal = openInitialFundsModal;
-    window.openAdjustInitialBalanceModal = openInitialFundsModal;
-    window.openEditBudgetPrompt = openInitialFundsModal;
-
-    function setModalBaseCurrency(curr) {
-      if (!curr || !CURRENCY_INFO[curr]) return;
-      modalBaseCurrency = curr;
-      renderInitialFundsList();
-      showToast(`👑 기준 통화가 [${curr}] (${CURRENCY_INFO[curr].name})로 지정되었습니다.`);
-    }
-    window.setModalBaseCurrency = setModalBaseCurrency;
-
-    function removeCurrencyInModal(curr) {
-      if (curr === modalBaseCurrency) {
-        showToast('⚠️ 기준 통화는 삭제할 수 없습니다. 다른 통화를 기준 통화로 먼저 지정해 주세요.');
-        return;
-      }
-      if (modalActiveCurrencies.length <= 1) {
-        showToast('⚠️ 최소 1개 이상의 통화가 필요합니다.');
-        return;
-      }
-
-      const trip = getActiveTrip();
-      const info = CURRENCY_INFO[curr] || { name: curr, flag: '🌐' };
-      const hasExpenses = trip && (trip.expenses || []).some(e => e.curr === curr || e.walletCurr === curr);
-      const hasExchanges = trip && (trip.exchanges || []).some(x => x.fromCurr === curr || x.toCurr === curr);
-
-      const title = '통화 삭제 확인';
-      const targetName = `${info.flag} ${curr} (${info.name})`;
-      let desc = '해당 통화를 예산 및 초기 자산 목록에서 삭제하시겠습니까?\n(실수로 누르셨다면 취소를 선택하세요)';
-      if (hasExpenses || hasExchanges) {
-        desc = `⚠️ [${curr}] 통화로 기록된 지출 또는 환전 거래 내역이 존재합니다.\n목록에서 삭제해도 기존 지출 기록은 보존되지만, 지갑 잔액 관리가 해제됩니다.\n정말 삭제하시겠습니까?`;
-      }
-
-      showConfirmDelete(title, targetName, desc, () => {
-        // Preserve current input values before re-rendering
-        modalActiveCurrencies.forEach(c => {
-          const input = document.getElementById(`init-fund-input-${c}`);
-          if (input && trip && trip.initialBalances) {
-            trip.initialBalances[c] = parseFloat(input.value) || 0;
-          }
-        });
-
-        modalActiveCurrencies = modalActiveCurrencies.filter(c => c !== curr);
-        if (trip && trip.initialBalances) {
-          delete trip.initialBalances[curr];
-        }
-
-        renderInitialFundsList();
-        showToast(`🗑️ [${curr}] 통화가 목록에서 삭제되었습니다.`);
-      });
-    }
-    window.removeCurrencyInModal = removeCurrencyInModal;
-
-    function openDeleteCurrencySelector() {
-      const deletable = modalActiveCurrencies.filter(c => c !== modalBaseCurrency);
-      if (deletable.length === 0) {
-        showToast('ℹ️ 기준 통화 외에 삭제 가능한 추가 통화가 없습니다.');
-        return;
-      }
-      showToast('ℹ️ 각 통화 카드의 휴지통(🗑️) 아이콘을 눌러 확인 후 안전하게 삭제할 수 있습니다.');
-    }
-    window.openDeleteCurrencySelector = openDeleteCurrencySelector;
-
-    function handleSyncBudgetToggle() {
-      const chkSync = document.getElementById('chk-sync-initial-budget');
-      const customRow = document.getElementById('init-funds-custom-budget-row');
-      isInitialBudgetSyncEnabled = chkSync ? chkSync.checked : true;
-      if (customRow) {
-        if (isInitialBudgetSyncEnabled) {
-          customRow.classList.add('hidden');
-        } else {
-          customRow.classList.remove('hidden');
-          const customBudgetInput = document.getElementById('init-funds-custom-budget');
-          if (customBudgetInput && !customBudgetInput.value) {
-            const trip = getActiveTrip();
-            customBudgetInput.value = (trip?.budget || 0).toLocaleString();
-          }
-        }
-      }
-      updateInitialFundsPreview();
-    }
-    window.handleSyncBudgetToggle = handleSyncBudgetToggle;
-
-    function renderInitialFundsList() {
-      const trip = getActiveTrip();
-      if (!trip) return;
-      const container = document.getElementById('initial-funds-list');
-      if (!container) return;
-
-      const baseCurr = modalBaseCurrency || 'KRW';
-      const baseSymbol = getCurrencySymbol(baseCurr);
-
-      // Update banner labels
-      const baseCurrLabel = document.getElementById('init-funds-base-curr-label');
-      if (baseCurrLabel) {
-        baseCurrLabel.innerText = `설정된 초기 총 자산 (${baseCurr} 환산 합산)`;
-      }
-      const budgetSymbolEl = document.getElementById('init-funds-custom-budget-symbol');
-      if (budgetSymbolEl) {
-        budgetSymbolEl.innerText = `직접 지정할 총 예산 (${baseCurr}): ${baseSymbol}`;
-      }
-
-      container.innerHTML = modalActiveCurrencies.map(c => {
-        const info = CURRENCY_INFO[c] || { name: c, flag: '🌐', symbol: c, rate: 1 };
-        const rate = getCurrencyRate(c);
-        const currentVal = (trip.initialBalances && trip.initialBalances[c] != null)
-          ? Number(trip.initialBalances[c])
-          : (c === baseCurr ? (Number(trip.budget) || 0) : 0);
-
-        const isBase = (c === baseCurr);
-
-        let rateDesc = '';
-        if (isBase) {
-          rateDesc = `<span class="font-bold text-amber-600 dark:text-amber-400">1 ${c} = 1 ${baseSymbol} (기준 통화)</span>`;
-        } else {
-          rateDesc = `1 ${c} ≈ ₩${rate.toLocaleString()}`;
-        }
-
-        return `
-          <div class="p-3.5 rounded-xl border transition ${isBase ? 'bg-amber-500/10 dark:bg-amber-500/10 border-amber-500/60 shadow-sm' : 'bg-white dark:bg-[#0f1422] border-stone-200 dark:border-[#1e263c] hover:border-stone-300 dark:hover:border-[#2a3655]'} space-y-2.5">
-            <!-- 카드 헤더: 기준통화 라디오/뱃지 + 통화정보 + 개별삭제 버튼 -->
-            <div class="flex items-center justify-between gap-2 flex-wrap">
-              <div class="flex items-center gap-2 min-w-0">
-                <label class="flex items-center gap-1.5 cursor-pointer select-none">
-                  <input type="radio" name="modal-base-currency-radio" value="${c}" ${isBase ? 'checked' : ''} onchange="setModalBaseCurrency('${c}')" class="w-4 h-4 accent-amber-500 cursor-pointer">
-                  ${isBase ? `
-                    <span class="text-[10px] font-black px-2 py-0.5 rounded-md bg-amber-500 text-stone-950 flex items-center gap-1 shadow-sm">
-                      <i class="fa-solid fa-crown text-[9px]"></i> 기준 통화
-                    </span>
-                  ` : `
-                    <span onclick="setModalBaseCurrency('${c}')" class="text-[10px] font-bold px-1.5 py-0.5 rounded bg-stone-100 dark:bg-stone-800 hover:bg-stone-200 dark:hover:bg-stone-700 text-stone-600 dark:text-stone-300 border border-stone-200 dark:border-stone-700 cursor-pointer transition">
-                      기준통화 설정
-                    </span>
-                  `}
-                </label>
-                <span class="text-xl shrink-0">${info.flag}</span>
-                <div class="min-w-0">
-                  <div class="flex items-center gap-1.5">
-                    <span class="text-xs font-black text-stone-900 dark:text-white">${c}</span>
-                    <span class="text-[11px] text-stone-500 dark:text-slate-400 font-medium truncate">${info.name}</span>
-                  </div>
-                </div>
-              </div>
-
-              <div class="flex items-center gap-2 shrink-0">
-                <div class="text-[10px] text-stone-500 dark:text-slate-400 font-mono text-right">
-                  ${rateDesc}
-                </div>
-                ${isBase ? `
-                  <span class="text-stone-300 dark:text-slate-600 p-1 cursor-not-allowed text-xs" title="기준 통화는 삭제할 수 없습니다">
-                    <i class="fa-solid fa-lock text-[10px]"></i>
-                  </span>
-                ` : `
-                  <button type="button" onclick="removeCurrencyInModal('${c}')" class="p-1 rounded-lg text-rose-500 hover:text-rose-700 hover:bg-rose-50 dark:hover:bg-rose-950/60 transition cursor-pointer" title="${c} 통화 삭제">
-                    <i class="fa-solid fa-trash-can text-xs"></i>
-                  </button>
-                `}
-              </div>
-            </div>
-
-            <!-- 입력부 및 환산 소계 -->
-            <div class="flex items-center justify-between gap-2 pt-0.5">
-              <div class="flex-1 relative">
-                <input type="number" step="any" id="init-fund-input-${c}" value="${currentVal || ''}" placeholder="0" oninput="updateInitialFundsPreview()" class="w-full pl-3 pr-11 py-1.5 bg-stone-50 dark:bg-[#080b12] border border-stone-300 dark:border-[#23304c] rounded-lg text-xs text-stone-900 dark:text-white font-mono font-bold focus:outline-none focus:border-amber-500">
-                <span class="absolute right-2.5 top-1/2 -translate-y-1/2 text-[10px] font-bold text-stone-500 dark:text-slate-400">${c}</span>
-              </div>
-              <div class="text-right shrink-0 min-w-[105px]">
-                <div class="text-[9px] text-stone-500 dark:text-slate-400 font-medium">${baseCurr} 환산</div>
-                <div id="init-fund-subtotal-${c}" class="text-xs font-bold text-amber-600 dark:text-amber-400 font-mono">${baseSymbol}0</div>
-              </div>
-            </div>
-          </div>
-        `;
-      }).join('');
-
-      updateInitialFundsPreview();
-    }
-    window.renderInitialFundsList = renderInitialFundsList;
-
-    function updateInitialFundsPreview() {
-      const trip = getActiveTrip();
-      if (!trip) return;
-
-      const baseCurr = modalBaseCurrency || 'KRW';
-      const baseRate = getCurrencyRate(baseCurr);
-      const baseSymbol = getCurrencySymbol(baseCurr);
-      const isBaseDec = (baseCurr !== 'KRW' && baseCurr !== 'JPY' && baseCurr !== 'VND' && baseCurr !== 'CLP');
-
-      let totalInitialKrw = 0;
-
-      modalActiveCurrencies.forEach(c => {
-        const input = document.getElementById(`init-fund-input-${c}`);
-        const subtotalEl = document.getElementById(`init-fund-subtotal-${c}`);
-        const val = input ? parseFloat(input.value) || 0 : 0;
-        const rate = getCurrencyRate(c);
-        const krwAmt = val * rate;
-        totalInitialKrw += krwAmt;
-
-        const valInBase = baseRate > 0 ? (krwAmt / baseRate) : 0;
-        const formattedSubtotal = valInBase.toLocaleString(undefined, {
-          minimumFractionDigits: isBaseDec ? 2 : 0,
-          maximumFractionDigits: isBaseDec ? 2 : 0
-        });
-
-        if (subtotalEl) {
-          if (baseCurr === 'KRW') {
-            subtotalEl.innerText = `₩${Math.round(krwAmt).toLocaleString()}`;
-          } else {
-            subtotalEl.innerHTML = `${baseSymbol}${formattedSubtotal}<span class="block text-[8px] text-stone-400 font-normal font-sans">≈ ₩${Math.round(krwAmt).toLocaleString()}</span>`;
-          }
-        }
-      });
-
-      const totalInBase = baseCurr === 'KRW' ? totalInitialKrw : (baseRate > 0 ? (totalInitialKrw / baseRate) : 0);
-      const formattedTotalBase = totalInBase.toLocaleString(undefined, {
-        minimumFractionDigits: isBaseDec ? 2 : 0,
-        maximumFractionDigits: isBaseDec ? 2 : 0
-      });
-
-      const totalPreviewEl = document.getElementById('init-funds-total-krw-preview');
-      if (totalPreviewEl) {
-        if (baseCurr === 'KRW') {
-          totalPreviewEl.innerText = `₩${Math.round(totalInitialKrw).toLocaleString()}`;
-        } else {
-          totalPreviewEl.innerHTML = `${baseSymbol}${formattedTotalBase} <span class="text-xs text-stone-500 dark:text-slate-400 font-normal font-sans">(≈ ₩${Math.round(totalInitialKrw).toLocaleString()})</span>`;
-        }
-      }
-
-      if (isInitialBudgetSyncEnabled) {
-        const customBudgetInput = document.getElementById('init-funds-custom-budget');
-        if (customBudgetInput) {
-          customBudgetInput.value = isBaseDec ? totalInBase.toFixed(2) : Math.round(totalInBase).toLocaleString();
-        }
-      }
-    }
-    window.updateInitialFundsPreview = updateInitialFundsPreview;
-
-    async function saveInitialFundsAndBudget() {
-      const trip = getActiveTrip();
-      if (!trip) return;
-
-      const baseCurr = modalBaseCurrency || 'KRW';
-      const baseRate = getCurrencyRate(baseCurr);
-      const baseSymbol = getCurrencySymbol(baseCurr);
-      const isBaseDec = (baseCurr !== 'KRW' && baseCurr !== 'JPY' && baseCurr !== 'VND' && baseCurr !== 'CLP');
-
-      // 입력값을 먼저 읽고, 저장은 복사본에 한 번만 적용한다. 실패하면 창과 입력이 그대로 남는다.
-      const balances = {};
-      let totalInitialKrw = 0;
-      modalActiveCurrencies.forEach(c => {
-        const input = document.getElementById(`init-fund-input-${c}`);
-        const val = Math.max(0, input ? parseFloat(input.value) || 0 : 0);
-        balances[c] = val;
-        totalInitialKrw += val * getCurrencyRate(c);
-      });
-
-      const totalInBase = baseCurr === 'KRW' ? totalInitialKrw : (baseRate > 0 ? (totalInitialKrw / baseRate) : 0);
-
-      const chkSync = document.getElementById('chk-sync-initial-budget');
-      const isSync = chkSync ? chkSync.checked : true;
-      let budget = null;
-      if (isSync) {
-        budget = isBaseDec ? parseFloat(totalInBase.toFixed(2)) : Math.round(totalInBase);
-      } else {
-        const customInput = document.getElementById('init-funds-custom-budget');
-        const customVal = customInput ? parseFloat(String(customInput.value).replace(/,/g, '')) : 0;
-        if (!isNaN(customVal) && customVal > 0) {
-          budget = isBaseDec ? parseFloat(customVal.toFixed(2)) : Math.round(customVal);
-        } else if (totalInBase > 0) {
-          budget = isBaseDec ? parseFloat(totalInBase.toFixed(2)) : Math.round(totalInBase);
-        }
-      }
-
-      const saved = await commitTrip(trip.id, target => {
-        target.currency = baseCurr;
-        target.activeCurrencies = modalActiveCurrencies.slice();
-        target.initialBalances = target.initialBalances || {};
-        Object.keys(target.initialBalances).forEach(k => {
-          if (!modalActiveCurrencies.includes(k)) delete target.initialBalances[k];
-        });
-        Object.assign(target.initialBalances, balances);
-        if (budget != null) target.budget = budget;
-      });
-      if (!saved) return;
-      renderActiveTripWorkspace();
-      closeModal('modal-initial-funds', true);
-
-      const formattedBudget = (getActiveTrip()?.budget || 0).toLocaleString();
-      showToast(`💰 기준 통화 [${baseCurr}] 및 초기 자산·총 예산(${baseSymbol}${formattedBudget})이 성공적으로 저장되었습니다!`);
-    }
-    window.saveInitialFundsAndBudget = saveInitialFundsAndBudget;
-
-    // ==========================================
-    // [11.3] 전세계 통화 선택 모달 엔진 (v1.5.2)
-    // ==========================================
-    let currentAddCurrencyRegion = 'ALL';
-
-    function openAddCurrencyModal() {
-      const trip = getActiveTrip();
-      if (!trip) return;
-      currentAddCurrencyRegion = 'ALL';
-      const searchInput = document.getElementById('add-curr-search-input');
-      if (searchInput) searchInput.value = '';
-      const clearBtn = document.getElementById('btn-clear-add-curr-search');
-      if (clearBtn) clearBtn.classList.add('hidden');
-      updateRegionFilterButtons();
-      renderAddCurrencyGrid();
-      openModal('modal-add-currency');
-      if (searchInput) {
-        setTimeout(() => searchInput.focus(), 150);
-      }
-    }
-    window.openAddCurrencyModal = openAddCurrencyModal;
-    window.openAddCurrencyPrompt = openAddCurrencyModal;
-
-    function clearAddCurrencySearch() {
-      const searchInput = document.getElementById('add-curr-search-input');
-      if (searchInput) searchInput.value = '';
-      const clearBtn = document.getElementById('btn-clear-add-curr-search');
-      if (clearBtn) clearBtn.classList.add('hidden');
-      renderAddCurrencyGrid();
-    }
-    window.clearAddCurrencySearch = clearAddCurrencySearch;
-
-    function filterAddCurrencyRegion(region) {
-      currentAddCurrencyRegion = region || 'ALL';
-      updateRegionFilterButtons();
-      renderAddCurrencyGrid();
-    }
-    window.filterAddCurrencyRegion = filterAddCurrencyRegion;
-
-    function updateRegionFilterButtons() {
-      const btns = document.querySelectorAll('.add-curr-filter-btn');
-      btns.forEach(btn => {
-        const r = btn.getAttribute('data-region');
-        if (r === currentAddCurrencyRegion) {
-          btn.className = 'add-curr-filter-btn px-2.5 py-1 rounded-lg font-bold sulsul-badge-sky bg-sky-100 text-sky-800 border border-sky-300 dark:bg-sky-950/50 dark:text-sky-300 dark:border-sky-800 cursor-pointer';
-        } else {
-          btn.className = 'add-curr-filter-btn px-2.5 py-1 rounded-lg font-medium bg-[#080b12] text-slate-400 border border-[#1e263c] hover:text-white cursor-pointer';
-        }
-      });
-    }
-
-    function filterAddCurrencyList() {
-      const searchInput = document.getElementById('add-curr-search-input');
-      const clearBtn = document.getElementById('btn-clear-add-curr-search');
-      const query = (searchInput ? searchInput.value : '').trim();
-      if (clearBtn) {
-        if (query.length > 0) clearBtn.classList.remove('hidden');
-        else clearBtn.classList.add('hidden');
-      }
-      renderAddCurrencyGrid();
-    }
-    window.filterAddCurrencyList = filterAddCurrencyList;
-
-    function renderAddCurrencyGrid() {
-      const trip = getActiveTrip();
-      if (!trip) return;
-      const container = document.getElementById('add-currency-grid');
-      if (!container) return;
-
-      const searchInput = document.getElementById('add-curr-search-input');
-      const query = (searchInput ? searchInput.value.trim().toLowerCase() : '');
-
-      const walletData = calculateTripWallets(trip);
-      const activeCurrs = new Set(walletData.activeCurrencies);
-
-      const allCodes = Object.keys(CURRENCY_INFO);
-      const filtered = allCodes.filter(code => {
-        if (code === 'KRW') return false; // KRW is base currency
-        const info = CURRENCY_INFO[code];
-        if (!info) return false;
-
-        // Region filter
-        if (currentAddCurrencyRegion !== 'ALL' && info.region !== currentAddCurrencyRegion) {
-          return false;
-        }
-
-        // Search query filter
-        if (query) {
-          const matchCode = code.toLowerCase().includes(query);
-          const matchName = info.name.toLowerCase().includes(query);
-          const matchCountry = (info.country || '').toLowerCase().includes(query);
-          if (!matchCode && !matchName && !matchCountry) return false;
-        }
-
-        return true;
-      });
-
-      if (filtered.length === 0) {
-        container.innerHTML = `
-          <div class="col-span-full py-8 text-center text-slate-500 text-xs">
-            <i class="fa-solid fa-magnifying-glass text-xl mb-2 block"></i>
-            일치하는 통화가 없습니다. 검색어를 확인해 주세요.
-          </div>
-        `;
-        return;
-      }
-
-      container.innerHTML = filtered.map(code => {
-        const info = CURRENCY_INFO[code];
-        const isActive = activeCurrs.has(code);
-        const rate = getCurrencyRate(code);
-
-        return `
-          <div onclick="selectAddCurrency('${code}')" class="p-2.5 rounded-xl bg-[#080b12] border ${isActive ? 'border-slate-800 opacity-60 cursor-not-allowed' : 'border-[#1e263c] hover:border-sky-500/60 hover:bg-[#111827] cursor-pointer'} transition flex items-center justify-between gap-2">
-            <div class="flex items-center gap-2.5 min-w-0">
-              <span class="text-2xl shrink-0">${info.flag}</span>
-              <div class="min-w-0">
-                <div class="flex items-center gap-1.5 flex-wrap">
-                  <span class="text-xs font-black text-white">${code}</span>
-                  <span class="text-[11px] text-slate-300 font-bold truncate">${info.name}</span>
-                </div>
-                <div class="text-[10px] text-slate-400 truncate mt-0.5">${info.country || ''}</div>
-              </div>
-            </div>
-            <div class="text-right shrink-0">
-              ${isActive ? `
-                <span class="text-[9px] px-2 py-0.5 rounded-full font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">사용 중</span>
-              ` : `
-                <div class="text-xs font-mono font-bold text-sky-400">₩${rate.toLocaleString()}</div>
-                <span class="text-[9px] text-slate-500">터치하여 추가</span>
-              `}
-            </div>
-          </div>
-        `;
-      }).join('');
-    }
-    window.renderAddCurrencyGrid = renderAddCurrencyGrid;
-
-    async function selectAddCurrency(code) {
-      const trip = getActiveTrip();
-      if (!trip) return;
-      if ((Array.isArray(trip.activeCurrencies) ? trip.activeCurrencies : ['KRW']).includes(code)) {
-        showToast(`ℹ️ 이미 활성화되어 있는 통화입니다: ${code}`);
-        return;
-      }
-      const added = await commitTrip(trip.id, target => {
-        if (!Array.isArray(target.activeCurrencies)) target.activeCurrencies = ['KRW'];
-        if (!target.activeCurrencies.includes(code)) target.activeCurrencies.push(code);
-        if (!target.initialBalances) target.initialBalances = {};
-        if (target.initialBalances[code] == null) target.initialBalances[code] = 0;
-      });
-      if (!added) return;
-      renderActiveTripWorkspace();
-      closeModal('modal-add-currency', true);
-      const info = CURRENCY_INFO[code] || { name: code, flag: '🌐' };
-      showToast(`🎉 ${info.flag} [${code}] ${info.name} 지갑이 추가되었습니다!`);
-
-      // If initial funds modal is open, immediately refresh its list
-      const initModal = document.getElementById('modal-initial-funds');
-      if (initModal && !initModal.classList.contains('sheet-closed')) {
-        if (!modalActiveCurrencies.includes(code)) {
-          modalActiveCurrencies.push(code);
-        }
-        renderInitialFundsList();
-      }
-
-      // If expense modal is open, immediately refresh its currency chips and select the new currency!
-      const expModal = document.getElementById('modal-expense');
-      if (expModal && !expModal.classList.contains('sheet-closed')) {
-        if (typeof renderExpenseCurrencyChips === 'function') {
-          renderExpenseCurrencyChips(code);
-        }
-        if (typeof selectExpenseCurrency === 'function') {
-          selectExpenseCurrency(code);
-        }
-      }
-    }
-    window.selectAddCurrency = selectAddCurrency;
+    // [11.2] 초기 자산·예산 창과 [11.3] 전세계 통화 선택 창은 js/presentation/budget-ui.js(SulsulTravel.BudgetUI)로 옮겼다(v2.1.2, 4단계).
 
     // 환전 창과 [5.1] 환율 갱신·맞춤 환율·MEP 스위치는 js/presentation/exchange-ui.js(SulsulTravel.ExchangeUI)로 옮겼다(v2.1.1, 4단계).
 
@@ -15227,7 +14725,7 @@ ${JSON.stringify(snapshotDays)}`;
     }
 
     function getReplanDomain() {
-      if (!replanDomainPromise) replanDomainPromise = import('./js/domain/replan.mjs?v=2.1.1');
+      if (!replanDomainPromise) replanDomainPromise = import('./js/domain/replan.mjs?v=2.1.2');
       return replanDomainPromise;
     }
 
@@ -15331,26 +14829,11 @@ ${JSON.stringify(snapshotDays)}`;
       showToast('기존 계획을 유지합니다.');
     }
 
-    function openEditBudgetPrompt() {
-      openInitialFundsModal();
-    }
-    window.openEditBudgetPrompt = openEditBudgetPrompt;
-
     // ==========================================
     // [11] 고도화된 여행 가계부 (Travel Expense v1.5.0)
     // ==========================================
-    const EXPENSE_CATEGORIES = [
-      { key: 'meal', label: '식사', icon: '🍽️', color: '#f59e0b' },
-      { key: 'snack', label: '간식', icon: '🍰', color: '#fbbf24' },
-      { key: 'drink', label: '술', icon: '🍸', color: '#a855f7' },
-      { key: 'beverage', label: '음료', icon: '☕', color: '#06b6d4' },
-      { key: 'lodging', label: '숙소', icon: '🏨', color: '#3b82f6' },
-      { key: 'transport', label: '교통', icon: '🚕', color: '#10b981' },
-      { key: 'rental', label: '렌터카', icon: '🚗', color: '#14b8a6' },
-      { key: 'tour', label: '관광', icon: '🎟️', color: '#ec4899' },
-      { key: 'shopping', label: '쇼핑', icon: '🛍️', color: '#8b5cf6' },
-      { key: 'etc', label: '기타', icon: '📦', color: '#64748b' }
-    ];
+    // 카테고리 목록은 사용내역 통계와 하나만 둔다(js/presentation/expense-analytics.js).
+    const EXPENSE_CATEGORIES = SulsulTravel.ExpenseAnalytics?.CATEGORIES || []; // 파일을 읽지 못하면 compatible()이 복구 화면으로 보낸다
 
     const ExpenseFormState = {
       mode: 'simple',
@@ -15626,7 +15109,7 @@ ${JSON.stringify(snapshotDays)}`;
 
         // "+ 다른 통화" button
         html += `
-          <button type="button" onclick="openAddCurrencyModal()" class="exp-curr-chip exp-curr-chip-add" title="68개국 전세계 통화 검색 및 추가">
+          <button type="button" data-on-click="budget.addCurrency" class="exp-curr-chip exp-curr-chip-add" title="68개국 전세계 통화 검색 및 추가">
             <i class="fa-solid fa-plus text-[9px]"></i>
             <span>다른 통화</span>
           </button>
@@ -15903,278 +15386,7 @@ ${JSON.stringify(snapshotDays)}`;
 
     window.submitAddExpense = submitAddExpense;
 
-    // ==========================================
-    // [11-B] 사용내역 통계 모듈 (Analytics v1.5.0)
-    // ==========================================
-    function openExpenseAnalyticsModal() {
-      const trip = getActiveTrip();
-      if (!trip) {
-        showToast('⚠️ 선택된 여행이 없습니다.');
-        return;
-      }
-      openModal('modal-expense-analytics');
-      switchExpenseAnalyticsTab('method');
-    }
-    window.openExpenseAnalyticsModal = openExpenseAnalyticsModal;
-
-    function switchExpenseAnalyticsTab(tab) {
-      State.activeExpenseAnalyticsTab = tab;
-      const methodBtn = document.getElementById('exp-stat-tab-method');
-      const catBtn = document.getElementById('exp-stat-tab-cat');
-      const typeBtn = document.getElementById('exp-stat-tab-type');
-
-      [methodBtn, catBtn, typeBtn].forEach(b => {
-        if (b) b.className = 'flex-1 py-1.5 exp-pill-btn';
-      });
-
-      if (tab === 'method' && methodBtn) {
-        methodBtn.className = 'flex-1 py-1.5 exp-pill-btn active-card';
-      } else if (tab === 'cat' && catBtn) {
-        catBtn.className = 'flex-1 py-1.5 exp-pill-btn active-card';
-      } else if (tab === 'type' && typeBtn) {
-        typeBtn.className = 'flex-1 py-1.5 exp-pill-btn active-card';
-      }
-
-      renderExpenseAnalytics(tab);
-    }
-    window.switchExpenseAnalyticsTab = switchExpenseAnalyticsTab;
-
-    function renderExpenseAnalytics(tab) {
-      const trip = getActiveTrip();
-      if (!trip) return;
-
-      const expenses = trip.expenses || [];
-      const expenseItems = expenses.filter(e => e.type !== 'income');
-      const incomeItems = expenses.filter(e => e.type === 'income');
-
-      const totalExpenseKrw = expenseItems.reduce((acc, e) => acc + (e.krw || 0), 0);
-      const totalIncomeKrw = incomeItems.reduce((acc, e) => acc + (e.krw || 0), 0);
-
-      const totalEl = document.getElementById('exp-stat-total-krw');
-      const subEl = document.getElementById('exp-stat-count-sub');
-      const listEl = document.getElementById('exp-stat-breakdown-list');
-
-      if (totalEl) totalEl.textContent = `${totalExpenseKrw.toLocaleString()} KRW`;
-      if (subEl) subEl.textContent = `총 ${expenses.length}건의 내역 (지출 ${expenseItems.length}건 · 수입 ${incomeItems.length}건)`;
-
-      if (expenses.length === 0) {
-        renderSvgDonutChart([], '기록 없음', '0건');
-        if (listEl) {
-          listEl.innerHTML = `<div class="p-6 text-center text-xs text-slate-500">등록된 지출 또는 수입 내역이 없습니다.</div>`;
-        }
-        return;
-      }
-
-      let slices = [];
-      let breakdownRows = [];
-
-      if (tab === 'method') {
-        // [지출 구분] 카드 vs 현금
-        let cardKrw = 0;
-        let cardCount = 0;
-        let cashKrw = 0;
-        let cashCount = 0;
-
-        expenseItems.forEach(e => {
-          if (e.payMethod === 'cash') {
-            cashKrw += (e.krw || 0);
-            cashCount++;
-          } else {
-            cardKrw += (e.krw || 0);
-            cardCount++;
-          }
-        });
-
-        const totalMethodKrw = cardKrw + cashKrw || 1;
-        const cardPct = Math.round((cardKrw / totalMethodKrw) * 100);
-        const cashPct = 100 - cardPct;
-
-        if (cardKrw > 0) slices.push({ label: '카드', value: cardKrw, color: '#0284c7' });
-        if (cashKrw > 0) slices.push({ label: '현금', value: cashKrw, color: '#10b981' });
-
-        renderSvgDonutChart(slices, '지출 구분', `${cardPct} : ${cashPct}`);
-
-        breakdownRows = [
-          {
-            icon: '💳',
-            label: '카드 지출',
-            count: cardCount,
-            pct: cardPct,
-            amountKrw: cardKrw,
-            barColor: 'bg-sky-500'
-          },
-          {
-            icon: '💵',
-            label: '현금 지출',
-            count: cashCount,
-            pct: cashPct,
-            amountKrw: cashKrw,
-            barColor: 'bg-emerald-500'
-          }
-        ];
-      } else if (tab === 'cat') {
-        // [지출 카테고리] 카테고리별 비중
-        const catMap = {};
-        EXPENSE_CATEGORIES.forEach(c => {
-          catMap[c.key] = { ...c, amountKrw: 0, count: 0 };
-        });
-
-        expenseItems.forEach(e => {
-          let k = e.cat || 'etc';
-          if (k === 'food') k = 'meal';
-          if (k === 'flight') k = 'transport';
-          if (!catMap[k]) {
-            catMap[k] = { key: k, label: '기타', icon: '📦', color: '#64748b', amountKrw: 0, count: 0 };
-          }
-          catMap[k].amountKrw += (e.krw || 0);
-          catMap[k].count++;
-        });
-
-        const activeCats = Object.values(catMap).filter(c => c.amountKrw > 0).sort((a, b) => b.amountKrw - a.amountKrw);
-        const denom = totalExpenseKrw || 1;
-
-        slices = activeCats.map(c => ({
-          label: c.label,
-          value: c.amountKrw,
-          color: c.color
-        }));
-
-        renderSvgDonutChart(slices, '카테고리', `${activeCats.length}가지 항목`);
-
-        breakdownRows = activeCats.map((c, rankIdx) => {
-          const pct = Math.round((c.amountKrw / denom) * 100);
-          return {
-            rank: rankIdx + 1,
-            icon: c.icon,
-            label: c.label,
-            count: c.count,
-            pct: pct,
-            amountKrw: c.amountKrw,
-            customHex: c.color
-          };
-        });
-      } else {
-        // [지출 및 수입 구분]
-        const totalFlow = totalExpenseKrw + totalIncomeKrw || 1;
-        const expPct = Math.round((totalExpenseKrw / totalFlow) * 100);
-        const incPct = 100 - expPct;
-        const netSpent = totalExpenseKrw - totalIncomeKrw;
-
-        if (totalExpenseKrw > 0) slices.push({ label: '지출', value: totalExpenseKrw, color: '#f43f5e' });
-        if (totalIncomeKrw > 0) slices.push({ label: '수입', value: totalIncomeKrw, color: '#10b981' });
-
-        renderSvgDonutChart(slices, '수지 현황', `지출 ${expPct}%`);
-
-        breakdownRows = [
-          {
-            icon: '🔴',
-            label: '총 지출',
-            count: expenseItems.length,
-            pct: expPct,
-            amountKrw: totalExpenseKrw,
-            barColor: 'bg-rose-500'
-          },
-          {
-            icon: '🟢',
-            label: '총 수입',
-            count: incomeItems.length,
-            pct: incPct,
-            amountKrw: totalIncomeKrw,
-            barColor: 'bg-emerald-500'
-          },
-          {
-            icon: '⚖️',
-            label: '순 지출 (지출 - 수입)',
-            count: expenses.length,
-            pct: 100,
-            amountKrw: netSpent,
-            barColor: 'bg-amber-500',
-            isSummary: true
-          }
-        ];
-      }
-
-      if (listEl) {
-        listEl.innerHTML = breakdownRows.map(row => {
-          const barStyle = row.customHex ? `style="background-color: ${row.customHex}"` : '';
-          const barClass = row.barColor || '';
-          return `
-            <div class="p-3 bg-[#0f1422] rounded-xl border border-[#1e263c] space-y-1.5 hover:border-[#2a3650] transition">
-              <div class="flex items-center justify-between">
-                <div class="flex items-center gap-2">
-                  <span class="text-sm">${row.icon}</span>
-                  <span class="text-xs font-bold text-white">${escapeHtml(row.label)}</span>
-                  <span class="text-[10px] text-slate-400">(${row.count}건)</span>
-                </div>
-                <div class="flex items-center gap-2">
-                  <span class="text-[10px] font-bold px-1.5 py-0.5 rounded bg-[#141c2e] text-slate-300 border border-[#23304c]">${row.pct}%</span>
-                  <span class="text-xs font-black ${row.isSummary ? 'text-amber-400' : 'text-white'}">₩${row.amountKrw.toLocaleString()}</span>
-                </div>
-              </div>
-              <div class="w-full bg-[#080b12] rounded-full h-1.5 overflow-hidden">
-                <div class="h-1.5 rounded-full ${barClass}" ${barStyle} style="width: ${Math.min(100, Math.max(3, row.pct))}%;"></div>
-              </div>
-            </div>
-          `;
-        }).join('');
-      }
-    }
-    window.renderExpenseAnalytics = renderExpenseAnalytics;
-
-    function renderSvgDonutChart(slices, centerTitle, centerSub) {
-      const container = document.getElementById('exp-donut-chart-box');
-      const centerTextEl = document.getElementById('exp-donut-center-text');
-      if (!container) return;
-
-      const total = slices.reduce((acc, s) => acc + s.value, 0);
-      if (total <= 0) {
-        container.innerHTML = `
-          <svg viewBox="0 0 200 200" class="w-full h-full">
-            <circle cx="100" cy="100" r="70" fill="transparent" stroke="#1e263c" stroke-width="26" />
-            <text x="100" y="105" text-anchor="middle" class="text-xs fill-slate-500 font-bold">기록 없음</text>
-          </svg>
-        `;
-        if (centerTextEl) centerTextEl.innerHTML = '';
-        return;
-      }
-
-      const r = 70;
-      const circumference = 2 * Math.PI * r;
-      let accumulatedLength = 0;
-
-      const svgPaths = slices.map(s => {
-        const sliceLength = (s.value / total) * circumference;
-        const dashArray = `${sliceLength} ${circumference - sliceLength}`;
-        const dashOffset = -accumulatedLength;
-        accumulatedLength += sliceLength;
-
-        return `
-          <circle cx="100" cy="100" r="${r}" fill="transparent"
-            stroke="${s.color}" stroke-width="26"
-            stroke-dasharray="${dashArray}"
-            stroke-dashoffset="${dashOffset}"
-            transform="rotate(-90 100 100)"
-            class="donut-slice"
-            title="${s.label}: ₩${s.value.toLocaleString()} (${Math.round((s.value / total) * 100)}%)"
-            onclick="showToast('${s.label}: ₩${s.value.toLocaleString()} (${Math.round((s.value / total) * 100)}%)')">
-          </circle>
-        `;
-      }).join('');
-
-      container.innerHTML = `
-        <svg viewBox="0 0 200 200" class="w-full h-full drop-shadow">
-          <circle cx="100" cy="100" r="${r}" fill="transparent" stroke="#080b12" stroke-width="26" />
-          ${svgPaths}
-          <text x="100" y="94" text-anchor="middle" fill="#94a3b8" font-size="11" font-weight="700">${escapeHtml(centerTitle)}</text>
-          <text x="100" y="114" text-anchor="middle" fill="#ffffff" font-size="14" font-weight="900">${escapeHtml(centerSub)}</text>
-        </svg>
-      `;
-
-      if (centerTextEl) {
-        centerTextEl.innerHTML = `<span class="text-[11px] text-slate-400">도넛 섹션을 탭하여 세부 금액을 확인하세요</span>`;
-      }
-    }
-    window.renderSvgDonutChart = renderSvgDonutChart;
+    // [11-B] 사용내역 통계(도넛 차트 포함)는 js/presentation/expense-analytics.js(SulsulTravel.ExpenseAnalytics)로 옮겼다(v2.1.2, 4단계).
 
     // ==========================================
     // [12] AI Multi-Model Fallback Engine (R-5)
@@ -16279,7 +15491,7 @@ ${JSON.stringify(snapshotDays)}`;
 
     async function getAiOrchestrator() {
       if (!aiOrchestratorPromise) {
-        aiOrchestratorPromise = import('./js/application/orchestration.mjs?v=2.1.1').then(({ Orchestrator }) =>
+        aiOrchestratorPromise = import('./js/application/orchestration.mjs?v=2.1.2').then(({ Orchestrator }) =>
           new Orchestrator({
             online: job => Boolean(job?.input?.localDraft) || navigator.onLine,
             timeoutMs: 65000,
@@ -19050,14 +18262,7 @@ JSON 배열만 출력하세요. 각 day는 dayNum, title, city, date, spots를 �
       getCountryFlag: getCountryFlag,
       getCountryCurrency: getCountryCurrency,
       getCurrencyRate: getCurrencyRate,
-      openInitialFundsModal: openInitialFundsModal,
-      saveInitialFundsAndBudget: saveInitialFundsAndBudget,
-      setModalBaseCurrency: setModalBaseCurrency,
-      removeCurrencyInModal: removeCurrencyInModal,
-      openDeleteCurrencySelector: openDeleteCurrencySelector,
-      getCurrencySymbol: getCurrencySymbol,
-      openAddCurrencyModal: openAddCurrencyModal,
-      selectAddCurrency: selectAddCurrency
+      getCurrencySymbol: getCurrencySymbol
     };
   </script>
 </body>
