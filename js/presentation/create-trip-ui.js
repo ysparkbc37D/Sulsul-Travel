@@ -1459,15 +1459,15 @@
 
       switchView('workspace');
       if (shouldGenerateAi) {
+        T.DraftStudio.open();
         const aiPromptInput = $('ai-trip-prompt');
         if (aiPromptInput) aiPromptInput.value = [style, wishlist, requestedCities.length ? `주요 도시: ${requestedCities.join(', ')}` : ''].filter(Boolean).join(' · ');
-        openModal('modal-ai-trip');
         showToast('🤖 입력한 도시와 기간을 바탕으로 AI 일정 초안을 만드는 중입니다.', 3500);
         void generateAiItinerary();
       } else if (aiAuto) {
         showToast('⚠️ Gemini API 키가 없어 기본 일정으로 생성했습니다. 키를 등록하면 AI 일정으로 다시 설계할 수 있습니다.', 5000);
       } else {
-        openModal('modal-ai-trip');
+        T.DraftStudio.open();
       }
     } catch (err) {
       console.error('Failed to submitCreateTrip:', err);

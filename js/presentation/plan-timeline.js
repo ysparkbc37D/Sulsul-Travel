@@ -309,7 +309,7 @@
     remove: (element, event) => requestDeleteSpot(day(element), spot(element), event),
     tune: element => element.dataset.day === undefined ? T.ScheduleTuning.openScheduleTuningModal() : T.ScheduleTuning.openScheduleTuningModal(day(element)),
     addSpot: element => element.dataset.day === undefined ? T.ScheduleTuning.openAddSpotModal() : T.ScheduleTuning.openAddSpotToDay(day(element)),
-    aiTrip: () => openModal('modal-ai-trip'),
+    aiTrip: () => T.DraftStudio.open(),
     yunnanCourse: () => applyYunnanGoldenCourse()
   });
 })(typeof window !== 'undefined' ? window : globalThis);

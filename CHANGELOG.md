@@ -26,6 +26,14 @@
 - [ ] 항공권/호텔 예약 바우처 PDF 자동 파싱 일정 등록
 - [ ] 여행 동행자 실시간 음성 메모 AI 다이어리 자동 변환
 
+## [v2.2.5] - 2026-11-26
+
+- 화면 분리(4단계) 16차(여행 설정·일정 초안 편집 스튜디오)입니다. `index.html`의 `#modal-ai-trip` 제어와 `draftStudioState`·`openTripDraftStudio`·`saveDraftStudioSettingsOnly`·`executeDraftStudioGeneration` 등 약 675줄을 `js/presentation/draft-studio-ui.js`(`SulsulTravel.DraftStudio`)로 옮겼습니다.
+- **초안 스튜디오 미초기화 진입 복구**: 빈 여행의 'AI 초안 만들기'(`companion-ui.js`), 일정표 AI 추천 배너(`plan-timeline.js`), 새 여행 생성 직후(`create-trip-ui.js`)가 `openTripDraftStudio()` 대신 `openModal('modal-ai-trip')`을 직접 호출해 날짜·거점이 빈 상태로 열리고 저장 시 오류로 실패하던 결함을 고쳤습니다(v2.2.4에서 재현). 이제 모든 진입 경로가 `SulsulTravel.DraftStudio.open()`으로 상태를 초기화합니다.
+- **보안(XSS 차단)**: 검색 결과 직접 추가 버튼(`addCustomDraftStudioCountry`)과 소도시 토글(`toggleDraftStudioCity`)의 `onclick` 문자열 조합을 `data-on-click`·`data-*` 위임으로 전환했고, `showToast`가 `innerHTML`을 쓰는 경로에서 커스텀 국가명이 이스케이프 없이 토스트 DOM에 삽입되던 결함(`<img id="toastxss">`)을 `escapeHtml`로 차단했습니다(v2.2.4에서 재현). 검색 원본 대소문자도 함께 보존합니다.
+- **날짜 역전 거절·연타 방지·접근성**: 종료일이 출발일보다 앞선 입력을 `change`와 저장/생성 단계 모두에서 거절하고 UTC 달력 연산으로 일수를 계산합니다. `saveDraftStudioSettingsOnly()`에 진행 중 잠금(`savingSettings`)과 버튼 비활성화를 추가해 연타 중복 저장을 막았고, 권역 탭·국가/도시/컨셉 칩에 `aria-pressed`를 동기화하며 미지 권역 키는 `'all'`로 폴백했습니다.
+- `index.html`(28곳)과 `companion-ui.js`(2곳)의 인라인 이벤트 처리기 30곳을 `draftStudio.*`·`shell.closeModal`로 전환해 `UI01` 기준을 277 → 247곳(`index.html` 135 → 107곳, `companion-ui.js` 69 → 67곳), `HTML01`을 `index.html` 44 → 21곳(새 파일 0곳)으로 낮췄습니다. 전용 브라우저 검사 `tests/draft-studio.browser.cjs`(2개 시나리오)를 추가했습니다.
+
 ## [v2.2.4] - 2026-11-26
 
 - 화면 분리(4단계) 15차(새 여행 만들기 모달·전 세계 국가/도시 스마트 선택기·거점 일자 배분·오프라인 자동 일정 생성)입니다. `index.html`의 `#modal-create-trip` 제어와 `allocateTripHubs`·`generateAutoSpotsForTrip`·`submitCreateTrip` 등 약 1,230줄을 `js/presentation/create-trip-ui.js`(`SulsulTravel.CreateTrip`)로 옮겼습니다.

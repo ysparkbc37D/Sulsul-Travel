@@ -15,9 +15,9 @@ function renderCompanionPlan() {
   const aiButtonHtml = hasSpots
     ? `<div class="flex items-center gap-2 flex-wrap">
          <button type="button" class="companion-button companion-primary" data-on-click="scheduleTuning.open" data-day="all" title="전체 일정 재배치, 교통 지연/기상 변수 대응 및 템포 조율"><i class="fa-solid fa-bolt text-amber-400" aria-hidden="true"></i> AI 스마트 일정 튜닝</button>
-         <button class="companion-button text-xs opacity-75 hover:opacity-100" onclick="confirmResetAiDraft()" title="여행 설정(국가/도시/기간) 및 초안 편집 스튜디오 열기"><i class="fa-solid fa-pen-to-square" aria-hidden="true"></i> 초안 편집</button>
+         <button type="button" class="companion-button text-xs opacity-75 hover:opacity-100" data-on-click="draftStudio.open" title="여행 설정(국가/도시/기간) 및 초안 편집 스튜디오 열기"><i class="fa-solid fa-pen-to-square" aria-hidden="true"></i> 초안 편집</button>
        </div>`
-    : `<button class="companion-button companion-primary" onclick="openModal('modal-ai-trip')" title="여행 기본 정보 기반 최초 AI 일정 초안 생성"><i class="fa-solid fa-wand-magic-sparkles" aria-hidden="true"></i> AI 초안 만들기</button>`;
+    : `<button type="button" class="companion-button companion-primary" data-on-click="draftStudio.open" title="여행 기본 정보 기반 최초 AI 일정 초안 생성"><i class="fa-solid fa-wand-magic-sparkles" aria-hidden="true"></i> AI 초안 만들기</button>`;
   container.innerHTML = `
     <section class="companion-intro">
       <div><p class="companion-eyebrow">PLAN YOUR JOURNEY</p><h3>우리의 큰 계획</h3>
@@ -668,8 +668,8 @@ function scrollToPlanBlock(blockIndex) {
 window.scrollToPlanBlock = scrollToPlanBlock;
 
 function confirmResetAiDraft() {
-  if (typeof openTripDraftStudio === 'function') {
-    openTripDraftStudio();
+  if (window.SulsulTravel?.DraftStudio?.open) {
+    window.SulsulTravel.DraftStudio.open();
   } else if (typeof openModal === 'function') {
     openModal('modal-ai-trip');
   }

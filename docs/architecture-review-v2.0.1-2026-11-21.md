@@ -196,6 +196,12 @@ flowchart TD
 - **검증**: 단위 257개(새 `trip-store.test.mjs` 8개 — 느린 비동기 백엔드에서 연달아 맡긴 저장이 모두 남는지 포함), 브라우저 회귀 27종, `tools-verify.ps1` 통과. 저장 실패를 일부러 만드는 브라우저 검사 세 곳은 결과를 저장보다 먼저 읽어, 실패 경로를 검사하지 않은 채 통과하고 있었다. 저장을 기다리게 고쳤다(실록 112호).
 - **남은 3b(2차)**: 여행 자료를 IndexedDB로 옮기는 일. 백엔드를 `TripStore` 아래에서 바꾸고, 원문 보관 → 이전 → 다시 읽어 대조 → 채택 순서로 옮긴다. 옛 문서는 다른 창의 구버전이 덮어쓰지 못하게 표시만 바꿔 남긴다. 다른 창 충돌 판정은 문서 원문 비교 대신 저장소의 버전 번호로 한다. 브라우저 검사의 `localStorage` 직접 읽기를 저장소 읽기로 바꾸는 작업이 함께 필요하다.
 
+## 33. 4단계 진행 결과 (v2.2.5) — 화면 분리 16차: 여행 초안 편집 스튜디오
+
+- **옮긴 것**: `index.html`의 `#modal-ai-trip` 여행 설정·일정 초안 편집 스튜디오(약 675줄)를 `js/presentation/draft-studio-ui.js`(`SulsulTravel.DraftStudio`)로 옮겼다. `index.html`(28곳)과 `companion-ui.js`(2곳)의 인라인 처리기 30곳 → `draftStudio.*`·`shell.closeModal`(UI01 277 → 247곳, `index.html` 135 → 107곳, `companion-ui.js` 69 → 67곳). HTML01은 `index.html` 44 → 21곳, 새 파일 0곳이다.
+- **검증에서 고친 것**: 빈 여행 'AI 초안 만들기'(`companion-ui.js`)·일정표 AI 배너(`plan-timeline.js`)·새 여행 직후(`create-trip-ui.js`)가 `openModal('modal-ai-trip')`을 직접 호출해 상태가 비어 저장이 실패하던 문제, 검색어 `onclick` 따옴표 및 `showToast` HTML 삽입 취약점(`<img id="toastxss">`), 종료일<시작일 역전 날짜 저장, 설정 저장 연타 중복 요청, 권역·칩 `aria-pressed` 누락과 미지 권역 공백(실록 130호). 모두 v2.2.4 코드에서 재현한 뒤 고쳤다.
+- **다음**: 나머지 셸 구역(A-7: AI 채팅/생성, Gist 백업, GPS 레이더, 영수증 OCR, PDF 보고서, 빠른 환율 계산기, 서바이벌 스페인어) → `companion-ui.js` 분리(A-8).
+
 ## 32. 4단계 진행 결과 (v2.2.4) — 화면 분리 15차: 새 여행 만들기 모달·국가/도시 선택기·거점 일자 배분
 
 - **옮긴 것**: `index.html`의 `#modal-create-trip` 제어, 전 세계 국가/도시 스마트 선택기, 시차/비행 매트릭스, `allocateTripHubs`·`generateAutoSpotsForTrip`·`submitCreateTrip` 등 약 1,230줄을 `js/presentation/create-trip-ui.js`(`SulsulTravel.CreateTrip`)로 옮겼다. `index.html`의 인라인 처리기 35곳 → `createTrip.*`·`shell.closeModal`(UI01 312 → 277곳, `index.html` 170 → 135곳). HTML01은 `index.html` 64 → 44곳, 새 파일 0곳이다.

@@ -68,6 +68,7 @@
 | `js/presentation/settings-ui.js` | 설정·테마·PWA 설치·안내 모달(v2.2.1, `SulsulTravel.SettingsUI`): 3-Way 테마, 설정 모달·탭·Gemini API 키 관리(검증 통과 시에만 후보 키 저장), PWA 설치·시작 가이드 배너·설치 안내 모달, 버전 이력·후원·사용 가이드·백업 안내·개인정보 모달(`settings.*`) |
 | `js/presentation/schedule-tuning-ui.js` | 스팟 편집·실시간 일정 튜닝·RePlan 검토(v2.2.2, `SulsulTravel.ScheduleTuning`): `#modal-spot`·`#modal-schedule-tuning`·`#modal-replan-review`, 완료/고정 토글, 구간 RePlan 프롬프트·오프라인 검토·중복 적용 방지(`scheduleTuning.*`) |
 | `js/presentation/create-trip-ui.js` | 새 여행 만들기 모달·전 세계 국가/도시 스마트 선택기·거점 일자 배분·오프라인 자동 일정 생성(v2.2.4, `SulsulTravel.CreateTrip`): `#modal-create-trip`, 권역 필터·검색·직접 추가(XSS 차단), 시차/비행 매트릭스, `allocateTripHubs`·`generateAutoSpotsForTrip`·`submitCreateTrip`(KST 날짜 정확성·0원 예산 보존·날짜 역전 거절·연타 방지, `createTrip.*`) |
+| `js/presentation/draft-studio-ui.js` | 여행 설정·일정 초안 편집 스튜디오(v2.2.5, `SulsulTravel.DraftStudio`): `#modal-ai-trip`, 국가/도시 편집기, 거점별 일수 스테퍼·균등 배분, 컨셉 칩, 설정 저장·스마트 로컬/Gemini 초안 생성(모든 진입 경로 초기화·XSS/토스트 방어·날짜 역전 거절·연타 방지, `draftStudio.*`) |
 | `js/presentation/plan-guides.js` | 계획 탭 예약 가이드·도시 가이드(v2.1.4, `SulsulTravel.PlanGuides`): 남미 팩 예약 체크리스트(팩 `bookings.items`, 완료는 `bookingStatuses`), 그 밖의 여행은 준비물 점검(`checklist.*` 동작), 남미·운남 거점 도시, 스팟 모아보기. 그리는 동안 여행 자료를 바꾸지 않고 모든 값을 escape한다 |
 | `js/presentation/budget-ui.js` | 초기 자산·예산 창과 전세계 통화 선택 창(v2.1.2). 창의 입력과 통화 목록은 파일 안의 초안에만 두고 저장 버튼의 `commitTrip` 한 번으로 쓴다. 통화 추가는 바로 저장하고 열린 초기 자산 창·지출 입력창을 갱신한다 |
 | `js/presentation/expense-analytics.js` | 사용내역 통계(v2.1.2): 카드·현금, 카테고리, 수지와 SVG 도넛 차트. 지출 카테고리 목록(`SulsulTravel.ExpenseAnalytics.CATEGORIES`)의 유일한 정의 |

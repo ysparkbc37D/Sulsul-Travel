@@ -20,6 +20,7 @@ const hubView = readFileSync(new URL('../js/presentation/hub-view.js', import.me
 const settingsUi = readFileSync(new URL('../js/presentation/settings-ui.js', import.meta.url), 'utf8');
 const scheduleTuningUi = readFileSync(new URL('../js/presentation/schedule-tuning-ui.js', import.meta.url), 'utf8');
 const createTripUi = readFileSync(new URL('../js/presentation/create-trip-ui.js', import.meta.url), 'utf8');
+const draftStudioUi = readFileSync(new URL('../js/presentation/draft-studio-ui.js', import.meta.url), 'utf8');
 const packSa = readFileSync(new URL('../js/destinations/pack-south-america.js', import.meta.url), 'utf8');
 const packageMetadata = JSON.parse(readFileSync(new URL('../package.json', import.meta.url), 'utf8'));
 const backupUi = readFileSync(new URL('../js/presentation/travel-backup-ui.js', import.meta.url), 'utf8');
@@ -246,10 +247,10 @@ test('footer nav gap spacing, multi-country hub allocation & trip draft studio s
   assert.match(createTripUi, /function allocateTripHubs\(/);
 
   // 3. Trip draft studio
-  assert.match(html, /function openTripDraftStudio\(/);
-  assert.match(html, /function renderDraftStudioHubSteppers\(/);
-  assert.match(html, /function saveDraftStudioSettingsOnly\(/);
-  assert.match(html, /function executeDraftStudioGeneration\(/);
+  assert.match(draftStudioUi, /function openTripDraftStudio\(/);
+  assert.match(draftStudioUi, /function renderDraftStudioHubSteppers\(/);
+  assert.match(draftStudioUi, /function saveDraftStudioSettingsOnly\(/);
+  assert.match(draftStudioUi, /function executeDraftStudioGeneration\(/);
 });
 
 test('unified sulsul-chip design system & high contrast WCAG AAA compliance supported (v1.7.5)', () => {
@@ -289,14 +290,14 @@ test('draft studio destination editor & receipt camera capture supported (v1.7.6
   assert.match(html, /id=["']draft-studio-countries-container["']/);
 
   // 4. Draft Studio destination editor JS engine
-  assert.match(html, /function setDraftStudioRegionFilter\(/);
-  assert.match(html, /function handleDraftStudioSearch\(/);
-  assert.match(html, /function renderDraftStudioCountryChips\(/);
-  assert.match(html, /function renderDraftStudioSelectedBoard\(/);
-  assert.match(html, /function toggleDraftStudioCountry\(/);
-  assert.match(html, /function toggleDraftStudioCity\(/);
-  assert.match(html, /function addCustomDraftStudioCity\(/);
-  assert.match(html, /function recalcDraftStudioHubs\(/);
+  assert.match(draftStudioUi, /function setDraftStudioRegionFilter\(/);
+  assert.match(draftStudioUi, /function handleDraftStudioSearch\(/);
+  assert.match(draftStudioUi, /function renderDraftStudioCountryChips\(/);
+  assert.match(draftStudioUi, /function renderDraftStudioSelectedBoard\(/);
+  assert.match(draftStudioUi, /function toggleDraftStudioCountry\(/);
+  assert.match(draftStudioUi, /function toggleDraftStudioCity\(/);
+  assert.match(draftStudioUi, /function addCustomDraftStudioCity\(/);
+  assert.match(draftStudioUi, /function recalcDraftStudioHubs\(/);
 
   // 5. Companion UI button renamed to '초안 편집'
   assert.match(companion, /초안 편집/);

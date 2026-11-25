@@ -26,18 +26,18 @@
     "__companionHudTimer": "오늘 화면 HUD 갱신 타이머의 중복 등록 방지"
   },
   "html": {
-    "index.html": 44,
+    "index.html": 21,
     "js/presentation/companion-ui.js": 94,
     "js/presentation/live-itinerary-ui.js": 3,
     "js/presentation/activity-journal.js": 1,
     "js/presentation/moment-journal.js": 1
   },
-  "_inlineHandlers": "UI01 기준값(v2.0.9 658곳 → v2.1.0 643곳 → v2.1.1 594곳 → v2.1.2 564곳 → v2.1.3 539곳 → v2.1.4 534곳 → v2.1.5 518곳 → v2.1.6 506곳 → v2.1.7 489곳 → v2.1.8 464곳 → v2.1.9 444곳 → v2.2.0 409곳 → v2.2.1 346곳 → v2.2.2 312곳 → v2.2.4 277곳). 4단계 화면 분리 때 화면마다 data-on-*로 옮기며 낮춘다. 늘리지 않는다",
+  "_inlineHandlers": "UI01 기준값(v2.0.9 658곳 → v2.1.0 643곳 → v2.1.1 594곳 → v2.1.2 564곳 → v2.1.3 539곳 → v2.1.4 534곳 → v2.1.5 518곳 → v2.1.6 506곳 → v2.1.7 489곳 → v2.1.8 464곳 → v2.1.9 444곳 → v2.2.0 409곳 → v2.2.1 346곳 → v2.2.2 312곳 → v2.2.4 277곳 → v2.2.5 247곳). 4단계 화면 분리 때 화면마다 data-on-*로 옮기며 낮춘다. 늘리지 않는다",
   "inlineHandlers": {
-    "index.html": 135,
+    "index.html": 107,
     "js/presentation/activity-journal.js": 5,
     "js/presentation/collaboration-review.js": 4,
-    "js/presentation/companion-ui.js": 69,
+    "js/presentation/companion-ui.js": 67,
     "js/presentation/live-itinerary-ui.js": 11,
     "js/presentation/mobile-navigation.js": 3,
     "js/presentation/moment-journal.js": 17,
