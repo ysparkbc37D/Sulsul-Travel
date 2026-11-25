@@ -19,6 +19,7 @@ const routeMap = readFileSync(new URL('../js/presentation/route-map.js', import.
 const hubView = readFileSync(new URL('../js/presentation/hub-view.js', import.meta.url), 'utf8');
 const settingsUi = readFileSync(new URL('../js/presentation/settings-ui.js', import.meta.url), 'utf8');
 const scheduleTuningUi = readFileSync(new URL('../js/presentation/schedule-tuning-ui.js', import.meta.url), 'utf8');
+const createTripUi = readFileSync(new URL('../js/presentation/create-trip-ui.js', import.meta.url), 'utf8');
 const packSa = readFileSync(new URL('../js/destinations/pack-south-america.js', import.meta.url), 'utf8');
 const packageMetadata = JSON.parse(readFileSync(new URL('../package.json', import.meta.url), 'utf8'));
 const backupUi = readFileSync(new URL('../js/presentation/travel-backup-ui.js', import.meta.url), 'utf8');
@@ -64,12 +65,12 @@ test('travel-stage navigation and reviewed RePlan are wired', () => {
 
 test('new trip creation passes major cities into the AI itinerary flow', () => {
   assert.match(html, /id=["']trip-form-cities["']/);
-  assert.match(html, /let shouldGenerateAi =/);
-  assert.match(html, /void generateAiItinerary\(\)/);
+  assert.match(createTripUi, /let shouldGenerateAi =/);
+  assert.match(createTripUi, /void generateAiItinerary\(\)/);
   assert.match(html, /우선 방문할 주요 도시\/거점/);
-  assert.match(html, /requestedCities\.join\(', '\)/);
-  assert.match(html, /const calculatedHubs = allocateTripHubs\(countries, requestedCities, durationDays\)/);
-  assert.match(html, /planSource: shouldGenerateAi \? 'ai_pending'/);
+  assert.match(createTripUi, /requestedCities\.join\(', '\)/);
+  assert.match(createTripUi, /const calculatedHubs = allocateTripHubs\(countries, requestedCities, durationDays\)/);
+  assert.match(createTripUi, /planSource: shouldGenerateAi \? 'ai_pending'/);
 });
 
 test('AI itinerary approval updates day identity, rebuilds initial plan blocks, and rejects sparse schedules', () => {
@@ -95,8 +96,8 @@ test('big plan edits can trigger scoped AI regeneration without a free-travel fa
   assert.match(scheduleTuningUi, /function buildAiReplanPrompt\(/);
   assert.match(scheduleTuningUi, /사용자가 편집하고 저장한 큰 계획/);
   assert.match(companion, /data-on-click="planBlocks\.regenerateByIndex"/);
-  assert.doesNotMatch(html, /countriesStr \? splitTravelList\(countriesStr\) : \['자유여행'\]/);
-  assert.doesNotMatch(html, /State\.createTripSelectedConcepts\.slice\(\)\s*:\s*\['자유여행'\]/);
+  assert.doesNotMatch(html + createTripUi, /countriesStr \? splitTravelList\(countriesStr\) : \['자유여행'\]/);
+  assert.doesNotMatch(html + createTripUi, /State\.createTripSelectedConcepts\.slice\(\)\s*:\s*\['자유여행'\]/);
 });
 
 test('legacy destructive AI paths and mock OCR are absent', () => {
@@ -233,8 +234,8 @@ test('global country database expanded to 140+ countries and custom destination 
   assert.match(html, /name:\s*['"]나미비아['"]/);
 
   // Fallback custom addition function
-  assert.match(html, /function addCustomCreateTripCountry\(/);
-  assert.match(html, /window\.addCustomCreateTripCountry\s*=/);
+  assert.match(createTripUi, /function addCustomCreateTripCountry\(/);
+  assert.match(createTripUi, /addCustomCountry:\s*addCustomCreateTripCountry/);
 });
 
 test('footer nav gap spacing, multi-country hub allocation & trip draft studio supported (v1.7.4)', () => {
@@ -242,7 +243,7 @@ test('footer nav gap spacing, multi-country hub allocation & trip draft studio s
   assert.match(html, /#hub-sulsul-footer nav\s*\{[^}]*gap:\s*8px 18px !important;/);
 
   // 2. Macro hub allocation engine
-  assert.match(html, /function allocateTripHubs\(/);
+  assert.match(createTripUi, /function allocateTripHubs\(/);
 
   // 3. Trip draft studio
   assert.match(html, /function openTripDraftStudio\(/);
@@ -260,13 +261,13 @@ test('unified sulsul-chip design system & high contrast WCAG AAA compliance supp
   assert.match(html, /\[class\*="bg-amber-"\]:not\(\[class\*="dark:"\]\):not\(\[class\*="hover:"\]\)/);
 
   // 3. Region filter tabs use sulsul-chip
-  assert.match(html, /id=["']tab-reg-east_asia["']\s+class=["']sulsul-chip/);
-  assert.match(html, /function setCreateTripRegionFilter\(/);
+  assert.match(html, /id=["']tab-reg-east_asia["'][^>]*class=["']sulsul-chip/);
+  assert.match(createTripUi, /function setCreateTripRegionFilter\(/);
 
   // 4. Country chips, city chips, and concept chips adopt sulsul-chip & is-active
-  assert.match(html, /class=["']sulsul-chip \$\{activeClass\}["']/);
-  assert.match(html, /class=["']sulsul-chip \$\{chipClass\}["']/);
-  assert.match(html, /sulsul-chip-badge/);
+  assert.match(createTripUi, /isSelected \? 'sulsul-chip is-active' : 'sulsul-chip'/);
+  assert.match(createTripUi, /isCitySelected \? 'sulsul-chip is-active' : 'sulsul-chip'/);
+  assert.match(createTripUi, /sulsul-chip-badge/);
 });
 
 test('draft studio destination editor & receipt camera capture supported (v1.7.6)', () => {

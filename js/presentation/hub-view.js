@@ -890,7 +890,7 @@
     removeCover: (element, event) => removeCover(element.dataset.tripId, event),
     openPdf: (element, event) => openTripPdfReport(element.dataset.tripId, event),
     deleteTrip: (element, event) => requestDeleteTrip(element.dataset.tripId, event),
-    createTrip: () => openCreateTripModal(),
+    createTrip: () => T.CreateTrip.open(),
     noop: () => {}
   });
 

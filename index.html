@@ -35,7 +35,8 @@
         typeof window.SulsulTravel?.LifetimeAnalytics?.render === 'function' &&
         typeof window.SulsulTravel?.HubView?.render === 'function' &&
         typeof window.SulsulTravel?.SettingsUI?.open === 'function' &&
-        typeof window.SulsulTravel?.ScheduleTuning?.openScheduleTuningModal === 'function';
+        typeof window.SulsulTravel?.ScheduleTuning?.openScheduleTuningModal === 'function' &&
+        typeof window.SulsulTravel?.CreateTrip?.open === 'function';
       shell.reload = () => {if(!shell.reloading){shell.reloading=true;location.reload();}};
       shell.canReload = () => {
         if(!shell.started)return true;
@@ -154,17 +155,17 @@
   </script>
 
   <!-- PWA Meta & Icons -->
-  <link rel="manifest" href="manifest.webmanifest?v=2.2.3">
+  <link rel="manifest" href="manifest.webmanifest?v=2.2.4">
   <meta name="theme-color" content="#F7F5F0">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <meta name="apple-mobile-web-app-title" content="술술트래블">
-  <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192-v115.png?v=2.2.3">
-  <link rel="icon" type="image/png" sizes="32x32" href="favicon.png?v=2.2.3">
+  <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192-v115.png?v=2.2.4">
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon.png?v=2.2.4">
   <link rel="shortcut icon" href="favicon.ico">
-  <link rel="apple-touch-icon" sizes="180x180" href="icons/apple-touch-icon-v115.png?v=2.2.3">
-  <link rel="apple-touch-icon" href="icons/apple-touch-icon-v115.png?v=2.2.3">
+  <link rel="apple-touch-icon" sizes="180x180" href="icons/apple-touch-icon-v115.png?v=2.2.4">
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon-v115.png?v=2.2.4">
 
   <!-- Google Fonts: Great Vibes, Dancing Script (Cursive Calligraphy), Cormorant Garamond, Noto Serif KR, Playfair Display -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -172,7 +173,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Great+Vibes&family=Cormorant+Garamond:wght@600;700;800&family=Noto+Serif+KR:wght@500;600;700;900&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
 
   <!-- Local Utilities Bundle (CDN fallback & tailwind utilities) -->
-  <link rel="stylesheet" href="css/utilities.css?v=2.2.3" integrity="sha384-HMVB4SH6xwwGITkNyT8ARmHegAYSuTMocPGl4bpl0JywMIe2PqYrUxqZOgEuZjmP">
+  <link rel="stylesheet" href="css/utilities.css?v=2.2.4" integrity="sha384-HMVB4SH6xwwGITkNyT8ARmHegAYSuTMocPGl4bpl0JywMIe2PqYrUxqZOgEuZjmP">
   <link rel="stylesheet" href="vendor/fontawesome/css/all.min.css" integrity="sha384-t1nt8BQoYMLFN5p42tRAtuAAFQaCQODekUVeKKZrEnEyp4H2R0RHFz0KWpmj7i8g">
 
   <!-- Leaflet Map CSS & JS -->
@@ -1514,75 +1515,76 @@
     }
   </style>
 
-  <link rel="stylesheet" href="css/companion.css?v=2.2.3" integrity="sha384-Syant7HB0IYUZUU2saRSYUDkM71WKVuK2JtHM+kAluFdw3VvWv9gSglgJh4utHv/">
-  <link rel="stylesheet" href="css/companion-refresh.css?v=2.2.3" integrity="sha384-2KIp4VI8qsP6dGnz0cm/vehjLjr6GxpZ9yWTbbIXBPWi25XHg6XUOtNbp7W8KMd3">
-  <link rel="stylesheet" href="css/live-itinerary.css?v=2.2.3" integrity="sha384-e/V9wyJ/Gi6baSHcWzBeNGjdn/eKDQIvKWyiYmByLE7C7nYJaQOA+GshtUMcCR72">
-  <link rel="stylesheet" href="css/expense-mobile.css?v=2.2.3" integrity="sha384-QZFtKrU/YvkTaEKv0oJ2ZQi1Zry8RgEFaHzTckwuPFsMDDmadYBH7UuYgTVS7281">
-  <link rel="stylesheet" href="css/moment-journal.css?v=2.2.3" integrity="sha384-g1EihgfyPDJ5o5eWSsQgT1WDTRKDtUfzVatlx6T/t+DhApDBY8dznSrwmelasv91">
-  <script src="js/domain/trip-adapter.js?v=2.2.3" integrity="sha384-JHU/NkAlxwR9G9/49TaFK4sTvg9xKGsSVd3re8rLivtiXcSNdnQA9gRIfvVWUtG7"></script>
-  <script src="js/domain/ai-draft-validation.js?v=2.2.3" integrity="sha384-OTRAiX7YaOiiNrpMWDjkOyH0bTbbL3KrGwGp1RmIkgvd15pErNTTKVTJkoesmpfi"></script>
-  <script src="js/domain/live-itinerary.js?v=2.2.3" integrity="sha384-cwMH5i2F5Mve7Z9cKeWrP7uLU5plcu6c7xvTf4Lyz3Xkb6GlNCI14lnEWzw46cVg"></script>
-  <script src="js/presentation/live-itinerary-ui.js?v=2.2.3" integrity="sha384-o0/FMQJBgpZ6IjgCVORm7T9wuyP+FMXZBQWNpODWeV7EibRoxJXXvfpLYyRnZwJV"></script>
-  <script src="js/presentation/live-itinerary-bridge.js?v=2.2.3" integrity="sha384-lRoX8rvtVNC3rl6v9tCVjTLCSBjLmTH3EhNiq6OPizV+6GvspGEUIpH00HoPTgEn"></script>
-  <script src="js/domain/schedule-change.js?v=2.2.3" integrity="sha384-v7zQ2iSY9DIrsztq758NvV0o6vbsguJn70NviXT6itT6YcuNaCvSW2beDogcMbD7"></script>
-  <script src="js/presentation/schedule-change-ui.js?v=2.2.3" integrity="sha384-/o64DP3fREiF6GLq76fUVLc7a0yqHmcXa7vYfKDJfvwz2C78WHFUeufRrmntmWOh"></script>
-  <script src="js/domain/spot-realignment.js?v=2.2.3" integrity="sha384-gCFPNcD1aD3UegqTLtFPCU7Xqm7CtRN0yjQx2QnWe1ee0i3cZu8pzZic7YzBJLKt"></script>
-  <script src="js/presentation/spot-realignment-ui.js?v=2.2.3" integrity="sha384-GKlSQQKluvxcnRhJmQVQL4lZIFXbqf8ac/0BnxPiWNWcLjFJWYx/IZU3+5fZI7dk"></script>
-  <script src="js/domain/travel-records.js?v=2.2.3" integrity="sha384-qhkfkF1xKTuPtBvsB5Gwpz631xTkyy2tS1BU9Hixd2L1t+oobsXBMJnFv1pBHNnW"></script>
-  <script src="js/domain/travel-story.js?v=2.2.3" integrity="sha384-vjuGNDpytM6vG8SuZbKLW7qTTV1L33j48P1KSwNQnvca7uxo5EYkBM2X0IOdn/Qa"></script>
-  <script src="js/infrastructure/storage/photo-compression.js?v=2.2.3" integrity="sha384-MeOApXBzhg++Rcq/Lfjwb04/MA1U6wmwHppDgFZvKA4ZfdPC4oR2Hv1BhPFNU7Ig"></script>
-  <link rel="stylesheet" href="css/photo-optimization.css?v=2.2.3" integrity="sha384-9sgcirlxZs5tcmp/22RdH56B3bZla/q4DVH7x8W+fO8P4neR4WJMDDtQNK4WPq+/">
-  <script src="js/domain/photo-optimization.js?v=2.2.3" integrity="sha384-fpPZ4nJ383bIJaSHvmuZg+9BYd5LQ8YuVtEEMjtJnQr2Fod/mawAoB5SYMdtvBRU"></script>
-  <script src="js/infrastructure/storage/photo-cleanup.js?v=2.2.3" integrity="sha384-qPUCnJe7spP79MZLfOuzscYXTD6cW+7dzsf0xxvDip9hIj+yBvbBK6KhAouz5BC/"></script>
-  <script src="js/presentation/photo-optimization-ui.js?v=2.2.3" integrity="sha384-3hbyGaTEmmcJedqdlzMJs8SeGnYCFuuItyMz6MU2GqsZPt0F3lqhR6C3xfEjtztX"></script>
-  <script src="js/infrastructure/storage/media-repository.js?v=2.2.3" integrity="sha384-q0IPoo86aU2ruB130X1HAh01dr4hpI0IAXeMVCoa7Jy/2pIB09f7WbSKPm8vowhw"></script>
-  <script src="js/infrastructure/storage/record-media-store.js?v=2.2.3" integrity="sha384-vNu5tI/i1vWsxi2/3aQYW+9zYfivBNB2ewaUTRlwhnGwRbv9dpR4bu/sqzv1D2jm"></script>
-  <script src="js/infrastructure/storage/expense-photo-repository.js?v=2.2.3" integrity="sha384-gdumvFYkJqEbRPJlK4mffCsUjPsnKCXLg6/1fLMR8kUuU1QDMeLLOYmMVSRTGNSy"></script>
-  <script src="js/presentation/companion-ui.js?v=2.2.3" integrity="sha384-2Jqr/hGAQWtlAPASY5FtUziGBR3OTSMP0kKZkqjb0z313GVMqPtBUgt7MRqiWMMv"></script>
-  <script src="js/domain/trip-transfer.js?v=2.2.3" integrity="sha384-VD9q1co1+bJzdS4i19rvfkQN/4KvzfnNdHUjbbucghcxzjmPim+kWF93qv5DaXSu"></script>
-  <script src="js/domain/travel-backup.js?v=2.2.3" integrity="sha384-4zE43uWlz5y3eP7g98tEL3HqAsw08/XvINQ+RhLLt4wz+cnySMWiy3Eu1m7BaBbK"></script>
-  <script src="js/presentation/travel-backup-ui.js?v=2.2.3" integrity="sha384-sVW2ZCtsSxmpUV5LLx/g7qXCQgsC7telSgAQ1ahagRA8PVeaCIIR3eRLB5CuEHuY"></script>
-  <script src="js/presentation/storage-health-ui.js?v=2.2.3" integrity="sha384-yhLee1WlZBu7vZL8qquRuBbYdW2RIBPIkjKQqjgT5iNw7FRWOlw7POGkpMar7IkT"></script>
-  <script src="js/presentation/trip-transfer-ui.js?v=2.2.3" integrity="sha384-eqPYhJD7v4KX0Ya6tmFTiMnZZaifZSy9rw+iOVpL40NbDHovbAiFLCkBXIdKFr+l"></script>
-  <script src="js/presentation/mobile-navigation.js?v=2.2.3" integrity="sha384-kBt19zWZRJi5YikjblCgSn1Lvo3lYWKGTAr1wUWly83cD5FTjDSjryhWLx0D2Jl0"></script>
-  <script src="js/presentation/activity-journal.js?v=2.2.3" integrity="sha384-yfWY1V0BnjH3KiQRcQhSUSk+yFtzEHdTrHFa9impeFfcJfhekTfeXeCZvzbgv4he"></script>
-  <script src="js/presentation/moment-journal.js?v=2.2.3" integrity="sha384-r/heV0A2E+VDwxEE7joC1tw0UPcWIWSdZHDvU0rQs6c+LzY5zCEBLYiF4KIKQo5u"></script>
-  <script src="js/presentation/travel-story-ui.js?v=2.2.3" integrity="sha384-s9HZ4A1/X3tCfe4rBfB6nzEwAC7i2U1YVfradgxnQPX5X4tnFszIOPeMsLPfXnfq"></script>
-  <script src="js/config/collaboration-config.js?v=2.2.3" integrity="sha384-ipxhKB+fQ4s3OThYo3p6IWFvP6BbstXYDW6jZWWiPHB4qomo64w7r8/wRvdsi47w"></script>
-  <script src="js/infrastructure/collaboration/supabase-travel-service.js?v=2.2.3" integrity="sha384-+SDvVJ0CNqCMvFlOBOA+nfA1k6/sN6GlaKDhTQo4SgX8x3EwPXyJlvMfJj0D6Bt/"></script>
-  <script src="js/presentation/collaboration-ui.js?v=2.2.3" integrity="sha384-KvnYI6ym2/deKsOtKryWJS5tljPjqYRx67JGGgWVRNyWHEC470iPDg3+fdw0OHX0"></script>
-  <script src="js/presentation/collaboration-review.js?v=2.2.3" integrity="sha384-cbND/rT26DaIY2hR++LBuByF9L/ACu5TDl0b85EN2zsk/sTapWGm2BPQqZgN6GzI"></script>
-  <script src="js/presentation/ui-actions.js?v=2.2.3" integrity="sha384-86E6+vWuYSS4ldFWIpwfcJMnPW2jUnvL9CJGWeJHDKHEXnQsNWTDB0skpvkRBm9K"></script>
-  <script src="js/presentation/shell-actions.js?v=2.2.3" integrity="sha384-U2oGDxTvGwi30E4dNh1CkhDtgABYyf+tvtZYOm2h31bPLv/ptAhsQhnFv0nVndEo"></script>
-  <script src="js/presentation/exchange-ui.js?v=2.2.3" integrity="sha384-21MA/m/6rg1LsIZFsoAuqvhmWN3Y8seM2ZdIZHKOGEZ70CAjaeulE8mmIbSKmb1h"></script>
-  <script src="js/presentation/plan-blocks.js?v=2.2.3" integrity="sha384-Y9Ig6PlkuyrOlG37ahgrLVzCAAnLtVb57tte96feeiMky/nRwri//Osk26zHr7E6"></script>
-  <script src="js/presentation/plan-timeline.js?v=2.2.3" integrity="sha384-92DXb1pEf38w/3vomukTTi8Jk14NBoY3s408mV5DhhATNH81x/Qfrnm5mitwRWWa"></script>
-  <script src="js/presentation/plan-map.js?v=2.2.3" integrity="sha384-moJ8fpaMtEe644aLUgtZGuvdUoG/ax/MK9VlZPw4TCtT/XomX3xjobLrKtRnm94d"></script>
-  <script src="js/presentation/route-map.js?v=2.2.3" integrity="sha384-j87WAiWOdi7HTCFWm0XWLG7jV7KT9R2JLOGoKKmEiPJh3CsZCYfDmI7hO896ksUY"></script>
-  <script src="js/presentation/lifetime-analytics.js?v=2.2.3" integrity="sha384-wSyGWne4T8RC9AEQuhHrfWZrQ4ulSh4zZYD7ekFBnlo3nUdEurMhOIk2++IALbi4"></script>
-  <script src="js/presentation/hub-view.js?v=2.2.3" integrity="sha384-htKlVrBc9ue00E/iSHm7evqbnEHDM+La/E+phfFh5hKAg7YFHhNztv/UMbhMH+6O"></script>
-  <script src="js/presentation/settings-ui.js?v=2.2.3" integrity="sha384-rY0ntKNCuVqoub7KcF2B+FxBjKcODsJs+uJ3EAQlRvT8Iju3HSZOkBe1/DdcxAvL"></script>
-  <script src="js/presentation/schedule-tuning-ui.js?v=2.2.3" integrity="sha384-Tp4+B9nZah+yiF5b2K1i2xptW7Un4k9BX3J2FBjPgyuzdOGI+hPaE/REof87giCG"></script>
-  <script src="js/presentation/plan-guides.js?v=2.2.3" integrity="sha384-Eg0ooJHXflNMCbbk5sEJIg4VX2WigAkFB9GzPI7iT7q57s8L2TdNMYQxc9BWHb87"></script>
-  <script src="js/presentation/budget-ui.js?v=2.2.3" integrity="sha384-p+A7x64rZuPWhGaUzTMoNYo60aTQzp7UXhZzMfXABMyWqrG32b4LDPZ/SGwoEKjs"></script>
-  <script src="js/presentation/expense-analytics.js?v=2.2.3" integrity="sha384-GOo/a/N9uE2yr6Aw2Ju6sXiBr5VTaDbPb1nth/ElR4GDT1yPI0CfghLOB7DaN1Yp"></script>
-  <script src="js/presentation/expenses-tab.js?v=2.2.3" integrity="sha384-dFoKIs/B5CCctW17/wd1Kp0Kr6v9LXykyt/8yOknSEs3G9C7rnYam3VrTKE9ZaFg"></script>
-  <script src="js/presentation/journal-tab.js?v=2.2.3" integrity="sha384-Hhgx7Hra1MAb8tvQIMdF9khAJjZHC3SqpdqWrAXEVAbGHvgFLOf+bREOM6jyvFoc"></script>
-  <script src="js/presentation/checklist-tab.js?v=2.2.3" integrity="sha384-ENgqtNcHd59KKTorCEZx/H/zUSfXi47RIM1X1F1E6tNPe5U4DKXginat44x1SDbL"></script>
-  <script src="js/presentation/expense-editor.js?v=2.2.3" integrity="sha384-PosLZVGcia3FlNTeQCWVw+mtgPsGaCJjpHKtrdFVXpaw5LYD+iQ/M5FYwMYy/HVY"></script>
+  <link rel="stylesheet" href="css/companion.css?v=2.2.4" integrity="sha384-Syant7HB0IYUZUU2saRSYUDkM71WKVuK2JtHM+kAluFdw3VvWv9gSglgJh4utHv/">
+  <link rel="stylesheet" href="css/companion-refresh.css?v=2.2.4" integrity="sha384-2KIp4VI8qsP6dGnz0cm/vehjLjr6GxpZ9yWTbbIXBPWi25XHg6XUOtNbp7W8KMd3">
+  <link rel="stylesheet" href="css/live-itinerary.css?v=2.2.4" integrity="sha384-e/V9wyJ/Gi6baSHcWzBeNGjdn/eKDQIvKWyiYmByLE7C7nYJaQOA+GshtUMcCR72">
+  <link rel="stylesheet" href="css/expense-mobile.css?v=2.2.4" integrity="sha384-QZFtKrU/YvkTaEKv0oJ2ZQi1Zry8RgEFaHzTckwuPFsMDDmadYBH7UuYgTVS7281">
+  <link rel="stylesheet" href="css/moment-journal.css?v=2.2.4" integrity="sha384-g1EihgfyPDJ5o5eWSsQgT1WDTRKDtUfzVatlx6T/t+DhApDBY8dznSrwmelasv91">
+  <script src="js/domain/trip-adapter.js?v=2.2.4" integrity="sha384-JHU/NkAlxwR9G9/49TaFK4sTvg9xKGsSVd3re8rLivtiXcSNdnQA9gRIfvVWUtG7"></script>
+  <script src="js/domain/ai-draft-validation.js?v=2.2.4" integrity="sha384-OTRAiX7YaOiiNrpMWDjkOyH0bTbbL3KrGwGp1RmIkgvd15pErNTTKVTJkoesmpfi"></script>
+  <script src="js/domain/live-itinerary.js?v=2.2.4" integrity="sha384-cwMH5i2F5Mve7Z9cKeWrP7uLU5plcu6c7xvTf4Lyz3Xkb6GlNCI14lnEWzw46cVg"></script>
+  <script src="js/presentation/live-itinerary-ui.js?v=2.2.4" integrity="sha384-o0/FMQJBgpZ6IjgCVORm7T9wuyP+FMXZBQWNpODWeV7EibRoxJXXvfpLYyRnZwJV"></script>
+  <script src="js/presentation/live-itinerary-bridge.js?v=2.2.4" integrity="sha384-lRoX8rvtVNC3rl6v9tCVjTLCSBjLmTH3EhNiq6OPizV+6GvspGEUIpH00HoPTgEn"></script>
+  <script src="js/domain/schedule-change.js?v=2.2.4" integrity="sha384-v7zQ2iSY9DIrsztq758NvV0o6vbsguJn70NviXT6itT6YcuNaCvSW2beDogcMbD7"></script>
+  <script src="js/presentation/schedule-change-ui.js?v=2.2.4" integrity="sha384-/o64DP3fREiF6GLq76fUVLc7a0yqHmcXa7vYfKDJfvwz2C78WHFUeufRrmntmWOh"></script>
+  <script src="js/domain/spot-realignment.js?v=2.2.4" integrity="sha384-gCFPNcD1aD3UegqTLtFPCU7Xqm7CtRN0yjQx2QnWe1ee0i3cZu8pzZic7YzBJLKt"></script>
+  <script src="js/presentation/spot-realignment-ui.js?v=2.2.4" integrity="sha384-GKlSQQKluvxcnRhJmQVQL4lZIFXbqf8ac/0BnxPiWNWcLjFJWYx/IZU3+5fZI7dk"></script>
+  <script src="js/domain/travel-records.js?v=2.2.4" integrity="sha384-qhkfkF1xKTuPtBvsB5Gwpz631xTkyy2tS1BU9Hixd2L1t+oobsXBMJnFv1pBHNnW"></script>
+  <script src="js/domain/travel-story.js?v=2.2.4" integrity="sha384-vjuGNDpytM6vG8SuZbKLW7qTTV1L33j48P1KSwNQnvca7uxo5EYkBM2X0IOdn/Qa"></script>
+  <script src="js/infrastructure/storage/photo-compression.js?v=2.2.4" integrity="sha384-MeOApXBzhg++Rcq/Lfjwb04/MA1U6wmwHppDgFZvKA4ZfdPC4oR2Hv1BhPFNU7Ig"></script>
+  <link rel="stylesheet" href="css/photo-optimization.css?v=2.2.4" integrity="sha384-9sgcirlxZs5tcmp/22RdH56B3bZla/q4DVH7x8W+fO8P4neR4WJMDDtQNK4WPq+/">
+  <script src="js/domain/photo-optimization.js?v=2.2.4" integrity="sha384-fpPZ4nJ383bIJaSHvmuZg+9BYd5LQ8YuVtEEMjtJnQr2Fod/mawAoB5SYMdtvBRU"></script>
+  <script src="js/infrastructure/storage/photo-cleanup.js?v=2.2.4" integrity="sha384-qPUCnJe7spP79MZLfOuzscYXTD6cW+7dzsf0xxvDip9hIj+yBvbBK6KhAouz5BC/"></script>
+  <script src="js/presentation/photo-optimization-ui.js?v=2.2.4" integrity="sha384-3hbyGaTEmmcJedqdlzMJs8SeGnYCFuuItyMz6MU2GqsZPt0F3lqhR6C3xfEjtztX"></script>
+  <script src="js/infrastructure/storage/media-repository.js?v=2.2.4" integrity="sha384-q0IPoo86aU2ruB130X1HAh01dr4hpI0IAXeMVCoa7Jy/2pIB09f7WbSKPm8vowhw"></script>
+  <script src="js/infrastructure/storage/record-media-store.js?v=2.2.4" integrity="sha384-vNu5tI/i1vWsxi2/3aQYW+9zYfivBNB2ewaUTRlwhnGwRbv9dpR4bu/sqzv1D2jm"></script>
+  <script src="js/infrastructure/storage/expense-photo-repository.js?v=2.2.4" integrity="sha384-gdumvFYkJqEbRPJlK4mffCsUjPsnKCXLg6/1fLMR8kUuU1QDMeLLOYmMVSRTGNSy"></script>
+  <script src="js/presentation/companion-ui.js?v=2.2.4" integrity="sha384-2Jqr/hGAQWtlAPASY5FtUziGBR3OTSMP0kKZkqjb0z313GVMqPtBUgt7MRqiWMMv"></script>
+  <script src="js/domain/trip-transfer.js?v=2.2.4" integrity="sha384-VD9q1co1+bJzdS4i19rvfkQN/4KvzfnNdHUjbbucghcxzjmPim+kWF93qv5DaXSu"></script>
+  <script src="js/domain/travel-backup.js?v=2.2.4" integrity="sha384-4zE43uWlz5y3eP7g98tEL3HqAsw08/XvINQ+RhLLt4wz+cnySMWiy3Eu1m7BaBbK"></script>
+  <script src="js/presentation/travel-backup-ui.js?v=2.2.4" integrity="sha384-sVW2ZCtsSxmpUV5LLx/g7qXCQgsC7telSgAQ1ahagRA8PVeaCIIR3eRLB5CuEHuY"></script>
+  <script src="js/presentation/storage-health-ui.js?v=2.2.4" integrity="sha384-yhLee1WlZBu7vZL8qquRuBbYdW2RIBPIkjKQqjgT5iNw7FRWOlw7POGkpMar7IkT"></script>
+  <script src="js/presentation/trip-transfer-ui.js?v=2.2.4" integrity="sha384-eqPYhJD7v4KX0Ya6tmFTiMnZZaifZSy9rw+iOVpL40NbDHovbAiFLCkBXIdKFr+l"></script>
+  <script src="js/presentation/mobile-navigation.js?v=2.2.4" integrity="sha384-kBt19zWZRJi5YikjblCgSn1Lvo3lYWKGTAr1wUWly83cD5FTjDSjryhWLx0D2Jl0"></script>
+  <script src="js/presentation/activity-journal.js?v=2.2.4" integrity="sha384-yfWY1V0BnjH3KiQRcQhSUSk+yFtzEHdTrHFa9impeFfcJfhekTfeXeCZvzbgv4he"></script>
+  <script src="js/presentation/moment-journal.js?v=2.2.4" integrity="sha384-r/heV0A2E+VDwxEE7joC1tw0UPcWIWSdZHDvU0rQs6c+LzY5zCEBLYiF4KIKQo5u"></script>
+  <script src="js/presentation/travel-story-ui.js?v=2.2.4" integrity="sha384-s9HZ4A1/X3tCfe4rBfB6nzEwAC7i2U1YVfradgxnQPX5X4tnFszIOPeMsLPfXnfq"></script>
+  <script src="js/config/collaboration-config.js?v=2.2.4" integrity="sha384-ipxhKB+fQ4s3OThYo3p6IWFvP6BbstXYDW6jZWWiPHB4qomo64w7r8/wRvdsi47w"></script>
+  <script src="js/infrastructure/collaboration/supabase-travel-service.js?v=2.2.4" integrity="sha384-+SDvVJ0CNqCMvFlOBOA+nfA1k6/sN6GlaKDhTQo4SgX8x3EwPXyJlvMfJj0D6Bt/"></script>
+  <script src="js/presentation/collaboration-ui.js?v=2.2.4" integrity="sha384-KvnYI6ym2/deKsOtKryWJS5tljPjqYRx67JGGgWVRNyWHEC470iPDg3+fdw0OHX0"></script>
+  <script src="js/presentation/collaboration-review.js?v=2.2.4" integrity="sha384-cbND/rT26DaIY2hR++LBuByF9L/ACu5TDl0b85EN2zsk/sTapWGm2BPQqZgN6GzI"></script>
+  <script src="js/presentation/ui-actions.js?v=2.2.4" integrity="sha384-86E6+vWuYSS4ldFWIpwfcJMnPW2jUnvL9CJGWeJHDKHEXnQsNWTDB0skpvkRBm9K"></script>
+  <script src="js/presentation/shell-actions.js?v=2.2.4" integrity="sha384-U2oGDxTvGwi30E4dNh1CkhDtgABYyf+tvtZYOm2h31bPLv/ptAhsQhnFv0nVndEo"></script>
+  <script src="js/presentation/exchange-ui.js?v=2.2.4" integrity="sha384-21MA/m/6rg1LsIZFsoAuqvhmWN3Y8seM2ZdIZHKOGEZ70CAjaeulE8mmIbSKmb1h"></script>
+  <script src="js/presentation/plan-blocks.js?v=2.2.4" integrity="sha384-Y9Ig6PlkuyrOlG37ahgrLVzCAAnLtVb57tte96feeiMky/nRwri//Osk26zHr7E6"></script>
+  <script src="js/presentation/plan-timeline.js?v=2.2.4" integrity="sha384-92DXb1pEf38w/3vomukTTi8Jk14NBoY3s408mV5DhhATNH81x/Qfrnm5mitwRWWa"></script>
+  <script src="js/presentation/plan-map.js?v=2.2.4" integrity="sha384-moJ8fpaMtEe644aLUgtZGuvdUoG/ax/MK9VlZPw4TCtT/XomX3xjobLrKtRnm94d"></script>
+  <script src="js/presentation/route-map.js?v=2.2.4" integrity="sha384-j87WAiWOdi7HTCFWm0XWLG7jV7KT9R2JLOGoKKmEiPJh3CsZCYfDmI7hO896ksUY"></script>
+  <script src="js/presentation/lifetime-analytics.js?v=2.2.4" integrity="sha384-wSyGWne4T8RC9AEQuhHrfWZrQ4ulSh4zZYD7ekFBnlo3nUdEurMhOIk2++IALbi4"></script>
+  <script src="js/presentation/hub-view.js?v=2.2.4" integrity="sha384-HWFGCpUC7D4gGxHUD5pdr37uGaSjXiHHMyU/UhZXo5lL3zJHuSBb/ScDN3LY+JNW"></script>
+  <script src="js/presentation/settings-ui.js?v=2.2.4" integrity="sha384-rY0ntKNCuVqoub7KcF2B+FxBjKcODsJs+uJ3EAQlRvT8Iju3HSZOkBe1/DdcxAvL"></script>
+  <script src="js/presentation/schedule-tuning-ui.js?v=2.2.4" integrity="sha384-SwR2N77sOsxTvurQ6YQjmkC9xO9HKEQqJ9XgfFlrJ7QKm1tDnOhCkx9negFOS0Dg"></script>
+  <script src="js/presentation/create-trip-ui.js?v=2.2.4" integrity="sha384-b/VApxeGfhdpH9I8yzdzvqSusE4DxSHx3S18Xr4bDrROQCOFD4y/tPAss2lkzRCs"></script>
+  <script src="js/presentation/plan-guides.js?v=2.2.4" integrity="sha384-Eg0ooJHXflNMCbbk5sEJIg4VX2WigAkFB9GzPI7iT7q57s8L2TdNMYQxc9BWHb87"></script>
+  <script src="js/presentation/budget-ui.js?v=2.2.4" integrity="sha384-p+A7x64rZuPWhGaUzTMoNYo60aTQzp7UXhZzMfXABMyWqrG32b4LDPZ/SGwoEKjs"></script>
+  <script src="js/presentation/expense-analytics.js?v=2.2.4" integrity="sha384-GOo/a/N9uE2yr6Aw2Ju6sXiBr5VTaDbPb1nth/ElR4GDT1yPI0CfghLOB7DaN1Yp"></script>
+  <script src="js/presentation/expenses-tab.js?v=2.2.4" integrity="sha384-dFoKIs/B5CCctW17/wd1Kp0Kr6v9LXykyt/8yOknSEs3G9C7rnYam3VrTKE9ZaFg"></script>
+  <script src="js/presentation/journal-tab.js?v=2.2.4" integrity="sha384-Hhgx7Hra1MAb8tvQIMdF9khAJjZHC3SqpdqWrAXEVAbGHvgFLOf+bREOM6jyvFoc"></script>
+  <script src="js/presentation/checklist-tab.js?v=2.2.4" integrity="sha384-ENgqtNcHd59KKTorCEZx/H/zUSfXi47RIM1X1F1E6tNPe5U4DKXginat44x1SDbL"></script>
+  <script src="js/presentation/expense-editor.js?v=2.2.4" integrity="sha384-PosLZVGcia3FlNTeQCWVw+mtgPsGaCJjpHKtrdFVXpaw5LYD+iQ/M5FYwMYy/HVY"></script>
 
   <!-- Knowledge Base Seed & Destination Knowledge Packs (DKP) -->
-  <script src="kb-travel.js?v=2.2.3" integrity="sha384-zxXc7MUMbmXkiaF3ymeLmVSiCyPRVfkUjSZetDVx41zrHGyPeSCN4TFpy5f1jNUd"></script>
+  <script src="kb-travel.js?v=2.2.4" integrity="sha384-zxXc7MUMbmXkiaF3ymeLmVSiCyPRVfkUjSZetDVx41zrHGyPeSCN4TFpy5f1jNUd"></script>
   <script src="js/destinations/destination-registry.js" integrity="sha384-PV7EnpqZusutqYxhFc0vICq72coA/C+TMYaBkk+BFy52dmgfk/RDzf/DAgW7dmvC"></script>
   <script src="js/destinations/pack-default.js" integrity="sha384-mCe4oKfrN+8fbLFCJJexsHJXBZkw6b6q1bOg5skoupZ9hXUrhZ92sTRRTF831vDt"></script>
-  <script src="js/destinations/pack-south-america.js?v=2.2.3" integrity="sha384-p6i8pSXkYDEndehBEqNlXK7ZIZia6Tsxw4TD2LUf7TJPUSlPd2AzXbp3wyyAvDG7"></script>
+  <script src="js/destinations/pack-south-america.js?v=2.2.4" integrity="sha384-p6i8pSXkYDEndehBEqNlXK7ZIZia6Tsxw4TD2LUf7TJPUSlPd2AzXbp3wyyAvDG7"></script>
   <script src="js/destinations/pack-yunnan.js" integrity="sha384-MIgviqt+QV/b06eH6w7DO42JTPFr7Q2kFTi8TRQT4MCouBcFBGiC7x1jnKgVatOX"></script>
-  <script src="js/destinations/emergency-contacts.js?v=2.2.3" integrity="sha384-q3IUPhGWY99DNBNM269wiapa6eQYahcwaro/PvPILVtAgkUM0pE23GI5E63eMLlN"></script>
-  <script src="js/infrastructure/storage/legacy-trip-repository.js?v=2.2.3" integrity="sha384-Jf2y8z7h6bwxOdkwZP0zMyhyG/ntcCrFco7a+mzgiFAtiCUE2uXU8Cc/MSjunorP"></script>
-  <script src="js/infrastructure/storage/idb-trip-repository.js?v=2.2.3" integrity="sha384-n7ndWoPUE3bipL9HvWWTfW8XPNZbDRmAWocUpRIyVM5HtGIIEqbkOK1e6InJY8c4"></script>
-  <script src="js/infrastructure/storage/trip-store.js?v=2.2.3" integrity="sha384-ftpferQ+1NXFRqMRZuHlz2wGUfEKk4GKeXEZzAs3FlsUmGfFdxcsSG6U5t4/B1Rb"></script>
-  <script src="js/infrastructure/storage/settings-repository.js?v=2.2.3" integrity="sha384-fp7ck757BhOA+Y2i/VoW21KRCkeMyb/G78wxwhZuReB2JbzcyTxBrLxGldhvw3n3"></script>
-  <script src="js/infrastructure/storage/journal-overflow-repository.js?v=2.2.3" integrity="sha384-uRxi9B+oBHCQ+aa8a6Wp72RAAeEuslXu5kZ+gf9Kvo22B3N6fr1XSkVnAV1X42yO"></script>
+  <script src="js/destinations/emergency-contacts.js?v=2.2.4" integrity="sha384-q3IUPhGWY99DNBNM269wiapa6eQYahcwaro/PvPILVtAgkUM0pE23GI5E63eMLlN"></script>
+  <script src="js/infrastructure/storage/legacy-trip-repository.js?v=2.2.4" integrity="sha384-Jf2y8z7h6bwxOdkwZP0zMyhyG/ntcCrFco7a+mzgiFAtiCUE2uXU8Cc/MSjunorP"></script>
+  <script src="js/infrastructure/storage/idb-trip-repository.js?v=2.2.4" integrity="sha384-n7ndWoPUE3bipL9HvWWTfW8XPNZbDRmAWocUpRIyVM5HtGIIEqbkOK1e6InJY8c4"></script>
+  <script src="js/infrastructure/storage/trip-store.js?v=2.2.4" integrity="sha384-ftpferQ+1NXFRqMRZuHlz2wGUfEKk4GKeXEZzAs3FlsUmGfFdxcsSG6U5t4/B1Rb"></script>
+  <script src="js/infrastructure/storage/settings-repository.js?v=2.2.4" integrity="sha384-fp7ck757BhOA+Y2i/VoW21KRCkeMyb/G78wxwhZuReB2JbzcyTxBrLxGldhvw3n3"></script>
+  <script src="js/infrastructure/storage/journal-overflow-repository.js?v=2.2.4" integrity="sha384-uRxi9B+oBHCQ+aa8a6Wp72RAAeEuslXu5kZ+gf9Kvo22B3N6fr1XSkVnAV1X42yO"></script>
 </head>
 <body class="min-h-screen flex flex-col font-sans transition-colors duration-200">
 
@@ -1595,7 +1597,7 @@
       <div class="app-brand flex items-center gap-2 sm:gap-2.5 min-w-0 cursor-pointer select-none" data-on-click="shell.switchView" data-view="hub">
         <img src="icons/sulsul_bear_mascot.png" class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl object-cover border border-[#e6e2d8] dark:border-stone-800 shadow-sm shrink-0" alt="Sulsul Travel">
           <h1 class="font-brand-script text-xl sm:text-2xl md:text-3xl font-bold tracking-normal text-[#1E2B24] dark:text-[#ededed] whitespace-nowrap leading-tight">Sulsul Travel</h1>
-            <button id="app-ver-badge" type="button" data-on-click="settings.openVersionHistory" class="theme-card-subtle font-mono" title="앱 버전과 업데이트 기록 보기">v2.2.3</button>
+            <button id="app-ver-badge" type="button" data-on-click="settings.openVersionHistory" class="theme-card-subtle font-mono" title="앱 버전과 업데이트 기록 보기">v2.2.4</button>
             <p id="header-trip-name" class="sr-only">A Deep Life Essay</p>
       </div>
 
@@ -1608,7 +1610,7 @@
         </button>
 
         <!-- 4. + 추가 버튼 (허브 모드 활성 시 노출 - 둥근 캡슐) -->
-        <button id="header-btn-create-trip" onclick="openCreateTripModal()" class="h-7 sm:h-8 px-2.5 sm:px-3.5 rounded-full btn-gold text-xs font-black flex items-center gap-1 shadow-sm transition cursor-pointer shrink-0" title="새 여행 추가 및 AI 일정 설계">
+        <button id="header-btn-create-trip" type="button" data-on-click="createTrip.open" class="h-7 sm:h-8 px-2.5 sm:px-3.5 rounded-full btn-gold text-xs font-black flex items-center gap-1 shadow-sm transition cursor-pointer shrink-0" title="새 여행 추가 및 AI 일정 설계">
           <i class="fa-solid fa-plus text-[10px]"></i>
           <span>추가</span>
         </button>
@@ -1743,7 +1745,7 @@
       <p>타이베이·타이중 5일 예제로 큰 계획, 세부 일정, 글·사진과 여행 이야기 출력을 살펴보세요. 날짜·시간·금액·기록은 모두 기능 설명용 가상값입니다.</p>
       <div class="demo-actions">
         <button type="button" onclick="addDemoTrip()" class="companion-button companion-button-primary">가상 예제 살펴보기</button>
-        <button type="button" onclick="dismissDemoOffer(); openCreateTripModal()" class="companion-button">내 여행부터 만들기</button>
+        <button type="button" data-on-click="createTrip.dismissDemoAndOpen" class="companion-button">내 여행부터 만들기</button>
         <button type="button" onclick="dismissDemoOffer()" class="companion-button">나중에</button>
       </div>
       <small>선택해야 이 기기에 추가됩니다. 설정에서 예제 초안을 삭제할 수 있습니다.</small>
@@ -2760,7 +2762,7 @@
   
   <!-- 새 여행 만들기 모달 (Sulsul-Diary Warm Cream Luxury) -->
   <div id="modal-create-trip" class="sheet-container sheet-closed">
-    <div class="sheet-scrim" onclick="closeModal('modal-create-trip')"></div>
+    <div class="sheet-scrim" data-on-click="shell.closeModal" data-modal="modal-create-trip"></div>
     <div class="sheet-box sheet-scroll-layout max-w-xl">
       <!-- 1. 고정 헤더 -->
       <div class="sheet-sticky-header flex items-center justify-between gap-2 pb-3">
@@ -2773,7 +2775,7 @@
             <p class="text-[10px] sm:text-[11px] text-[#78716c] dark:text-stone-400 truncate">국가·도시 선택으로 AI가 일자별 30분 단위 상세 일정을 자동 생성합니다.</p>
           </div>
         </div>
-        <button onclick="closeModal('modal-create-trip')" class="w-7 h-7 rounded-lg bg-[#faf8f5] dark:bg-stone-800 hover:bg-[#f0ece1] dark:hover:bg-stone-700 text-[#78716c] dark:text-stone-300 flex items-center justify-center text-sm transition cursor-pointer shrink-0" title="닫기">✕</button>
+        <button type="button" data-on-click="shell.closeModal" data-modal="modal-create-trip" class="w-7 h-7 rounded-lg bg-[#faf8f5] dark:bg-stone-800 hover:bg-[#f0ece1] dark:hover:bg-stone-700 text-[#78716c] dark:text-stone-300 flex items-center justify-center text-sm transition cursor-pointer shrink-0" title="닫기">✕</button>
       </div>
 
       <!-- 2. 독립 스크롤 본문 -->
@@ -2792,22 +2794,22 @@
           <!-- 대륙 빠른 필터 탭 바 (독립 가로 스크롤 격리, 8대 권역 완비) -->
           <div class="w-full max-w-full overflow-hidden">
             <div class="flex items-center gap-1 overflow-x-auto pb-1 scrollbar-none text-[11px] w-full max-w-full">
-              <button type="button" onclick="setCreateTripRegionFilter('all')" id="tab-reg-all" class="sulsul-chip is-active shrink-0">전체</button>
-              <button type="button" onclick="setCreateTripRegionFilter('east_asia')" id="tab-reg-east_asia" class="sulsul-chip shrink-0">동아시아</button>
-              <button type="button" onclick="setCreateTripRegionFilter('southeast_asia')" id="tab-reg-southeast_asia" class="sulsul-chip shrink-0">동남아</button>
-              <button type="button" onclick="setCreateTripRegionFilter('south_central_asia')" id="tab-reg-south_central_asia" class="sulsul-chip shrink-0">남·중앙아시아</button>
-              <button type="button" onclick="setCreateTripRegionFilter('europe')" id="tab-reg-europe" class="sulsul-chip shrink-0">유럽</button>
-              <button type="button" onclick="setCreateTripRegionFilter('americas')" id="tab-reg-americas" class="sulsul-chip shrink-0">미주</button>
-              <button type="button" onclick="setCreateTripRegionFilter('oceania')" id="tab-reg-oceania" class="sulsul-chip shrink-0">대양주</button>
-              <button type="button" onclick="setCreateTripRegionFilter('mideast_africa')" id="tab-reg-mideast_africa" class="sulsul-chip shrink-0">중동·아프리카</button>
+              <button type="button" data-on-click="createTrip.region" data-region="all" id="tab-reg-all" aria-pressed="true" class="sulsul-chip is-active shrink-0">전체</button>
+              <button type="button" data-on-click="createTrip.region" data-region="east_asia" id="tab-reg-east_asia" aria-pressed="false" class="sulsul-chip shrink-0">동아시아</button>
+              <button type="button" data-on-click="createTrip.region" data-region="southeast_asia" id="tab-reg-southeast_asia" aria-pressed="false" class="sulsul-chip shrink-0">동남아</button>
+              <button type="button" data-on-click="createTrip.region" data-region="south_central_asia" id="tab-reg-south_central_asia" aria-pressed="false" class="sulsul-chip shrink-0">남·중앙아시아</button>
+              <button type="button" data-on-click="createTrip.region" data-region="europe" id="tab-reg-europe" aria-pressed="false" class="sulsul-chip shrink-0">유럽</button>
+              <button type="button" data-on-click="createTrip.region" data-region="americas" id="tab-reg-americas" aria-pressed="false" class="sulsul-chip shrink-0">미주</button>
+              <button type="button" data-on-click="createTrip.region" data-region="oceania" id="tab-reg-oceania" aria-pressed="false" class="sulsul-chip shrink-0">대양주</button>
+              <button type="button" data-on-click="createTrip.region" data-region="mideast_africa" id="tab-reg-mideast_africa" aria-pressed="false" class="sulsul-chip shrink-0">중동·아프리카</button>
             </div>
           </div>
 
           <!-- 국가/도시 통합 실시간 검색창 -->
           <div class="relative w-full min-w-0">
             <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-stone-400 text-xs"></i>
-            <input type="text" id="create-trip-search-input" oninput="handleCreateTripSearch(this.value)" placeholder="국가명이나 도시명을 검색하세요 (예: 스페인, 파리, 도쿄, 방콕...)" class="w-full min-w-0 pl-8 pr-8 py-2 bg-white dark:bg-stone-900 border border-[#e8e2d5] dark:border-stone-700 rounded-xl text-xs text-[#1c1917] dark:text-[#ededed] focus:outline-none focus:border-[#a2601b]">
-            <button type="button" onclick="clearCreateTripSearch()" id="btn-clear-create-search" class="hidden absolute right-2.5 top-1/2 -translate-y-1/2 text-stone-400 hover:text-stone-600 dark:hover:text-stone-200 text-xs p-1 cursor-pointer">✕</button>
+            <input type="text" id="create-trip-search-input" data-on-input="createTrip.search" placeholder="국가명이나 도시명을 검색하세요 (예: 스페인, 파리, 도쿄, 방콕...)" class="w-full min-w-0 pl-8 pr-8 py-2 bg-white dark:bg-stone-900 border border-[#e8e2d5] dark:border-stone-700 rounded-xl text-xs text-[#1c1917] dark:text-[#ededed] focus:outline-none focus:border-[#a2601b]">
+            <button type="button" data-on-click="createTrip.clearSearch" id="btn-clear-create-search" class="hidden absolute right-2.5 top-1/2 -translate-y-1/2 text-stone-400 hover:text-stone-600 dark:hover:text-stone-200 text-xs p-1 cursor-pointer">✕</button>
           </div>
 
           <!-- 국가 선택 칩 영역 (실시간 필터 결과) -->
@@ -2827,7 +2829,7 @@
           </div>
 
           <!-- 기존 호환용 숨김 인풋 (R-10 및 테스트 코드/AI 파이프라인 계약 100% 보존) -->
-          <input type="hidden" id="trip-form-countries" oninput="handleTripFormCountryInput()">
+          <input type="hidden" id="trip-form-countries" data-on-input="createTrip.countryInput">
           <input type="hidden" id="trip-form-cities">
         </div>
 
@@ -2848,11 +2850,11 @@
           <div class="grid grid-cols-2 gap-2 sm:gap-3 w-full">
             <div class="min-w-0">
               <label class="font-bold text-[#1c1917] dark:text-stone-300 block mb-1">출발일</label>
-              <input type="date" id="trip-form-start" onchange="handleTripDatesChange()" class="w-full min-w-0 max-w-full px-2 sm:px-3 py-2 bg-white dark:bg-stone-900 border border-[#e8e2d5] dark:border-stone-700 rounded-xl text-[#1c1917] dark:text-[#ededed] focus:outline-none focus:border-[#a2601b]">
+              <input type="date" id="trip-form-start" data-on-change="createTrip.datesChange" class="w-full min-w-0 max-w-full px-2 sm:px-3 py-2 bg-white dark:bg-stone-900 border border-[#e8e2d5] dark:border-stone-700 rounded-xl text-[#1c1917] dark:text-[#ededed] focus:outline-none focus:border-[#a2601b]">
             </div>
             <div class="min-w-0">
               <label class="font-bold text-[#1c1917] dark:text-stone-300 block mb-1">종료일</label>
-              <input type="date" id="trip-form-end" onchange="handleTripDatesChange()" class="w-full min-w-0 max-w-full px-2 sm:px-3 py-2 bg-white dark:bg-stone-900 border border-[#e8e2d5] dark:border-stone-700 rounded-xl text-[#1c1917] dark:text-[#ededed] focus:outline-none focus:border-[#a2601b]">
+              <input type="date" id="trip-form-end" data-on-change="createTrip.datesChange" class="w-full min-w-0 max-w-full px-2 sm:px-3 py-2 bg-white dark:bg-stone-900 border border-[#e8e2d5] dark:border-stone-700 rounded-xl text-[#1c1917] dark:text-[#ededed] focus:outline-none focus:border-[#a2601b]">
             </div>
           </div>
 
@@ -2866,10 +2868,10 @@
                 </label>
                 <input type="time" id="trip-form-arrival-time" value="14:00" class="w-full min-w-0 px-2 py-1.5 bg-[#faf8f5] dark:bg-stone-800 border border-[#e8e2d5] dark:border-stone-700 rounded-lg text-xs text-[#1c1917] dark:text-[#ededed] focus:outline-none focus:border-[#a2601b]">
                 <div class="grid grid-cols-2 gap-1 mt-1.5 w-full">
-                  <button type="button" onclick="document.getElementById('trip-form-arrival-time').value='10:00'" class="py-1 px-0.5 text-[10px] rounded bg-stone-100 dark:bg-stone-800 text-stone-600 dark:text-stone-300 hover:bg-stone-200 dark:hover:bg-stone-700 transition cursor-pointer truncate">오전 10:00</button>
-                  <button type="button" onclick="document.getElementById('trip-form-arrival-time').value='14:00'" class="py-1 px-0.5 text-[10px] rounded bg-stone-100 dark:bg-stone-800 text-stone-600 dark:text-stone-300 hover:bg-stone-200 dark:hover:bg-stone-700 transition cursor-pointer truncate">오후 14:00</button>
-                  <button type="button" onclick="document.getElementById('trip-form-arrival-time').value='19:00'" class="py-1 px-0.5 text-[10px] rounded bg-stone-100 dark:bg-stone-800 text-stone-600 dark:text-stone-300 hover:bg-stone-200 dark:hover:bg-stone-700 transition cursor-pointer truncate">저녁 19:00</button>
-                  <button type="button" onclick="document.getElementById('trip-form-arrival-time').value='22:00'" class="py-1 px-0.5 text-[10px] rounded bg-stone-100 dark:bg-stone-800 text-stone-600 dark:text-stone-300 hover:bg-stone-200 dark:hover:bg-stone-700 transition cursor-pointer truncate">심야 22:00</button>
+                  <button type="button" data-on-click="createTrip.setTime" data-target="trip-form-arrival-time" data-time="10:00" class="py-1 px-0.5 text-[10px] rounded bg-stone-100 dark:bg-stone-800 text-stone-600 dark:text-stone-300 hover:bg-stone-200 dark:hover:bg-stone-700 transition cursor-pointer truncate">오전 10:00</button>
+                  <button type="button" data-on-click="createTrip.setTime" data-target="trip-form-arrival-time" data-time="14:00" class="py-1 px-0.5 text-[10px] rounded bg-stone-100 dark:bg-stone-800 text-stone-600 dark:text-stone-300 hover:bg-stone-200 dark:hover:bg-stone-700 transition cursor-pointer truncate">오후 14:00</button>
+                  <button type="button" data-on-click="createTrip.setTime" data-target="trip-form-arrival-time" data-time="19:00" class="py-1 px-0.5 text-[10px] rounded bg-stone-100 dark:bg-stone-800 text-stone-600 dark:text-stone-300 hover:bg-stone-200 dark:hover:bg-stone-700 transition cursor-pointer truncate">저녁 19:00</button>
+                  <button type="button" data-on-click="createTrip.setTime" data-target="trip-form-arrival-time" data-time="22:00" class="py-1 px-0.5 text-[10px] rounded bg-stone-100 dark:bg-stone-800 text-stone-600 dark:text-stone-300 hover:bg-stone-200 dark:hover:bg-stone-700 transition cursor-pointer truncate">심야 22:00</button>
                 </div>
               </div>
 
@@ -2880,10 +2882,10 @@
                 </label>
                 <input type="time" id="trip-form-departure-time" value="17:00" class="w-full min-w-0 px-2 py-1.5 bg-[#faf8f5] dark:bg-stone-800 border border-[#e8e2d5] dark:border-stone-700 rounded-lg text-xs text-[#1c1917] dark:text-[#ededed] focus:outline-none focus:border-[#a2601b]">
                 <div class="grid grid-cols-2 gap-1 mt-1.5 w-full">
-                  <button type="button" onclick="document.getElementById('trip-form-departure-time').value='11:00'" class="py-1 px-0.5 text-[10px] rounded bg-stone-100 dark:bg-stone-800 text-stone-600 dark:text-stone-300 hover:bg-stone-200 dark:hover:bg-stone-700 transition cursor-pointer truncate">오전 11:00</button>
-                  <button type="button" onclick="document.getElementById('trip-form-departure-time').value='15:00'" class="py-1 px-0.5 text-[10px] rounded bg-stone-100 dark:bg-stone-800 text-stone-600 dark:text-stone-300 hover:bg-stone-200 dark:hover:bg-stone-700 transition cursor-pointer truncate">오후 15:00</button>
-                  <button type="button" onclick="document.getElementById('trip-form-departure-time').value='17:00'" class="py-1 px-0.5 text-[10px] rounded bg-stone-100 dark:bg-stone-800 text-stone-600 dark:text-stone-300 hover:bg-stone-200 dark:hover:bg-stone-700 transition cursor-pointer truncate">오후 17:00</button>
-                  <button type="button" onclick="document.getElementById('trip-form-departure-time').value='21:30'" class="py-1 px-0.5 text-[10px] rounded bg-stone-100 dark:bg-stone-800 text-stone-600 dark:text-stone-300 hover:bg-stone-200 dark:hover:bg-stone-700 transition cursor-pointer truncate">야간 21:30</button>
+                  <button type="button" data-on-click="createTrip.setTime" data-target="trip-form-departure-time" data-time="11:00" class="py-1 px-0.5 text-[10px] rounded bg-stone-100 dark:bg-stone-800 text-stone-600 dark:text-stone-300 hover:bg-stone-200 dark:hover:bg-stone-700 transition cursor-pointer truncate">오전 11:00</button>
+                  <button type="button" data-on-click="createTrip.setTime" data-target="trip-form-departure-time" data-time="15:00" class="py-1 px-0.5 text-[10px] rounded bg-stone-100 dark:bg-stone-800 text-stone-600 dark:text-stone-300 hover:bg-stone-200 dark:hover:bg-stone-700 transition cursor-pointer truncate">오후 15:00</button>
+                  <button type="button" data-on-click="createTrip.setTime" data-target="trip-form-departure-time" data-time="17:00" class="py-1 px-0.5 text-[10px] rounded bg-stone-100 dark:bg-stone-800 text-stone-600 dark:text-stone-300 hover:bg-stone-200 dark:hover:bg-stone-700 transition cursor-pointer truncate">오후 17:00</button>
+                  <button type="button" data-on-click="createTrip.setTime" data-target="trip-form-departure-time" data-time="21:30" class="py-1 px-0.5 text-[10px] rounded bg-stone-100 dark:bg-stone-800 text-stone-600 dark:text-stone-300 hover:bg-stone-200 dark:hover:bg-stone-700 transition cursor-pointer truncate">야간 21:30</button>
                 </div>
               </div>
             </div>
@@ -2992,8 +2994,8 @@
 
       <!-- 3. 고정 하단 액션바 -->
       <div class="sheet-sticky-actions flex items-center gap-3">
-        <button onclick="closeModal('modal-create-trip')" class="flex-1 py-3 rounded-xl bg-[#faf8f5] dark:bg-stone-800 hover:bg-[#f0ece1] dark:hover:bg-stone-700 border border-[#e8e2d5] dark:border-stone-700 text-[#78716c] dark:text-stone-300 font-bold text-xs transition cursor-pointer">취소</button>
-        <button onclick="submitCreateTrip()" class="flex-1 py-3 rounded-xl btn-gold text-xs font-black shadow-md cursor-pointer flex items-center justify-center gap-1.5">
+        <button type="button" data-on-click="shell.closeModal" data-modal="modal-create-trip" class="flex-1 py-3 rounded-xl bg-[#faf8f5] dark:bg-stone-800 hover:bg-[#f0ece1] dark:hover:bg-stone-700 border border-[#e8e2d5] dark:border-stone-700 text-[#78716c] dark:text-stone-300 font-bold text-xs transition cursor-pointer">취소</button>
+        <button type="button" id="btn-submit-create-trip" data-on-click="createTrip.submit" class="flex-1 py-3 rounded-xl btn-gold text-xs font-black shadow-md cursor-pointer flex items-center justify-center gap-1.5">
           <i class="fa-solid fa-plus text-[11px]"></i>
           <span>새 여행 등록하기</span>
         </button>
@@ -4800,7 +4802,9 @@
 
       <!-- 버전 목록 스크롤 영역 (독립 스크롤 컨테이너로 Flexbox 압축 버그 영구 척결) -->
       <div class="overflow-y-auto flex-1 min-h-0 space-y-3.5 pr-1.5 custom-scrollbar">
-        <!-- v2.2.3 (Current) -->
+        <!-- v2.2.4 (Current) -->
+        <section class="companion-context"><h3 class="font-bold">v2.2.4 · 새 여행 만들기·국가/도시 선택기·거점 배분 정리</h3><p class="text-xs">2026-11-26 · st-shell-v2.2.4</p><p class="text-xs leading-relaxed">새 여행 만들기 모달, 전 세계 국가·도시 스마트 선택기, 시차 매트릭스, 거점 일자 배분, 오프라인 기본 일정 생성을 별도 파일로 옮겼습니다. 한국 시간대에서 AI 여행 생성 시 1일차 날짜가 하루 앞당겨지던 오류, 0원 예산이 300만 원으로 바뀌거나 역전된 종료일이 그대로 저장되던 문제, 다국가 거점 배분에서 도시가 첫 국가에 몰리거나 단기 여행 일수가 초과되던 문제, 검색어·소도시 따옴표 onclick 깨짐/주입 취약점을 함께 고쳤습니다.</p></section>
+        <!-- v2.2.3 -->
         <section class="companion-context"><h3 class="font-bold">v2.2.3 · 오프라인 RePlan 모듈 로딩 복구</h3><p class="text-xs">2026-11-25 · st-shell-v2.2.3</p><p class="text-xs leading-relaxed">오프라인 상태에서 즉시 일정 재배치(RePlan)를 실행할 때 replan.mjs 내부의 구버전 쿼리(?v=2.0.1) 정적 import가 서비스워커 캐시를 빗나가 실패하던 문제를 고쳤습니다. 브라우저가 이미 불러온 검증·일정 모듈을 그대로 재사용해 오프라인에서도 즉시 동작합니다.</p></section>
         <!-- v2.2.2 -->
         <section class="companion-context"><h3 class="font-bold">v2.2.2 · 일정 튜닝·RePlan·스팟 편집 모달 정리</h3><p class="text-xs">2026-11-25 · st-shell-v2.2.2</p><p class="text-xs leading-relaxed">스팟 추가·수정 모달, 실시간 일정 튜닝, RePlan 검토 흐름을 별도 파일로 옮겼습니다. 시간 미정 일정을 열 때 09:00이 임의로 채워지던 문제, 잘못된 일차·구간 범위로 열면 선택창이 비거나 구간 재배치가 0건으로 끝나던 문제, RePlan 적용 버튼 연타 충돌, 일차 번호 HTML 이스케이프 누락을 고쳤습니다.</p></section>
@@ -6368,7 +6372,7 @@
     window.showToast = showToast;
 
     // 앱 버전 및 글로벌 네임스페이스 (Sulsul-Travel Invariant Rule R-10, R-11, R-12, R-13, R-14, R-15, R-16)
-    const APP_VER = '2.2.3';
+    const APP_VER = '2.2.4';
 
     // 3-Way 테마 엔진(setTheme·toggleTheme·updateThemeUi)은 js/presentation/settings-ui.js(SulsulTravel.SettingsUI)로 옮겼다(v2.2.1, 4단계).
 
@@ -6934,12 +6938,12 @@
       if (!State.storageRecovery && !SulsulTravel.expensePhotoRepository.missingReferences().length) await saveTrips({ bump: false });
       SulsulTravel.HubView.updateFilterDropdowns();
       SulsulTravel.HubView.updateViewModeButton();
-      renderConceptChips();
+      SulsulTravel.CreateTrip.renderConceptChips();
       SulsulTravel.HubView.render();
       renderActiveTripWorkspace();
       SulsulTravel.SettingsUI.updateGeminiKeyUi();
       SulsulTravel.SettingsUI.checkStartupInstallOnboarding();
-      populateCreateTripCurrencyOptions();
+      SulsulTravel.CreateTrip.populateCurrencyOptions();
       restoreJournalOverflowEntries();
       if (State.storageRecovery?.storageUnavailable) {
         showToast('⚠️ 여행 저장소(IndexedDB)를 열지 못했습니다. 이 상태에서는 저장하지 않습니다. 다른 창을 닫고 앱을 다시 열어 주세요. '+(State.storageRecovery.message||''), 10000);
@@ -7364,29 +7368,7 @@
     // 허브 화면(renderHub·필터·검색·정렬·보기 전환·대표 사진·여행 카드 렌더링)은 js/presentation/hub-view.js(SulsulTravel.HubView)로 옮겼다(v2.2.0, 4단계).
     // 평생 여행 통계 대시보드와 6대 지표 드릴다운은 js/presentation/lifetime-analytics.js(SulsulTravel.LifetimeAnalytics)로 옮겼다(v2.1.9, 4단계).
 
-    function renderConceptChips() {
-      const container = document.getElementById('trip-form-concept-chips');
-      if (!container) return;
-      container.innerHTML = TRAVEL_CONCEPTS.map(c => {
-        const isSelected = State.createTripSelectedConcepts.includes(c.id);
-        const activeClass = isSelected ? 'is-active' : '';
-        return `
-          <button type="button" onclick="toggleConceptChip('${c.id}')" class="sulsul-chip ${activeClass}">
-            ${c.label}
-          </button>
-        `;
-      }).join('');
-    }
-
-    function toggleConceptChip(conceptId) {
-      const idx = State.createTripSelectedConcepts.indexOf(conceptId);
-      if (idx >= 0) {
-        State.createTripSelectedConcepts.splice(idx, 1);
-      } else {
-        State.createTripSelectedConcepts.push(conceptId);
-      }
-      renderConceptChips();
-    }
+    // 컨셉 칩 렌더링·토글(renderConceptChips·toggleConceptChip)은 js/presentation/create-trip-ui.js(SulsulTravel.CreateTrip)로 옮겼다(v2.2.4, 4단계).
 
     // 대표 커버 사진·D-Day 배지·허브 카드 렌더링은 js/presentation/hub-view.js(SulsulTravel.HubView)로 옮겼다(v2.2.0, 4단계).
 
@@ -8115,660 +8097,7 @@
     // [11] 신규 여행 생성 및 스팟/지출 폼 핸들러
     // ==========================================
     // ==========================================
-    // [11] 신규 여행 생성 및 인터랙티브 전 세계 국가·도시 스마트 선택기
-    // ==========================================
-    function initCreateTripDestinationPicker() {
-      State.createTripSelectedRegion = 'all';
-      State.createTripSearchQuery = '';
-      State.createTripSelectedCountries = [];
-      State.createTripSelectedCities = {};
-      State.createTripCustomCities = {};
-
-      const searchInput = document.getElementById('create-trip-search-input');
-      if (searchInput) searchInput.value = '';
-      const clearBtn = document.getElementById('btn-clear-create-search');
-      if (clearBtn) clearBtn.classList.add('hidden');
-
-      setCreateTripRegionFilter('all');
-      renderCreateTripCountryChips();
-      renderCreateTripSelectedBoard();
-    }
-
-    function setCreateTripRegionFilter(regionKey = 'all') {
-      State.createTripSelectedRegion = regionKey;
-      const regions = ['all', 'east_asia', 'southeast_asia', 'south_central_asia', 'europe', 'americas', 'oceania', 'mideast_africa'];
-      regions.forEach(r => {
-        const tab = document.getElementById(`tab-reg-${r}`);
-        if (tab) {
-          if (r === regionKey) {
-            tab.className = 'sulsul-chip is-active shrink-0';
-          } else {
-            tab.className = 'sulsul-chip shrink-0';
-          }
-        }
-      });
-      renderCreateTripCountryChips();
-    }
-    window.setCreateTripRegionFilter = setCreateTripRegionFilter;
-
-    function handleCreateTripSearch(val) {
-      State.createTripSearchQuery = (val || '').trim().toLowerCase();
-      const clearBtn = document.getElementById('btn-clear-create-search');
-      if (clearBtn) {
-        if (State.createTripSearchQuery) clearBtn.classList.remove('hidden');
-        else clearBtn.classList.add('hidden');
-      }
-      renderCreateTripCountryChips();
-    }
-
-    function clearCreateTripSearch() {
-      const searchInput = document.getElementById('create-trip-search-input');
-      if (searchInput) searchInput.value = '';
-      handleCreateTripSearch('');
-    }
-
-    function renderCreateTripCountryChips() {
-      const container = document.getElementById('create-trip-country-chips');
-      const badge = document.getElementById('create-trip-country-count-badge');
-      if (!container) return;
-
-      const q = State.createTripSearchQuery;
-      const reg = State.createTripSelectedRegion;
-
-      const filtered = COUNTRY_DATABASE.filter(c => {
-        const matchesReg = (reg === 'all' || c.region === reg || (reg === 'other' && (c.region === 'oceania' || c.region === 'mideast_africa')));
-        if (!matchesReg) return false;
-        if (!q) return true;
-        return c.name.toLowerCase().includes(q) ||
-          c.code.toLowerCase().includes(q) ||
-          c.currency.toLowerCase().includes(q) ||
-          (c.aliases || []).some(a => a.toLowerCase().includes(q)) ||
-          (c.popularCities || []).some(city => city.toLowerCase().includes(q));
-      });
-
-      if (badge) badge.innerText = `${filtered.length}개국 검색됨`;
-
-      if (filtered.length === 0) {
-        container.innerHTML = `
-          <div class="py-3 px-3 text-[11px] text-stone-500 dark:text-stone-400 w-full text-center space-y-2">
-            <div>'${escapeHtml(q)}' 검색 결과가 데이터베이스에 없습니다.</div>
-            <button type="button" onclick="addCustomCreateTripCountry('${escapeHtml(q)}')" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-amber-500 hover:bg-amber-600 text-black font-bold text-xs shadow-sm cursor-pointer transition">
-              <span>🌐</span>
-              <span>'${escapeHtml(q)}' 직접 여행지로 추가</span>
-            </button>
-          </div>
-        `;
-        return;
-      }
-
-      let chipsHtml = filtered.map(c => {
-        const isSelected = State.createTripSelectedCountries.includes(c.code);
-        const activeClass = isSelected ? 'is-active' : '';
-
-        return `
-          <button type="button" onclick="toggleCreateTripCountry('${c.code}')" class="sulsul-chip ${activeClass}">
-            <span class="text-sm">${c.flag}</span>
-            <span>${escapeHtml(c.name)}</span>
-            <span class="text-[10px] opacity-70">${c.currency}</span>
-            ${isSelected ? '<span class="text-[10px] ml-0.5">✓</span>' : ''}
-          </button>
-        `;
-      }).join('');
-
-      if (q) {
-        chipsHtml += `
-          <button type="button" onclick="addCustomCreateTripCountry('${escapeHtml(q)}')" class="sulsul-chip border-dashed font-bold shrink-0" title="직접 입력하여 새 여행지 추가">
-            <span>🌐</span>
-            <span>+ '${escapeHtml(q)}' 직접 추가</span>
-          </button>
-        `;
-      }
-
-      container.innerHTML = chipsHtml;
-    }
-
-    function addCustomCreateTripCountry(rawName) {
-      if (!rawName || typeof rawName !== 'string') return;
-      const name = rawName.trim();
-      if (!name) return;
-
-      let existing = COUNTRY_DATABASE.find(c => c.name.toLowerCase() === name.toLowerCase() || (c.aliases || []).some(a => a.toLowerCase() === name.toLowerCase()));
-      if (existing) {
-        if (!State.createTripSelectedCountries.includes(existing.code)) {
-          toggleCreateTripCountry(existing.code);
-        }
-        if (typeof showToast === 'function') showToast(`'${existing.name}' 여행지가 선택되었습니다.`);
-        return;
-      }
-
-      // 신규 커스텀 여행지 객체 생성 (전 세계 미등재 소도시/도서지역/특수목적지 완벽 수용)
-      const customCode = 'CUST_' + Math.random().toString(36).substring(2, 7).toUpperCase();
-      const newCountry = {
-        name: name,
-        code: customCode,
-        flag: '🌐',
-        currency: 'USD',
-        currName: '달러',
-        symbol: '$',
-        region: 'all',
-        popularCities: [name],
-        aliases: [name.toLowerCase()]
-      };
-      COUNTRY_DATABASE.push(newCountry);
-
-      toggleCreateTripCountry(customCode);
-      if (!State.createTripSelectedCities[customCode]) {
-        State.createTripSelectedCities[customCode] = [];
-      }
-      if (!State.createTripSelectedCities[customCode].includes(name)) {
-        State.createTripSelectedCities[customCode].push(name);
-      }
-      renderCreateTripCountryChips();
-      renderCreateTripSelectedBoard();
-      syncCreateTripHiddenInputs();
-      if (typeof showToast === 'function') showToast(`'${name}'(이)가 여행지로 추가되었습니다.`);
-    }
-    window.addCustomCreateTripCountry = addCustomCreateTripCountry;
-
-    function toggleCreateTripCountry(countryCode) {
-      const country = COUNTRY_DATABASE.find(c => c.code === countryCode);
-      if (!country) return;
-
-      const idx = State.createTripSelectedCountries.indexOf(countryCode);
-      if (idx >= 0) {
-        // 해제
-        State.createTripSelectedCountries.splice(idx, 1);
-        delete State.createTripSelectedCities[countryCode];
-        delete State.createTripCustomCities[countryCode];
-      } else {
-        // 추가
-        State.createTripSelectedCountries.push(countryCode);
-        // 사용자가 자유롭게 순서대로 선택할 수 있도록 빈 배열로 시작
-        State.createTripSelectedCities[countryCode] = [];
-
-        // 기준 통화 자동 매칭
-        const currSelect = document.getElementById('trip-form-curr');
-        if (currSelect && country.currency) {
-          for (let i = 0; i < currSelect.options.length; i++) {
-            if (currSelect.options[i].value === country.currency) {
-              currSelect.value = country.currency;
-              break;
-            }
-          }
-        }
-      }
-
-      renderCreateTripCountryChips();
-      renderCreateTripSelectedBoard();
-      syncCreateTripHiddenInputs();
-    }
-
-    function renderCreateTripSelectedBoard() {
-      const container = document.getElementById('create-trip-selected-destinations-board');
-      if (!container) return;
-
-      if (!State.createTripSelectedCountries || State.createTripSelectedCountries.length === 0) {
-        container.innerHTML = `
-          <div class="p-3 rounded-xl bg-white dark:bg-stone-900 border border-dashed border-amber-400/60 dark:border-amber-700/50 text-center space-y-1">
-            <div class="text-amber-600 dark:text-amber-400 font-bold text-xs flex items-center justify-center gap-1.5">
-              <i class="fa-solid fa-map-location-dot"></i>
-              <span>방문할 국가를 위에서 선택해 주세요</span>
-            </div>
-            <p class="text-[10px] text-stone-500 dark:text-stone-400">
-              국가를 선택하면 예상 방문 도시를 복수로 선택하고 AI 일정 동선 순서를 지정할 수 있습니다.
-            </p>
-          </div>
-        `;
-        return;
-      }
-
-      let globalCityOrder = 0;
-      container.innerHTML = State.createTripSelectedCountries.map(code => {
-        const country = COUNTRY_DATABASE.find(c => c.code === code);
-        if (!country) return '';
-
-        const selectedCities = State.createTripSelectedCities[code] || [];
-        const customCities = State.createTripCustomCities[code] || [];
-        const allAvailableCities = [...(country.popularCities || []), ...customCities];
-        const uniqueCities = allAvailableCities.filter((city, index, self) => self.indexOf(city) === index);
-
-        return `
-          <div class="p-3 rounded-xl bg-white dark:bg-stone-900 border border-[#e8e2d5] dark:border-stone-800 space-y-2.5 shadow-sm w-full max-w-full overflow-hidden">
-            <!-- 국가 헤더 바 -->
-            <div class="flex items-center justify-between gap-2 border-b border-[#e8e2d5]/60 dark:border-stone-800 pb-2 flex-wrap sm:flex-nowrap">
-              <div class="flex items-center gap-1.5 min-w-0 flex-wrap">
-                <span class="text-base sm:text-lg shrink-0">${country.flag}</span>
-                <span class="font-black text-xs text-[#1c1917] dark:text-stone-100 truncate">${escapeHtml(country.name)}</span>
-                <span class="text-[10px] font-bold px-1.5 py-0.5 rounded-md bg-stone-100 dark:bg-stone-800 text-stone-600 dark:text-stone-300 border border-stone-200 dark:border-stone-700 shrink-0">
-                  ${country.currency} (${country.currName})
-                </span>
-                <span class="text-[10px] text-emerald-600 dark:text-emerald-400 font-bold shrink-0">
-                  ${selectedCities.length}개 도시 선택됨
-                </span>
-              </div>
-              <button type="button" onclick="toggleCreateTripCountry('${country.code}')" class="text-stone-400 hover:text-rose-500 text-xs px-1.5 py-0.5 rounded transition cursor-pointer shrink-0 ml-auto" title="이 국가 제외">
-                ✕ 제외
-              </button>
-            </div>
-
-            <!-- 도시 복수 선택 칩 보드 -->
-            <div class="space-y-1.5 w-full">
-              <div class="text-[11px] text-[#44403c] dark:text-stone-300 font-bold flex items-center justify-between">
-                <span>예상 방문 도시 (터치하여 선택/해제, 순서대로 동선 반영):</span>
-              </div>
-              <div class="flex flex-wrap gap-1.5 pt-0.5 w-full">
-                ${uniqueCities.map(city => {
-                  const cityIdx = selectedCities.indexOf(city);
-                  const isCitySelected = (cityIdx >= 0);
-                  if (isCitySelected) globalCityOrder++;
-
-                  const chipClass = isCitySelected ? 'is-active' : '';
-
-                  return `
-                    <button type="button" data-city-chip="true" onclick="toggleCreateTripCity('${country.code}', '${escapeHtml(city)}')" class="sulsul-chip ${chipClass}">
-                      ${isCitySelected ? `<span class="sulsul-chip-badge">${cityIdx + 1}</span>` : '<span class="text-stone-400 text-[10px]">+</span>'}
-                      <span>${escapeHtml(city)}</span>
-                    </button>
-                  `;
-                }).join('')}
-              </div>
-            </div>
-
-            <!-- 소도시/근교 직접 추가 입력창 -->
-            <div class="flex items-center gap-1.5 pt-1 w-full min-w-0">
-              <div class="relative flex-1 min-w-0">
-                <input type="text" id="input-custom-city-${country.code}" placeholder="목록 외 소도시/근교 (예: 론다)" class="w-full min-w-0 px-2.5 py-1.5 bg-[#faf8f5] dark:bg-stone-800 border border-[#e8e2d5] dark:border-stone-700 rounded-lg text-xs text-[#1c1917] dark:text-[#ededed] placeholder-stone-400 focus:outline-none focus:border-[#a2601b]" onkeydown="if(event.key==='Enter'){event.preventDefault(); addCustomCreateTripCity('${country.code}');}">
-              </div>
-              <button type="button" onclick="addCustomCreateTripCity('${country.code}')" class="px-2.5 sm:px-3 py-1.5 rounded-lg bg-stone-100 dark:bg-stone-800 hover:bg-stone-200 dark:hover:bg-stone-700 text-stone-700 dark:text-stone-200 text-xs font-bold border border-stone-200 dark:border-stone-700 transition cursor-pointer shrink-0 whitespace-nowrap">
-                + 도시 추가
-              </button>
-            </div>
-          </div>
-        `;
-      }).join('');
-    }
-
-    function toggleCreateTripCity(countryCode, cityName) {
-      if (!State.createTripSelectedCities[countryCode]) {
-        State.createTripSelectedCities[countryCode] = [];
-      }
-      const list = State.createTripSelectedCities[countryCode];
-      const idx = list.indexOf(cityName);
-      if (idx >= 0) {
-        list.splice(idx, 1);
-      } else {
-        list.push(cityName);
-      }
-      renderCreateTripSelectedBoard();
-      syncCreateTripHiddenInputs();
-    }
-
-    function addCustomCreateTripCity(countryCode) {
-      const input = document.getElementById(`input-custom-city-${countryCode}`);
-      if (!input) return;
-      const val = input.value.trim();
-      if (!val) return;
-
-      if (!State.createTripCustomCities[countryCode]) {
-        State.createTripCustomCities[countryCode] = [];
-      }
-      if (!State.createTripCustomCities[countryCode].includes(val)) {
-        State.createTripCustomCities[countryCode].push(val);
-      }
-      if (!State.createTripSelectedCities[countryCode]) {
-        State.createTripSelectedCities[countryCode] = [];
-      }
-      if (!State.createTripSelectedCities[countryCode].includes(val)) {
-        State.createTripSelectedCities[countryCode].push(val);
-      }
-
-      input.value = '';
-      renderCreateTripSelectedBoard();
-      syncCreateTripHiddenInputs();
-    }
-
-    function syncCreateTripHiddenInputs() {
-      const countriesInput = document.getElementById('trip-form-countries');
-      const citiesInput = document.getElementById('trip-form-cities');
-      const titleInput = document.getElementById('trip-form-title');
-
-      const selectedCountryObjs = State.createTripSelectedCountries
-        .map(code => COUNTRY_DATABASE.find(c => c.code === code))
-        .filter(Boolean);
-
-      const countryNames = selectedCountryObjs.map(c => c.name);
-      if (countriesInput) {
-        countriesInput.value = countryNames.join(', ');
-      }
-
-      const allCitiesOrdered = [];
-      selectedCountryObjs.forEach(c => {
-        const cCities = State.createTripSelectedCities[c.code] || [];
-        cCities.forEach(city => {
-          if (!allCitiesOrdered.includes(city)) allCitiesOrdered.push(city);
-        });
-      });
-
-      if (citiesInput) {
-        citiesInput.value = allCitiesOrdered.join(', ');
-      }
-
-      // 스마트 제목 자동 제안 (사용자가 직접 정밀 제목을 쓰지 않았거나 기본 템플릿일 때)
-      if (titleInput && (!titleInput.value || titleInput.value.includes('여행') || titleInput.value.includes('기행') || titleInput.value.startsWith('2026 '))) {
-        if (countryNames.length > 0) {
-          const mainCitiesStr = allCitiesOrdered.slice(0, 3).join('·');
-          const destSummary = countryNames.length > 1
-            ? `${countryNames.join(' & ')} 일주`
-            : `${countryNames[0]} ${mainCitiesStr || '여정'}`;
-          titleInput.value = `2026 ${destSummary} 여행`;
-        }
-      }
-
-      updateCreateTripTzBanner();
-    }
-
-    function handleTripDatesChange() {
-      updateCreateTripTzBanner();
-    }
-
-    function populateCreateTripCurrencyOptions() {
-      const sel = document.getElementById('trip-form-curr');
-      if (!sel) return;
-      const currentVal = sel.value || 'KRW';
-      const popular = ['KRW', 'USD', 'EUR', 'JPY', 'CNY', 'GBP', 'CHF', 'TWD', 'HKD', 'THB', 'VND', 'SGD', 'AUD', 'CAD'];
-      const allCurrs = Object.keys(CURRENCY_INFO);
-      const others = allCurrs.filter(c => !popular.includes(c)).sort();
-      const sorted = [...popular, ...others];
-      sel.innerHTML = sorted.map(c => {
-        const info = CURRENCY_INFO[c] || { name: c, flag: '🌐' };
-        return `<option value="${c}">${info.flag} ${c} (${info.name})</option>`;
-      }).join('');
-      if (sorted.includes(currentVal)) {
-        sel.value = currentVal;
-      } else {
-        sel.value = 'KRW';
-      }
-    }
-    window.populateCreateTripCurrencyOptions = populateCreateTripCurrencyOptions;
-
-    function openCreateTripModal() {
-      populateCreateTripCurrencyOptions();
-      const today = SulsulTravel.TripAdapter.localDateKey(new Date(),getActiveTrip()?.timeZone);
-      const titleInput = document.getElementById('trip-form-title');
-      if (titleInput) titleInput.value = '';
-      const countriesInput = document.getElementById('trip-form-countries');
-      if (countriesInput) countriesInput.value = '';
-      const citiesInput = document.getElementById('trip-form-cities');
-      if (citiesInput) citiesInput.value = '';
-      const styleInput = document.getElementById('trip-form-style');
-      if (styleInput) styleInput.value = '';
-      const budgetInput = document.getElementById('trip-form-budget');
-      if (budgetInput) budgetInput.value = '3000000';
-      const startInput = document.getElementById('trip-form-start');
-      if (startInput) startInput.value = today;
-      const endInput = document.getElementById('trip-form-end');
-      if (endInput) endInput.value = '';
-      const arrInput = document.getElementById('trip-form-arrival-time');
-      if (arrInput) arrInput.value = '14:00';
-      const depInput = document.getElementById('trip-form-departure-time');
-      if (depInput) depInput.value = '17:00';
-      const wishlistInput = document.getElementById('trip-form-wishlist');
-      if (wishlistInput) wishlistInput.value = '';
-      const aiAutoCheck = document.getElementById('trip-form-ai-auto');
-      if (aiAutoCheck) aiAutoCheck.checked = true;
-
-      State.createTripSelectedConcepts = ['배낭', '자연'];
-      renderConceptChips();
-
-      // 전 세계 국가 & 도시 스마트 선택기 초기화
-      initCreateTripDestinationPicker();
-
-      if (titleInput && !titleInput._tzBound) {
-        titleInput.addEventListener('input', updateCreateTripTzBanner);
-        titleInput._tzBound = true;
-      }
-      if (countriesInput && !countriesInput._tzBound) {
-        countriesInput.addEventListener('input', updateCreateTripTzBanner);
-        countriesInput._tzBound = true;
-      }
-
-      updateCreateTripTzBanner();
-      openModal('modal-create-trip');
-    }
-    window.openCreateTripModal = openCreateTripModal;
-
-    function handleTripFormCountryInput() {
-      const input = document.getElementById('trip-form-countries');
-      const currSelect = document.getElementById('trip-form-curr');
-      if (!input || !currSelect) return;
-      const val = input.value.trim();
-      if (!val) return;
-
-      const firstCountry = val.split(/[,/·\s]+/)[0];
-      const info = resolveCountryInfo(firstCountry);
-      if (info && info.currency) {
-        for (let i = 0; i < currSelect.options.length; i++) {
-          if (currSelect.options[i].value === info.currency) {
-            currSelect.value = info.currency;
-            break;
-          }
-        }
-      }
-    }
-
-    function selectQuickFormCountry(countryName, suggestedCities, currencyCode) {
-      const country = COUNTRY_DATABASE.find(c => c.name === countryName || (c.aliases || []).includes(countryName));
-      if (country) {
-        State.createTripSelectedCountries = [country.code];
-        if (suggestedCities) {
-          State.createTripSelectedCities[country.code] = suggestedCities.split(',').map(s => s.trim()).filter(Boolean);
-        }
-        renderCreateTripCountryChips();
-        renderCreateTripSelectedBoard();
-        syncCreateTripHiddenInputs();
-      } else {
-        const cInput = document.getElementById('trip-form-countries');
-        const ctInput = document.getElementById('trip-form-cities');
-        const currSelect = document.getElementById('trip-form-curr');
-        const titleInput = document.getElementById('trip-form-title');
-
-        if (cInput) cInput.value = countryName;
-        if (ctInput && suggestedCities) ctInput.value = suggestedCities;
-        if (currSelect && currencyCode) currSelect.value = currencyCode;
-        if (titleInput && (!titleInput.value || titleInput.value.includes('여행'))) {
-          titleInput.value = `2026 ${countryName} ${suggestedCities.split(',')[0]} 힐링 여행`;
-        }
-        updateCreateTripTzBanner();
-      }
-    }
-
-    // ----------------------------------------------------
-    // [11.1] 국가별 시차(Time Zone Offset) & 비행 소요 시간 스마트 매트릭스
-    // ----------------------------------------------------
-    function detectDestinationTimezone(destStr) {
-      const s = (destStr || '').toLowerCase();
-
-      // 1. 대한민국 국내
-      if (/제주|부산|강릉|속초|경주|여수|전주|서울|인천|대구|광주|남해|통영|국내/.test(s)) {
-        return {
-          region: '국내',
-          tzDiff: 0,
-          flightHours: 1,
-          returnFlightHours: 1,
-          tzLabel: '시차 없음',
-          calcDesc: '국내 이동 ➔ 당일 도착',
-          isCrossDateLine: false
-        };
-      }
-
-      // 2. 일본
-      if (/일본|도쿄|오사카|후쿠오카|삿포로|교토|오키나와|나고야|유후인|japan|tokyo|osaka|fukuoka|sapporo/.test(s)) {
-        return {
-          region: '일본',
-          tzDiff: 0,
-          flightHours: 2.5,
-          returnFlightHours: 2.5,
-          tzLabel: '시차 없음 (UTC+9)',
-          calcDesc: '인천 출발 ➔ 당일 낮 착륙',
-          isCrossDateLine: false
-        };
-      }
-
-      // 3. 중화권 / 몽골 (대만, 홍콩, 마카오, 베이징, 상하이, 칭다오, 윈난, 몽골)
-      if (/대만|타이베이|가오슝|홍콩|마카오|taiwan|taipei|hong kong|몽골|울란바토르|mongolia|중국|베이징|상하이|칭다오|시안|운남|윈난|리장|china|beijing|shanghai/.test(s)) {
-        return {
-          region: '동아시아/중화권',
-          tzDiff: -1,
-          flightHours: 3.5,
-          returnFlightHours: 3.5,
-          tzLabel: '한국보다 1시간 느림 (UTC+8)',
-          calcDesc: '인천 출발 ➔ 당일 착륙',
-          isCrossDateLine: false
-        };
-      }
-
-      // 4. 동남아시아 (베트남, 태국, 싱가포르, 발리, 필리핀, 말레이시아 등)
-      if (/베트남|다낭|나트랑|푸꾸옥|하노이|호치민|태국|방콕|푸켓|치앙마이|vietnam|danang|thailand|bangkok|singapore|싱가포르|발리|인도네시아|bali|필리핀|세부|보라카이|마닐라|말레이시아|쿠알라룸푸르|코타키나발루|philippines|cebu/.test(s)) {
-        return {
-          region: '동남아시아',
-          tzDiff: -2,
-          flightHours: 5,
-          returnFlightHours: 5,
-          tzLabel: '한국보다 1~2시간 느림 (UTC+7)',
-          calcDesc: '인천 출발 ➔ 당일 오후/저녁 착륙',
-          isCrossDateLine: false
-        };
-      }
-
-      // 5. 괌 / 사이판
-      if (/괌|사이판|guam|saipan/.test(s)) {
-        return {
-          region: '대양주(괌/사이판)',
-          tzDiff: 1,
-          flightHours: 4.5,
-          returnFlightHours: 4.5,
-          tzLabel: '한국보다 1시간 빠름 (UTC+10)',
-          calcDesc: '인천 출발 ➔ 당일 착륙',
-          isCrossDateLine: false
-        };
-      }
-
-      // 6. 하와이
-      if (/하와이|호놀룰루|오아후|마우이|hawaii|honolulu/.test(s)) {
-        return {
-          region: '미국 하와이',
-          tzDiff: -19,
-          flightHours: 8.5,
-          returnFlightHours: 10.5,
-          tzLabel: '한국보다 19시간 느림 (UTC-10)',
-          calcDesc: '날짜변경선: 현지 당일 오전 착륙 | 귀국: +1일 익일 도착',
-          isCrossDateLine: true
-        };
-      }
-
-      // 7. 미국/캐나다 서부 (LA, 샌프란시스코, 시애틀, 라스베이거스, 밴쿠버)
-      if (/로스앤젤레스|la\b|lax|샌프란시스코|시애틀|라스베이거스|캘리포니아|포틀랜드|san francisco|los angeles|seattle|las vegas|미국 서부|밴쿠버|vancouver/.test(s)) {
-        return {
-          region: '미국/캐나다 서부',
-          tzDiff: -16,
-          flightHours: 11.5,
-          returnFlightHours: 13,
-          tzLabel: '한국보다 16시간 느림 (UTC-7)',
-          calcDesc: '날짜변경선: 현지 당일 오전 착륙 | 귀국: +1일 익일 도착',
-          isCrossDateLine: true
-        };
-      }
-
-      // 8. 미국/캐나다 동부 (뉴욕, 워싱턴, 보스턴, 시카고, 토론토 등)
-      if (/뉴욕|new york|nyc|워싱턴|보스턴|시카고|마이애미|토론토|몬트리올|미국 동부|미국|캐나다|usa|america/.test(s)) {
-        return {
-          region: '미국/캐나다 동부',
-          tzDiff: -13,
-          flightHours: 14.5,
-          returnFlightHours: 15,
-          tzLabel: '한국보다 13시간 느림 (UTC-4)',
-          calcDesc: '한국 출발 ➔ 현지 당일 착륙 | 귀국: +1일 익일 도착',
-          isCrossDateLine: false
-        };
-      }
-
-      // 9. 유럽 전역 (프랑스, 파리, 스페인, 바르셀로나, 마드리드, 이탈리아, 로마, 영국, 런던, 독일, 스위스, 오스트리아, 체코, 프라하, 포르투갈, 리스본 등)
-      if (/유럽|프랑스|파리|스페인|바르셀로나|마드리드|이탈리아|로마|베네치아|피렌체|영국|런던|스위스|인터라켄|취리히|독일|뮌헨|베를린|오스트리아|비엔나|빈|체코|프라하|헝가리|부다페스트|포르투갈|리스본|포르투|크로아티아|네덜란드|암스테르담|벨기에|europe|france|paris|spain|italy|rome|london|germany|swiss|prague|lisbon/.test(s)) {
-        return {
-          region: '유럽',
-          tzDiff: -7,
-          flightHours: 14,
-          returnFlightHours: 12,
-          tzLabel: '한국보다 7시간 느림 (UTC+2 서머타임)',
-          calcDesc: '한국 오전 출발 ➔ 현지 당일 저녁 도착 | 귀국: +1일 익일 도착',
-          isCrossDateLine: false
-        };
-      }
-
-      // 10. 중동 / 튀르키예 (두바이, 터키, 이스탄불, 카타르)
-      if (/두바이|dubai|아랍에미리트|uae|카타르|도하|튀르키예|터키|이스탄불|turkey|istanbul/.test(s)) {
-        return {
-          region: '중동/튀르키예',
-          tzDiff: -5,
-          flightHours: 10,
-          returnFlightHours: 9,
-          tzLabel: '한국보다 5~6시간 느림 (UTC+3~4)',
-          calcDesc: '한국 출발 ➔ 현지 당일 도착 | 귀국: +1일 익일 도착',
-          isCrossDateLine: false
-        };
-      }
-
-      // 11. 호주 / 뉴질랜드 (시드니, 멜버른, 브리즈번, 오클랜드)
-      if (/호주|오스트레일리아|시드니|멜버른|브리즈번|골드코스트|뉴질랜드|오클랜드|australia|sydney|melbourne|new zealand/.test(s)) {
-        return {
-          region: '대양주(호주/뉴질랜드)',
-          tzDiff: 1,
-          flightHours: 10.5,
-          returnFlightHours: 10.5,
-          tzLabel: '한국보다 1~2시간 빠름 (UTC+10)',
-          calcDesc: '야간 비행 ➔ 현지 아침/낮 착륙 | 귀국: 당일/익일 도착',
-          isCrossDateLine: false
-        };
-      }
-
-      // 12. 남미 (페루, 리마, 볼리비아, 칠레, 아르헨티나, 브라질)
-      if (/남미|페루|리마|쿠스코|볼리비아|우유니|아르헨티나|부에노스아이레스|칠레|산티아고|브라질|리오|peru|lima|argentina|brazil/.test(s)) {
-        return {
-          region: '남아메리카',
-          tzDiff: -14,
-          flightHours: 24,
-          returnFlightHours: 24,
-          tzLabel: '한국보다 12~14시간 느림 (UTC-5)',
-          calcDesc: '환승 20~24h 소요 | 출국·귀국 모두 익일(+1일) 도착',
-          isCrossDateLine: false
-        };
-      }
-
-      // 기본 fallback
-      return {
-        region: '단거리/동아시아',
-        tzDiff: 0,
-        flightHours: 2.5,
-        returnFlightHours: 2.5,
-        tzLabel: '시차 0h (동일 시차권)',
-        calcDesc: '인천 출발 ➔ 당일 도착',
-        isCrossDateLine: false
-      };
-    }
-
-    function updateCreateTripTzBanner() {
-      const textEl = document.getElementById('trip-form-tz-text');
-      const calcEl = document.getElementById('trip-form-tz-calc');
-      if (!textEl || !calcEl) return;
-
-      const title = document.getElementById('trip-form-title')?.value || '';
-      const countries = document.getElementById('trip-form-countries')?.value || '';
-      const destStr = (countries + ' ' + title).trim();
-
-      const tzInfo = detectDestinationTimezone(destStr);
-      textEl.textContent = `${tzInfo.region} (시차: ${tzInfo.tzLabel} · 직항 약 ${tzInfo.flightHours}h)`;
-      calcEl.textContent = tzInfo.calcDesc;
-    }
+    // [11] 신규 여행 생성 모달·전 세계 국가·도시 스마트 선택기·시차/비행 매트릭스는 js/presentation/create-trip-ui.js(SulsulTravel.CreateTrip)로 옮겼다(v2.2.4, 4단계).
 
     // 시간 연산 유틸리티 (익일 +1일 지원)
     function timeToMinutes(timeStr, defaultMinutes = 840) {
@@ -8788,561 +8117,7 @@
       return isNextDay ? `+1일 ${formatted}` : formatted;
     }
 
-    // [v1.7.4] 거시적 거점 & 일자 배분 엔진 (Macro Hub Allocation Engine)
-    function allocateTripHubs(countries = [], cities = [], durationDays = 5, manualDaysMap = null) {
-      let rawCountries = (Array.isArray(countries) ? countries : [countries]).filter(Boolean);
-      let rawCities = (Array.isArray(cities) ? cities : [cities]).filter(Boolean);
-
-      let hubs = [];
-      if (rawCountries.length > 0) {
-        hubs = rawCountries.map(cName => {
-          const cClean = cleanCityName(cName);
-          const dbObj = (typeof COUNTRY_DATABASE !== 'undefined')
-            ? COUNTRY_DATABASE.find(c => c.name === cClean || c.code === cClean || (c.aliases || []).includes(cClean))
-            : null;
-
-          const myCities = rawCities.filter(cityName => {
-            if (!dbObj) return false;
-            const cleanCt = cleanCityName(cityName);
-            return (dbObj.cities || []).some(dbCt => dbCt.includes(cleanCt) || cleanCt.includes(dbCt)) ||
-                   (State.createTripSelectedCities && State.createTripSelectedCities[dbObj.code] && State.createTripSelectedCities[dbObj.code].includes(cityName));
-          });
-
-          return {
-            name: cClean,
-            country: cClean,
-            code: dbObj ? dbObj.code : '',
-            flag: dbObj ? dbObj.flag : '✈️',
-            currency: dbObj ? dbObj.currency : 'KRW',
-            cities: myCities
-          };
-        });
-
-        rawCities.forEach(ct => {
-          const matched = hubs.some(h => h.cities.includes(ct));
-          if (!matched && hubs.length > 0) {
-            hubs[0].cities.push(ct);
-          }
-        });
-      } else if (rawCities.length > 0) {
-        hubs = rawCities.map(cityName => ({
-          name: cleanCityName(cityName),
-          country: cleanCityName(cityName),
-          flag: '📍',
-          currency: 'KRW',
-          cities: [cityName]
-        }));
-      } else {
-        hubs = [{ name: '여행지', country: '여행지', flag: '✈️', currency: 'KRW', cities: [] }];
-      }
-
-      const totalDays = Math.max(1, Number(durationDays) || 5);
-      const numHubs = hubs.length;
-
-      let allocatedDays = [];
-      if (manualDaysMap && Array.isArray(manualDaysMap) && manualDaysMap.length === numHubs) {
-        const sum = manualDaysMap.reduce((a, b) => a + (Number(b) || 0), 0);
-        if (sum === totalDays) {
-          allocatedDays = manualDaysMap.map(d => Math.max(1, Number(d) || 1));
-        }
-      }
-
-      if (!allocatedDays.length) {
-        if (totalDays <= numHubs) {
-          allocatedDays = hubs.map((_, idx) => (idx < totalDays ? 1 : 0));
-        } else {
-          const base = Math.floor(totalDays / numHubs);
-          let rem = totalDays % numHubs;
-          allocatedDays = hubs.map((hub, idx) => {
-            let d = base;
-            if (rem > 0) {
-              d += 1;
-              rem -= 1;
-            }
-            return Math.max(1, d);
-          });
-        }
-      }
-
-      let curDay = 1;
-      return hubs.map((hub, idx) => {
-        const days = allocatedDays[idx] || 1;
-        const startDay = curDay;
-        const endDay = curDay + days - 1;
-        curDay += days;
-        return {
-          ...hub,
-          dayCount: days,
-          startDayNum: startDay,
-          endDayNum: endDay
-        };
-      }).filter(h => h.dayCount > 0);
-    }
-    window.allocateTripHubs = allocateTripHubs;
-
-    function generateAutoSpotsForTrip(destination, durationDays, concepts, wishlist, arrivalTime = '14:00', departureTime = '17:00', fullDestContext = '', customHubs = null) {
-      const conceptList = (concepts && concepts.length > 0) ? concepts : ['사용자 맞춤 여행'];
-      const conceptStr = conceptList.join(', ');
-      const wishlistItems = wishlist ? wishlist.split(/[,\n]/).map(s => s.trim()).filter(Boolean) : [];
-      let wishIndex = 0;
-
-      // 1. Resolve multi-hub allocation
-      let hubs = customHubs;
-      if (!hubs || !Array.isArray(hubs) || hubs.length === 0) {
-        const detectedCountries = splitTravelList(fullDestContext || destination);
-        if (detectedCountries.length > 1) {
-          hubs = allocateTripHubs(detectedCountries, [], durationDays);
-        } else {
-          hubs = [{
-            name: destination || '여행지',
-            country: destination || '여행지',
-            cities: [],
-            dayCount: durationDays,
-            startDayNum: 1,
-            endDayNum: durationDays
-          }];
-        }
-      }
-
-      const days = [];
-
-      for (let i = 1; i <= durationDays; i++) {
-        const daySpots = [];
-        const isFirstDay = (i === 1);
-        const isLastDay = (i === durationDays);
-
-        // Find which hub covers day i:
-        const hub = hubs.find(h => i >= h.startDayNum && i <= h.endDayNum) || hubs[0];
-        const hubIdx = hubs.indexOf(hub);
-        const hubDay = i - hub.startDayNum + 1;
-        const hubCity = (hub.cities && hub.cities.length > 0)
-          ? (hub.cities[(hubDay - 1) % hub.cities.length] || hub.name)
-          : hub.name;
-        const isTransitDay = (!isFirstDay && hubDay === 1 && hubIdx > 0);
-        const prevHub = isTransitDay ? hubs[hubIdx - 1] : null;
-
-        const tzInfo = detectDestinationTimezone(hub.name + ' ' + hubCity + ' ' + (fullDestContext || ''));
-        const arrMin = timeToMinutes(arrivalTime, 14 * 60);
-        const depMin = timeToMinutes(departureTime, 17 * 60);
-
-        if (isFirstDay && durationDays > 1) {
-          // --- Day 1: 시차 & 비행시간 반영 실전 출국 라이프사이클 ---
-          const arrKstTotalMin = arrMin - (tzInfo.tzDiff * 60);
-          const flightDepKstTotalMin = arrKstTotalMin - Math.round(tzInfo.flightHours * 60);
-          const flightDepKstMins = ((flightDepKstTotalMin % 1440) + 1440) % 1440;
-          const airportCheckinKstMins = ((flightDepKstMins - 180 + 1440) % 1440);
-          const homeDepKstMins = ((airportCheckinKstMins - 60 + 1440) % 1440);
-
-          const flightDepKstStr = minutesToTime(flightDepKstMins);
-          const airportCheckinKstStr = minutesToTime(airportCheckinKstMins);
-          const homeDepKstStr = minutesToTime(homeDepKstMins);
-          const arrLocalStr = minutesToTime(arrMin);
-
-          daySpots.push({
-            id: 'spot_' + Date.now() + '_1_0',
-            time: homeDepKstStr,
-            title: `집 출발 ➔ 공항 이동 (공항철도/리무진)`,
-            memo: `[출국 준비: 한국 KST ${homeDepKstStr}] 여권, E-티켓, 해외 결제 카드 지참 및 공항 이동`,
-            cat: 'flight',
-            cost: 15000,
-            currency: 'KRW',
-            completed: false,
-            isDateLine: tzInfo.isCrossDateLine
-          });
-
-          daySpots.push({
-            id: 'spot_' + Date.now() + '_1_1',
-            time: airportCheckinKstStr,
-            title: `인천공항 수속 & 보안검색 및 면세구역 진입`,
-            memo: `[공항 수속: 한국 KST ${airportCheckinKstStr}] 수하물 위탁, 자동출입국 심사, eSIM/환전 수령`,
-            cat: 'flight',
-            cost: 0,
-            currency: 'KRW',
-            completed: false,
-            isDateLine: tzInfo.isCrossDateLine
-          });
-
-          daySpots.push({
-            id: 'spot_' + Date.now() + '_1_2',
-            time: flightDepKstStr,
-            title: `비행기 탑승 & ${hub.name}행 항공편 이륙`,
-            memo: `[비행 이동: 한국 KST ${flightDepKstStr}] 약 ${tzInfo.flightHours}시간 비행 (기내식, 기내 수면). 시차 ${tzInfo.tzDiff}시간 적용`,
-            cat: 'flight',
-            cost: 0,
-            currency: 'KRW',
-            completed: false,
-            isDateLine: tzInfo.isCrossDateLine
-          });
-
-          const dateLineNote = tzInfo.isCrossDateLine ? ' (날짜변경선 통과 당일 오전 도착)' : '';
-          daySpots.push({
-            id: 'spot_' + Date.now() + '_1_3',
-            time: arrLocalStr,
-            title: `🛬 ${hub.name} 공항 착륙 & 입국 수속`,
-            memo: `[현지 도착: ${tzInfo.tzLabel}${dateLineNote}] 현지 시각 ${arrLocalStr} 착륙. 입국 심사, 수하물 수취, 현지 교통편 탑승`,
-            cat: 'flight',
-            cost: 10000,
-            currency: 'KRW',
-            completed: false,
-            isDateLine: tzInfo.isCrossDateLine
-          });
-
-          daySpots.push({
-            id: 'spot_' + Date.now() + '_1_4',
-            time: minutesToTime(arrMin + 60),
-            title: `${hub.name} 공항 ➔ 숙소/호텔 이동`,
-            memo: `[시내 이동: 현지시각] 공항철도/리무진버스/택시 탑승 및 시내 이동`,
-            cat: 'tour',
-            cost: 20000,
-            currency: 'KRW',
-            completed: false
-          });
-
-          daySpots.push({
-            id: 'spot_' + Date.now() + '_1_5',
-            time: minutesToTime(arrMin + 120),
-            title: `${hub.name} 호텔 체크인 & 짐 정리 및 가벼운 휴식`,
-            memo: `[체크인: 현지시각] 예약 바우처 확인, 짐 풀기 및 외출 준비`,
-            cat: 'lodging',
-            cost: 0,
-            currency: 'KRW',
-            completed: false
-          });
-
-          const dinnerMin = Math.max(arrMin + 180, 18 * 60 + 30);
-          if (dinnerMin < 22 * 60) {
-            let firstDinnerName = `${hub.name} ${hubCity !== hub.name ? hubCity + ' ' : ''}시그니처 로컬 디너`;
-            if (wishIndex < wishlistItems.length) {
-              firstDinnerName = `⭐ ${wishlistItems[wishIndex++]}`;
-            }
-            daySpots.push({
-              id: 'spot_' + Date.now() + '_1_6',
-              time: minutesToTime(dinnerMin),
-              title: firstDinnerName,
-              memo: `[첫날 미식: ${conceptStr}] ${hub.name} 숙소 근처 검증된 대표 맛집 탐방`,
-              cat: 'food',
-              cost: 40000,
-              currency: 'KRW',
-              completed: false
-            });
-
-            if (dinnerMin + 90 <= 22 * 60 + 30) {
-              daySpots.push({
-                id: 'spot_' + Date.now() + '_1_7',
-                time: minutesToTime(dinnerMin + 90),
-                title: `${hub.name} 숙소 주변 나이트 산책 & 마트 장보기`,
-                memo: `[야경/산책] 가벼운 거리 구경, 편의점/마트 생수 및 간식 구매`,
-                cat: 'tour',
-                cost: 15000,
-                currency: 'KRW',
-                completed: false
-              });
-            }
-          }
-        } else if (isTransitDay) {
-          // --- 거점 간 환승 이동일 (예: 홍콩 -> 마카오, 마카오 -> 중국 등) ---
-          let transitTitle = `${prevHub.name} ➔ ${hub.name} 도시 간 환승 이동 (페리/고속철)`;
-          let transitMemo = `[거점 이동] ${prevHub.name}에서 ${hub.name}으로 이동 및 새 거점 여정 시작`;
-          if (prevHub.name.includes('홍콩') && hub.name.includes('마카오')) {
-            transitTitle = `홍콩 ➔ 마카오 페리/강주아오 대교 탑승 & 이동 (약 1시간)`;
-            transitMemo = `[해상/대교 이동] 홍콩 페리 터미널 또는 HZMB 버스 탑승, 마카오 입국 심사`;
-          } else if (prevHub.name.includes('마카오') && hub.name.includes('중국')) {
-            transitTitle = `마카오 ➔ 중국 국경(공베이/주하이) 출입국 수속 & 시내 이동`;
-            transitMemo = `[국경 통과] 공베이 코안 수속 및 중국 시내/고속철 탑승`;
-          } else if (prevHub.country === '일본' && hub.country === '일본') {
-            transitTitle = `${prevHub.name} ➔ ${hub.name} 신칸센 고속열차 탑승 & 이동`;
-            transitMemo = `[고속철 이동] 신칸센 지정석 탑승 및 ${hub.name} 역 도착`;
-          }
-
-          daySpots.push({
-            id: 'spot_' + Date.now() + '_' + i + '_0',
-            time: '09:00',
-            title: `${prevHub.name} 호텔 체크아웃 & 이동 준비`,
-            memo: `[체크아웃] 객실 정리, 체크아웃 수속 및 환승 터미널 이동`,
-            cat: 'lodging',
-            cost: 0,
-            currency: 'KRW',
-            completed: false
-          });
-
-          daySpots.push({
-            id: 'spot_' + Date.now() + '_' + i + '_1',
-            time: '10:00',
-            title: transitTitle,
-            memo: transitMemo,
-            cat: 'flight',
-            cost: 30000,
-            currency: 'KRW',
-            completed: false
-          });
-
-          daySpots.push({
-            id: 'spot_' + Date.now() + '_' + i + '_2',
-            time: '12:00',
-            title: `🛬 ${hub.name} 도착, 호텔 짐 보관 & 시그니처 웰컴 런치`,
-            memo: `[새 거점 도착] ${hub.name} 호텔 프론트 짐 보관 후 현지 대표 요리로 점심 식사`,
-            cat: 'food',
-            cost: 35000,
-            currency: 'KRW',
-            completed: false
-          });
-
-          daySpots.push({
-            id: 'spot_' + Date.now() + '_' + i + '_3',
-            time: '14:30',
-            title: `${hub.name} ${hubCity !== hub.name ? hubCity + ' ' : ''}대표 랜드마크 & 명소 집중 탐방`,
-            memo: `[랜드마크] ${hub.name}의 대표 볼거리 및 필수 코스 탐방 (${conceptStr})`,
-            cat: 'tour',
-            cost: 25000,
-            currency: 'KRW',
-            completed: false
-          });
-
-          daySpots.push({
-            id: 'spot_' + Date.now() + '_' + i + '_4',
-            time: '17:30',
-            title: `${hub.name} 감성 카페 & 로컬 마켓 투어`,
-            memo: `[로컬 문화] 골목길 산책, 전통 마켓 및 분위기 좋은 카페 휴식`,
-            cat: 'shopping',
-            cost: 20000,
-            currency: 'KRW',
-            completed: false
-          });
-
-          daySpots.push({
-            id: 'spot_' + Date.now() + '_' + i + '_5',
-            time: '19:30',
-            title: `${hub.name} 시그니처 디너 & 로컬 미식`,
-            memo: `[미식 탐방] ${hub.name} 밤을 여는 현지 추천 디너 코스`,
-            cat: 'food',
-            cost: 45000,
-            currency: 'KRW',
-            completed: false
-          });
-
-          daySpots.push({
-            id: 'spot_' + Date.now() + '_' + i + '_6',
-            time: '21:30',
-            title: `${hub.name} 야경 명소 감상 & 체크인 룸 휴식`,
-            memo: `[야경 산책] 화려한 도시 야경 산책 후 객실 체크인 및 휴식`,
-            cat: 'tour',
-            cost: 0,
-            currency: 'KRW',
-            completed: false
-          });
-        } else if (isLastDay && durationDays > 1) {
-          // --- 마지막 날 귀국 라이프사이클 ---
-          const flightDepKstTotal = depMin - (tzInfo.tzDiff * 60);
-          const landingKstTotal = flightDepKstTotal + Math.round(tzInfo.returnFlightHours * 60);
-          const isNextDayLanding = (landingKstTotal >= 1440);
-
-          const landingKstMins = landingKstTotal % 1440;
-          const homeKstMins = (landingKstTotal + 90) % 1440;
-          const landingTimeStr = isNextDayLanding ? `+1일 ${minutesToTime(landingKstMins)}` : minutesToTime(landingKstMins);
-          const homeTimeStr = isNextDayLanding ? `+1일 ${minutesToTime(homeKstMins)}` : minutesToTime(homeKstMins);
-
-          if (depMin >= 14 * 60) {
-            daySpots.push({
-              id: 'spot_' + Date.now() + '_' + i + '_0',
-              time: '09:30',
-              title: `${hub.name} 호텔 체크아웃 & 프론트 짐 보관`,
-              memo: `[체크아웃] 짐 보관 서비스 이용 후 가벼운 복장으로 마지막 날 일정 시작`,
-              cat: 'lodging',
-              cost: 0,
-              currency: 'KRW',
-              completed: false
-            });
-
-            let lastSpotName = `${hub.name} 특산품·기념품 쇼핑 & 로컬 마켓`;
-            if (wishIndex < wishlistItems.length) {
-              lastSpotName = `⭐ ${wishlistItems[wishIndex++]}`;
-            }
-            daySpots.push({
-              id: 'spot_' + Date.now() + '_' + i + '_1',
-              time: '10:30',
-              title: lastSpotName,
-              memo: `[기념품 쇼핑] 특산품, 선물, 로컬 마켓 쇼핑 및 여유로운 산책`,
-              cat: 'shopping',
-              cost: 50000,
-              currency: 'KRW',
-              completed: false
-            });
-
-            daySpots.push({
-              id: 'spot_' + Date.now() + '_' + i + '_2',
-              time: '12:30',
-              title: `${hub.name} 여행 마무리 시그니처 런치`,
-              memo: `[라스트 미식] 현지에서 가장 기억에 남는 대표 요리 즐기기`,
-              cat: 'food',
-              cost: 35000,
-              currency: 'KRW',
-              completed: false
-            });
-
-            const airportMoveMin = Math.max(13 * 60 + 30, depMin - 210);
-            daySpots.push({
-              id: 'spot_' + Date.now() + '_' + i + '_3',
-              time: minutesToTime(airportMoveMin),
-              title: `숙소 짐 픽업 & ${hub.name} 공항 이동`,
-              memo: `[공항 이동] 호텔에서 짐 찾기 후 공항철도/리무진/택시로 공항 이동`,
-              cat: 'tour',
-              cost: 20000,
-              currency: 'KRW',
-              completed: false
-            });
-
-            daySpots.push({
-              id: 'spot_' + Date.now() + '_' + i + '_4',
-              time: minutesToTime(depMin - 150),
-              title: `공항 도착, 출국 수속 & 택스리펀 및 면세점`,
-              memo: `[출국 수속] 탑승권 발권, 수하물 위탁, 택스리펀, 보안검색 및 면세점`,
-              cat: 'flight',
-              cost: 0,
-              currency: 'KRW',
-              completed: false
-            });
-
-            daySpots.push({
-              id: 'spot_' + Date.now() + '_' + i + '_5',
-              time: minutesToTime(depMin),
-              title: `🛫 ${hub.name} 공항 출발 & 귀국 비행기 탑승`,
-              memo: `[귀국 비행: 현지 시각 ${minutesToTime(depMin)}] 항공기 탑승, 한국행 출발 (약 ${tzInfo.returnFlightHours}시간 비행)`,
-              cat: 'flight',
-              cost: 0,
-              currency: 'KRW',
-              completed: false
-            });
-
-            daySpots.push({
-              id: 'spot_' + Date.now() + '_' + i + '_6',
-              time: landingTimeStr,
-              title: isNextDayLanding ? `🛬 한국 인천공항 도착 & 입국 심사 (+1일 익일)` : `한국 공항 도착, 입국 심사 & 수하물 수령`,
-              memo: `[입국 수속] 한국 시각 ${landingTimeStr} 도착 (약 ${tzInfo.returnFlightHours}시간 비행 + 시차 반영). 자동출입국 심사 및 수하물 수취`,
-              cat: 'tour',
-              cost: 0,
-              currency: 'KRW',
-              completed: false
-            });
-
-            daySpots.push({
-              id: 'spot_' + Date.now() + '_' + i + '_7',
-              time: homeTimeStr,
-              title: isNextDayLanding ? `집 도착! 여행 짐 정리 및 휴식 (+1일 익일)` : `집 도착! 여행 짐 정리 및 휴식`,
-              memo: `[여정 마무리] 한국 시각 ${homeTimeStr} 무사 귀가. 짐 정리, 여행 사진 백업 및 시차 적응 휴식`,
-              cat: 'tour',
-              cost: 15000,
-              currency: 'KRW',
-              completed: false
-            });
-          } else {
-            // 이른 귀국편
-            const earlyCheckoutMin = Math.max(5 * 60, depMin - 210);
-            daySpots.push({
-              id: 'spot_' + Date.now() + '_' + i + '_0',
-              time: minutesToTime(earlyCheckoutMin),
-              title: `${hub.name} 호텔 얼리 체크아웃 & 공항 이동`,
-              memo: `[이른 출국] 체크아웃 및 공항 이동 (조식 테이크아웃)`,
-              cat: 'lodging',
-              cost: 20000,
-              currency: 'KRW',
-              completed: false
-            });
-
-            daySpots.push({
-              id: 'spot_' + Date.now() + '_' + i + '_1',
-              time: minutesToTime(depMin - 150),
-              title: `공항 도착, 출국 수속 & 탑승구 이동`,
-              memo: `[출국 수속] 항공권 발권, 보안검색 및 탑승구 대기`,
-              cat: 'flight',
-              cost: 0,
-              currency: 'KRW',
-              completed: false
-            });
-
-            daySpots.push({
-              id: 'spot_' + Date.now() + '_' + i + '_2',
-              time: minutesToTime(depMin),
-              title: `🛫 귀국 비행기 탑승 & 한국 출발`,
-              memo: `[비행: 현지 시각 ${minutesToTime(depMin)}] 탑승 후 기내 휴식 (약 ${tzInfo.returnFlightHours}시간 소요)`,
-              cat: 'flight',
-              cost: 0,
-              currency: 'KRW',
-              completed: false
-            });
-
-            daySpots.push({
-              id: 'spot_' + Date.now() + '_' + i + '_3',
-              time: landingTimeStr,
-              title: isNextDayLanding ? `🛬 한국 공항 도착 및 입국 수속 (+1일 익일)` : `한국 공항 도착 및 입국 수속`,
-              memo: `[도착] 한국 시각 ${landingTimeStr} 도착. 수하물 수령 및 세관 검사`,
-              cat: 'tour',
-              cost: 0,
-              currency: 'KRW',
-              completed: false
-            });
-
-            daySpots.push({
-              id: 'spot_' + Date.now() + '_' + i + '_4',
-              time: homeTimeStr,
-              title: isNextDayLanding ? `집 도착! 여정 마무리 (+1일 익일)` : `집 도착! 여정 마무리`,
-              memo: `[귀가] 한국 시각 ${homeTimeStr} 무사 귀가 및 휴식`,
-              cat: 'tour',
-              cost: 15000,
-              currency: 'KRW',
-              completed: false
-            });
-          }
-        } else {
-          // --- 일반 여행일 (거점 내부 탐방) ---
-          const generalTemplates = [
-            { time: '09:00', prefix: '모닝 산책 & 로컬 브런치/조식', cat: 'food', estCost: 15000 },
-            { time: '10:30', prefix: `${hubCity !== hub.name ? hubCity + ' ' : ''}대표 랜드마크 & 명소 집중 탐방`, cat: 'tour', estCost: 25000 },
-            { time: '12:30', prefix: '현지인 추천 시그니처 미식 런치', cat: 'food', estCost: 30000 },
-            { time: '14:30', prefix: `${hubCity !== hub.name ? hubCity + ' ' : ''}테마 맞춤 익스피리언스 & 문화 체험`, cat: 'tour', estCost: 35000 },
-            { time: '17:00', prefix: '감성 카페 & 로컬 마켓 투어', cat: 'shopping', estCost: 20000 },
-            { time: '19:00', prefix: '선셋 전망 & 디너 코스', cat: 'food', estCost: 50000 },
-            { time: '21:00', prefix: '야경 감상 및 하루 다이어리 기록', cat: 'tour', estCost: 0 }
-          ];
-
-          generalTemplates.forEach((tpl, sIdx) => {
-            let spotName = `${hub.name} ${tpl.prefix}`;
-            let spotMemo = `[컨셉: ${conceptStr}] 30분~1시간 단위 최적화 동선`;
-
-            if ((sIdx === 1 || sIdx === 3) && wishIndex < wishlistItems.length) {
-              spotName = `⭐ ${wishlistItems[wishIndex]}`;
-              spotMemo = `[버킷리스트] 희망 방문 스팟 탐방 (${conceptStr})`;
-              wishIndex++;
-            } else if (sIdx === 3) {
-              spotName = `${hub.name} ${conceptList[(i - 1) % conceptList.length]} 맞춤 스팟`;
-            }
-
-            daySpots.push({
-              id: 'spot_' + Date.now() + '_' + i + '_' + sIdx,
-              time: tpl.time,
-              title: spotName,
-              memo: spotMemo,
-              cat: tpl.cat,
-              cost: tpl.estCost,
-              currency: 'KRW',
-              completed: false
-            });
-          });
-        }
-
-        days.push({
-          dayNum: i,
-          title: `Day ${i} ${hub.name} ${hubCity !== hub.name ? hubCity + ' ' : ''}${isFirstDay ? '도착 및 첫 여정' : isLastDay ? '마무리 및 귀국' : isTransitDay ? '이동 및 탐방' : (conceptList[(i - 1) % conceptList.length] || '여행')}`,
-          date: `Day ${i}`,
-          city: hub.name,
-          subCity: hubCity,
-          hub: hub.name,
-          blockPlace: hub.name,
-          spots: daySpots
-        });
-      }
-
-      return days;
-    }
+    // 거시적 거점·일자 배분(allocateTripHubs)과 오프라인 30분 자동 일정 생성(generateAutoSpotsForTrip)은 js/presentation/create-trip-ui.js(SulsulTravel.CreateTrip)로 옮겼다(v2.2.4, 4단계).
 
     function splitTravelList(value) {
       const result = [];
@@ -9362,249 +8137,7 @@
       return result;
     }
 
-    async function submitCreateTrip() {
-      try {
-        const title = document.getElementById('trip-form-title').value.trim();
-        const start = document.getElementById('trip-form-start').value;
-        const end = document.getElementById('trip-form-end').value;
-        const curr = document.getElementById('trip-form-curr').value;
-        const budget = parseInt(document.getElementById('trip-form-budget').value) || 3000000;
-        const countriesStr = document.getElementById('trip-form-countries').value.trim();
-        const citiesStr = document.getElementById('trip-form-cities')?.value.trim() || '';
-        const style = document.getElementById('trip-form-style').value.trim();
-        const arrivalTime = document.getElementById('trip-form-arrival-time') ? document.getElementById('trip-form-arrival-time').value.trim() : '14:00';
-        const departureTime = document.getElementById('trip-form-departure-time') ? document.getElementById('trip-form-departure-time').value.trim() : '17:00';
-        const wishlist = document.getElementById('trip-form-wishlist') ? document.getElementById('trip-form-wishlist').value.trim() : '';
-        const aiAuto = document.getElementById('trip-form-ai-auto') ? document.getElementById('trip-form-ai-auto').checked : true;
-
-        if (!title) {
-          alert('여행 제목을 입력해 주세요.');
-          return;
-        }
-
-        const rawCountries = countriesStr ? splitTravelList(countriesStr) : [];
-        const explicitCities = splitTravelList(citiesStr);
-        const normalizedCountriesSet = new Set();
-        const normalizedCitiesSet = new Set(explicitCities.map(c => cleanCityName(c)).filter(Boolean));
-        rawCountries.forEach(rc => {
-          const resolved = resolveCanonicalCountry(rc);
-          if (resolved && resolved.canonicalName) {
-            normalizedCountriesSet.add(resolved.canonicalName);
-            if (resolved.extractedCity) {
-              const cl = cleanCityName(resolved.extractedCity);
-              if (cl) normalizedCitiesSet.add(cl);
-            }
-          } else if (rc.trim()) {
-            normalizedCountriesSet.add(rc.trim());
-          }
-        });
-        const countries = Array.from(normalizedCountriesSet);
-        let durationDays = 5;
-        if (start && end) {
-          durationDays = Math.max(1, Math.ceil((new Date(end) - new Date(start)) / (1000 * 60 * 60 * 24)) + 1);
-        }
-
-        const concepts = (State.createTripSelectedConcepts && State.createTripSelectedConcepts.length > 0)
-          ? State.createTripSelectedConcepts.slice()
-          : [];
-
-        let days = [];
-        let shouldGenerateAi = false;
-        const hasGeminiKey = Boolean(cleanApiKey(State.geminiKey || localStorage.getItem('st_gemini_key')));
-        const tempTrip = { title, countries, cities: Array.from(normalizedCitiesSet) };
-        const pack = resolveTripPack(tempTrip);
-        const isYN = isYunnanTrip(tempTrip);
-        const isSA = isSouthAmericaTrip(tempTrip);
-
-        // 스팟 생성용 주요 여행지명 정규화 (괄호 등 정돈)
-        const inferredCities = countries.flatMap(item => {
-          const match = item.match(/\(([^)]+)\)/);
-          return match ? match[1].split(/[,/]/).map(s => s.trim()).filter(Boolean) : [];
-        });
-        const requestedCities = [...Array.from(normalizedCitiesSet), ...inferredCities].filter((city, index, list) => city && list.indexOf(city) === index);
-        let primaryDest = requestedCities[0] || countries[0] || '여행지';
-        primaryDest = primaryDest.replace(/[()[\]]/g, ' ').trim();
-        primaryDest = cleanCityName(primaryDest);
-
-        const calculatedHubs = allocateTripHubs(countries, requestedCities, durationDays);
-
-        if (aiAuto && hasGeminiKey) {
-          shouldGenerateAi = true;
-          const dayDate = (offset) => {
-            if (!start) return `Day ${offset + 1}`;
-            const date = new Date(`${start}T00:00:00`);
-            date.setDate(date.getDate() + offset);
-            return date.toISOString().slice(0, 10);
-          };
-          for (let i = 1; i <= durationDays; i++) {
-            const currentHub = calculatedHubs.find(h => i >= h.startDayNum && i <= h.endDayNum) || calculatedHubs[0];
-            const hubCity = (currentHub.cities && currentHub.cities.length > 0) ? currentHub.cities[0] : currentHub.name;
-            days.push({
-              dayNum: i,
-              title: `Day ${i} ${currentHub.name} ${hubCity !== currentHub.name ? hubCity + ' ' : ''}계획`,
-              date: dayDate(i - 1),
-              city: currentHub.name,
-              subCity: hubCity,
-              hub: currentHub.name,
-              blockPlace: currentHub.name,
-              spots: []
-            });
-          }
-        } else if (aiAuto) {
-          if (pack && pack.hasGoldenCourse && typeof pack.getGoldenItinerary === 'function') {
-            days = pack.getGoldenItinerary(durationDays);
-          } else {
-            const fullDestContext = (countriesStr ? countriesStr + ' ' : '') + (citiesStr ? citiesStr + ' ' : '') + (title || primaryDest || '여행지');
-            days = generateAutoSpotsForTrip(primaryDest || '여행지', durationDays, concepts, wishlist, arrivalTime, departureTime, fullDestContext, calculatedHubs);
-          }
-        } else {
-          for (let i = 1; i <= durationDays; i++) {
-            const currentHub = calculatedHubs.find(h => i >= h.startDayNum && i <= h.endDayNum) || calculatedHubs[0];
-            const hubCity = (currentHub.cities && currentHub.cities.length > 0) ? currentHub.cities[0] : currentHub.name;
-            days.push({
-              dayNum: i,
-              title: `Day ${i} ${currentHub.name} 여행 일정`,
-              date: `Day ${i}`,
-              city: currentHub.name,
-              subCity: hubCity,
-              hub: currentHub.name,
-              blockPlace: currentHub.name,
-              spots: []
-            });
-          }
-        }
-
-        let tripCities = requestedCities.length ? requestedCities.slice(0, 10) : (countries.length ? [primaryDest] : []);
-        if (pack && pack.geo && Array.isArray(pack.geo.destinations) && pack.geo.destinations.length > 0) {
-          tripCities = pack.geo.destinations.map(d => d.nameKo || (d.name ? d.name.split(' ')[0] : d.id));
-        } else {
-          // wishlist 및 countries로부터 방문 도시 추출
-          const rawCities = [...requestedCities];
-          if (wishlist) {
-            wishlist.split(/[,\n]/).map(s => s.trim()).filter(Boolean).forEach(w => {
-              const clean = cleanCityName(w);
-              if (clean && !rawCities.includes(clean) && !countries.includes(clean)) rawCities.push(clean);
-            });
-          }
-          normalizedCitiesSet.forEach(c => {
-            if (c && !rawCities.includes(c) && !countries.includes(c)) rawCities.push(c);
-          });
-          if (rawCities.length > 0) {
-            tripCities = rawCities.filter(ct => !countries.includes(ct)).slice(0, 10);
-          }
-        }
-
-        // 목적지 맞춤 이모지/국기 감지
-        let tripEmoji = (pack && pack.flag) ? pack.flag : null;
-        if (!tripEmoji) {
-          const combinedStr = (title + ' ' + countriesStr + ' ' + (primaryDest || '')).toLowerCase();
-          if (combinedStr.includes('몽골') || combinedStr.includes('mongol')) tripEmoji = '🇲🇳';
-          else if (combinedStr.includes('일본') || combinedStr.includes('도쿄') || combinedStr.includes('오사카') || combinedStr.includes('후쿠오카')) tripEmoji = '🇯🇵';
-          else if (combinedStr.includes('중국') || combinedStr.includes('운남') || combinedStr.includes('상하이') || combinedStr.includes('베이징')) tripEmoji = '🇨🇳';
-          else if (combinedStr.includes('미국') || combinedStr.includes('하와이') || combinedStr.includes('뉴욕') || combinedStr.includes('la')) tripEmoji = '🇺🇸';
-          else if (combinedStr.includes('프랑스') || combinedStr.includes('파리')) tripEmoji = '🇫🇷';
-          else if (combinedStr.includes('이탈리아') || combinedStr.includes('로마')) tripEmoji = '🇮🇹';
-          else if (combinedStr.includes('스페인') || combinedStr.includes('바르셀로나')) tripEmoji = '🇪🇸';
-          else if (combinedStr.includes('스위스') || combinedStr.includes('인터라켄')) tripEmoji = '🇨🇭';
-          else if (combinedStr.includes('영국') || combinedStr.includes('런던')) tripEmoji = '🇬🇧';
-          else if (combinedStr.includes('독일') || combinedStr.includes('베를린')) tripEmoji = '🇩🇪';
-          else if (combinedStr.includes('베트남') || combinedStr.includes('다낭') || combinedStr.includes('하노이')) tripEmoji = '🇻🇳';
-          else if (combinedStr.includes('태국') || combinedStr.includes('방콕') || combinedStr.includes('치앙마이')) tripEmoji = '🇹🇭';
-          else if (combinedStr.includes('대만') || combinedStr.includes('타이베이')) tripEmoji = '🇹🇼';
-          else if (combinedStr.includes('호주') || combinedStr.includes('시드니')) tripEmoji = '🇦🇺';
-          else if (combinedStr.includes('캐나다')) tripEmoji = '🇨🇦';
-          else if (combinedStr.includes('남미') || combinedStr.includes('페루') || combinedStr.includes('볼리비아') || combinedStr.includes('아르헨티나') || combinedStr.includes('브라질')) tripEmoji = '🌎';
-          else if (combinedStr.includes('유럽')) tripEmoji = '🇪🇺';
-          else tripEmoji = '✈️';
-        }
-
-        let initialChecklist = [];
-        if (isYN) {
-          initialChecklist = [
-            { text: '여권 유효기간 6개월 이상 확인', urgent: true, checked: false },
-            { text: '알리페이 / 위챗페이 트래블로그 카드 사전 등록', urgent: true, checked: false },
-            { text: '옥룡설산 케이블카 사전 예매', urgent: true, checked: false },
-            { text: '중국 고속철 (쿤밍-따리-리장) 예매', urgent: true, checked: false },
-            { text: '중국 데이터 eSIM 또는 유심 구매', urgent: false, checked: false },
-            { text: '상비약 (고산병약, 소화제, 지사제, 타이레놀)', urgent: true, checked: false }
-          ];
-        } else if (isSA) {
-          initialChecklist = [
-            { text: '여권 유효기간 6개월 이상 확인', urgent: true, checked: false },
-            { text: '마추픽추 입장권 & 페루레일 기차표 공식 사전 예매', urgent: true, checked: false },
-            { text: '황열병 예방접종 증명서(옐로우카드) 준비', urgent: true, checked: false },
-            { text: '현지 통화 환전 또는 트래블로그/월렛 카드 발급', urgent: true, checked: false },
-            { text: '고산병 처방약(다이아목스) 및 비상 상비약 준비', urgent: true, checked: false },
-            { text: '해외 여행자 보험 가입', urgent: true, checked: false },
-            { text: '스마트폰 유심 / eSIM 구매', urgent: false, checked: false }
-          ];
-        } else {
-          initialChecklist = [
-            { text: '여권 유효기간 6개월 이상 확인 (최소 6개월)', urgent: true, checked: false },
-            { text: '항공권 E-티켓 및 모바일 탑승권 보관', urgent: true, checked: false },
-            { text: '숙소 예약 바우처 및 주소 오프라인 저장', urgent: true, checked: false },
-            { text: '현지 통화 환전 또는 트래블로그/트래블월렛 카드 발급', urgent: true, checked: false },
-            { text: '해외 여행자 보험 가입', urgent: true, checked: false },
-            { text: '스마트폰 해외 로밍 또는 eSIM/유심 구매', urgent: false, checked: false },
-            { text: '여행용 상비약 (소화제, 진통제, 지사제, 밴드)', urgent: false, checked: false },
-            { text: '멀티 어댑터 및 보조배터리 준비', urgent: false, checked: false }
-          ];
-        }
-
-        const baseCurr = curr || (pack ? pack.currency : 'KRW');
-        const initBalances = { [baseCurr]: budget || 0 };
-        if (baseCurr !== 'KRW') initBalances['KRW'] = 0;
-
-        const newTrip = {
-          id: 'trip_' + Date.now(),
-          title: title,
-          subtitle: style || concepts.join(' · ') || requestedCities.join(' · ') || countries.join(' · ') || (pack ? pack.name : '사용자 계획'),
-          startDate: start,
-          endDate: end,
-          durationDays: durationDays,
-          arrivalTime: arrivalTime || '14:00',
-          departureTime: departureTime || '17:00',
-          currency: baseCurr,
-          budget: budget,
-          countries: countries,
-          cities: tripCities,
-          coverEmoji: tripEmoji,
-          concepts: concepts,
-          wishlist: wishlist,
-          hubAllocations: calculatedHubs,
-          planSource: shouldGenerateAi ? 'ai_pending' : (aiAuto ? 'local_draft' : 'manual'),
-          isBucketlist: (!start && !end),
-          days: days,
-          expenses: [],
-          exchanges: [],
-          activeCurrencies: [baseCurr, 'KRW'].filter((v, i, a) => v && a.indexOf(v) === i),
-          initialBalances: initBalances,
-          journals: {},
-          checklist: initialChecklist
-        };
-
-        // 저장하지 못하면 만들기 창과 입력을 그대로 둔다.
-        if (!await commitTripsCommand(current => [newTrip, ...current], { bumpTripId: newTrip.id, activeTripId: newTrip.id })) return;
-        SulsulTravel.HubView.updateFilterDropdowns();
-        closeModal('modal-create-trip', true);
-
-        switchView('workspace');
-        if (shouldGenerateAi) {
-          const aiPromptInput = document.getElementById('ai-trip-prompt');
-          if (aiPromptInput) aiPromptInput.value = [style, wishlist, requestedCities.length ? `주요 도시: ${requestedCities.join(', ')}` : ''].filter(Boolean).join(' · ');
-          openModal('modal-ai-trip');
-          showToast('🤖 입력한 도시와 기간을 바탕으로 AI 일정 초안을 만드는 중입니다.', 3500);
-          void generateAiItinerary();
-        } else if (aiAuto) {
-          showToast('⚠️ Gemini API 키가 없어 기본 일정으로 생성했습니다. 키를 등록하면 AI 일정으로 다시 설계할 수 있습니다.', 5000);
-        } else {
-          openModal('modal-ai-trip');
-        }
-      } catch (err) {
-        console.error('Failed to submitCreateTrip:', err);
-        alert('여행 생성 중 오류가 발생했습니다: ' + err.message);
-      }
-    }
+    // 새 여행 저장·초안 생성 흐름(submitCreateTrip)은 js/presentation/create-trip-ui.js(SulsulTravel.CreateTrip)로 옮겼다(v2.2.4, 4단계).
 
     // 스팟 추가·수정 모달과 [11.1] 실시간 일정 튜닝·RePlan 검토(약 425줄)는 js/presentation/schedule-tuning-ui.js(SulsulTravel.ScheduleTuning)로 옮겼다(v2.2.2, 4단계).
 
@@ -9715,7 +8248,7 @@
 
     async function getAiOrchestrator() {
       if (!aiOrchestratorPromise) {
-        aiOrchestratorPromise = import('./js/application/orchestration.mjs?v=2.2.3').then(({ Orchestrator }) =>
+        aiOrchestratorPromise = import('./js/application/orchestration.mjs?v=2.2.4').then(({ Orchestrator }) =>
           new Orchestrator({
             online: job => Boolean(job?.input?.localDraft) || navigator.onLine,
             timeoutMs: 65000,
@@ -9830,9 +8363,9 @@
       // 2. Built-in 30-minute timetable rule engine with multi-hub support
       const hubs = (trip?.hubAllocations && trip.hubAllocations.length > 0)
         ? trip.hubAllocations
-        : allocateTripHubs(trip?.countries || [], trip?.cities || [], durationDays);
+        : SulsulTravel.CreateTrip.allocateTripHubs(trip?.countries || [], trip?.cities || [], durationDays);
 
-      const autoDays = generateAutoSpotsForTrip(
+      const autoDays = SulsulTravel.CreateTrip.generateAutoSpotsForTrip(
         primaryDest, durationDays, concepts, wishlist, arrivalTime, departureTime, fullDestContext, hubs
       );
       return autoDays.map((d, i) => ({
@@ -10737,7 +9270,7 @@
 
       draftStudioState.countries = countryNames;
       draftStudioState.cities = allCities;
-      draftStudioState.hubs = allocateTripHubs(countryNames, allCities, draftStudioState.durationDays);
+      draftStudioState.hubs = SulsulTravel.CreateTrip.allocateTripHubs(countryNames, allCities, draftStudioState.durationDays);
       renderDraftStudioCountries();
       renderDraftStudioHubSteppers();
     }
@@ -10929,7 +9462,7 @@
         await new Promise(resolve=>setTimeout(resolve,100));
         const concepts=settings.concepts.length?settings.concepts:['사용자 맞춤 여행'];
         const context=[...settings.countries,...settings.cities].join(', ');
-        const days=generateAutoSpotsForTrip(settings.countries[0]||'여행지',settings.durationDays,concepts,settings.wishlist,
+        const days=SulsulTravel.CreateTrip.generateAutoSpotsForTrip(settings.countries[0]||'여행지',settings.durationDays,concepts,settings.wishlist,
           settings.arrivalTime,settings.departureTime,context,settings.hubAllocations);
         // 비동기 생성이 끝나도 처음 캡처한 객체를 수정하지 않는다.
         if(getActiveTrip()?.id!==tripId)throw new Error('다른 여행으로 이동했습니다. 원래 여행에서 다시 생성해 주세요.');
@@ -10962,7 +9495,7 @@
 
       const hubs = (trip.hubAllocations && trip.hubAllocations.length > 0)
         ? trip.hubAllocations
-        : allocateTripHubs(trip.countries || [], trip.cities || [], expectedDayCount);
+        : SulsulTravel.CreateTrip.allocateTripHubs(trip.countries || [], trip.cities || [], expectedDayCount);
 
       const hubAllocationDesc = hubs.length > 1
         ? `\n거점별 체류 계획 (반드시 준수):\n` + hubs.map(h => `- Day ${h.startDayNum}~${h.endDayNum}: ${h.name} (${h.dayCount}일 체류, 세부 도시: ${h.cities.join(', ') || h.name})`).join('\n')
@@ -12400,11 +10933,13 @@ JSON 배열만 출력하세요. 각 day는 dayNum, title, city, date, spots를 �
       openEditSpotModal: SulsulTravel.ScheduleTuning.openEditSpotModal,
       sortDaySpotsByTime: SulsulTravel.ScheduleTuning.sortDaySpotsByTime,
       submitSpot: SulsulTravel.ScheduleTuning.submitSpot,
-      generateAutoSpotsForTrip: generateAutoSpotsForTrip,
-      detectDestinationTimezone: detectDestinationTimezone,
-      updateCreateTripTzBanner: updateCreateTripTzBanner,
+      openCreateTripModal: SulsulTravel.CreateTrip.open,
+      allocateTripHubs: SulsulTravel.CreateTrip.allocateTripHubs,
+      generateAutoSpotsForTrip: SulsulTravel.CreateTrip.generateAutoSpotsForTrip,
+      detectDestinationTimezone: SulsulTravel.CreateTrip.detectDestinationTimezone,
+      updateCreateTripTzBanner: SulsulTravel.CreateTrip.updateTzBanner,
       updateAiStatusIndicator: SulsulTravel.SettingsUI.updateAiStatusIndicator,
-      selectQuickFormCountry: selectQuickFormCountry,
+      selectQuickFormCountry: SulsulTravel.CreateTrip.selectQuickCountry,
       resolveCountryInfo: resolveCountryInfo,
       getCountryFlag: getCountryFlag,
       getCountryCurrency: getCountryCurrency,

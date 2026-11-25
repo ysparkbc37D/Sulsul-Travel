@@ -26,6 +26,14 @@
 - [ ] 항공권/호텔 예약 바우처 PDF 자동 파싱 일정 등록
 - [ ] 여행 동행자 실시간 음성 메모 AI 다이어리 자동 변환
 
+## [v2.2.4] - 2026-11-26
+
+- 화면 분리(4단계) 15차(새 여행 만들기 모달·전 세계 국가/도시 스마트 선택기·거점 일자 배분·오프라인 자동 일정 생성)입니다. `index.html`의 `#modal-create-trip` 제어와 `allocateTripHubs`·`generateAutoSpotsForTrip`·`submitCreateTrip` 등 약 1,230줄을 `js/presentation/create-trip-ui.js`(`SulsulTravel.CreateTrip`)로 옮겼습니다.
+- **보안**: 검색 결과의 직접 추가 버튼(`addCustomCreateTripCountry`)과 소도시 토글(`toggleCreateTripCity`)이 `onclick` 문자열 안에 값을 직접 끼워 넣어 작은따옴표가 든 검색어(`x');window.__pwn=1;//`) 클릭 시 임의 스크립트가 실행되던 결함을 고쳤습니다(v2.2.3에서 재현). 모든 동작을 `data-on-click`·`data-query`·`data-city` 위임과 `escapeHtml`로 전환했습니다.
+- **날짜 정확성(KST)**: `submitCreateTrip`이 `new Date(start + 'T00:00:00').toISOString().slice(0, 10)`으로 날짜를 계산해 KST(UTC+9) 환경에서 AI 대기 일정 Day 1 날짜가 하루 앞당겨지던 결함(`2026-10-01` → `2026-09-30`)을 고쳤습니다(v2.2.3에서 재현). 이제 UTC 달력 연산으로 AI·로컬 초안·수동 일정 모두 정확한 `YYYY-MM-DD`를 기록합니다.
+- **거점 배분·입력 검증**: `allocateTripHubs`가 `popularCities` 대신 존재하지 않는 `cities` 필드를 읽어 다국가 도시가 첫 번째 국가로 쏠리던 결함과 단기 여행(예: 2일 3개국)에서 0일 거점이 `|| 1`로 부풀어 총 일수를 초과하던 결함을 고쳤습니다(v2.2.3에서 재현). 또한 종료일이 시작일보다 앞선 입력을 거절하고, 명시 입력한 `0`원 예산이 `3,000,000`으로 덮어씌워지지 않도록 보존하며 연타 중복 생성을 막았습니다.
+- 권역 탭·국가 칩·도시 칩·컨셉 칩에 `aria-pressed`를 동기화하고 잘못된 권역 키는 `'all'`로 폴백했습니다. `index.html`의 인라인 이벤트 처리기 35곳을 `createTrip.*`·`shell.closeModal`로 전환해 `UI01` 기준을 312 → 277곳(`index.html` 170 → 135곳), `HTML01`을 `index.html` 64 → 44곳(새 파일 0곳)으로 낮췄습니다. 전용 브라우저 검사 `tests/create-trip.browser.cjs`(2개 시나리오)를 추가했습니다.
+
 ## [v2.2.3] - 2026-11-25
 
 - **오프라인 RePlan 모듈 로딩 복구(긴급 수정)**: 실서버 `v2.2.2` 오프라인 검증에서 `js/domain/replan.mjs`의 정적 import(`ai-draft-validation.js?v=2.0.1`, `live-itinerary.js?v=2.0.1`)가 `sw.js` 프리캐시 버전과 어긋나 오프라인 즉시 일정 재배치가 `Failed to fetch dynamically imported module`로 실패하던 결함을 발견·수정했습니다. 브라우저에 이미 로드된 `SulsulTravel.AiDraftValidation`·`SulsulTravel.LiveItinerary`를 재사용하고 Node 단위 테스트 환경에서만 조건부 import하도록 바꿨습니다.
