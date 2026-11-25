@@ -196,6 +196,12 @@ flowchart TD
 - **검증**: 단위 257개(새 `trip-store.test.mjs` 8개 — 느린 비동기 백엔드에서 연달아 맡긴 저장이 모두 남는지 포함), 브라우저 회귀 27종, `tools-verify.ps1` 통과. 저장 실패를 일부러 만드는 브라우저 검사 세 곳은 결과를 저장보다 먼저 읽어, 실패 경로를 검사하지 않은 채 통과하고 있었다. 저장을 기다리게 고쳤다(실록 112호).
 - **남은 3b(2차)**: 여행 자료를 IndexedDB로 옮기는 일. 백엔드를 `TripStore` 아래에서 바꾸고, 원문 보관 → 이전 → 다시 읽어 대조 → 채택 순서로 옮긴다. 옛 문서는 다른 창의 구버전이 덮어쓰지 못하게 표시만 바꿔 남긴다. 다른 창 충돌 판정은 문서 원문 비교 대신 저장소의 버전 번호로 한다. 브라우저 검사의 `localStorage` 직접 읽기를 저장소 읽기로 바꾸는 작업이 함께 필요하다.
 
+## 30. 4단계 진행 결과 (v2.2.2) — 화면 분리 14차: 스팟 편집·일정 튜닝·RePlan 검토
+
+- **옮긴 것**: `index.html`의 `#modal-spot`, `#modal-schedule-tuning`, `#modal-replan-review` 제어와 스팟 완료/고정·구간 RePlan·오프라인/AI 일정 튜닝(약 425줄)을 `js/presentation/schedule-tuning-ui.js`(`SulsulTravel.ScheduleTuning`)로 옮겼다. `index.html`(26곳)과 `companion-ui.js`(8곳)의 인라인 처리기 34곳 → `scheduleTuning.*`·`shell.closeModal`(UI01 346 → 312곳, `index.html` 196 → 170곳, `companion-ui.js` 77 → 69곳). HTML01은 `index.html` 68 → 64곳, `companion-ui.js` 96 → 94곳, 새 파일 0곳이다.
+- **검증에서 고친 것**: 시간 미정(`''`) 스팟 편집 시 `'09:00'` 자동 대입, 일차 `<option>`의 `d.dayNum` 미이스케이프 DOM 주입, 범위 초과 일차/구간 `<select>` 공백과 `rebalanceTripSchedule`의 `range:0:1` 미지원, `applyPendingReplan` 비동기 연타 충돌과 프리셋 `aria-pressed` 누락(실록 127호). 모두 v2.2.1 코드에서 재현한 뒤 고쳤다.
+- **다음**: 여행 만들기(`#modal-create-trip`, A-6b) → 초안 편집 스튜디오(`#modal-trip-draft-studio`, A-6c) → 나머지 셸 구역(A-7) → `companion-ui.js` 분리(A-8).
+
 ## 29. 4단계 진행 결과 (v2.2.1) — 화면 분리 13차: 설정·테마·PWA 설치·안내 모달
 
 - **옮긴 것**: `index.html`의 3-Way 테마 엔진, 설정 모달·Gemini API 키 관리, PWA 설치·시작 가이드 배너·설치 안내 모달, 버전 이력·후원·사용 가이드·백업 안내·개인정보 모달(약 820줄)을 `js/presentation/settings-ui.js`(`SulsulTravel.SettingsUI`)로 옮기고 `shell.switchView`를 `js/presentation/shell-actions.js`에 추가했다. 인라인 처리기 63곳 → `settings.*`·`shell.*`(UI01 409 → 346곳, `index.html` 259 → 196곳). `index.html`의 HTML01은 69 → 68곳, 새 파일은 0곳이다.

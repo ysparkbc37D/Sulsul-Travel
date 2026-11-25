@@ -117,7 +117,7 @@
     if(modal){
       if(modal==='modal-expense'&&root.SulsulTravel?.ExpenseEditor?.state.saving){root.showToast('지출 저장을 마친 뒤 닫아 주세요.');return 'busy';}
       if(modal==='modal-travel-backup'){root.closeTravelBackupModal();return 'modal';}
-      if(modal==='modal-replan-review'){root.rejectPendingReplan();return 'modal';}
+      if(modal==='modal-replan-review'){root.SulsulTravel.ScheduleTuning.rejectPendingReplan();return 'modal';}
       if(modal==='modal-ai-draft-review'){await root.rejectActiveAiDraft();return 'modal';}
       if(modal==='modal-moment-record')root.closeMomentJournal(false,{fromHistory:true});
       else root.closeModal(modal,false,{fromNavigation:true});

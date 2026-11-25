@@ -34,7 +34,8 @@
         typeof window.SulsulTravel?.RouteMap?.open === 'function' &&
         typeof window.SulsulTravel?.LifetimeAnalytics?.render === 'function' &&
         typeof window.SulsulTravel?.HubView?.render === 'function' &&
-        typeof window.SulsulTravel?.SettingsUI?.open === 'function';
+        typeof window.SulsulTravel?.SettingsUI?.open === 'function' &&
+        typeof window.SulsulTravel?.ScheduleTuning?.openScheduleTuningModal === 'function';
       shell.reload = () => {if(!shell.reloading){shell.reloading=true;location.reload();}};
       shell.canReload = () => {
         if(!shell.started)return true;
@@ -153,17 +154,17 @@
   </script>
 
   <!-- PWA Meta & Icons -->
-  <link rel="manifest" href="manifest.webmanifest?v=2.2.1">
+  <link rel="manifest" href="manifest.webmanifest?v=2.2.2">
   <meta name="theme-color" content="#F7F5F0">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <meta name="apple-mobile-web-app-title" content="술술트래블">
-  <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192-v115.png?v=2.2.1">
-  <link rel="icon" type="image/png" sizes="32x32" href="favicon.png?v=2.2.1">
+  <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192-v115.png?v=2.2.2">
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon.png?v=2.2.2">
   <link rel="shortcut icon" href="favicon.ico">
-  <link rel="apple-touch-icon" sizes="180x180" href="icons/apple-touch-icon-v115.png?v=2.2.1">
-  <link rel="apple-touch-icon" href="icons/apple-touch-icon-v115.png?v=2.2.1">
+  <link rel="apple-touch-icon" sizes="180x180" href="icons/apple-touch-icon-v115.png?v=2.2.2">
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon-v115.png?v=2.2.2">
 
   <!-- Google Fonts: Great Vibes, Dancing Script (Cursive Calligraphy), Cormorant Garamond, Noto Serif KR, Playfair Display -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -171,7 +172,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Great+Vibes&family=Cormorant+Garamond:wght@600;700;800&family=Noto+Serif+KR:wght@500;600;700;900&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
 
   <!-- Local Utilities Bundle (CDN fallback & tailwind utilities) -->
-  <link rel="stylesheet" href="css/utilities.css?v=2.2.1" integrity="sha384-HMVB4SH6xwwGITkNyT8ARmHegAYSuTMocPGl4bpl0JywMIe2PqYrUxqZOgEuZjmP">
+  <link rel="stylesheet" href="css/utilities.css?v=2.2.2" integrity="sha384-HMVB4SH6xwwGITkNyT8ARmHegAYSuTMocPGl4bpl0JywMIe2PqYrUxqZOgEuZjmP">
   <link rel="stylesheet" href="vendor/fontawesome/css/all.min.css" integrity="sha384-t1nt8BQoYMLFN5p42tRAtuAAFQaCQODekUVeKKZrEnEyp4H2R0RHFz0KWpmj7i8g">
 
   <!-- Leaflet Map CSS & JS -->
@@ -1513,74 +1514,75 @@
     }
   </style>
 
-  <link rel="stylesheet" href="css/companion.css?v=2.2.1" integrity="sha384-Syant7HB0IYUZUU2saRSYUDkM71WKVuK2JtHM+kAluFdw3VvWv9gSglgJh4utHv/">
-  <link rel="stylesheet" href="css/companion-refresh.css?v=2.2.1" integrity="sha384-2KIp4VI8qsP6dGnz0cm/vehjLjr6GxpZ9yWTbbIXBPWi25XHg6XUOtNbp7W8KMd3">
-  <link rel="stylesheet" href="css/live-itinerary.css?v=2.2.1" integrity="sha384-e/V9wyJ/Gi6baSHcWzBeNGjdn/eKDQIvKWyiYmByLE7C7nYJaQOA+GshtUMcCR72">
-  <link rel="stylesheet" href="css/expense-mobile.css?v=2.2.1" integrity="sha384-QZFtKrU/YvkTaEKv0oJ2ZQi1Zry8RgEFaHzTckwuPFsMDDmadYBH7UuYgTVS7281">
-  <link rel="stylesheet" href="css/moment-journal.css?v=2.2.1" integrity="sha384-g1EihgfyPDJ5o5eWSsQgT1WDTRKDtUfzVatlx6T/t+DhApDBY8dznSrwmelasv91">
-  <script src="js/domain/trip-adapter.js?v=2.2.1" integrity="sha384-JHU/NkAlxwR9G9/49TaFK4sTvg9xKGsSVd3re8rLivtiXcSNdnQA9gRIfvVWUtG7"></script>
-  <script src="js/domain/ai-draft-validation.js?v=2.2.1" integrity="sha384-OTRAiX7YaOiiNrpMWDjkOyH0bTbbL3KrGwGp1RmIkgvd15pErNTTKVTJkoesmpfi"></script>
-  <script src="js/domain/live-itinerary.js?v=2.2.1" integrity="sha384-cwMH5i2F5Mve7Z9cKeWrP7uLU5plcu6c7xvTf4Lyz3Xkb6GlNCI14lnEWzw46cVg"></script>
-  <script src="js/presentation/live-itinerary-ui.js?v=2.2.1" integrity="sha384-SLjn2QhNBI6VfrG3siiRZqfs51VnmqyRCTMGjMN25fIyHhYwf4LnECXOOiQ4arog"></script>
-  <script src="js/presentation/live-itinerary-bridge.js?v=2.2.1" integrity="sha384-lRoX8rvtVNC3rl6v9tCVjTLCSBjLmTH3EhNiq6OPizV+6GvspGEUIpH00HoPTgEn"></script>
-  <script src="js/domain/schedule-change.js?v=2.2.1" integrity="sha384-v7zQ2iSY9DIrsztq758NvV0o6vbsguJn70NviXT6itT6YcuNaCvSW2beDogcMbD7"></script>
-  <script src="js/presentation/schedule-change-ui.js?v=2.2.1" integrity="sha384-DcmUeBgzRXnC2DuzuFjF4cgUfQzHPJkPFRMGt6IjV+ElSdmxrmyVdcasWSVnkQsn"></script>
-  <script src="js/domain/spot-realignment.js?v=2.2.1" integrity="sha384-gCFPNcD1aD3UegqTLtFPCU7Xqm7CtRN0yjQx2QnWe1ee0i3cZu8pzZic7YzBJLKt"></script>
-  <script src="js/presentation/spot-realignment-ui.js?v=2.2.1" integrity="sha384-GKlSQQKluvxcnRhJmQVQL4lZIFXbqf8ac/0BnxPiWNWcLjFJWYx/IZU3+5fZI7dk"></script>
-  <script src="js/domain/travel-records.js?v=2.2.1" integrity="sha384-qhkfkF1xKTuPtBvsB5Gwpz631xTkyy2tS1BU9Hixd2L1t+oobsXBMJnFv1pBHNnW"></script>
-  <script src="js/domain/travel-story.js?v=2.2.1" integrity="sha384-vjuGNDpytM6vG8SuZbKLW7qTTV1L33j48P1KSwNQnvca7uxo5EYkBM2X0IOdn/Qa"></script>
-  <script src="js/infrastructure/storage/photo-compression.js?v=2.2.1" integrity="sha384-MeOApXBzhg++Rcq/Lfjwb04/MA1U6wmwHppDgFZvKA4ZfdPC4oR2Hv1BhPFNU7Ig"></script>
-  <link rel="stylesheet" href="css/photo-optimization.css?v=2.2.1" integrity="sha384-9sgcirlxZs5tcmp/22RdH56B3bZla/q4DVH7x8W+fO8P4neR4WJMDDtQNK4WPq+/">
-  <script src="js/domain/photo-optimization.js?v=2.2.1" integrity="sha384-fpPZ4nJ383bIJaSHvmuZg+9BYd5LQ8YuVtEEMjtJnQr2Fod/mawAoB5SYMdtvBRU"></script>
-  <script src="js/infrastructure/storage/photo-cleanup.js?v=2.2.1" integrity="sha384-qPUCnJe7spP79MZLfOuzscYXTD6cW+7dzsf0xxvDip9hIj+yBvbBK6KhAouz5BC/"></script>
-  <script src="js/presentation/photo-optimization-ui.js?v=2.2.1" integrity="sha384-3hbyGaTEmmcJedqdlzMJs8SeGnYCFuuItyMz6MU2GqsZPt0F3lqhR6C3xfEjtztX"></script>
-  <script src="js/infrastructure/storage/media-repository.js?v=2.2.1" integrity="sha384-q0IPoo86aU2ruB130X1HAh01dr4hpI0IAXeMVCoa7Jy/2pIB09f7WbSKPm8vowhw"></script>
-  <script src="js/infrastructure/storage/record-media-store.js?v=2.2.1" integrity="sha384-vNu5tI/i1vWsxi2/3aQYW+9zYfivBNB2ewaUTRlwhnGwRbv9dpR4bu/sqzv1D2jm"></script>
-  <script src="js/infrastructure/storage/expense-photo-repository.js?v=2.2.1" integrity="sha384-gdumvFYkJqEbRPJlK4mffCsUjPsnKCXLg6/1fLMR8kUuU1QDMeLLOYmMVSRTGNSy"></script>
-  <script src="js/presentation/companion-ui.js?v=2.2.1" integrity="sha384-FYQu/PpwY6jyVnnaEcVzbTl/UuclRS+qCCWytiF6BeSHiFZUW9+KezOAAv6gURR2"></script>
-  <script src="js/domain/trip-transfer.js?v=2.2.1" integrity="sha384-VD9q1co1+bJzdS4i19rvfkQN/4KvzfnNdHUjbbucghcxzjmPim+kWF93qv5DaXSu"></script>
-  <script src="js/domain/travel-backup.js?v=2.2.1" integrity="sha384-4zE43uWlz5y3eP7g98tEL3HqAsw08/XvINQ+RhLLt4wz+cnySMWiy3Eu1m7BaBbK"></script>
-  <script src="js/presentation/travel-backup-ui.js?v=2.2.1" integrity="sha384-sVW2ZCtsSxmpUV5LLx/g7qXCQgsC7telSgAQ1ahagRA8PVeaCIIR3eRLB5CuEHuY"></script>
-  <script src="js/presentation/storage-health-ui.js?v=2.2.1" integrity="sha384-yhLee1WlZBu7vZL8qquRuBbYdW2RIBPIkjKQqjgT5iNw7FRWOlw7POGkpMar7IkT"></script>
-  <script src="js/presentation/trip-transfer-ui.js?v=2.2.1" integrity="sha384-eqPYhJD7v4KX0Ya6tmFTiMnZZaifZSy9rw+iOVpL40NbDHovbAiFLCkBXIdKFr+l"></script>
-  <script src="js/presentation/mobile-navigation.js?v=2.2.1" integrity="sha384-eQghbRiQF5vWbbzIWcYjk+nJ9Hb0Mc8LqeDBvGptxDqMieJnQstf/shr6UQf2kad"></script>
-  <script src="js/presentation/activity-journal.js?v=2.2.1" integrity="sha384-yfWY1V0BnjH3KiQRcQhSUSk+yFtzEHdTrHFa9impeFfcJfhekTfeXeCZvzbgv4he"></script>
-  <script src="js/presentation/moment-journal.js?v=2.2.1" integrity="sha384-r/heV0A2E+VDwxEE7joC1tw0UPcWIWSdZHDvU0rQs6c+LzY5zCEBLYiF4KIKQo5u"></script>
-  <script src="js/presentation/travel-story-ui.js?v=2.2.1" integrity="sha384-s9HZ4A1/X3tCfe4rBfB6nzEwAC7i2U1YVfradgxnQPX5X4tnFszIOPeMsLPfXnfq"></script>
-  <script src="js/config/collaboration-config.js?v=2.2.1" integrity="sha384-ipxhKB+fQ4s3OThYo3p6IWFvP6BbstXYDW6jZWWiPHB4qomo64w7r8/wRvdsi47w"></script>
-  <script src="js/infrastructure/collaboration/supabase-travel-service.js?v=2.2.1" integrity="sha384-+SDvVJ0CNqCMvFlOBOA+nfA1k6/sN6GlaKDhTQo4SgX8x3EwPXyJlvMfJj0D6Bt/"></script>
-  <script src="js/presentation/collaboration-ui.js?v=2.2.1" integrity="sha384-KvnYI6ym2/deKsOtKryWJS5tljPjqYRx67JGGgWVRNyWHEC470iPDg3+fdw0OHX0"></script>
-  <script src="js/presentation/collaboration-review.js?v=2.2.1" integrity="sha384-cbND/rT26DaIY2hR++LBuByF9L/ACu5TDl0b85EN2zsk/sTapWGm2BPQqZgN6GzI"></script>
-  <script src="js/presentation/ui-actions.js?v=2.2.1" integrity="sha384-86E6+vWuYSS4ldFWIpwfcJMnPW2jUnvL9CJGWeJHDKHEXnQsNWTDB0skpvkRBm9K"></script>
-  <script src="js/presentation/shell-actions.js?v=2.2.1" integrity="sha384-U2oGDxTvGwi30E4dNh1CkhDtgABYyf+tvtZYOm2h31bPLv/ptAhsQhnFv0nVndEo"></script>
-  <script src="js/presentation/exchange-ui.js?v=2.2.1" integrity="sha384-21MA/m/6rg1LsIZFsoAuqvhmWN3Y8seM2ZdIZHKOGEZ70CAjaeulE8mmIbSKmb1h"></script>
-  <script src="js/presentation/plan-blocks.js?v=2.2.1" integrity="sha384-9L3ReY65vVOLocj/bo9HlbUTj0ZFMo1Cxq3Jtu+Q3j6mL3+BCwDaEuPJCBk4L0D6"></script>
-  <script src="js/presentation/plan-timeline.js?v=2.2.1" integrity="sha384-47MFhIy5AILe78Oj2efg0Sdhl0enRNIn/dZrGuxcyLqQG3Ht9dC4kLDicaNOJe9C"></script>
-  <script src="js/presentation/plan-map.js?v=2.2.1" integrity="sha384-moJ8fpaMtEe644aLUgtZGuvdUoG/ax/MK9VlZPw4TCtT/XomX3xjobLrKtRnm94d"></script>
-  <script src="js/presentation/route-map.js?v=2.2.1" integrity="sha384-j87WAiWOdi7HTCFWm0XWLG7jV7KT9R2JLOGoKKmEiPJh3CsZCYfDmI7hO896ksUY"></script>
-  <script src="js/presentation/lifetime-analytics.js?v=2.2.1" integrity="sha384-wSyGWne4T8RC9AEQuhHrfWZrQ4ulSh4zZYD7ekFBnlo3nUdEurMhOIk2++IALbi4"></script>
-  <script src="js/presentation/hub-view.js?v=2.2.1" integrity="sha384-htKlVrBc9ue00E/iSHm7evqbnEHDM+La/E+phfFh5hKAg7YFHhNztv/UMbhMH+6O"></script>
-  <script src="js/presentation/settings-ui.js?v=2.2.1" integrity="sha384-rY0ntKNCuVqoub7KcF2B+FxBjKcODsJs+uJ3EAQlRvT8Iju3HSZOkBe1/DdcxAvL"></script>
-  <script src="js/presentation/plan-guides.js?v=2.2.1" integrity="sha384-Eg0ooJHXflNMCbbk5sEJIg4VX2WigAkFB9GzPI7iT7q57s8L2TdNMYQxc9BWHb87"></script>
-  <script src="js/presentation/budget-ui.js?v=2.2.1" integrity="sha384-p+A7x64rZuPWhGaUzTMoNYo60aTQzp7UXhZzMfXABMyWqrG32b4LDPZ/SGwoEKjs"></script>
-  <script src="js/presentation/expense-analytics.js?v=2.2.1" integrity="sha384-GOo/a/N9uE2yr6Aw2Ju6sXiBr5VTaDbPb1nth/ElR4GDT1yPI0CfghLOB7DaN1Yp"></script>
-  <script src="js/presentation/expenses-tab.js?v=2.2.1" integrity="sha384-dFoKIs/B5CCctW17/wd1Kp0Kr6v9LXykyt/8yOknSEs3G9C7rnYam3VrTKE9ZaFg"></script>
-  <script src="js/presentation/journal-tab.js?v=2.2.1" integrity="sha384-Hhgx7Hra1MAb8tvQIMdF9khAJjZHC3SqpdqWrAXEVAbGHvgFLOf+bREOM6jyvFoc"></script>
-  <script src="js/presentation/checklist-tab.js?v=2.2.1" integrity="sha384-ENgqtNcHd59KKTorCEZx/H/zUSfXi47RIM1X1F1E6tNPe5U4DKXginat44x1SDbL"></script>
-  <script src="js/presentation/expense-editor.js?v=2.2.1" integrity="sha384-PosLZVGcia3FlNTeQCWVw+mtgPsGaCJjpHKtrdFVXpaw5LYD+iQ/M5FYwMYy/HVY"></script>
+  <link rel="stylesheet" href="css/companion.css?v=2.2.2" integrity="sha384-Syant7HB0IYUZUU2saRSYUDkM71WKVuK2JtHM+kAluFdw3VvWv9gSglgJh4utHv/">
+  <link rel="stylesheet" href="css/companion-refresh.css?v=2.2.2" integrity="sha384-2KIp4VI8qsP6dGnz0cm/vehjLjr6GxpZ9yWTbbIXBPWi25XHg6XUOtNbp7W8KMd3">
+  <link rel="stylesheet" href="css/live-itinerary.css?v=2.2.2" integrity="sha384-e/V9wyJ/Gi6baSHcWzBeNGjdn/eKDQIvKWyiYmByLE7C7nYJaQOA+GshtUMcCR72">
+  <link rel="stylesheet" href="css/expense-mobile.css?v=2.2.2" integrity="sha384-QZFtKrU/YvkTaEKv0oJ2ZQi1Zry8RgEFaHzTckwuPFsMDDmadYBH7UuYgTVS7281">
+  <link rel="stylesheet" href="css/moment-journal.css?v=2.2.2" integrity="sha384-g1EihgfyPDJ5o5eWSsQgT1WDTRKDtUfzVatlx6T/t+DhApDBY8dznSrwmelasv91">
+  <script src="js/domain/trip-adapter.js?v=2.2.2" integrity="sha384-JHU/NkAlxwR9G9/49TaFK4sTvg9xKGsSVd3re8rLivtiXcSNdnQA9gRIfvVWUtG7"></script>
+  <script src="js/domain/ai-draft-validation.js?v=2.2.2" integrity="sha384-OTRAiX7YaOiiNrpMWDjkOyH0bTbbL3KrGwGp1RmIkgvd15pErNTTKVTJkoesmpfi"></script>
+  <script src="js/domain/live-itinerary.js?v=2.2.2" integrity="sha384-cwMH5i2F5Mve7Z9cKeWrP7uLU5plcu6c7xvTf4Lyz3Xkb6GlNCI14lnEWzw46cVg"></script>
+  <script src="js/presentation/live-itinerary-ui.js?v=2.2.2" integrity="sha384-o0/FMQJBgpZ6IjgCVORm7T9wuyP+FMXZBQWNpODWeV7EibRoxJXXvfpLYyRnZwJV"></script>
+  <script src="js/presentation/live-itinerary-bridge.js?v=2.2.2" integrity="sha384-lRoX8rvtVNC3rl6v9tCVjTLCSBjLmTH3EhNiq6OPizV+6GvspGEUIpH00HoPTgEn"></script>
+  <script src="js/domain/schedule-change.js?v=2.2.2" integrity="sha384-v7zQ2iSY9DIrsztq758NvV0o6vbsguJn70NviXT6itT6YcuNaCvSW2beDogcMbD7"></script>
+  <script src="js/presentation/schedule-change-ui.js?v=2.2.2" integrity="sha384-/o64DP3fREiF6GLq76fUVLc7a0yqHmcXa7vYfKDJfvwz2C78WHFUeufRrmntmWOh"></script>
+  <script src="js/domain/spot-realignment.js?v=2.2.2" integrity="sha384-gCFPNcD1aD3UegqTLtFPCU7Xqm7CtRN0yjQx2QnWe1ee0i3cZu8pzZic7YzBJLKt"></script>
+  <script src="js/presentation/spot-realignment-ui.js?v=2.2.2" integrity="sha384-GKlSQQKluvxcnRhJmQVQL4lZIFXbqf8ac/0BnxPiWNWcLjFJWYx/IZU3+5fZI7dk"></script>
+  <script src="js/domain/travel-records.js?v=2.2.2" integrity="sha384-qhkfkF1xKTuPtBvsB5Gwpz631xTkyy2tS1BU9Hixd2L1t+oobsXBMJnFv1pBHNnW"></script>
+  <script src="js/domain/travel-story.js?v=2.2.2" integrity="sha384-vjuGNDpytM6vG8SuZbKLW7qTTV1L33j48P1KSwNQnvca7uxo5EYkBM2X0IOdn/Qa"></script>
+  <script src="js/infrastructure/storage/photo-compression.js?v=2.2.2" integrity="sha384-MeOApXBzhg++Rcq/Lfjwb04/MA1U6wmwHppDgFZvKA4ZfdPC4oR2Hv1BhPFNU7Ig"></script>
+  <link rel="stylesheet" href="css/photo-optimization.css?v=2.2.2" integrity="sha384-9sgcirlxZs5tcmp/22RdH56B3bZla/q4DVH7x8W+fO8P4neR4WJMDDtQNK4WPq+/">
+  <script src="js/domain/photo-optimization.js?v=2.2.2" integrity="sha384-fpPZ4nJ383bIJaSHvmuZg+9BYd5LQ8YuVtEEMjtJnQr2Fod/mawAoB5SYMdtvBRU"></script>
+  <script src="js/infrastructure/storage/photo-cleanup.js?v=2.2.2" integrity="sha384-qPUCnJe7spP79MZLfOuzscYXTD6cW+7dzsf0xxvDip9hIj+yBvbBK6KhAouz5BC/"></script>
+  <script src="js/presentation/photo-optimization-ui.js?v=2.2.2" integrity="sha384-3hbyGaTEmmcJedqdlzMJs8SeGnYCFuuItyMz6MU2GqsZPt0F3lqhR6C3xfEjtztX"></script>
+  <script src="js/infrastructure/storage/media-repository.js?v=2.2.2" integrity="sha384-q0IPoo86aU2ruB130X1HAh01dr4hpI0IAXeMVCoa7Jy/2pIB09f7WbSKPm8vowhw"></script>
+  <script src="js/infrastructure/storage/record-media-store.js?v=2.2.2" integrity="sha384-vNu5tI/i1vWsxi2/3aQYW+9zYfivBNB2ewaUTRlwhnGwRbv9dpR4bu/sqzv1D2jm"></script>
+  <script src="js/infrastructure/storage/expense-photo-repository.js?v=2.2.2" integrity="sha384-gdumvFYkJqEbRPJlK4mffCsUjPsnKCXLg6/1fLMR8kUuU1QDMeLLOYmMVSRTGNSy"></script>
+  <script src="js/presentation/companion-ui.js?v=2.2.2" integrity="sha384-2Jqr/hGAQWtlAPASY5FtUziGBR3OTSMP0kKZkqjb0z313GVMqPtBUgt7MRqiWMMv"></script>
+  <script src="js/domain/trip-transfer.js?v=2.2.2" integrity="sha384-VD9q1co1+bJzdS4i19rvfkQN/4KvzfnNdHUjbbucghcxzjmPim+kWF93qv5DaXSu"></script>
+  <script src="js/domain/travel-backup.js?v=2.2.2" integrity="sha384-4zE43uWlz5y3eP7g98tEL3HqAsw08/XvINQ+RhLLt4wz+cnySMWiy3Eu1m7BaBbK"></script>
+  <script src="js/presentation/travel-backup-ui.js?v=2.2.2" integrity="sha384-sVW2ZCtsSxmpUV5LLx/g7qXCQgsC7telSgAQ1ahagRA8PVeaCIIR3eRLB5CuEHuY"></script>
+  <script src="js/presentation/storage-health-ui.js?v=2.2.2" integrity="sha384-yhLee1WlZBu7vZL8qquRuBbYdW2RIBPIkjKQqjgT5iNw7FRWOlw7POGkpMar7IkT"></script>
+  <script src="js/presentation/trip-transfer-ui.js?v=2.2.2" integrity="sha384-eqPYhJD7v4KX0Ya6tmFTiMnZZaifZSy9rw+iOVpL40NbDHovbAiFLCkBXIdKFr+l"></script>
+  <script src="js/presentation/mobile-navigation.js?v=2.2.2" integrity="sha384-kBt19zWZRJi5YikjblCgSn1Lvo3lYWKGTAr1wUWly83cD5FTjDSjryhWLx0D2Jl0"></script>
+  <script src="js/presentation/activity-journal.js?v=2.2.2" integrity="sha384-yfWY1V0BnjH3KiQRcQhSUSk+yFtzEHdTrHFa9impeFfcJfhekTfeXeCZvzbgv4he"></script>
+  <script src="js/presentation/moment-journal.js?v=2.2.2" integrity="sha384-r/heV0A2E+VDwxEE7joC1tw0UPcWIWSdZHDvU0rQs6c+LzY5zCEBLYiF4KIKQo5u"></script>
+  <script src="js/presentation/travel-story-ui.js?v=2.2.2" integrity="sha384-s9HZ4A1/X3tCfe4rBfB6nzEwAC7i2U1YVfradgxnQPX5X4tnFszIOPeMsLPfXnfq"></script>
+  <script src="js/config/collaboration-config.js?v=2.2.2" integrity="sha384-ipxhKB+fQ4s3OThYo3p6IWFvP6BbstXYDW6jZWWiPHB4qomo64w7r8/wRvdsi47w"></script>
+  <script src="js/infrastructure/collaboration/supabase-travel-service.js?v=2.2.2" integrity="sha384-+SDvVJ0CNqCMvFlOBOA+nfA1k6/sN6GlaKDhTQo4SgX8x3EwPXyJlvMfJj0D6Bt/"></script>
+  <script src="js/presentation/collaboration-ui.js?v=2.2.2" integrity="sha384-KvnYI6ym2/deKsOtKryWJS5tljPjqYRx67JGGgWVRNyWHEC470iPDg3+fdw0OHX0"></script>
+  <script src="js/presentation/collaboration-review.js?v=2.2.2" integrity="sha384-cbND/rT26DaIY2hR++LBuByF9L/ACu5TDl0b85EN2zsk/sTapWGm2BPQqZgN6GzI"></script>
+  <script src="js/presentation/ui-actions.js?v=2.2.2" integrity="sha384-86E6+vWuYSS4ldFWIpwfcJMnPW2jUnvL9CJGWeJHDKHEXnQsNWTDB0skpvkRBm9K"></script>
+  <script src="js/presentation/shell-actions.js?v=2.2.2" integrity="sha384-U2oGDxTvGwi30E4dNh1CkhDtgABYyf+tvtZYOm2h31bPLv/ptAhsQhnFv0nVndEo"></script>
+  <script src="js/presentation/exchange-ui.js?v=2.2.2" integrity="sha384-21MA/m/6rg1LsIZFsoAuqvhmWN3Y8seM2ZdIZHKOGEZ70CAjaeulE8mmIbSKmb1h"></script>
+  <script src="js/presentation/plan-blocks.js?v=2.2.2" integrity="sha384-Y9Ig6PlkuyrOlG37ahgrLVzCAAnLtVb57tte96feeiMky/nRwri//Osk26zHr7E6"></script>
+  <script src="js/presentation/plan-timeline.js?v=2.2.2" integrity="sha384-92DXb1pEf38w/3vomukTTi8Jk14NBoY3s408mV5DhhATNH81x/Qfrnm5mitwRWWa"></script>
+  <script src="js/presentation/plan-map.js?v=2.2.2" integrity="sha384-moJ8fpaMtEe644aLUgtZGuvdUoG/ax/MK9VlZPw4TCtT/XomX3xjobLrKtRnm94d"></script>
+  <script src="js/presentation/route-map.js?v=2.2.2" integrity="sha384-j87WAiWOdi7HTCFWm0XWLG7jV7KT9R2JLOGoKKmEiPJh3CsZCYfDmI7hO896ksUY"></script>
+  <script src="js/presentation/lifetime-analytics.js?v=2.2.2" integrity="sha384-wSyGWne4T8RC9AEQuhHrfWZrQ4ulSh4zZYD7ekFBnlo3nUdEurMhOIk2++IALbi4"></script>
+  <script src="js/presentation/hub-view.js?v=2.2.2" integrity="sha384-htKlVrBc9ue00E/iSHm7evqbnEHDM+La/E+phfFh5hKAg7YFHhNztv/UMbhMH+6O"></script>
+  <script src="js/presentation/settings-ui.js?v=2.2.2" integrity="sha384-rY0ntKNCuVqoub7KcF2B+FxBjKcODsJs+uJ3EAQlRvT8Iju3HSZOkBe1/DdcxAvL"></script>
+  <script src="js/presentation/schedule-tuning-ui.js?v=2.2.2" integrity="sha384-TFt+IvVixVrPV2BXHuTkJKJsAVfjDCsfWHKPcYYRIUF2ZpESqoAk+9HHqf2CjXsU"></script>
+  <script src="js/presentation/plan-guides.js?v=2.2.2" integrity="sha384-Eg0ooJHXflNMCbbk5sEJIg4VX2WigAkFB9GzPI7iT7q57s8L2TdNMYQxc9BWHb87"></script>
+  <script src="js/presentation/budget-ui.js?v=2.2.2" integrity="sha384-p+A7x64rZuPWhGaUzTMoNYo60aTQzp7UXhZzMfXABMyWqrG32b4LDPZ/SGwoEKjs"></script>
+  <script src="js/presentation/expense-analytics.js?v=2.2.2" integrity="sha384-GOo/a/N9uE2yr6Aw2Ju6sXiBr5VTaDbPb1nth/ElR4GDT1yPI0CfghLOB7DaN1Yp"></script>
+  <script src="js/presentation/expenses-tab.js?v=2.2.2" integrity="sha384-dFoKIs/B5CCctW17/wd1Kp0Kr6v9LXykyt/8yOknSEs3G9C7rnYam3VrTKE9ZaFg"></script>
+  <script src="js/presentation/journal-tab.js?v=2.2.2" integrity="sha384-Hhgx7Hra1MAb8tvQIMdF9khAJjZHC3SqpdqWrAXEVAbGHvgFLOf+bREOM6jyvFoc"></script>
+  <script src="js/presentation/checklist-tab.js?v=2.2.2" integrity="sha384-ENgqtNcHd59KKTorCEZx/H/zUSfXi47RIM1X1F1E6tNPe5U4DKXginat44x1SDbL"></script>
+  <script src="js/presentation/expense-editor.js?v=2.2.2" integrity="sha384-PosLZVGcia3FlNTeQCWVw+mtgPsGaCJjpHKtrdFVXpaw5LYD+iQ/M5FYwMYy/HVY"></script>
 
   <!-- Knowledge Base Seed & Destination Knowledge Packs (DKP) -->
-  <script src="kb-travel.js?v=2.2.1" integrity="sha384-zxXc7MUMbmXkiaF3ymeLmVSiCyPRVfkUjSZetDVx41zrHGyPeSCN4TFpy5f1jNUd"></script>
+  <script src="kb-travel.js?v=2.2.2" integrity="sha384-zxXc7MUMbmXkiaF3ymeLmVSiCyPRVfkUjSZetDVx41zrHGyPeSCN4TFpy5f1jNUd"></script>
   <script src="js/destinations/destination-registry.js" integrity="sha384-PV7EnpqZusutqYxhFc0vICq72coA/C+TMYaBkk+BFy52dmgfk/RDzf/DAgW7dmvC"></script>
   <script src="js/destinations/pack-default.js" integrity="sha384-mCe4oKfrN+8fbLFCJJexsHJXBZkw6b6q1bOg5skoupZ9hXUrhZ92sTRRTF831vDt"></script>
-  <script src="js/destinations/pack-south-america.js?v=2.2.1" integrity="sha384-p6i8pSXkYDEndehBEqNlXK7ZIZia6Tsxw4TD2LUf7TJPUSlPd2AzXbp3wyyAvDG7"></script>
+  <script src="js/destinations/pack-south-america.js?v=2.2.2" integrity="sha384-p6i8pSXkYDEndehBEqNlXK7ZIZia6Tsxw4TD2LUf7TJPUSlPd2AzXbp3wyyAvDG7"></script>
   <script src="js/destinations/pack-yunnan.js" integrity="sha384-MIgviqt+QV/b06eH6w7DO42JTPFr7Q2kFTi8TRQT4MCouBcFBGiC7x1jnKgVatOX"></script>
-  <script src="js/destinations/emergency-contacts.js?v=2.2.1" integrity="sha384-q3IUPhGWY99DNBNM269wiapa6eQYahcwaro/PvPILVtAgkUM0pE23GI5E63eMLlN"></script>
-  <script src="js/infrastructure/storage/legacy-trip-repository.js?v=2.2.1" integrity="sha384-Jf2y8z7h6bwxOdkwZP0zMyhyG/ntcCrFco7a+mzgiFAtiCUE2uXU8Cc/MSjunorP"></script>
-  <script src="js/infrastructure/storage/idb-trip-repository.js?v=2.2.1" integrity="sha384-n7ndWoPUE3bipL9HvWWTfW8XPNZbDRmAWocUpRIyVM5HtGIIEqbkOK1e6InJY8c4"></script>
-  <script src="js/infrastructure/storage/trip-store.js?v=2.2.1" integrity="sha384-ftpferQ+1NXFRqMRZuHlz2wGUfEKk4GKeXEZzAs3FlsUmGfFdxcsSG6U5t4/B1Rb"></script>
-  <script src="js/infrastructure/storage/settings-repository.js?v=2.2.1" integrity="sha384-fp7ck757BhOA+Y2i/VoW21KRCkeMyb/G78wxwhZuReB2JbzcyTxBrLxGldhvw3n3"></script>
-  <script src="js/infrastructure/storage/journal-overflow-repository.js?v=2.2.1" integrity="sha384-uRxi9B+oBHCQ+aa8a6Wp72RAAeEuslXu5kZ+gf9Kvo22B3N6fr1XSkVnAV1X42yO"></script>
+  <script src="js/destinations/emergency-contacts.js?v=2.2.2" integrity="sha384-q3IUPhGWY99DNBNM269wiapa6eQYahcwaro/PvPILVtAgkUM0pE23GI5E63eMLlN"></script>
+  <script src="js/infrastructure/storage/legacy-trip-repository.js?v=2.2.2" integrity="sha384-Jf2y8z7h6bwxOdkwZP0zMyhyG/ntcCrFco7a+mzgiFAtiCUE2uXU8Cc/MSjunorP"></script>
+  <script src="js/infrastructure/storage/idb-trip-repository.js?v=2.2.2" integrity="sha384-n7ndWoPUE3bipL9HvWWTfW8XPNZbDRmAWocUpRIyVM5HtGIIEqbkOK1e6InJY8c4"></script>
+  <script src="js/infrastructure/storage/trip-store.js?v=2.2.2" integrity="sha384-ftpferQ+1NXFRqMRZuHlz2wGUfEKk4GKeXEZzAs3FlsUmGfFdxcsSG6U5t4/B1Rb"></script>
+  <script src="js/infrastructure/storage/settings-repository.js?v=2.2.2" integrity="sha384-fp7ck757BhOA+Y2i/VoW21KRCkeMyb/G78wxwhZuReB2JbzcyTxBrLxGldhvw3n3"></script>
+  <script src="js/infrastructure/storage/journal-overflow-repository.js?v=2.2.2" integrity="sha384-uRxi9B+oBHCQ+aa8a6Wp72RAAeEuslXu5kZ+gf9Kvo22B3N6fr1XSkVnAV1X42yO"></script>
 </head>
 <body class="min-h-screen flex flex-col font-sans transition-colors duration-200">
 
@@ -1593,7 +1595,7 @@
       <div class="app-brand flex items-center gap-2 sm:gap-2.5 min-w-0 cursor-pointer select-none" data-on-click="shell.switchView" data-view="hub">
         <img src="icons/sulsul_bear_mascot.png" class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl object-cover border border-[#e6e2d8] dark:border-stone-800 shadow-sm shrink-0" alt="Sulsul Travel">
           <h1 class="font-brand-script text-xl sm:text-2xl md:text-3xl font-bold tracking-normal text-[#1E2B24] dark:text-[#ededed] whitespace-nowrap leading-tight">Sulsul Travel</h1>
-            <button id="app-ver-badge" type="button" data-on-click="settings.openVersionHistory" class="theme-card-subtle font-mono" title="앱 버전과 업데이트 기록 보기">v2.2.1</button>
+            <button id="app-ver-badge" type="button" data-on-click="settings.openVersionHistory" class="theme-card-subtle font-mono" title="앱 버전과 업데이트 기록 보기">v2.2.2</button>
             <p id="header-trip-name" class="sr-only">A Deep Life Essay</p>
       </div>
 
@@ -3082,24 +3084,24 @@
 
   <!-- 스팟 추가 모달 -->
   <div id="modal-spot" class="sheet-container sheet-closed">
-    <div class="sheet-scrim" onclick="closeModal('modal-spot')"></div>
+    <div class="sheet-scrim" data-on-click="shell.closeModal" data-modal="modal-spot"></div>
     <div class="sheet-box sheet-scroll-layout">
       <div class="sheet-sticky-header flex items-center justify-between">
         <h3 class="text-base font-black text-white flex items-center gap-2">
           <i id="spot-form-icon" class="fa-solid fa-location-dot text-amber-400"></i>
           <span id="spot-form-modal-title">새 일정 추가</span>
         </h3>
-        <button onclick="closeModal('modal-spot')" class="tap-target text-slate-400 hover:text-white text-base" aria-label="일정 편집 닫기">✕</button>
+        <button type="button" data-on-click="shell.closeModal" data-modal="modal-spot" class="tap-target text-slate-400 hover:text-white text-base" aria-label="일정 편집 닫기">✕</button>
       </div>
       <div class="sheet-scroll-body space-y-4">
       <input type="hidden" id="spot-form-edit-idx" value="">
-      <div class="live-position-fields"><label for="spot-form-position">넣을 위치</label><select id="spot-form-position" onchange="syncLiveSpotPosition()"><option value="keep">현재 위치 유지</option><option value="time">시각에 맞춰 삽입 (미정이면 끝)</option><option value="start">맨 앞</option><option value="end">맨 뒤</option><option value="before">선택 일정 앞</option><option value="after">선택 일정 뒤</option></select><label for="spot-form-anchor">기준 일정</label><select id="spot-form-anchor"></select></div>
+      <div class="live-position-fields"><label for="spot-form-position">넣을 위치</label><select id="spot-form-position" data-on-change="scheduleTuning.syncPosition"><option value="keep">현재 위치 유지</option><option value="time">시각에 맞춰 삽입 (미정이면 끝)</option><option value="start">맨 앞</option><option value="end">맨 뒤</option><option value="before">선택 일정 앞</option><option value="after">선택 일정 뒤</option></select><label for="spot-form-anchor">기준 일정</label><select id="spot-form-anchor"></select></div>
       <p id="spot-form-notice" class="companion-muted"></p>
 
       <div class="space-y-3 text-xs">
         <div>
           <label class="font-bold text-slate-300 block mb-1">일차 (Day)</label>
-          <select id="spot-form-day" onchange="syncLiveSpotPosition()" class="w-full px-3 py-2 bg-[#080b12] border border-[#1e263c] rounded-xl text-white focus:outline-none focus:border-amber-500"></select>
+          <select id="spot-form-day" data-on-change="scheduleTuning.syncPosition" class="w-full px-3 py-2 bg-[#080b12] border border-[#1e263c] rounded-xl text-white focus:outline-none focus:border-amber-500"></select>
         </div>
         <div class="grid grid-cols-2 gap-3">
           <div>
@@ -3139,8 +3141,8 @@
       <label class="schedule-fixed-field"><input type="checkbox" id="spot-form-fixed"> AI 자동 조정에서 보호할 고정 일정</label>
       </div>
       <div class="sheet-sticky-actions flex items-center gap-3">
-        <button onclick="closeModal('modal-spot')" class="flex-1 py-2.5 rounded-xl bg-[#141c2e] text-slate-300 font-bold text-xs">취소</button>
-        <button id="spot-form-submit-btn" onclick="submitSpot()" class="flex-1 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 text-slate-950 font-black text-xs shadow-md">스팟 저장</button>
+        <button type="button" data-on-click="shell.closeModal" data-modal="modal-spot" class="flex-1 py-2.5 rounded-xl bg-[#141c2e] text-slate-300 font-bold text-xs">취소</button>
+        <button type="button" id="spot-form-submit-btn" data-on-click="scheduleTuning.submitSpot" class="flex-1 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 text-slate-950 font-black text-xs shadow-md">스팟 저장</button>
       </div>
     </div>
   </div>
@@ -3926,7 +3928,7 @@
 
   <!-- 실시간 변수 대응 & 일정 튜닝 모달 (v1.3.1) -->
   <div id="modal-schedule-tuning" class="sheet-container sheet-closed">
-    <div class="sheet-scrim" onclick="closeModal('modal-schedule-tuning')"></div>
+    <div class="sheet-scrim" data-on-click="shell.closeModal" data-modal="modal-schedule-tuning"></div>
     <div class="sheet-box sheet-scroll-layout max-w-xl">
       <div class="sheet-sticky-header flex items-center justify-between gap-3">
         <div class="flex items-center gap-2.5">
@@ -3938,7 +3940,7 @@
             <p class="text-[11px] text-slate-400">교통 지연, 기상 악화, 피로도 등 현장 변수를 즉시 일정에 반영합니다.</p>
           </div>
         </div>
-        <button onclick="closeModal('modal-schedule-tuning')" class="w-8 h-8 rounded-lg bg-[#141c2e] hover:bg-[#1a263e] text-slate-400 hover:text-white flex items-center justify-center text-sm transition cursor-pointer">✕</button>
+        <button type="button" data-on-click="shell.closeModal" data-modal="modal-schedule-tuning" class="w-8 h-8 rounded-lg bg-[#141c2e] hover:bg-[#1a263e] text-slate-400 hover:text-white flex items-center justify-center text-sm transition cursor-pointer">✕</button>
       </div>
 
       <div class="sheet-scroll-body space-y-3.5 text-xs">
@@ -3954,42 +3956,42 @@
         <div>
           <label class="font-bold text-slate-200 block mb-1.5">⚡ 빠른 현장 변수 선택</label>
           <div class="grid grid-cols-2 sm:grid-cols-3 gap-2">
-            <button type="button" onclick="setTuningPreset('flight_delay', 60, '비행기/열차 연착으로 인한 전체 시간 순연')" class="p-2.5 rounded-xl bg-[#080b12] border border-[#1e263c] hover:border-amber-500/50 hover:bg-amber-500/10 text-left transition flex items-center gap-2 cursor-pointer">
+            <button type="button" data-on-click="scheduleTuning.preset" data-preset="flight_delay" data-minutes="60" data-reason="비행기/열차 연착으로 인한 전체 시간 순연" aria-pressed="false" class="p-2.5 rounded-xl bg-[#080b12] border border-[#1e263c] hover:border-amber-500/50 hover:bg-amber-500/10 text-left transition flex items-center gap-2 cursor-pointer">
               <span class="text-base">🚨</span>
               <div>
                 <div class="font-bold text-white text-[11px]">비행기/열차 연착</div>
                 <div class="text-[10px] text-amber-400">+60분 뒤로 순연</div>
               </div>
             </button>
-            <button type="button" onclick="setTuningPreset('traffic_jam', 120, '극심한 현지 교통 체증 및 이동 지연')" class="p-2.5 rounded-xl bg-[#080b12] border border-[#1e263c] hover:border-amber-500/50 hover:bg-amber-500/10 text-left transition flex items-center gap-2 cursor-pointer">
+            <button type="button" data-on-click="scheduleTuning.preset" data-preset="traffic_jam" data-minutes="120" data-reason="극심한 현지 교통 체증 및 이동 지연" aria-pressed="false" class="p-2.5 rounded-xl bg-[#080b12] border border-[#1e263c] hover:border-amber-500/50 hover:bg-amber-500/10 text-left transition flex items-center gap-2 cursor-pointer">
               <span class="text-base">🚗</span>
               <div>
                 <div class="font-bold text-white text-[11px]">교통 체증 / 이동 지연</div>
                 <div class="text-[10px] text-amber-400">+120분 뒤로 순연</div>
               </div>
             </button>
-            <button type="button" onclick="setTuningPreset('rain_weather', 0, '우천 및 기상 악화로 인한 실내 명소 및 휴식 중심 전환')" class="p-2.5 rounded-xl bg-[#080b12] border border-[#1e263c] hover:border-cyan-500/50 hover:bg-cyan-500/10 text-left transition flex items-center gap-2 cursor-pointer">
+            <button type="button" data-on-click="scheduleTuning.preset" data-preset="rain_weather" data-minutes="0" data-reason="우천 및 기상 악화로 인한 실내 명소 및 휴식 중심 전환" aria-pressed="false" class="p-2.5 rounded-xl bg-[#080b12] border border-[#1e263c] hover:border-cyan-500/50 hover:bg-cyan-500/10 text-left transition flex items-center gap-2 cursor-pointer">
               <span class="text-base">🌧️</span>
               <div>
                 <div class="font-bold text-white text-[11px]">우천/기상 악화</div>
                 <div class="text-[10px] text-cyan-300">실내 코스 및 여유 조정</div>
               </div>
             </button>
-            <button type="button" onclick="setTuningPreset('fatigue_rest', 90, '체력 저하로 인한 호텔 휴식 및 시간표 순연')" class="p-2.5 rounded-xl bg-[#080b12] border border-[#1e263c] hover:border-purple-500/50 hover:bg-purple-500/10 text-left transition flex items-center gap-2 cursor-pointer">
+            <button type="button" data-on-click="scheduleTuning.preset" data-preset="fatigue_rest" data-minutes="90" data-reason="체력 저하로 인한 호텔 휴식 및 시간표 순연" aria-pressed="false" class="p-2.5 rounded-xl bg-[#080b12] border border-[#1e263c] hover:border-purple-500/50 hover:bg-purple-500/10 text-left transition flex items-center gap-2 cursor-pointer">
               <span class="text-base">🥱</span>
               <div>
                 <div class="font-bold text-white text-[11px]">체력 저하 · 힐링 휴식</div>
                 <div class="text-[10px] text-purple-300">+90분 휴식 확보</div>
               </div>
             </button>
-            <button type="button" onclick="setTuningPreset('early_finish', -60, '스팟 조기 관람 완료로 일정 1시간 당김')" class="p-2.5 rounded-xl bg-[#080b12] border border-[#1e263c] hover:border-emerald-500/50 hover:bg-emerald-500/10 text-left transition flex items-center gap-2 cursor-pointer">
+            <button type="button" data-on-click="scheduleTuning.preset" data-preset="early_finish" data-minutes="-60" data-reason="스팟 조기 관람 완료로 일정 1시간 당김" aria-pressed="false" class="p-2.5 rounded-xl bg-[#080b12] border border-[#1e263c] hover:border-emerald-500/50 hover:bg-emerald-500/10 text-left transition flex items-center gap-2 cursor-pointer">
               <span class="text-base">⏩</span>
               <div>
                 <div class="font-bold text-white text-[11px]">스팟 조기 완료</div>
                 <div class="text-[10px] text-emerald-400">-60분 앞당김</div>
               </div>
             </button>
-            <button type="button" onclick="setTuningPreset('custom', 30, '사용자 맞춤 30분 시간표 재배치')" class="p-2.5 rounded-xl bg-[#080b12] border border-[#1e263c] hover:border-slate-500 hover:bg-slate-800 text-left transition flex items-center gap-2 cursor-pointer">
+            <button type="button" data-on-click="scheduleTuning.preset" data-preset="custom" data-minutes="30" data-reason="사용자 맞춤 30분 시간표 재배치" aria-pressed="false" class="p-2.5 rounded-xl bg-[#080b12] border border-[#1e263c] hover:border-slate-500 hover:bg-slate-800 text-left transition flex items-center gap-2 cursor-pointer">
               <span class="text-base">✏️</span>
               <div>
                 <div class="font-bold text-white text-[11px]">직접 분 단위 조정</div>
@@ -4006,11 +4008,11 @@
             <input type="number" id="tuning-offset-minutes" value="60" step="15" class="w-28 px-3 py-2 bg-[#080b12] border border-[#1e263c] rounded-xl text-white font-mono font-bold text-center focus:outline-none focus:border-amber-500">
             <span class="text-slate-400 text-xs">분</span>
             <div class="flex items-center gap-1.5 flex-wrap ml-auto">
-              <button type="button" onclick="adjustTuningMinutes(-60)" class="px-2 py-1 rounded-lg bg-[#141c2e] hover:bg-[#1a263e] border border-[#1e263c] text-slate-300 text-xs font-mono cursor-pointer">-60분</button>
-              <button type="button" onclick="adjustTuningMinutes(-30)" class="px-2 py-1 rounded-lg bg-[#141c2e] hover:bg-[#1a263e] border border-[#1e263c] text-slate-300 text-xs font-mono cursor-pointer">-30분</button>
-              <button type="button" onclick="adjustTuningMinutes(30)" class="px-2 py-1 rounded-lg bg-[#141c2e] hover:bg-[#1a263e] border border-[#1e263c] text-slate-300 text-xs font-mono cursor-pointer">+30분</button>
-              <button type="button" onclick="adjustTuningMinutes(60)" class="px-2 py-1 rounded-lg bg-[#141c2e] hover:bg-[#1a263e] border border-[#1e263c] text-slate-300 text-xs font-mono cursor-pointer">+60분</button>
-              <button type="button" onclick="adjustTuningMinutes(120)" class="px-2 py-1 rounded-lg bg-[#141c2e] hover:bg-[#1a263e] border border-[#1e263c] text-slate-300 text-xs font-mono cursor-pointer">+120분</button>
+              <button type="button" data-on-click="scheduleTuning.adjustMinutes" data-delta="-60" class="px-2 py-1 rounded-lg bg-[#141c2e] hover:bg-[#1a263e] border border-[#1e263c] text-slate-300 text-xs font-mono cursor-pointer">-60분</button>
+              <button type="button" data-on-click="scheduleTuning.adjustMinutes" data-delta="-30" class="px-2 py-1 rounded-lg bg-[#141c2e] hover:bg-[#1a263e] border border-[#1e263c] text-slate-300 text-xs font-mono cursor-pointer">-30분</button>
+              <button type="button" data-on-click="scheduleTuning.adjustMinutes" data-delta="30" class="px-2 py-1 rounded-lg bg-[#141c2e] hover:bg-[#1a263e] border border-[#1e263c] text-slate-300 text-xs font-mono cursor-pointer">+30분</button>
+              <button type="button" data-on-click="scheduleTuning.adjustMinutes" data-delta="60" class="px-2 py-1 rounded-lg bg-[#141c2e] hover:bg-[#1a263e] border border-[#1e263c] text-slate-300 text-xs font-mono cursor-pointer">+60분</button>
+              <button type="button" data-on-click="scheduleTuning.adjustMinutes" data-delta="120" class="px-2 py-1 rounded-lg bg-[#141c2e] hover:bg-[#1a263e] border border-[#1e263c] text-slate-300 text-xs font-mono cursor-pointer">+120분</button>
             </div>
           </div>
         </div>
@@ -4031,12 +4033,12 @@
       </div>
 
       <div class="sheet-sticky-actions flex items-center gap-2">
-        <button onclick="closeModal('modal-schedule-tuning')" class="px-3 sm:px-4 py-2.5 rounded-xl bg-[#141c2e] hover:bg-[#1a263e] text-slate-400 hover:text-slate-200 font-bold text-xs transition cursor-pointer shrink-0 whitespace-nowrap">취소</button>
-        <button onclick="executeScheduleTuning(false)" class="flex-1 py-2.5 rounded-xl bg-[#1e263c] hover:bg-[#25314d] text-amber-400 hover:text-amber-300 border border-amber-500/30 font-bold text-xs transition flex items-center justify-center gap-1.5 cursor-pointer whitespace-nowrap" title="오프라인에서도 1초 만에 즉시 시간표를 밀거나 당깁니다">
+        <button type="button" data-on-click="shell.closeModal" data-modal="modal-schedule-tuning" class="px-3 sm:px-4 py-2.5 rounded-xl bg-[#141c2e] hover:bg-[#1a263e] text-slate-400 hover:text-slate-200 font-bold text-xs transition cursor-pointer shrink-0 whitespace-nowrap">취소</button>
+        <button type="button" data-on-click="scheduleTuning.execute" data-use-ai="false" class="flex-1 py-2.5 rounded-xl bg-[#1e263c] hover:bg-[#25314d] text-amber-400 hover:text-amber-300 border border-amber-500/30 font-bold text-xs transition flex items-center justify-center gap-1.5 cursor-pointer whitespace-nowrap" title="오프라인에서도 1초 만에 즉시 시간표를 밀거나 당깁니다">
           <i class="fa-solid fa-clock-rotate-left shrink-0"></i>
           <span><span class="sm:hidden">즉시 재배치</span><span class="hidden sm:inline">즉시 일정 재배치 (오프라인)</span></span>
         </button>
-        <button onclick="executeScheduleTuning(true)" class="flex-1 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-slate-950 font-black text-xs shadow-md transition flex items-center justify-center gap-1.5 cursor-pointer whitespace-nowrap" title="Gemini AI로 코스를 유기적으로 재구성하고 초안을 검토합니다">
+        <button type="button" data-on-click="scheduleTuning.execute" data-use-ai="true" class="flex-1 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-slate-950 font-black text-xs shadow-md transition flex items-center justify-center gap-1.5 cursor-pointer whitespace-nowrap" title="Gemini AI로 코스를 유기적으로 재구성하고 초안을 검토합니다">
           <i class="fa-solid fa-wand-magic-sparkles shrink-0"></i>
           <span><span class="sm:hidden">AI 재생성</span><span class="hidden sm:inline">AI 스마트 재생성 (검토)</span></span>
         </button>
@@ -4046,7 +4048,7 @@
 
   <!-- RePlan 변경 전후 검토 모달 -->
   <div id="modal-replan-review" class="sheet-container sheet-closed">
-    <div class="sheet-scrim" onclick="rejectPendingReplan()"></div>
+    <div class="sheet-scrim" data-on-click="scheduleTuning.rejectReplan"></div>
     <div class="sheet-box sheet-scroll-layout max-w-2xl">
       <div class="sheet-sticky-header flex items-start justify-between gap-3">
         <div>
@@ -4054,7 +4056,7 @@
           <h3 class="text-base sm:text-lg font-black text-white mt-1">바뀌는 일정만 확인하세요</h3>
           <p id="replan-review-summary" class="text-[11px] text-slate-400 mt-1"></p>
         </div>
-        <button onclick="rejectPendingReplan()" class="w-8 h-8 rounded-lg bg-[#141c2e] text-slate-400" title="닫기">✕</button>
+        <button type="button" data-on-click="scheduleTuning.rejectReplan" class="w-8 h-8 rounded-lg bg-[#141c2e] text-slate-400" title="닫기">✕</button>
       </div>
       <div class="sheet-scroll-body space-y-3">
         <div id="replan-review-changes" class="space-y-2"></div>
@@ -4063,8 +4065,8 @@
         </div>
       </div>
       <div class="sheet-sticky-actions flex items-center gap-3">
-        <button onclick="rejectPendingReplan()" class="flex-1 min-h-11 rounded-xl bg-[#141c2e] text-slate-300 font-bold text-xs">기존 계획 유지</button>
-        <button id="btn-apply-replan" onclick="applyPendingReplan()" class="flex-1 min-h-11 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 text-slate-950 font-black text-xs">변경안 적용</button>
+        <button type="button" data-on-click="scheduleTuning.rejectReplan" class="flex-1 min-h-11 rounded-xl bg-[#141c2e] text-slate-300 font-bold text-xs">기존 계획 유지</button>
+        <button type="button" id="btn-apply-replan" data-on-click="scheduleTuning.applyReplan" class="flex-1 min-h-11 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 text-slate-950 font-black text-xs">변경안 적용</button>
       </div>
     </div>
   </div>
@@ -4798,7 +4800,9 @@
 
       <!-- 버전 목록 스크롤 영역 (독립 스크롤 컨테이너로 Flexbox 압축 버그 영구 척결) -->
       <div class="overflow-y-auto flex-1 min-h-0 space-y-3.5 pr-1.5 custom-scrollbar">
-        <!-- v2.2.1 (Current) -->
+        <!-- v2.2.2 (Current) -->
+        <section class="companion-context"><h3 class="font-bold">v2.2.2 · 일정 튜닝·RePlan·스팟 편집 모달 정리</h3><p class="text-xs">2026-11-25 · st-shell-v2.2.2</p><p class="text-xs leading-relaxed">스팟 추가·수정 모달, 실시간 일정 튜닝, RePlan 검토 흐름을 별도 파일로 옮겼습니다. 시간 미정 일정을 열 때 09:00이 임의로 채워지던 문제, 잘못된 일차·구간 범위로 열면 선택창이 비거나 구간 재배치가 0건으로 끝나던 문제, RePlan 적용 버튼 연타 충돌, 일차 번호 HTML 이스케이프 누락을 고쳤습니다.</p></section>
+        <!-- v2.2.1 -->
         <section class="companion-context"><h3 class="font-bold">v2.2.1 · 설정·테마·PWA 설치·안내 모달 정리</h3><p class="text-xs">2026-11-25 · st-shell-v2.2.1</p><p class="text-xs leading-relaxed">환경설정, 3단 테마 전환, Gemini API 키 관리, PWA 설치 안내와 시작 가이드 배너, 푸터 안내·후원 모달을 별도 파일로 옮겼습니다. 설정·안내·AI 채팅 창에서 다른 창으로 바로 이동할 때 이전 창이 뒤에 남거나 잘못된 탭으로 열리던 문제, 처음 입력한 API 키 연결 테스트가 무시되거나 실패한 키가 기존 정상 키를 덮어쓰던 문제, 인앱 브라우저 크롬 전환 링크 프로토콜·이스케이프 오류와 탭 선택 접근성 속성을 함께 고쳤습니다.</p></section>
         <!-- v2.2.0 -->
         <section class="companion-context"><h3 class="font-bold">v2.2.0 · 내 여행 허브 화면 정리</h3><p class="text-xs">2026-11-25 · st-shell-v2.2.0</p><p class="text-xs leading-relaxed">내 여행 허브의 검색·상태/국가/도시/컨셉 필터·보기 전환·대표 사진·여행 카드 렌더링을 별도 파일로 옮겼습니다. 목록과 격자 카드에서 외화 예산이 원화 기호로 오표시되거나 0원 예산이 ₩500만으로 지어내지던 문제, 목록 카드 일수가 22일로 고정되던 문제, 삭제된 국가 필터가 남아 목록이 비던 문제를 고쳤습니다. 대표 사진 URL과 이모지·날짜 HTML을 안전하게 검증·이스케이프합니다.</p></section>
@@ -6362,7 +6366,7 @@
     window.showToast = showToast;
 
     // 앱 버전 및 글로벌 네임스페이스 (Sulsul-Travel Invariant Rule R-10, R-11, R-12, R-13, R-14, R-15, R-16)
-    const APP_VER = '2.2.1';
+    const APP_VER = '2.2.2';
 
     // 3-Way 테마 엔진(setTheme·toggleTheme·updateThemeUi)은 js/presentation/settings-ui.js(SulsulTravel.SettingsUI)로 옮겼다(v2.2.1, 4단계).
 
@@ -6789,7 +6793,6 @@
     }
     const JournalOverflowRepository = window.SulsulTravel.JournalOverflowRepository ? new window.SulsulTravel.JournalOverflowRepository() : null;
     let aiOrchestratorPromise = null;
-    let replanDomainPromise = null;
 
     // ==========================================
     // 앱 초기화 및 시드 로드
@@ -7395,7 +7398,7 @@
       renderCompanionToday();
     }
 
-    async function completeTodaySpot(dayIndex, spotIndex, event) { await toggleSpotCompleted(dayIndex, spotIndex, event); renderTodayTab(); }
+    async function completeTodaySpot(dayIndex, spotIndex, event) { await SulsulTravel.ScheduleTuning.toggleSpotCompleted(dayIndex, spotIndex, event); renderTodayTab(); }
     function skipTodaySpot(dayIndex,spotIndex,event){openScheduleChange(dayIndex,spotIndex,event);}
 
     // 워크스페이스 렌더링
@@ -9601,431 +9604,7 @@
       }
     }
 
-    function openAddSpotModal() {
-      const trip = getActiveTrip();
-      if(!trip||!requireSharedPlanEdit())return;
-      document.getElementById('modal-spot').dataset.tripId=trip.id;
-      document.getElementById('modal-spot').dataset.baseRevision=String(trip.revision);
-      document.getElementById('modal-spot').dataset.replacement='false';
-      document.getElementById('modal-spot').dataset.editSpotId='';
-      document.getElementById('modal-spot').dataset.sourceDayId='';
-      document.getElementById('spot-form-position').value='time';
-      document.getElementById('spot-form-position').querySelector('[value="keep"]').disabled=true;
-      document.getElementById('spot-form-fixed').checked=false;
-      document.getElementById('spot-form-notice').textContent='AI 고정은 자동 조정에서만 보호합니다. 직접 수정·취소·대체할 수 있습니다.';
-      const daySelect = document.getElementById('spot-form-day');
-      daySelect.innerHTML = (trip.days || []).map((d, idx) => `
-        <option value="${idx}">Day ${d.dayNum || (idx+1)}: ${escapeHtml(d.title)}</option>
-      `).join('');
-
-      const editIdxInput = document.getElementById('spot-form-edit-idx');
-      if (editIdxInput) editIdxInput.value = '';
-
-      const modalTitle = document.getElementById('spot-form-modal-title');
-      if (modalTitle) modalTitle.innerText = '새 일정 추가';
-      const formIcon = document.getElementById('spot-form-icon');
-      if (formIcon) formIcon.className = 'fa-solid fa-location-dot text-amber-400';
-      const submitBtn = document.getElementById('spot-form-submit-btn');
-      if (submitBtn) submitBtn.innerText = '스팟 저장';
-
-      const timeInput = document.getElementById('spot-form-time');
-      if (timeInput) timeInput.value = '';
-      const catSelect = document.getElementById('spot-form-cat');
-      if (catSelect) catSelect.value = 'tour';
-      const titleInput = document.getElementById('spot-form-title');
-      if (titleInput) titleInput.value = '';
-      const memoInput = document.getElementById('spot-form-memo');
-      if (memoInput) memoInput.value = '';
-      const tipInput = document.getElementById('spot-form-tip');
-      if (tipInput) tipInput.value = '';
-      const costInput = document.getElementById('spot-form-cost');
-      if (costInput) costInput.value = '';
-
-      syncLiveSpotPosition();
-      openModal('modal-spot');
-    }
-
-    function openAddSpotToDay(dayIdx) {
-      if(!requireSharedPlanEdit())return;
-      openAddSpotModal();
-      document.getElementById('spot-form-day').value = dayIdx;
-      syncLiveSpotPosition();
-    }
-
-    function openEditSpotModal(dayIdx, spotIdx, evt) {
-      if(!requireSharedPlanEdit())return;
-      if (evt && typeof evt.stopPropagation === 'function') evt.stopPropagation();
-      const trip = getActiveTrip();
-      if (!trip || !trip.days || !trip.days[dayIdx] || !trip.days[dayIdx].spots || !trip.days[dayIdx].spots[spotIdx]) return;
-      const spot = trip.days[dayIdx].spots[spotIdx];
-      document.getElementById('modal-spot').dataset.tripId=trip.id;
-      document.getElementById('modal-spot').dataset.baseRevision=String(trip.revision);
-      document.getElementById('modal-spot').dataset.replacement='false';
-      document.getElementById('modal-spot').dataset.editSpotId=spot.id;
-      document.getElementById('modal-spot').dataset.sourceDayId=trip.days[dayIdx].id;
-      document.getElementById('spot-form-position').value='keep';
-      document.getElementById('spot-form-position').querySelector('[value="keep"]').disabled=false;
-      document.getElementById('spot-form-fixed').checked=!!spot.fixed;
-      document.getElementById('spot-form-notice').textContent='시간·내용은 직접 수정할 수 있습니다. 연결된 여행 기록의 원문은 유지됩니다.';
-
-      const daySelect = document.getElementById('spot-form-day');
-      daySelect.innerHTML = (trip.days || []).map((d, idx) => `
-        <option value="${idx}">Day ${d.dayNum || (idx+1)}: ${escapeHtml(d.title)}</option>
-      `).join('');
-      daySelect.value = String(dayIdx);
-
-      const editIdxInput = document.getElementById('spot-form-edit-idx');
-      if (editIdxInput) editIdxInput.value = `${dayIdx}:${spotIdx}`;
-
-      const modalTitle = document.getElementById('spot-form-modal-title');
-      if (modalTitle) modalTitle.innerText = '30분 단위 스팟 수정';
-      const formIcon = document.getElementById('spot-form-icon');
-      if (formIcon) formIcon.className = 'fa-solid fa-pen-to-square text-amber-400';
-      const submitBtn = document.getElementById('spot-form-submit-btn');
-      if (submitBtn) submitBtn.innerText = '수정 내용 저장';
-
-      const timeInput = document.getElementById('spot-form-time');
-      if (timeInput) {
-        timeInput.value = spot.time || '09:00';
-      }
-      const catSelect = document.getElementById('spot-form-cat');
-      if (catSelect) catSelect.value = spot.cat || 'tour';
-      const titleInput = document.getElementById('spot-form-title');
-      if (titleInput) titleInput.value = spot.title || '';
-      const memoInput = document.getElementById('spot-form-memo');
-      if (memoInput) memoInput.value = spot.desc || spot.memo || '';
-      const tipInput = document.getElementById('spot-form-tip');
-      if (tipInput) tipInput.value = spot.tip || '';
-      const costInput = document.getElementById('spot-form-cost');
-      if (costInput) costInput.value = spot.cost ? String(spot.cost) : '';
-
-      syncLiveSpotPosition();
-      openModal('modal-spot');
-    }
-
-    function sortDaySpotsByTime(dayIdx) {
-      const trip = getActiveTrip();
-      if (!trip || !trip.days || !trip.days[dayIdx] || !Array.isArray(trip.days[dayIdx].spots)) return;
-      const day = trip.days[dayIdx];
-      const hasDateLineFlight = day.spots.some(s => s.isDateLine);
-      if (!hasDateLineFlight) {
-        day.spots.sort((a, b) => timeToMinutes(a.time) - timeToMinutes(b.time));
-      }
-    }
-
-    function submitSpot() { return submitLiveSpot(); }
-
-    // 하위 호환성 유지
-    function submitAddSpot() {
-      return submitSpot();
-    }
-
-    // 📌 스팟 일정 픽스(고정) 상태 토글 (재배치/튜닝 시 시간 불변 보호)
-    function toggleSpotFixed(dayIdx,spotIdx,evt){
-      evt?.stopPropagation();const trip=getActiveTrip(),day=trip?.days[dayIdx],spot=day?.spots[spotIdx];if(!spot)return;
-      return commitLiveSchedule({type:'update',tripId:trip.id,dayId:day.id,itemId:spot.id,changes:{fixed:!spot.fixed}},trip.revision,spot.fixed?'일정 고정을 해제했습니다.':'AI 조정에서 보호할 고정 일정으로 저장했습니다.');
-    }
-
-    // 스팟 방문 완료 상태 토글 (불변 보호 마킹)
-    function toggleSpotCompleted(dayIdx,spotIdx,evt){
-      evt?.stopPropagation();const trip=getActiveTrip(),day=trip?.days[dayIdx],spot=day?.spots[spotIdx];if(!spot)return;
-      if(!SulsulTravel.LiveItinerary.active(spot)){showToast('보관한 일정을 먼저 복구한 뒤 완료해 주세요.');return false;}
-      return commitLiveSchedule({type:'update',tripId:trip.id,dayId:day.id,itemId:spot.id,changes:{completed:!spot.completed}},trip.revision,spot.completed?'방문 완료를 취소했습니다.':'방문 완료로 기록했습니다.');
-    }
-
-    // ==========================================
-    // [11.1] 실시간 변수 대응 및 일정 튜닝 엔진 (v1.2.7)
-    // ==========================================
-    function describeReplanScope(targetDayVal, trip = getActiveTrip()) {
-      if (targetDayVal === 'all') return '전체 일정';
-      const range = /^range:(\d+):(\d+)$/.exec(String(targetDayVal));
-      if (range) {
-        const start = Number(range[1]), end = Number(range[2]);
-        const block = SulsulTravel.PlanBlocks.buildBlocks(trip).find(item => item.days[0].dayIndex === start && item.days[item.days.length - 1].dayIndex === end);
-        return block ? `${block.title || block.place} 구간 (Day ${start + 1}~${end + 1})` : `Day ${start + 1}~${end + 1}`;
-      }
-      return `Day ${Number(targetDayVal) + 1}`;
-    }
-
-    function openScheduleTuningModal(dayIdx = null, rangeEndIdx = null) {
-      if(!requireSharedPlanEdit())return;
-      const trip = getActiveTrip();
-      if (!trip || !trip.days || trip.days.length === 0) {
-        showToast('일정이 포함된 여행을 먼저 선택해 주세요.');
-        return;
-      }
-      const select = document.getElementById('tuning-target-day');
-      if (select) {
-        let opts = `<option value="all">전체 일정 (Day 1 ~ Day ${trip.days.length})</option>`;
-        if (dayIdx !== null && rangeEndIdx !== null && dayIdx >= 0 && rangeEndIdx >= dayIdx && rangeEndIdx < trip.days.length) {
-          opts = `<option value="range:${dayIdx}:${rangeEndIdx}">${escapeHtml(describeReplanScope(`range:${dayIdx}:${rangeEndIdx}`, trip))}만</option>` + opts;
-        }
-        trip.days.forEach((d, idx) => {
-          opts += `<option value="${idx}">Day ${d.dayNum || (idx + 1)}: ${escapeHtml(d.title)}</option>`;
-        });
-        select.innerHTML = opts;
-        if (dayIdx !== null && rangeEndIdx !== null && rangeEndIdx >= dayIdx) {
-          select.value = `range:${dayIdx}:${rangeEndIdx}`;
-        } else if (dayIdx !== null && dayIdx !== undefined && dayIdx >= 0 && dayIdx < trip.days.length) {
-          select.value = String(dayIdx);
-        } else {
-          select.value = 'all';
-        }
-      }
-      const offsetInput = document.getElementById('tuning-offset-minutes');
-      if (offsetInput) offsetInput.value = '60';
-      const reasonInput = document.getElementById('tuning-reason-input');
-      if (reasonInput) reasonInput.value = '';
-      openModal('modal-schedule-tuning');
-    }
-
-    function findPlanBlockForReplanScope(targetDayVal, trip = getActiveTrip()) {
-      if (!trip) return null;
-      const blocks = SulsulTravel.PlanBlocks.buildBlocks(trip);
-      const range = /^range:(\d+):(\d+)$/.exec(String(targetDayVal));
-      if (range) {
-        const start = Number(range[1]);
-        const end = Number(range[2]);
-        return blocks.find(block => block.days[0].dayIndex === start && block.days[block.days.length - 1].dayIndex === end) || null;
-      }
-      if (targetDayVal !== 'all') {
-        const dayIndex = Number(targetDayVal);
-        return blocks.find(block => block.days.some(item => item.dayIndex === dayIndex)) || null;
-      }
-      return null;
-    }
-
-    function describePlanBlockForAi(block) {
-      if (!block) return '';
-      return `
-사용자가 편집하고 저장한 큰 계획(가장 우선하는 조건):
-- 카드 제목: ${block.title || '제목 없음'}
-- 방문 거점/도시: ${block.place || '미정'}
-- 희망 기간: ${block.startDate || '미정'} ~ ${block.endDate || block.startDate || '미정'}
-- 숙소/체류 기준: ${block.lodging || '지정 없음'}
-- 꼭 하고 싶은 경험: ${(block.priorities || []).join(', ') || '지정 없음'}
-- 위험·예약·이동 메모: ${block.notes || '없음'}`;
-    }
-
-    function buildAiReplanPrompt({ trip, targetDayVal, offsetMinutes = 0, reason, snapshotDays }) {
-      const block = findPlanBlockForReplanScope(targetDayVal, trip);
-      const destination = (trip.countries || []).join(', ') || (trip.cities || []).join(', ') || trip.title || '사용자 지정 여행지';
-      return `당신은 여행 큰 계획을 실제 일정으로 다시 설계하는 전문가입니다. 아래 현재 일정 JSON을 바탕으로 변경된 전체 days JSON 배열만 반환하세요.
-여행 전체 목적지: ${destination}
-여행의 주요 도시: ${(trip.cities || []).join(', ') || '사용자 지정'}
-변경 요청: ${reason}
-대상: ${describeReplanScope(targetDayVal, trip)}
-기준 시간 조정: ${offsetMinutes >= 0 ? '+' : ''}${offsetMinutes}분${describePlanBlockForAi(block)}
-규칙:
-1. 전체 배열 길이, day 순서와 dayNum은 유지하세요.
-2. 지정한 대상 범위 밖 day는 어떤 필드도 바꾸지 마세요.
-3. completed, fixed, skipped, cancelled가 true이거나 recordId가 있는 일정은 ID를 포함한 모든 필드를 그대로 유지하고 삭제하지 마세요. 취소 일정을 되살리지 말고 기존 day의 id도 유지하세요.
-4. 대상 범위 안에서는 사용자가 저장한 거점, 기간, 숙소, 우선 경험과 메모를 최우선으로 반영해 day title, city, date와 미완료 세부 일정을 다시 설계하세요.
-5. 이동 시간과 휴식 여유를 포함하고, 예약·운영시간처럼 확인이 필요한 사실은 확정하지 말고 desc에 '확인 필요'로 표시하세요.
-6. 각 spot은 time(HH:MM), cat, title, desc, tip, cost를 포함하세요.
-현재 일정 JSON:
-${JSON.stringify(snapshotDays)}`;
-    }
-
-    async function startPlanBlockAiRegeneration(blockId, reason) {
-      const trip = getActiveTrip();
-      const block = SulsulTravel.PlanBlocks.buildBlocks(trip).find(item => item.id === blockId);
-      if (!trip || !block) return;
-      if (!cleanApiKey(State.geminiKey || localStorage.getItem('st_gemini_key'))) {
-        showToast('⚠️ 큰 계획 편집은 저장했습니다. Gemini 키를 등록한 뒤 카드의 AI 재생성을 다시 눌러 주세요.', 5500);
-        return;
-      }
-      State.replanReturnBlockId = block.id;
-      const start = block.days[0].dayIndex;
-      const end = block.days[block.days.length - 1].dayIndex;
-      const targetDayVal = `range:${start}:${end}`;
-      const snapshotDays = JSON.parse(JSON.stringify(trip.days));
-      const prompt = buildAiReplanPrompt({ trip, targetDayVal, reason, snapshotDays, offsetMinutes: 0 });
-      showToast('🤖 수정한 큰 계획을 기준으로 이 구간의 AI 초안을 만들고 있습니다...', 3500);
-      try {
-        const result = await startAiDraftJob({
-          id: `plan-block-ai:${trip.id}:${block.id}:${trip.revision || 0}:${Date.now()}`,
-          tripId: trip.id,
-          targetId: block.id,
-          kind: 'replan',
-          baseRevision: trip.revision || 0,
-          input: { prompt, snapshotDays, reason, targetDayVal, offsetMinutes: 0, planBlockId: block.id }
-        });
-        if (!result || ['waiting_network', 'failed'].includes(result.state)) {
-          showToast('⚠️ AI 재생성에 실패했습니다. 저장한 큰 계획과 기존 일정은 유지되며 카드에서 다시 시도할 수 있습니다.', 5500);
-        }
-      } catch (error) {
-        console.warn('[PlanBlock AI] proposal unavailable:', error?.message);
-        showToast('⚠️ AI 재생성에 실패했습니다. 저장한 큰 계획과 기존 일정은 그대로 유지됩니다.', 5500);
-      }
-    }
-
-    function setTuningPreset(type, minutes, reason) {
-      const offsetInput = document.getElementById('tuning-offset-minutes');
-      const reasonInput = document.getElementById('tuning-reason-input');
-      if (offsetInput) offsetInput.value = String(minutes);
-      if (reasonInput) reasonInput.value = reason;
-    }
-
-    function adjustTuningMinutes(delta) {
-      const offsetInput = document.getElementById('tuning-offset-minutes');
-      if (!offsetInput) return;
-      let cur = parseInt(offsetInput.value) || 0;
-      offsetInput.value = String(cur + delta);
-    }
-
-    function rebalanceTripSchedule(trip, targetDayVal, offsetMinutes, reason = '') {
-      if (!trip || !Array.isArray(trip.days)) return null;
-      const clonedDays = JSON.parse(JSON.stringify(trip.days));
-      const targetIndices = (targetDayVal === 'all' || targetDayVal === null || targetDayVal === undefined)
-        ? clonedDays.map((_, i) => i)
-        : [Number(targetDayVal)];
-
-      let modifiedSpotsCount = 0;
-      let preservedCompletedCount = 0;
-
-      targetIndices.forEach(dIdx => {
-        const day = clonedDays[dIdx];
-        if (!day || !Array.isArray(day.spots)) return;
-
-        day.spots.forEach(spot => {
-          // Invariant: Completed or Fixed spots are NEVER shifted or touched!
-          if (spot.completed || spot.fixed || spot.recordId || spot.skipped || spot.cancelled) {
-            preservedCompletedCount++;
-            return;
-          }
-          if (offsetMinutes !== 0 && spot.time) {
-            const curMins = timeToMinutes(spot.time);
-            const newMins = curMins + offsetMinutes;
-            spot.time = minutesToTime(newMins);
-            modifiedSpotsCount++;
-          }
-          if (reason && !spot.desc?.includes(reason) && !spot.memo?.includes(reason)) {
-            const tag = `[일정조정: ${offsetMinutes > 0 ? '+' : ''}${offsetMinutes}분 (${reason})]`;
-            if (spot.desc) spot.desc += ` ${tag}`;
-            else if (spot.memo) spot.memo += ` ${tag}`;
-            else spot.desc = tag;
-          }
-        });
-
-        // 시간순 안전 정렬 (날짜변경선 비행 일정이 포함된 날은 원래 순서 유지)
-        const hasDateLineFlight = day.spots.some(s => s.isDateLine);
-        if (!hasDateLineFlight) {
-          day.spots.sort((a, b) => timeToMinutes(a.time) - timeToMinutes(b.time));
-        }
-      });
-
-      return {
-        proposedDays: clonedDays,
-        modifiedSpotsCount,
-        preservedCompletedCount
-      };
-    }
-
-    function getReplanDomain() {
-      if (!replanDomainPromise) replanDomainPromise = import('./js/domain/replan.mjs?v=2.2.1');
-      return replanDomainPromise;
-    }
-
-    async function showHeuristicReplanReview(trip, targetDayVal, offsetMinutes, reason) {
-      const domain = await getReplanDomain();
-      const proposal = domain.createReplanProposal({
-        days: trip.days,
-        targetDay: targetDayVal,
-        offsetMinutes,
-        reason
-      });
-      State.pendingReplan = {
-        id: `replan:${trip.id}:${trip.revision || 0}:${Date.now()}`,
-        tripId: trip.id,
-        baseRevision: trip.revision || 0,
-        reason,
-        targetDayVal,
-        proposedDays: proposal.proposedDays,
-        changes: proposal.changes
-      };
-      document.getElementById('replan-review-summary').textContent = `${describeReplanScope(targetDayVal, trip)} · ${reason} · 변경 ${proposal.changes.length}개 · 완료 ${proposal.preservedCompletedCount}개 / 고정 ${proposal.preservedFixedCount}개 보호`;
-      const changes = document.getElementById('replan-review-changes');
-      changes.innerHTML = proposal.changes.length ? proposal.changes.map(change => `
-        <div class="grid grid-cols-[1fr_auto_1fr] items-center gap-2 p-3 rounded-xl bg-[#080b12] border border-[#1a2236] text-xs">
-          <div><strong class="text-slate-200">${escapeHtml(change.title)}</strong><p class="text-slate-500 mt-0.5">Day ${change.dayIndex + 1}</p></div><span class="text-slate-500">→</span><strong class="text-amber-300 text-right">${escapeHtml(change.before)} → ${escapeHtml(change.after)}</strong>
-        </div>`).join('') : '<div class="p-4 rounded-xl bg-[#080b12] text-slate-400 text-xs">바꿀 수 있는 미완료 일정이 없습니다. 완료·고정 일정은 유지됩니다.</div>';
-      document.getElementById('btn-apply-replan').disabled = proposal.changes.length === 0;
-      closeModal('modal-schedule-tuning', true);
-      openModal('modal-replan-review');
-    }
-
-    async function executeScheduleTuning(useAi) {
-      const trip = getActiveTrip();
-      if (!trip?.days?.length) return;
-      const targetDayVal = document.getElementById('tuning-target-day')?.value || 'all';
-      const offsetMinutes = parseInt(document.getElementById('tuning-offset-minutes')?.value) || 0;
-      const reason = document.getElementById('tuning-reason-input')?.value.trim() || '현장 일정 변화';
-      if (!useAi) return showHeuristicReplanReview(trip, targetDayVal, offsetMinutes, reason);
-
-      closeModal('modal-schedule-tuning', true);
-      showToast('🤖 AI가 현재 계획과 보호 조건을 함께 검토하고 있습니다...', 3000);
-      const snapshotDays = JSON.parse(JSON.stringify(trip.days));
-      const prompt = buildAiReplanPrompt({ trip, targetDayVal, offsetMinutes, reason, snapshotDays });
-      try {
-        const result = await startAiDraftJob({
-          id: `replan-ai:${trip.id}:${trip.revision || 0}:${Date.now()}`,
-          tripId: trip.id,
-          targetId: 'replan',
-          kind: 'replan',
-          baseRevision: trip.revision || 0,
-          input: { prompt, snapshotDays, reason, targetDayVal, offsetMinutes }
-        });
-        if (!result || ['waiting_network', 'failed'].includes(result.state)) {
-          showToast('AI 초안을 만들지 못해 안전한 시간 조정안을 보여드립니다.', 3500);
-          await showHeuristicReplanReview(trip, targetDayVal, offsetMinutes, reason);
-        }
-      } catch (error) {
-        console.warn('[RePlan] AI proposal unavailable:', error?.message);
-        await showHeuristicReplanReview(trip, targetDayVal, offsetMinutes, reason);
-      }
-    }
-
-    async function applyPendingReplan() {
-      const pending = State.pendingReplan;
-      if (!pending) return;
-      const domain = await getReplanDomain();
-      const current = State.trips.find(item => item.id === pending.tripId);
-      if (!current || current.revision !== pending.baseRevision || !domain.protectedSpotsMatch(current.days, pending.proposedDays) || !domain.outsideScopeMatches(current.days, pending.proposedDays, pending.targetDayVal || 'all')) {
-        closeModal('modal-replan-review', true);
-        State.pendingReplan = null;
-        showToast('⚠️ 검토 중 계획이 바뀌어 적용하지 않았습니다. 현재 일정에서 다시 만들어 주세요.', 4500);
-        return;
-      }
-      const result = await TripRepository.applyDraft({
-        tripId: pending.tripId,
-        baseRevision: pending.baseRevision,
-        jobId: pending.id,
-        mutate: draftTrip => { draftTrip.days = JSON.parse(JSON.stringify(pending.proposedDays)); }
-      });
-      if (result.status !== 'applied') {
-        showToast('⚠️ 변경안을 저장하지 못했습니다. 원래 계획은 유지됩니다.', 4500);
-        return;
-      }
-      State.pendingReplan = null;
-      closeModal('modal-replan-review', true);
-      renderActiveTripWorkspace();
-      if (State.replanReturnBlockId) {
-        State.activePlanBlockId = State.replanReturnBlockId;
-        State.replanReturnBlockId = null;
-        SulsulTravel.PlanBlocks.renderDetail();
-      } else {
-        switchTab('today');
-      }
-      showToast('✅ RePlan을 적용했습니다. 완료 기록과 고정 일정은 유지됩니다.');
-    }
-
-    function rejectPendingReplan() {
-      State.pendingReplan = null;
-      State.replanReturnBlockId = null;
-      closeModal('modal-replan-review', true);
-      showToast('기존 계획을 유지합니다.');
-    }
+    // 스팟 추가·수정 모달과 [11.1] 실시간 일정 튜닝·RePlan 검토(약 425줄)는 js/presentation/schedule-tuning-ui.js(SulsulTravel.ScheduleTuning)로 옮겼다(v2.2.2, 4단계).
 
     // [11] 지출·수입 입력창은 js/presentation/expense-editor.js(SulsulTravel.ExpenseEditor)로 합쳤다(v2.1.3, 4단계). 폼 상태는 SulsulTravel.ExpenseEditor.state다.
 
@@ -10134,7 +9713,7 @@ ${JSON.stringify(snapshotDays)}`;
 
     async function getAiOrchestrator() {
       if (!aiOrchestratorPromise) {
-        aiOrchestratorPromise = import('./js/application/orchestration.mjs?v=2.2.1').then(({ Orchestrator }) =>
+        aiOrchestratorPromise = import('./js/application/orchestration.mjs?v=2.2.2').then(({ Orchestrator }) =>
           new Orchestrator({
             online: job => Boolean(job?.input?.localDraft) || navigator.onLine,
             timeoutMs: 65000,
@@ -10306,7 +9885,7 @@ ${JSON.stringify(snapshotDays)}`;
         // Smart Local Engine Fallback (100% Guaranteed Itinerary Creation)
         const trip = State.trips.find(item => item.id === job.tripId);
         if (job.kind === 'replan') {
-          const domain = await getReplanDomain();
+          const domain = await SulsulTravel.ScheduleTuning.getReplanDomain();
           const proposal = domain.createReplanProposal({days:job.input.snapshotDays, targetDay:job.input.targetDayVal || 'all', offsetMinutes:job.input.offsetMinutes || 0, reason:job.input.reason || ''});
           return {days:proposal.proposedDays, source:'local_time_adjustment'};
         }
@@ -11890,7 +11469,7 @@ JSON 배열만 출력하세요. 각 day는 dayNum, title, city, date, spots를 �
       const openSheet = [...document.querySelectorAll('.sheet-container:not(.sheet-closed)')].pop();
       if (detailOpen && openSheet) {
         State.handlingPopState = true;
-        if (openSheet.id === 'modal-replan-review') rejectPendingReplan();
+        if (openSheet.id === 'modal-replan-review') SulsulTravel.ScheduleTuning.rejectPendingReplan();
         else if (openSheet.id === 'modal-ai-draft-review') await rejectActiveAiDraft();
         else closeModal(openSheet.id);
         State.handlingPopState = false;
@@ -12811,14 +12390,14 @@ JSON 배열만 출력하세요. 각 day는 dayNum, title, city, date, spots를 �
       DestinationRegistry: window.DestinationRegistry,
       resolveTripPack: resolveTripPack,
       updateAiChatStatusBadge: SulsulTravel.SettingsUI.updateAiChatStatusBadge,
-      openScheduleTuningModal: openScheduleTuningModal,
-      executeScheduleTuning: executeScheduleTuning,
-      rebalanceTripSchedule: rebalanceTripSchedule,
-      toggleSpotCompleted: toggleSpotCompleted,
-      toggleSpotFixed: toggleSpotFixed,
-      openEditSpotModal: openEditSpotModal,
-      sortDaySpotsByTime: sortDaySpotsByTime,
-      submitSpot: submitSpot,
+      openScheduleTuningModal: SulsulTravel.ScheduleTuning.openScheduleTuningModal,
+      executeScheduleTuning: SulsulTravel.ScheduleTuning.executeScheduleTuning,
+      rebalanceTripSchedule: SulsulTravel.ScheduleTuning.rebalanceTripSchedule,
+      toggleSpotCompleted: SulsulTravel.ScheduleTuning.toggleSpotCompleted,
+      toggleSpotFixed: SulsulTravel.ScheduleTuning.toggleSpotFixed,
+      openEditSpotModal: SulsulTravel.ScheduleTuning.openEditSpotModal,
+      sortDaySpotsByTime: SulsulTravel.ScheduleTuning.sortDaySpotsByTime,
+      submitSpot: SulsulTravel.ScheduleTuning.submitSpot,
       generateAutoSpotsForTrip: generateAutoSpotsForTrip,
       detectDestinationTimezone: detectDestinationTimezone,
       updateCreateTripTzBanner: updateCreateTripTzBanner,

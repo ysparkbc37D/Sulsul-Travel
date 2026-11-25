@@ -71,7 +71,7 @@ const fixture=()=>({id:'structural-trip',title:'구조 검증 가상 여행',sta
       assert.equal(JSON.parse(after.stored)[0].revision,before.trips[0].revision+1);return {failedDeleteAtomic:true,dialogRetained:true,retryCommittedOnce:true};
     });
     await check('실제 일정 편집 폼은 저장 실패에서 입력과 원본을 보존하고 같은 폼으로 재시도한다',async api=>{
-      await api.seed();const before=await api.state();await api.page.evaluate(()=>openEditSpotModal(0,0));
+      await api.seed();const before=await api.state();await api.page.evaluate(()=>SulsulTravel.ScheduleTuning.openEditSpotModal(0,0));
       await api.page.locator('#spot-form-title').fill('재시도할 합성 일정');await api.page.locator('#spot-form-memo').fill('실패해도 잃지 않을 편집 메모');
       await api.quota(true);await api.page.locator('#spot-form-submit-btn').tap();assert.deepEqual(await api.state(),before);
       assert.equal(await api.page.locator('#modal-spot').evaluate(element=>element.classList.contains('sheet-closed')),false);

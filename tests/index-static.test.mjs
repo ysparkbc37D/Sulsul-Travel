@@ -18,6 +18,7 @@ const planMap = readFileSync(new URL('../js/presentation/plan-map.js', import.me
 const routeMap = readFileSync(new URL('../js/presentation/route-map.js', import.meta.url), 'utf8');
 const hubView = readFileSync(new URL('../js/presentation/hub-view.js', import.meta.url), 'utf8');
 const settingsUi = readFileSync(new URL('../js/presentation/settings-ui.js', import.meta.url), 'utf8');
+const scheduleTuningUi = readFileSync(new URL('../js/presentation/schedule-tuning-ui.js', import.meta.url), 'utf8');
 const packSa = readFileSync(new URL('../js/destinations/pack-south-america.js', import.meta.url), 'utf8');
 const packageMetadata = JSON.parse(readFileSync(new URL('../package.json', import.meta.url), 'utf8'));
 const backupUi = readFileSync(new URL('../js/presentation/travel-backup-ui.js', import.meta.url), 'utf8');
@@ -50,12 +51,12 @@ test('travel-stage navigation and reviewed RePlan are wired', () => {
     'modal-plan-block-edit', 'today-overview-container', 'modal-replan-review']) {
     assert.match(html, new RegExp(`id=["']${id}["']`));
   }
-  assert.match(html, /function applyPendingReplan\(/);
-  assert.match(html, /protectedSpotsMatch/);
+  assert.match(scheduleTuningUi, /function applyPendingReplan\(/);
+  assert.match(scheduleTuningUi, /protectedSpotsMatch/);
   assert.match(planBlocks, /function inferPlace\(day\)/);
   assert.match(planBlocks, /async function submitEdit\(\{ regenerate = false \} = \{\}\)/);
   assert.match(planBlocks, /function openActiveReplan\(\)/);
-  assert.match(html, /range:\$\{dayIdx\}:\$\{rangeEndIdx\}/);
+  assert.match(scheduleTuningUi, /range:\$\{Number\(startNum\)\}:\$\{Number\(endNum\)\}/);
   assert.match(html, /window\.addEventListener\('popstate'/);
   assert.match(planBlocks, /day\.loc, day\.cityName, day\.city, day\.route, day\.title/);
   assert.match(sw, /const CACHE_PREFIX = 'st-shell-'/);
@@ -90,9 +91,9 @@ test('AI itinerary approval updates day identity, rebuilds initial plan blocks, 
 test('big plan edits can trigger scoped AI regeneration without a free-travel fallback', () => {
   assert.match(html, /id=["']btn-save-plan-block-ai["']/);
   assert.match(html, /data-on-click="planBlocks\.submitEdit" data-regenerate="true"/);
-  assert.match(html, /function startPlanBlockAiRegeneration\(blockId, reason\)/);
-  assert.match(html, /function buildAiReplanPrompt\(/);
-  assert.match(html, /사용자가 편집하고 저장한 큰 계획/);
+  assert.match(scheduleTuningUi, /function startPlanBlockAiRegeneration\(blockId, reason\)/);
+  assert.match(scheduleTuningUi, /function buildAiReplanPrompt\(/);
+  assert.match(scheduleTuningUi, /사용자가 편집하고 저장한 큰 계획/);
   assert.match(companion, /data-on-click="planBlocks\.regenerateByIndex"/);
   assert.doesNotMatch(html, /countriesStr \? splitTravelList\(countriesStr\) : \['자유여행'\]/);
   assert.doesNotMatch(html, /State\.createTripSelectedConcepts\.slice\(\)\s*:\s*\['자유여행'\]/);

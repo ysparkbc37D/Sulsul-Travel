@@ -23,7 +23,7 @@ function openLiveInsert(dayIndex, spotIndex, position = 'after') {
   if (!target) return false;
   if (!['before', 'after', 'start', 'end'].includes(position)) position = 'end';
   if ((position === 'before' || position === 'after') && !target.item) position = 'end';
-  openAddSpotToDay(dayIndex);
+  SulsulTravel.ScheduleTuning.openAddSpotToDay(dayIndex);
   const modal = document.getElementById('modal-spot');
   if (!modal || modal.classList.contains('sheet-closed')) return false;
   modal.dataset.tripId = target.trip.id;

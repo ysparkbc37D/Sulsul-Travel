@@ -61,7 +61,7 @@ const server=http.createServer((req,res)=>{
     await page.evaluate(async ()=>{
       localStorage.setItem('st_collaboration_config_v1',JSON.stringify({url:'https://example.supabase.co',publicKey:'sb_publishable_mockpublic123456'}));
       SulsulTravel.CollaborationUI.attachTrip(getActiveTrip().id,{documentId:'11111111-1111-4111-8111-111111111111',revision:2,role:'viewer'});
-      window.viewerPlan=JSON.stringify(getActiveTrip().days);await toggleSpotCompleted(0,0);openEditSpotModal(0,0);
+      window.viewerPlan=JSON.stringify(getActiveTrip().days);await SulsulTravel.ScheduleTuning.toggleSpotCompleted(0,0);SulsulTravel.ScheduleTuning.openEditSpotModal(0,0);
     });
     assert.equal(await page.evaluate(()=>JSON.stringify(getActiveTrip().days)===window.viewerPlan),true,'보기 권한으로 완료 변경 차단');
     assert.equal(await page.locator('#modal-spot').isVisible(),false,'보기 권한의 일정 편집 진입 차단');

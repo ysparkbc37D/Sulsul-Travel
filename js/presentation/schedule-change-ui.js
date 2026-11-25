@@ -52,7 +52,7 @@ function requireManualFixedChange(spot){if(spot.fixed&&!document.getElementById(
 function editManagedSchedule(replace){
   try{
     const target=scheduleChangeTarget();if(replace){requireManualFixedChange(target.spot);if(target.spot.completed||SulsulTravel.ScheduleChange.retired(target.spot))throw new Error('완료 또는 취소한 일정은 바로 대체할 수 없습니다.');}
-    closeModal('modal-schedule-change',true);openEditSpotModal(target.dayIndex,target.spotIndex);
+    closeModal('modal-schedule-change',true);SulsulTravel.ScheduleTuning.openEditSpotModal(target.dayIndex,target.spotIndex);
     if(replace){
       document.getElementById('modal-spot').dataset.replacement='true';
       document.getElementById('spot-form-modal-title').textContent='대체 일정 만들기';

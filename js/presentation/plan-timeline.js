@@ -303,12 +303,12 @@
   T.UiActions.define('timeline', {
     toggleDay: element => api.toggleDay(day(element)),
     toggleAll: () => api.toggleAll(),
-    toggleDone: (element, event) => toggleSpotCompleted(day(element), spot(element), event),
-    toggleFixed: (element, event) => toggleSpotFixed(day(element), spot(element), event),
-    edit: (element, event) => openEditSpotModal(day(element), spot(element), event),
+    toggleDone: (element, event) => T.ScheduleTuning.toggleSpotCompleted(day(element), spot(element), event),
+    toggleFixed: (element, event) => T.ScheduleTuning.toggleSpotFixed(day(element), spot(element), event),
+    edit: (element, event) => T.ScheduleTuning.openEditSpotModal(day(element), spot(element), event),
     remove: (element, event) => requestDeleteSpot(day(element), spot(element), event),
-    tune: element => element.dataset.day === undefined ? openScheduleTuningModal() : openScheduleTuningModal(day(element)),
-    addSpot: element => element.dataset.day === undefined ? openAddSpotModal() : openAddSpotToDay(day(element)),
+    tune: element => element.dataset.day === undefined ? T.ScheduleTuning.openScheduleTuningModal() : T.ScheduleTuning.openScheduleTuningModal(day(element)),
+    addSpot: element => element.dataset.day === undefined ? T.ScheduleTuning.openAddSpotModal() : T.ScheduleTuning.openAddSpotToDay(day(element)),
     aiTrip: () => openModal('modal-ai-trip'),
     yunnanCourse: () => applyYunnanGoldenCourse()
   });

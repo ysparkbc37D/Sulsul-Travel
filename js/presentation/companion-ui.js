@@ -14,7 +14,7 @@ function renderCompanionPlan() {
   const hasSpots = spots.length > 0;
   const aiButtonHtml = hasSpots
     ? `<div class="flex items-center gap-2 flex-wrap">
-         <button class="companion-button companion-primary" onclick="openScheduleTuningModal('all')" title="전체 일정 재배치, 교통 지연/기상 변수 대응 및 템포 조율"><i class="fa-solid fa-bolt text-amber-400" aria-hidden="true"></i> AI 스마트 일정 튜닝</button>
+         <button type="button" class="companion-button companion-primary" data-on-click="scheduleTuning.open" data-day="all" title="전체 일정 재배치, 교통 지연/기상 변수 대응 및 템포 조율"><i class="fa-solid fa-bolt text-amber-400" aria-hidden="true"></i> AI 스마트 일정 튜닝</button>
          <button class="companion-button text-xs opacity-75 hover:opacity-100" onclick="confirmResetAiDraft()" title="여행 설정(국가/도시/기간) 및 초안 편집 스튜디오 열기"><i class="fa-solid fa-pen-to-square" aria-hidden="true"></i> 초안 편집</button>
        </div>`
     : `<button class="companion-button companion-primary" onclick="openModal('modal-ai-trip')" title="여행 기본 정보 기반 최초 AI 일정 초안 생성"><i class="fa-solid fa-wand-magic-sparkles" aria-hidden="true"></i> AI 초안 만들기</button>`;
@@ -159,7 +159,7 @@ function companionSpot(spot, dayIndex, spotIndex, {today = false} = {}) {
       <details class="companion-spot-more">
         <summary class="companion-spot-more-trigger" aria-label="일정 관리 더보기" title="수정·관리 더보기"><i class="fa-solid fa-ellipsis" aria-hidden="true"></i></summary>
         <div class="companion-spot-edit-actions">
-          <button class="companion-button" onclick="openEditSpotModal(${dayIndex},${spotIndex},event)"><i class="fa-solid fa-pen-to-square" aria-hidden="true"></i> 시간·내용 수정</button>
+          <button type="button" class="companion-button" data-on-click="scheduleTuning.openEditSpot" data-day="${Number(dayIndex)}" data-spot="${Number(spotIndex)}"><i class="fa-solid fa-pen-to-square" aria-hidden="true"></i> 시간·내용 수정</button>
           <button class="companion-button" onclick="moveCompanionSpotOrder(${dayIndex},${spotIndex},-1,event)" ${isFirstSpot ? 'disabled' : ''}><i class="fa-solid fa-arrow-up" aria-hidden="true"></i> 위로 이동</button>
           <button class="companion-button" onclick="moveCompanionSpotOrder(${dayIndex},${spotIndex},1,event)" ${isLastSpot ? 'disabled' : ''}><i class="fa-solid fa-arrow-down" aria-hidden="true"></i> 아래로 이동</button>
           <button class="companion-button" data-action="change" onclick="openScheduleChange(${dayIndex},${spotIndex},event)"><i class="fa-solid fa-shuffle" aria-hidden="true"></i> ${SulsulTravel.ScheduleChange.retired(spot)?'복구·관리':'취소·대체·지연'}</button>
@@ -173,7 +173,7 @@ function companionSpot(spot, dayIndex, spotIndex, {today = false} = {}) {
     ${spot.tip ? `<details class="companion-tip"><summary>여행 팁 보기</summary><p>${escapeHtml(spot.tip)}</p></details>` : ''}
     ${spot.recordId ? activityCardHtml(spot, dayIndex, spotIndex) : ''}
     <div class="companion-spot-actions">
-      <button data-action="complete" ${SulsulTravel.ScheduleChange.retired(spot)?'disabled':''} onclick="${today ? 'completeTodaySpot' : 'toggleSpotCompleted'}(${dayIndex},${spotIndex},event)" aria-pressed="${!!spot.completed}"><i class="fa-solid fa-check" aria-hidden="true"></i> ${spot.completed ? '완료 취소' : '완료'}</button>
+      <button type="button" data-action="complete" ${SulsulTravel.ScheduleChange.retired(spot)?'disabled':''} data-on-click="scheduleTuning.toggleCompleted" data-day="${Number(dayIndex)}" data-spot="${Number(spotIndex)}" data-today="${today ? '1' : '0'}" aria-pressed="${!!spot.completed}"><i class="fa-solid fa-check" aria-hidden="true"></i> ${spot.completed ? '완료 취소' : '완료'}</button>
       <button data-action="record" onclick="openActivityJournal(${dayIndex},${spotIndex},event)"><i class="fa-solid fa-book-open" aria-hidden="true"></i> 기록</button>
       <button data-action="directions" onclick="openCompanionDirections(${dayIndex},${spotIndex})"><i class="fa-solid fa-location-arrow" aria-hidden="true"></i> 길찾기</button>
       <button data-action="taxi" onclick="openTaxiCardModal(${dayIndex},${spotIndex},event)"><i class="fa-solid fa-taxi" aria-hidden="true"></i> 기사님</button>
@@ -220,7 +220,7 @@ function companionTimeline(items,dayIndex,options={}) {
   return (bridgeHtml || '') + reorderToolbarHtml + itemsHtml;
 }
 function adjustCompanionDay(dayIndex,reason) {
-  openScheduleTuningModal(dayIndex);
+  SulsulTravel.ScheduleTuning.openScheduleTuningModal(dayIndex);
   const input=document.getElementById('tuning-reason-input');if(input)input.value=reason;
 }
 
@@ -239,8 +239,8 @@ function renderCompanionDetail() {
   container.innerHTML = `${companionDayPicker(block.days, selected, 'selectCompanionDetailDay')}
     ${renderLiveToolbar(selected)}
     ${block.lodging || block.notes || block.priorities.length ? `<details class="companion-context"><summary>숙소·꼭 하고 싶은 일·메모 <i class="fa-solid fa-chevron-down" aria-hidden="true"></i></summary><div>${block.lodging ? `<p><b>숙소</b> ${escapeHtml(block.lodging)}</p>` : ''}${block.priorities.length ? `<p>${block.priorities.map(escapeHtml).join(' · ')}</p>` : ''}${block.notes ? `<p>${escapeHtml(block.notes)}</p>` : ''}</div></details>` : ''}
-    <div class="companion-day-heading"><div><p class="companion-eyebrow">DAY ${day.dayNum || selected + 1} · ${escapeHtml(companionDate(day.date))}</p><h3>${escapeHtml(day.title || day.city || block.place)}</h3><p class="companion-muted">${pending.length}개 예정 · ${completed.length}개 완료</p></div><button class="companion-button" onclick="openScheduleTuningModal(${selected})">이 날 조정</button></div>
-    <div class="companion-timeline">${companionTimeline(pending,selected) || `<div class="companion-bento-empty"><div class="empty-icon-wrap"><i class="fa-regular fa-compass"></i></div><h4 class="companion-empty-title">${completed.length ? '이 날의 계획을 모두 마쳤어요 🎉' : '아직 일정이 비어있는 하루예요'}</h4><p class="companion-empty-desc">${completed.length ? '오늘 하루의 소중한 기억을 일기로 남겨 볼까요?' : '가고 싶은 장소를 추가하여 알찬 일정을 완성해 보세요.'}</p><div class="empty-actions"><button class="companion-button companion-primary" onclick="openAddSpotToDay(${selected})"><i class="fa-solid fa-plus"></i> 일정 추가하기</button><button type="button" class="companion-button" data-on-click="planBlocks.openJournal" data-day-index="${selected}"><i class="fa-solid fa-book-open"></i> 기억 남기기</button></div></div>`}</div>
+    <div class="companion-day-heading"><div><p class="companion-eyebrow">DAY ${day.dayNum || selected + 1} · ${escapeHtml(companionDate(day.date))}</p><h3>${escapeHtml(day.title || day.city || block.place)}</h3><p class="companion-muted">${pending.length}개 예정 · ${completed.length}개 완료</p></div><button type="button" class="companion-button" data-on-click="scheduleTuning.open" data-day="${Number(selected)}">이 날 조정</button></div>
+    <div class="companion-timeline">${companionTimeline(pending,selected) || `<div class="companion-bento-empty"><div class="empty-icon-wrap"><i class="fa-regular fa-compass"></i></div><h4 class="companion-empty-title">${completed.length ? '이 날의 계획을 모두 마쳤어요 🎉' : '아직 일정이 비어있는 하루예요'}</h4><p class="companion-empty-desc">${completed.length ? '오늘 하루의 소중한 기억을 일기로 남겨 볼까요?' : '가고 싶은 장소를 추가하여 알찬 일정을 완성해 보세요.'}</p><div class="empty-actions"><button type="button" class="companion-button companion-primary" data-on-click="scheduleTuning.openAddSpot" data-day="${Number(selected)}"><i class="fa-solid fa-plus"></i> 일정 추가하기</button><button type="button" class="companion-button" data-on-click="planBlocks.openJournal" data-day-index="${selected}"><i class="fa-solid fa-book-open"></i> 기억 남기기</button></div></div>`}</div>
     ${completed.length ? `<details class="companion-completed"><summary>완료한 일정 ${completed.length}개 보기 <i class="fa-solid fa-chevron-down" aria-hidden="true"></i></summary>${completed.map(item => companionSpot(item.spot, selected, item.spotIndex)).join('')}</details>` : ''}
     ${(day.spots||[]).some(spot=>SulsulTravel.ScheduleChange.retired(spot))?`<details class="companion-cancelled"><summary>보관·취소·나중에 갈 곳 ${day.spots.filter(spot=>SulsulTravel.ScheduleChange.retired(spot)).length}개 보기</summary>${day.spots.map((spot,spotIndex)=>({spot,spotIndex})).filter(item=>SulsulTravel.ScheduleChange.retired(item.spot)).map(item=>companionSpot(item.spot,selected,item.spotIndex)).join('')}</details>`:''}
     <button type="button" class="companion-button companion-record" data-on-click="planBlocks.openJournal" data-day-index="${selected}"><i class="fa-solid fa-book-open" aria-hidden="true"></i> 이 날의 기억 남기기</button>`;
@@ -591,7 +591,7 @@ function renderCompanionToday() {
         <h4 class="companion-empty-title">아직 일정이 비어있는 하루예요</h4>
         <p class="companion-empty-desc">새로운 설렘으로 이 날을 채워보세요. 가고 싶은 장소를 추가하거나 지도에서 명소를 둘러보실 수 있어요.</p>
         <div class="empty-actions">
-          <button class="companion-button companion-primary" onclick="openAddSpotToDay(${dayIndex})"><i class="fa-solid fa-plus"></i> 첫 일정 추가하기</button>
+          <button type="button" class="companion-button companion-primary" data-on-click="scheduleTuning.openAddSpot" data-day="${Number(dayIndex)}"><i class="fa-solid fa-plus"></i> 첫 일정 추가하기</button>
           <button class="companion-button" onclick="openQuickCapsuleModal()"><i class="fa-solid fa-microphone"></i> 음성 캡슐로 기록</button>
           <button class="companion-button" onclick="navigateToInteractiveMap()"><i class="fa-solid fa-map-pin"></i> 추천 명소 지도</button>
         </div>
@@ -614,8 +614,8 @@ function renderCompanionToday() {
     ${actionDeckHtml}
     ${smartHudHtml}
     ${renderLiveToolbar(dayIndex)}
-    <div class="companion-change-reason" aria-label="상황에 맞게 일정 조정"><button onclick="adjustCompanionDay(${dayIndex},'비가 와서 실내 위주로 변경')">🌧️ 비가 와요</button><button onclick="adjustCompanionDay(${dayIndex},'교통 지연으로 남은 동선을 조정')">⏳ 이동 지연</button><button onclick="adjustCompanionDay(${dayIndex},'휴식 시간을 늘리고 무리하지 않는 일정으로 변경')">☕ 쉬고 싶어요</button><button onclick="openScheduleTuningModal(${dayIndex})">⚙️ 직접 조정</button></div>
-    <div class="companion-section-title"><h3>하루의 흐름</h3><button class="companion-button" onclick="openAddSpotToDay(${dayIndex})">+ 일정 추가</button></div>
+    <div class="companion-change-reason" aria-label="상황에 맞게 일정 조정"><button onclick="adjustCompanionDay(${dayIndex},'비가 와서 실내 위주로 변경')">🌧️ 비가 와요</button><button onclick="adjustCompanionDay(${dayIndex},'교통 지연으로 남은 동선을 조정')">⏳ 이동 지연</button><button onclick="adjustCompanionDay(${dayIndex},'휴식 시간을 늘리고 무리하지 않는 일정으로 변경')">☕ 쉬고 싶어요</button><button type="button" data-on-click="scheduleTuning.open" data-day="${Number(dayIndex)}">⚙️ 직접 조정</button></div>
+    <div class="companion-section-title"><h3>하루의 흐름</h3><button type="button" class="companion-button" data-on-click="scheduleTuning.openAddSpot" data-day="${Number(dayIndex)}">+ 일정 추가</button></div>
     <div class="companion-timeline">${companionTimeline(pending,dayIndex,{today:true}) || emptyTimelineHtml}</div>
     ${completed.length ? `<details class="companion-completed"><summary>완료한 일정 ${completed.length}개 보기</summary>${completed.map(item=>companionSpot(item.spot,dayIndex,item.spotIndex,{today:true})).join('')}</details>`:''}
     ${(day.spots||[]).some(spot=>SulsulTravel.ScheduleChange.retired(spot))?`<details class="companion-cancelled"><summary>보관·취소·나중에 갈 곳 ${day.spots.filter(spot=>SulsulTravel.ScheduleChange.retired(spot)).length}개 보기</summary>${day.spots.map((spot,spotIndex)=>({spot,spotIndex})).filter(item=>SulsulTravel.ScheduleChange.retired(item.spot)).map(item=>companionSpot(item.spot,dayIndex,item.spotIndex)).join('')}</details>`:''}

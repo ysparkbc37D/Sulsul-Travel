@@ -26,7 +26,7 @@ const server=http.createServer((req,res)=>{
    const memoryOnFail=getActiveTrip().journals[0].text;
    SulsulTravel.JournalTab.selectDay(1);SulsulTravel.JournalTab.selectDay(0);const draftRetained=document.getElementById('journal-text-input').value;
    const retry=await SulsulTravel.JournalTab.saveText();const saved=JSON.parse((await TripRepository.readRaw()))[0].journals[0].text;
-   await withFailure(()=>toggleSpotCompleted(0,2));const completedOnFailure=getActiveTrip().days[0].spots[2].completed===true;
+   await withFailure(()=>SulsulTravel.ScheduleTuning.toggleSpotCompleted(0,2));const completedOnFailure=getActiveTrip().days[0].spots[2].completed===true;
    const payload=SulsulTravel.TripTransfer.create(getActiveTrip(),{journals:true},APP_VER);
    const link=`${location.origin}/#share=${LZString.compressToEncodedURIComponent(JSON.stringify(payload))}`;
    history.replaceState(null,'',link);const before=State.trips.length;

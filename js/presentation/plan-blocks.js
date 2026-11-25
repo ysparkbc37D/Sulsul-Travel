@@ -380,7 +380,7 @@
       closeModal('modal-plan-block-edit', true);
       renderActiveTripWorkspace();
       if (regenerate) {
-        await startPlanBlockAiRegeneration(id, changeSummary);
+        await T.ScheduleTuning.startPlanBlockAiRegeneration(id, changeSummary);
       } else {
         showToast('✅ 큰 계획을 저장했습니다. 필요할 때 이 카드만 AI 재생성할 수 있습니다.');
       }
@@ -395,7 +395,7 @@
     const first = block.days[0].dayIndex;
     const last = block.days[block.days.length - 1].dayIndex;
     State.replanReturnBlockId = block.id;
-    openScheduleTuningModal(first, last);
+    T.ScheduleTuning.openScheduleTuningModal(first, last);
   }
 
   function regenerateByIndex(blockIndex) {
@@ -406,7 +406,7 @@
     if (!block) return;
     State.planBlockReturnY = window.scrollY;
     showDetail(block.id);
-    void startPlanBlockAiRegeneration(block.id, '저장된 큰 계획 기준으로 동선과 세부 일정을 다시 설계');
+    void T.ScheduleTuning.startPlanBlockAiRegeneration(block.id, '저장된 큰 계획 기준으로 동선과 세부 일정을 다시 설계');
   }
 
   function openActiveAddSpot() {
@@ -416,7 +416,7 @@
       const targetDay = selection?.blockId === block.id && block.days.some(item => item.dayIndex === selection.dayIndex)
         ? selection.dayIndex
         : block.days[0].dayIndex;
-      openAddSpotToDay(targetDay);
+      T.ScheduleTuning.openAddSpotToDay(targetDay);
     }
   }
 

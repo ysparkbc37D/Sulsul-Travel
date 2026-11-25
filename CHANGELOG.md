@@ -26,6 +26,15 @@
 - [ ] 항공권/호텔 예약 바우처 PDF 자동 파싱 일정 등록
 - [ ] 여행 동행자 실시간 음성 메모 AI 다이어리 자동 변환
 
+## [v2.2.2] - 2026-11-25
+
+- 화면 분리(4단계) 14차(스팟 추가·수정 모달, 실시간 일정 튜닝, RePlan 검토)입니다. `index.html`의 `#modal-spot`·`#modal-schedule-tuning`·`#modal-replan-review` 제어와 관련 로직(약 425줄)을 `js/presentation/schedule-tuning-ui.js`(`SulsulTravel.ScheduleTuning`)로 옮겼습니다.
+- 시간 미정(`time === ''`) 스팟을 수정 모달로 열었을 때 `#spot-form-time`에 `'09:00'`이 임의로 채워져 저장 시 시각이 조작되던 결함을 고쳤습니다(v2.2.1에서 재현). 이제 빈 값을 그대로 유지합니다.
+- **보안**: 스팟·일정 튜닝 모달의 일차 `<select>` 옵션이 `d.dayNum`을 escape 없이 넣어 공유 사본의 태그(`</option></select><img ...>`)가 DOM에 삽입되던 결함을 고쳤습니다(v2.2.1에서 재현). 양의 정수로 정규화한 일차 번호와 `escapeHtml`만 사용합니다.
+- `openAddSpotToDay`·`openScheduleTuningModal`에 범위를 벗어난 일차·구간 인덱스가 전달되면 `<select>` 값이 비고(`""`), 빈 `trip.days`에서 깨진 스팟 모달이 열리던 문제와 `rebalanceTripSchedule`이 `'range:0:1'` 구간 문자열을 처리하지 못해 0건을 수정하던 문제를 고쳤습니다(v2.2.1에서 재현).
+- `applyPendingReplan()` 실행 중 `#btn-apply-replan`을 잠가 연타 시 중복 저장·오탐 충돌 토스트를 막았고, 0분 오프라인 재배치 검토 화면에 전용 안내를 추가했으며, 튜닝 빠른 변수 프리셋 6종에 `aria-pressed`를 동기화했습니다.
+- `index.html`(26곳)과 `companion-ui.js`(8곳)의 인라인 이벤트 처리기 34곳을 `scheduleTuning.*`·`shell.closeModal`로 전환해 `UI01` 기준을 346 → 312곳(`index.html` 196 → 170곳, `companion-ui.js` 77 → 69곳), `HTML01`을 `index.html` 68 → 64곳·`companion-ui.js` 96 → 94곳(새 파일 0곳)으로 낮췄습니다. 전용 브라우저 검사 `tests/schedule-tuning.browser.cjs`(2개 시나리오)를 추가했습니다.
+
 ## [v2.2.1] - 2026-11-25
 
 - 화면 분리(4단계) 13차(설정·테마·PWA 설치 안내·안내 모달)입니다. `index.html`의 3-Way 테마 엔진, 설정 모달·Gemini API 키 관리, PWA 설치·시작 가이드 배너·설치 안내 모달, 푸터 안내·후원·버전 이력 모달(약 820줄)을 `js/presentation/settings-ui.js`(`SulsulTravel.SettingsUI`)로 옮기고 `shell.switchView`를 `js/presentation/shell-actions.js`에 추가했습니다.
