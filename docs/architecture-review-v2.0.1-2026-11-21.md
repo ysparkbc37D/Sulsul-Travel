@@ -196,6 +196,10 @@ flowchart TD
 - **검증**: 단위 257개(새 `trip-store.test.mjs` 8개 — 느린 비동기 백엔드에서 연달아 맡긴 저장이 모두 남는지 포함), 브라우저 회귀 27종, `tools-verify.ps1` 통과. 저장 실패를 일부러 만드는 브라우저 검사 세 곳은 결과를 저장보다 먼저 읽어, 실패 경로를 검사하지 않은 채 통과하고 있었다. 저장을 기다리게 고쳤다(실록 112호).
 - **남은 3b(2차)**: 여행 자료를 IndexedDB로 옮기는 일. 백엔드를 `TripStore` 아래에서 바꾸고, 원문 보관 → 이전 → 다시 읽어 대조 → 채택 순서로 옮긴다. 옛 문서는 다른 창의 구버전이 덮어쓰지 못하게 표시만 바꿔 남긴다. 다른 창 충돌 판정은 문서 원문 비교 대신 저장소의 버전 번호로 한다. 브라우저 검사의 `localStorage` 직접 읽기를 저장소 읽기로 바꾸는 작업이 함께 필요하다.
 
+## 31. 오프라인 RePlan 모듈 로딩 복구 (v2.2.3)
+
+- **원인과 수정**: `v2.2.2` 실서버 오프라인 검증에서 `js/domain/replan.mjs`가 구버전 쿼리(`?v=2.0.1`)로 `ai-draft-validation.js`·`live-itinerary.js`를 정적 import해 오프라인 서비스워커 캐시를 빗나가는 결함을 발견했다(실록 128호). 브라우저에서는 이미 로드된 `SulsulTravel.AiDraftValidation`·`LiveItinerary`를 재사용하고 Node 단위 테스트에서만 조건부 import하도록 수정했으며, `tests/service-worker.browser.cjs`에 오프라인 RePlan 모듈 로드 검증을 추가했다.
+
 ## 30. 4단계 진행 결과 (v2.2.2) — 화면 분리 14차: 스팟 편집·일정 튜닝·RePlan 검토
 
 - **옮긴 것**: `index.html`의 `#modal-spot`, `#modal-schedule-tuning`, `#modal-replan-review` 제어와 스팟 완료/고정·구간 RePlan·오프라인/AI 일정 튜닝(약 425줄)을 `js/presentation/schedule-tuning-ui.js`(`SulsulTravel.ScheduleTuning`)로 옮겼다. `index.html`(26곳)과 `companion-ui.js`(8곳)의 인라인 처리기 34곳 → `scheduleTuning.*`·`shell.closeModal`(UI01 346 → 312곳, `index.html` 196 → 170곳, `companion-ui.js` 77 → 69곳). HTML01은 `index.html` 68 → 64곳, `companion-ui.js` 96 → 94곳, 새 파일 0곳이다.

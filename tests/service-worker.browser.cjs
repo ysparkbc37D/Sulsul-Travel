@@ -76,8 +76,10 @@ const external=http.createServer((_req,res)=>{res.setHeader('Access-Control-Allo
     const offline=await page.evaluate(async asset=>({body:await (await fetch(asset)).text(),oldFails:await fetch('/css/companion.css?v=old').then(()=>false,()=>true)}),asset);
     assert.equal(offline.body,result.before);assert.equal(offline.oldFails,true);assert.deepEqual(errors,[]);
     await page.goto(origin+'/?offline-upgrade=1',{waitUntil:'domcontentloaded'});
-    assert.equal(await page.evaluate(()=>APP_VER),version);assert.equal(await page.evaluate(()=>Array.isArray(State.trips)),true);assert.deepEqual(errors,[]);
-    console.log(JSON.stringify({passed:true,checks:17,runtimeErrors:errors,scope:'실제 Chromium SW / 인증·외부 API 미캐시 / 버전 자산 고정 / 필수 자산 실패 시 구 워커 유지 / 새 HTML 캐시 혼합 방지 / 오프라인 앱 진입'}));
+    assert.equal(await page.evaluate(()=>APP_VER),version);assert.equal(await page.evaluate(()=>Array.isArray(State.trips)),true);
+    assert.equal(await page.evaluate(async()=>typeof (await SulsulTravel.ScheduleTuning.getReplanDomain()).createReplanProposal==='function'),true);
+    assert.deepEqual(errors,[]);
+    console.log(JSON.stringify({passed:true,checks:18,runtimeErrors:errors,scope:'실제 Chromium SW / 인증·외부 API 미캐시 / 버전 자산 고정 / 필수 자산 실패 시 구 워커 유지 / 새 HTML 캐시 혼합 방지 / 오프라인 앱 진입·RePlan 로드'}));
     await context.close();
   }finally{await browser.close();}
 })().catch(error=>{console.error(error);process.exitCode=1;}).finally(()=>{server.close();external.close();});

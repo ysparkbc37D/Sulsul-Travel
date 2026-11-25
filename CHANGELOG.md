@@ -26,6 +26,11 @@
 - [ ] 항공권/호텔 예약 바우처 PDF 자동 파싱 일정 등록
 - [ ] 여행 동행자 실시간 음성 메모 AI 다이어리 자동 변환
 
+## [v2.2.3] - 2026-11-25
+
+- **오프라인 RePlan 모듈 로딩 복구(긴급 수정)**: 실서버 `v2.2.2` 오프라인 검증에서 `js/domain/replan.mjs`의 정적 import(`ai-draft-validation.js?v=2.0.1`, `live-itinerary.js?v=2.0.1`)가 `sw.js` 프리캐시 버전과 어긋나 오프라인 즉시 일정 재배치가 `Failed to fetch dynamically imported module`로 실패하던 결함을 발견·수정했습니다. 브라우저에 이미 로드된 `SulsulTravel.AiDraftValidation`·`SulsulTravel.LiveItinerary`를 재사용하고 Node 단위 테스트 환경에서만 조건부 import하도록 바꿨습니다.
+- `tests/service-worker.browser.cjs`에 오프라인 서비스워커 환경에서 `SulsulTravel.ScheduleTuning.getReplanDomain()` 로드 검증을 추가했습니다.
+
 ## [v2.2.2] - 2026-11-25
 
 - 화면 분리(4단계) 14차(스팟 추가·수정 모달, 실시간 일정 튜닝, RePlan 검토)입니다. `index.html`의 `#modal-spot`·`#modal-schedule-tuning`·`#modal-replan-review` 제어와 관련 로직(약 425줄)을 `js/presentation/schedule-tuning-ui.js`(`SulsulTravel.ScheduleTuning`)로 옮겼습니다.

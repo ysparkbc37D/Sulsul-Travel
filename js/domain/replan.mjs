@@ -1,11 +1,13 @@
-import './ai-draft-validation.js?v=2.0.1';
-import './live-itinerary.js?v=2.0.1';
+const root = typeof window !== 'undefined' ? window : globalThis;
+// 브라우저에서는 index.html이 같은 버전의 스크립트를 이미 불러오므로 오프라인에서 구버전 쿼리 요청이 나가지 않는다.
+if (!root.SulsulTravel?.AiDraftValidation) await import('./ai-draft-validation.js');
+if (!root.SulsulTravel?.LiveItinerary) await import('./live-itinerary.js');
 
 const clone = value => JSON.parse(JSON.stringify(value));
-const validation = (typeof window !== 'undefined' ? window : globalThis).SulsulTravel.AiDraftValidation;
+const validation = root.SulsulTravel.AiDraftValidation;
 
 export function timeToMinutes(value) {
-  return (typeof window !== 'undefined' ? window : globalThis).SulsulTravel.LiveItinerary.minutes(value);
+  return root.SulsulTravel.LiveItinerary.minutes(value);
 }
 
 export function minutesToTime(value) {
