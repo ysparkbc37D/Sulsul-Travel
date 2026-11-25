@@ -85,19 +85,19 @@ const server=http.createServer((req,res)=>{
     return new Response(JSON.stringify({candidates:[{content:{parts:[{text:'OK'}]}}]}),{status:200,headers:{'Content-Type':'application/json'}});
    };
    try{
-    await testGeminiApiKey();const button=document.getElementById('btn-test-gemini-key').textContent,activeFallback=State.aiFallbackActive,chatStatus=document.getElementById('ai-chat-status-pill')?.textContent||'';
+    await SulsulTravel.SettingsUI.testGeminiApiKey();const button=document.getElementById('btn-test-gemini-key').textContent,activeFallback=State.aiFallbackActive,chatStatus=document.getElementById('ai-chat-status-pill')?.textContent||'';
     window.fetch=async url=>{quotaModels.push(new URL(url).pathname.split('/models/')[1].split(':')[0]);if(quotaModels.length===1)return new Response(JSON.stringify({error:{message:'synthetic quota'}}),{status:429,headers:{'Content-Type':'application/json'}});return new Response(JSON.stringify({candidates:[{content:{parts:[{text:'OK'}]}}]}),{status:200,headers:{'Content-Type':'application/json'}});};
     State.aiFallbackActive=false;const quotaFallback=await callGeminiApiWithFallback('Reply with only OK.',{timeoutMs:8000});
     window.fetch=async()=>new Response(JSON.stringify({error:{message:'synthetic quota'}}),{status:429,headers:{'Content-Type':'application/json'}});
     let allQuotaError='';try{await callGeminiApiWithFallback('Reply with only OK.',{timeoutMs:8000});}catch(error){allQuotaError=error.code;}
     return {models,button,activeFallback,chatStatus,quotaModels,quotaFallback,allQuotaError};
    }
-   finally{window.fetch=oldFetch;State.geminiKey=priorKey;State.aiFallbackActive=priorFallback;if(priorStoredKey==null)localStorage.removeItem('st_gemini_key');else localStorage.setItem('st_gemini_key',priorStoredKey);updateGeminiKeyUi();}
+   finally{window.fetch=oldFetch;State.geminiKey=priorKey;State.aiFallbackActive=priorFallback;if(priorStoredKey==null)localStorage.removeItem('st_gemini_key');else localStorage.setItem('st_gemini_key',priorStoredKey);SulsulTravel.SettingsUI.updateGeminiKeyUi();}
   });
   assert.deepEqual(aiFallbackTest.models,['gemini-3.1-flash-lite','gemini-3.5-flash-lite']);assert.ok(aiFallbackTest.button.includes('정상 작동'));assert.equal(aiFallbackTest.activeFallback,true);assert.ok(aiFallbackTest.chatStatus.includes('대체 모델 사용'));assert.deepEqual(aiFallbackTest.quotaModels,['gemini-3.1-flash-lite','gemini-3.5-flash-lite']);assert.equal(aiFallbackTest.quotaFallback,'OK');assert.equal(aiFallbackTest.allQuotaError,'QUOTA_EXCEEDED');
   const contrast={};
   for(const theme of ['modern','lightgray','deepblack']){
-   await page.evaluate(t=>setTheme(t),theme);await page.waitForTimeout(300);
+   await page.evaluate(t=>SulsulTravel.SettingsUI.setTheme(t),theme);await page.waitForTimeout(300);
    contrast[theme]=await page.evaluate(()=>{const s=getComputedStyle(document.querySelector('#status-test span'));const lum=c=>c.match(/[\d.]+/g).slice(0,3).map(v=>{v=Number(v)/255;return v<=.04045?v/12.92:((v+.055)/1.055)**2.4;}).reduce((a,v,i)=>a+v*[.2126,.7152,.0722][i],0);const a=lum(s.color),b=lum(s.backgroundColor);return (Math.max(a,b)+.05)/(Math.min(a,b)+.05);});
    assert.ok(contrast[theme]>=7,`${theme}: ${contrast[theme]}`);
    await page.screenshot({path:path.join(output,`${theme}.png`),fullPage:true});

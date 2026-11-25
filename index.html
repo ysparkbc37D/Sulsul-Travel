@@ -33,7 +33,8 @@
         typeof window.SulsulTravel?.PlanMap?.render === 'function' &&
         typeof window.SulsulTravel?.RouteMap?.open === 'function' &&
         typeof window.SulsulTravel?.LifetimeAnalytics?.render === 'function' &&
-        typeof window.SulsulTravel?.HubView?.render === 'function';
+        typeof window.SulsulTravel?.HubView?.render === 'function' &&
+        typeof window.SulsulTravel?.SettingsUI?.open === 'function';
       shell.reload = () => {if(!shell.reloading){shell.reloading=true;location.reload();}};
       shell.canReload = () => {
         if(!shell.started)return true;
@@ -152,17 +153,17 @@
   </script>
 
   <!-- PWA Meta & Icons -->
-  <link rel="manifest" href="manifest.webmanifest?v=2.2.0">
+  <link rel="manifest" href="manifest.webmanifest?v=2.2.1">
   <meta name="theme-color" content="#F7F5F0">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <meta name="apple-mobile-web-app-title" content="술술트래블">
-  <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192-v115.png?v=2.2.0">
-  <link rel="icon" type="image/png" sizes="32x32" href="favicon.png?v=2.2.0">
+  <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192-v115.png?v=2.2.1">
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon.png?v=2.2.1">
   <link rel="shortcut icon" href="favicon.ico">
-  <link rel="apple-touch-icon" sizes="180x180" href="icons/apple-touch-icon-v115.png?v=2.2.0">
-  <link rel="apple-touch-icon" href="icons/apple-touch-icon-v115.png?v=2.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="icons/apple-touch-icon-v115.png?v=2.2.1">
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon-v115.png?v=2.2.1">
 
   <!-- Google Fonts: Great Vibes, Dancing Script (Cursive Calligraphy), Cormorant Garamond, Noto Serif KR, Playfair Display -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -170,7 +171,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Great+Vibes&family=Cormorant+Garamond:wght@600;700;800&family=Noto+Serif+KR:wght@500;600;700;900&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
 
   <!-- Local Utilities Bundle (CDN fallback & tailwind utilities) -->
-  <link rel="stylesheet" href="css/utilities.css?v=2.2.0" integrity="sha384-HMVB4SH6xwwGITkNyT8ARmHegAYSuTMocPGl4bpl0JywMIe2PqYrUxqZOgEuZjmP">
+  <link rel="stylesheet" href="css/utilities.css?v=2.2.1" integrity="sha384-HMVB4SH6xwwGITkNyT8ARmHegAYSuTMocPGl4bpl0JywMIe2PqYrUxqZOgEuZjmP">
   <link rel="stylesheet" href="vendor/fontawesome/css/all.min.css" integrity="sha384-t1nt8BQoYMLFN5p42tRAtuAAFQaCQODekUVeKKZrEnEyp4H2R0RHFz0KWpmj7i8g">
 
   <!-- Leaflet Map CSS & JS -->
@@ -1512,73 +1513,74 @@
     }
   </style>
 
-  <link rel="stylesheet" href="css/companion.css?v=2.2.0" integrity="sha384-Syant7HB0IYUZUU2saRSYUDkM71WKVuK2JtHM+kAluFdw3VvWv9gSglgJh4utHv/">
-  <link rel="stylesheet" href="css/companion-refresh.css?v=2.2.0" integrity="sha384-2KIp4VI8qsP6dGnz0cm/vehjLjr6GxpZ9yWTbbIXBPWi25XHg6XUOtNbp7W8KMd3">
-  <link rel="stylesheet" href="css/live-itinerary.css?v=2.2.0" integrity="sha384-e/V9wyJ/Gi6baSHcWzBeNGjdn/eKDQIvKWyiYmByLE7C7nYJaQOA+GshtUMcCR72">
-  <link rel="stylesheet" href="css/expense-mobile.css?v=2.2.0" integrity="sha384-QZFtKrU/YvkTaEKv0oJ2ZQi1Zry8RgEFaHzTckwuPFsMDDmadYBH7UuYgTVS7281">
-  <link rel="stylesheet" href="css/moment-journal.css?v=2.2.0" integrity="sha384-g1EihgfyPDJ5o5eWSsQgT1WDTRKDtUfzVatlx6T/t+DhApDBY8dznSrwmelasv91">
-  <script src="js/domain/trip-adapter.js?v=2.2.0" integrity="sha384-JHU/NkAlxwR9G9/49TaFK4sTvg9xKGsSVd3re8rLivtiXcSNdnQA9gRIfvVWUtG7"></script>
-  <script src="js/domain/ai-draft-validation.js?v=2.2.0" integrity="sha384-OTRAiX7YaOiiNrpMWDjkOyH0bTbbL3KrGwGp1RmIkgvd15pErNTTKVTJkoesmpfi"></script>
-  <script src="js/domain/live-itinerary.js?v=2.2.0" integrity="sha384-cwMH5i2F5Mve7Z9cKeWrP7uLU5plcu6c7xvTf4Lyz3Xkb6GlNCI14lnEWzw46cVg"></script>
-  <script src="js/presentation/live-itinerary-ui.js?v=2.2.0" integrity="sha384-SLjn2QhNBI6VfrG3siiRZqfs51VnmqyRCTMGjMN25fIyHhYwf4LnECXOOiQ4arog"></script>
-  <script src="js/presentation/live-itinerary-bridge.js?v=2.2.0" integrity="sha384-lRoX8rvtVNC3rl6v9tCVjTLCSBjLmTH3EhNiq6OPizV+6GvspGEUIpH00HoPTgEn"></script>
-  <script src="js/domain/schedule-change.js?v=2.2.0" integrity="sha384-v7zQ2iSY9DIrsztq758NvV0o6vbsguJn70NviXT6itT6YcuNaCvSW2beDogcMbD7"></script>
-  <script src="js/presentation/schedule-change-ui.js?v=2.2.0" integrity="sha384-DcmUeBgzRXnC2DuzuFjF4cgUfQzHPJkPFRMGt6IjV+ElSdmxrmyVdcasWSVnkQsn"></script>
-  <script src="js/domain/spot-realignment.js?v=2.2.0" integrity="sha384-gCFPNcD1aD3UegqTLtFPCU7Xqm7CtRN0yjQx2QnWe1ee0i3cZu8pzZic7YzBJLKt"></script>
-  <script src="js/presentation/spot-realignment-ui.js?v=2.2.0" integrity="sha384-GKlSQQKluvxcnRhJmQVQL4lZIFXbqf8ac/0BnxPiWNWcLjFJWYx/IZU3+5fZI7dk"></script>
-  <script src="js/domain/travel-records.js?v=2.2.0" integrity="sha384-qhkfkF1xKTuPtBvsB5Gwpz631xTkyy2tS1BU9Hixd2L1t+oobsXBMJnFv1pBHNnW"></script>
-  <script src="js/domain/travel-story.js?v=2.2.0" integrity="sha384-vjuGNDpytM6vG8SuZbKLW7qTTV1L33j48P1KSwNQnvca7uxo5EYkBM2X0IOdn/Qa"></script>
-  <script src="js/infrastructure/storage/photo-compression.js?v=2.2.0" integrity="sha384-MeOApXBzhg++Rcq/Lfjwb04/MA1U6wmwHppDgFZvKA4ZfdPC4oR2Hv1BhPFNU7Ig"></script>
-  <link rel="stylesheet" href="css/photo-optimization.css?v=2.2.0" integrity="sha384-9sgcirlxZs5tcmp/22RdH56B3bZla/q4DVH7x8W+fO8P4neR4WJMDDtQNK4WPq+/">
-  <script src="js/domain/photo-optimization.js?v=2.2.0" integrity="sha384-fpPZ4nJ383bIJaSHvmuZg+9BYd5LQ8YuVtEEMjtJnQr2Fod/mawAoB5SYMdtvBRU"></script>
-  <script src="js/infrastructure/storage/photo-cleanup.js?v=2.2.0" integrity="sha384-qPUCnJe7spP79MZLfOuzscYXTD6cW+7dzsf0xxvDip9hIj+yBvbBK6KhAouz5BC/"></script>
-  <script src="js/presentation/photo-optimization-ui.js?v=2.2.0" integrity="sha384-3hbyGaTEmmcJedqdlzMJs8SeGnYCFuuItyMz6MU2GqsZPt0F3lqhR6C3xfEjtztX"></script>
-  <script src="js/infrastructure/storage/media-repository.js?v=2.2.0" integrity="sha384-q0IPoo86aU2ruB130X1HAh01dr4hpI0IAXeMVCoa7Jy/2pIB09f7WbSKPm8vowhw"></script>
-  <script src="js/infrastructure/storage/record-media-store.js?v=2.2.0" integrity="sha384-vNu5tI/i1vWsxi2/3aQYW+9zYfivBNB2ewaUTRlwhnGwRbv9dpR4bu/sqzv1D2jm"></script>
-  <script src="js/infrastructure/storage/expense-photo-repository.js?v=2.2.0" integrity="sha384-gdumvFYkJqEbRPJlK4mffCsUjPsnKCXLg6/1fLMR8kUuU1QDMeLLOYmMVSRTGNSy"></script>
-  <script src="js/presentation/companion-ui.js?v=2.2.0" integrity="sha384-FYQu/PpwY6jyVnnaEcVzbTl/UuclRS+qCCWytiF6BeSHiFZUW9+KezOAAv6gURR2"></script>
-  <script src="js/domain/trip-transfer.js?v=2.2.0" integrity="sha384-VD9q1co1+bJzdS4i19rvfkQN/4KvzfnNdHUjbbucghcxzjmPim+kWF93qv5DaXSu"></script>
-  <script src="js/domain/travel-backup.js?v=2.2.0" integrity="sha384-4zE43uWlz5y3eP7g98tEL3HqAsw08/XvINQ+RhLLt4wz+cnySMWiy3Eu1m7BaBbK"></script>
-  <script src="js/presentation/travel-backup-ui.js?v=2.2.0" integrity="sha384-sVW2ZCtsSxmpUV5LLx/g7qXCQgsC7telSgAQ1ahagRA8PVeaCIIR3eRLB5CuEHuY"></script>
-  <script src="js/presentation/storage-health-ui.js?v=2.2.0" integrity="sha384-yhLee1WlZBu7vZL8qquRuBbYdW2RIBPIkjKQqjgT5iNw7FRWOlw7POGkpMar7IkT"></script>
-  <script src="js/presentation/trip-transfer-ui.js?v=2.2.0" integrity="sha384-eqPYhJD7v4KX0Ya6tmFTiMnZZaifZSy9rw+iOVpL40NbDHovbAiFLCkBXIdKFr+l"></script>
-  <script src="js/presentation/mobile-navigation.js?v=2.2.0" integrity="sha384-eQghbRiQF5vWbbzIWcYjk+nJ9Hb0Mc8LqeDBvGptxDqMieJnQstf/shr6UQf2kad"></script>
-  <script src="js/presentation/activity-journal.js?v=2.2.0" integrity="sha384-yfWY1V0BnjH3KiQRcQhSUSk+yFtzEHdTrHFa9impeFfcJfhekTfeXeCZvzbgv4he"></script>
-  <script src="js/presentation/moment-journal.js?v=2.2.0" integrity="sha384-r/heV0A2E+VDwxEE7joC1tw0UPcWIWSdZHDvU0rQs6c+LzY5zCEBLYiF4KIKQo5u"></script>
-  <script src="js/presentation/travel-story-ui.js?v=2.2.0" integrity="sha384-s9HZ4A1/X3tCfe4rBfB6nzEwAC7i2U1YVfradgxnQPX5X4tnFszIOPeMsLPfXnfq"></script>
-  <script src="js/config/collaboration-config.js?v=2.2.0" integrity="sha384-ipxhKB+fQ4s3OThYo3p6IWFvP6BbstXYDW6jZWWiPHB4qomo64w7r8/wRvdsi47w"></script>
-  <script src="js/infrastructure/collaboration/supabase-travel-service.js?v=2.2.0" integrity="sha384-+SDvVJ0CNqCMvFlOBOA+nfA1k6/sN6GlaKDhTQo4SgX8x3EwPXyJlvMfJj0D6Bt/"></script>
-  <script src="js/presentation/collaboration-ui.js?v=2.2.0" integrity="sha384-KvnYI6ym2/deKsOtKryWJS5tljPjqYRx67JGGgWVRNyWHEC470iPDg3+fdw0OHX0"></script>
-  <script src="js/presentation/collaboration-review.js?v=2.2.0" integrity="sha384-cbND/rT26DaIY2hR++LBuByF9L/ACu5TDl0b85EN2zsk/sTapWGm2BPQqZgN6GzI"></script>
-  <script src="js/presentation/ui-actions.js?v=2.2.0" integrity="sha384-86E6+vWuYSS4ldFWIpwfcJMnPW2jUnvL9CJGWeJHDKHEXnQsNWTDB0skpvkRBm9K"></script>
-  <script src="js/presentation/shell-actions.js?v=2.2.0" integrity="sha384-ec2zNqB35MYVfgVf448ukoOrIy6FFwUow/h7S8z0W47OS7F+tloHdR8w4+Mmw4Zy"></script>
-  <script src="js/presentation/exchange-ui.js?v=2.2.0" integrity="sha384-21MA/m/6rg1LsIZFsoAuqvhmWN3Y8seM2ZdIZHKOGEZ70CAjaeulE8mmIbSKmb1h"></script>
-  <script src="js/presentation/plan-blocks.js?v=2.2.0" integrity="sha384-9L3ReY65vVOLocj/bo9HlbUTj0ZFMo1Cxq3Jtu+Q3j6mL3+BCwDaEuPJCBk4L0D6"></script>
-  <script src="js/presentation/plan-timeline.js?v=2.2.0" integrity="sha384-47MFhIy5AILe78Oj2efg0Sdhl0enRNIn/dZrGuxcyLqQG3Ht9dC4kLDicaNOJe9C"></script>
-  <script src="js/presentation/plan-map.js?v=2.2.0" integrity="sha384-moJ8fpaMtEe644aLUgtZGuvdUoG/ax/MK9VlZPw4TCtT/XomX3xjobLrKtRnm94d"></script>
-  <script src="js/presentation/route-map.js?v=2.2.0" integrity="sha384-j87WAiWOdi7HTCFWm0XWLG7jV7KT9R2JLOGoKKmEiPJh3CsZCYfDmI7hO896ksUY"></script>
-  <script src="js/presentation/lifetime-analytics.js?v=2.2.0" integrity="sha384-wSyGWne4T8RC9AEQuhHrfWZrQ4ulSh4zZYD7ekFBnlo3nUdEurMhOIk2++IALbi4"></script>
-  <script src="js/presentation/hub-view.js?v=2.2.0" integrity="sha384-htKlVrBc9ue00E/iSHm7evqbnEHDM+La/E+phfFh5hKAg7YFHhNztv/UMbhMH+6O"></script>
-  <script src="js/presentation/plan-guides.js?v=2.2.0" integrity="sha384-Eg0ooJHXflNMCbbk5sEJIg4VX2WigAkFB9GzPI7iT7q57s8L2TdNMYQxc9BWHb87"></script>
-  <script src="js/presentation/budget-ui.js?v=2.2.0" integrity="sha384-p+A7x64rZuPWhGaUzTMoNYo60aTQzp7UXhZzMfXABMyWqrG32b4LDPZ/SGwoEKjs"></script>
-  <script src="js/presentation/expense-analytics.js?v=2.2.0" integrity="sha384-GOo/a/N9uE2yr6Aw2Ju6sXiBr5VTaDbPb1nth/ElR4GDT1yPI0CfghLOB7DaN1Yp"></script>
-  <script src="js/presentation/expenses-tab.js?v=2.2.0" integrity="sha384-dFoKIs/B5CCctW17/wd1Kp0Kr6v9LXykyt/8yOknSEs3G9C7rnYam3VrTKE9ZaFg"></script>
-  <script src="js/presentation/journal-tab.js?v=2.2.0" integrity="sha384-Hhgx7Hra1MAb8tvQIMdF9khAJjZHC3SqpdqWrAXEVAbGHvgFLOf+bREOM6jyvFoc"></script>
-  <script src="js/presentation/checklist-tab.js?v=2.2.0" integrity="sha384-ENgqtNcHd59KKTorCEZx/H/zUSfXi47RIM1X1F1E6tNPe5U4DKXginat44x1SDbL"></script>
-  <script src="js/presentation/expense-editor.js?v=2.2.0" integrity="sha384-PosLZVGcia3FlNTeQCWVw+mtgPsGaCJjpHKtrdFVXpaw5LYD+iQ/M5FYwMYy/HVY"></script>
+  <link rel="stylesheet" href="css/companion.css?v=2.2.1" integrity="sha384-Syant7HB0IYUZUU2saRSYUDkM71WKVuK2JtHM+kAluFdw3VvWv9gSglgJh4utHv/">
+  <link rel="stylesheet" href="css/companion-refresh.css?v=2.2.1" integrity="sha384-2KIp4VI8qsP6dGnz0cm/vehjLjr6GxpZ9yWTbbIXBPWi25XHg6XUOtNbp7W8KMd3">
+  <link rel="stylesheet" href="css/live-itinerary.css?v=2.2.1" integrity="sha384-e/V9wyJ/Gi6baSHcWzBeNGjdn/eKDQIvKWyiYmByLE7C7nYJaQOA+GshtUMcCR72">
+  <link rel="stylesheet" href="css/expense-mobile.css?v=2.2.1" integrity="sha384-QZFtKrU/YvkTaEKv0oJ2ZQi1Zry8RgEFaHzTckwuPFsMDDmadYBH7UuYgTVS7281">
+  <link rel="stylesheet" href="css/moment-journal.css?v=2.2.1" integrity="sha384-g1EihgfyPDJ5o5eWSsQgT1WDTRKDtUfzVatlx6T/t+DhApDBY8dznSrwmelasv91">
+  <script src="js/domain/trip-adapter.js?v=2.2.1" integrity="sha384-JHU/NkAlxwR9G9/49TaFK4sTvg9xKGsSVd3re8rLivtiXcSNdnQA9gRIfvVWUtG7"></script>
+  <script src="js/domain/ai-draft-validation.js?v=2.2.1" integrity="sha384-OTRAiX7YaOiiNrpMWDjkOyH0bTbbL3KrGwGp1RmIkgvd15pErNTTKVTJkoesmpfi"></script>
+  <script src="js/domain/live-itinerary.js?v=2.2.1" integrity="sha384-cwMH5i2F5Mve7Z9cKeWrP7uLU5plcu6c7xvTf4Lyz3Xkb6GlNCI14lnEWzw46cVg"></script>
+  <script src="js/presentation/live-itinerary-ui.js?v=2.2.1" integrity="sha384-SLjn2QhNBI6VfrG3siiRZqfs51VnmqyRCTMGjMN25fIyHhYwf4LnECXOOiQ4arog"></script>
+  <script src="js/presentation/live-itinerary-bridge.js?v=2.2.1" integrity="sha384-lRoX8rvtVNC3rl6v9tCVjTLCSBjLmTH3EhNiq6OPizV+6GvspGEUIpH00HoPTgEn"></script>
+  <script src="js/domain/schedule-change.js?v=2.2.1" integrity="sha384-v7zQ2iSY9DIrsztq758NvV0o6vbsguJn70NviXT6itT6YcuNaCvSW2beDogcMbD7"></script>
+  <script src="js/presentation/schedule-change-ui.js?v=2.2.1" integrity="sha384-DcmUeBgzRXnC2DuzuFjF4cgUfQzHPJkPFRMGt6IjV+ElSdmxrmyVdcasWSVnkQsn"></script>
+  <script src="js/domain/spot-realignment.js?v=2.2.1" integrity="sha384-gCFPNcD1aD3UegqTLtFPCU7Xqm7CtRN0yjQx2QnWe1ee0i3cZu8pzZic7YzBJLKt"></script>
+  <script src="js/presentation/spot-realignment-ui.js?v=2.2.1" integrity="sha384-GKlSQQKluvxcnRhJmQVQL4lZIFXbqf8ac/0BnxPiWNWcLjFJWYx/IZU3+5fZI7dk"></script>
+  <script src="js/domain/travel-records.js?v=2.2.1" integrity="sha384-qhkfkF1xKTuPtBvsB5Gwpz631xTkyy2tS1BU9Hixd2L1t+oobsXBMJnFv1pBHNnW"></script>
+  <script src="js/domain/travel-story.js?v=2.2.1" integrity="sha384-vjuGNDpytM6vG8SuZbKLW7qTTV1L33j48P1KSwNQnvca7uxo5EYkBM2X0IOdn/Qa"></script>
+  <script src="js/infrastructure/storage/photo-compression.js?v=2.2.1" integrity="sha384-MeOApXBzhg++Rcq/Lfjwb04/MA1U6wmwHppDgFZvKA4ZfdPC4oR2Hv1BhPFNU7Ig"></script>
+  <link rel="stylesheet" href="css/photo-optimization.css?v=2.2.1" integrity="sha384-9sgcirlxZs5tcmp/22RdH56B3bZla/q4DVH7x8W+fO8P4neR4WJMDDtQNK4WPq+/">
+  <script src="js/domain/photo-optimization.js?v=2.2.1" integrity="sha384-fpPZ4nJ383bIJaSHvmuZg+9BYd5LQ8YuVtEEMjtJnQr2Fod/mawAoB5SYMdtvBRU"></script>
+  <script src="js/infrastructure/storage/photo-cleanup.js?v=2.2.1" integrity="sha384-qPUCnJe7spP79MZLfOuzscYXTD6cW+7dzsf0xxvDip9hIj+yBvbBK6KhAouz5BC/"></script>
+  <script src="js/presentation/photo-optimization-ui.js?v=2.2.1" integrity="sha384-3hbyGaTEmmcJedqdlzMJs8SeGnYCFuuItyMz6MU2GqsZPt0F3lqhR6C3xfEjtztX"></script>
+  <script src="js/infrastructure/storage/media-repository.js?v=2.2.1" integrity="sha384-q0IPoo86aU2ruB130X1HAh01dr4hpI0IAXeMVCoa7Jy/2pIB09f7WbSKPm8vowhw"></script>
+  <script src="js/infrastructure/storage/record-media-store.js?v=2.2.1" integrity="sha384-vNu5tI/i1vWsxi2/3aQYW+9zYfivBNB2ewaUTRlwhnGwRbv9dpR4bu/sqzv1D2jm"></script>
+  <script src="js/infrastructure/storage/expense-photo-repository.js?v=2.2.1" integrity="sha384-gdumvFYkJqEbRPJlK4mffCsUjPsnKCXLg6/1fLMR8kUuU1QDMeLLOYmMVSRTGNSy"></script>
+  <script src="js/presentation/companion-ui.js?v=2.2.1" integrity="sha384-FYQu/PpwY6jyVnnaEcVzbTl/UuclRS+qCCWytiF6BeSHiFZUW9+KezOAAv6gURR2"></script>
+  <script src="js/domain/trip-transfer.js?v=2.2.1" integrity="sha384-VD9q1co1+bJzdS4i19rvfkQN/4KvzfnNdHUjbbucghcxzjmPim+kWF93qv5DaXSu"></script>
+  <script src="js/domain/travel-backup.js?v=2.2.1" integrity="sha384-4zE43uWlz5y3eP7g98tEL3HqAsw08/XvINQ+RhLLt4wz+cnySMWiy3Eu1m7BaBbK"></script>
+  <script src="js/presentation/travel-backup-ui.js?v=2.2.1" integrity="sha384-sVW2ZCtsSxmpUV5LLx/g7qXCQgsC7telSgAQ1ahagRA8PVeaCIIR3eRLB5CuEHuY"></script>
+  <script src="js/presentation/storage-health-ui.js?v=2.2.1" integrity="sha384-yhLee1WlZBu7vZL8qquRuBbYdW2RIBPIkjKQqjgT5iNw7FRWOlw7POGkpMar7IkT"></script>
+  <script src="js/presentation/trip-transfer-ui.js?v=2.2.1" integrity="sha384-eqPYhJD7v4KX0Ya6tmFTiMnZZaifZSy9rw+iOVpL40NbDHovbAiFLCkBXIdKFr+l"></script>
+  <script src="js/presentation/mobile-navigation.js?v=2.2.1" integrity="sha384-eQghbRiQF5vWbbzIWcYjk+nJ9Hb0Mc8LqeDBvGptxDqMieJnQstf/shr6UQf2kad"></script>
+  <script src="js/presentation/activity-journal.js?v=2.2.1" integrity="sha384-yfWY1V0BnjH3KiQRcQhSUSk+yFtzEHdTrHFa9impeFfcJfhekTfeXeCZvzbgv4he"></script>
+  <script src="js/presentation/moment-journal.js?v=2.2.1" integrity="sha384-r/heV0A2E+VDwxEE7joC1tw0UPcWIWSdZHDvU0rQs6c+LzY5zCEBLYiF4KIKQo5u"></script>
+  <script src="js/presentation/travel-story-ui.js?v=2.2.1" integrity="sha384-s9HZ4A1/X3tCfe4rBfB6nzEwAC7i2U1YVfradgxnQPX5X4tnFszIOPeMsLPfXnfq"></script>
+  <script src="js/config/collaboration-config.js?v=2.2.1" integrity="sha384-ipxhKB+fQ4s3OThYo3p6IWFvP6BbstXYDW6jZWWiPHB4qomo64w7r8/wRvdsi47w"></script>
+  <script src="js/infrastructure/collaboration/supabase-travel-service.js?v=2.2.1" integrity="sha384-+SDvVJ0CNqCMvFlOBOA+nfA1k6/sN6GlaKDhTQo4SgX8x3EwPXyJlvMfJj0D6Bt/"></script>
+  <script src="js/presentation/collaboration-ui.js?v=2.2.1" integrity="sha384-KvnYI6ym2/deKsOtKryWJS5tljPjqYRx67JGGgWVRNyWHEC470iPDg3+fdw0OHX0"></script>
+  <script src="js/presentation/collaboration-review.js?v=2.2.1" integrity="sha384-cbND/rT26DaIY2hR++LBuByF9L/ACu5TDl0b85EN2zsk/sTapWGm2BPQqZgN6GzI"></script>
+  <script src="js/presentation/ui-actions.js?v=2.2.1" integrity="sha384-86E6+vWuYSS4ldFWIpwfcJMnPW2jUnvL9CJGWeJHDKHEXnQsNWTDB0skpvkRBm9K"></script>
+  <script src="js/presentation/shell-actions.js?v=2.2.1" integrity="sha384-U2oGDxTvGwi30E4dNh1CkhDtgABYyf+tvtZYOm2h31bPLv/ptAhsQhnFv0nVndEo"></script>
+  <script src="js/presentation/exchange-ui.js?v=2.2.1" integrity="sha384-21MA/m/6rg1LsIZFsoAuqvhmWN3Y8seM2ZdIZHKOGEZ70CAjaeulE8mmIbSKmb1h"></script>
+  <script src="js/presentation/plan-blocks.js?v=2.2.1" integrity="sha384-9L3ReY65vVOLocj/bo9HlbUTj0ZFMo1Cxq3Jtu+Q3j6mL3+BCwDaEuPJCBk4L0D6"></script>
+  <script src="js/presentation/plan-timeline.js?v=2.2.1" integrity="sha384-47MFhIy5AILe78Oj2efg0Sdhl0enRNIn/dZrGuxcyLqQG3Ht9dC4kLDicaNOJe9C"></script>
+  <script src="js/presentation/plan-map.js?v=2.2.1" integrity="sha384-moJ8fpaMtEe644aLUgtZGuvdUoG/ax/MK9VlZPw4TCtT/XomX3xjobLrKtRnm94d"></script>
+  <script src="js/presentation/route-map.js?v=2.2.1" integrity="sha384-j87WAiWOdi7HTCFWm0XWLG7jV7KT9R2JLOGoKKmEiPJh3CsZCYfDmI7hO896ksUY"></script>
+  <script src="js/presentation/lifetime-analytics.js?v=2.2.1" integrity="sha384-wSyGWne4T8RC9AEQuhHrfWZrQ4ulSh4zZYD7ekFBnlo3nUdEurMhOIk2++IALbi4"></script>
+  <script src="js/presentation/hub-view.js?v=2.2.1" integrity="sha384-htKlVrBc9ue00E/iSHm7evqbnEHDM+La/E+phfFh5hKAg7YFHhNztv/UMbhMH+6O"></script>
+  <script src="js/presentation/settings-ui.js?v=2.2.1" integrity="sha384-rY0ntKNCuVqoub7KcF2B+FxBjKcODsJs+uJ3EAQlRvT8Iju3HSZOkBe1/DdcxAvL"></script>
+  <script src="js/presentation/plan-guides.js?v=2.2.1" integrity="sha384-Eg0ooJHXflNMCbbk5sEJIg4VX2WigAkFB9GzPI7iT7q57s8L2TdNMYQxc9BWHb87"></script>
+  <script src="js/presentation/budget-ui.js?v=2.2.1" integrity="sha384-p+A7x64rZuPWhGaUzTMoNYo60aTQzp7UXhZzMfXABMyWqrG32b4LDPZ/SGwoEKjs"></script>
+  <script src="js/presentation/expense-analytics.js?v=2.2.1" integrity="sha384-GOo/a/N9uE2yr6Aw2Ju6sXiBr5VTaDbPb1nth/ElR4GDT1yPI0CfghLOB7DaN1Yp"></script>
+  <script src="js/presentation/expenses-tab.js?v=2.2.1" integrity="sha384-dFoKIs/B5CCctW17/wd1Kp0Kr6v9LXykyt/8yOknSEs3G9C7rnYam3VrTKE9ZaFg"></script>
+  <script src="js/presentation/journal-tab.js?v=2.2.1" integrity="sha384-Hhgx7Hra1MAb8tvQIMdF9khAJjZHC3SqpdqWrAXEVAbGHvgFLOf+bREOM6jyvFoc"></script>
+  <script src="js/presentation/checklist-tab.js?v=2.2.1" integrity="sha384-ENgqtNcHd59KKTorCEZx/H/zUSfXi47RIM1X1F1E6tNPe5U4DKXginat44x1SDbL"></script>
+  <script src="js/presentation/expense-editor.js?v=2.2.1" integrity="sha384-PosLZVGcia3FlNTeQCWVw+mtgPsGaCJjpHKtrdFVXpaw5LYD+iQ/M5FYwMYy/HVY"></script>
 
   <!-- Knowledge Base Seed & Destination Knowledge Packs (DKP) -->
-  <script src="kb-travel.js?v=2.2.0" integrity="sha384-zxXc7MUMbmXkiaF3ymeLmVSiCyPRVfkUjSZetDVx41zrHGyPeSCN4TFpy5f1jNUd"></script>
+  <script src="kb-travel.js?v=2.2.1" integrity="sha384-zxXc7MUMbmXkiaF3ymeLmVSiCyPRVfkUjSZetDVx41zrHGyPeSCN4TFpy5f1jNUd"></script>
   <script src="js/destinations/destination-registry.js" integrity="sha384-PV7EnpqZusutqYxhFc0vICq72coA/C+TMYaBkk+BFy52dmgfk/RDzf/DAgW7dmvC"></script>
   <script src="js/destinations/pack-default.js" integrity="sha384-mCe4oKfrN+8fbLFCJJexsHJXBZkw6b6q1bOg5skoupZ9hXUrhZ92sTRRTF831vDt"></script>
-  <script src="js/destinations/pack-south-america.js?v=2.2.0" integrity="sha384-p6i8pSXkYDEndehBEqNlXK7ZIZia6Tsxw4TD2LUf7TJPUSlPd2AzXbp3wyyAvDG7"></script>
+  <script src="js/destinations/pack-south-america.js?v=2.2.1" integrity="sha384-p6i8pSXkYDEndehBEqNlXK7ZIZia6Tsxw4TD2LUf7TJPUSlPd2AzXbp3wyyAvDG7"></script>
   <script src="js/destinations/pack-yunnan.js" integrity="sha384-MIgviqt+QV/b06eH6w7DO42JTPFr7Q2kFTi8TRQT4MCouBcFBGiC7x1jnKgVatOX"></script>
-  <script src="js/destinations/emergency-contacts.js?v=2.2.0" integrity="sha384-q3IUPhGWY99DNBNM269wiapa6eQYahcwaro/PvPILVtAgkUM0pE23GI5E63eMLlN"></script>
-  <script src="js/infrastructure/storage/legacy-trip-repository.js?v=2.2.0" integrity="sha384-Jf2y8z7h6bwxOdkwZP0zMyhyG/ntcCrFco7a+mzgiFAtiCUE2uXU8Cc/MSjunorP"></script>
-  <script src="js/infrastructure/storage/idb-trip-repository.js?v=2.2.0" integrity="sha384-n7ndWoPUE3bipL9HvWWTfW8XPNZbDRmAWocUpRIyVM5HtGIIEqbkOK1e6InJY8c4"></script>
-  <script src="js/infrastructure/storage/trip-store.js?v=2.2.0" integrity="sha384-ftpferQ+1NXFRqMRZuHlz2wGUfEKk4GKeXEZzAs3FlsUmGfFdxcsSG6U5t4/B1Rb"></script>
-  <script src="js/infrastructure/storage/settings-repository.js?v=2.2.0" integrity="sha384-fp7ck757BhOA+Y2i/VoW21KRCkeMyb/G78wxwhZuReB2JbzcyTxBrLxGldhvw3n3"></script>
-  <script src="js/infrastructure/storage/journal-overflow-repository.js?v=2.2.0" integrity="sha384-uRxi9B+oBHCQ+aa8a6Wp72RAAeEuslXu5kZ+gf9Kvo22B3N6fr1XSkVnAV1X42yO"></script>
+  <script src="js/destinations/emergency-contacts.js?v=2.2.1" integrity="sha384-q3IUPhGWY99DNBNM269wiapa6eQYahcwaro/PvPILVtAgkUM0pE23GI5E63eMLlN"></script>
+  <script src="js/infrastructure/storage/legacy-trip-repository.js?v=2.2.1" integrity="sha384-Jf2y8z7h6bwxOdkwZP0zMyhyG/ntcCrFco7a+mzgiFAtiCUE2uXU8Cc/MSjunorP"></script>
+  <script src="js/infrastructure/storage/idb-trip-repository.js?v=2.2.1" integrity="sha384-n7ndWoPUE3bipL9HvWWTfW8XPNZbDRmAWocUpRIyVM5HtGIIEqbkOK1e6InJY8c4"></script>
+  <script src="js/infrastructure/storage/trip-store.js?v=2.2.1" integrity="sha384-ftpferQ+1NXFRqMRZuHlz2wGUfEKk4GKeXEZzAs3FlsUmGfFdxcsSG6U5t4/B1Rb"></script>
+  <script src="js/infrastructure/storage/settings-repository.js?v=2.2.1" integrity="sha384-fp7ck757BhOA+Y2i/VoW21KRCkeMyb/G78wxwhZuReB2JbzcyTxBrLxGldhvw3n3"></script>
+  <script src="js/infrastructure/storage/journal-overflow-repository.js?v=2.2.1" integrity="sha384-uRxi9B+oBHCQ+aa8a6Wp72RAAeEuslXu5kZ+gf9Kvo22B3N6fr1XSkVnAV1X42yO"></script>
 </head>
 <body class="min-h-screen flex flex-col font-sans transition-colors duration-200">
 
@@ -1588,10 +1590,10 @@
   <header class="companion-app-header sticky top-0 z-40 bg-[#faf8f5]/90 dark:bg-[#121316]/90 backdrop-blur-md border-b border-[#e8e2d5] dark:border-stone-800 transition-colors">
     <div class="max-w-6xl mx-auto px-3 sm:px-4 h-14 flex items-center justify-between gap-1.5 sm:gap-2">
       <!-- 좌측 브랜드 로고 & 워크스페이스 타이틀 (새로 만든 빈티지 베어 마스코트 + 필기체 영문 로고 + A Deep Life Essay) -->
-      <div class="app-brand flex items-center gap-2 sm:gap-2.5 min-w-0 cursor-pointer select-none" onclick="switchView('hub')">
+      <div class="app-brand flex items-center gap-2 sm:gap-2.5 min-w-0 cursor-pointer select-none" data-on-click="shell.switchView" data-view="hub">
         <img src="icons/sulsul_bear_mascot.png" class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl object-cover border border-[#e6e2d8] dark:border-stone-800 shadow-sm shrink-0" alt="Sulsul Travel">
           <h1 class="font-brand-script text-xl sm:text-2xl md:text-3xl font-bold tracking-normal text-[#1E2B24] dark:text-[#ededed] whitespace-nowrap leading-tight">Sulsul Travel</h1>
-            <button id="app-ver-badge" type="button" onclick="event.stopPropagation(); openVersionHistoryModal()" class="theme-card-subtle font-mono" title="앱 버전과 업데이트 기록 보기">v2.2.0</button>
+            <button id="app-ver-badge" type="button" data-on-click="settings.openVersionHistory" class="theme-card-subtle font-mono" title="앱 버전과 업데이트 기록 보기">v2.2.1</button>
             <p id="header-trip-name" class="sr-only">A Deep Life Essay</p>
       </div>
 
@@ -1599,7 +1601,7 @@
       <div class="app-header-actions flex items-center gap-1 sm:gap-1.5 shrink-0">
         <button id="header-btn-analytics" type="button" data-on-click="lifetimeAnalytics.open" data-tab="lifetime" class="companion-header-analytics theme-card-subtle flex items-center justify-center shrink-0" aria-label="누적 여행 통계" title="누적 여행 통계"><i class="fa-solid fa-chart-pie text-xs" aria-hidden="true"></i></button>
         <!-- 3. 설정 버튼 (⚙️ - 원형 버튼) -->
-        <button id="header-btn-settings" onclick="openSettingsModal()" class="w-7 h-7 sm:w-8 sm:h-8 rounded-full theme-card-subtle flex items-center justify-center text-[#44403c] dark:text-stone-300 hover:border-amber-500/60 transition shadow-xs cursor-pointer shrink-0" aria-label="앱 설정" title="앱 설정 & AI & 백업">
+        <button id="header-btn-settings" type="button" data-on-click="settings.open" class="w-7 h-7 sm:w-8 sm:h-8 rounded-full theme-card-subtle flex items-center justify-center text-[#44403c] dark:text-stone-300 hover:border-amber-500/60 transition shadow-xs cursor-pointer shrink-0" aria-label="앱 설정" title="앱 설정 & AI & 백업">
           <i class="fa-solid fa-sliders text-xs" aria-hidden="true"></i>
         </button>
 
@@ -1610,14 +1612,14 @@
         </button>
 
         <!-- 4-ALT. ‹ 허브 복귀 버튼 (워크스페이스 모드 활성 시 노출) -->
-        <button id="header-btn-back-hub" onclick="switchView('hub')" class="hidden h-7 sm:h-8 px-2.5 sm:px-3.5 rounded-full btn-gold text-xs font-black transition flex items-center gap-1 shadow-sm cursor-pointer shrink-0" title="인생 여행 허브로 돌아가기">
+        <button id="header-btn-back-hub" type="button" data-on-click="shell.switchView" data-view="hub" class="hidden h-7 sm:h-8 px-2.5 sm:px-3.5 rounded-full btn-gold text-xs font-black transition flex items-center gap-1 shadow-sm cursor-pointer shrink-0" title="인생 여행 허브로 돌아가기">
           <i class="fa-solid fa-arrow-left text-[10px]"></i>
           <span>내 여행</span>
         </button>
 
         <!-- 히든 보조 버튼들 (Mandatory IDs & 워크스페이스 상태 보존) -->
-        <button id="header-btn-theme" onclick="toggleTheme()" class="hidden" title="테마 전환"><span id="header-theme-icon">🌙</span></button>
-        <button id="btn-native-install" onclick="handleInstallButtonClick()" class="hidden" title="PWA 설치"><span id="btn-native-install-txt">설치</span></button>
+        <button id="header-btn-theme" type="button" data-on-click="settings.toggleTheme" class="hidden" title="테마 전환"><span id="header-theme-icon">🌙</span></button>
+        <button id="btn-native-install" type="button" data-on-click="settings.installButton" class="hidden" title="PWA 설치"><span id="btn-native-install-txt">설치</span></button>
         <button id="header-btn-share" onclick="openShareModal()" class="hidden" title="동행 공유"></button>
       </div>
     </div>
@@ -1753,7 +1755,7 @@
     <!-- 하단 에디토리얼 푸터 & 후원/정책 네비게이션 (v1.7.2) -->
     <footer id="hub-sulsul-footer" class="mt-14 mb-10 pt-8 border-t border-[#e8e2d5] dark:border-stone-800 flex flex-col items-center gap-4 text-center">
       <!-- 후원 버튼 (Sulsul-Diary 동일 캡슐 스타일) -->
-      <button type="button" onclick="openDonationModal()" class="inline-flex items-center gap-2 px-5 py-2 rounded-xl text-xs sm:text-sm font-bold text-[#8a5015] dark:text-[#f5dfb8] bg-[#fdf6ec] dark:bg-stone-800 border border-[#f5dfb8] dark:border-stone-700 hover:bg-[#faebd7] dark:hover:bg-stone-700 shadow-sm transition active:scale-95 cursor-pointer">
+      <button type="button" data-on-click="settings.openDonation" class="inline-flex items-center gap-2 px-5 py-2 rounded-xl text-xs sm:text-sm font-bold text-[#8a5015] dark:text-[#f5dfb8] bg-[#fdf6ec] dark:bg-stone-800 border border-[#f5dfb8] dark:border-stone-700 hover:bg-[#faebd7] dark:hover:bg-stone-700 shadow-sm transition active:scale-95 cursor-pointer">
         <svg class="w-4 h-4 text-[#a2601b] dark:text-[#d4af37] shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <path d="M18 8h1a4 4 0 0 1 0 8h-1"></path>
           <path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"></path>
@@ -1766,10 +1768,10 @@
 
       <!-- 정책 & 가이드 링크 4종 -->
       <nav class="flex flex-wrap items-center justify-center gap-x-4 gap-y-2 text-xs text-stone-500 dark:text-stone-400 font-medium">
-        <button type="button" onclick="openUserGuideModal()" class="underline hover:text-amber-600 dark:hover:text-amber-400 transition cursor-pointer">사용 가이드</button>
-        <button type="button" onclick="openDeviceSyncModal()" class="underline hover:text-amber-600 dark:hover:text-amber-400 transition cursor-pointer">기기 간 백업 안내</button>
-        <button type="button" onclick="openPrivacyModal()" class="underline hover:text-amber-600 dark:hover:text-amber-400 transition cursor-pointer">개인정보처리방침</button>
-        <button type="button" onclick="openVersionHistoryModal()" class="underline hover:text-amber-600 dark:hover:text-amber-400 transition cursor-pointer">변경 이력</button>
+        <button type="button" data-on-click="settings.openUserGuide" class="underline hover:text-amber-600 dark:hover:text-amber-400 transition cursor-pointer">사용 가이드</button>
+        <button type="button" data-on-click="settings.openDeviceSync" class="underline hover:text-amber-600 dark:hover:text-amber-400 transition cursor-pointer">기기 간 백업 안내</button>
+        <button type="button" data-on-click="settings.openPrivacy" class="underline hover:text-amber-600 dark:hover:text-amber-400 transition cursor-pointer">개인정보처리방침</button>
+        <button type="button" data-on-click="settings.openVersionHistory" class="underline hover:text-amber-600 dark:hover:text-amber-400 transition cursor-pointer">변경 이력</button>
       </nav>
 
       <!-- 서브 안내문구 -->
@@ -1852,7 +1854,7 @@
           <span>공유</span>
         </button>
         <button onclick="switchTab('checklist');this.closest('details').open=false"><i class="fa-solid fa-list-check" aria-hidden="true"></i> 준비</button>
-        <button onclick="openVersionHistoryModal()"><i class="fa-solid fa-clock-rotate-left" aria-hidden="true"></i> 변경 이력</button>
+        <button type="button" data-on-click="settings.openVersionHistory"><i class="fa-solid fa-clock-rotate-left" aria-hidden="true"></i> 변경 이력</button>
         </div>
       </details>
     </div>
@@ -2473,7 +2475,7 @@
 
         <div class="flex items-center gap-2">
           <input type="password" id="cfg-gemini-key" placeholder="AI Studio에서 발급받은 Gemini API 키 입력" class="flex-1 px-3 py-2 bg-[#080b12] border border-[#1e263c] rounded-xl text-xs text-white placeholder-slate-500 focus:outline-none focus:border-amber-500">
-          <button onclick="saveGeminiKey()" class="px-4 py-2 bg-gradient-to-r from-amber-500 to-amber-600 text-slate-950 font-black rounded-xl text-xs shrink-0 transition">저장</button>
+          <button type="button" data-on-click="settings.saveLegacyGeminiKey" class="px-4 py-2 bg-gradient-to-r from-amber-500 to-amber-600 text-slate-950 font-black rounded-xl text-xs shrink-0 transition">저장</button>
         </div>
       </div>
     </div>
@@ -2495,7 +2497,7 @@
         <button type="button" data-on-click="planBlocks.editActive" class="tap-target px-3 rounded-xl theme-card-subtle flex items-center justify-center gap-1.5 text-xs font-black shrink-0" title="큰 계획 구간 편집">
           <i class="fa-solid fa-pen"></i><span class="hidden sm:inline">편집</span>
         </button>
-        <button onclick="openSettingsModal()" class="tap-target rounded-xl theme-card-subtle flex items-center justify-center shrink-0" aria-label="앱 설정과 백업" title="앱 설정과 백업">
+        <button type="button" data-on-click="settings.open" class="tap-target rounded-xl theme-card-subtle flex items-center justify-center shrink-0" aria-label="앱 설정과 백업" title="앱 설정과 백업">
           <i class="fa-solid fa-sliders"></i>
         </button>
       </div>
@@ -2543,7 +2545,7 @@
   <!-- 5. PWA 앱 설치 가이드 모달 (INSTALL GUIDE) -->
   <!-- ========================================== -->
   <div id="modal-install-guide" class="sheet-container sheet-closed">
-    <div class="sheet-scrim" onclick="closeModal('modal-install-guide')"></div>
+    <div class="sheet-scrim" data-on-click="shell.closeModal" data-modal="modal-install-guide"></div>
     <div class="sheet-box p-6 sm:p-7 space-y-4">
       <div class="flex items-center justify-between border-b border-[var(--line)] pb-3">
         <div class="flex items-center gap-2.5">
@@ -2553,7 +2555,7 @@
             <p class="text-[11px]" style="color: var(--ink2);">단독 앱 실행 & 오프라인 접근 지원</p>
           </div>
         </div>
-        <button onclick="closeModal('modal-install-guide')" class="text-base p-1 hover:opacity-75 transition cursor-pointer" style="color: var(--ink2);" title="닫기">✕</button>
+        <button type="button" data-on-click="shell.closeModal" data-modal="modal-install-guide" class="text-base p-1 hover:opacity-75 transition cursor-pointer" style="color: var(--ink2);" title="닫기">✕</button>
       </div>
 
       <!-- 헤더 히어로 배너 (2-Tone 테마 호환 고대비 카드) -->
@@ -2568,7 +2570,7 @@
       <!-- 동적 인터랙티브 설치 영역 (앱 상태 / 인앱 브라우저 / 1-탭 설치 버튼) -->
       <div id="install-guide-dynamic-box">
         <div class="space-y-2">
-          <button id="btn-modal-direct-install" onclick="triggerNativeInstall()" class="btn-gold w-full py-3.5 px-4 rounded-xl text-sm font-black flex items-center justify-center gap-2 cursor-pointer pulse-gold shadow-lg">
+          <button id="btn-modal-direct-install" type="button" data-on-click="settings.triggerInstall" class="btn-gold w-full py-3.5 px-4 rounded-xl text-sm font-black flex items-center justify-center gap-2 cursor-pointer pulse-gold shadow-lg">
             <i class="fa-solid fa-download text-sm"></i>
             <span>📲 지금 바로 홈 화면에 앱 설치하기</span>
           </button>
@@ -2601,9 +2603,9 @@
 
       <!-- 플랫폼 3대 탭 -->
       <div class="flex items-center gap-1.5 p-1 rounded-xl theme-card-subtle">
-        <button onclick="switchInstallTab('ios')" id="tab-inst-ios" class="flex-1 py-1.5 text-xs font-semibold rounded-lg tab-install-inactive transition">🍎 iPhone / iPad</button>
-        <button onclick="switchInstallTab('android')" id="tab-inst-android" class="flex-1 py-1.5 text-xs font-black rounded-lg tab-install-active shadow-sm">🤖 Android</button>
-        <button onclick="switchInstallTab('pc')" id="tab-inst-pc" class="flex-1 py-1.5 text-xs font-semibold rounded-lg tab-install-inactive transition">💻 PC (Edge/Chrome)</button>
+        <button type="button" data-on-click="settings.switchInstallTab" data-platform="ios" id="tab-inst-ios" aria-pressed="false" class="flex-1 py-1.5 text-xs font-semibold rounded-lg tab-install-inactive transition">🍎 iPhone / iPad</button>
+        <button type="button" data-on-click="settings.switchInstallTab" data-platform="android" id="tab-inst-android" aria-pressed="true" class="flex-1 py-1.5 text-xs font-black rounded-lg tab-install-active shadow-sm">🤖 Android</button>
+        <button type="button" data-on-click="settings.switchInstallTab" data-platform="pc" id="tab-inst-pc" aria-pressed="false" class="flex-1 py-1.5 text-xs font-semibold rounded-lg tab-install-inactive transition">💻 PC (Edge/Chrome)</button>
       </div>
 
       <!-- iOS 안내 -->
@@ -2655,7 +2657,7 @@
         </div>
       </div>
 
-      <button onclick="closeModal('modal-install-guide')" class="w-full py-2.5 rounded-xl btn-surface font-bold text-xs transition cursor-pointer">
+      <button type="button" data-on-click="shell.closeModal" data-modal="modal-install-guide" class="w-full py-2.5 rounded-xl btn-surface font-bold text-xs transition cursor-pointer">
         확인 완료
       </button>
     </div>
@@ -4111,7 +4113,7 @@
   <!-- 7.5 설정 & 아카이브 관리 모달 (MODAL-SETTINGS) -->
   <!-- ========================================== -->
   <div id="modal-settings" class="sheet-container sheet-closed">
-    <div class="sheet-scrim" onclick="closeModal('modal-settings')"></div>
+    <div class="sheet-scrim" data-on-click="shell.closeModal" data-modal="modal-settings"></div>
     <div class="sheet-box sheet-scroll-layout max-w-xl">
       <!-- 헤더 & 탭 바 (고정 영역) -->
       <div class="sheet-sticky-header space-y-3 pb-3">
@@ -4125,18 +4127,18 @@
               <p class="text-[11px] text-[#78716c] dark:text-stone-400">화면 테마, Gemini AI, 백업·복원 및 데이터 관리</p>
             </div>
           </div>
-          <button onclick="closeModal('modal-settings')" class="w-7 h-7 rounded-lg bg-[#faf8f5] dark:bg-stone-800 hover:bg-[#f0ece1] dark:hover:bg-stone-700 text-[#78716c] dark:text-stone-300 flex items-center justify-center text-sm transition cursor-pointer">✕</button>
+          <button type="button" data-on-click="shell.closeModal" data-modal="modal-settings" class="w-7 h-7 rounded-lg bg-[#faf8f5] dark:bg-stone-800 hover:bg-[#f0ece1] dark:hover:bg-stone-700 text-[#78716c] dark:text-stone-300 flex items-center justify-center text-sm transition cursor-pointer">✕</button>
         </div>
 
         <!-- 3대 카테고리 탭 바 -->
         <div class="grid grid-cols-3 gap-1 p-1 rounded-xl bg-[#f5f4ef] dark:bg-stone-900 border border-[#e8e2d5]/60 dark:border-stone-800 text-[11px] font-bold select-none shrink-0">
-          <button onclick="switchSettingsTab('theme')" id="tab-settings-theme" class="py-1.5 rounded-lg transition text-center hub-tab-active shadow-sm cursor-pointer truncate">
+          <button type="button" data-on-click="settings.switchTab" data-tab="theme" id="tab-settings-theme" aria-pressed="true" class="py-1.5 rounded-lg transition text-center hub-tab-active shadow-sm cursor-pointer truncate">
             🎨 화면·테마
           </button>
-          <button onclick="switchSettingsTab('ai')" id="tab-settings-ai" class="py-1.5 rounded-lg transition text-center hub-tab-inactive cursor-pointer truncate">
+          <button type="button" data-on-click="settings.switchTab" data-tab="ai" id="tab-settings-ai" aria-pressed="false" class="py-1.5 rounded-lg transition text-center hub-tab-inactive cursor-pointer truncate">
             🤖 AI·백업
           </button>
-          <button onclick="switchSettingsTab('data')" id="tab-settings-data" class="py-1.5 rounded-lg transition text-center hub-tab-inactive cursor-pointer truncate">
+          <button type="button" data-on-click="settings.switchTab" data-tab="data" id="tab-settings-data" aria-pressed="false" class="py-1.5 rounded-lg transition text-center hub-tab-inactive cursor-pointer truncate">
             💾 데이터·관리
           </button>
         </div>
@@ -4160,21 +4162,21 @@
               고풍스러운 양장본 고서 감성의 <b>모던(빈티지 아카이벌)</b>, 단정하고 깔끔한 <b>라이트그레이</b>, 눈부심을 최소화한 <b>딥 블랙(옵시디언 다크)</b> 3대 테마를 자유롭게 선택할 수 있습니다.
             </p>
             <div class="grid grid-cols-3 gap-1.5 pt-1">
-              <button id="btn-theme-modern" onclick="setTheme('modern')" class="py-2.5 px-2 rounded-xl border font-black text-[11px] flex flex-col items-center justify-center gap-1 transition cursor-pointer">
+              <button type="button" id="btn-theme-modern" data-on-click="settings.setTheme" data-theme="modern" aria-pressed="true" class="py-2.5 px-2 rounded-xl border font-black text-[11px] flex flex-col items-center justify-center gap-1 transition cursor-pointer">
                 <span class="text-base">📜</span>
                 <span id="btn-theme-modern-txt">모던</span>
               </button>
-              <button id="btn-theme-lightgray" onclick="setTheme('lightgray')" class="py-2.5 px-2 rounded-xl border font-black text-[11px] flex flex-col items-center justify-center gap-1 transition cursor-pointer">
+              <button type="button" id="btn-theme-lightgray" data-on-click="settings.setTheme" data-theme="lightgray" aria-pressed="false" class="py-2.5 px-2 rounded-xl border font-black text-[11px] flex flex-col items-center justify-center gap-1 transition cursor-pointer">
                 <span class="text-base">☀️</span>
                 <span id="btn-theme-lightgray-txt">라이트그레이</span>
               </button>
-              <button id="btn-theme-deepblack" onclick="setTheme('deepblack')" class="py-2.5 px-2 rounded-xl border font-black text-[11px] flex flex-col items-center justify-center gap-1 transition cursor-pointer">
+              <button type="button" id="btn-theme-deepblack" data-on-click="settings.setTheme" data-theme="deepblack" aria-pressed="false" class="py-2.5 px-2 rounded-xl border font-black text-[11px] flex flex-col items-center justify-center gap-1 transition cursor-pointer">
                 <span class="text-base">🌙</span>
                 <span id="btn-theme-deepblack-txt">딥 블랙</span>
               </button>
               <!-- 하위 호환성 유지용 숨김 버튼 -->
-              <button id="btn-theme-light" onclick="setTheme('light')" class="hidden"><span id="btn-theme-light-txt">라이트</span></button>
-              <button id="btn-theme-dark" onclick="setTheme('dark')" class="hidden"><span id="btn-theme-dark-txt">다크</span></button>
+              <button type="button" id="btn-theme-light" data-on-click="settings.setTheme" data-theme="light" class="hidden"><span id="btn-theme-light-txt">라이트</span></button>
+              <button type="button" id="btn-theme-dark" data-on-click="settings.setTheme" data-theme="dark" class="hidden"><span id="btn-theme-dark-txt">다크</span></button>
             </div>
           </div>
 
@@ -4186,12 +4188,12 @@
                   <i class="fa-solid fa-mobile-screen-button text-[#a2601b]"></i>
                   <span>홈 화면에 앱(PWA) 설치 & 구동</span>
                 </div>
-                <div class="text-[11px] text-[#78716c] dark:text-stone-400 mt-0.5">인터넷 없는 비행기 안에서도 100% 동작합니다.</div>
+                <div class="text-[11px] text-[#78716c] dark:text-stone-400 mt-0.5">저장된 여행과 기록은 오프라인에서도 확인하고 기록할 수 있습니다.</div>
                 <div class="mt-1.5">
                   <span id="settings-pwa-status" class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-slate-100 dark:bg-stone-800 text-slate-600 dark:text-stone-300 border border-slate-200 dark:border-stone-700">웹 브라우저로 실행 중</span>
                 </div>
               </div>
-              <button id="btn-settings-install" onclick="handleInstallButtonClick()" class="px-3.5 py-1.5 rounded-xl btn-gold text-xs font-bold transition shrink-0 cursor-pointer shadow-sm">
+              <button type="button" id="btn-settings-install" data-on-click="settings.installButton" class="px-3.5 py-1.5 rounded-xl btn-gold text-xs font-bold transition shrink-0 cursor-pointer shadow-sm">
                 앱 설치
               </button>
             </div>
@@ -4271,20 +4273,20 @@
               <div class="flex items-center gap-2">
                 <div class="relative flex-1">
                   <input type="password" id="modal-cfg-gemini-key" placeholder="AIzaSy... 형태의 키를 붙여넣으세요" class="w-full pl-3 pr-9 py-2 bg-[#faf8f5] dark:bg-[#16181d] border border-[#e8e2d5] dark:border-stone-700 rounded-xl text-xs text-[#1c1917] dark:text-[#ededed] focus:outline-none focus:border-[#a2601b] font-mono transition">
-                  <button type="button" onclick="toggleGeminiKeyVisibility()" id="btn-toggle-gemini-key" title="키 표시/숨김" class="absolute right-2.5 top-1/2 -translate-y-1/2 text-stone-400 hover:text-stone-700 dark:hover:text-stone-200 text-xs p-1 cursor-pointer">
+                  <button type="button" data-on-click="settings.toggleGeminiVisibility" id="btn-toggle-gemini-key" title="키 표시/숨김" class="absolute right-2.5 top-1/2 -translate-y-1/2 text-stone-400 hover:text-stone-700 dark:hover:text-stone-200 text-xs p-1 cursor-pointer">
                     <i id="icon-gemini-key-eye" class="fa-solid fa-eye"></i>
                   </button>
                   <div id="icon-gemini-key-locked" class="hidden absolute right-3 top-1/2 -translate-y-1/2 text-emerald-600 dark:text-emerald-400 text-xs" title="입력창에서 API 키를 가리는 중">
                     <i class="fa-solid fa-eye-slash"></i>
                   </div>
                 </div>
-                <button id="btn-save-gemini-key" onclick="handleGeminiKeyMainAction()" class="btn-gold px-3.5 py-2 rounded-xl text-xs font-bold shrink-0 cursor-pointer shadow-sm transition-all flex items-center gap-1">
+                <button type="button" id="btn-save-gemini-key" data-on-click="settings.geminiMainAction" class="btn-gold px-3.5 py-2 rounded-xl text-xs font-bold shrink-0 cursor-pointer shadow-sm transition-all flex items-center gap-1">
                   <span id="btn-save-gemini-key-txt">저장</span>
                 </button>
-                <button id="btn-cancel-gemini-key" onclick="cancelGeminiKeyEdit()" class="hidden px-2.5 py-2 rounded-xl bg-stone-100 dark:bg-stone-800 hover:bg-stone-200 text-stone-700 dark:text-stone-300 text-xs font-bold shrink-0 border border-stone-200 dark:border-stone-700 cursor-pointer transition">
+                <button type="button" id="btn-cancel-gemini-key" data-on-click="settings.cancelGeminiEdit" class="hidden px-2.5 py-2 rounded-xl bg-stone-100 dark:bg-stone-800 hover:bg-stone-200 text-stone-700 dark:text-stone-300 text-xs font-bold shrink-0 border border-stone-200 dark:border-stone-700 cursor-pointer transition">
                   취소
                 </button>
-                <button id="btn-delete-gemini-key" onclick="deleteGeminiKey()" title="등록된 API 키 삭제" class="hidden px-2.5 py-2 rounded-xl bg-rose-50 dark:bg-rose-950/40 hover:bg-rose-100 text-rose-700 dark:text-rose-300 text-xs font-bold shrink-0 border border-rose-200 dark:border-rose-800 cursor-pointer transition">
+                <button type="button" id="btn-delete-gemini-key" data-on-click="settings.deleteGeminiKey" title="등록된 API 키 삭제" class="hidden px-2.5 py-2 rounded-xl bg-rose-50 dark:bg-rose-950/40 hover:bg-rose-100 text-rose-700 dark:text-rose-300 text-xs font-bold shrink-0 border border-rose-200 dark:border-rose-800 cursor-pointer transition">
                   <i class="fa-solid fa-trash-can"></i>
                 </button>
               </div>
@@ -4293,7 +4295,7 @@
                   <span class="shrink-0">상태:</span>
                   <span id="gemini-key-preview-text" class="font-semibold text-emerald-700 dark:text-emerald-400 truncate text-[11px]">미등록</span>
                 </div>
-                <button type="button" id="btn-test-gemini-key" onclick="testGeminiApiKey()" class="px-3 py-1 rounded-lg bg-amber-500/10 hover:bg-amber-500/20 text-[#a2601b] dark:text-[#d4af37] text-[11px] font-bold border border-amber-500/30 transition flex items-center gap-1 cursor-pointer shrink-0">
+                <button type="button" id="btn-test-gemini-key" data-on-click="settings.testGeminiKey" class="px-3 py-1 rounded-lg bg-amber-500/10 hover:bg-amber-500/20 text-[#a2601b] dark:text-[#d4af37] text-[11px] font-bold border border-amber-500/30 transition flex items-center gap-1 cursor-pointer shrink-0">
                   <i class="fa-solid fa-bolt-lightning text-[10px]"></i>
                   <span>연결 테스트</span>
                 </button>
@@ -4428,11 +4430,11 @@
               <i class="fa-solid fa-earth-americas text-[#a2601b]"></i>
               <span>세계 지도 궤적</span>
             </button>
-            <button onclick="closeModal('modal-settings'); openVersionHistoryModal();" class="py-2 px-3 rounded-xl bg-[#faf8f5] dark:bg-stone-800 hover:bg-[#f0ece1] dark:hover:bg-stone-700 border border-[#e8e2d5] dark:border-stone-700 text-[#1c1917] dark:text-stone-200 text-xs font-bold transition flex items-center justify-center gap-1.5 cursor-pointer">
+            <button type="button" data-on-click="settings.openVersionHistory" data-close-modal="modal-settings" class="py-2 px-3 rounded-xl bg-[#faf8f5] dark:bg-stone-800 hover:bg-[#f0ece1] dark:hover:bg-stone-700 border border-[#e8e2d5] dark:border-stone-700 text-[#1c1917] dark:text-stone-200 text-xs font-bold transition flex items-center justify-center gap-1.5 cursor-pointer">
               <i class="fa-solid fa-list-check text-[#a2601b]"></i>
               <span>버전 기록 전체</span>
             </button>
-            <button onclick="restoreSmartWelcomeBanner();" class="col-span-2 sm:col-span-1 py-2 px-3 rounded-xl bg-[#faf8f5] dark:bg-stone-800 hover:bg-[#f0ece1] dark:hover:bg-stone-700 border border-[#e8e2d5] dark:border-stone-700 text-[#1c1917] dark:text-stone-200 text-xs font-bold transition flex items-center justify-center gap-1.5 cursor-pointer" title="상단 시작 가이드 배너 다시 활성화">
+            <button type="button" data-on-click="settings.restoreWelcome" class="col-span-2 sm:col-span-1 py-2 px-3 rounded-xl bg-[#faf8f5] dark:bg-stone-800 hover:bg-[#f0ece1] dark:hover:bg-stone-700 border border-[#e8e2d5] dark:border-stone-700 text-[#1c1917] dark:text-stone-200 text-xs font-bold transition flex items-center justify-center gap-1.5 cursor-pointer" title="상단 시작 가이드 배너 다시 활성화">
               <i class="fa-solid fa-lightbulb text-amber-500"></i>
               <span>시작 가이드 복원</span>
             </button>
@@ -4775,7 +4777,7 @@
   <!-- 7.8 버전 업데이트 기록 모달 (MODAL-VERSION-HISTORY) -->
   <!-- ========================================== -->
   <div id="modal-version-history" class="sheet-container sheet-closed">
-    <div class="sheet-scrim" onclick="closeModal('modal-version-history')"></div>
+    <div class="sheet-scrim" data-on-click="shell.closeModal" data-modal="modal-version-history"></div>
     <div class="sheet-box max-w-2xl p-5 sm:p-6 space-y-4 max-h-[90vh] flex flex-col bg-white dark:bg-[#16181d] text-[#1c1917] dark:text-[#ededed]">
       <!-- 모달 헤더 -->
       <div class="flex items-center justify-between border-b border-[#e8e2d5] dark:border-stone-800 pb-3 shrink-0">
@@ -4791,12 +4793,14 @@
             <p class="text-[11px] text-[#78716c] dark:text-stone-400">술술 오도미터 순차 올림 원칙에 따른 공식 업데이트 기록</p>
           </div>
         </div>
-        <button onclick="closeModal('modal-version-history')" class="w-7 h-7 rounded-lg bg-[#faf8f5] dark:bg-stone-800 hover:bg-[#f0ece1] dark:hover:bg-stone-700 text-[#78716c] dark:text-stone-300 flex items-center justify-center text-sm transition cursor-pointer" title="닫기">✕</button>
+        <button type="button" data-on-click="shell.closeModal" data-modal="modal-version-history" class="w-7 h-7 rounded-lg bg-[#faf8f5] dark:bg-stone-800 hover:bg-[#f0ece1] dark:hover:bg-stone-700 text-[#78716c] dark:text-stone-300 flex items-center justify-center text-sm transition cursor-pointer" title="닫기">✕</button>
       </div>
 
       <!-- 버전 목록 스크롤 영역 (독립 스크롤 컨테이너로 Flexbox 압축 버그 영구 척결) -->
       <div class="overflow-y-auto flex-1 min-h-0 space-y-3.5 pr-1.5 custom-scrollbar">
-        <!-- v2.2.0 (Current) -->
+        <!-- v2.2.1 (Current) -->
+        <section class="companion-context"><h3 class="font-bold">v2.2.1 · 설정·테마·PWA 설치·안내 모달 정리</h3><p class="text-xs">2026-11-25 · st-shell-v2.2.1</p><p class="text-xs leading-relaxed">환경설정, 3단 테마 전환, Gemini API 키 관리, PWA 설치 안내와 시작 가이드 배너, 푸터 안내·후원 모달을 별도 파일로 옮겼습니다. 설정·안내·AI 채팅 창에서 다른 창으로 바로 이동할 때 이전 창이 뒤에 남거나 잘못된 탭으로 열리던 문제, 처음 입력한 API 키 연결 테스트가 무시되거나 실패한 키가 기존 정상 키를 덮어쓰던 문제, 인앱 브라우저 크롬 전환 링크 프로토콜·이스케이프 오류와 탭 선택 접근성 속성을 함께 고쳤습니다.</p></section>
+        <!-- v2.2.0 -->
         <section class="companion-context"><h3 class="font-bold">v2.2.0 · 내 여행 허브 화면 정리</h3><p class="text-xs">2026-11-25 · st-shell-v2.2.0</p><p class="text-xs leading-relaxed">내 여행 허브의 검색·상태/국가/도시/컨셉 필터·보기 전환·대표 사진·여행 카드 렌더링을 별도 파일로 옮겼습니다. 목록과 격자 카드에서 외화 예산이 원화 기호로 오표시되거나 0원 예산이 ₩500만으로 지어내지던 문제, 목록 카드 일수가 22일로 고정되던 문제, 삭제된 국가 필터가 남아 목록이 비던 문제를 고쳤습니다. 대표 사진 URL과 이모지·날짜 HTML을 안전하게 검증·이스케이프합니다.</p></section>
         <!-- v2.1.9 -->
         <section class="companion-context"><h3 class="font-bold">v2.1.9 · 평생 여행 통계 대시보드 정리</h3><p class="text-xs">2026-11-25 · st-shell-v2.1.9</p><p class="text-xs leading-relaxed">평생 여행 통계 모달과 6대 지표 드릴다운을 별도 파일로 옮겼습니다. 요약표와 지출 랭킹에서 목표 예산이 ₩0만·소진율 0%로 나오던 오류를 고쳐 여행 통화 기준 예산을 원화로 정확히 환산해 표시하고, 요약표와 여정 목록의 상태 배지도 날짜 기준 단계(진행중·예정·완료·버킷)로 통일했습니다. 공유 사본의 날짜·제목 HTML은 글자로만 표시하며 6대 지표 카드를 키보드·접근성 버튼으로 개선했습니다.</p></section>
@@ -5775,14 +5779,14 @@
   <!-- 7.12 술술트래블 후원 모달 (MODAL-DONATION) -->
   <!-- ========================================== -->
   <div id="modal-donation" class="sheet-container sheet-closed">
-    <div class="sheet-scrim" onclick="closeModal('modal-donation')"></div>
+    <div class="sheet-scrim" data-on-click="shell.closeModal" data-modal="modal-donation"></div>
     <div class="sheet-box sheet-lg max-w-sm sm:max-w-md mx-auto p-5 space-y-4 bg-white dark:bg-[#16181d] text-[#1c1917] dark:text-[#ededed] rounded-t-3xl sm:rounded-3xl shadow-2xl">
       <div class="sheet-handle sm:hidden"></div>
       <div class="flex items-center justify-between border-b border-[#e8e2d5] dark:border-stone-800 pb-3">
         <h3 class="text-base font-extrabold text-[#1E2B24] dark:text-white flex items-center gap-2">
           <span>술술트래블 후원</span>
         </h3>
-        <button onclick="closeModal('modal-donation')" class="w-7 h-7 rounded-lg bg-[#faf8f5] dark:bg-stone-800 hover:bg-[#f0ece1] dark:hover:bg-stone-700 text-stone-500 dark:text-stone-300 flex items-center justify-center text-sm transition cursor-pointer" title="닫기">✕</button>
+        <button type="button" data-on-click="shell.closeModal" data-modal="modal-donation" class="w-7 h-7 rounded-lg bg-[#faf8f5] dark:bg-stone-800 hover:bg-[#f0ece1] dark:hover:bg-stone-700 text-stone-500 dark:text-stone-300 flex items-center justify-center text-sm transition cursor-pointer" title="닫기">✕</button>
       </div>
 
       <div class="py-2 flex flex-col items-center text-center space-y-4">
@@ -5796,10 +5800,10 @@
       </div>
 
       <div class="pt-3 border-t border-[#e8e2d5] dark:border-stone-800 grid grid-cols-2 gap-2.5">
-        <button type="button" onclick="copyDonationLink()" class="w-full py-2.5 px-3 rounded-xl border border-stone-300 dark:border-stone-700 bg-white dark:bg-stone-800 hover:bg-stone-50 dark:hover:bg-stone-700 text-stone-800 dark:text-stone-200 text-xs sm:text-sm font-bold transition shadow-sm cursor-pointer">
+        <button type="button" data-on-click="settings.copyDonationLink" class="w-full py-2.5 px-3 rounded-xl border border-stone-300 dark:border-stone-700 bg-white dark:bg-stone-800 hover:bg-stone-50 dark:hover:bg-stone-700 text-stone-800 dark:text-stone-200 text-xs sm:text-sm font-bold transition shadow-sm cursor-pointer">
           링크 복사
         </button>
-        <button type="button" onclick="openDonationLink()" class="w-full py-2.5 px-3 rounded-xl bg-[#c58b2b] hover:bg-[#b07823] text-white text-xs sm:text-sm font-bold transition shadow-md cursor-pointer">
+        <button type="button" data-on-click="settings.openDonationLink" class="w-full py-2.5 px-3 rounded-xl bg-[#c58b2b] hover:bg-[#b07823] text-white text-xs sm:text-sm font-bold transition shadow-md cursor-pointer">
           링크 열기
         </button>
       </div>
@@ -6061,7 +6065,7 @@
   <!-- 7.13 술술트래블 사용 가이드 모달 (MODAL-USER-GUIDE) -->
   <!-- ========================================== -->
   <div id="modal-user-guide" class="sheet-container sheet-closed">
-    <div class="sheet-scrim" onclick="closeModal('modal-user-guide')"></div>
+    <div class="sheet-scrim" data-on-click="shell.closeModal" data-modal="modal-user-guide"></div>
     <div class="sheet-box max-w-2xl p-5 sm:p-6 space-y-4 max-h-[90vh] flex flex-col bg-white dark:bg-[#16181d] text-[#1c1917] dark:text-[#ededed] rounded-t-3xl sm:rounded-3xl shadow-2xl">
       <div class="sheet-handle sm:hidden"></div>
       <div class="flex items-center justify-between border-b border-[#e8e2d5] dark:border-stone-800 pb-3 shrink-0">
@@ -6074,7 +6078,7 @@
             <p class="text-[11px] text-[#78716c] dark:text-stone-400">설레는 계획부터 오프라인 현장 기록까지</p>
           </div>
         </div>
-        <button onclick="closeModal('modal-user-guide')" class="w-7 h-7 rounded-lg bg-[#faf8f5] dark:bg-stone-800 hover:bg-[#f0ece1] dark:hover:bg-stone-700 text-stone-500 dark:text-stone-300 flex items-center justify-center text-sm transition cursor-pointer" title="닫기">✕</button>
+        <button type="button" data-on-click="shell.closeModal" data-modal="modal-user-guide" class="w-7 h-7 rounded-lg bg-[#faf8f5] dark:bg-stone-800 hover:bg-[#f0ece1] dark:hover:bg-stone-700 text-stone-500 dark:text-stone-300 flex items-center justify-center text-sm transition cursor-pointer" title="닫기">✕</button>
       </div>
 
       <div class="overflow-y-auto flex-1 min-h-0 space-y-4 pr-1.5 custom-scrollbar text-xs sm:text-sm">
@@ -6142,7 +6146,7 @@
       </div>
 
       <div class="pt-3 border-t border-[#e8e2d5] dark:border-stone-800 flex items-center justify-end shrink-0">
-        <button onclick="closeModal('modal-user-guide')" class="px-5 py-2.5 rounded-xl bg-stone-100 dark:bg-stone-800 hover:bg-stone-200 dark:hover:bg-stone-700 font-bold text-xs transition cursor-pointer">
+        <button type="button" data-on-click="shell.closeModal" data-modal="modal-user-guide" class="px-5 py-2.5 rounded-xl bg-stone-100 dark:bg-stone-800 hover:bg-stone-200 dark:hover:bg-stone-700 font-bold text-xs transition cursor-pointer">
           확인
         </button>
       </div>
@@ -6153,7 +6157,7 @@
   <!-- 7.14 기기 간 백업·이동 안내 모달 -->
   <!-- ========================================== -->
   <div id="modal-device-sync" class="sheet-container sheet-closed">
-    <div class="sheet-scrim" onclick="closeModal('modal-device-sync')"></div>
+    <div class="sheet-scrim" data-on-click="shell.closeModal" data-modal="modal-device-sync"></div>
     <div class="sheet-box max-w-2xl p-5 sm:p-6 space-y-4 max-h-[90vh] flex flex-col bg-white dark:bg-[#16181d] text-[#1c1917] dark:text-[#ededed] rounded-t-3xl sm:rounded-3xl shadow-2xl">
       <div class="sheet-handle sm:hidden"></div>
       <div class="flex items-center justify-between border-b border-[#e8e2d5] dark:border-stone-800 pb-3 shrink-0">
@@ -6166,7 +6170,7 @@
             <p class="text-[11px] text-[#78716c] dark:text-stone-400">여행 사본을 내보내 다른 기기에 수동으로 복원합니다</p>
           </div>
         </div>
-        <button onclick="closeModal('modal-device-sync')" class="w-7 h-7 rounded-lg bg-[#faf8f5] dark:bg-stone-800 hover:bg-[#f0ece1] dark:hover:bg-stone-700 text-stone-500 dark:text-stone-300 flex items-center justify-center text-sm transition cursor-pointer" title="닫기">✕</button>
+        <button type="button" data-on-click="shell.closeModal" data-modal="modal-device-sync" class="w-7 h-7 rounded-lg bg-[#faf8f5] dark:bg-stone-800 hover:bg-[#f0ece1] dark:hover:bg-stone-700 text-stone-500 dark:text-stone-300 flex items-center justify-center text-sm transition cursor-pointer" title="닫기">✕</button>
       </div>
 
       <div class="overflow-y-auto flex-1 min-h-0 space-y-4 pr-1.5 custom-scrollbar text-xs sm:text-sm">
@@ -6215,10 +6219,10 @@
       </div>
 
       <div class="pt-3 border-t border-[#e8e2d5] dark:border-stone-800 flex items-center justify-between shrink-0">
-        <button onclick="closeModal('modal-device-sync'); openSettingsModal();" class="px-4 py-2.5 rounded-xl border border-stone-300 dark:border-stone-700 hover:bg-stone-100 dark:hover:bg-stone-800 font-bold text-xs transition cursor-pointer">
+        <button type="button" data-on-click="settings.openFromModal" data-close-modal="modal-device-sync" data-tab="data" class="px-4 py-2.5 rounded-xl border border-stone-300 dark:border-stone-700 hover:bg-stone-100 dark:hover:bg-stone-800 font-bold text-xs transition cursor-pointer">
           ⚙️ 지금 백업하러 가기
         </button>
-        <button onclick="closeModal('modal-device-sync')" class="px-5 py-2.5 rounded-xl bg-stone-100 dark:bg-stone-800 hover:bg-stone-200 dark:hover:bg-stone-700 font-bold text-xs transition cursor-pointer">
+        <button type="button" data-on-click="shell.closeModal" data-modal="modal-device-sync" class="px-5 py-2.5 rounded-xl bg-stone-100 dark:bg-stone-800 hover:bg-stone-200 dark:hover:bg-stone-700 font-bold text-xs transition cursor-pointer">
           확인
         </button>
       </div>
@@ -6229,7 +6233,7 @@
   <!-- 7.15 개인정보처리방침 모달 (MODAL-PRIVACY) -->
   <!-- ========================================== -->
   <div id="modal-privacy" class="sheet-container sheet-closed">
-    <div class="sheet-scrim" onclick="closeModal('modal-privacy')"></div>
+    <div class="sheet-scrim" data-on-click="shell.closeModal" data-modal="modal-privacy"></div>
     <div class="sheet-box max-w-2xl p-5 sm:p-6 space-y-4 max-h-[90vh] flex flex-col bg-white dark:bg-[#16181d] text-[#1c1917] dark:text-[#ededed] rounded-t-3xl sm:rounded-3xl shadow-2xl">
       <div class="sheet-handle sm:hidden"></div>
       <div class="flex items-center justify-between border-b border-[#e8e2d5] dark:border-stone-800 pb-3 shrink-0">
@@ -6242,7 +6246,7 @@
             <p class="text-[11px] text-[#78716c] dark:text-stone-400">기기에 기본 저장 · 선택한 외부 기능은 해당 서비스로 전송</p>
           </div>
         </div>
-        <button onclick="closeModal('modal-privacy')" class="w-7 h-7 rounded-lg bg-[#faf8f5] dark:bg-stone-800 hover:bg-[#f0ece1] dark:hover:bg-stone-700 text-stone-500 dark:text-stone-300 flex items-center justify-center text-sm transition cursor-pointer" title="닫기">✕</button>
+        <button type="button" data-on-click="shell.closeModal" data-modal="modal-privacy" class="w-7 h-7 rounded-lg bg-[#faf8f5] dark:bg-stone-800 hover:bg-[#f0ece1] dark:hover:bg-stone-700 text-stone-500 dark:text-stone-300 flex items-center justify-center text-sm transition cursor-pointer" title="닫기">✕</button>
       </div>
 
       <div class="overflow-y-auto flex-1 min-h-0 space-y-4 pr-1.5 custom-scrollbar text-xs sm:text-sm">
@@ -6314,7 +6318,7 @@
       </div>
 
       <div class="pt-3 border-t border-[#e8e2d5] dark:border-stone-800 flex items-center justify-end shrink-0">
-        <button onclick="closeModal('modal-privacy')" class="px-5 py-2.5 rounded-xl bg-stone-100 dark:bg-stone-800 hover:bg-stone-200 dark:hover:bg-stone-700 font-bold text-xs transition cursor-pointer">
+        <button type="button" data-on-click="shell.closeModal" data-modal="modal-privacy" class="px-5 py-2.5 rounded-xl bg-stone-100 dark:bg-stone-800 hover:bg-stone-200 dark:hover:bg-stone-700 font-bold text-xs transition cursor-pointer">
           확인
         </button>
       </div>
@@ -6325,25 +6329,7 @@
   <!-- 8. 메인 자바스크립트 로직 -->
   <!-- ========================================== -->
   <script>
-    // ── PWA 및 플랫폼 판별 유틸리티 (Sulsul-Diary 패턴 동기화 & 전역 호이스팅 보장) ──
-    function isIOS() {
-      return /iP(hone|ad|od)/.test(navigator.userAgent)
-        || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
-    }
-    function isInstalled() {
-      return (typeof matchMedia === 'function' && (matchMedia('(display-mode: standalone)').matches || matchMedia('(display-mode: fullscreen)').matches))
-        || navigator.standalone === true;
-    }
-    function inApp() {
-      const u = navigator.userAgent;
-      if (/KAKAOTALK/i.test(u))           return '카카오톡';
-      if (/NAVER\(inapp|NAVER /i.test(u)) return '네이버 앱';
-      if (/Instagram/i.test(u))           return '인스타그램';
-      if (/FBAN|FBAV/i.test(u))           return '페이스북';
-      if (/Line\//i.test(u))              return '라인';
-      if (/DaumApps/i.test(u))            return '다음 앱';
-      return '';
-    }
+    // PWA·플랫폼 판별 유틸리티(isIOS·isInstalled·inApp)는 js/presentation/settings-ui.js(SulsulTravel.SettingsUI)로 옮겼다(v2.2.1, 4단계).
     function escapeHtml(str) {
       if (!str) return '';
       return String(str).replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
@@ -6376,124 +6362,9 @@
     window.showToast = showToast;
 
     // 앱 버전 및 글로벌 네임스페이스 (Sulsul-Travel Invariant Rule R-10, R-11, R-12, R-13, R-14, R-15, R-16)
-    const APP_VER = '2.2.0';
+    const APP_VER = '2.2.1';
 
-    // ══════════════════════════════════════════
-    // [3-Way Theme System] 모던, 라이트그레이, 딥 블랙 테마 엔진 (v1.6.7)
-    // ══════════════════════════════════════════
-    function setTheme(theme) {
-      if (theme === 'light') theme = 'modern';
-      if (theme === 'dark') theme = 'deepblack';
-      if (theme !== 'modern' && theme !== 'lightgray' && theme !== 'deepblack') {
-        theme = 'modern';
-      }
-      document.documentElement.setAttribute('data-theme', theme);
-      document.documentElement.classList.toggle('dark', theme === 'deepblack');
-      localStorage.setItem('st_theme', theme);
-      updateThemeUi(theme);
-    }
-    window.setTheme = setTheme;
-
-    function toggleTheme() {
-      const current = document.documentElement.getAttribute('data-theme') || 'modern';
-      const cycle = {
-        modern: 'lightgray',
-        light: 'lightgray',
-        lightgray: 'deepblack',
-        deepblack: 'modern',
-        dark: 'modern'
-      };
-      const next = cycle[current] || 'modern';
-      setTheme(next);
-      if (typeof showToast === 'function') {
-        const labels = {
-          modern: '📜 모던 (빈티지 아카이벌) 테마가 적용되었습니다.',
-          lightgray: '☀️ 라이트그레이 (클린 미니멀) 테마가 적용되었습니다.',
-          deepblack: '🌙 딥 블랙 (옵시디언 럭셔리) 테마가 적용되었습니다.'
-        };
-        showToast(labels[next] || '테마가 전환되었습니다.');
-      }
-    }
-    window.toggleTheme = toggleTheme;
-
-    function updateThemeUi(theme) {
-      const isDark = theme === 'deepblack' || theme === 'dark';
-      const isLightgray = theme === 'lightgray';
-      const isModern = !isDark && !isLightgray;
-
-      // 1. 헤더 테마 아이콘 및 툴팁
-      const headerIcon = document.getElementById('header-theme-icon');
-      if (headerIcon) {
-        headerIcon.innerText = isDark ? '🌙' : (isLightgray ? '☀️' : '📜');
-      }
-      const headerBtn = document.getElementById('header-btn-theme');
-      if (headerBtn) {
-        headerBtn.setAttribute('title', isModern ? '라이트그레이 테마로 전환' : (isLightgray ? '딥 블랙 테마로 전환' : '모던 테마로 전환'));
-      }
-
-      // 2. 설정 모달 테마 뱃지 및 3단 버튼 활성 상태
-      const badge = document.getElementById('settings-current-theme-badge');
-      if (badge) {
-        if (isModern) {
-          badge.innerText = '모던 (Vintage Archival)';
-          badge.className = 'text-[10px] font-black px-2.5 py-0.5 rounded-full bg-[#2C3A2E]/10 text-[#2C3A2E] border border-[#2C3A2E]/30';
-        } else if (isLightgray) {
-          badge.innerText = '라이트그레이 (Clean Minimal)';
-          badge.className = 'text-[10px] font-black px-2.5 py-0.5 rounded-full bg-slate-100 text-slate-800 border border-slate-300';
-        } else {
-          badge.innerText = '딥 블랙 (Deep Obsidian)';
-          badge.className = 'text-[10px] font-black px-2.5 py-0.5 rounded-full bg-amber-500/20 text-[#d4af37] border border-amber-500/40';
-        }
-      }
-      const btnModern = document.getElementById('btn-theme-modern');
-      const btnLightgray = document.getElementById('btn-theme-lightgray');
-      const btnDeepblack = document.getElementById('btn-theme-deepblack');
-      const btnModernTxt = document.getElementById('btn-theme-modern-txt');
-      const btnLightgrayTxt = document.getElementById('btn-theme-lightgray-txt');
-      const btnDeepblackTxt = document.getElementById('btn-theme-deepblack-txt');
-
-      const activeClassModern = "py-2.5 px-2 rounded-xl bg-[#2C3A2E] text-white border border-[#2C3A2E] font-black text-[11px] flex flex-col items-center justify-center gap-1 shadow-sm transition ring-2 ring-[#2C3A2E]/40 cursor-pointer is-theme-active";
-      const activeClassLightgray = "py-2.5 px-2 rounded-xl bg-[#111827] text-white border border-[#111827] font-black text-[11px] flex flex-col items-center justify-center gap-1 shadow-sm transition ring-2 ring-stone-900/30 cursor-pointer is-theme-active";
-      const activeClassDeepblack = "py-2.5 px-2 rounded-xl bg-[#d4af37] text-[#0b0c0e] border border-[#d4af37] font-black text-[11px] flex flex-col items-center justify-center gap-1 shadow-sm transition ring-2 ring-amber-400/40 cursor-pointer is-theme-active";
-      const inactiveClass = "py-2.5 px-2 rounded-xl bg-[var(--surface2)] text-[var(--ink)] border border-[var(--line)] font-bold text-[11px] flex flex-col items-center justify-center gap-1 transition cursor-pointer hover:border-[var(--accent)]";
-
-      if (btnModern) {
-        btnModern.className = isModern ? activeClassModern : inactiveClass;
-        btnModern.classList.toggle('is-theme-active', isModern);
-        if (btnModernTxt) {
-          btnModernTxt.style.setProperty('color', isModern ? '#ffffff' : 'var(--ink)', 'important');
-          btnModernTxt.style.fontWeight = isModern ? '900' : '700';
-        }
-      }
-      if (btnLightgray) {
-        btnLightgray.className = isLightgray ? activeClassLightgray : inactiveClass;
-        btnLightgray.classList.toggle('is-theme-active', isLightgray);
-        if (btnLightgrayTxt) {
-          btnLightgrayTxt.style.setProperty('color', isLightgray ? '#ffffff' : 'var(--ink)', 'important');
-          btnLightgrayTxt.style.fontWeight = isLightgray ? '900' : '700';
-        }
-      }
-      if (btnDeepblack) {
-        btnDeepblack.className = isDark ? activeClassDeepblack : inactiveClass;
-        btnDeepblack.classList.toggle('is-theme-active', isDark);
-        if (btnDeepblackTxt) {
-          btnDeepblackTxt.style.setProperty('color', isDark ? '#0b0c0e' : 'var(--ink)', 'important');
-          btnDeepblackTxt.style.fontWeight = isDark ? '900' : '700';
-        }
-      }
-
-      // 하위 호환용 2개 버튼 상태 동기화 (오류 방지)
-      const btnLight = document.getElementById('btn-theme-light');
-      const btnDark = document.getElementById('btn-theme-dark');
-      if (btnLight) btnLight.style.display = 'none';
-      if (btnDark) btnDark.style.display = 'none';
-
-      // 3. 브라우저 최상단 시스템 메타 컬러 동기화
-      const metaTheme = document.querySelector('meta[name="theme-color"]');
-      if (metaTheme) {
-        metaTheme.setAttribute('content', isDark ? '#080B12' : (isLightgray ? '#F3F4F6' : '#F5EFEB'));
-      }
-    }
+    // 3-Way 테마 엔진(setTheme·toggleTheme·updateThemeUi)은 js/presentation/settings-ui.js(SulsulTravel.SettingsUI)로 옮겼다(v2.2.1, 4단계).
 
     // 여행 컨셉 마스터 데이터 (Sulsul-Diary 테마)
     const TRAVEL_CONCEPTS = [
@@ -6978,7 +6849,7 @@
       setTimeout(() => { if (document.visibilityState === 'visible') void SulsulTravel.StorageHealth?.remind(); }, 4000);
       if(SulsulTravel.recordMediaStore.missingReferences().length)showToast(`기록 사진 ${SulsulTravel.recordMediaStore.missingReferences().length}장의 보관본을 이 기기에서 찾지 못했습니다. 연결 정보는 그대로 두었습니다. 설정 → 데이터의 저장 공간에서 확인하고, 백업 파일이 있으면 복원해 주세요.`,8000);
       if(SulsulTravel.expensePhotoRepository.missingReferences().length)showToast('일부 지출 사진 원본을 읽지 못했습니다. 연결 정보는 보존했습니다. 이 기기의 저장소를 확인하고 새로고침해 주세요.',10000);
-      setupPwaInstallPrompt();
+      SulsulTravel.SettingsUI.setupPwaInstallPrompt();
       checkUrlParamsForSharedRoom();
       if(SulsulTravel.CollaborationUI.checkInviteOnStartup()){openShareModal();document.getElementById('travel-collaboration').closest('details').open=true;}
       registerServiceWorker();
@@ -6993,7 +6864,7 @@
     async function initApp() {
       // 0. 컬러 테마 초기화 (3-Way Theme System)
       const savedTheme = localStorage.getItem('st_theme') || 'modern';
-      setTheme(savedTheme);
+      SulsulTravel.SettingsUI.setTheme(savedTheme);
 
       // 1. LocalStorage에서 여행 컬렉션 로드 (하위 호환 마이그레이션)
       const loadedTrips = await TripRepository.loadAll();
@@ -7061,8 +6932,8 @@
       renderConceptChips();
       SulsulTravel.HubView.render();
       renderActiveTripWorkspace();
-      updateGeminiKeyUi();
-      checkStartupInstallOnboarding();
+      SulsulTravel.SettingsUI.updateGeminiKeyUi();
+      SulsulTravel.SettingsUI.checkStartupInstallOnboarding();
       populateCreateTripCurrencyOptions();
       restoreJournalOverflowEntries();
       if (State.storageRecovery?.storageUnavailable) {
@@ -7094,7 +6965,7 @@
     }
 
     function openLegacyDemoManager() {
-      openSettingsModal('data');
+      SulsulTravel.SettingsUI.open('data');
       document.getElementById('legacy-demo-settings')?.scrollIntoView({ block: 'start' });
     }
 
@@ -7480,339 +7351,7 @@
 
     // 워크스페이스 전체 여행 궤적 지도는 js/presentation/plan-map.js(SulsulTravel.PlanMap)로 옮겼다(v2.1.6, 4단계).
 
-    function updateAiChatStatusBadge() {
-      const pill = document.getElementById('ai-chat-status-pill');
-      if (!pill) return;
-      const rawKey = State.geminiKey || localStorage.getItem('st_gemini_key');
-      const key = cleanApiKey(rawKey);
-      if (key && key.length > 5 && State.aiFallbackActive) {
-        pill.className = 'text-[9px] font-bold px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-400 border border-amber-500/30 flex items-center gap-1';
-        pill.title = '마지막 응답은 대체 Gemini 모델에서 생성되었습니다.';
-        pill.innerHTML = '<i class="fa-solid fa-bolt text-[8px]"></i> <span>대체 모델 사용</span>';
-      } else if (key && key.length > 5) {
-        pill.className = 'text-[9px] font-bold px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 flex items-center gap-1';
-        pill.title = 'API 키가 등록되어 있습니다. 첫 요청 전까지 서버 연결은 확인되지 않았습니다.';
-        pill.innerHTML = '<i class="fa-solid fa-key text-[8px]"></i> <span>API 키 등록됨</span>';
-      } else {
-        pill.className = 'text-[9px] font-bold px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-400 border border-amber-500/30 flex items-center gap-1';
-        pill.title = 'AI 기능을 쓰려면 Gemini API 키를 등록하세요.';
-        pill.innerHTML = '<i class="fa-solid fa-triangle-exclamation text-[8px]"></i> <span>키 미등록</span>';
-      }
-    }
-
-    function openVersionHistoryModal() {
-      openModal('modal-version-history');
-    }
-
-    function switchSettingsTab(tabKey = 'theme') {
-      const tabs = ['theme', 'ai', 'data'];
-      tabs.forEach(t => {
-        const btn = document.getElementById(`tab-settings-${t}`);
-        const panel = document.getElementById(`panel-settings-${t}`);
-        if (btn) {
-          if (t === tabKey) {
-            btn.className = 'py-1.5 rounded-lg transition text-center hub-tab-active shadow-sm cursor-pointer truncate whitespace-nowrap';
-          } else {
-            btn.className = 'py-1.5 rounded-lg transition text-center hub-tab-inactive cursor-pointer truncate whitespace-nowrap';
-          }
-        }
-        if (panel) {
-          if (t === tabKey) {
-            panel.classList.remove('hidden');
-          } else {
-            panel.classList.add('hidden');
-          }
-        }
-      });
-      const contentEl = document.getElementById('modal-settings-content');
-      if (contentEl) contentEl.scrollTop = 0;
-      if (tabKey === 'data') void SulsulTravel.StorageHealth?.refresh();
-    }
-
-    function openSettingsModal(defaultTab = 'theme') {
-      const currentTheme = document.documentElement.getAttribute('data-theme') || 'modern';
-      if (typeof updateThemeUi === 'function') {
-        updateThemeUi(currentTheme);
-      }
-      if (typeof updateGeminiKeyUi === 'function') {
-        updateGeminiKeyUi();
-      } else {
-        const modalKeyInput = document.getElementById('modal-cfg-gemini-key');
-        if (modalKeyInput) {
-          modalKeyInput.value = State.geminiKey || '';
-        }
-      }
-      if (typeof updateGithubSyncUi === 'function') {
-        updateGithubSyncUi();
-      }
-      if (typeof updatePwaUiState === 'function') {
-        updatePwaUiState();
-      }
-      switchSettingsTab(defaultTab || 'theme');
-      openModal('modal-settings');
-    }
-
-    function updateAiStatusIndicator() {
-      const el = document.getElementById('ai-status-indicator');
-      if (!el) return;
-
-      const rawKey = State.geminiKey || localStorage.getItem('st_gemini_key') || '';
-      const key = cleanApiKey(rawKey);
-
-      if (!key) {
-        el.className = 'text-[10px] font-bold px-2 py-0.5 rounded-full border border-rose-300 bg-rose-50 text-rose-700 dark:bg-rose-950/50 dark:text-rose-300 dark:border-rose-800 flex items-center gap-1 select-none shadow-sm';
-        el.title = 'Gemini API 키 미등록';
-        el.innerHTML = `
-          <span class="w-1.5 h-1.5 rounded-full bg-rose-500 animate-pulse"></span>
-          <span id="ai-status-text">키 필요</span>
-        `;
-      } else if (State.aiFallbackActive) {
-        el.className = 'text-[10px] font-bold px-2 py-0.5 rounded-full border border-amber-300 bg-amber-50 text-amber-700 dark:bg-amber-950/50 dark:text-amber-300 dark:border-amber-800 flex items-center gap-1 select-none shadow-sm';
-        el.title = 'Gemini Fallback 백업 모델 작동 중';
-        el.innerHTML = `
-          <span class="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse"></span>
-          <span id="ai-status-text">Fallback</span>
-        `;
-      } else {
-        el.className = 'text-[10px] font-bold px-2 py-0.5 rounded-full border border-emerald-300 bg-emerald-50 text-emerald-700 dark:bg-emerald-950/50 dark:text-emerald-300 dark:border-emerald-800 flex items-center gap-1 select-none shadow-sm';
-        el.title = 'API 키가 등록되어 있습니다. 실제 연결은 AI 요청 또는 연결 테스트에서 확인됩니다.';
-        el.innerHTML = `
-          <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
-          <span id="ai-status-text">키 등록됨</span>
-        `;
-      }
-    }
-
-    let isGeminiKeyEditMode = false;
-
-    function updateGeminiKeyUi() {
-      updateAiStatusIndicator();
-      const currentKey = State.geminiKey || '';
-      const input = document.getElementById('modal-cfg-gemini-key');
-      const tabKey = document.getElementById('cfg-gemini-key');
-      const eyeBtn = document.getElementById('btn-toggle-gemini-key');
-      const lockedIcon = document.getElementById('icon-gemini-key-locked');
-      const mainBtn = document.getElementById('btn-save-gemini-key');
-      const mainBtnTxt = document.getElementById('btn-save-gemini-key-txt');
-      const cancelBtn = document.getElementById('btn-cancel-gemini-key');
-      const deleteBtn = document.getElementById('btn-delete-gemini-key');
-      const badge = document.getElementById('gemini-key-status-badge');
-      const preview = document.getElementById('gemini-key-preview-text');
-
-      if (tabKey && tabKey.value !== currentKey) {
-        tabKey.value = currentKey;
-      }
-
-      const hasRegisteredKey = currentKey && currentKey.length > 5;
-
-      if (hasRegisteredKey && !isGeminiKeyEditMode) {
-        // [1] 입력창에서 키를 마스킹하고 편집을 잠근 상태
-        if (input) {
-          input.value = '••••••••••••••••••••••••';
-          input.disabled = true;
-          input.readOnly = true;
-          input.type = 'password';
-          input.className = "w-full pl-3 pr-9 py-2 bg-stone-100 dark:bg-stone-800/70 border border-stone-200 dark:border-stone-700 rounded-xl text-xs text-stone-500 select-none cursor-not-allowed font-mono transition";
-        }
-        if (eyeBtn) eyeBtn.classList.add('hidden');
-        if (lockedIcon) lockedIcon.classList.remove('hidden');
-        
-        if (badge) {
-          badge.className = 'text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-emerald-100 dark:bg-emerald-950/60 text-emerald-900 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-700 flex items-center gap-1';
-          badge.innerHTML = '<i class="fa-solid fa-key text-emerald-600"></i> 키 등록됨 · 입력 가림';
-        }
-        if (preview) {
-          preview.className = "font-semibold text-emerald-700 dark:text-emerald-400 truncate text-[11px]";
-          preview.innerHTML = '<i class="fa-solid fa-database text-[10px] mr-1"></i>이 브라우저에 저장 (암호화되지 않음)';
-        }
-        if (mainBtn && mainBtnTxt) {
-          mainBtn.className = "px-3.5 py-2 rounded-xl text-xs font-bold shrink-0 cursor-pointer transition-all flex items-center gap-1 bg-amber-500/15 hover:bg-amber-500/25 text-[#a2601b] dark:text-[#d4af37] border border-amber-500/30";
-          mainBtnTxt.innerHTML = '<i class="fa-solid fa-pen-to-square text-[10px]"></i> <span>키 변경</span>';
-        }
-        if (cancelBtn) cancelBtn.classList.add('hidden');
-        if (deleteBtn) deleteBtn.classList.remove('hidden');
-      } else {
-        // [2] 신규 입력 또는 키 변경(편집) 모드
-        if (input) {
-          input.disabled = false;
-          input.readOnly = false;
-          if (!isGeminiKeyEditMode) {
-            input.value = currentKey;
-          }
-          input.className = "w-full pl-3 pr-9 py-2 bg-[#faf8f5] dark:bg-[#16181d] border border-[#e8e2d5] dark:border-stone-700 rounded-xl text-xs text-[#1c1917] dark:text-[#ededed] focus:outline-none focus:border-[#a2601b] font-mono transition";
-        }
-        if (eyeBtn) eyeBtn.classList.remove('hidden');
-        if (lockedIcon) lockedIcon.classList.add('hidden');
-
-        if (hasRegisteredKey) {
-          if (badge) {
-            badge.className = 'text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-amber-100 dark:bg-amber-950/60 text-amber-900 dark:text-amber-300 border border-amber-300 dark:border-amber-700 flex items-center gap-1';
-            badge.innerHTML = '<i class="fa-solid fa-pen text-amber-600"></i> 새 키 입력 중';
-          }
-          if (preview) {
-            preview.className = "font-medium text-stone-500 dark:text-stone-400 truncate text-[11px]";
-            preview.innerText = "새 API 키를 붙여넣고 [저장]을 누르세요.";
-          }
-          if (cancelBtn) cancelBtn.classList.remove('hidden');
-          if (deleteBtn) deleteBtn.classList.remove('hidden');
-        } else {
-          if (badge) {
-            badge.className = 'text-[10px] font-bold px-2 py-0.5 rounded-full bg-stone-100 dark:bg-stone-800 text-stone-600 dark:text-stone-300 border border-stone-200 dark:border-stone-700 flex items-center gap-1';
-            badge.innerHTML = '<i class="fa-solid fa-circle-exclamation text-amber-500"></i> 미등록 (오프라인 모드)';
-          }
-          if (preview) {
-            preview.className = "font-medium text-stone-400 truncate text-[11px]";
-            preview.innerText = "등록된 키 없음 (AI 기능 사용 시 등록 필요)";
-          }
-          if (cancelBtn) cancelBtn.classList.add('hidden');
-          if (deleteBtn) deleteBtn.classList.add('hidden');
-        }
-
-        if (mainBtn && mainBtnTxt) {
-          mainBtn.className = "btn-gold px-4 py-2 rounded-xl text-xs font-bold shrink-0 cursor-pointer shadow-sm transition-all flex items-center gap-1";
-          mainBtnTxt.innerHTML = '<i class="fa-solid fa-check text-[10px]"></i> <span>저장</span>';
-        }
-      }
-    }
-
-    function handleGeminiKeyMainAction() {
-      const currentKey = State.geminiKey || '';
-      const hasRegisteredKey = currentKey && currentKey.length > 5;
-      if (hasRegisteredKey && !isGeminiKeyEditMode) {
-        // Switch to edit mode
-        isGeminiKeyEditMode = true;
-        updateGeminiKeyUi();
-        const input = document.getElementById('modal-cfg-gemini-key');
-        if (input) {
-          input.value = '';
-          input.focus();
-        }
-      } else {
-        // Save action
-        saveGeminiKeyFromModal();
-      }
-    }
-
-    function cancelGeminiKeyEdit() {
-      isGeminiKeyEditMode = false;
-      updateGeminiKeyUi();
-    }
-
-    function deleteGeminiKey() {
-      if (!confirm('등록된 Gemini API 키를 정말로 삭제하시겠습니까?\n삭제 시 AI 일정 생성 및 윤문 기능이 오프라인 모드로 전환됩니다.')) {
-        return;
-      }
-      State.geminiKey = '';
-      localStorage.removeItem('st_gemini_key');
-      const tabKey = document.getElementById('cfg-gemini-key');
-      if (tabKey) tabKey.value = '';
-      const input = document.getElementById('modal-cfg-gemini-key');
-      if (input) input.value = '';
-      isGeminiKeyEditMode = false;
-      updateGeminiKeyUi();
-      showToast('🗑️ Gemini API 키가 이 브라우저에서 삭제되었습니다.');
-    }
-
-    function toggleGeminiKeyVisibility() {
-      const input = document.getElementById('modal-cfg-gemini-key');
-      const icon = document.getElementById('icon-gemini-key-eye');
-      if (!input || input.disabled) return;
-      if (input.type === 'password') {
-        input.type = 'text';
-        if (icon) {
-          icon.classList.remove('fa-eye');
-          icon.classList.add('fa-eye-slash');
-        }
-      } else {
-        input.type = 'password';
-        if (icon) {
-          icon.classList.remove('fa-eye-slash');
-          icon.classList.add('fa-eye');
-        }
-      }
-    }
-
-    function saveGeminiKeyFromModal() {
-      const input = document.getElementById('modal-cfg-gemini-key');
-      if (!input) return;
-      const cleanKey = cleanApiKey(input.value);
-      if (!cleanKey) {
-        showToast('⚠️ 유효한 API 키를 입력해 주세요 (AI Studio에서 발급받은 키).');
-        input.focus();
-        return;
-      }
-      State.geminiKey = cleanKey;
-      localStorage.setItem('st_gemini_key', cleanKey);
-      const tabKey = document.getElementById('cfg-gemini-key');
-      if (tabKey) tabKey.value = cleanKey;
-
-      isGeminiKeyEditMode = false;
-      updateGeminiKeyUi();
-
-      showToast('🔑 Gemini API 키를 이 브라우저에 저장했습니다. 브라우저 저장소에는 암호화되지 않습니다.');
-    }
-
-    async function testGeminiApiKey() {
-      const currentKey = State.geminiKey || '';
-      const input = document.getElementById('modal-cfg-gemini-key');
-      const testBtn = document.getElementById('btn-test-gemini-key');
-      
-      // Use candidate from input if user is actively entering one, otherwise use safely stored key
-      let candidateKey = (isGeminiKeyEditMode && input && input.value.trim()) 
-        ? cleanApiKey(input.value) 
-        : cleanApiKey(currentKey);
-
-      if (!candidateKey) {
-        showToast('⚠️ 먼저 Gemini API 키를 입력해 주세요.');
-        if (input) {
-          isGeminiKeyEditMode = true;
-          updateGeminiKeyUi();
-          input.focus();
-        }
-        return;
-      }
-
-      // If user typed a valid new candidate key in edit mode, save it
-      if (isGeminiKeyEditMode && candidateKey) {
-        State.geminiKey = candidateKey;
-        localStorage.setItem('st_gemini_key', candidateKey);
-        isGeminiKeyEditMode = false;
-        updateGeminiKeyUi();
-      }
-
-      const origHtml = testBtn ? testBtn.innerHTML : '';
-      if (testBtn) {
-        testBtn.disabled = true;
-        testBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin text-[10px]"></i> <span>연결 확인 중...</span>';
-      }
-
-      try {
-        // 연결 테스트도 실제 생성과 같은 무료 모델 폴백 순서를 사용한다.
-        const responseText = await callGeminiApiWithFallback('Reply with only OK.', { timeoutMs: 8000 });
-        if (!responseText) throw new Error('EMPTY_RESPONSE');
-        if (testBtn) {
-          testBtn.innerHTML = '<i class="fa-solid fa-circle-check text-emerald-500"></i> <span class="text-emerald-600 dark:text-emerald-400 font-bold">정상 작동!</span>';
-        }
-        showToast('✅ 등록된 API 키로 Gemini 모델에 연결했습니다.');
-      } catch (err) {
-        if (testBtn) {
-          testBtn.innerHTML = '<i class="fa-solid fa-circle-xmark text-rose-500"></i> <span class="text-rose-600 dark:text-rose-400 font-bold">연결 실패</span>';
-        }
-        const message = err.code === 'INVALID_API_KEY'
-          ? 'API 키가 유효하지 않습니다.'
-          : err.code === 'QUOTA_EXCEEDED'
-            ? 'API 한도를 확인하세요.'
-            : '인터넷, API 키 권한과 사용 가능한 모델을 확인하세요.';
-        showToast(`❌ Gemini 연결 실패: ${message}`);
-      } finally {
-        setTimeout(() => {
-          if (testBtn) {
-            testBtn.disabled = false;
-            testBtn.innerHTML = origHtml;
-          }
-        }, 3000);
-      }
-    }
+    // 설정 모달·버전 이력 모달·Gemini 키 UI(openVersionHistoryModal·switchSettingsTab·openSettingsModal·updateAiChatStatusBadge·updateAiStatusIndicator·updateGeminiKeyUi·handleGeminiKeyMainAction·cancelGeminiKeyEdit·deleteGeminiKey·toggleGeminiKeyVisibility·saveGeminiKeyFromModal·testGeminiApiKey)는 js/presentation/settings-ui.js(SulsulTravel.SettingsUI)로 옮겼다(v2.2.1, 4단계).
 
     // ==========================================
     // 허브 렌더링 (평생 통계 & 트립 카드)
@@ -8509,305 +8048,7 @@
       );
     }
 
-    // ==========================================
-    // [9] PWA 네이티브 설치 및 플랫폼 가이드 (Sulsul-Diary 아키텍처 연동)
-    // ==========================================
-    function setupPwaInstallPrompt() {
-      window.addEventListener('beforeinstallprompt', (e) => {
-        e.preventDefault();
-        State.deferredPrompt = e;
-        updatePwaUiState();
-      });
-
-      window.addEventListener('appinstalled', () => {
-        State.deferredPrompt = null;
-        showToast('🎉 술술트래블이 홈 화면에 성공적으로 설치되었습니다!');
-        updatePwaUiState();
-        closeModal('modal-install-guide');
-      });
-    }
-
-    function updatePwaUiState() {
-      const installed = isInstalled();
-      const settingsPwaBadge = document.getElementById('settings-pwa-status');
-      if (settingsPwaBadge) {
-        if (installed) {
-          settingsPwaBadge.className = "text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800";
-          settingsPwaBadge.innerText = "✅ PWA 단독 앱으로 구동 중";
-        } else {
-          settingsPwaBadge.className = "text-[10px] font-bold px-2 py-0.5 rounded-full bg-slate-100 dark:bg-stone-800 text-slate-600 dark:text-stone-300 border border-slate-200 dark:border-stone-700";
-          settingsPwaBadge.innerText = "웹 브라우저로 실행 중 (홈 화면 설치 가능)";
-        }
-      }
-
-      const settingsInstallBtn = document.getElementById('btn-settings-install');
-      if (settingsInstallBtn) {
-        if (installed) {
-          settingsInstallBtn.className = "px-3.5 py-1.5 rounded-xl bg-stone-100 dark:bg-stone-800 text-stone-500 dark:text-stone-400 text-xs font-bold transition shrink-0 border border-stone-200 dark:border-stone-700 cursor-default";
-          settingsInstallBtn.innerHTML = '<i class="fa-solid fa-circle-check text-emerald-600 dark:text-emerald-400"></i> 설치됨';
-        } else {
-          settingsInstallBtn.className = "px-3.5 py-1.5 rounded-xl btn-gold text-xs font-bold transition shrink-0 cursor-pointer shadow-sm";
-          settingsInstallBtn.innerText = "앱 설치";
-        }
-      }
-
-      const btn = document.getElementById('btn-native-install');
-      const btnTxt = document.getElementById('btn-native-install-txt');
-      if (btn) {
-        btn.className = "hidden"; // 모바일 뷰포트 헤더 슬림화를 위해 헤더 버튼은 항상 숨김 유지
-        if (btnTxt) {
-          btnTxt.innerText = installed ? "PWA 구동 중" : "앱 설치";
-        }
-      }
-      renderSmartWelcomeBanner();
-    }
-
-    function triggerNativeInstall() {
-      if (isInstalled()) {
-        showToast('✅ 이미 홈 화면에 앱(PWA)으로 설치되어 실행 중입니다 ✈️');
-        return;
-      }
-      if (State.deferredPrompt) {
-        const promptEvent = State.deferredPrompt;
-        State.deferredPrompt = null;
-        promptEvent.prompt();
-        promptEvent.userChoice.then((choiceResult) => {
-          if (choiceResult && choiceResult.outcome === 'accepted') {
-            showToast('🎉 술술트래블이 홈 화면에 설치되었습니다! 홈 화면에서 열어보세요.');
-            updatePwaUiState();
-            closeModal('modal-install-guide');
-          } else {
-            showToast('설치를 취소했습니다. 상단 버튼에서 언제든 다시 설치할 수 있습니다.');
-          }
-        }).catch(() => {});
-        return;
-      }
-
-      // If deferredPrompt is not yet ready or unsupported
-      const app = inApp();
-      if (app) {
-        showToast(`⚠️ ${app} 내부에서는 직접 설치가 불가능합니다. Chrome이나 Safari로 열어주세요.`);
-        openInstallGuideModal();
-      } else if (isIOS()) {
-        showToast('🍎 사파리 공유(우측 상단 또는 하단 ⬆) 버튼을 눌러 [홈 화면에 추가]를 선택해주세요.', 3500);
-        openInstallGuideModal('ios');
-      } else {
-        showToast('💡 브라우저 우측 상단 메뉴(⋮)에서 [앱 설치] 또는 [홈 화면에 추가]를 눌러주세요.');
-        openInstallGuideModal('android');
-      }
-    }
-
-    function handleInstallButtonClick() {
-      if (isInstalled()) {
-        showToast('✅ 이미 홈 화면에 앱(PWA)으로 설치되어 실행 중입니다 ✈️');
-        return;
-      }
-      if (State.deferredPrompt) {
-        triggerNativeInstall();
-      } else {
-        openInstallGuideModal();
-      }
-    }
-
-    function handleInstallBannerClick() {
-      if (State.deferredPrompt) {
-        triggerNativeInstall();
-      } else {
-        openInstallGuideModal();
-      }
-    }
-
-    function dismissSmartWelcomeBanner() {
-      try {
-        localStorage.setItem('st_hide_swb', '1');
-        sessionStorage.setItem('st_hide_swb', '1');
-      } catch (e) {}
-      const banner = document.getElementById('smart-welcome-banner');
-      if (banner) {
-        banner.classList.add('hidden');
-        banner.innerHTML = '';
-      }
-      showToast('💡 시작 가이드 배너가 닫혔습니다. (설정에서 다시 표시 가능)');
-    }
-    window.dismissSmartWelcomeBanner = dismissSmartWelcomeBanner;
-
-    function restoreSmartWelcomeBanner() {
-      try {
-        localStorage.removeItem('st_hide_swb');
-        sessionStorage.removeItem('st_hide_swb');
-      } catch (e) {}
-      renderSmartWelcomeBanner();
-      showToast('💡 시작 가이드 배너가 다시 활성화되었습니다.');
-    }
-    window.restoreSmartWelcomeBanner = restoreSmartWelcomeBanner;
-
-    function copyCurrentUrl() {
-      const url = window.location.href.split('#')[0];
-      if (navigator.clipboard && navigator.clipboard.writeText) {
-        navigator.clipboard.writeText(url).then(() => {
-          showToast('📋 앱 접속 주소가 복사되었습니다!');
-        }).catch(() => {
-          showToast('주소 복사 완료');
-        });
-      } else {
-        showToast('주소: ' + url);
-      }
-    }
-
-    function renderSmartWelcomeBanner() {
-      const banner = document.getElementById('smart-welcome-banner');
-      if (!banner) return;
-      const installed = isInstalled();
-      const isHidden = (function() {
-        try {
-          return localStorage.getItem('st_hide_swb') === '1' || sessionStorage.getItem('st_hide_swb') === '1';
-        } catch (e) {
-          return false;
-        }
-      })();
-      if (installed || isHidden) {
-        banner.classList.add('hidden');
-        banner.innerHTML = '';
-        return;
-      }
-      banner.classList.remove('hidden');
-      banner.innerHTML = `
-        <div class="rounded-2xl bg-gradient-to-r from-amber-500/15 via-[#141c2e] to-[#0f1422] border border-amber-500/30 p-3.5 sm:p-4 shadow-lg shadow-black/30">
-          <div class="flex items-center justify-between gap-3">
-            <div class="flex items-center gap-3 min-w-0 cursor-pointer" onclick="handleInstallBannerClick()">
-              <span class="w-9 h-9 rounded-xl bg-amber-500/20 text-amber-400 border border-amber-500/30 flex items-center justify-center text-base shrink-0 pulse-gold">📲</span>
-              <div class="min-w-0">
-                <div class="flex items-center gap-1.5 text-[11px] font-bold text-amber-400">
-                  <span>💡 시작 가이드</span>
-                  <span class="text-slate-400 font-normal hidden sm:inline">| 오프라인에서도 빠르게 열기</span>
-                </div>
-                <div class="text-xs sm:text-sm font-extrabold text-white truncate">
-                  터치 한 번으로 홈 화면에 앱 설치하기
-                </div>
-              </div>
-            </div>
-            <div class="flex items-center gap-2 shrink-0">
-              <button onclick="handleInstallBannerClick()" class="btn-gold px-3.5 py-1.5 rounded-lg text-xs font-black shadow-md cursor-pointer">
-                앱 설치
-              </button>
-              <button onclick="dismissSmartWelcomeBanner()" class="text-slate-400 hover:text-white p-1 text-sm transition cursor-pointer" title="배너 닫기">✕</button>
-            </div>
-          </div>
-        </div>
-      `;
-    }
-
-    function checkStartupInstallOnboarding() {
-      updatePwaUiState();
-      // Installation remains available from the banner/settings without interrupting planning.
-    }
-
-    function openInstallGuideModal(preferredPlatform) {
-      const dynamicBox = document.getElementById('install-guide-dynamic-box');
-      const installed = isInstalled();
-      const app = inApp();
-      const currentUrl = window.location.href.split('#')[0];
-      const chromeIntent = 'intent://' + currentUrl.replace(/^https?:\/\//, '') + '#Intent;scheme=https;package=com.android.chrome;end';
-
-      if (dynamicBox) {
-        if (installed) {
-          dynamicBox.innerHTML = `
-            <div class="p-3.5 bg-emerald-500/10 border border-emerald-500/30 rounded-xl text-xs text-emerald-300 font-semibold flex items-center gap-2.5">
-              <span class="text-lg">✅</span>
-              <div>
-                <b>이미 홈 화면 단독 앱(PWA)으로 완벽하게 구동 중입니다.</b><br>
-                <span class="text-emerald-400/80 text-[11px]">운영체제 영구 저장소 보호가 가동되어 비행기 모드에서도 데이터가 보존됩니다.</span>
-              </div>
-            </div>
-          `;
-        } else if (app) {
-          dynamicBox.innerHTML = `
-            <div class="p-3.5 bg-amber-500/10 border border-amber-500/25 rounded-xl space-y-2.5">
-              <div class="text-xs text-amber-300 font-bold flex items-center gap-1.5">
-                <span>⚠️</span>
-                <span><b>${escapeHtml(app)} 인앱 브라우저</b>에서는 직접 설치가 지원되지 않습니다.</span>
-              </div>
-              <div class="text-[11px] text-slate-300 leading-relaxed">
-                인앱 브라우저는 홈 화면 추가 권한을 제공하지 않습니다. 원활한 앱 설치와 데이터 보호를 위해 기본 브라우저에서 열어주세요.
-              </div>
-              ${isIOS() ? `
-                <div class="p-2.5 bg-[#080b12] rounded-lg border border-[#1e263c] text-xs text-slate-300 space-y-1">
-                  <div class="font-bold text-amber-400">🍎 Safari로 전환하기:</div>
-                  <div>우측 하단(또는 상단) <b>⋯ / 나침반</b> 아이콘 터치 → <b>Safari로 열기</b> 선택</div>
-                </div>
-              ` : `
-                <a href="${chromeIntent}" class="btn-gold w-full py-2.5 px-3 rounded-xl text-xs font-black flex items-center justify-center gap-1.5 shadow-md">
-                  <i class="fa-brands fa-chrome"></i>
-                  <span>Chrome(크롬) 브라우저로 열기</span>
-                </a>
-              `}
-              <button onclick="copyCurrentUrl()" class="btn-surface w-full py-2 rounded-xl text-xs font-semibold text-slate-300 hover:text-white cursor-pointer">
-                <i class="fa-solid fa-copy mr-1 text-[11px]"></i> 주소 복사하기
-              </button>
-            </div>
-          `;
-        } else if (isIOS()) {
-          dynamicBox.innerHTML = `
-            <div class="p-4 theme-card rounded-2xl border-2 border-amber-500/40 space-y-3 shadow-sm">
-              <div class="flex items-center gap-2 text-sm font-black text-[#a2601b] dark:text-[#d4af37]">
-                <span class="text-lg">🍎</span>
-                <span>아이폰·아이패드 사파리(Safari) 간편 설치 안내</span>
-              </div>
-              <div class="text-xs font-medium text-[#1c1917] dark:text-stone-200 leading-relaxed">
-                아이폰에서는 사파리 브라우저의 <b>공유 버튼 ( 📤 )</b>을 누르고 <b>[홈 화면에 추가]</b>를 선택하시면 1초 만에 앱으로 설치됩니다.
-              </div>
-              <div class="p-3 rounded-xl bg-amber-500/10 dark:bg-amber-500/15 border border-amber-500/30 text-xs text-[#78350f] dark:text-amber-200 space-y-1">
-                <div class="font-bold flex items-center gap-1.5">
-                  <i class="fa-solid fa-circle-info text-amber-600 dark:text-amber-400"></i>
-                  <span>공유 버튼 위치 안내:</span>
-                </div>
-                <div class="text-[11px] leading-relaxed pl-5 font-semibold text-[#92400e] dark:text-amber-300">
-                  사파리 주소창 설정에 따라 <u>화면 오른쪽 상단</u> 또는 <u>하단 중앙</u>에 위치합니다.
-                </div>
-              </div>
-            </div>
-          `;
-        } else {
-          dynamicBox.innerHTML = `
-            <div class="space-y-2">
-              <button id="btn-modal-direct-install" onclick="triggerNativeInstall()" class="btn-gold w-full py-3.5 px-4 rounded-xl text-sm font-black flex items-center justify-center gap-2 cursor-pointer pulse-gold shadow-lg shadow-amber-500/20">
-                <i class="fa-solid fa-download text-sm"></i>
-                <span>📲 지금 바로 홈 화면에 앱 설치하기</span>
-              </button>
-              <div class="text-[11px] text-slate-400 text-center">
-                (터치 시 브라우저 설치 팝업이 바로 뜹니다. 메뉴의 [앱 설치]로도 가능합니다)
-              </div>
-            </div>
-          `;
-        }
-      }
-
-      let targetPlatform = preferredPlatform;
-      if (!targetPlatform) {
-        if (isIOS()) targetPlatform = 'ios';
-        else if (!/Android|iPhone|iPad|iPod/i.test(navigator.userAgent)) targetPlatform = 'pc';
-        else targetPlatform = 'android';
-      }
-      switchInstallTab(targetPlatform);
-
-      openModal('modal-install-guide');
-    }
-
-    function switchInstallTab(platform) {
-      ['ios', 'android', 'pc'].forEach(p => {
-        const btn = document.getElementById(`tab-inst-${p}`);
-        const view = document.getElementById(`inst-guide-${p}`);
-        if (btn && view) {
-          if (p === platform) {
-            btn.className = "flex-1 py-1.5 text-xs font-black rounded-lg tab-install-active shadow-sm transition";
-            view.classList.remove('hidden');
-          } else {
-            btn.className = "flex-1 py-1.5 text-xs font-semibold rounded-lg tab-install-inactive transition";
-            view.classList.add('hidden');
-          }
-        }
-      });
-    }
+    // [9] PWA 네이티브 설치·시작 가이드 배너·설치 안내 모달은 js/presentation/settings-ui.js(SulsulTravel.SettingsUI)로 옮겼다(v2.2.1, 4단계).
 
     // ==========================================
     // [10] 동행자 여행 사본 공유와 로컬 저장
@@ -10682,7 +9923,7 @@ ${JSON.stringify(snapshotDays)}`;
     }
 
     function getReplanDomain() {
-      if (!replanDomainPromise) replanDomainPromise = import('./js/domain/replan.mjs?v=2.2.0');
+      if (!replanDomainPromise) replanDomainPromise = import('./js/domain/replan.mjs?v=2.2.1');
       return replanDomainPromise;
     }
 
@@ -10841,8 +10082,8 @@ ${JSON.stringify(snapshotDays)}`;
             const data = await res.json();
             if (data.candidates && data.candidates[0] && data.candidates[0].content && data.candidates[0].content.parts && data.candidates[0].content.parts[0].text) {
               State.aiFallbackActive = (model !== AI_MODELS[0]);
-              updateAiStatusIndicator();
-              updateAiChatStatusBadge();
+              SulsulTravel.SettingsUI.updateAiStatusIndicator();
+              SulsulTravel.SettingsUI.updateAiChatStatusBadge();
               return data.candidates[0].content.parts[0].text;
             }
           } else {
@@ -10893,7 +10134,7 @@ ${JSON.stringify(snapshotDays)}`;
 
     async function getAiOrchestrator() {
       if (!aiOrchestratorPromise) {
-        aiOrchestratorPromise = import('./js/application/orchestration.mjs?v=2.2.0').then(({ Orchestrator }) =>
+        aiOrchestratorPromise = import('./js/application/orchestration.mjs?v=2.2.1').then(({ Orchestrator }) =>
           new Orchestrator({
             online: job => Boolean(job?.input?.localDraft) || navigator.onLine,
             timeoutMs: 65000,
@@ -12251,7 +11492,7 @@ JSON 배열만 출력하세요. 각 day는 dayNum, title, city, date, spots를 �
                 실시간 맞춤형 AI 여행 비서를 사용하시려면 상단 [⚙️ 설정]에서 개인 Google Gemini API 키를 등록해 주세요.
               </p>
               <div class="pt-1 flex items-center gap-2">
-                <button onclick="closeModal('modal-ai-chat'); openSettingsModal();" class="px-3 py-1.5 rounded-lg bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold text-xs flex items-center gap-1 transition shadow cursor-pointer">
+                <button type="button" data-on-click="settings.openFromModal" data-close-modal="modal-ai-chat" data-tab="ai" class="px-3 py-1.5 rounded-lg bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold text-xs flex items-center gap-1 transition shadow cursor-pointer">
                   <i class="fa-solid fa-gear text-[10px]"></i> API 키 등록하러 가기
                 </button>
               </div>
@@ -12270,7 +11511,7 @@ JSON 배열만 출력하세요. 각 day는 dayNum, title, city, date, spots를 �
                 입력하신 Gemini API 키가 올바르지 않습니다. Google AI Studio에서 발급받은 정확한 키(AIzaSy...)를 다시 확인해 주세요.
               </p>
               <div class="pt-1 flex items-center gap-2">
-                <button onclick="closeModal('modal-ai-chat'); openSettingsModal();" class="px-3 py-1.5 rounded-lg bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold text-xs flex items-center gap-1 transition shadow cursor-pointer">
+                <button type="button" data-on-click="settings.openFromModal" data-close-modal="modal-ai-chat" data-tab="ai" class="px-3 py-1.5 rounded-lg bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold text-xs flex items-center gap-1 transition shadow cursor-pointer">
                   <i class="fa-solid fa-pen-to-square text-[10px]"></i> 키 다시 입력하기
                 </button>
               </div>
@@ -12303,7 +11544,7 @@ JSON 배열만 출력하세요. 각 day는 dayNum, title, city, date, spots를 �
                 💡 <strong>오프라인 추천 팁:</strong> 아르헨티나에서는 MEP 우대 신용카드 결제를 이용하시고, 쿠스코(3,400m)에서는 첫날 3시간 휴식을 잊지 마세요!
               </div>
               <div class="pt-1 flex items-center gap-2">
-                <button onclick="closeModal('modal-ai-chat'); openSettingsModal();" class="px-2.5 py-1 rounded bg-[#080b12] border border-[#23304c] text-amber-300 hover:text-white text-[11px] font-bold cursor-pointer">
+                <button type="button" data-on-click="settings.openFromModal" data-close-modal="modal-ai-chat" data-tab="ai" class="px-2.5 py-1 rounded bg-[#080b12] border border-[#23304c] text-amber-300 hover:text-white text-[11px] font-bold cursor-pointer">
                   ⚙️ API 키 연결 상태 점검
                 </button>
               </div>
@@ -12521,19 +11762,7 @@ JSON 배열만 출력하세요. 각 day는 dayNum, title, city, date, spots를 �
       finally{if(button){button.disabled=false;button.innerHTML=original;}}
     }
 
-    function saveGeminiKey() {
-      const input = document.getElementById('cfg-gemini-key');
-      const raw = input ? input.value : '';
-      const k = cleanApiKey(raw);
-      State.geminiKey = k;
-      localStorage.setItem('st_gemini_key', k);
-      if (input) input.value = k;
-      const modalKey = document.getElementById('modal-cfg-gemini-key');
-      if (modalKey) modalKey.value = k;
-      if (typeof updateGeminiKeyUi === 'function') updateGeminiKeyUi();
-      closeModal('modal-settings', true);
-      showToast('🔑 Gemini API 키를 이 브라우저에 저장했습니다. 브라우저 저장소에는 암호화되지 않습니다.');
-    }
+    // saveGeminiKey는 js/presentation/settings-ui.js(SulsulTravel.SettingsUI)로 옮겼다(v2.2.1, 4단계).
 
     // ==========================================
     // [14] 모달 제어 (Sulsul Invariant R-9, R-15)
@@ -12584,7 +11813,7 @@ JSON 배열만 출력하세요. 각 day는 dayNum, title, city, date, spots를 �
         document.body.style.overflow = 'hidden';
       }
       if (modalId === 'modal-ai-chat') {
-        if (typeof updateAiChatStatusBadge === 'function') updateAiChatStatusBadge();
+        SulsulTravel.SettingsUI.updateAiChatStatusBadge();
       }
       if (modalId === 'modal-route-map') {
         SulsulTravel.RouteMap.onModalOpened();
@@ -12635,50 +11864,7 @@ JSON 배열만 출력하세요. 각 day는 dayNum, title, city, date, spots를 �
       closeModal(modalId, force);
     }
 
-    // ══════════════════════════════════════════
-    // [v1.7.2] Footer & Donation / Guide Modals Engine
-    // ══════════════════════════════════════════
-    const SULSUL_DONATION_URL = 'https://blog.naver.com/PostList.naver?blogId=ysparkbc37&from=postList&categoryNo=15';
-
-    function openDonationModal() {
-      openModal('modal-donation');
-    }
-
-    async function copyDonationLink() {
-      try {
-        if (navigator.clipboard && navigator.clipboard.writeText) {
-          await navigator.clipboard.writeText(SULSUL_DONATION_URL);
-        } else {
-          const ta = document.createElement('textarea');
-          ta.value = SULSUL_DONATION_URL;
-          ta.style.position = 'fixed';
-          ta.style.opacity = '0';
-          document.body.appendChild(ta);
-          ta.select();
-          document.execCommand('copy');
-          document.body.removeChild(ta);
-        }
-        showToast('후원 링크를 복사했습니다');
-      } catch (err) {
-        showToast('복사에 실패했습니다 — 링크를 직접 방문해 주세요');
-      }
-    }
-
-    function openDonationLink() {
-      window.open(SULSUL_DONATION_URL, '_blank', 'noopener,noreferrer');
-    }
-
-    function openUserGuideModal() {
-      openModal('modal-user-guide');
-    }
-
-    function openDeviceSyncModal() {
-      openModal('modal-device-sync');
-    }
-
-    function openPrivacyModal() {
-      openModal('modal-privacy');
-    }
+    // 푸터 안내·후원 모달(SULSUL_DONATION_URL·openDonationModal·copyDonationLink·openDonationLink·openUserGuideModal·openDeviceSyncModal·openPrivacyModal)은 js/presentation/settings-ui.js(SulsulTravel.SettingsUI)로 옮겼다(v2.2.1, 4단계).
 
     window.addEventListener('popstate', async event => {
       if (SulsulTravel.MobileNavigation?.active) return;
@@ -13594,9 +12780,9 @@ JSON 배열만 출력하세요. 각 day는 dayNum, title, city, date, spots를 �
       openTripPdfReport: openTripPdfReport,
       triggerPrintReport: triggerPrintReport,
       downloadReportAsHtml: downloadReportAsHtml,
-      isInstalled: isInstalled,
-      triggerNativeInstall: triggerNativeInstall,
-      openInstallGuideModal: openInstallGuideModal,
+      isInstalled: SulsulTravel.SettingsUI.isInstalled,
+      triggerNativeInstall: SulsulTravel.SettingsUI.triggerNativeInstall,
+      openInstallGuideModal: SulsulTravel.SettingsUI.openInstallGuideModal,
       cleanApiKey: cleanApiKey,
       closeModal: closeModal,
       safeCloseModal: safeCloseModal,
@@ -13608,23 +12794,23 @@ JSON 배열만 출력하세요. 각 day는 dayNum, title, city, date, spots를 �
       exportTripAsShareUrl: exportTripAsShareUrl,
       exportActiveTripShareLink: exportActiveTripShareLink,
       navigateToInteractiveMap: navigateToInteractiveMap,
-      openVersionHistoryModal: openVersionHistoryModal,
-      openSettingsModal: openSettingsModal,
-      switchSettingsTab: switchSettingsTab,
-      setTheme: setTheme,
-      toggleTheme: toggleTheme,
+      openVersionHistoryModal: SulsulTravel.SettingsUI.openVersionHistoryModal,
+      openSettingsModal: SulsulTravel.SettingsUI.open,
+      switchSettingsTab: SulsulTravel.SettingsUI.switchTab,
+      setTheme: SulsulTravel.SettingsUI.setTheme,
+      toggleTheme: SulsulTravel.SettingsUI.toggleTheme,
       getGithubSyncConfig: getGithubSyncConfig,
       saveGithubSyncConfig: saveGithubSyncConfig,
       syncToGist: syncToGist,
       syncFromGist: syncFromGist,
       showToast: showToast,
-      saveGeminiKeyFromModal: saveGeminiKeyFromModal,
-      updateGeminiKeyUi: updateGeminiKeyUi,
-      toggleGeminiKeyVisibility: toggleGeminiKeyVisibility,
-      testGeminiApiKey: testGeminiApiKey,
+      saveGeminiKeyFromModal: SulsulTravel.SettingsUI.saveGeminiKeyFromModal,
+      updateGeminiKeyUi: SulsulTravel.SettingsUI.updateGeminiKeyUi,
+      toggleGeminiKeyVisibility: SulsulTravel.SettingsUI.toggleGeminiKeyVisibility,
+      testGeminiApiKey: SulsulTravel.SettingsUI.testGeminiApiKey,
       DestinationRegistry: window.DestinationRegistry,
       resolveTripPack: resolveTripPack,
-      updateAiChatStatusBadge: updateAiChatStatusBadge,
+      updateAiChatStatusBadge: SulsulTravel.SettingsUI.updateAiChatStatusBadge,
       openScheduleTuningModal: openScheduleTuningModal,
       executeScheduleTuning: executeScheduleTuning,
       rebalanceTripSchedule: rebalanceTripSchedule,
@@ -13636,7 +12822,7 @@ JSON 배열만 출력하세요. 각 day는 dayNum, title, city, date, spots를 �
       generateAutoSpotsForTrip: generateAutoSpotsForTrip,
       detectDestinationTimezone: detectDestinationTimezone,
       updateCreateTripTzBanner: updateCreateTripTzBanner,
-      updateAiStatusIndicator: updateAiStatusIndicator,
+      updateAiStatusIndicator: SulsulTravel.SettingsUI.updateAiStatusIndicator,
       selectQuickFormCountry: selectQuickFormCountry,
       resolveCountryInfo: resolveCountryInfo,
       getCountryFlag: getCountryFlag,

@@ -25,7 +25,7 @@ const fixture=()=>({id:'structural-trip',title:'구조 검증 가상 여행',sta
           async seed(trip=fixture()){return page.evaluate(async trip=>{State.trips=await TripRepository.saveAll([trip]);State.activeTripId=trip.id;State.activeJournalDay=0;switchView('workspace');switchTab('journal');SulsulTravel.JournalTab.render();return State.trips;},trip);},
           async state(){return page.evaluate(async ()=>{const stored=await TripRepository.readRaw();return {trips:State.trips,stored};});},
           async quota(value){return page.evaluate(value=>{if(value){window.structuralSetItem=Storage.prototype.setItem;Storage.prototype.setItem=function(key,value){if(key==='st_trips_v2')throw new DOMException('synthetic quota','QuotaExceededError');return structuralSetItem.call(this,key,value);};}else Storage.prototype.setItem=structuralSetItem;},value);},
-          async gistSettings(){await page.evaluate(()=>openSettingsModal('ai'));await page.locator('#cfg-github-pat').fill('synthetic-test-token');await page.locator('#cfg-github-gist').fill('synthetic-gist-id');},
+          async gistSettings(){await page.evaluate(()=>SulsulTravel.SettingsUI.open('ai'));await page.locator('#cfg-github-pat').fill('synthetic-test-token');await page.locator('#cfg-github-gist').fill('synthetic-gist-id');},
           // tap()은 화면 밖 버튼을 스크롤한 직후 터치가 옛 스크롤 위치로 처리돼 다른 요소를 누르는 일이 있다(헤드리스 Chrome).
           // 그러면 저장 자체가 일어나지 않아 뒤 검사가 엉뚱한 이유로 실패하므로 click()으로 누르고 실제 기록을 확인한다.
           async saveJournal(text){
@@ -57,7 +57,7 @@ const fixture=()=>({id:'structural-trip',title:'구조 검증 가상 여행',sta
     await check('손상된 환율 JSON도 앱과 실제 백업 버튼을 중단시키지 않고 원문을 보관한다',async api=>{
       const state=await api.page.evaluate(()=>({defined:typeof State!=='undefined',rates:State.liveRates,custom:State.customRates,backups:Object.keys(localStorage).filter(key=>key.startsWith('st_live_rates_corrupt_')).map(key=>localStorage.getItem(key))}));
       assert.equal(state.defined,true);assert.deepEqual(state.rates,{});assert.deepEqual(state.custom,{});assert.ok(state.backups.includes('{synthetic-broken-rates'));
-      await api.page.evaluate(()=>openSettingsModal('data'));await api.page.locator('#panel-settings-data').getByText('JSON 백업',{exact:true}).tap();
+      await api.page.evaluate(()=>SulsulTravel.SettingsUI.open('data'));await api.page.locator('#panel-settings-data').getByText('JSON 백업',{exact:true}).tap();
       await api.page.waitForFunction(()=>document.getElementById('backup-file-save')?.getAttribute('href')?.startsWith('blob:'));
       assert.equal(await api.page.locator('#backup-file-save').isVisible(),true);return {bootAvailable:true,corruptSourcePreserved:true,backupFileReady:true};
     },{init:()=>{localStorage.setItem('st_live_rates','{synthetic-broken-rates');localStorage.setItem('st_custom_rates','{"KRW":0}');}});

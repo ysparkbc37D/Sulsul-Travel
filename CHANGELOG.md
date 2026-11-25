@@ -26,6 +26,15 @@
 - [ ] 항공권/호텔 예약 바우처 PDF 자동 파싱 일정 등록
 - [ ] 여행 동행자 실시간 음성 메모 AI 다이어리 자동 변환
 
+## [v2.2.1] - 2026-11-25
+
+- 화면 분리(4단계) 13차(설정·테마·PWA 설치 안내·안내 모달)입니다. `index.html`의 3-Way 테마 엔진, 설정 모달·Gemini API 키 관리, PWA 설치·시작 가이드 배너·설치 안내 모달, 푸터 안내·후원·버전 이력 모달(약 820줄)을 `js/presentation/settings-ui.js`(`SulsulTravel.SettingsUI`)로 옮기고 `shell.switchView`를 `js/presentation/shell-actions.js`에 추가했습니다.
+- 설정 모달 → 버전 기록 전체, 기기 간 백업 안내 → 지금 백업하러 가기, AI 채팅 오류 → API 키 점검/등록처럼 모달에서 다른 모달로 바로 전환할 때 `closeModal(..., true)`가 빠져 350ms 연타 방지 가드에 걸려 이전 창이 뒤에 남던 결함과, 백업/AI 안내 버튼이 항상 기본 `theme` 탭으로 열리던 결함을 고쳤습니다(v2.2.0에서 재현). 이제 즉시 닫히며 각각 `data`·`ai` 탭으로 열립니다.
+- Gemini API 키를 처음 등록하는 화면에서 입력만 하고 `[연결 테스트]`를 누르면 입력값이 무시되던 결함, 키 변경 중 잘못된 키로 연결 테스트가 실패해도 기존 정상 키가 `State.geminiKey`와 `localStorage`에 덮어씌워지던 결함, 새 키 저장·삭제 뒤 `State.aiFallbackActive`가 `true`로 남던 결함을 고쳤습니다(v2.2.0에서 재현).
+- `switchSettingsTab`·`switchInstallTab`에 잘못된 탭 키가 들어오면 모든 패널이 숨겨지던 문제를 기본 탭 폴백으로 막고, 설정 탭·3단 테마 버튼·설치 플랫폼 탭에 `aria-pressed`를 동기화했습니다.
+- 인앱 브라우저 설치 안내의 Chrome 인텐트 링크가 HTTP 환경에서도 `scheme=https`를 고정하고 escape 없이 삽입되던 문제(v2.2.0 재현)를 실제 프로토콜 반영과 `escapeHtml`로 고치고, 과장된 오프라인/영구 보관 안내 문구를 개인정보처리방침 기준에 맞게 다듬었습니다.
+- 인라인 이벤트 처리기 63곳을 `settings.*`·`shell.*`로 옮겨 `UI01` 기준을 409 → 346곳(`index.html` 259 → 196곳), `HTML01` `index.html`을 69 → 68곳(새 파일 0곳)으로 낮췄습니다. 전용 브라우저 검사 `tests/settings-ui.browser.cjs`(3개 시나리오)를 추가했습니다.
+
 ## [v2.2.0] - 2026-11-25
 
 - 화면 분리(4단계) 12차(내 여행 허브 화면)입니다. 오도미터 순차 올림 원칙(`v2.1.9 → v2.2.0`)에 따라 버전을 올리고, `index.html`의 허브 필터·검색·정렬·보기 전환·대표 사진·D-Day 배지·목록/히어로/표준 카드 렌더링(약 970줄)을 `js/presentation/hub-view.js`(`SulsulTravel.HubView`)로 옮겼습니다.

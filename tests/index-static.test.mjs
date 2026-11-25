@@ -17,6 +17,7 @@ const planTimeline = readFileSync(new URL('../js/presentation/plan-timeline.js',
 const planMap = readFileSync(new URL('../js/presentation/plan-map.js', import.meta.url), 'utf8');
 const routeMap = readFileSync(new URL('../js/presentation/route-map.js', import.meta.url), 'utf8');
 const hubView = readFileSync(new URL('../js/presentation/hub-view.js', import.meta.url), 'utf8');
+const settingsUi = readFileSync(new URL('../js/presentation/settings-ui.js', import.meta.url), 'utf8');
 const packSa = readFileSync(new URL('../js/destinations/pack-south-america.js', import.meta.url), 'utf8');
 const packageMetadata = JSON.parse(readFileSync(new URL('../package.json', import.meta.url), 'utf8'));
 const backupUi = readFileSync(new URL('../js/presentation/travel-backup-ui.js', import.meta.url), 'utf8');
@@ -204,10 +205,10 @@ test('editorial footer, donation modal, guides, and copyright are complete (v1.7
   assert.match(html, /id=["']modal-user-guide["']/);
   assert.match(html, /id=["']modal-device-sync["']/);
   assert.match(html, /id=["']modal-privacy["']/);
-  assert.match(html, /function openDonationModal\(/);
-  assert.match(html, /function copyDonationLink\(/);
-  assert.match(html, /function openDonationLink\(/);
-  assert.match(html, /https:\/\/blog\.naver\.com\/PostList\.naver\?blogId=ysparkbc37&from=postList&categoryNo=15/);
+  assert.match(settingsUi, /function openDonationModal\(/);
+  assert.match(settingsUi, /function copyDonationLink\(/);
+  assert.match(settingsUi, /function openDonationLink\(/);
+  assert.match(settingsUi, /https:\/\/blog\.naver\.com\/PostList\.naver\?blogId=ysparkbc37&from=postList&categoryNo=15/);
 });
 
 test('global country database expanded to 140+ countries and custom destination fallback supported (v1.7.3)', () => {
@@ -447,17 +448,17 @@ test('privacy notice matches the current local storage and optional network flow
   assert.match(html, /open\.er-api\.com/);
   assert.match(html, /실시간 공동편집은 아닙니다/);
   assert.doesNotMatch(html, /sulsul_travel_trips|sulsul_travel_theme|sulsul_gemini_api_key/);
-  assert.doesNotMatch(html, /100% 오프라인 동작|100% 무료|무제한 사용|기기 보안 저장소 보관 중|Gemini 3\.1 Flash-Lite 연동됨/);
-  assert.match(html, /키 등록됨 · 입력 가림/);
-  assert.match(html, /브라우저 저장소에는 암호화되지 않습니다/);
+  assert.doesNotMatch(html + settingsUi, /100% 오프라인 동작|100% 무료|무제한 사용|기기 보안 저장소 보관 중|Gemini 3\.1 Flash-Lite 연동됨/);
+  assert.match(settingsUi, /키 등록됨 · 입력 가림/);
+  assert.match(settingsUi, /브라우저 저장소에는 암호화되지 않습니다/);
   assert.match(html, /기기 간 백업·이동 안내/);
   assert.match(html, /여행 사본입니다\. 각자 수정한 내용은 자동으로 합쳐지지 않습니다/);
 });
 
 test('Gemini connection test uses the same fallback chain as AI generation', () => {
-  const start = html.indexOf('async function testGeminiApiKey()');
-  const end = html.indexOf('// ==========================================', start + 20);
-  const body = html.slice(start, end);
+  const start = settingsUi.indexOf('async function testGeminiApiKey()');
+  const end = settingsUi.indexOf('// ── 4. PWA', start + 20);
+  const body = settingsUi.slice(start, end);
   assert.match(body, /callGeminiApiWithFallback\('Reply with only OK\.'/);
   assert.doesNotMatch(body, /AI_MODELS\[0\]/);
 });
@@ -465,7 +466,7 @@ test('Gemini connection test uses the same fallback chain as AI generation', () 
 test('full backup restores clear old overflow journals only after the trip document is written', () => {
   const jsonRestore = backupUi.slice(backupUi.indexOf('async function applyTravelBackupRestore()'));
   const gistStart = html.indexOf('async function syncFromGist()');
-  const gistEnd = html.indexOf('function saveGeminiKey()', gistStart);
+  const gistEnd = html.indexOf('// [14] 모달 제어', gistStart);
   const gistRestore = html.slice(gistStart, gistEnd);
   assert.match(jsonRestore, /TripRepository\.saveAll\(replacement,\{approvedRecoveryRaw:recoveryRaw,expectedRaw:pending.baseRaw\}\)[\s\S]*?await JournalOverflowRepository\.clearAll\(\)/);
   assert.match(gistRestore, /previewTravelBackupText\(content,\{filename:'GitHub Gist 백업',source:'gist',baseRaw,baseState\}\)/);

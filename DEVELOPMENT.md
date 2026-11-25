@@ -65,10 +65,11 @@
 | `js/presentation/route-map.js` | 노선도 모달·공용 여행 좌표 해석(v2.1.7, `SulsulTravel.RouteMap`): 단일·전체 관광 일러스트 노선도, 위성 궤적(Leaflet), 통계 국가 포커스·복귀, `CITY_GEO_COORDS`·`getTripGeoData`(`routeMap.*`). 노선도 전역 3종을 모듈 변수로 옮겼고 모든 여행 자료 값을 escape한다 |
 | `js/presentation/lifetime-analytics.js` | 평생 여행 통계 대시보드(v2.1.9, `SulsulTravel.LifetimeAnalytics`): `#modal-analytics` 열기·탭 전환, 6대 지표 요약·상태 분포·국가/컨셉 아카이브·종합 비교표·6대 드릴다운(`lifetimeAnalytics.*`). 여행 `budget`/`currency`를 원화 환산하고 `TripAdapter.resolveTripStage`로 상태 배지를 통일하며 모든 값을 escape한다 |
 | `js/presentation/hub-view.js` | 내 여행 허브 화면(v2.2.0, `SulsulTravel.HubView`): 5대 상태 탭, 검색·정렬·국가/도시/컨셉 필터·활성 칩, 목록/격자 전환, 대표 커버 사진 안전 검증·등록/삭제, D-Day 배지, 히어로·표준·목록 카드(`hub.*`). 통화 환산 원화 예산과 실제 일수를 사용하며 모든 값을 escape한다 |
+| `js/presentation/settings-ui.js` | 설정·테마·PWA 설치·안내 모달(v2.2.1, `SulsulTravel.SettingsUI`): 3-Way 테마, 설정 모달·탭·Gemini API 키 관리(검증 통과 시에만 후보 키 저장), PWA 설치·시작 가이드 배너·설치 안내 모달, 버전 이력·후원·사용 가이드·백업 안내·개인정보 모달(`settings.*`) |
 | `js/presentation/plan-guides.js` | 계획 탭 예약 가이드·도시 가이드(v2.1.4, `SulsulTravel.PlanGuides`): 남미 팩 예약 체크리스트(팩 `bookings.items`, 완료는 `bookingStatuses`), 그 밖의 여행은 준비물 점검(`checklist.*` 동작), 남미·운남 거점 도시, 스팟 모아보기. 그리는 동안 여행 자료를 바꾸지 않고 모든 값을 escape한다 |
 | `js/presentation/budget-ui.js` | 초기 자산·예산 창과 전세계 통화 선택 창(v2.1.2). 창의 입력과 통화 목록은 파일 안의 초안에만 두고 저장 버튼의 `commitTrip` 한 번으로 쓴다. 통화 추가는 바로 저장하고 열린 초기 자산 창·지출 입력창을 갱신한다 |
 | `js/presentation/expense-analytics.js` | 사용내역 통계(v2.1.2): 카드·현금, 카테고리, 수지와 SVG 도넛 차트. 지출 카테고리 목록(`SulsulTravel.ExpenseAnalytics.CATEGORIES`)의 유일한 정의 |
-| `js/presentation/shell-actions.js` | 여러 화면이 함께 쓰는 셸 동작(v2.1.1): `shell.closeModal`(`data-modal`) |
+| `js/presentation/shell-actions.js` | 여러 화면이 함께 쓰는 셸 동작(v2.1.1, v2.2.1): `shell.closeModal`(`data-modal`), `shell.switchView`(`data-view`) |
 | `js/presentation/journal-tab.js` | 기록 탭(v2.1.0): 날짜 고르기, 하루 회고 글·사진 저장, 사진 크게 보기·안전 삭제, 저장 대기 사진 재시도, 글·사진 초안 파일. 순간 기록 목록은 `moment-journal.js`가 그린다 |
 | `js/presentation/checklist-tab.js` | 준비물 화면(v2.0.9, 4단계 첫 분리): 분류·D-Day 보기, 체크·전체 완료, 추가·상세·안전 삭제, 예약 가이드의 준비물 체크 |
 | `js/presentation/companion-ui.js` | 오늘 화면·큰 계획 카드, SOS, 퀵 캡슐(순간 기록 입력), 매거진(TravelStory 보기) |

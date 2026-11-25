@@ -81,7 +81,7 @@ const server=http.createServer((req,res) => {
       const adapter=SulsulTravel.TripAdapter,start=adapter.dateForDay(adapter.localDateKey(new Date(),'Asia/Seoul'),10);
       const cities=['푸에르토 나탈레스','엘 찰텐','New York','Buenos Aires','토레스 델 파이네','엘 칼라파테'];
       const makeTrip=(id,title) => adapter.normalizeTrip({id,title,startDate:start,timeZone:'Asia/Seoul',countries:['칠레'],cities,currency:'KRW',budget:10000,journals:{},momentEntries:[],activityRecords:{},expenses:[],checklist:[],days:cities.map((city,index) => ({dayNum:index+1,date:adapter.dateForDay(start,index),city,title:`${city}에서 천천히 걷는 하루`,spots:Array.from({length:6},(_,spotIndex) => ({title:`${city} ${spotIndex+1}번째 일정`,time:`${String(9+spotIndex).padStart(2,'0')}:00`,desc:'시간을 확인하고 길을 따라 천천히 걸어간다. 사진이나 한 줄 메모로 여행의 순간을 남길 수 있다.',cat:spotIndex%2 ? 'tour' : 'food',completed:false}))}))});
-      State.trips=[makeTrip('refresh-a','여섯 도시에서 함께 만드는 여행'),makeTrip('refresh-b','다른 여행')];State.activeTripId=null;State.activePlanBlockId=null;State.currentView='hub';State.travelWorkspaceViews={};State.travelTabPositions={};State.planSubTab='timeline';State.ratesLastUpdated=new Date().toISOString();openTripWorkspace('refresh-a');setTheme('modern');
+      State.trips=[makeTrip('refresh-a','여섯 도시에서 함께 만드는 여행'),makeTrip('refresh-b','다른 여행')];State.activeTripId=null;State.activePlanBlockId=null;State.currentView='hub';State.travelWorkspaceViews={};State.travelTabPositions={};State.planSubTab='timeline';State.ratesLastUpdated=new Date().toISOString();openTripWorkspace('refresh-a');SulsulTravel.SettingsUI.setTheme('modern');
     });
     await settle();
     await check('여행 전 오늘은 미리보기이며 다음 일정 제목을 표시',async() => {
@@ -114,7 +114,7 @@ const server=http.createServer((req,res) => {
     await page.setViewportSize({width:390,height:844});
     for(const theme of ['modern','deepblack','lightgray']) {
       await check(`${theme} 주요 본문·보조 글자 실제 대비 4.5 이상`,async() => {
-        await page.evaluate(theme => {setTheme(theme);switchTab('plan');SulsulTravel.PlanBlocks.openPresentation('overview');},theme);await settle();
+        await page.evaluate(theme => {SulsulTravel.SettingsUI.setTheme(theme);switchTab('plan');SulsulTravel.PlanBlocks.openPresentation('overview');},theme);await settle();
         const plan=await contrast(page,['.companion-muted','.companion-block-meta > span','.companion-block-summary','.companion-block-bottom > span','.companion-metrics > span','.companion-section-title > span']);
         await page.evaluate(() => switchTab('today'));await settle();
         const today=await contrast(page,['.companion-next h3','.companion-next > p','.companion-day-picker small','.companion-spot h4','.companion-spot > p','.companion-spot-time time','.companion-preview']);
@@ -124,7 +124,7 @@ const server=http.createServer((req,res) => {
       });
     }
     await check('탭 사이 이동 후 선택 날짜와 스크롤 복원',async() => {
-      await page.evaluate(() => {setTheme('modern');switchTab('today');selectCompanionTodayDay(2);});await settle();
+      await page.evaluate(() => {SulsulTravel.SettingsUI.setTheme('modern');switchTab('today');selectCompanionTodayDay(2);});await settle();
       await page.evaluate(() => window.scrollTo({top:330,behavior:'instant'}));await settle();const todayY=await page.evaluate(() => scrollY);assert.ok(todayY>=300);
       await page.evaluate(() => {switchTab('plan');SulsulTravel.PlanBlocks.openPresentation('timeline');});await settle();
       await page.evaluate(() => window.scrollTo({top:240,behavior:'instant'}));await settle();const planY=await page.evaluate(() => scrollY);

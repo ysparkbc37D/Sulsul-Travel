@@ -177,7 +177,7 @@ async function check(name,run){try{const details=await run();results.push({name,
       const first=await page.evaluate(async()=>({kind:TripRepository.kind,titles:State.trips.map(t=>t.title).sort(),token:TripRepository.token(),stats:await TripRepository.stats(),legacyEnd:localStorage.getItem('st_trips_v2').endsWith('\n')}));
       await page.evaluate(async()=>{await commitTripRecord(State.trips[0].id,t=>{t.journals[0].text='옮긴 뒤 저장한 회고';});});
       await page.reload();await page.waitForFunction(()=>window.SulsulShell?.started);
-      const second=await page.evaluate(async()=>{openSettingsModal('data');await SulsulTravel.StorageHealth.refresh();return {kind:TripRepository.kind,journal:State.trips.find(t=>t.journals[0].text==='옮긴 뒤 저장한 회고')?.id||null,row:document.getElementById('storage-health-list')?.textContent||''};});
+      const second=await page.evaluate(async()=>{SulsulTravel.SettingsUI.open('data');await SulsulTravel.StorageHealth.refresh();return {kind:TripRepository.kind,journal:State.trips.find(t=>t.journals[0].text==='옮긴 뒤 저장한 회고')?.id||null,row:document.getElementById('storage-health-list')?.textContent||''};});
       assert.equal(first.kind,'indexedDB');assert.deepEqual(first.titles,['앱 이전 가상 여행 A','앱 이전 가상 여행 B']);assert.match(first.token,/^idb:\d+$/);assert.equal(first.legacyEnd,true);
       assert.ok(second.journal,'새로고침 뒤에도 새 저장소의 글');assert.match(second.row,/IndexedDB/);
       // 두 번째 창을 열어도(부팅 정규화) 바뀐 것이 없으면 쓰지 않으므로 첫 창의 다음 저장이 막히지 않는다.

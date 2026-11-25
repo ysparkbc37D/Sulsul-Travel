@@ -27,14 +27,14 @@ const server=http.createServer((req,res) => {
       const adapter=SulsulTravel.TripAdapter,today=adapter.localDateKey(new Date(),'Asia/Seoul');
       const makeTrip=(id,title,city,startDate,endDate) => adapter.normalizeTrip({id,title,countries:['일본'],cities:[city],currency:'JPY',budget:12345000,startDate,endDate,timeZone:'Asia/Seoul',days:Array.from({length:id==='header-live' ? 12 : 2},(_,index) => ({date:adapter.dateForDay(startDate,index),city,title:`${city}의 ${index+1}일 가상 일정`,spots:[{title:'가상 산책',time:'09:00',cat:'tour'}]})),journals:{},momentEntries:[],activityRecords:{},expenses:[{title:'가상 식사',amount:50000,currency:'JPY',krw:5350000,cat:'food',date:startDate}]});
       State.trips=[makeTrip('header-live','가상 교토 산책, 골목마다 함께 남기는 열두 날의 가족 여행','교토',adapter.dateForDay(today,-1),adapter.dateForDay(today,10)),makeTrip('header-future','가상 오사카 맛집, 오래 기억할 음식과 이야기를 찾아 떠나는 여행','오사카','2035-04-01','2035-04-02'),makeTrip('header-past','가상 도쿄 회상','도쿄','2020-04-01','2020-04-02')];
-      State.activeTripId=null;State.hubViewMode='list';switchView('hub');SulsulTravel.HubView.resetFilters();setTheme('modern');
+      State.activeTripId=null;State.hubViewMode='list';switchView('hub');SulsulTravel.HubView.resetFilters();SulsulTravel.SettingsUI.setTheme('modern');
     });await settle();
     for(const width of [320,360,390,430])for(const view of ['hub','workspace']){
       await check(`${width}px ${view} 버전·브랜드·설정·이동 버튼 실제 노출과 터치 경계`,async() => {
         await page.setViewportSize({width,height:844});await page.evaluate(view => {if(view==='hub')switchView('hub');else{openTripWorkspace('header-live');if(view==='detail')SulsulTravel.PlanBlocks.openBlock(0);}},view);await settle();
         const geometry=await page.evaluate(() => {
           const header=document.querySelector('.companion-app-header'),badge=document.getElementById('app-ver-badge'),brand=header.querySelector('h1');
-          const buttons=[badge,document.getElementById('header-btn-analytics'),header.querySelector('button[onclick="openSettingsModal()"]'),document.getElementById(State.currentView==='hub' ? 'header-btn-create-trip' : 'header-btn-back-hub')];
+          const buttons=[badge,document.getElementById('header-btn-analytics'),document.getElementById('header-btn-settings'),document.getElementById(State.currentView==='hub' ? 'header-btn-create-trip' : 'header-btn-back-hub')];
           const box=element => {const rect=element.getBoundingClientRect(),style=getComputedStyle(element);return {id:element.id || element.title,visible:!!element.getClientRects().length&&style.display!=='none'&&style.visibility!=='hidden'&&Number(style.opacity)>0,hittable:element.contains(document.elementFromPoint(rect.left+rect.width/2,rect.top+rect.height/2)),left:rect.left,right:rect.right,top:rect.top,bottom:rect.bottom,width:rect.width,height:rect.height,fontSize:parseFloat(style.fontSize)};};
           const textRange=document.createRange();textRange.selectNodeContents(brand);const rect=textRange.getBoundingClientRect();
           return {version:APP_VER,label:badge.textContent.trim(),overflow:document.documentElement.scrollWidth>innerWidth,header:box(header),brand:{left:rect.left,right:rect.right,top:rect.top,bottom:rect.bottom},buttons:buttons.map(box),width:innerWidth};
@@ -139,7 +139,7 @@ const server=http.createServer((req,res) => {
     await page.setViewportSize({width:390,height:844});
     for(const theme of ['modern','deepblack','lightgray']){
       await check(`${theme} 버전·진행 상태·검색·필터 글자 대비 4.5 이상`,async() => {
-        await page.evaluate(theme => {switchView('hub');SulsulTravel.HubView.resetFilters();setTheme(theme);},theme);await settle();
+        await page.evaluate(theme => {switchView('hub');SulsulTravel.HubView.resetFilters();SulsulTravel.SettingsUI.setTheme(theme);},theme);await settle();
         const samples=await contrast(page,['#app-ver-badge','#hub-search-input','#hub-filter-sort','#tab-filter-all','#tab-filter-ongoing','.travel-status[data-status="ongoing"]']);
         assert.equal(samples.length,6,'진행 여행을 포함한 모든 대비 대상을 실제로 렌더링합니다.');
         const failures=samples.filter(sample => sample.ratio<4.5);assert.deepEqual(failures,[],JSON.stringify(failures));
@@ -191,7 +191,7 @@ const server=http.createServer((req,res) => {
       return {syntheticLegacyOnly:true,collapsedByDefault:true,originalUnchanged:true};
     });
     for(const [width,theme] of [[320,'modern'],[390,'modern'],[390,'deepblack']]){
-      await page.setViewportSize({width,height:844});await page.evaluate(theme => {switchView('hub');SulsulTravel.HubView.resetFilters();State.hubViewMode='list';SulsulTravel.HubView.renderCards();setTheme(theme);window.scrollTo({top:0,behavior:'instant'});},theme);await settle();
+      await page.setViewportSize({width,height:844});await page.evaluate(theme => {switchView('hub');SulsulTravel.HubView.resetFilters();State.hubViewMode='list';SulsulTravel.HubView.renderCards();SulsulTravel.SettingsUI.setTheme(theme);window.scrollTo({top:0,behavior:'instant'});},theme);await settle();
       await page.screenshot({path:path.join(output,`${theme}-${width}.png`)});
     }
     await check('사용자 동작 중 JavaScript 오류 없음',async() => {assert.deepEqual(errors,[]);return errors;});

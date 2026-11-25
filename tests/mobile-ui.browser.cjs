@@ -32,7 +32,7 @@ const server = http.createServer((req, res) => {
     await page.evaluate(() => {
       const cities = ['마드리드','마드리드','세비야','세비야','바르셀로나'];
       const trip = { id:'ui-test-spain', title:'스페인, 느리게 걷는 다섯 날', subtitle:'골목과 미술관을 따라', startDate:'2026-10-11',endDate:'2026-10-15',durationDays:5,cities:['마드리드','세비야','바르셀로나'],countries:['스페인'],currency:'EUR',revision:0,coverEmoji:'🇪🇸',planBlockMeta:{},expenses:[],journals:{},checklist:[{text:'미술관 입장권 예약하기',checked:false}],days:cities.map((city,index)=>({dayNum:index+1,title:`${city}, 골목에서 만나는 하루`,date:`2026-10-${11+index}`,city,spots:[{id:`s${index}a`,time:'09:00',cat:'food',title:'동네 카페에서 느긋한 아침',desc:'따뜻한 커피와 가벼운 아침 식사. 다음 장소로 이동하기 전에 잠시 쉬어 가요.',completed:false},{id:`s${index}b`,time:'10:30',cat:'tour',title:`${city}의 미술관과 오래된 골목 산책`,desc:'예약 시간과 입구를 확인하고, 걸어서 주변 골목을 둘러봅니다.',fixed:true,tip:'입장권 예약 시간을 확인하세요.'}]}))};
-      State.trips=[trip]; State.activeTripId=trip.id; setTheme('light'); switchView('workspace'); switchTab('plan');
+      State.trips=[trip]; State.activeTripId=trip.id; SulsulTravel.SettingsUI.setTheme('light'); switchView('workspace'); switchTab('plan');
     });
     fs.mkdirSync(output,{recursive:true});
     await page.screenshot({path:path.join(output,'mobile-plan.png'),fullPage:true});
@@ -69,7 +69,7 @@ const server = http.createServer((req, res) => {
     await page.locator('#today-overview-container .companion-spot-actions button').first().click();
     assert.equal(await page.evaluate(()=>State.activeTodayDayIndex),3,'manual date stays selected after completion');
     await page.screenshot({path:path.join(output,'mobile-today.png'),fullPage:true});
-    await page.evaluate(()=>setTheme('dark'));
+    await page.evaluate(()=>SulsulTravel.SettingsUI.setTheme('dark'));
     await page.waitForFunction(()=>document.documentElement.dataset.theme==='deepblack');
     await page.waitForTimeout(400);
     console.log('dark colors', await page.evaluate(()=>['.companion-next h3','.companion-next .companion-eyebrow','.companion-next > p:not(.companion-eyebrow)','.companion-spot > p','.companion-button'].map(selector=>{const el=document.querySelector('#today-overview-container '+selector);const s=getComputedStyle(el);return {selector,color:s.color,background:s.backgroundColor,opacity:s.opacity}})));
@@ -79,7 +79,7 @@ const server = http.createServer((req, res) => {
     assert.equal(await page.locator('#days-accordion-container').isVisible(),true);
     assert.equal(await page.locator('#big-plan-container').isVisible(),false);
     await page.locator('#nav-tab-journal').click();
-    await page.evaluate(()=>setTheme('light'));
+    await page.evaluate(()=>SulsulTravel.SettingsUI.setTheme('light'));
     await page.waitForFunction(()=>document.documentElement.dataset.theme==='modern');
     await page.waitForTimeout(400);
     assert.equal(await page.locator('#tab-content-journal').isVisible(),true);

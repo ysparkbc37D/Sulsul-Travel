@@ -6,6 +6,7 @@
   const T = root.SulsulTravel = root.SulsulTravel || {};
   T.UiActions.define('shell', {
     // data-modal의 창을 닫는다. 강제로 닫지 않으므로 작성 중 확인·연타 방지(350ms)는 closeModal 규칙을 그대로 따른다.
-    closeModal: element => closeModal(element.dataset.modal)
+    closeModal: element => closeModal(element.dataset.modal),
+    switchView: element => switchView(element.dataset.view || 'hub')
   });
 })(typeof window !== 'undefined' ? window : globalThis);
