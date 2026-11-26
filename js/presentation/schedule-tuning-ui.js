@@ -427,7 +427,7 @@ ${JSON.stringify(snapshotDays)}`;
 
   function getReplanDomain() {
     if (!replanDomainPromise) {
-      const url = new URL('./js/domain/replan.mjs?v=2.2.7', root.document.baseURI).href;
+      const url = new URL('./js/domain/replan.mjs?v=2.2.8', root.document.baseURI).href;
       replanDomainPromise = import(url);
     }
     return replanDomainPromise;

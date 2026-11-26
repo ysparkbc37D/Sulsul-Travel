@@ -41,7 +41,8 @@
         typeof window.SulsulTravel?.FieldTools?.openQuickCurrencyCalc === 'function' &&
         typeof window.SulsulTravel?.ReportUI?.openModal === 'function' &&
         typeof window.SulsulTravel?.GistSync?.push === 'function' &&
-        typeof window.SulsulTravel?.AiChat?.send === 'function';
+        typeof window.SulsulTravel?.AiChat?.send === 'function' &&
+        typeof window.SulsulTravel?.CompanionModals?.openMagazine === 'function';
       shell.reload = () => {if(!shell.reloading){shell.reloading=true;location.reload();}};
       shell.canReload = () => {
         if(!shell.started)return true;
@@ -160,17 +161,17 @@
   </script>
 
   <!-- PWA Meta & Icons -->
-  <link rel="manifest" href="manifest.webmanifest?v=2.2.7">
+  <link rel="manifest" href="manifest.webmanifest?v=2.2.8">
   <meta name="theme-color" content="#F7F5F0">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <meta name="apple-mobile-web-app-title" content="술술트래블">
-  <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192-v115.png?v=2.2.7">
-  <link rel="icon" type="image/png" sizes="32x32" href="favicon.png?v=2.2.7">
+  <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192-v115.png?v=2.2.8">
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon.png?v=2.2.8">
   <link rel="shortcut icon" href="favicon.ico">
-  <link rel="apple-touch-icon" sizes="180x180" href="icons/apple-touch-icon-v115.png?v=2.2.7">
-  <link rel="apple-touch-icon" href="icons/apple-touch-icon-v115.png?v=2.2.7">
+  <link rel="apple-touch-icon" sizes="180x180" href="icons/apple-touch-icon-v115.png?v=2.2.8">
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon-v115.png?v=2.2.8">
 
   <!-- Google Fonts: Great Vibes, Dancing Script (Cursive Calligraphy), Cormorant Garamond, Noto Serif KR, Playfair Display -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -178,7 +179,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Great+Vibes&family=Cormorant+Garamond:wght@600;700;800&family=Noto+Serif+KR:wght@500;600;700;900&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
 
   <!-- Local Utilities Bundle (CDN fallback & tailwind utilities) -->
-  <link rel="stylesheet" href="css/utilities.css?v=2.2.7" integrity="sha384-HMVB4SH6xwwGITkNyT8ARmHegAYSuTMocPGl4bpl0JywMIe2PqYrUxqZOgEuZjmP">
+  <link rel="stylesheet" href="css/utilities.css?v=2.2.8" integrity="sha384-HMVB4SH6xwwGITkNyT8ARmHegAYSuTMocPGl4bpl0JywMIe2PqYrUxqZOgEuZjmP">
   <link rel="stylesheet" href="vendor/fontawesome/css/all.min.css" integrity="sha384-t1nt8BQoYMLFN5p42tRAtuAAFQaCQODekUVeKKZrEnEyp4H2R0RHFz0KWpmj7i8g">
 
   <!-- Leaflet Map CSS & JS -->
@@ -1520,81 +1521,82 @@
     }
   </style>
 
-  <link rel="stylesheet" href="css/companion.css?v=2.2.7" integrity="sha384-Syant7HB0IYUZUU2saRSYUDkM71WKVuK2JtHM+kAluFdw3VvWv9gSglgJh4utHv/">
-  <link rel="stylesheet" href="css/companion-refresh.css?v=2.2.7" integrity="sha384-2KIp4VI8qsP6dGnz0cm/vehjLjr6GxpZ9yWTbbIXBPWi25XHg6XUOtNbp7W8KMd3">
-  <link rel="stylesheet" href="css/live-itinerary.css?v=2.2.7" integrity="sha384-e/V9wyJ/Gi6baSHcWzBeNGjdn/eKDQIvKWyiYmByLE7C7nYJaQOA+GshtUMcCR72">
-  <link rel="stylesheet" href="css/expense-mobile.css?v=2.2.7" integrity="sha384-QZFtKrU/YvkTaEKv0oJ2ZQi1Zry8RgEFaHzTckwuPFsMDDmadYBH7UuYgTVS7281">
-  <link rel="stylesheet" href="css/moment-journal.css?v=2.2.7" integrity="sha384-g1EihgfyPDJ5o5eWSsQgT1WDTRKDtUfzVatlx6T/t+DhApDBY8dznSrwmelasv91">
-  <script src="js/domain/trip-adapter.js?v=2.2.7" integrity="sha384-JHU/NkAlxwR9G9/49TaFK4sTvg9xKGsSVd3re8rLivtiXcSNdnQA9gRIfvVWUtG7"></script>
-  <script src="js/domain/ai-draft-validation.js?v=2.2.7" integrity="sha384-OTRAiX7YaOiiNrpMWDjkOyH0bTbbL3KrGwGp1RmIkgvd15pErNTTKVTJkoesmpfi"></script>
-  <script src="js/domain/live-itinerary.js?v=2.2.7" integrity="sha384-cwMH5i2F5Mve7Z9cKeWrP7uLU5plcu6c7xvTf4Lyz3Xkb6GlNCI14lnEWzw46cVg"></script>
-  <script src="js/presentation/live-itinerary-ui.js?v=2.2.7" integrity="sha384-o0/FMQJBgpZ6IjgCVORm7T9wuyP+FMXZBQWNpODWeV7EibRoxJXXvfpLYyRnZwJV"></script>
-  <script src="js/presentation/live-itinerary-bridge.js?v=2.2.7" integrity="sha384-lRoX8rvtVNC3rl6v9tCVjTLCSBjLmTH3EhNiq6OPizV+6GvspGEUIpH00HoPTgEn"></script>
-  <script src="js/domain/schedule-change.js?v=2.2.7" integrity="sha384-v7zQ2iSY9DIrsztq758NvV0o6vbsguJn70NviXT6itT6YcuNaCvSW2beDogcMbD7"></script>
-  <script src="js/presentation/schedule-change-ui.js?v=2.2.7" integrity="sha384-/o64DP3fREiF6GLq76fUVLc7a0yqHmcXa7vYfKDJfvwz2C78WHFUeufRrmntmWOh"></script>
-  <script src="js/domain/spot-realignment.js?v=2.2.7" integrity="sha384-gCFPNcD1aD3UegqTLtFPCU7Xqm7CtRN0yjQx2QnWe1ee0i3cZu8pzZic7YzBJLKt"></script>
-  <script src="js/presentation/spot-realignment-ui.js?v=2.2.7" integrity="sha384-GKlSQQKluvxcnRhJmQVQL4lZIFXbqf8ac/0BnxPiWNWcLjFJWYx/IZU3+5fZI7dk"></script>
-  <script src="js/domain/travel-records.js?v=2.2.7" integrity="sha384-qhkfkF1xKTuPtBvsB5Gwpz631xTkyy2tS1BU9Hixd2L1t+oobsXBMJnFv1pBHNnW"></script>
-  <script src="js/domain/travel-story.js?v=2.2.7" integrity="sha384-vjuGNDpytM6vG8SuZbKLW7qTTV1L33j48P1KSwNQnvca7uxo5EYkBM2X0IOdn/Qa"></script>
-  <script src="js/infrastructure/storage/photo-compression.js?v=2.2.7" integrity="sha384-MeOApXBzhg++Rcq/Lfjwb04/MA1U6wmwHppDgFZvKA4ZfdPC4oR2Hv1BhPFNU7Ig"></script>
-  <link rel="stylesheet" href="css/photo-optimization.css?v=2.2.7" integrity="sha384-9sgcirlxZs5tcmp/22RdH56B3bZla/q4DVH7x8W+fO8P4neR4WJMDDtQNK4WPq+/">
-  <script src="js/domain/photo-optimization.js?v=2.2.7" integrity="sha384-fpPZ4nJ383bIJaSHvmuZg+9BYd5LQ8YuVtEEMjtJnQr2Fod/mawAoB5SYMdtvBRU"></script>
-  <script src="js/infrastructure/storage/photo-cleanup.js?v=2.2.7" integrity="sha384-qPUCnJe7spP79MZLfOuzscYXTD6cW+7dzsf0xxvDip9hIj+yBvbBK6KhAouz5BC/"></script>
-  <script src="js/presentation/photo-optimization-ui.js?v=2.2.7" integrity="sha384-3hbyGaTEmmcJedqdlzMJs8SeGnYCFuuItyMz6MU2GqsZPt0F3lqhR6C3xfEjtztX"></script>
-  <script src="js/infrastructure/storage/media-repository.js?v=2.2.7" integrity="sha384-q0IPoo86aU2ruB130X1HAh01dr4hpI0IAXeMVCoa7Jy/2pIB09f7WbSKPm8vowhw"></script>
-  <script src="js/infrastructure/storage/record-media-store.js?v=2.2.7" integrity="sha384-vNu5tI/i1vWsxi2/3aQYW+9zYfivBNB2ewaUTRlwhnGwRbv9dpR4bu/sqzv1D2jm"></script>
-  <script src="js/infrastructure/storage/expense-photo-repository.js?v=2.2.7" integrity="sha384-gdumvFYkJqEbRPJlK4mffCsUjPsnKCXLg6/1fLMR8kUuU1QDMeLLOYmMVSRTGNSy"></script>
-  <script src="js/presentation/companion-ui.js?v=2.2.7" integrity="sha384-Npzl8S0OMmAmSh+ED3V/mQNOm+kda1rIH8r6xkEKinizFbNqwSoLT03VNpFBmWsD"></script>
-  <script src="js/domain/trip-transfer.js?v=2.2.7" integrity="sha384-VD9q1co1+bJzdS4i19rvfkQN/4KvzfnNdHUjbbucghcxzjmPim+kWF93qv5DaXSu"></script>
-  <script src="js/domain/travel-backup.js?v=2.2.7" integrity="sha384-4zE43uWlz5y3eP7g98tEL3HqAsw08/XvINQ+RhLLt4wz+cnySMWiy3Eu1m7BaBbK"></script>
-  <script src="js/presentation/travel-backup-ui.js?v=2.2.7" integrity="sha384-MTytnNuaclpRpJbyvgJzeS9gtrOk8VQUnFSGicvlLrQCd/DcDNdyx4OCf5CjPFwl"></script>
-  <script src="js/presentation/storage-health-ui.js?v=2.2.7" integrity="sha384-yhLee1WlZBu7vZL8qquRuBbYdW2RIBPIkjKQqjgT5iNw7FRWOlw7POGkpMar7IkT"></script>
-  <script src="js/presentation/trip-transfer-ui.js?v=2.2.7" integrity="sha384-eqPYhJD7v4KX0Ya6tmFTiMnZZaifZSy9rw+iOVpL40NbDHovbAiFLCkBXIdKFr+l"></script>
-  <script src="js/presentation/mobile-navigation.js?v=2.2.7" integrity="sha384-kBt19zWZRJi5YikjblCgSn1Lvo3lYWKGTAr1wUWly83cD5FTjDSjryhWLx0D2Jl0"></script>
-  <script src="js/presentation/activity-journal.js?v=2.2.7" integrity="sha384-yfWY1V0BnjH3KiQRcQhSUSk+yFtzEHdTrHFa9impeFfcJfhekTfeXeCZvzbgv4he"></script>
-  <script src="js/presentation/moment-journal.js?v=2.2.7" integrity="sha384-r/heV0A2E+VDwxEE7joC1tw0UPcWIWSdZHDvU0rQs6c+LzY5zCEBLYiF4KIKQo5u"></script>
-  <script src="js/presentation/travel-story-ui.js?v=2.2.7" integrity="sha384-s9HZ4A1/X3tCfe4rBfB6nzEwAC7i2U1YVfradgxnQPX5X4tnFszIOPeMsLPfXnfq"></script>
-  <script src="js/config/collaboration-config.js?v=2.2.7" integrity="sha384-ipxhKB+fQ4s3OThYo3p6IWFvP6BbstXYDW6jZWWiPHB4qomo64w7r8/wRvdsi47w"></script>
-  <script src="js/infrastructure/collaboration/supabase-travel-service.js?v=2.2.7" integrity="sha384-+SDvVJ0CNqCMvFlOBOA+nfA1k6/sN6GlaKDhTQo4SgX8x3EwPXyJlvMfJj0D6Bt/"></script>
-  <script src="js/presentation/collaboration-ui.js?v=2.2.7" integrity="sha384-KvnYI6ym2/deKsOtKryWJS5tljPjqYRx67JGGgWVRNyWHEC470iPDg3+fdw0OHX0"></script>
-  <script src="js/presentation/collaboration-review.js?v=2.2.7" integrity="sha384-cbND/rT26DaIY2hR++LBuByF9L/ACu5TDl0b85EN2zsk/sTapWGm2BPQqZgN6GzI"></script>
-  <script src="js/presentation/ui-actions.js?v=2.2.7" integrity="sha384-86E6+vWuYSS4ldFWIpwfcJMnPW2jUnvL9CJGWeJHDKHEXnQsNWTDB0skpvkRBm9K"></script>
-  <script src="js/presentation/shell-actions.js?v=2.2.7" integrity="sha384-U2oGDxTvGwi30E4dNh1CkhDtgABYyf+tvtZYOm2h31bPLv/ptAhsQhnFv0nVndEo"></script>
-  <script src="js/presentation/exchange-ui.js?v=2.2.7" integrity="sha384-21MA/m/6rg1LsIZFsoAuqvhmWN3Y8seM2ZdIZHKOGEZ70CAjaeulE8mmIbSKmb1h"></script>
-  <script src="js/presentation/plan-blocks.js?v=2.2.7" integrity="sha384-Y9Ig6PlkuyrOlG37ahgrLVzCAAnLtVb57tte96feeiMky/nRwri//Osk26zHr7E6"></script>
-  <script src="js/presentation/plan-timeline.js?v=2.2.7" integrity="sha384-XccR9D5M8JUlh6XBhwvZKMhbTmNhj84+Ni21lw1rnzHWo5KkXzNYl7pynmxJtFVL"></script>
-  <script src="js/presentation/plan-map.js?v=2.2.7" integrity="sha384-moJ8fpaMtEe644aLUgtZGuvdUoG/ax/MK9VlZPw4TCtT/XomX3xjobLrKtRnm94d"></script>
-  <script src="js/presentation/route-map.js?v=2.2.7" integrity="sha384-j87WAiWOdi7HTCFWm0XWLG7jV7KT9R2JLOGoKKmEiPJh3CsZCYfDmI7hO896ksUY"></script>
-  <script src="js/presentation/lifetime-analytics.js?v=2.2.7" integrity="sha384-XnY1tdVYapJQw3lLhKkqDcKF3h6GAOG2reiPfz/1+IdqoKJb2YelleP4hY6p2SRK"></script>
-  <script src="js/presentation/hub-view.js?v=2.2.7" integrity="sha384-+vq3AZRVg4mRX44XKyWFn7MLDnNuZskoqGum7d4JdbvMdKJy3iarV81VN/dBUJgG"></script>
-  <script src="js/presentation/settings-ui.js?v=2.2.7" integrity="sha384-Q1Tkh0RkRZX57u6cdXCgU+s82Iku1KO9OD/BjN9s6Dg8OW3etymmGXXVsWbfbjcN"></script>
-  <script src="js/presentation/schedule-tuning-ui.js?v=2.2.7" integrity="sha384-ctvrdbl+jYB0RNl4H9X+BiNoaSayzkzg75uKMGbkUxhiLafJWm7HXS3KaS/k0QOs"></script>
-  <script src="js/presentation/create-trip-ui.js?v=2.2.7" integrity="sha384-grGJopZB8QQaFNnR6pAIz8XfX5ryM2Wen2ZxGPvec7HgQwK4Ku5BW0nlZSe7YwIg"></script>
-  <script src="js/presentation/draft-studio-ui.js?v=2.2.7" integrity="sha384-FRYBodJrfRiQlWBAZS/twaoxaCxHUmjB77DVXvslmfQf8l9o3xu/cHPHO/dViDKZ"></script>
-  <script src="js/presentation/field-tools-ui.js?v=2.2.7" integrity="sha384-6hFyHsBDRisof8rW64wE6swEOs7uQBy7LwoUxkRviul9ps8dep80GVevprrZU/Mk"></script>
-  <script src="js/presentation/report-ui.js?v=2.2.7" integrity="sha384-mD+kK7LKx11U6I1RYb7/B+xCpsiyrqNEqaafGk7safVnyAdUKNDlDMLyzPJuQcAd"></script>
-  <script src="js/presentation/gist-sync-ui.js?v=2.2.7" integrity="sha384-TDkgCdrgsX6/2IizVyZOwC2kik/RKZyvJ/b6AUQXqfp05PsacI9ZznWjMrjUu+e4"></script>
-  <script src="js/presentation/ai-chat-ui.js?v=2.2.7" integrity="sha384-HE7Em3W+NDhx7gEsmrHSMnshy0Nhetk9gf1bBhlE52F5x+GgbL8JvU3YfeI3tQcz"></script>
-  <script src="js/presentation/plan-guides.js?v=2.2.7" integrity="sha384-Eg0ooJHXflNMCbbk5sEJIg4VX2WigAkFB9GzPI7iT7q57s8L2TdNMYQxc9BWHb87"></script>
-  <script src="js/presentation/budget-ui.js?v=2.2.7" integrity="sha384-p+A7x64rZuPWhGaUzTMoNYo60aTQzp7UXhZzMfXABMyWqrG32b4LDPZ/SGwoEKjs"></script>
-  <script src="js/presentation/expense-analytics.js?v=2.2.7" integrity="sha384-GOo/a/N9uE2yr6Aw2Ju6sXiBr5VTaDbPb1nth/ElR4GDT1yPI0CfghLOB7DaN1Yp"></script>
-  <script src="js/presentation/expenses-tab.js?v=2.2.7" integrity="sha384-dFoKIs/B5CCctW17/wd1Kp0Kr6v9LXykyt/8yOknSEs3G9C7rnYam3VrTKE9ZaFg"></script>
-  <script src="js/presentation/journal-tab.js?v=2.2.7" integrity="sha384-kcbpMZiWtGOoJFVsgQ2u4c467aU9DAdx0X5ia0jCo6xRzb0iF6vtiwBRw4P7y56x"></script>
-  <script src="js/presentation/checklist-tab.js?v=2.2.7" integrity="sha384-ENgqtNcHd59KKTorCEZx/H/zUSfXi47RIM1X1F1E6tNPe5U4DKXginat44x1SDbL"></script>
-  <script src="js/presentation/expense-editor.js?v=2.2.7" integrity="sha384-PosLZVGcia3FlNTeQCWVw+mtgPsGaCJjpHKtrdFVXpaw5LYD+iQ/M5FYwMYy/HVY"></script>
+  <link rel="stylesheet" href="css/companion.css?v=2.2.8" integrity="sha384-Syant7HB0IYUZUU2saRSYUDkM71WKVuK2JtHM+kAluFdw3VvWv9gSglgJh4utHv/">
+  <link rel="stylesheet" href="css/companion-refresh.css?v=2.2.8" integrity="sha384-2KIp4VI8qsP6dGnz0cm/vehjLjr6GxpZ9yWTbbIXBPWi25XHg6XUOtNbp7W8KMd3">
+  <link rel="stylesheet" href="css/live-itinerary.css?v=2.2.8" integrity="sha384-e/V9wyJ/Gi6baSHcWzBeNGjdn/eKDQIvKWyiYmByLE7C7nYJaQOA+GshtUMcCR72">
+  <link rel="stylesheet" href="css/expense-mobile.css?v=2.2.8" integrity="sha384-QZFtKrU/YvkTaEKv0oJ2ZQi1Zry8RgEFaHzTckwuPFsMDDmadYBH7UuYgTVS7281">
+  <link rel="stylesheet" href="css/moment-journal.css?v=2.2.8" integrity="sha384-g1EihgfyPDJ5o5eWSsQgT1WDTRKDtUfzVatlx6T/t+DhApDBY8dznSrwmelasv91">
+  <script src="js/domain/trip-adapter.js?v=2.2.8" integrity="sha384-JHU/NkAlxwR9G9/49TaFK4sTvg9xKGsSVd3re8rLivtiXcSNdnQA9gRIfvVWUtG7"></script>
+  <script src="js/domain/ai-draft-validation.js?v=2.2.8" integrity="sha384-OTRAiX7YaOiiNrpMWDjkOyH0bTbbL3KrGwGp1RmIkgvd15pErNTTKVTJkoesmpfi"></script>
+  <script src="js/domain/live-itinerary.js?v=2.2.8" integrity="sha384-cwMH5i2F5Mve7Z9cKeWrP7uLU5plcu6c7xvTf4Lyz3Xkb6GlNCI14lnEWzw46cVg"></script>
+  <script src="js/presentation/live-itinerary-ui.js?v=2.2.8" integrity="sha384-o0/FMQJBgpZ6IjgCVORm7T9wuyP+FMXZBQWNpODWeV7EibRoxJXXvfpLYyRnZwJV"></script>
+  <script src="js/presentation/live-itinerary-bridge.js?v=2.2.8" integrity="sha384-lRoX8rvtVNC3rl6v9tCVjTLCSBjLmTH3EhNiq6OPizV+6GvspGEUIpH00HoPTgEn"></script>
+  <script src="js/domain/schedule-change.js?v=2.2.8" integrity="sha384-v7zQ2iSY9DIrsztq758NvV0o6vbsguJn70NviXT6itT6YcuNaCvSW2beDogcMbD7"></script>
+  <script src="js/presentation/schedule-change-ui.js?v=2.2.8" integrity="sha384-/o64DP3fREiF6GLq76fUVLc7a0yqHmcXa7vYfKDJfvwz2C78WHFUeufRrmntmWOh"></script>
+  <script src="js/domain/spot-realignment.js?v=2.2.8" integrity="sha384-gCFPNcD1aD3UegqTLtFPCU7Xqm7CtRN0yjQx2QnWe1ee0i3cZu8pzZic7YzBJLKt"></script>
+  <script src="js/presentation/spot-realignment-ui.js?v=2.2.8" integrity="sha384-7/4euNMDZ4LD+vObD0Xq42qTopq0iMukESWCT00f92IXRtW3rMnntg0b7ypeAQZV"></script>
+  <script src="js/domain/travel-records.js?v=2.2.8" integrity="sha384-qhkfkF1xKTuPtBvsB5Gwpz631xTkyy2tS1BU9Hixd2L1t+oobsXBMJnFv1pBHNnW"></script>
+  <script src="js/domain/travel-story.js?v=2.2.8" integrity="sha384-vjuGNDpytM6vG8SuZbKLW7qTTV1L33j48P1KSwNQnvca7uxo5EYkBM2X0IOdn/Qa"></script>
+  <script src="js/infrastructure/storage/photo-compression.js?v=2.2.8" integrity="sha384-MeOApXBzhg++Rcq/Lfjwb04/MA1U6wmwHppDgFZvKA4ZfdPC4oR2Hv1BhPFNU7Ig"></script>
+  <link rel="stylesheet" href="css/photo-optimization.css?v=2.2.8" integrity="sha384-9sgcirlxZs5tcmp/22RdH56B3bZla/q4DVH7x8W+fO8P4neR4WJMDDtQNK4WPq+/">
+  <script src="js/domain/photo-optimization.js?v=2.2.8" integrity="sha384-fpPZ4nJ383bIJaSHvmuZg+9BYd5LQ8YuVtEEMjtJnQr2Fod/mawAoB5SYMdtvBRU"></script>
+  <script src="js/infrastructure/storage/photo-cleanup.js?v=2.2.8" integrity="sha384-qPUCnJe7spP79MZLfOuzscYXTD6cW+7dzsf0xxvDip9hIj+yBvbBK6KhAouz5BC/"></script>
+  <script src="js/presentation/photo-optimization-ui.js?v=2.2.8" integrity="sha384-3hbyGaTEmmcJedqdlzMJs8SeGnYCFuuItyMz6MU2GqsZPt0F3lqhR6C3xfEjtztX"></script>
+  <script src="js/infrastructure/storage/media-repository.js?v=2.2.8" integrity="sha384-q0IPoo86aU2ruB130X1HAh01dr4hpI0IAXeMVCoa7Jy/2pIB09f7WbSKPm8vowhw"></script>
+  <script src="js/infrastructure/storage/record-media-store.js?v=2.2.8" integrity="sha384-vNu5tI/i1vWsxi2/3aQYW+9zYfivBNB2ewaUTRlwhnGwRbv9dpR4bu/sqzv1D2jm"></script>
+  <script src="js/infrastructure/storage/expense-photo-repository.js?v=2.2.8" integrity="sha384-gdumvFYkJqEbRPJlK4mffCsUjPsnKCXLg6/1fLMR8kUuU1QDMeLLOYmMVSRTGNSy"></script>
+  <script src="js/presentation/companion-ui.js?v=2.2.8" integrity="sha384-sh89FLSYvHK/NeEc4JZ/0Q4yJQcqrTeYmoNRIVesImRA8sPV7BpPCv/DykQUXMBK"></script>
+  <script src="js/domain/trip-transfer.js?v=2.2.8" integrity="sha384-VD9q1co1+bJzdS4i19rvfkQN/4KvzfnNdHUjbbucghcxzjmPim+kWF93qv5DaXSu"></script>
+  <script src="js/domain/travel-backup.js?v=2.2.8" integrity="sha384-4zE43uWlz5y3eP7g98tEL3HqAsw08/XvINQ+RhLLt4wz+cnySMWiy3Eu1m7BaBbK"></script>
+  <script src="js/presentation/travel-backup-ui.js?v=2.2.8" integrity="sha384-MTytnNuaclpRpJbyvgJzeS9gtrOk8VQUnFSGicvlLrQCd/DcDNdyx4OCf5CjPFwl"></script>
+  <script src="js/presentation/storage-health-ui.js?v=2.2.8" integrity="sha384-yhLee1WlZBu7vZL8qquRuBbYdW2RIBPIkjKQqjgT5iNw7FRWOlw7POGkpMar7IkT"></script>
+  <script src="js/presentation/trip-transfer-ui.js?v=2.2.8" integrity="sha384-eqPYhJD7v4KX0Ya6tmFTiMnZZaifZSy9rw+iOVpL40NbDHovbAiFLCkBXIdKFr+l"></script>
+  <script src="js/presentation/mobile-navigation.js?v=2.2.8" integrity="sha384-kBt19zWZRJi5YikjblCgSn1Lvo3lYWKGTAr1wUWly83cD5FTjDSjryhWLx0D2Jl0"></script>
+  <script src="js/presentation/activity-journal.js?v=2.2.8" integrity="sha384-yfWY1V0BnjH3KiQRcQhSUSk+yFtzEHdTrHFa9impeFfcJfhekTfeXeCZvzbgv4he"></script>
+  <script src="js/presentation/moment-journal.js?v=2.2.8" integrity="sha384-r/heV0A2E+VDwxEE7joC1tw0UPcWIWSdZHDvU0rQs6c+LzY5zCEBLYiF4KIKQo5u"></script>
+  <script src="js/presentation/travel-story-ui.js?v=2.2.8" integrity="sha384-s9HZ4A1/X3tCfe4rBfB6nzEwAC7i2U1YVfradgxnQPX5X4tnFszIOPeMsLPfXnfq"></script>
+  <script src="js/config/collaboration-config.js?v=2.2.8" integrity="sha384-ipxhKB+fQ4s3OThYo3p6IWFvP6BbstXYDW6jZWWiPHB4qomo64w7r8/wRvdsi47w"></script>
+  <script src="js/infrastructure/collaboration/supabase-travel-service.js?v=2.2.8" integrity="sha384-+SDvVJ0CNqCMvFlOBOA+nfA1k6/sN6GlaKDhTQo4SgX8x3EwPXyJlvMfJj0D6Bt/"></script>
+  <script src="js/presentation/collaboration-ui.js?v=2.2.8" integrity="sha384-KvnYI6ym2/deKsOtKryWJS5tljPjqYRx67JGGgWVRNyWHEC470iPDg3+fdw0OHX0"></script>
+  <script src="js/presentation/collaboration-review.js?v=2.2.8" integrity="sha384-cbND/rT26DaIY2hR++LBuByF9L/ACu5TDl0b85EN2zsk/sTapWGm2BPQqZgN6GzI"></script>
+  <script src="js/presentation/ui-actions.js?v=2.2.8" integrity="sha384-86E6+vWuYSS4ldFWIpwfcJMnPW2jUnvL9CJGWeJHDKHEXnQsNWTDB0skpvkRBm9K"></script>
+  <script src="js/presentation/shell-actions.js?v=2.2.8" integrity="sha384-U2oGDxTvGwi30E4dNh1CkhDtgABYyf+tvtZYOm2h31bPLv/ptAhsQhnFv0nVndEo"></script>
+  <script src="js/presentation/exchange-ui.js?v=2.2.8" integrity="sha384-21MA/m/6rg1LsIZFsoAuqvhmWN3Y8seM2ZdIZHKOGEZ70CAjaeulE8mmIbSKmb1h"></script>
+  <script src="js/presentation/plan-blocks.js?v=2.2.8" integrity="sha384-SQl0uZdf+PtHrvvoSs1jaOc7AfiHQ0Ya0Xg2hZrtesp8JDda6Lv4hXFTHTz49p+1"></script>
+  <script src="js/presentation/plan-timeline.js?v=2.2.8" integrity="sha384-XccR9D5M8JUlh6XBhwvZKMhbTmNhj84+Ni21lw1rnzHWo5KkXzNYl7pynmxJtFVL"></script>
+  <script src="js/presentation/plan-map.js?v=2.2.8" integrity="sha384-moJ8fpaMtEe644aLUgtZGuvdUoG/ax/MK9VlZPw4TCtT/XomX3xjobLrKtRnm94d"></script>
+  <script src="js/presentation/route-map.js?v=2.2.8" integrity="sha384-j87WAiWOdi7HTCFWm0XWLG7jV7KT9R2JLOGoKKmEiPJh3CsZCYfDmI7hO896ksUY"></script>
+  <script src="js/presentation/lifetime-analytics.js?v=2.2.8" integrity="sha384-XnY1tdVYapJQw3lLhKkqDcKF3h6GAOG2reiPfz/1+IdqoKJb2YelleP4hY6p2SRK"></script>
+  <script src="js/presentation/hub-view.js?v=2.2.8" integrity="sha384-+vq3AZRVg4mRX44XKyWFn7MLDnNuZskoqGum7d4JdbvMdKJy3iarV81VN/dBUJgG"></script>
+  <script src="js/presentation/settings-ui.js?v=2.2.8" integrity="sha384-Q1Tkh0RkRZX57u6cdXCgU+s82Iku1KO9OD/BjN9s6Dg8OW3etymmGXXVsWbfbjcN"></script>
+  <script src="js/presentation/schedule-tuning-ui.js?v=2.2.8" integrity="sha384-7/ObhCAKJ4M2gWU8aG2kVA1lYwurmC8PSa+EtzfxIvuGB7pX+ibPWECnu3qW0yIZ"></script>
+  <script src="js/presentation/create-trip-ui.js?v=2.2.8" integrity="sha384-grGJopZB8QQaFNnR6pAIz8XfX5ryM2Wen2ZxGPvec7HgQwK4Ku5BW0nlZSe7YwIg"></script>
+  <script src="js/presentation/draft-studio-ui.js?v=2.2.8" integrity="sha384-FRYBodJrfRiQlWBAZS/twaoxaCxHUmjB77DVXvslmfQf8l9o3xu/cHPHO/dViDKZ"></script>
+  <script src="js/presentation/field-tools-ui.js?v=2.2.8" integrity="sha384-6hFyHsBDRisof8rW64wE6swEOs7uQBy7LwoUxkRviul9ps8dep80GVevprrZU/Mk"></script>
+  <script src="js/presentation/report-ui.js?v=2.2.8" integrity="sha384-mD+kK7LKx11U6I1RYb7/B+xCpsiyrqNEqaafGk7safVnyAdUKNDlDMLyzPJuQcAd"></script>
+  <script src="js/presentation/gist-sync-ui.js?v=2.2.8" integrity="sha384-TDkgCdrgsX6/2IizVyZOwC2kik/RKZyvJ/b6AUQXqfp05PsacI9ZznWjMrjUu+e4"></script>
+  <script src="js/presentation/ai-chat-ui.js?v=2.2.8" integrity="sha384-HE7Em3W+NDhx7gEsmrHSMnshy0Nhetk9gf1bBhlE52F5x+GgbL8JvU3YfeI3tQcz"></script>
+  <script src="js/presentation/companion-modals-ui.js?v=2.2.8" integrity="sha384-HeKInDyhz2I+s89xzk5VGFor7LVITnwZXlQVWQ8DLMwAWVHnLNJE0wOnaq87F8Yk"></script>
+  <script src="js/presentation/plan-guides.js?v=2.2.8" integrity="sha384-Eg0ooJHXflNMCbbk5sEJIg4VX2WigAkFB9GzPI7iT7q57s8L2TdNMYQxc9BWHb87"></script>
+  <script src="js/presentation/budget-ui.js?v=2.2.8" integrity="sha384-p+A7x64rZuPWhGaUzTMoNYo60aTQzp7UXhZzMfXABMyWqrG32b4LDPZ/SGwoEKjs"></script>
+  <script src="js/presentation/expense-analytics.js?v=2.2.8" integrity="sha384-GOo/a/N9uE2yr6Aw2Ju6sXiBr5VTaDbPb1nth/ElR4GDT1yPI0CfghLOB7DaN1Yp"></script>
+  <script src="js/presentation/expenses-tab.js?v=2.2.8" integrity="sha384-dFoKIs/B5CCctW17/wd1Kp0Kr6v9LXykyt/8yOknSEs3G9C7rnYam3VrTKE9ZaFg"></script>
+  <script src="js/presentation/journal-tab.js?v=2.2.8" integrity="sha384-wYGgHcCXYQ1gu1GC7aPEmaWfY9p2LtdIbY3seMd8Kyc0UncOzlN+RJSNguvZsEId"></script>
+  <script src="js/presentation/checklist-tab.js?v=2.2.8" integrity="sha384-ENgqtNcHd59KKTorCEZx/H/zUSfXi47RIM1X1F1E6tNPe5U4DKXginat44x1SDbL"></script>
+  <script src="js/presentation/expense-editor.js?v=2.2.8" integrity="sha384-PosLZVGcia3FlNTeQCWVw+mtgPsGaCJjpHKtrdFVXpaw5LYD+iQ/M5FYwMYy/HVY"></script>
 
   <!-- Knowledge Base Seed & Destination Knowledge Packs (DKP) -->
-  <script src="kb-travel.js?v=2.2.7" integrity="sha384-zxXc7MUMbmXkiaF3ymeLmVSiCyPRVfkUjSZetDVx41zrHGyPeSCN4TFpy5f1jNUd"></script>
+  <script src="kb-travel.js?v=2.2.8" integrity="sha384-zxXc7MUMbmXkiaF3ymeLmVSiCyPRVfkUjSZetDVx41zrHGyPeSCN4TFpy5f1jNUd"></script>
   <script src="js/destinations/destination-registry.js" integrity="sha384-PV7EnpqZusutqYxhFc0vICq72coA/C+TMYaBkk+BFy52dmgfk/RDzf/DAgW7dmvC"></script>
   <script src="js/destinations/pack-default.js" integrity="sha384-mCe4oKfrN+8fbLFCJJexsHJXBZkw6b6q1bOg5skoupZ9hXUrhZ92sTRRTF831vDt"></script>
-  <script src="js/destinations/pack-south-america.js?v=2.2.7" integrity="sha384-p6i8pSXkYDEndehBEqNlXK7ZIZia6Tsxw4TD2LUf7TJPUSlPd2AzXbp3wyyAvDG7"></script>
+  <script src="js/destinations/pack-south-america.js?v=2.2.8" integrity="sha384-p6i8pSXkYDEndehBEqNlXK7ZIZia6Tsxw4TD2LUf7TJPUSlPd2AzXbp3wyyAvDG7"></script>
   <script src="js/destinations/pack-yunnan.js" integrity="sha384-MIgviqt+QV/b06eH6w7DO42JTPFr7Q2kFTi8TRQT4MCouBcFBGiC7x1jnKgVatOX"></script>
-  <script src="js/destinations/emergency-contacts.js?v=2.2.7" integrity="sha384-q3IUPhGWY99DNBNM269wiapa6eQYahcwaro/PvPILVtAgkUM0pE23GI5E63eMLlN"></script>
-  <script src="js/infrastructure/storage/legacy-trip-repository.js?v=2.2.7" integrity="sha384-Jf2y8z7h6bwxOdkwZP0zMyhyG/ntcCrFco7a+mzgiFAtiCUE2uXU8Cc/MSjunorP"></script>
-  <script src="js/infrastructure/storage/idb-trip-repository.js?v=2.2.7" integrity="sha384-n7ndWoPUE3bipL9HvWWTfW8XPNZbDRmAWocUpRIyVM5HtGIIEqbkOK1e6InJY8c4"></script>
-  <script src="js/infrastructure/storage/trip-store.js?v=2.2.7" integrity="sha384-ftpferQ+1NXFRqMRZuHlz2wGUfEKk4GKeXEZzAs3FlsUmGfFdxcsSG6U5t4/B1Rb"></script>
-  <script src="js/infrastructure/storage/settings-repository.js?v=2.2.7" integrity="sha384-fp7ck757BhOA+Y2i/VoW21KRCkeMyb/G78wxwhZuReB2JbzcyTxBrLxGldhvw3n3"></script>
-  <script src="js/infrastructure/storage/journal-overflow-repository.js?v=2.2.7" integrity="sha384-uRxi9B+oBHCQ+aa8a6Wp72RAAeEuslXu5kZ+gf9Kvo22B3N6fr1XSkVnAV1X42yO"></script>
+  <script src="js/destinations/emergency-contacts.js?v=2.2.8" integrity="sha384-q3IUPhGWY99DNBNM269wiapa6eQYahcwaro/PvPILVtAgkUM0pE23GI5E63eMLlN"></script>
+  <script src="js/infrastructure/storage/legacy-trip-repository.js?v=2.2.8" integrity="sha384-Jf2y8z7h6bwxOdkwZP0zMyhyG/ntcCrFco7a+mzgiFAtiCUE2uXU8Cc/MSjunorP"></script>
+  <script src="js/infrastructure/storage/idb-trip-repository.js?v=2.2.8" integrity="sha384-n7ndWoPUE3bipL9HvWWTfW8XPNZbDRmAWocUpRIyVM5HtGIIEqbkOK1e6InJY8c4"></script>
+  <script src="js/infrastructure/storage/trip-store.js?v=2.2.8" integrity="sha384-ftpferQ+1NXFRqMRZuHlz2wGUfEKk4GKeXEZzAs3FlsUmGfFdxcsSG6U5t4/B1Rb"></script>
+  <script src="js/infrastructure/storage/settings-repository.js?v=2.2.8" integrity="sha384-fp7ck757BhOA+Y2i/VoW21KRCkeMyb/G78wxwhZuReB2JbzcyTxBrLxGldhvw3n3"></script>
+  <script src="js/infrastructure/storage/journal-overflow-repository.js?v=2.2.8" integrity="sha384-uRxi9B+oBHCQ+aa8a6Wp72RAAeEuslXu5kZ+gf9Kvo22B3N6fr1XSkVnAV1X42yO"></script>
 </head>
 <body class="min-h-screen flex flex-col font-sans transition-colors duration-200">
 
@@ -1607,7 +1609,7 @@
       <div class="app-brand flex items-center gap-2 sm:gap-2.5 min-w-0 cursor-pointer select-none" data-on-click="shell.switchView" data-view="hub">
         <img src="icons/sulsul_bear_mascot.png" class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl object-cover border border-[#e6e2d8] dark:border-stone-800 shadow-sm shrink-0" alt="Sulsul Travel">
           <h1 class="font-brand-script text-xl sm:text-2xl md:text-3xl font-bold tracking-normal text-[#1E2B24] dark:text-[#ededed] whitespace-nowrap leading-tight">Sulsul Travel</h1>
-            <button id="app-ver-badge" type="button" data-on-click="settings.openVersionHistory" class="theme-card-subtle font-mono" title="앱 버전과 업데이트 기록 보기">v2.2.7</button>
+            <button id="app-ver-badge" type="button" data-on-click="settings.openVersionHistory" class="theme-card-subtle font-mono" title="앱 버전과 업데이트 기록 보기">v2.2.8</button>
             <p id="header-trip-name" class="sr-only">A Deep Life Essay</p>
       </div>
 
@@ -1827,7 +1829,7 @@
       </div>
 
       <!-- 긴급 SOS 1-Tap 다이얼 및 소통 버튼 -->
-      <button id="ws-btn-sos" onclick="openSosEmergencyModal()" class="px-2 sm:px-2.5 py-1.5 rounded-xl bg-rose-500/15 hover:bg-rose-500/25 border border-rose-500/40 text-rose-500 dark:text-rose-400 text-xs font-black flex items-center gap-1 transition shadow-sm cursor-pointer shrink-0" title="긴급 SOS 비상 연락망 & 약국·병원 의사소통 카드">
+      <button id="ws-btn-sos" type="button" data-on-click="companionModals.openSos" class="px-2 sm:px-2.5 py-1.5 rounded-xl bg-rose-500/15 hover:bg-rose-500/25 border border-rose-500/40 text-rose-500 dark:text-rose-400 text-xs font-black flex items-center gap-1 transition shadow-sm cursor-pointer shrink-0" title="긴급 SOS 비상 연락망 & 약국·병원 의사소통 카드">
         <i class="fa-solid fa-triangle-exclamation text-rose-500 text-[11px] animate-pulse"></i>
         <span>SOS</span>
       </button>
@@ -1836,7 +1838,7 @@
       <details class="travel-tools">
         <summary>여행 도구 <i class="fa-solid fa-ellipsis" aria-hidden="true"></i></summary>
         <div>
-        <button onclick="openSosEmergencyModal();this.closest('details').open=false" class="px-2.5 sm:px-3 py-1.5 rounded-xl bg-rose-500/15 text-rose-500 dark:text-rose-400 border border-rose-500/30 text-xs font-bold flex items-center gap-1.5 shadow-sm transition cursor-pointer" title="오프라인 긴급 비상 SOS & 약국/병원">
+        <button type="button" data-on-click="companionModals.openSos" class="px-2.5 sm:px-3 py-1.5 rounded-xl bg-rose-500/15 text-rose-500 dark:text-rose-400 border border-rose-500/30 text-xs font-bold flex items-center gap-1.5 shadow-sm transition cursor-pointer" title="오프라인 긴급 비상 SOS & 약국/병원">
           <i class="fa-solid fa-truck-medical text-[12px]"></i>
           <span>긴급 SOS</span>
         </button>
@@ -1844,7 +1846,7 @@
           <i class="fa-solid fa-microphone text-[12px]"></i>
           <span>퀵 캡슐</span>
         </button>
-        <button onclick="openStoryMagazineModal();this.closest('details').open=false" class="px-2.5 sm:px-3 py-1.5 rounded-xl theme-card-subtle text-xs font-bold flex items-center gap-1.5 shadow-sm transition cursor-pointer text-sky-400 hover:border-sky-500/40" title="여행 에디토리얼 스토리 매거진 뷰 & PDF">
+        <button type="button" data-on-click="companionModals.openMagazine" class="px-2.5 sm:px-3 py-1.5 rounded-xl theme-card-subtle text-xs font-bold flex items-center gap-1.5 shadow-sm transition cursor-pointer text-sky-400 hover:border-sky-500/40" title="여행 에디토리얼 스토리 매거진 뷰 & PDF">
           <i class="fa-solid fa-newspaper text-[12px]"></i>
           <span>매거진</span>
         </button>
@@ -3017,14 +3019,14 @@
   <!-- 현지어 기사님 카드 모달 (MODAL-TAXI-CARD) -->
   <!-- ========================================== -->
   <div id="modal-taxi-card" class="sheet-container sheet-closed">
-    <div class="sheet-scrim" onclick="closeModal('modal-taxi-card')"></div>
+    <div class="sheet-scrim" data-on-click="shell.closeModal" data-modal="modal-taxi-card"></div>
     <div class="sheet-box sheet-scroll-layout max-w-lg">
       <div class="sheet-sticky-header flex items-center justify-between">
         <h3 class="text-base font-black text-white flex items-center gap-2">
           <i class="fa-solid fa-taxi text-amber-400"></i>
           <span>현지어 기사님 카드</span>
         </h3>
-        <button onclick="closeModal('modal-taxi-card')" class="tap-target text-slate-400 hover:text-white text-base" aria-label="기사님 카드 닫기">✕</button>
+        <button type="button" data-on-click="shell.closeModal" data-modal="modal-taxi-card" class="tap-target text-slate-400 hover:text-white text-base" aria-label="기사님 카드 닫기">✕</button>
       </div>
       <div class="sheet-scroll-body space-y-4" id="taxi-card-content">
         <!-- 동적 렌더링 영역: renderTaxiCardContent() -->
@@ -3036,14 +3038,14 @@
   <!-- 긴급 SOS 비상 연락망 & 병원·약국 카드 (MODAL-SOS-EMERGENCY) -->
   <!-- ========================================== -->
   <div id="modal-sos-emergency" class="sheet-container sheet-closed">
-    <div class="sheet-scrim" onclick="closeModal('modal-sos-emergency')"></div>
+    <div class="sheet-scrim" data-on-click="shell.closeModal" data-modal="modal-sos-emergency"></div>
     <div class="sheet-box sheet-scroll-layout max-w-lg">
       <div class="sheet-sticky-header flex items-center justify-between">
         <h3 class="text-base font-black text-rose-500 flex items-center gap-2">
           <i class="fa-solid fa-triangle-exclamation text-rose-500 animate-pulse"></i>
           <span>오프라인 긴급 SOS & 약국·병원 카드</span>
         </h3>
-        <button onclick="closeModal('modal-sos-emergency')" class="tap-target text-slate-400 hover:text-white text-base" aria-label="긴급 SOS 닫기">✕</button>
+        <button type="button" data-on-click="shell.closeModal" data-modal="modal-sos-emergency" class="tap-target text-slate-400 hover:text-white text-base" aria-label="긴급 SOS 닫기">✕</button>
       </div>
       <div class="sheet-scroll-body space-y-4" id="sos-emergency-content">
         <!-- 동적 렌더링 영역: renderSosEmergencyContent() -->
@@ -3074,7 +3076,7 @@
   <!-- 여행 에디토리얼 스토리 매거진 & PDF 제본 뷰 (MODAL-STORY-MAGAZINE) -->
   <!-- ========================================== -->
   <div id="modal-story-magazine" class="sheet-container sheet-closed">
-    <div class="sheet-scrim no-print" onclick="closeModal('modal-story-magazine')"></div>
+    <div class="sheet-scrim no-print" data-on-click="shell.closeModal" data-modal="modal-story-magazine"></div>
     <div class="sheet-box sheet-scroll-layout max-w-2xl sm:max-w-3xl">
       <div class="sheet-sticky-header flex items-center justify-between no-print">
         <h3 class="text-base font-black text-amber-400 flex items-center gap-2">
@@ -3082,10 +3084,10 @@
           <span>여행 에디토리얼 매거진</span>
         </h3>
         <div class="flex items-center gap-2">
-          <button type="button" onclick="printStoryMagazine()" class="px-3 py-1.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 text-xs font-black flex items-center gap-1.5 transition cursor-pointer shadow">
+          <button type="button" data-on-click="companionModals.printMagazine" class="px-3 py-1.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 text-xs font-black flex items-center gap-1.5 transition cursor-pointer shadow">
             <i class="fa-solid fa-print"></i> <span>A4 PDF / 인쇄</span>
           </button>
-          <button onclick="closeModal('modal-story-magazine')" class="tap-target text-slate-400 hover:text-white text-base" aria-label="매거진 닫기">✕</button>
+          <button type="button" data-on-click="shell.closeModal" data-modal="modal-story-magazine" class="tap-target text-slate-400 hover:text-white text-base" aria-label="매거진 닫기">✕</button>
         </div>
       </div>
       <div class="sheet-scroll-body p-2 sm:p-4" id="story-magazine-content">
@@ -4812,7 +4814,9 @@
 
       <!-- 버전 목록 스크롤 영역 (독립 스크롤 컨테이너로 Flexbox 압축 버그 영구 척결) -->
       <div class="overflow-y-auto flex-1 min-h-0 space-y-3.5 pr-1.5 custom-scrollbar">
-        <!-- v2.2.7 (Current) -->
+        <!-- v2.2.8 (Current) -->
+        <section class="companion-context"><h3 class="font-bold">v2.2.8 · 렌더 중 저장·전역 상태 제거 및 기사님 카드·긴급 SOS·매거진 분리</h3><p class="text-xs">2026-11-26 · st-shell-v2.2.8</p><p class="text-xs leading-relaxed">큰 계획 화면을 그리는 도중 저장하던 호출(saveTrips)을 결정적 블록 ID 전환으로 대체해 없애 ASYNC01 예외를 0건으로 줄이고, 전역 플래그·타이머(window.__spotReorderModeActive·window.__companionHudTimer)를 모듈 상태로 정리했습니다. 현지어 기사님 카드(#modal-taxi-card), 긴급 SOS(#modal-sos-emergency), 스토리 매거진(#modal-story-magazine)을 별도 파일로 옮기고 주소 복사 onclick 따옴표 주입(XSS)·빈 일차 이전 목적지 잔류·SOS 복사 버튼 연타 고착·매거진 사진 URL 검증 누락을 함께 고쳤습니다.</p></section>
+        <!-- v2.2.7 -->
         <section class="companion-context"><h3 class="font-bold">v2.2.7 · PDF 완주 보고서·GitHub Gist 백업·AI 채팅 분리</h3><p class="text-xs">2026-11-26 · st-shell-v2.2.7</p><p class="text-xs leading-relaxed">인생 여행 완주 보고서(#modal-pdf-report), GitHub Gist 개인 스냅샷 백업, AI 여행 비서 채팅(#modal-ai-chat)을 별도 파일로 옮기고 전역 타이머(window.__toastTimer)를 정리했습니다. 외화 여행 보고서에서 목표 예산이 원화 환산 없이 생숫자(₩2,000)로 표시되거나 제목 누락 시 HTML 저장이 오류로 중단되던 문제, Gist 백업 연타 시 중복 생성 및 Gist URL 미인식·토스트 이스케이프 누락, AI 채팅 연타 중복 요청과 DOM 재파싱을 함께 고쳤습니다.</p></section>
         <!-- v2.2.6 -->
         <section class="companion-context"><h3 class="font-bold">v2.2.6 · 현장 도구(빠른 환율·서바이벌 스페인어·GPS 레이더) 분리</h3><p class="text-xs">2026-11-26 · st-shell-v2.2.6</p><p class="text-xs leading-relaxed">현지 통화 빠른 환율 계산기, 서바이벌 스페인어 10문장, 실시간·오프라인 GPS 스팟 레이더를 별도 파일로 옮겼습니다. GPS 모의 위치 선택기에서 일반 여행 도시를 골라도 서울 좌표로 고정되거나 재렌더 시 위치가 초기화되던 오류, GPS 옵션·주변 스팟 및 스페인어 복사 토스트의 HTML/따옴표 주입 취약점, 빠른 환율 계산기에서 현재 여행 통화가 빠지거나 MEP 토글 상태가 실제 계산과 어긋나고 음수가 입력되던 문제를 함께 고쳤습니다.</p></section>
@@ -6389,7 +6393,7 @@
     window.showToast = showToast;
 
     // 앱 버전 및 글로벌 네임스페이스 (Sulsul-Travel Invariant Rule R-10, R-11, R-12, R-13, R-14, R-15, R-16)
-    const APP_VER = '2.2.7';
+    const APP_VER = '2.2.8';
 
     // 3-Way 테마 엔진(setTheme·toggleTheme·updateThemeUi)은 js/presentation/settings-ui.js(SulsulTravel.SettingsUI)로 옮겼다(v2.2.1, 4단계).
 
@@ -8265,7 +8269,7 @@
 
     async function getAiOrchestrator() {
       if (!aiOrchestratorPromise) {
-        aiOrchestratorPromise = import('./js/application/orchestration.mjs?v=2.2.7').then(({ Orchestrator }) =>
+        aiOrchestratorPromise = import('./js/application/orchestration.mjs?v=2.2.8').then(({ Orchestrator }) =>
           new Orchestrator({
             online: job => Boolean(job?.input?.localDraft) || navigator.onLine,
             timeoutMs: 65000,

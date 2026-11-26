@@ -196,6 +196,12 @@ flowchart TD
 - **검증**: 단위 257개(새 `trip-store.test.mjs` 8개 — 느린 비동기 백엔드에서 연달아 맡긴 저장이 모두 남는지 포함), 브라우저 회귀 27종, `tools-verify.ps1` 통과. 저장 실패를 일부러 만드는 브라우저 검사 세 곳은 결과를 저장보다 먼저 읽어, 실패 경로를 검사하지 않은 채 통과하고 있었다. 저장을 기다리게 고쳤다(실록 112호).
 - **남은 3b(2차)**: 여행 자료를 IndexedDB로 옮기는 일. 백엔드를 `TripStore` 아래에서 바꾸고, 원문 보관 → 이전 → 다시 읽어 대조 → 채택 순서로 옮긴다. 옛 문서는 다른 창의 구버전이 덮어쓰지 못하게 표시만 바꿔 남긴다. 다른 창 충돌 판정은 문서 원문 비교 대신 저장소의 버전 번호로 한다. 브라우저 검사의 `localStorage` 직접 읽기를 저장소 읽기로 바꾸는 작업이 함께 필요하다.
 
+## 36. 4단계 진행 결과 (v2.2.8) — 화면 분리 19차: 동행 현장 모달(기사님·SOS·매거진) 및 렌더 중 저장·전역 제거
+
+- **옮긴 것**: `js/presentation/companion-ui.js`의 현지어 기사님 카드(`#modal-taxi-card`), 긴급 SOS(`#modal-sos-emergency`), 스토리 매거진(`#modal-story-magazine`)(약 420줄)을 `js/presentation/companion-modals-ui.js`(`SulsulTravel.CompanionModals`)로 옮겼다. `PlanBlocks.ensureStructure()`의 결정적 블록 ID 전환과 함께 `renderCompanionPlan()` 안의 `void saveTrips({ bump: false })`를 제거해 `ASYNC01`을 `1 → 0`(완전 해소), `WRITE01`을 `13 → 12`로 낮췄고, `window.__spotReorderModeActive`(`SpotRealignmentUI.isReorderMode()`)와 `window.__companionHudTimer`(지역 IIFE)를 제거해 `GLOBAL01`을 `4 → 2`로 낮췄다. `index.html`(10곳)과 `companion-ui.js`(17곳)의 인라인 처리기 27곳 → `companionModals.*`·`shell.closeModal`(UI01 `200 → 173`곳, `index.html` `60 → 50`곳, `companion-ui.js` `67 → 50`곳). `HTML01`은 `companion-ui.js` `94 → 71`곳, 새 파일 0곳이다.
+- **검증에서 고친 것**: 기사님 카드 복사 버튼 `onclick` 따옴표 주입(XSS) 및 빈 일차 호출 시 이전 목적지 잔류, 긴급 SOS 복사 버튼 연타 시 `'복사됨'` 영구 고착 및 잘못된 언어/카테고리 폴백, 매거진 이미지 URL 검증 누락(`TravelStory.safePhoto` 적용)(실록 133호). 모두 v2.2.7 코드에서 재현한 뒤 고쳤다.
+- **다음**: `companion-ui.js`의 나머지 구역(퀵 캡슐·오늘 HUD·계획 상세)과 `index.html` 잔여 구역(공유/협업/영수증 OCR/음성 안내 등) 계속 분리.
+
 ## 35. 4단계 진행 결과 (v2.2.7) — 화면 분리 18차: PDF 보고서·Gist 백업·AI 채팅
 
 - **옮긴 것**: `index.html`의 `#modal-pdf-report`(약 195줄), GitHub Gist 개인 백업/복원(약 160줄), `#modal-ai-chat`(약 130줄)을 `js/presentation/report-ui.js`(`SulsulTravel.ReportUI`), `js/presentation/gist-sync-ui.js`(`SulsulTravel.GistSync`), `js/presentation/ai-chat-ui.js`(`SulsulTravel.AiChat`)로 분리하고 `window.__toastTimer`를 지역 변수로 옮겼다(`GLOBAL01` 5 → 4개). `index.html`의 인라인 처리기 18곳 → `report.*`·`gistSync.*`·`aiChat.*`·`shell.closeModal`(UI01 218 → 200곳, `index.html` 78 → 60곳). HTML01은 `index.html` 7 → 4곳, 새 파일 3개 모두 0곳이다.

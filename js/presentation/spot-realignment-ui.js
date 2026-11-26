@@ -2,7 +2,7 @@
   'use strict';
 
   const modalId = 'modal-spot-realignment';
-  root.__spotReorderModeActive = false;
+  let spotReorderModeActive = false;
   root.__spotRealignmentPending = null;
 
   function notify(message, duration) {
@@ -35,7 +35,7 @@
   }
 
   function toggleSpotReorderMode() {
-    root.__spotReorderModeActive = !root.__spotReorderModeActive;
+    spotReorderModeActive = !spotReorderModeActive;
     const trip = activeTrip();
     const state = appState();
     if (trip && typeof root.renderPlanDetail === 'function' && state?.activeTab === 'plan') {
@@ -44,7 +44,7 @@
     if (typeof root.renderCompanionToday === 'function' && state?.activeTab === 'today') {
       root.renderCompanionToday();
     }
-    notify(root.__spotReorderModeActive ? '스팟 순서 편집 모드가 켜졌습니다.' : '스팟 순서 편집 모드가 종료되었습니다.');
+    notify(spotReorderModeActive ? '스팟 순서 편집 모드가 켜졌습니다.' : '스팟 순서 편집 모드가 종료되었습니다.');
   }
 
   async function moveCompanionSpotOrder(dayIndex, spotIndex, direction, event) {
@@ -249,6 +249,11 @@
     return true;
   }
 
+  const T = root.SulsulTravel = root.SulsulTravel || {};
+  T.SpotRealignmentUI = Object.freeze({
+    isReorderMode: () => spotReorderModeActive,
+    toggleReorderMode: toggleSpotReorderMode
+  });
   root.toggleSpotReorderMode = toggleSpotReorderMode;
   root.moveCompanionSpotOrder = moveCompanionSpotOrder;
   root.realignSpotSchedule = realignSpotSchedule;

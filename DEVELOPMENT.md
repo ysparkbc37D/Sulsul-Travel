@@ -73,13 +73,14 @@
 | `js/presentation/report-ui.js` | 인생 여행 완주 보고서·포토북 출력(v2.2.7, `SulsulTravel.ReportUI`): `#modal-pdf-report`, 원화 환산 예산/잔액, 항목별 지출 분포, `TravelStory` 렌더링, 인쇄 및 안전한 HTML 파일 다운로드(`report.*`) |
 | `js/presentation/gist-sync-ui.js` | GitHub Gist 개인 스냅샷 백업·복원(v2.2.7, `SulsulTravel.GistSync`): 설정 저장·URL ID 정규화·중복 백업/불러오기 잠금·`TravelBackupUI` 미리보기 연동(`gistSync.*`) |
 | `js/presentation/ai-chat-ui.js` | AI 여행 비서 챗봇(v2.2.7, `SulsulTravel.AiChat`): `#modal-ai-chat`, 중복 전송 잠금·`insertAdjacentHTML` DOM 보존·Enter 키 위임·오류 상태별 안내(`aiChat.*`) |
+| `js/presentation/companion-modals-ui.js` | 동행 현장 모달 3종(v2.2.8, `SulsulTravel.CompanionModals`): 현지어 기사님 카드(`#modal-taxi-card`, XSS·빈 일차 잔류 방지), 긴급 SOS(`#modal-sos-emergency`, 연타 복사 복원·언어/카테고리 폴백), 스토리 매거진(`#modal-story-magazine`, `safePhoto` 이미지 검증, `companionModals.*`) |
 | `js/presentation/plan-guides.js` | 계획 탭 예약 가이드·도시 가이드(v2.1.4, `SulsulTravel.PlanGuides`): 남미 팩 예약 체크리스트(팩 `bookings.items`, 완료는 `bookingStatuses`), 그 밖의 여행은 준비물 점검(`checklist.*` 동작), 남미·운남 거점 도시, 스팟 모아보기. 그리는 동안 여행 자료를 바꾸지 않고 모든 값을 escape한다 |
 | `js/presentation/budget-ui.js` | 초기 자산·예산 창과 전세계 통화 선택 창(v2.1.2). 창의 입력과 통화 목록은 파일 안의 초안에만 두고 저장 버튼의 `commitTrip` 한 번으로 쓴다. 통화 추가는 바로 저장하고 열린 초기 자산 창·지출 입력창을 갱신한다 |
 | `js/presentation/expense-analytics.js` | 사용내역 통계(v2.1.2): 카드·현금, 카테고리, 수지와 SVG 도넛 차트. 지출 카테고리 목록(`SulsulTravel.ExpenseAnalytics.CATEGORIES`)의 유일한 정의 |
 | `js/presentation/shell-actions.js` | 여러 화면이 함께 쓰는 셸 동작(v2.1.1, v2.2.1): `shell.closeModal`(`data-modal`), `shell.switchView`(`data-view`) |
 | `js/presentation/journal-tab.js` | 기록 탭(v2.1.0): 날짜 고르기, 하루 회고 글·사진 저장, 사진 크게 보기·안전 삭제, 저장 대기 사진 재시도, 글·사진 초안 파일. 순간 기록 목록은 `moment-journal.js`가 그린다 |
 | `js/presentation/checklist-tab.js` | 준비물 화면(v2.0.9, 4단계 첫 분리): 분류·D-Day 보기, 체크·전체 완료, 추가·상세·안전 삭제, 예약 가이드의 준비물 체크 |
-| `js/presentation/companion-ui.js` | 오늘 화면·큰 계획 카드, SOS, 퀵 캡슐(순간 기록 입력), 매거진(TravelStory 보기) |
+| `js/presentation/companion-ui.js` | 오늘 화면·큰 계획 카드, 퀵 캡슐(순간 기록 입력). 기사님 카드·긴급 SOS·스토리 매거진은 `companion-modals-ui.js`로 분리(v2.2.8) |
 | `sw.js` | 앱 셸 및 오프라인 에셋 캐시 |
 
 새 도메인 규칙은 DOM과 저장소에서 분리합니다. 기존 기능을 옮길 때는 데이터 계약과 오류 경계를 먼저 만든 뒤 화면 연결을 바꿉니다. 모든 화면을 한 번에 재작성하지 않습니다.

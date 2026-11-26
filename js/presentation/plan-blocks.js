@@ -81,7 +81,7 @@
       if (!day.planBlockId) {
         day.planBlockId = previousId && previousPlace === place
           ? previousId
-          : `pb_${String(trip.id || 'trip').replace(/[^a-zA-Z0-9_-]/g, '').slice(0, 30)}_${dayIndex}_${Date.now().toString(36)}`;
+          : `pb_${String(trip.id || 'trip').replace(/[^a-zA-Z0-9_-]/g, '').slice(0, 30)}_${dayIndex}`;
         changed = true;
       }
       previousPlace = place;

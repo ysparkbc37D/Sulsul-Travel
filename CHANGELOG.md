@@ -26,6 +26,16 @@
 - [ ] 항공권/호텔 예약 바우처 PDF 자동 파싱 일정 등록
 - [ ] 여행 동행자 실시간 음성 메모 AI 다이어리 자동 변환
 
+## [v2.2.8] - 2026-11-26
+
+- 화면 분리(4단계) 19차(렌더 중 저장·전역 상태 제거 및 기사님 카드·긴급 SOS·스토리 매거진 분리)입니다. `js/presentation/companion-ui.js`의 현지어 기사님 카드(`#modal-taxi-card`), 긴급 SOS(`#modal-sos-emergency`), 스토리 매거진(`#modal-story-magazine`)(약 420줄)을 `js/presentation/companion-modals-ui.js`(`SulsulTravel.CompanionModals`)로 옮겼습니다.
+- **렌더 중 저장 및 전역 오염 제거**: `PlanBlocks.ensureStructure()`의 블록 ID 생성을 타임스탬프 없는 결정적 ID로 전환하고 `renderCompanionPlan()`의 `void saveTrips({ bump: false })`를 제거해 `ASYNC01` 허용 목록을 `1 → 0`(완전 해소), `WRITE01`을 `13 → 12`로 낮췄습니다. `window.__spotReorderModeActive`(`SpotRealignmentUI.isReorderMode()` 전환)와 `window.__companionHudTimer`(IIFE 지역 변수화)를 모두 제거해 `GLOBAL01`을 `4 → 2`로 낮췄습니다.
+- **동행 모달 보안·상태 결함 수정**:
+  - 기사님 카드 주소 복사의 `onclick="copyTaxiCardAddress('${escapeHtml(address)}...')"` 따옴표 주입(XSS)을 `data-on-click="companionModals.copyTaxi"`·`data-address` 위임으로 차단하고, 빈 일차 호출 시 이전 목적지가 모달에 그대로 남던 문제를 빈 상태 안내 렌더로 고쳤습니다(v2.2.7에서 재현).
+  - 긴급 SOS 복사 버튼(`copySosPhraseText`) 연타 시 `'복사됨'`이 원본으로 캡처돼 버튼이 영구 고착되던 결함을 요소별 `WeakMap` 복원 타이머로 고치고, 잘못된 언어/카테고리/증상 ID 폴백 및 `aria-pressed` 속성을 보강했습니다(v2.2.7에서 재현).
+  - 스토리 매거진(`renderStoryMagazineContent`) 대표/일차 이미지에 `TravelStory.safePhoto` URL 검증을 적용해 위험한 스킴(`javascript:`) 출력을 차단했습니다.
+- `index.html`(10곳)과 `companion-ui.js`(17곳)의 인라인 이벤트 처리기 27곳을 `companionModals.*`·`shell.closeModal`로 전환해 `UI01` 기준을 `200 → 173`곳(`index.html` 60 → 50곳, `companion-ui.js` 67 → 50곳), `HTML01`을 `companion-ui.js` `94 → 71`곳(새 파일 0곳)으로 낮췄습니다. 전용 브라우저 검사 `tests/companion-modals.browser.cjs`(4개 시나리오)를 추가했습니다.
+
 ## [v2.2.7] - 2026-11-26
 
 - 화면 분리(4단계) 18차(PDF 완주 보고서·GitHub Gist 백업·AI 여행 비서 채팅 및 전역 토스트 타이머 정리)입니다. `index.html`의 `#modal-pdf-report`(약 195줄), GitHub Gist 백업/복원(약 160줄), `#modal-ai-chat`(약 130줄)을 각각 `js/presentation/report-ui.js`(`SulsulTravel.ReportUI`), `js/presentation/gist-sync-ui.js`(`SulsulTravel.GistSync`), `js/presentation/ai-chat-ui.js`(`SulsulTravel.AiChat`)로 분리하고 `window.__toastTimer` 전역을 지역 변수로 정리했습니다(`GLOBAL01` 5 → 4개).
