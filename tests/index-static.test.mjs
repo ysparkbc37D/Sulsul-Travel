@@ -21,6 +21,7 @@ const settingsUi = readFileSync(new URL('../js/presentation/settings-ui.js', imp
 const scheduleTuningUi = readFileSync(new URL('../js/presentation/schedule-tuning-ui.js', import.meta.url), 'utf8');
 const createTripUi = readFileSync(new URL('../js/presentation/create-trip-ui.js', import.meta.url), 'utf8');
 const draftStudioUi = readFileSync(new URL('../js/presentation/draft-studio-ui.js', import.meta.url), 'utf8');
+const fieldToolsUi = readFileSync(new URL('../js/presentation/field-tools-ui.js', import.meta.url), 'utf8');
 const packSa = readFileSync(new URL('../js/destinations/pack-south-america.js', import.meta.url), 'utf8');
 const packageMetadata = JSON.parse(readFileSync(new URL('../package.json', import.meta.url), 'utf8'));
 const backupUi = readFileSync(new URL('../js/presentation/travel-backup-ui.js', import.meta.url), 'utf8');
@@ -407,10 +408,10 @@ test('v1.8.4 6 key UI/UX convenience features remain available', () => {
   assert.doesNotMatch(planTimeline + companion, /쾌청 18~24°C|쾌청 온화|해발 0~50m/);
 
   // 4. Quick currency calculator remains available from the workspace action
-  assert.match(html, /onclick="openQuickCurrencyCalc\(\)"[\s\S]{0,500}<i class="fa-solid fa-calculator/);
+  assert.match(html, /data-on-click="fieldTools\.openCurrency"[\s\S]{0,500}<i class="fa-solid fa-calculator/);
   assert.doesNotMatch(html, /btn-floating-quick-calc/);
   assert.match(html, /modal-quick-currency/);
-  assert.match(html, /openQuickCurrencyCalc/);
+  assert.match(fieldToolsUi, /function openQuickCurrencyCalc\(/);
   assert.match(html, /quick-calc-chk-mep/);
 
   // 5. Transit segment card & Google Maps directions

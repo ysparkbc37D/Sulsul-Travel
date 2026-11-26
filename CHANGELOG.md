@@ -26,6 +26,14 @@
 - [ ] 항공권/호텔 예약 바우처 PDF 자동 파싱 일정 등록
 - [ ] 여행 동행자 실시간 음성 메모 AI 다이어리 자동 변환
 
+## [v2.2.6] - 2026-11-26
+
+- 화면 분리(4단계) 17차(현장 도구 모음 — 빠른 환율 계산기·서바이벌 스페인어·실시간/오프라인 GPS 스팟 레이더)입니다. `index.html`의 `#modal-quick-currency`, `#modal-survival-spanish`, `#gps-radar-card` 제어(약 435줄)를 `js/presentation/field-tools-ui.js`(`SulsulTravel.FieldTools`)로 옮겼습니다.
+- **보안(XSS 차단)**: GPS 모의 위치 `<option>`의 도시명 미이스케이프 DOM 주입, 주변 스팟 알약의 `onclick="updateGpsRadarUI(..., '${s.name}')"` 따옴표 코드 실행, 서바이벌 스페인어 `copySpanishText`의 `showToast`(`innerHTML`) 태그 삽입 취약점을 모두 `data-on-click`·`data-*` 위임과 `escapeHtml`로 차단했습니다(v2.2.5에서 재현).
+- **GPS 레이더 좌표·상태·보호 보강**: 일반 여행의 `city_0` 모의 위치가 항상 서울(`37.5665, 126.9780`)로 떨어지던 결함을 실제 여행 스팟·`RouteMap.CITY_GEO_COORDS`·`SulsulGeo` 좌표 해석으로 수정했고, `updateGpsRadarUI`가 `State.gps.tripId`를 누락해 재렌더마다 위치가 초기화되던 결함을 고쳤습니다(v2.2.5에서 재현). `addGpsSpotToActiveDay`에 `requireSharedPlanEdit()`·연타 잠금·오늘 일차 우선 배치를 적용하고 Google Maps 열기에 `noopener,noreferrer`를 추가했습니다.
+- **빠른 환율 계산기 정확성**: 활성 여행 통화(예: `JPY`)를 자동으로 칩 상단에 포함·기본 선택하고, 열 때 `#quick-calc-chk-mep` 체크박스를 `State.isMepEnabled`와 동기화하며, 음수 입력은 `0`원으로 클램프하고 통화 칩에 `aria-pressed`를 동기화했습니다(v2.2.5에서 재현).
+- `index.html`의 인라인 이벤트 처리기 29곳을 `fieldTools.*`·`shell.closeModal`로 전환해 `UI01` 기준을 247 → 218곳(`index.html` 107 → 78곳), `HTML01`을 `index.html` 21 → 7곳(새 파일 0곳)으로 낮췄습니다. 전용 브라우저 검사 `tests/field-tools.browser.cjs`(2개 시나리오)를 추가했습니다.
+
 ## [v2.2.5] - 2026-11-26
 
 - 화면 분리(4단계) 16차(여행 설정·일정 초안 편집 스튜디오)입니다. `index.html`의 `#modal-ai-trip` 제어와 `draftStudioState`·`openTripDraftStudio`·`saveDraftStudioSettingsOnly`·`executeDraftStudioGeneration` 등 약 675줄을 `js/presentation/draft-studio-ui.js`(`SulsulTravel.DraftStudio`)로 옮겼습니다.
