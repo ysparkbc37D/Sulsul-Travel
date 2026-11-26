@@ -138,7 +138,7 @@ const fixture=()=>({id:'structural-trip',title:'구조 검증 가상 여행',sta
     await check('Gist fetch 대기 중 직접 저장한 새 글은 오래된 원격 복원에 덮이지 않는다',async api=>{
       await api.seed();const backup=await api.page.evaluate(async()=>JSON.parse((await collectTravelBackup()).json));let release,started;
       const called=new Promise(resolve=>{started=resolve;});await api.page.route('https://api.github.com/gists/**',async route=>{started();await new Promise(resolve=>{release=resolve;});await route.fulfill({status:200,contentType:'application/json',body:JSON.stringify({files:{'sulsul_travel_data.json':{content:JSON.stringify(backup)}}})});});
-      await api.gistSettings();await api.page.evaluate(()=>{window.structuralPullResult=null;const original=syncFromGist;document.getElementById('btn-gist-pull').onclick=()=>original().then(result=>{structuralPullResult=result;});});
+      await api.gistSettings();await api.page.evaluate(()=>{window.structuralPullResult=null;const btn=document.getElementById('btn-gist-pull');btn.removeAttribute('data-on-click');btn.onclick=()=>SulsulTravel.GistSync.pull().then(result=>{structuralPullResult=result;});});
       await api.page.locator('#btn-gist-pull').tap();await called;await api.page.evaluate(()=>closeModal('modal-settings',true));
       await api.saveJournal('원격 백업을 읽는 동안 새로 저장한 글');const changed=await api.state();release();await api.page.waitForFunction(()=>structuralPullResult!==null);
       assert.equal(await api.page.evaluate(()=>structuralPullResult),false);assert.deepEqual(await api.state(),changed);assert.equal(await api.page.evaluate(()=>TravelBackupUI.pending),null);

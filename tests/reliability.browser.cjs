@@ -37,7 +37,7 @@ const server=http.createServer((req,res)=>{
    const metadata=getActiveTrip().planBlockMeta.b1.notes;
    const file=new File([JSON.stringify(SulsulTravel.TripTransfer.create(t,{},APP_VER))],'trip.json',{type:'application/json'});
    await importTravelSnapshotFile({target:{files:[file],value:'trip.json'}});const fileImported=State.trips.length===after+1;
-   const reportTrip=JSON.parse(JSON.stringify(t));reportTrip.title='<span data-probe="title">문자열</span>';renderPdfReport(reportTrip);
+   const reportTrip=JSON.parse(JSON.stringify(t));reportTrip.title='<span data-probe="title">문자열</span>';SulsulTravel.ReportUI.render(reportTrip);
    const report=document.getElementById('pdf-report-content');
    const reportSafe=!report.querySelector('[data-probe]'),reportText=report.textContent;
    await copyTravelSnapshotLink();const localhostWarning=document.getElementById('share-feedback').textContent.includes('내 컴퓨터');

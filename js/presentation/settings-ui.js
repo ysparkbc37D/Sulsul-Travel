@@ -192,8 +192,8 @@
     const currentTheme = document.documentElement.getAttribute('data-theme') || 'modern';
     updateThemeUi(currentTheme);
     updateGeminiKeyUi();
-    if (typeof updateGithubSyncUi === 'function') {
-      updateGithubSyncUi();
+    if (T.GistSync && typeof T.GistSync.updateUi === 'function') {
+      T.GistSync.updateUi();
     }
     updatePwaUiState();
     switchSettingsTab(defaultTab || 'theme');

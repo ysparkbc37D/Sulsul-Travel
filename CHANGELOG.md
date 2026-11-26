@@ -26,6 +26,14 @@
 - [ ] 항공권/호텔 예약 바우처 PDF 자동 파싱 일정 등록
 - [ ] 여행 동행자 실시간 음성 메모 AI 다이어리 자동 변환
 
+## [v2.2.7] - 2026-11-26
+
+- 화면 분리(4단계) 18차(PDF 완주 보고서·GitHub Gist 백업·AI 여행 비서 채팅 및 전역 토스트 타이머 정리)입니다. `index.html`의 `#modal-pdf-report`(약 195줄), GitHub Gist 백업/복원(약 160줄), `#modal-ai-chat`(약 130줄)을 각각 `js/presentation/report-ui.js`(`SulsulTravel.ReportUI`), `js/presentation/gist-sync-ui.js`(`SulsulTravel.GistSync`), `js/presentation/ai-chat-ui.js`(`SulsulTravel.AiChat`)로 분리하고 `window.__toastTimer` 전역을 지역 변수로 정리했습니다(`GLOBAL01` 5 → 4개).
+- **PDF 완주 보고서 예산·안전성 수정**: 외화 여행(예: `EUR 2,000`)에서 목표 예산이 원화 환산 없이 `₩2,000`으로 표시되고 예산 잔액이 `₩0`으로 무너지던 결함을 `LifetimeAnalytics.tripBudgetKrw(trip)` 환산으로 고쳤으며, `trip.title`이 비어 있을 때 `downloadReportAsHtml()`이 `TypeError`로 중단되던 결함을 안전한 기본 제목 처리로 수정했습니다(v2.2.6에서 재현).
+- **Gist 백업 중복 생성 차단·URL 정규화·토스트 이스케이프**: `syncToGist()`·`syncFromGist()`에 진행 중 잠금(`pushingGist`/`pullingGist`)을 추가해 연타 시 `POST /gists`가 중복 실행되던 결함을 막았고(v2.2.6에서 재현), 전체 Gist URL 붙여넣기에서 ID를 자동 추출하며 원격 Gist ID를 `escapeHtml`로 감싸 토스트 삽입을 차단했습니다.
+- **AI 채팅 중복 전송 차단·DOM 보존**: `sendAiChatMessage()`에 진행 중 잠금(`sendingChat`)·전송 버튼 비활성화·순번 기반 로딩 ID를 적용해 연타 시 동시 요청과 스피너 충돌을 막았고(v2.2.6에서 재현), `innerHTML +=` 대신 `insertAdjacentHTML('beforeend', ...)`로 기존 대화 DOM을 보존하며 Enter 키 입력을 위임 리스너로 전환했습니다.
+- `index.html`의 인라인 이벤트 처리기 18곳을 `report.*`·`gistSync.*`·`aiChat.*`·`shell.closeModal`로 전환해 `UI01` 기준을 218 → 200곳(`index.html` 78 → 60곳), `HTML01`을 `index.html` 7 → 4곳(새 파일 3개 모두 0곳)으로 낮췄습니다. 전용 브라우저 검사 `tests/report-gist-chat.browser.cjs`(3개 시나리오)를 추가했습니다.
+
 ## [v2.2.6] - 2026-11-26
 
 - 화면 분리(4단계) 17차(현장 도구 모음 — 빠른 환율 계산기·서바이벌 스페인어·실시간/오프라인 GPS 스팟 레이더)입니다. `index.html`의 `#modal-quick-currency`, `#modal-survival-spanish`, `#gps-radar-card` 제어(약 435줄)를 `js/presentation/field-tools-ui.js`(`SulsulTravel.FieldTools`)로 옮겼습니다.

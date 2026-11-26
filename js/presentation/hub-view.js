@@ -888,7 +888,7 @@
     openMap: (element, event) => { event.stopPropagation(); openTripWorkspace(element.dataset.tripId); navigateToInteractiveMap(); },
     uploadCover: (element, event) => triggerCoverUpload(element.dataset.tripId, event),
     removeCover: (element, event) => removeCover(element.dataset.tripId, event),
-    openPdf: (element, event) => openTripPdfReport(element.dataset.tripId, event),
+    openPdf: (element, event) => T.ReportUI.openTripReport(element.dataset.tripId, event),
     deleteTrip: (element, event) => requestDeleteTrip(element.dataset.tripId, event),
     createTrip: () => T.CreateTrip.open(),
     noop: () => {}

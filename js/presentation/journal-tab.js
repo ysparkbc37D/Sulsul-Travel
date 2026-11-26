@@ -244,7 +244,7 @@
     downloadText: () => downloadDraft(),
     saveText: () => saveText(),
     aiPolish: () => generateAiJournalEssay(),
-    storyPdf: () => openPdfReportModal(),
+    storyPdf: () => T.ReportUI.openModal(),
     magazine: () => openStoryMagazineModal(),
     openExpenses: () => switchTab('expenses'),
     closePhoto: () => closeModal('modal-journal-photo')

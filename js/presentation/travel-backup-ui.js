@@ -155,7 +155,7 @@ async function applyTravelBackupRestore(){
     const next=await TripRepository.saveAll(replacement,{approvedRecoveryRaw:recoveryRaw,expectedRaw:pending.baseRaw});
     committed=true;State.activeTripId=next[0]?.id||null;State.storageRecovery=null;TravelBackupUI.pending=null;
     if(pending.source==='gist'){
-      try{localStorage.setItem('st_github_last_sync',`${new Date().toLocaleString('ko-KR')} (복원)`);updateGithubSyncUi();}catch(_){}
+      try{localStorage.setItem('st_github_last_sync',`${new Date().toLocaleString('ko-KR')} (복원)`);SulsulTravel.GistSync?.updateUi();}catch(_){}
     }
     let cleaned=true;
     try{await JournalOverflowRepository.clearAll();}catch(_){cleaned=false;}

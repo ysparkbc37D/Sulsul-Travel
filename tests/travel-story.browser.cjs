@@ -31,7 +31,7 @@ const server=http.createServer((req,res) => {
         {id:'m2',dayId:'d1',date:'2026-10-11',time:'10:15',text:'카페의 창가에서 쉬었다.',photos:[portrait]},
         {id:'m1',dayId:'d1',date:'2026-10-11',time:'08:00',text:'이른 아침 거리에서 만난 순간.',photos:[]}
       ],journals:{0:{text:Array.from({length:36},(_,index) => `긴 회고 ${index+1}. 골목을 걸으며 햇살이 옮겨 가는 모습을 바라보았다. 여행에서 남긴 글과 사진을 천천히 다시 읽는다. 두 사람이 나눈 이야기가 노트의 다음 줄로 이어진다.`).join('\n\n')+'\n\n회고 마지막 문장도 출력되어야 한다.',photos:[]},1:{text:'둘째 날의 하루 회고',photos:[]}},expenses:[{id:'e1',date:'2026-10-11',title:'아침 식사',cat:'meal',krw:1000},{id:'e2',date:'2026-10-11',title:'버스',cat:'transport',krw:2000},{id:'e3',date:'2026-10-11',title:'커피',cat:'food',krw:500},{id:'e4',date:'2026-10-12',title:'기차',cat:'flight',krw:3000}],checklist:[]};
-      State.trips=[trip,{...trip,id:'other-trip',title:'다른 여행 제목',activityRecords:{},momentEntries:[],journals:{},expenses:[]}];State.activeTripId='other-trip';SulsulTravel.SettingsUI.setTheme('modern');openPdfReportModal('story-qa');
+      State.trips=[trip,{...trip,id:'other-trip',title:'다른 여행 제목',activityRecords:{},momentEntries:[],journals:{},expenses:[]}];State.activeTripId='other-trip';SulsulTravel.SettingsUI.setTheme('modern');SulsulTravel.ReportUI.openModal('story-qa');
     });
     await page.locator('#modal-pdf-report').waitFor({state:'visible'});
     const content=page.locator('#pdf-report-content');
@@ -52,7 +52,7 @@ const server=http.createServer((req,res) => {
     async function saveDownload(action,name) {
       const pending=page.waitForEvent('download');await action();const result=await pending;const file=path.join(output,name);await result.saveAs(file);return {result,file,text:fs.readFileSync(file,'utf8')};
     }
-    const html=await saveDownload(() => page.evaluate(() => downloadReportAsHtml()),'selected-report.html');
+    const html=await saveDownload(() => page.evaluate(() => SulsulTravel.ReportUI.downloadHtml()),'selected-report.html');
     assert.match(html.result.suggestedFilename(),/^마드리드, 우리의 이틀_/);assert.doesNotMatch(html.text,/다른 여행 제목|data:image|data-story-download/);
     assert.match(html.text,/승인 완료 광장 문장/);
     const markdown=await saveDownload(() => page.locator('#pdf-story-controls [data-story-download="markdown"]').click(),'selected-story.md');

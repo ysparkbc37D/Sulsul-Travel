@@ -22,6 +22,7 @@ const scheduleTuningUi = readFileSync(new URL('../js/presentation/schedule-tunin
 const createTripUi = readFileSync(new URL('../js/presentation/create-trip-ui.js', import.meta.url), 'utf8');
 const draftStudioUi = readFileSync(new URL('../js/presentation/draft-studio-ui.js', import.meta.url), 'utf8');
 const fieldToolsUi = readFileSync(new URL('../js/presentation/field-tools-ui.js', import.meta.url), 'utf8');
+const gistSyncUi = readFileSync(new URL('../js/presentation/gist-sync-ui.js', import.meta.url), 'utf8');
 const packSa = readFileSync(new URL('../js/destinations/pack-south-america.js', import.meta.url), 'utf8');
 const packageMetadata = JSON.parse(readFileSync(new URL('../package.json', import.meta.url), 'utf8'));
 const backupUi = readFileSync(new URL('../js/presentation/travel-backup-ui.js', import.meta.url), 'utf8');
@@ -469,9 +470,8 @@ test('Gemini connection test uses the same fallback chain as AI generation', () 
 
 test('full backup restores clear old overflow journals only after the trip document is written', () => {
   const jsonRestore = backupUi.slice(backupUi.indexOf('async function applyTravelBackupRestore()'));
-  const gistStart = html.indexOf('async function syncFromGist()');
-  const gistEnd = html.indexOf('// [14] 모달 제어', gistStart);
-  const gistRestore = html.slice(gistStart, gistEnd);
+  const gistStart = gistSyncUi.indexOf('async function syncFromGist()');
+  const gistRestore = gistSyncUi.slice(gistStart);
   assert.match(jsonRestore, /TripRepository\.saveAll\(replacement,\{approvedRecoveryRaw:recoveryRaw,expectedRaw:pending.baseRaw\}\)[\s\S]*?await JournalOverflowRepository\.clearAll\(\)/);
   assert.match(gistRestore, /previewTravelBackupText\(content,\{filename:'GitHub Gist 백업',source:'gist',baseRaw,baseState\}\)/);
   assert.doesNotMatch(gistRestore, /TripRepository\.saveAll|clearAll/);

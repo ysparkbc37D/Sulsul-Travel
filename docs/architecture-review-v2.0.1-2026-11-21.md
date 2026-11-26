@@ -196,6 +196,12 @@ flowchart TD
 - **검증**: 단위 257개(새 `trip-store.test.mjs` 8개 — 느린 비동기 백엔드에서 연달아 맡긴 저장이 모두 남는지 포함), 브라우저 회귀 27종, `tools-verify.ps1` 통과. 저장 실패를 일부러 만드는 브라우저 검사 세 곳은 결과를 저장보다 먼저 읽어, 실패 경로를 검사하지 않은 채 통과하고 있었다. 저장을 기다리게 고쳤다(실록 112호).
 - **남은 3b(2차)**: 여행 자료를 IndexedDB로 옮기는 일. 백엔드를 `TripStore` 아래에서 바꾸고, 원문 보관 → 이전 → 다시 읽어 대조 → 채택 순서로 옮긴다. 옛 문서는 다른 창의 구버전이 덮어쓰지 못하게 표시만 바꿔 남긴다. 다른 창 충돌 판정은 문서 원문 비교 대신 저장소의 버전 번호로 한다. 브라우저 검사의 `localStorage` 직접 읽기를 저장소 읽기로 바꾸는 작업이 함께 필요하다.
 
+## 35. 4단계 진행 결과 (v2.2.7) — 화면 분리 18차: PDF 보고서·Gist 백업·AI 채팅
+
+- **옮긴 것**: `index.html`의 `#modal-pdf-report`(약 195줄), GitHub Gist 개인 백업/복원(약 160줄), `#modal-ai-chat`(약 130줄)을 `js/presentation/report-ui.js`(`SulsulTravel.ReportUI`), `js/presentation/gist-sync-ui.js`(`SulsulTravel.GistSync`), `js/presentation/ai-chat-ui.js`(`SulsulTravel.AiChat`)로 분리하고 `window.__toastTimer`를 지역 변수로 옮겼다(`GLOBAL01` 5 → 4개). `index.html`의 인라인 처리기 18곳 → `report.*`·`gistSync.*`·`aiChat.*`·`shell.closeModal`(UI01 218 → 200곳, `index.html` 78 → 60곳). HTML01은 `index.html` 7 → 4곳, 새 파일 3개 모두 0곳이다.
+- **검증에서 고친 것**: PDF 보고서에서 외화 예산(`EUR 2,000`)이 원화 환산 없이 `₩2,000`·잔액 `₩0`으로 나오던 문제 및 `trip.title` 누락 시 HTML 다운로드 `TypeError`, `syncToGist()` 연타 시 `POST /gists` 2회 중복 발사 및 Gist URL 미인식·토스트 이스케이프 누락, `sendAiChatMessage()` 연타 중복 요청·스피너 충돌·`innerHTML +=` DOM 재파싱(실록 132호). 모두 v2.2.6 코드에서 재현한 뒤 고쳤다.
+- **다음**: `companion-ui.js` 분리 및 `renderCompanionPlan#saveTrips` 부팅 정규화 이관(A-8, `async` 허용 목록 1 → 0).
+
 ## 34. 4단계 진행 결과 (v2.2.6) — 화면 분리 17차: 현장 도구(빠른 환율·서바이벌 스페인어·GPS 레이더)
 
 - **옮긴 것**: `index.html`의 `#modal-quick-currency`, `#modal-survival-spanish`, `#gps-radar-card` 제어(약 435줄)를 `js/presentation/field-tools-ui.js`(`SulsulTravel.FieldTools`)로 옮겼다. `index.html`의 인라인 처리기 29곳 → `fieldTools.*`·`shell.closeModal`(UI01 247 → 218곳, `index.html` 107 → 78곳). HTML01은 `index.html` 21 → 7곳, 새 파일 0곳이다.

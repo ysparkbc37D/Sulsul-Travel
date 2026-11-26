@@ -70,6 +70,9 @@
 | `js/presentation/create-trip-ui.js` | 새 여행 만들기 모달·전 세계 국가/도시 스마트 선택기·거점 일자 배분·오프라인 자동 일정 생성(v2.2.4, `SulsulTravel.CreateTrip`): `#modal-create-trip`, 권역 필터·검색·직접 추가(XSS 차단), 시차/비행 매트릭스, `allocateTripHubs`·`generateAutoSpotsForTrip`·`submitCreateTrip`(KST 날짜 정확성·0원 예산 보존·날짜 역전 거절·연타 방지, `createTrip.*`) |
 | `js/presentation/draft-studio-ui.js` | 여행 설정·일정 초안 편집 스튜디오(v2.2.5, `SulsulTravel.DraftStudio`): `#modal-ai-trip`, 국가/도시 편집기, 거점별 일수 스테퍼·균등 배분, 컨셉 칩, 설정 저장·스마트 로컬/Gemini 초안 생성(모든 진입 경로 초기화·XSS/토스트 방어·날짜 역전 거절·연타 방지, `draftStudio.*`) |
 | `js/presentation/field-tools-ui.js` | 현장 도구 모음(v2.2.6, `SulsulTravel.FieldTools`): 빠른 환율 계산기(`#modal-quick-currency`, 활성 여행 통화 자동 칩·MEP 체크박스 동기화·음수 차단), 서바이벌 스페인어(`#modal-survival-spanish`, 안전 복사 토스트), 실시간·오프라인 GPS 스팟 레이더(`#gps-radar-card`, 도시 좌표 해석·`tripId` 보존·`requireSharedPlanEdit`·XSS 차단, `fieldTools.*`) |
+| `js/presentation/report-ui.js` | 인생 여행 완주 보고서·포토북 출력(v2.2.7, `SulsulTravel.ReportUI`): `#modal-pdf-report`, 원화 환산 예산/잔액, 항목별 지출 분포, `TravelStory` 렌더링, 인쇄 및 안전한 HTML 파일 다운로드(`report.*`) |
+| `js/presentation/gist-sync-ui.js` | GitHub Gist 개인 스냅샷 백업·복원(v2.2.7, `SulsulTravel.GistSync`): 설정 저장·URL ID 정규화·중복 백업/불러오기 잠금·`TravelBackupUI` 미리보기 연동(`gistSync.*`) |
+| `js/presentation/ai-chat-ui.js` | AI 여행 비서 챗봇(v2.2.7, `SulsulTravel.AiChat`): `#modal-ai-chat`, 중복 전송 잠금·`insertAdjacentHTML` DOM 보존·Enter 키 위임·오류 상태별 안내(`aiChat.*`) |
 | `js/presentation/plan-guides.js` | 계획 탭 예약 가이드·도시 가이드(v2.1.4, `SulsulTravel.PlanGuides`): 남미 팩 예약 체크리스트(팩 `bookings.items`, 완료는 `bookingStatuses`), 그 밖의 여행은 준비물 점검(`checklist.*` 동작), 남미·운남 거점 도시, 스팟 모아보기. 그리는 동안 여행 자료를 바꾸지 않고 모든 값을 escape한다 |
 | `js/presentation/budget-ui.js` | 초기 자산·예산 창과 전세계 통화 선택 창(v2.1.2). 창의 입력과 통화 목록은 파일 안의 초안에만 두고 저장 버튼의 `commitTrip` 한 번으로 쓴다. 통화 추가는 바로 저장하고 열린 초기 자산 창·지출 입력창을 갱신한다 |
 | `js/presentation/expense-analytics.js` | 사용내역 통계(v2.1.2): 카드·현금, 카테고리, 수지와 SVG 도넛 차트. 지출 카테고리 목록(`SulsulTravel.ExpenseAnalytics.CATEGORIES`)의 유일한 정의 |

@@ -601,7 +601,7 @@
     openTrip: element => openTrip(element.dataset.tripId, element.dataset.tab || ''),
     goWorkspaceExpenses: () => { closeModal('modal-analytics', true); switchTab('expenses'); },
     goWorkspaceMap: () => { closeModal('modal-analytics', true); navigateToInteractiveMap(); },
-    goWorkspaceReport: () => { closeModal('modal-analytics', true); openPdfReportModal(); }
+    goWorkspaceReport: () => { closeModal('modal-analytics', true); T.ReportUI.openModal(); }
   });
 
   T.LifetimeAnalytics = Object.freeze({
